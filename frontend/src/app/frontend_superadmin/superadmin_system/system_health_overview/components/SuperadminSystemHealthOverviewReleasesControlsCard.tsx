@@ -87,8 +87,14 @@ const KILLSWITCH_ITEMS = [
     desc: 'DDoS edge shield & request burst throttling',
     category: 'Edge & Network',
     icon: ShieldAlert,
-    iconColor: 'text-teal-400',
-    iconBg: 'bg-teal-500/15 border-teal-500/30',
+    theme: {
+      bg: 'bg-gradient-to-br from-[#061824]/95 via-[#082333]/90 to-[#0b3045]/85',
+      border: 'border-cyan-500/30 hover:border-cyan-500/60',
+      shadow: 'shadow-lg shadow-cyan-950/40 hover:shadow-cyan-950/60',
+      glow: 'bg-cyan-500/15 group-hover:bg-cyan-500/30',
+      iconBg: 'bg-cyan-500/20 border-cyan-500/40 text-cyan-300',
+      activeText: 'text-cyan-300',
+    },
     activeMetric: '4.2k req/s nominal',
     disabledMetric: 'Throttling Bypassed',
   },
@@ -98,8 +104,14 @@ const KILLSWITCH_ITEMS = [
     desc: 'Async BullMQ tasks & multi-worker pool',
     category: 'Compute & Queues',
     icon: Cpu,
-    iconColor: 'text-sky-400',
-    iconBg: 'bg-sky-500/15 border-sky-500/30',
+    theme: {
+      bg: 'bg-gradient-to-br from-[#120a26]/95 via-[#190e38]/90 to-[#23144d]/85',
+      border: 'border-indigo-500/30 hover:border-indigo-500/60',
+      shadow: 'shadow-lg shadow-indigo-950/40 hover:shadow-indigo-950/60',
+      glow: 'bg-indigo-500/15 group-hover:bg-indigo-500/30',
+      iconBg: 'bg-indigo-500/20 border-indigo-500/40 text-indigo-300',
+      activeText: 'text-indigo-300',
+    },
     activeMetric: '12 worker pods warm',
     disabledMetric: 'Consumers Halted',
   },
@@ -109,8 +121,14 @@ const KILLSWITCH_ITEMS = [
     desc: 'Dynamic query routing to secondary pool',
     category: 'Database & Storage',
     icon: Database,
-    iconColor: 'text-indigo-400',
-    iconBg: 'bg-indigo-500/15 border-indigo-500/30',
+    theme: {
+      bg: 'bg-gradient-to-br from-[#071329]/95 via-[#0a1c3b]/90 to-[#0e2752]/85',
+      border: 'border-blue-500/30 hover:border-blue-500/60',
+      shadow: 'shadow-lg shadow-blue-950/40 hover:shadow-blue-950/60',
+      glow: 'bg-blue-500/15 group-hover:bg-blue-500/30',
+      iconBg: 'bg-blue-500/20 border-blue-500/40 text-blue-300',
+      activeText: 'text-blue-300',
+    },
     activeMetric: 'Replica lag < 1.2ms',
     disabledMetric: 'Primary-Only Routing',
   },
@@ -120,8 +138,14 @@ const KILLSWITCH_ITEMS = [
     desc: 'Event delivery & exponential retry queues',
     category: 'Integrations & Events',
     icon: Webhook,
-    iconColor: 'text-rose-400',
-    iconBg: 'bg-rose-500/15 border-rose-500/30',
+    theme: {
+      bg: 'bg-gradient-to-br from-[#1c1206]/95 via-[#271908]/90 to-[#38240c]/85',
+      border: 'border-amber-500/30 hover:border-amber-500/60',
+      shadow: 'shadow-lg shadow-amber-950/40 hover:shadow-amber-950/60',
+      glow: 'bg-amber-500/15 group-hover:bg-amber-500/30',
+      iconBg: 'bg-amber-500/20 border-amber-500/40 text-amber-300',
+      activeText: 'text-amber-300',
+    },
     activeMetric: '0 dropped webhooks',
     disabledMetric: 'Outbox Buffering',
   },
@@ -131,8 +155,14 @@ const KILLSWITCH_ITEMS = [
     desc: 'OpenTelemetry spans & query profiling',
     category: 'Observability',
     icon: Activity,
-    iconColor: 'text-emerald-400',
-    iconBg: 'bg-emerald-500/15 border-emerald-500/30',
+    theme: {
+      bg: 'bg-gradient-to-br from-[#051c12]/95 via-[#072719]/90 to-[#0a3824]/85',
+      border: 'border-emerald-500/30 hover:border-emerald-500/60',
+      shadow: 'shadow-lg shadow-emerald-950/40 hover:shadow-emerald-950/60',
+      glow: 'bg-emerald-500/15 group-hover:bg-emerald-500/30',
+      iconBg: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300',
+      activeText: 'text-emerald-300',
+    },
     activeMetric: '100% traces sampled',
     disabledMetric: 'Telemetry Paused',
   },
@@ -142,8 +172,14 @@ const KILLSWITCH_ITEMS = [
     desc: 'Bypass non-admin traffic with HTTP 503',
     category: 'System Reliability',
     icon: Power,
-    iconColor: 'text-amber-400',
-    iconBg: 'bg-amber-500/15 border-amber-500/30',
+    theme: {
+      bg: 'bg-gradient-to-br from-[#200812]/95 via-[#2c0b19]/90 to-[#3e0f23]/85',
+      border: 'border-rose-500/35 hover:border-rose-500/60',
+      shadow: 'shadow-lg shadow-rose-950/40 hover:shadow-rose-950/60',
+      glow: 'bg-rose-500/20 group-hover:bg-rose-500/35',
+      iconBg: 'bg-rose-500/20 border-rose-500/40 text-rose-300',
+      activeText: 'text-rose-300',
+    },
     activeMetric: 'Standby (Traffic Open)',
     disabledMetric: '503 LOCKOUT ACTIVE',
   },
@@ -222,190 +258,224 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
         </div>
       </div>
 
-      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-7">
-        {/* Left Column: Deployment History */}
-        <div className="flex flex-col gap-3.5">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-              <GitBranch size={15} className="text-sky-400" />
-              <span>Recent Production Deployments</span>
-            </h3>
-            <span className="text-[11px] font-mono text-slate-400 bg-slate-900/80 px-2 py-0.5 rounded-md border border-slate-800">
-              Auto-rollback on 5xx spike
-            </span>
-          </div>
-
-          <div className="flex flex-col gap-3">
-            {deployments.map((dep) => {
-              const isLive = dep.status === 'Live';
-              const isRolling = rollingBackSha === dep.commitSha;
-              return (
-                <div
-                  key={dep.commitSha}
-                  className={`group relative overflow-hidden rounded-2xl p-4 transition-all duration-300 ${isLive
-                      ? 'border border-emerald-500/40 bg-gradient-to-r from-emerald-950/30 via-slate-900/80 to-[#080d1e] shadow-lg shadow-emerald-500/5'
-                      : 'border border-slate-800/80 bg-slate-900/50 hover:border-slate-700/80 hover:bg-slate-900/70'
-                    }`}
-                >
-                  <div className="flex items-start justify-between gap-3 mb-2">
-                    <div className="flex items-center gap-2.5 flex-wrap">
-                      <Tag size={13} className={isLive ? 'text-emerald-400' : 'text-slate-500'} />
-                      <span className="font-mono text-xs font-bold text-slate-100">{dep.version}</span>
-                      <span className="rounded-md border border-slate-700/60 bg-slate-800/80 px-2 py-0.5 font-mono text-[10px] text-slate-300">
-                        {dep.commitSha}
-                      </span>
-                      <span
-                        className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border ${isLive
-                            ? 'border-emerald-500/40 bg-emerald-500/20 text-emerald-300 shadow-xs'
-                            : 'border-slate-700 bg-slate-800/70 text-slate-400'
-                          }`}
-                      >
-                        {dep.status}
-                      </span>
-                    </div>
-
-                    {!isLive && (
-                      <button
-                        type="button"
-                        onClick={() => handleRollback(dep)}
-                        disabled={isRolling}
-                        className="inline-flex items-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 px-3 py-1.5 text-xs font-semibold shadow-xs transition-all active:scale-95 cursor-pointer disabled:opacity-50"
-                        title="Rollback cluster to this release"
-                      >
-                        <RotateCcw size={12} className={isRolling ? 'animate-spin' : ''} />
-                        <span>{isRolling ? 'Rolling back...' : 'Rollback'}</span>
-                      </button>
-                    )}
-                  </div>
-
-                  <p className="text-xs text-slate-300 mb-2 leading-relaxed">{dep.notes}</p>
-                  <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono pt-2 border-t border-slate-800/60">
-                    <span className="truncate">Pipeline: <strong className="text-slate-300">{dep.author}</strong></span>
-                    <span className="shrink-0">{dep.timestamp}</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+      {/* Deployments Section: Clean 3-Card Grid */}
+      <div className="relative z-10 flex flex-col gap-3.5">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+            <GitBranch size={15} className="text-sky-400" />
+            <span>Recent Production Deployments</span>
+          </h3>
+          <span className="text-[11px] font-mono text-slate-400 bg-slate-900/80 px-2 py-0.5 rounded-md border border-slate-800">
+            Auto-rollback on 5xx spike
+          </span>
         </div>
 
-        {/* Right Column: Feature Release Controls & Killswitches */}
-        <div className="flex flex-col gap-3.5">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-              <Sliders size={15} className="text-emerald-400" />
-              <span>Feature Release Controls & Killswitches</span>
-            </h3>
-            <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-mono font-semibold text-emerald-300">
-              <Zap size={11} className="text-emerald-400" />
-              Toggle Switch – ON/OFF control ({activeKillswitchCount}/6 ON)
-            </span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+          {deployments.map((dep) => {
+            const isLive = dep.status === 'Live';
+            const isRolling = rollingBackSha === dep.commitSha;
+            return (
+              <div
+                key={dep.commitSha}
+                className={`group relative overflow-hidden rounded-2xl p-4 transition-all duration-300 flex flex-col justify-between ${
+                  isLive
+                    ? 'border border-emerald-500/40 bg-gradient-to-br from-emerald-950/30 via-slate-900/80 to-[#080d1e] shadow-lg shadow-emerald-500/5'
+                    : 'border border-slate-800/80 bg-slate-900/50 hover:border-slate-700/80 hover:bg-slate-900/70'
+                }`}
+              >
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Tag size={13} className={isLive ? 'text-emerald-400' : 'text-slate-500'} />
+                    <span className="font-mono text-xs font-bold text-slate-100">{dep.version}</span>
+                    <span className="rounded-md border border-slate-700/60 bg-slate-800/80 px-2 py-0.5 font-mono text-[10px] text-slate-300">
+                      {dep.commitSha}
+                    </span>
+                  </div>
+
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider border shrink-0 ${
+                      isLive
+                        ? 'border-emerald-500/40 bg-emerald-500/20 text-emerald-300 shadow-xs'
+                        : 'border-slate-700 bg-slate-800/70 text-slate-400'
+                    }`}
+                  >
+                    {dep.status}
+                  </span>
+                </div>
+
+                <p className="text-xs text-slate-300 mb-3 leading-relaxed">{dep.notes}</p>
+
+                <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono pt-2.5 border-t border-slate-800/60">
+                  <span className="truncate text-[10px]">
+                    By <strong className="text-slate-300 font-medium">{dep.author}</strong>
+                  </span>
+
+                  {!isLive ? (
+                    <button
+                      type="button"
+                      onClick={() => handleRollback(dep)}
+                      disabled={isRolling}
+                      className="inline-flex items-center gap-1 rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 px-2.5 py-1 text-[11px] font-semibold shadow-xs transition-all active:scale-95 cursor-pointer disabled:opacity-50 shrink-0"
+                      title="Rollback cluster to this release"
+                    >
+                      <RotateCcw size={11} className={isRolling ? 'animate-spin' : ''} />
+                      <span>{isRolling ? 'Rolling...' : 'Rollback'}</span>
+                    </button>
+                  ) : (
+                    <span className="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
+                      <CheckCircle2 size={11} /> Active Build
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Feature Release Controls & Emergency Killswitches: Generous 3-Column Grid */}
+      <div className="relative z-10 flex flex-col gap-3.5 pt-4 border-t border-slate-800/80">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+              <Sliders size={15} />
+            </div>
+            <div>
+              <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-200">
+                Feature Release Controls & Killswitches
+              </h3>
+              <p className="text-[11px] text-slate-400">
+                Autonomous cluster telemetry circuit-breakers & isolated subsystem cutoffs
+              </p>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {KILLSWITCH_ITEMS.map(({ key, label, desc, category, icon: Icon, iconColor, iconBg, activeMetric, disabledMetric }) => {
-              const active = featureFlags[key];
-              return (
+          <span className="self-start sm:self-auto inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[11px] font-mono font-semibold text-emerald-300 shadow-xs">
+            <span className="text-emerald-400 font-bold">⏻</span>
+            Tactical Kill Switch Controls ({activeKillswitchCount}/6 Nominal)
+          </span>
+        </div>
+
+        {/* 6 Rich Colorful Killswitch Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {KILLSWITCH_ITEMS.map(({ key, label, desc, category, icon: Icon, theme, activeMetric, disabledMetric }) => {
+            const active = featureFlags[key];
+            return (
+              <div
+                key={key}
+                className={`group relative overflow-hidden rounded-2xl p-5 transition-all duration-300 flex flex-col justify-between border ${theme.border} ${theme.bg} ${theme.shadow} hover:scale-[1.01]`}
+              >
+                {/* Ambient Radial Backdrop Glow */}
                 <div
-                  key={key}
-                  className={`group relative overflow-hidden rounded-2xl p-4 transition-all duration-300 flex flex-col justify-between ${active
-                      ? 'border border-emerald-500/30 bg-gradient-to-br from-emerald-950/25 via-slate-900/90 to-[#070c1b] shadow-lg hover:border-emerald-500/50 hover:shadow-emerald-500/10'
-                      : 'border border-rose-500/40 bg-gradient-to-br from-rose-950/25 via-slate-900/90 to-[#12070e] shadow-lg hover:border-rose-500/60 hover:shadow-rose-500/10'
-                    }`}
-                >
-                  {/* Subtle ambient light indicator inside card */}
-                  <div
-                    className={`pointer-events-none absolute -top-8 -right-8 h-20 w-20 rounded-full blur-xl transition-opacity duration-300 ${active ? 'bg-emerald-500/20 opacity-100' : 'bg-rose-500/20 opacity-100'
-                      }`}
-                  />
+                  className={`pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full blur-2xl transition-all duration-500 ${theme.glow}`}
+                  aria-hidden="true"
+                />
 
-                  {/* Top: Icon, Labels & Switch Button */}
-                  <div className="flex items-start justify-between gap-3 mb-3 relative z-10">
-                    <div className="flex items-start gap-2.5">
-                      <div className={`p-2 rounded-xl border ${iconBg} ${iconColor} shrink-0 group-hover:scale-105 transition-transform shadow-xs`}>
-                        <Icon size={16} aria-hidden="true" />
-                      </div>
-                      <div>
-                        <span className="text-xs font-bold text-slate-100 block group-hover:text-white transition-colors">
-                          {label}
-                        </span>
-                        <span className="text-[10px] text-slate-400 block leading-tight mt-0.5">
-                          {desc}
-                        </span>
-                        <span className="text-[9px] font-mono font-medium text-slate-500 uppercase tracking-wider mt-1 block">
-                          {category}
-                        </span>
-                      </div>
+                {/* Top Section: Icon, Labels & Tactical Switch */}
+                <div className="relative z-10 flex items-start justify-between gap-3 mb-4">
+                  {/* Left: Icon & Title info */}
+                  <div className="flex items-start gap-3 min-w-0">
+                    <div className={`p-2.5 rounded-xl border ${theme.iconBg} shrink-0 group-hover:scale-110 transition-transform shadow-xs`}>
+                      <Icon size={18} aria-hidden="true" />
                     </div>
-
-                    {/* Premium Kill Switch Area (from Emergency Kill Switch design) */}
-                    <div className="switch-area flex flex-col items-end gap-1 shrink-0">
-                      <div className="flex items-center gap-1.5">
-                        <div
-                          className={`switch-status font-mono text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded tracking-wider transition-colors duration-200 select-none ${
-                            active
-                              ? 'armed bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-xs'
-                              : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'
-                          }`}
-                        >
-                          {active ? 'SWITCH ARMED' : 'SAFE MODE'}
-                        </div>
-
-                        <button
-                          type="button"
-                          role="switch"
-                          aria-checked={active}
-                          aria-label={active ? `Disarm kill switch for ${label}` : `Arm kill switch for ${label}`}
-                          aria-pressed={active}
-                          onClick={() => toggleFlag(key, label)}
-                          className={`premium-switch relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full p-0.5 transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-950 ${
-                            active
-                              ? 'is-armed bg-gradient-to-r from-emerald-600 to-teal-500 border border-emerald-400/40 shadow-xs shadow-emerald-500/40'
-                              : 'bg-slate-800 border border-slate-700 hover:bg-slate-700'
-                          }`}
-                        >
-                          <span
-                            aria-hidden="true"
-                            className={`switch-knob pointer-events-none inline-flex h-5 w-5 transform items-center justify-center rounded-full transition-transform duration-200 ease-in-out ${
-                              active
-                                ? 'translate-x-5 bg-white text-emerald-600 shadow-md font-bold'
-                                : 'translate-x-0 bg-slate-400 text-slate-900 shadow-sm font-bold'
-                            }`}
-                          >
-                            <span className="text-[10px] leading-none select-none font-bold">⏻</span>
-                          </span>
-                        </button>
-                      </div>
-
-                      <span className="switch-hint text-[8px] font-mono tracking-tight text-slate-400 uppercase select-none">
-                        {active ? 'CLICK TO DISARM' : 'CLICK TO ARM'}
+                    <div className="min-w-0">
+                      <span className="text-sm font-bold text-white block group-hover:text-emerald-300 transition-colors truncate">
+                        {label}
+                      </span>
+                      <span className="text-[11px] text-slate-300/80 block leading-snug mt-0.5 line-clamp-1">
+                        {desc}
+                      </span>
+                      <span className="text-[9px] font-mono font-semibold text-slate-400 uppercase tracking-wider mt-1 block">
+                        {category}
                       </span>
                     </div>
                   </div>
 
-                  {/* Bottom: Dynamic Telemetry & State Indicators */}
-                  <div className="relative z-10 flex items-center justify-between pt-2.5 border-t border-slate-800/80 text-[10px]">
-                    <div className="flex items-center gap-1.5">
+                  {/* Right: Tactical Cockpit Switch Control */}
+                  <div className="switch-area flex flex-col items-end gap-1.5 shrink-0">
+                    {/* Switch Status Pill */}
+                    <div
+                      className={`switch-status inline-flex items-center gap-1 font-mono text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border transition-all duration-300 select-none shadow-xs ${
+                        active
+                          ? 'armed bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-emerald-500/10'
+                          : 'bg-rose-500/20 text-rose-300 border-rose-500/40 shadow-rose-500/10'
+                      }`}
+                    >
                       <span
-                        className={`h-2 w-2 rounded-full transition-all ${active ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
-                          }`}
+                        className={`h-1.5 w-1.5 rounded-full ${
+                          active ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
+                        }`}
                       />
-                      <span
-                        className={`font-bold tracking-tight ${active ? 'text-emerald-300' : 'text-rose-400'
-                          }`}
-                      >
-                        {active ? 'Operational (ON)' : 'Killswitch Active (OFF)'}
-                      </span>
+                      <span>{active ? 'SWITCH ARMED' : 'SAFE MODE'}</span>
                     </div>
 
-                    <span className="font-mono text-slate-400 text-[10px] shrink-0">
-                      {active ? activeMetric : disabledMetric}
+                    {/* Illuminated Tactical Switch with Visible Socket & Chrome Knob */}
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={active}
+                      aria-label={active ? `Disarm kill switch for ${label}` : `Arm kill switch for ${label}`}
+                      aria-pressed={active}
+                      onClick={() => toggleFlag(key, label)}
+                      className={`premium-switch group/sw relative inline-flex h-7 w-14 shrink-0 cursor-pointer rounded-full p-0.5 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
+                        active
+                          ? 'is-armed bg-[#041a10] border border-emerald-400/50 shadow-[0_0_14px_rgba(16,185,129,0.35),inset_0_2px_4px_rgba(0,0,0,0.85)]'
+                          : 'bg-[#18080e] border border-rose-500/40 shadow-[0_0_10px_rgba(244,63,94,0.25),inset_0_2px_4px_rgba(0,0,0,0.85)] hover:border-rose-400/60'
+                      }`}
+                    >
+                      {/* Recessed Glowing Circuit Channel */}
+                      <div
+                        className={`pointer-events-none absolute inset-x-2 top-1/2 -translate-y-1/2 h-1.5 rounded-full transition-all duration-300 ${
+                          active
+                            ? 'bg-gradient-to-r from-emerald-500 to-teal-400 opacity-90 shadow-[0_0_6px_rgba(16,185,129,0.8)]'
+                            : 'bg-gradient-to-r from-rose-900/60 to-slate-800 opacity-40'
+                        }`}
+                      />
+
+                      {/* 3D Tactile Chrome Knob with Laser-Etched Power Symbol ⏻ */}
+                      <span
+                        aria-hidden="true"
+                        className={`switch-knob pointer-events-none relative z-10 flex h-5.5 w-5.5 transform items-center justify-center rounded-full transition-transform duration-300 ease-out font-black ${
+                          active
+                            ? 'translate-x-7 bg-gradient-to-b from-white via-slate-100 to-slate-200 text-emerald-600 border border-white shadow-[0_2px_5px_rgba(0,0,0,0.5),0_0_8px_rgba(16,185,129,0.5)]'
+                            : 'translate-x-0 bg-gradient-to-b from-slate-300 via-slate-400 to-slate-500 text-rose-700 border border-slate-300/80 shadow-[0_2px_4px_rgba(0,0,0,0.5)]'
+                        }`}
+                      >
+                        <span className="text-[10px] leading-none select-none font-bold drop-shadow-xs">⏻</span>
+                      </span>
+                    </button>
+
+                    {/* Switch Hint */}
+                    <span className="switch-hint font-mono text-[8px] font-bold uppercase tracking-wider text-slate-400 transition-colors select-none">
+                      {active ? 'CLICK TO DISARM' : 'CLICK TO ARM'}
                     </span>
                   </div>
                 </div>
-              );
-            })}
-          </div>
+
+                {/* Bottom Section: Dynamic Telemetry & State Indicators */}
+                <div className="relative z-10 flex items-center justify-between pt-3 border-t border-slate-800/80 text-[11px]">
+                  <div className="flex items-center gap-1.5">
+                    <span
+                      className={`h-2 w-2 rounded-full transition-all ${
+                        active ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
+                      }`}
+                    />
+                    <span
+                      className={`font-bold tracking-tight text-xs ${
+                        active ? 'text-emerald-300' : 'text-rose-400'
+                      }`}
+                    >
+                      {active ? 'Operational (ON)' : 'Killswitch Active (OFF)'}
+                    </span>
+                  </div>
+
+                  <span className="font-mono text-slate-300 font-semibold text-[11px] bg-slate-900/80 border border-slate-800 px-2 py-0.5 rounded-md shrink-0">
+                    {active ? activeMetric : disabledMetric}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

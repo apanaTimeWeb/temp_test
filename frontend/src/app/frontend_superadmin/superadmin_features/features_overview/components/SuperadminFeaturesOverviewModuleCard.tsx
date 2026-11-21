@@ -112,24 +112,31 @@ export default function SuperadminFeaturesOverviewModuleCard({
           </div>
 
           {/* Level 1: Platform Switch Toggle */}
-          <div className="flex flex-col items-end">
+          <div className="switch-area flex flex-col items-end gap-0.5">
             <button
               type="button"
               onClick={() => onTogglePlatformDefault(module.id)}
               aria-pressed={isGlobalAllowed}
               title={`Platform Default: ${isGlobalAllowed ? 'Enabled' : 'Disabled (Platform Killswitch)'}`}
-              className={`relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                isGlobalAllowed ? 'bg-teal-500' : 'bg-neutral-700'
+              className={`premium-switch relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full p-0.5 transition-all duration-200 ease-in-out focus:outline-none ${
+                isGlobalAllowed
+                  ? 'is-armed bg-gradient-to-r from-teal-500 to-emerald-500 border border-teal-400/40 shadow-xs shadow-teal-500/30'
+                  : 'bg-neutral-800 border border-neutral-700 hover:bg-neutral-700'
               }`}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                  isGlobalAllowed ? 'translate-x-5' : 'translate-x-0'
+                aria-hidden="true"
+                className={`switch-knob pointer-events-none inline-flex h-4 w-4 transform items-center justify-center rounded-full transition-transform duration-200 ease-in-out ${
+                  isGlobalAllowed
+                    ? 'translate-x-5 bg-white text-teal-600 font-bold shadow-xs'
+                    : 'translate-x-0 bg-neutral-400 text-neutral-900 font-bold shadow-xs'
                 }`}
-              />
+              >
+                <span className="text-[8px] leading-none select-none font-bold">⏻</span>
+              </span>
             </button>
-            <span className="text-[9px] uppercase tracking-wider font-semibold text-neutral-500 mt-1">
-              L1 Default
+            <span className="switch-hint text-[9px] uppercase tracking-wider font-semibold text-neutral-400">
+              {isGlobalAllowed ? 'L1 ARMED' : 'L1 DISARMED'}
             </span>
           </div>
         </div>
