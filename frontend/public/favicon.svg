@@ -6,9 +6,11 @@
       <stop offset="100%" stop-color="#7c3aed" />
     </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="16" fill="url(#libraryOsGrad)" />
-  <g fill="none" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 16h16a8 8 0 0 1 4 4v26a6 6 0 0 0-4-2H12z" fill="#ffffff" fill-opacity="0.25" />
-    <path d="M52 16H36a8 8 0 0 0-4 4v26a6 6 0 0 1 4-2h16z" fill="#ffffff" fill-opacity="0.25" />
+  <rect width="64" height="64" rx="12" fill="url(#libraryOsGrad)" />
+  <g fill="none" stroke="#ffffff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 12h21a4 4 0 0 1 4 4v34a4 4 0 0 0-4-3H7z" fill="#ffffff" fill-opacity="0.9" />
+    <path d="M57 12H36a4 4 0 0 0-4 4v34a4 4 0 0 1 4-3h21z" fill="#ffffff" fill-opacity="0.9" />
+    <path d="M12 21h12M12 29h12M12 37h12" stroke="#4f46e5" stroke-width="2.5" />
+    <path d="M40 21h12M40 29h12M40 37h12" stroke="#6366f1" stroke-width="2.5" />
   </g>
 </svg>
