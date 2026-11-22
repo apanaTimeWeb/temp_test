@@ -1,9 +1,9 @@
 'use client';
 // DATA FLOW: communication_whatsapp_templates route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
-import { useEffect, useRef, useState } from 'react';
-import type { AdminCommunicationWhatsappTemplate } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/types/AdminCommunicationWhatsappTemplatesWhatsappTemplateTypes';
 import { ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_FIXTURES } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/mocks/AdminCommunicationWhatsappTemplatesWhatsappTemplateFixtures';
+import type { AdminCommunicationWhatsappTemplate } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/types/AdminCommunicationWhatsappTemplatesWhatsappTemplateTypes';
+import { useEffect,useRef,useState } from 'react';
 
 export default function useAdminCommunicationWhatsappTemplateState() {
   const [templates, setTemplates] = useState<AdminCommunicationWhatsappTemplate[]>(ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_FIXTURES);

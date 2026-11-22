@@ -1,7 +1,6 @@
-import { http, HttpResponse } from 'msw';
-import { ADMIN_STAFF_DIRECTORY_API_FIXTURE } from '@/app/frontend_admin/admin_staff/staff_directory/mocks/scenarios/admin_staff_directory.scenarios';
 import { ADMIN_STAFF_DIRECTORY_URLS } from '@/app/frontend_admin/admin_staff/staff_directory/config/admin_staff_directory.url_config';
-import type { AdminStaffDirectoryHarnessProps } from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
+import { ADMIN_STAFF_DIRECTORY_API_FIXTURE } from '@/app/frontend_admin/admin_staff/staff_directory/mocks/scenarios/admin_staff_directory.scenarios';
+import { http,HttpResponse } from 'msw';
 
 /** Isolated test-scenario vocabulary owned by admin_staff_directory. No sibling imports or live API assumptions. */
 export const AdminStaffDirectoryScenarios = ['ACTIVE', 'EMPTY', 'SERVER_500', 'TIMEOUT', 'UNAUTHORIZED'] as const;

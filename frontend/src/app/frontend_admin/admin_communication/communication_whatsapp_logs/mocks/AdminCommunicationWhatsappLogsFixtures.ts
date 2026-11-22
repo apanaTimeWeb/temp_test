@@ -1,5 +1,5 @@
-import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
 import type { AdminCommunicationWhatsappLog } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/types/AdminCommunicationWhatsappLogsTypes';
+import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
 
 /** Synthetic, read-only records shown only while the explicit frontend demo mode is enabled. */
 export const ADMIN_COMMUNICATION_WHATSAPP_LOGS_FIXTURES: AdminCommunicationWhatsappLog[] = [

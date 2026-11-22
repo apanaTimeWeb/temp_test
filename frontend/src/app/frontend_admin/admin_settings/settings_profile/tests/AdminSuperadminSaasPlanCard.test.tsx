@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
-import { NextIntlClientProvider } from 'next-intl';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import messages from '@/app/frontend_admin/admin_settings/settings_profile/locales/admin_settings_profile_en.json';
 import AdminSettingsProfileReadOnlyPanels from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfileReadOnlyPanels';
 import { ADMIN_PROFILE_NAVIGATION_ITEMS } from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.url_config';
+import messages from '@/app/frontend_admin/admin_settings/settings_profile/locales/admin_settings_profile_en.json';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { NextIntlClientProvider } from 'next-intl';
+import { describe,expect,it,vi } from 'vitest';
 
 const { toastMock } = vi.hoisted(() => {
   const toastMock = { info: vi.fn(), error: vi.fn(), success: vi.fn() };

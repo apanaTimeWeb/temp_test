@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import type { AdminFinancePaymentsScenario, AdminFinancePaymentsHarnessProps } from '@/app/frontend_admin/admin_finance/finance_payments/types/AdminFinancePaymentsComponentTypes';
+import type { AdminFinancePaymentsHarnessProps,AdminFinancePaymentsScenario } from '@/app/frontend_admin/admin_finance/finance_payments/types/AdminFinancePaymentsComponentTypes';
 
 
 /** Test-only scenarios; these fixtures do not claim an external API contract. */
@@ -20,4 +19,4 @@ export function AdminFinancePaymentsHarness({ children, scenario = 'ACTIVE' }: A
 }
 
 
-export type { AdminFinancePaymentsScenario, AdminFinancePaymentsHarnessProps };
+export type { AdminFinancePaymentsHarnessProps,AdminFinancePaymentsScenario };

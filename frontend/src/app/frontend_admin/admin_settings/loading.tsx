@@ -1,7 +1,7 @@
 ﻿'use client';
 
-import { useTranslations } from 'next-intl';
 import { AdminPageLoader } from '@/app/frontend_admin/components/AdminLoader';
+import { useTranslations } from 'next-intl';
 
 export default function AdminSettingsLoading() {
   const t = useTranslations('ADMIN_NAVIGATION');

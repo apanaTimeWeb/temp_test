@@ -1,9 +1,9 @@
 'use client';
 // RESPONSIBILITY: AdminSecurityDashboardPanel component owned by admin_security; responsibility folder: admin_security_dashboard_panel.
 
-import { Shield, ShieldAlert, KeyRound, Smartphone } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { ADMIN_SECURITY_DASHBOARD_METRICS } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
+import { KeyRound,Shield,ShieldAlert } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 const generateSparkline = (title: string) => {
   return `M0,32 Q${15 + (title.length % 10)},${42 - (title.length % 15)} ${35 + (title.length % 10)},22 T${75 + (title.length % 10)},26 T${115 + (title.length % 10)},12 T150,6`;

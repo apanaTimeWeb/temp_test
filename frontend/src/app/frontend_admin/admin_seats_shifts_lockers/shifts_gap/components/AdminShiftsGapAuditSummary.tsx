@@ -1,7 +1,7 @@
 'use client';
 
+import { Activity,Clock,IndianRupee,ShieldAlert } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { ShieldAlert, IndianRupee, Clock, Activity } from 'lucide-react';
 
 interface AdminShiftsGapAuditSummaryProps {
   totalIncidents: number;

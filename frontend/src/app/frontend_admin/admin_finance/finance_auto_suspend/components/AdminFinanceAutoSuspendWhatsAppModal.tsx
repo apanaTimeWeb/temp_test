@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { MessageCircle, X, Copy, Send, Phone, User, Armchair, AlertCircle, IndianRupee } from 'lucide-react';
+import { AlertCircle,Armchair,Copy,MessageCircle,Phone,Send,User,X } from 'lucide-react';
+import { useEffect,useState } from 'react';
 import { toast } from 'sonner';
 import type { AdminFinanceAutoSuspendSuspendedStudent } from '../types/AdminFinanceAutoSuspendTypes';
 

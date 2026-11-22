@@ -1,27 +1,27 @@
 'use client';
 // RESPONSIBILITY: AdminStaffDirectoryCreateManagerForm component owned by admin_staff_directory; responsibility folder: admin_staff_directory_create_manager_form.
 
-import { Camera, UserPlus, Key, ShieldCheck, Printer, MessageSquare, Copy, Check } from 'lucide-react';
-import { useCallback, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { createAdminStaffDirectoryCreateManagerSchema, type AdminStaffDirectoryCreateManagerFormValues } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
 import {
-  ADMIN_STAFF_DIRECTORY_INITIAL_STATUS_OPTIONS,
-  ADMIN_STAFF_DIRECTORY_DEMO_BRANCH_OPTIONS,
+ADMIN_STAFF_DIRECTORY_DEMO_BRANCH_OPTIONS,
+ADMIN_STAFF_DIRECTORY_INITIAL_STATUS_OPTIONS,
 } from '@/app/frontend_admin/admin_staff/staff_directory/config/admin_staff_directory.url_config';
-import { toast } from 'sonner';
+import useAdminStaffDirectoryUnsavedChangesGuard from '@/app/frontend_admin/admin_staff/staff_directory/hooks/useAdminStaffDirectoryUnsavedChangesGuard';
+import { createAdminStaffDirectoryCreateManagerSchema,type AdminStaffDirectoryCreateManagerFormValues } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
+import type { AdminStaffDirectoryCreateManagerFormProps } from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import useAdminStaffDirectoryUnsavedChangesGuard from '@/app/frontend_admin/admin_staff/staff_directory/hooks/useAdminStaffDirectoryUnsavedChangesGuard';
-import type { AdminStaffDirectoryCreateManagerFormProps } from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
-import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
+import { type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Camera,Check,Copy,MessageSquare,Printer,ShieldCheck,UserPlus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useCallback,useMemo,useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 /**
  * Validates and adds a user-entered manager to local demo state only; no credential is generated or delivered.

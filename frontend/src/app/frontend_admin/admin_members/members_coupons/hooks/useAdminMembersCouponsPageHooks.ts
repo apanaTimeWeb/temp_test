@@ -1,12 +1,12 @@
 'use client';
 // DATA FLOW: coupons route -> page-scoped client state and query hooks; no unverified live mutation is implied.
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { fetchAdminCoupons, mapAdminCouponsApiRecords } from '@/app/frontend_admin/admin_members/members_coupons/api/admin_members_coupons_api';
 import { ADMIN_COUPONS_QUERY_KEYS } from '@/app/frontend_admin/admin_members/members_coupons/api/admin_members_coupons.query_keys';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { fetchAdminCoupons,mapAdminCouponsApiRecords } from '@/app/frontend_admin/admin_members/members_coupons/api/admin_members_coupons_api';
 import { ADMIN_COUPONS_API_FIXTURE } from '@/app/frontend_admin/admin_members/members_coupons/mocks/scenarios/admin_members_coupons.scenarios';
 import { AdminCouponsApiResponseSchema } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
+import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
 export function useAdminMembersCouponsState() {
   const [showForm, setShowForm] = useState(false);

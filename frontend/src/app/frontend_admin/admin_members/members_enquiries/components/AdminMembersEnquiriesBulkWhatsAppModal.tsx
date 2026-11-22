@@ -1,9 +1,9 @@
 'use client';
 // RESPONSIBILITY: AdminMembersEnquiriesBulkWhatsAppModal component owned by admin_members_enquiries.
 
-import { useState, useMemo, useEffect } from 'react';
-import { X, Send, CheckCircle2, MessageSquare, ExternalLink } from 'lucide-react';
 import type { Enquiry } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
+import { CheckCircle2,ExternalLink,MessageSquare,Send,X } from 'lucide-react';
+import { useEffect,useMemo,useState } from 'react';
 
 export interface AdminMembersEnquiriesBulkWhatsAppModalProps {
   isOpen: boolean;

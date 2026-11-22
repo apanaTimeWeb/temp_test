@@ -3,12 +3,12 @@
  * These records are intentionally not treated as persisted backend data.
  */
 import type {
-  AdminSeatsSeatStatus,
+AdminSeatsSeatStatus,
 } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/config/admin_seats_management_constants';
 import {
-  ADMIN_SEATS_ALLOCATION_FEE_STATUS_BADGE_CLASS,
-  ADMIN_SEATS_ALLOCATION_STATUS_BADGE_CLASS,
-  ADMIN_SEATS_LOCKER_STATUS_BADGE_CLASS,
+ADMIN_SEATS_ALLOCATION_FEE_STATUS_BADGE_CLASS,
+ADMIN_SEATS_ALLOCATION_STATUS_BADGE_CLASS,
+ADMIN_SEATS_LOCKER_STATUS_BADGE_CLASS,
 } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/config/admin_seats_management_constants';
 
 export interface AdminSeatsDemoSeat {

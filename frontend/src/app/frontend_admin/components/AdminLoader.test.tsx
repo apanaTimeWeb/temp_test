@@ -1,7 +1,6 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
-import { AdminLoader, AdminPageLoader, ButtonLoader } from '@/app/frontend_admin/components/AdminLoader';
+import { AdminLoader,AdminPageLoader,ButtonLoader } from '@/app/frontend_admin/components/AdminLoader';
+import { render,screen } from '@testing-library/react';
+import { describe,expect,it } from 'vitest';
 
 describe('AdminLoader (Aurora Cyber-Luxury)', () => {
   it('renders with accessible status role and default label', () => {

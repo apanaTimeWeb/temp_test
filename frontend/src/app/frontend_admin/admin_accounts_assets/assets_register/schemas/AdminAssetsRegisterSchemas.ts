@@ -1,10 +1,10 @@
 // schemas/AdminAssetsRegisterSchemas.ts
-import { z } from 'zod';
 import {
-  ADMIN_ASSET_CATEGORIES,
-  ADMIN_ASSET_STATUSES,
-  ADMIN_ASSET_AMC_STATUSES,
+ADMIN_ASSET_AMC_STATUSES,
+ADMIN_ASSET_CATEGORIES,
+ADMIN_ASSET_STATUSES,
 } from '@/app/frontend_admin/admin_accounts_assets/assets_register/config/admin_assets_register.url_config';
+import { z } from 'zod';
 
 export const AdminAssetCategorySchema = z.enum(ADMIN_ASSET_CATEGORIES);
 export const AdminAssetStatusSchema = z.enum(ADMIN_ASSET_STATUSES);

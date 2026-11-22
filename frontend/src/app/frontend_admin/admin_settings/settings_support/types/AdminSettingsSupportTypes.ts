@@ -1,5 +1,5 @@
-import type { LucideIcon } from 'lucide-react';
 import type { AdminSettingsSupportScenario } from '@/app/frontend_admin/admin_settings/settings_support/tests/harness/bootstrap';
+import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 export type AdminSupportTab = 'help' | 'tickets' | 'status' | 'announcements' | 'docs';

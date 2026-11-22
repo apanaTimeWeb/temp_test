@@ -1,13 +1,12 @@
-import { AdminSeatsMatrixScenarios as HarnessScenarioList } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/tests/harness/bootstrap';
-import { describe, expect, it } from 'vitest';
+import { describe,expect,it } from 'vitest';
 
-import { AdminSeatMatrixLockerListSchema, AdminSeatMatrixSeatListSchema } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/schemas/AdminSeatsMatrixApiSchema';
+import { AdminSeatMatrixLockerListSchema,AdminSeatMatrixSeatListSchema } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/schemas/AdminSeatsMatrixApiSchema';
 
-import { ADMIN_SEAT_MATRIX_API_LOCKERS_FIXTURE, ADMIN_SEAT_MATRIX_API_SEATS_FIXTURE } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/mocks/AdminSeatsMatrixMSWHandlers';
+import { ADMIN_SEAT_MATRIX_API_LOCKERS_FIXTURE,ADMIN_SEAT_MATRIX_API_SEATS_FIXTURE } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/mocks/AdminSeatsMatrixMSWHandlers';
 
 import { ADMIN_SEAT_MATRIX_MSW_HANDLERS } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/mocks/AdminSeatsMatrixMSWHandlers';
 
-import { render, screen } from '@testing-library/react';
+import { render,screen } from '@testing-library/react';
 
 import { AdminSeatsMatrixHarness } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/tests/harness/AdminSeatsMatrixHarness';
 

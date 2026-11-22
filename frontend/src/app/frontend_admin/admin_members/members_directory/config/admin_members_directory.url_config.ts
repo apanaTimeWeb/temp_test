@@ -1,7 +1,7 @@
 /** Canonical module routes/API endpoints and cohesive module-owned configuration constants. */
+import type { AdminMembersDetailTab,AdminMembersDirectoryTab } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import type { LucideIcon } from 'lucide-react';
-import { Users, UserPlus, Tags, Building, BookOpen, RotateCcw, CheckCircle, AlertTriangle, PauseCircle, Ban, UploadCloud, DownloadCloud, FileText, Calendar, CreditCard, Activity } from 'lucide-react';
-import type { AdminMembersDetailTab, AdminMembersDirectoryTab } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
+import { Activity,AlertTriangle,Ban,BookOpen,Calendar,CheckCircle,CreditCard,FileText,PauseCircle,RotateCcw,Users } from 'lucide-react';
 
 /** Source-backed Members API registry, separate from the browser UI route registry. */
 export const ADMIN_MEMBERS_ROOT = '/admin/admin_members/members_directory' as const;

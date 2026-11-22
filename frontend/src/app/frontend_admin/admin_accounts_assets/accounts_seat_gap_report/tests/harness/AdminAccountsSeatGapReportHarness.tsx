@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import { AdminAccountsSeatGapReportScenarioLabel, type AdminAccountsSeatGapReportScenario } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/tests/harness/bootstrap';
+import { AdminAccountsSeatGapReportScenarioLabel } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/tests/harness/bootstrap';
 import type { AdminAccountsSeatGapReportHarnessProps } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/types/AdminAccountsSeatGapReportTypes';
 
 

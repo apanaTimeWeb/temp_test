@@ -1,9 +1,9 @@
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_STAFF_PAYROLL_FIXTURES } from '@/app/frontend_admin/admin_staff/staff_payroll/mocks/scenarios/admin_staff_payroll.scenarios';
 import type {
-  StaffSalaryRecord,
-  DisburseSalaryInput,
+DisburseSalaryInput,
+StaffSalaryRecord,
 } from '@/app/frontend_admin/admin_staff/staff_payroll/schemas/AdminStaffPayrollSchema';
+import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 
 export async function fetchAdminStaffPayrollList(): Promise<StaffSalaryRecord[]> {
   if (isFrontendDemoModeEnabled()) {

@@ -1,9 +1,9 @@
 'use client';
 // RESPONSIBILITY: AdminLockersLockerMatrixStats component owned by admin_lockers; responsibility folder: admin_lockers_components_cards.
 
-import { useTranslations } from 'next-intl';
-import { Lock, CheckCircle, UserCheck, Wrench } from 'lucide-react';
 import type { AdminLockersLockerMatrixStatsProps } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/types/AdminLockersMatrixTypes';
+import { CheckCircle,Lock,UserCheck,Wrench } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function AdminLockersLockerMatrixStats(stats: AdminLockersLockerMatrixStatsProps) {
   const t = useTranslations('ADMIN_LOCKERS');

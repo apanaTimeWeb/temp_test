@@ -1,13 +1,12 @@
-import * as HarnessVitest from 'vitest';
-import * as HarnessTestingLibrary from '@testing-library/react';
 import { AdminMembersCouponsHarness as HarnessScenarioComponent } from '@/app/frontend_admin/admin_members/members_coupons/tests/harness/AdminMembersCouponsHarness';
 import { AdminMembersCouponsScenarios as HarnessScenarioList } from '@/app/frontend_admin/admin_members/members_coupons/tests/harness/bootstrap';
+import * as HarnessTestingLibrary from '@testing-library/react';
+import * as HarnessVitest from 'vitest';
 
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render,screen } from '@testing-library/react';
 
-import { describe, expect, it } from 'vitest';
+import { describe,expect,it } from 'vitest';
 
-import { AdminMembersCouponsHarness } from '@/app/frontend_admin/admin_members/members_coupons/tests/harness/AdminMembersCouponsHarness';
 
 
 import { createAdminCouponsFormSchema } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';

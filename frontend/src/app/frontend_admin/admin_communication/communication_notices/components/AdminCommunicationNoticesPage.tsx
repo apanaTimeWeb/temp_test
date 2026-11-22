@@ -1,24 +1,24 @@
 'use client';
-import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
-import useAdminCommunicationNoticesQuery from '@/app/frontend_admin/admin_communication/communication_notices/hooks/useAdminCommunicationNoticesQuery';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import useAdminCommunicationNoticesUnsavedChangesGuard from '@/app/frontend_admin/admin_communication/communication_notices/hooks/useAdminCommunicationNoticesUnsavedChangesGuard';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronRight, Plus, Edit2, Trash2, Send, SearchX, Building2, Radio, Clock, CheckCircle2, AlertTriangle } from 'lucide-react';
-import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import { getAdminCommunicationNoticeStatus } from '@/app/frontend_admin/admin_communication/communication_notices/utils/AdminCommunicationNoticesDateUtils';
-import { createAdminCommunicationNoticeSchema, type AdminCommunicationNoticeFormValues } from '@/app/frontend_admin/admin_communication/communication_notices/schemas/AdminCommunicationNoticesSchema';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import { ADMIN_COMMUNICATION_NOTICE_API_FIXTURE } from '@/app/frontend_admin/admin_communication/communication_notices/mocks/scenarios/admin_communication_notices.scenarios';
-import type { Notice, AdminCommunicationEmptyStateProps } from '@/app/frontend_admin/admin_communication/communication_notices/types/AdminCommunicationNoticesComponentTypes';
-import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import AdminCommunicationNoticeModal from '@/app/frontend_admin/admin_communication/communication_notices/components/AdminCommunicationNoticeModal';
-import { AdminCommunicationNoticesConfirmDialogs } from '@/app/frontend_admin/admin_communication/communication_notices/components/AdminCommunicationNoticesConfirmDialogs';
 import { AdminCommunicationNoticesBranchBar } from '@/app/frontend_admin/admin_communication/communication_notices/components/AdminCommunicationNoticesBranchBar';
+import { AdminCommunicationNoticesConfirmDialogs } from '@/app/frontend_admin/admin_communication/communication_notices/components/AdminCommunicationNoticesConfirmDialogs';
+import useAdminCommunicationNoticesQuery from '@/app/frontend_admin/admin_communication/communication_notices/hooks/useAdminCommunicationNoticesQuery';
+import useAdminCommunicationNoticesUnsavedChangesGuard from '@/app/frontend_admin/admin_communication/communication_notices/hooks/useAdminCommunicationNoticesUnsavedChangesGuard';
+import { ADMIN_COMMUNICATION_NOTICE_API_FIXTURE } from '@/app/frontend_admin/admin_communication/communication_notices/mocks/scenarios/admin_communication_notices.scenarios';
+import { createAdminCommunicationNoticeSchema,type AdminCommunicationNoticeFormValues } from '@/app/frontend_admin/admin_communication/communication_notices/schemas/AdminCommunicationNoticesSchema';
+import type { AdminCommunicationEmptyStateProps,Notice } from '@/app/frontend_admin/admin_communication/communication_notices/types/AdminCommunicationNoticesComponentTypes';
+import { getAdminCommunicationNoticeStatus } from '@/app/frontend_admin/admin_communication/communication_notices/utils/AdminCommunicationNoticesDateUtils';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
+import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
+import type { DataGridCellParams,DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
+import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
+import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { AlertTriangle,Building2,CheckCircle2,Clock,Edit2,Plus,Radio,SearchX,Send,Trash2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useCallback,useEffect,useMemo,useRef,useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 // Responsibility: AdminCommunicationNoticesPage component owned by admin_communication; responsibility folder: admin_communication_components_views.
 

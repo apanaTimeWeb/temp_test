@@ -1,12 +1,11 @@
 'use client';
 // RESPONSIBILITY: Owns the selected manager overview and its demo-only history/activity panels.
 
-import { Building2, Clock3, Mail, Phone, UserRound } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import useAdminStaffDirectory from '@/app/frontend_admin/admin_staff/staff_directory/hooks/useAdminStaffDirectory';
-import { getAdminStaffDirectoryLastActiveLabel } from '@/app/frontend_admin/admin_staff/staff_directory/utils/AdminStaffDirectoryDisplayUtils';
-import { ADMIN_STAFF_DIRECTORY_MANAGER_ACTIVITY_FIXTURES, ADMIN_STAFF_DIRECTORY_MANAGER_HISTORY_FIXTURES } from '@/app/frontend_admin/admin_staff/staff_directory/mocks/scenarios/admin_staff_directory.scenarios';
+import { ADMIN_STAFF_DIRECTORY_MANAGER_ACTIVITY_FIXTURES,ADMIN_STAFF_DIRECTORY_MANAGER_HISTORY_FIXTURES } from '@/app/frontend_admin/admin_staff/staff_directory/mocks/scenarios/admin_staff_directory.scenarios';
 import type { AdminStaffDirectoryDetailLogsSectionProps } from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
+import { getAdminStaffDirectoryLastActiveLabel } from '@/app/frontend_admin/admin_staff/staff_directory/utils/AdminStaffDirectoryDisplayUtils';
+import { Building2,Clock3,Mail,Phone,UserRound } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 
 /** Combines the selected-manager overview and its related detail panels under the same lifecycle. */

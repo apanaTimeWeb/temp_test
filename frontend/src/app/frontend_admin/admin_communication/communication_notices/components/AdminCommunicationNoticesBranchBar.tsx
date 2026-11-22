@@ -1,7 +1,7 @@
 'use client';
 
-import { Search } from 'lucide-react';
 import type { AdminBranchItem } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBranchConstants';
+import { Search } from 'lucide-react';
 
 interface AdminCommunicationNoticesBranchBarProps {
   branches?: readonly AdminBranchItem[];

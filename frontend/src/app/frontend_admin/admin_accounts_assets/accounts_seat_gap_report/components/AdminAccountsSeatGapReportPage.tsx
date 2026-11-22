@@ -1,26 +1,26 @@
 'use client';
 // RESPONSIBILITY: AdminAccountsSeatGapReportPage component owned by admin_accounting; responsibility folder: admin_accounting_components_views.
 
-import { useEffect, useMemo, useState } from 'react';
-import { TrendingUp } from 'lucide-react';
-import { useTranslations, useLocale } from 'next-intl';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { toast } from 'sonner';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import type { DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import AdminAccountingSeatGapSummarySection from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/components/AdminAccountsSeatGapReportSeatGapSummarySection';
 import AdminAccountingSeatGapFilterSection from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/components/AdminAccountsSeatGapReportSeatGapFilterSection';
+import AdminAccountingSeatGapSummarySection from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/components/AdminAccountsSeatGapReportSeatGapSummarySection';
 import AdminAccountingSeatGapTableSection from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/components/AdminAccountsSeatGapReportSeatGapTableSection';
+import {
+AdminAccountsSeatGapReportTimeHorizonBar,
+type AdminAccountsSeatGapTimeHorizon,
+} from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/components/AdminAccountsSeatGapReportTimeHorizonBar';
+import { ADMIN_ACCOUNTING_SEAT_GAP_STATUS_FILTER_OPTIONS,ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/config/admin_accounts_seat_gap_report.url_config';
 import { ADMIN_ACCOUNTING_SEAT_GAP_FIXTURES } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/mocks/AdminAccountsSeatGapReportSeatGapFixtures';
 import type { AdminAccountingSeatGapRow } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/types/AdminAccountsSeatGapReportTypes';
+import { buildAdminAccountsSeatGapReportCsv,downloadAdminAccountingCsv } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/utils/AdminAccountsSeatGapReportExportUtils';
 import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/utils/AdminAccountsSeatGapReportFormatCurrency';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { buildAdminAccountsSeatGapReportCsv, downloadAdminAccountingCsv } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/utils/AdminAccountsSeatGapReportExportUtils';
-import { ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS, ADMIN_ACCOUNTING_SEAT_GAP_STATUS_FILTER_OPTIONS } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/config/admin_accounts_seat_gap_report.url_config';
-import {
-  AdminAccountsSeatGapReportTimeHorizonBar,
-  type AdminAccountsSeatGapTimeHorizon,
-} from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/components/AdminAccountsSeatGapReportTimeHorizonBar';
+import type { DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
+import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { TrendingUp } from 'lucide-react';
+import { useLocale,useTranslations } from 'next-intl';
+import { usePathname,useRouter,useSearchParams } from 'next/navigation';
+import { useEffect,useMemo,useState } from 'react';
+import { toast } from 'sonner';
 
 /**
  * Renders the accounting seat-gap report by shift and availability status. Dependencies: module-owned shift/status options and report data. Edge cases: empty categories and unknown statuses must not be inferred as available seats.

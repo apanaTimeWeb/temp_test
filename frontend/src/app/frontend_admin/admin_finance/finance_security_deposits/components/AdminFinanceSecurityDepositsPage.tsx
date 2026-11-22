@@ -1,31 +1,29 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
-import {
-  ShieldCheck,
-  Search,
-  X,
-  Download,
-  Printer,
-  RotateCcw,
-  Building,
-  Lock,
-} from 'lucide-react';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
+import {
+Download,
+Printer,
+RotateCcw,
+Search,
+ShieldCheck,
+X
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
 import { ADMIN_FINANCE_DEMO_SECURITY_DEPOSITS } from '../mocks/AdminFinanceSecurityDepositsDemoFixtures';
 import type {
-  AdminFinanceSecurityDeposit,
-  DepositSortField,
-  AdminDepositsTimeHorizon,
-  SecurityDepositStatus,
+AdminDepositsTimeHorizon,
+AdminFinanceSecurityDeposit,
+DepositSortField,
+SecurityDepositStatus,
 } from '../types/AdminFinanceSecurityDepositsTypes';
-import { AdminFinanceSecurityDepositsTimeHorizonBar } from './AdminFinanceSecurityDepositsTimeHorizonBar';
-import { AdminFinanceSecurityDepositsKpis } from './AdminFinanceSecurityDepositsKpis';
-import { AdminFinanceSecurityDepositsTable } from './AdminFinanceSecurityDepositsTable';
-import { AdminFinanceSecurityDepositsRefundModal } from './AdminFinanceSecurityDepositsRefundModal';
 import { AdminFinanceSecurityDepositsDeductionModal } from './AdminFinanceSecurityDepositsDeductionModal';
+import { AdminFinanceSecurityDepositsKpis } from './AdminFinanceSecurityDepositsKpis';
+import { AdminFinanceSecurityDepositsRefundModal } from './AdminFinanceSecurityDepositsRefundModal';
+import { AdminFinanceSecurityDepositsTable } from './AdminFinanceSecurityDepositsTable';
+import { AdminFinanceSecurityDepositsTimeHorizonBar } from './AdminFinanceSecurityDepositsTimeHorizonBar';
 
 export function AdminFinanceSecurityDepositsPage() {
   const t = useTranslations('ADMIN_FINANCE_SECURITY_DEPOSITS');

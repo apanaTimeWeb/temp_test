@@ -1,13 +1,13 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { Printer, X, Building2, CheckCircle2, MessageSquare } from 'lucide-react';
+import type { StaffSalaryRecord } from '@/app/frontend_admin/admin_staff/staff_payroll/schemas/AdminStaffPayrollSchema';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
+import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
-import type { StaffSalaryRecord } from '@/app/frontend_admin/admin_staff/staff_payroll/schemas/AdminStaffPayrollSchema';
+import { Building2,CheckCircle2,MessageSquare,Printer } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   record: StaffSalaryRecord | null;

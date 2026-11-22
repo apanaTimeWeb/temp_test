@@ -1,16 +1,14 @@
 'use client';
 // RESPONSIBILITY: Owns the primary income/expense and occupancy charts for the selected report dataset.
 
-import dynamic from 'next/dynamic';
-import { useTranslations } from 'next-intl';
-import { BarChart2, PieChart, IndianRupee, TrendingUp, TrendingDown, Users, Wallet, type LucideIcon } from 'lucide-react';
-import type { ApexOptions } from 'apexcharts';
-import type { AdminDashboardReportsAnalyticsDataset, AdminDashboardReportsAnalyticsRange, AdminDashboardReportsAnalyticsKpi } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes';
-import { ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS, ADMIN_DASHBOARD_REPORTS_ANALYTICS_OCCUPANCY_LABEL_KEYS, ADMIN_DASHBOARD_REPORTS_ANALYTICS_KPI_LABEL_KEYS, ADMIN_DASHBOARD_REPORTS_ANALYTICS_KPI_SUB_KEYS, ADMIN_DASHBOARD_REPORTS_ANALYTICS_KPI_TREND_KEYS } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/config/admin_dashboard_reports.url_config';
-import { adminDashboardReportsAnalyticsFormatCurrency, adminDashboardReportsAnalyticsFormatNumber } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/utils/AdminDashboardReportsFormatters';
+import { ADMIN_DASHBOARD_REPORTS_ANALYTICS_KPI_LABEL_KEYS,ADMIN_DASHBOARD_REPORTS_ANALYTICS_KPI_SUB_KEYS,ADMIN_DASHBOARD_REPORTS_ANALYTICS_KPI_TREND_KEYS,ADMIN_DASHBOARD_REPORTS_ANALYTICS_OCCUPANCY_LABEL_KEYS,ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/config/admin_dashboard_reports.url_config';
+import type { AdminDashboardReportsAnalyticsKpi,AdminDashboardReportsAnalyticsPrimaryChartsGridProps } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes';
+import { adminDashboardReportsAnalyticsFormatCurrency,adminDashboardReportsAnalyticsFormatNumber } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/utils/AdminDashboardReportsFormatters';
 import { displayValue } from '@/lib/display_value';
-import Card from '@/components/ui/card/Card';
-import type { AdminDashboardReportsAnalyticsPrimaryChartsGridProps } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes';
+import type { ApexOptions } from 'apexcharts';
+import { BarChart2,IndianRupee,PieChart,TrendingDown,TrendingUp,Users,Wallet,type LucideIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 
 /** Accessible translated loading surface for the asynchronously loaded report charts. */
 function AdminDashboardReportsAnalyticsChartLoadingState() {

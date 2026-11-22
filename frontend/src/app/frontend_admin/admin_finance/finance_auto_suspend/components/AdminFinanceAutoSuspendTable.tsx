@@ -1,25 +1,24 @@
 'use client';
 
 import {
-  MessageCircle,
-  RotateCcw,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  QrCode,
-  User,
-  Armchair,
-  Building,
-  Clock,
-  Calendar,
-  AlertTriangle,
-  ChevronLeft,
-  ChevronRight,
-  Check,
+AlertTriangle,
+Armchair,
+ArrowDown,
+ArrowUp,
+ArrowUpDown,
+Building,
+Calendar,
+Check,
+ChevronLeft,
+ChevronRight,
+Clock,
+MessageCircle,
+QrCode,
+RotateCcw
 } from 'lucide-react';
 import type {
-  AdminFinanceAutoSuspendSuspendedStudent,
-  SuspendSortField,
+AdminFinanceAutoSuspendSuspendedStudent,
+SuspendSortField,
 } from '../types/AdminFinanceAutoSuspendTypes';
 import { AdminFinanceAutoSuspendEmptyState } from './AdminFinanceAutoSuspendEmptyState';
 

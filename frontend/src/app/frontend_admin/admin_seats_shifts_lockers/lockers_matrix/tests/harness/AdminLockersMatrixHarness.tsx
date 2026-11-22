@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import { AdminLockersMatrixScenarioLabel, type AdminLockersMatrixScenario } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/tests/harness/bootstrap';
+import { AdminLockersMatrixScenarioLabel } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/tests/harness/bootstrap';
 import type { AdminLockersMatrixHarnessProps } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/types/AdminLockersMatrixTypes';
 
 

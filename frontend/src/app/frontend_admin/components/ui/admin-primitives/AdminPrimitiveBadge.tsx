@@ -1,4 +1,3 @@
-import type { HTMLAttributes } from 'react';
 import { joinAdminPrimitiveClasses } from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveClassNames';
 import type { AdminSystemBadgeProps } from '@/app/frontend_admin/components/ui/admin-primitives/types/AdminUiAdminPrimitivesComponentTypes';
 

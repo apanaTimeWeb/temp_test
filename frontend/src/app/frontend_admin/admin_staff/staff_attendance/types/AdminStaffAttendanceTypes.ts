@@ -1,10 +1,8 @@
 import type {
-  StaffAttendanceRecord,
-  StaffRosterSlot,
-  AttendanceStatus,
-  StaffShiftType,
-  RegularizeAttendanceInput,
-  StaffLeaveRequest,
+RegularizeAttendanceInput,
+StaffAttendanceRecord,
+StaffLeaveRequest,
+StaffRosterSlot
 } from '@/app/frontend_admin/admin_staff/staff_attendance/schemas/AdminStaffAttendanceSchema';
 
 export type StaffAttendanceViewTab = 'roster' | 'logs' | 'leaves';

@@ -1,9 +1,9 @@
 'use client';
 // DATA FLOW: settings_support route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
-import { useCallback, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { AdminSupportTab } from '@/app/frontend_admin/admin_settings/settings_support/types/AdminSettingsSupportTypes';
+import { usePathname,useRouter,useSearchParams } from 'next/navigation';
+import { useCallback,useState } from 'react';
 const TABS: readonly AdminSupportTab[] = ['tickets', 'announcements'];
 export default function useAdminSupportTabState() {
   const router = useRouter(); const pathname = usePathname(); const searchParams = useSearchParams();

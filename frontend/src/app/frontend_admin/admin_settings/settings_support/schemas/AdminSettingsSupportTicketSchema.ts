@@ -1,5 +1,5 @@
+import { ADMIN_SUPPORT_TICKET_CATEGORIES,ADMIN_SUPPORT_TICKET_PRIORITIES } from '@/app/frontend_admin/admin_settings/settings_support/config/admin_settings_support.url_config';
 import { z } from 'zod';
-import { ADMIN_SUPPORT_TICKET_CATEGORIES, ADMIN_SUPPORT_TICKET_PRIORITIES } from '@/app/frontend_admin/admin_settings/settings_support/config/admin_settings_support.url_config';
 
 export const AdminSupportTicketSchema = z.object({
   category: z.enum(ADMIN_SUPPORT_TICKET_CATEGORIES, { required_error: 'Select a ticket category.' }),

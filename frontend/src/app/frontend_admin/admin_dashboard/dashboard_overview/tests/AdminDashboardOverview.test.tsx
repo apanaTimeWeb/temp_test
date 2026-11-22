@@ -1,11 +1,11 @@
+import AdminDashboardOverviewMain from '@/app/frontend_admin/admin_dashboard/dashboard_overview/components/AdminDashboardOverviewMain';
+import en from '@/app/frontend_admin/admin_dashboard/dashboard_overview/locales/admin_dashboard_overview_en.json';
+import { render,screen,within } from '@testing-library/react';
+import { NextIntlClientProvider } from 'next-intl';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { render, screen, within } from '@testing-library/react';
-import { NextIntlClientProvider } from 'next-intl';
-import { describe, expect, it } from 'vitest';
-import AdminDashboardOverviewMain from '@/app/frontend_admin/admin_dashboard/dashboard_overview/components/AdminDashboardOverviewMain';
-import en from '@/app/frontend_admin/admin_dashboard/dashboard_overview/locales/admin_dashboard_overview_en.json';
+import { describe,expect,it } from 'vitest';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 function renderOverview() {

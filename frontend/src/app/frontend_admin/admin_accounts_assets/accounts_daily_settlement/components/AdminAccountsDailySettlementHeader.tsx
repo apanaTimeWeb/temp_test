@@ -1,7 +1,7 @@
 'use client';
 // Responsibility: AdminAccountsDailySettlementHeader component owned by accounts_daily_settlement.
 
-import { Building2, Calendar } from 'lucide-react';
+import { Building2,Calendar } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 interface AdminAccountsDailySettlementHeaderProps {

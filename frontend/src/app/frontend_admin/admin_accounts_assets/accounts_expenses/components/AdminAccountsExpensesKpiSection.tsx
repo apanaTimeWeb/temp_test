@@ -1,10 +1,10 @@
 'use client';
 // RESPONSIBILITY: AdminAccountsExpensesKpiSection component owned by admin_accounting; responsibility folder: admin_accounts_expenses_sections.
 
-import { useTranslations, useLocale } from 'next-intl';
-import { TrendingDown, Clock, Filter, Tag } from 'lucide-react';
 import type { AdminAccountsExpensesKpiSectionProps } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/types/AdminAccountsExpensesComponentTypes';
 import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/utils/AdminAccountsExpensesFormatCurrency';
+import { Clock,Filter,Tag,TrendingDown } from 'lucide-react';
+import { useLocale,useTranslations } from 'next-intl';
 
 // Generates decorative SVG sparkline path like Superadmin Dashboard
 const generateSparkline = (title: string) => {

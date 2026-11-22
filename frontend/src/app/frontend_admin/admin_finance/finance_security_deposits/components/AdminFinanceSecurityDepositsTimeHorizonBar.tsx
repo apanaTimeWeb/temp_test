@@ -1,6 +1,6 @@
 'use client';
 
-import { Calendar, Clock, Filter } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import type { AdminDepositsTimeHorizon } from '../types/AdminFinanceSecurityDepositsTypes';
 
 export interface AdminFinanceSecurityDepositsTimeHorizonBarProps {

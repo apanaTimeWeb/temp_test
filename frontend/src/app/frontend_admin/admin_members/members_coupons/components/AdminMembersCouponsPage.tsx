@@ -1,34 +1,31 @@
 'use client';
 
-import { useCallback, useMemo, useState, useEffect } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { Trash2, CheckCircle, Building2 } from 'lucide-react';
-import { useLocale, useTranslations } from 'next-intl';
-import { toast } from 'sonner';
-import { Toaster } from 'sonner';
-import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { AdminCouponsCoupon } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
+import type { DataGridCellParams,DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
+import { useQueryClient } from '@tanstack/react-query';
+import { Building2,CheckCircle,Trash2 } from 'lucide-react';
+import { useLocale,useTranslations } from 'next-intl';
+import { useCallback,useEffect,useMemo,useState } from 'react';
+import { toast,Toaster } from 'sonner';
 
 import { ADMIN_COUPONS_QUERY_KEYS } from '@/app/frontend_admin/admin_members/members_coupons/api/admin_members_coupons.query_keys';
-import { ADMIN_COUPONS_STATUS_VALUES, ADMIN_COUPONS_UNKNOWN_STATUS, ADMIN_COUPONS_EMPTY_FORM } from '@/app/frontend_admin/admin_members/members_coupons/config/admin_members_coupons.url_config';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import AdminCouponsOverviewSection,{ formatAdminCouponsDate,formatAdminCouponsDiscount } from '@/app/frontend_admin/admin_members/members_coupons/components/AdminMembersCouponsOverviewSection';
+import { ADMIN_COUPONS_EMPTY_FORM,ADMIN_COUPONS_STATUS_VALUES,ADMIN_COUPONS_UNKNOWN_STATUS } from '@/app/frontend_admin/admin_members/members_coupons/config/admin_members_coupons.url_config';
+import { useAdminCouponsListQuery,useAdminMembersCouponsState } from '@/app/frontend_admin/admin_members/members_coupons/hooks/useAdminMembersCouponsPageHooks';
+import type { AdminCouponsCreateDialogIntent,AdminCouponsCreateDialogProps } from '@/app/frontend_admin/admin_members/members_coupons/types/AdminMembersCouponsComponentTypes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { useAdminMembersCouponsState, useAdminCouponsListQuery } from '@/app/frontend_admin/admin_members/members_coupons/hooks/useAdminMembersCouponsPageHooks';
-import AdminCouponsOverviewSection, { formatAdminCouponsDiscount, formatAdminCouponsDate } from '@/app/frontend_admin/admin_members/members_coupons/components/AdminMembersCouponsOverviewSection';
+import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { displayValue } from '@/lib/display_value';
-import type { AdminCouponsCreateDialogIntent, AdminCouponsCreateDialogProps } from '@/app/frontend_admin/admin_members/members_coupons/types/AdminMembersCouponsComponentTypes';
 
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 
-import type { z } from 'zod';
+import { createAdminCouponsFormSchema,type AdminCouponsFormOutput } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import { createAdminCouponsFormSchema, type AdminCouponsFormOutput } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
 
 // Responsibility: AdminCouponsPage presentation component owned by admin_coupons; responsibility folder: admin_coupons_components_views.
 

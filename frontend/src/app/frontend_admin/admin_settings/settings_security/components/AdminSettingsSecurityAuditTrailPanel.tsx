@@ -1,27 +1,22 @@
 // components/AdminSettingsSecurityAuditTrailPanel.tsx
 'use client';
-import { useState, useMemo, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
-import {
-  ShieldAlert,
-  AlertTriangle,
-  Info,
-  Search,
-  Filter,
-  CheckCircle2,
-  Eye,
-  ExternalLink,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-} from 'lucide-react';
-import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import { ADMIN_SECURITY_ANTI_FRAUD_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
 import type {
-  AntiFraudSeverity,
-  AntiFraudEntityType,
-  AntiFraudAuditRecord,
+AntiFraudAuditRecord
 } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
+import {
+AlertTriangle,
+ArrowDown,
+ArrowUp,
+ArrowUpDown,
+CheckCircle2,
+Info,
+Search,
+ShieldAlert
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect,useMemo,useState } from 'react';
 
 export function AdminSettingsSecurityAuditTrailPanel() {
   const t = useTranslations('ADMIN_SECURITY');

@@ -237,7 +237,7 @@ export default function SuperadminSubscriptionsOverviewPageClient() {
         <span className="text-slate-400 font-semibold flex items-center gap-1 pl-1">
           <Filter size={12} /> Status:
         </span>
-        {['all', 'Active', 'Trial', 'Grace Period', 'Past Due', 'Suspended', 'Cancelled'].map((st) => (
+        {['all', 'Active', 'Trial', 'Grace Period', 'Past Due', 'Suspended', 'Cancelled', 'Expired'].map((st) => (
           <button
             key={st}
             type="button"

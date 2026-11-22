@@ -1,7 +1,6 @@
 'use client';
-import type { ReactNode } from 'react';
-import { useDialog } from '@/components/ui/dialog/Dialog';
 import type { DialogTitleProps } from '@/app/frontend_admin/components/ui/dialog/types/AdminUiDialogComponentTypes';
+import { useDialog } from '@/components/ui/dialog/Dialog';
 
 
 export function DialogTitle({ children, className = '' }: DialogTitleProps) {

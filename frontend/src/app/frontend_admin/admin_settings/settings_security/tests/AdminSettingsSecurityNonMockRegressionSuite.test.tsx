@@ -1,12 +1,12 @@
 import { ADMIN_SETTINGS_SECURITY_API } from '@/app/frontend_admin/admin_settings/settings_security/config/admin_settings_security.url_config';
-import { ADMIN_SECURITY_MSW_HANDLERS, ADMIN_SECURITY_EVENT_FIXTURES, ADMIN_SECURITY_ACTIVE_SESSION_FIXTURES, ADMIN_SECURITY_FAILED_LOGIN_FIXTURES, ADMIN_SECURITY_DEVICE_SESSION_FIXTURES, ADMIN_SECURITY_BLOCKED_ACCOUNT_FIXTURES, ADMIN_SECURITY_ANTI_FRAUD_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
+import { ADMIN_SECURITY_ACTIVE_SESSION_FIXTURES,ADMIN_SECURITY_ANTI_FRAUD_FIXTURES,ADMIN_SECURITY_BLOCKED_ACCOUNT_FIXTURES,ADMIN_SECURITY_DEVICE_SESSION_FIXTURES,ADMIN_SECURITY_EVENT_FIXTURES,ADMIN_SECURITY_FAILED_LOGIN_FIXTURES,ADMIN_SECURITY_MSW_HANDLERS } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
 import { AdminSettingsSecurityHarness as HarnessScenarioComponent } from '@/app/frontend_admin/admin_settings/settings_security/tests/harness/AdminSettingsSecurityHarness';
 import { AdminSettingsSecurityScenarios as HarnessScenarioList } from '@/app/frontend_admin/admin_settings/settings_security/tests/harness/bootstrap';
 import { filterAdminSecurityEvents } from '@/app/frontend_admin/admin_settings/settings_security/utils/AdminSettingsSecurityEventUtils';
 import * as HarnessTestingLibrary from '@testing-library/react';
-import { render, screen } from '@testing-library/react';
+import { render,screen } from '@testing-library/react';
 import * as HarnessVitest from 'vitest';
-import { describe, expect, it } from 'vitest';
+import { describe,expect,it } from 'vitest';
 
 describe("Consolidated: AdminSettingsSecurityFixtures", () => {
     describe('AdminSecurityFixtures', () => {

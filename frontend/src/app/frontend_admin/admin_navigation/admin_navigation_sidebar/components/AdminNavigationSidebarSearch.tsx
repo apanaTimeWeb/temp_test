@@ -1,7 +1,7 @@
 'use client';
 
+import { Search,X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Search, X } from 'lucide-react';
 
 interface AdminNavigationSidebarSearchProps {
   expanded: boolean;

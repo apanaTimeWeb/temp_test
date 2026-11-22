@@ -1,8 +1,8 @@
 'use client';
 // DATA FLOW: settings_security route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
-import { useCallback } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { AdminSecurityTab } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
+import { usePathname,useRouter,useSearchParams } from 'next/navigation';
+import { useCallback } from 'react';
 const TABS: readonly AdminSecurityTab[] = ['active-sessions', 'login-security', 'device-sessions', 'failed-logins', 'blocked-users', 'events', 'audit-trail'];
 export default function useAdminSecurityTabState() {
   const router = useRouter(); const pathname = usePathname(); const searchParams = useSearchParams();

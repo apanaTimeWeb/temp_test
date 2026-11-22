@@ -1,7 +1,7 @@
 import type {
-  StaffAttendanceRecord,
-  StaffRosterSlot,
-  StaffLeaveRequest,
+StaffAttendanceRecord,
+StaffLeaveRequest,
+StaffRosterSlot,
 } from '@/app/frontend_admin/admin_staff/staff_attendance/schemas/AdminStaffAttendanceSchema';
 
 export const ADMIN_STAFF_ATTENDANCE_FIXTURES: StaffAttendanceRecord[] = [

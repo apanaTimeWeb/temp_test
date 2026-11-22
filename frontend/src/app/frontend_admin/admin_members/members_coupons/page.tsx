@@ -1,7 +1,7 @@
 'use client';
-import { useTranslations } from 'next-intl';
 import AdminCouponsPage from '@/app/frontend_admin/admin_members/members_coupons/components/AdminMembersCouponsPage';
 import AdminErrorBoundary from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveErrorBoundary';
+import { useTranslations } from 'next-intl';
 
 /** Canonical route boundary retains localized error recovery. */
 export default function AdminMembersCouponsRoute() {

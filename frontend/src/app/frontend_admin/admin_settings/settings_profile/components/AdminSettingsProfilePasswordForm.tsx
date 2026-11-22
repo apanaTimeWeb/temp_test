@@ -1,15 +1,14 @@
 'use client';
 // RESPONSIBILITY: AdminProfilePasswordForm component owned by admin_profile; responsibility folder: admin_profile_forms.
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'sonner';
-import { Eye, EyeOff, KeyRound, Lock, CheckCircle2, ShieldCheck } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { AdminProfilePasswordSchema,getAdminProfileValidationMessageKey,type AdminProfilePasswordFormValues } from '@/app/frontend_admin/admin_settings/settings_profile/schemas/AdminSettingsProfileSchema';
 import type { AdminSettingsProfileFormProps } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
-import { AdminProfilePasswordSchema, type AdminProfilePasswordFormValues } from '@/app/frontend_admin/admin_settings/settings_profile/schemas/AdminSettingsProfileSchema';
-import { getAdminProfileValidationMessageKey } from '@/app/frontend_admin/admin_settings/settings_profile/schemas/AdminSettingsProfileSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CheckCircle2,Eye,EyeOff,KeyRound,Lock,ShieldCheck } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect,useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 /** Validates the local password-change draft without invoking or implying an authentication mutation. */
 export default function AdminProfilePasswordForm({ onDirtyChange }: AdminSettingsProfileFormProps) {

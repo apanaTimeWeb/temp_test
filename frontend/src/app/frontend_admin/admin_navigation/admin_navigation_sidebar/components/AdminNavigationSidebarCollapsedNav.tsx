@@ -1,13 +1,13 @@
 'use client';
 // Responsibility: AdminNavigationSidebarCollapsedNav component owned by admin_navigation_sidebar.
 
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import { ADMIN_SIDEBAR_NAV } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_navigation_constants';
 import {
-  ADMIN_NAV_GROUP_COLORS,
-  DEFAULT_ADMIN_NAV_COLOR,
+ADMIN_NAV_GROUP_COLORS,
+DEFAULT_ADMIN_NAV_COLOR,
 } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_colors';
+import { ADMIN_SIDEBAR_NAV } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_navigation_constants';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { isSidebarLinkActive } from '../utils/AdminNavigationSidebarPathUtils';
 
 interface AdminNavigationSidebarCollapsedNavProps {

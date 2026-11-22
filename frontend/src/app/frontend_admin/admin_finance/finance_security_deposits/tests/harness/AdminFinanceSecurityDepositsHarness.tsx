@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import {
-  AdminFinanceSecurityDepositsScenarioLabel,
-  type AdminFinanceSecurityDepositsScenario,
+AdminFinanceSecurityDepositsScenarioLabel,
+type AdminFinanceSecurityDepositsScenario,
 } from './bootstrap';
 
 export interface AdminFinanceSecurityDepositsHarnessProps {

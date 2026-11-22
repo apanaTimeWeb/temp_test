@@ -3,7 +3,7 @@
 
 import { ADMIN_ACCOUNTS_FINANCIAL_REPORTS_CATEGORY_FIXTURES } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/mocks/AdminAccountsFinancialReportsFixtures';
 import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/utils/AdminAccountsFinancialReportsFormatCurrency';
-import { useTranslations, useLocale } from 'next-intl';
+import { useLocale,useTranslations } from 'next-intl';
 
 const CATEGORY_TRANSLATION_KEY: Record<string, string> = { Electricity: 'CATEGORY_ELECTRICITY', Maintenance: 'CATEGORY_MAINTENANCE', Internet: 'CATEGORY_INTERNET', Salary: 'CATEGORY_SALARY', Miscellaneous: 'CATEGORY_MISCELLANEOUS' };
 

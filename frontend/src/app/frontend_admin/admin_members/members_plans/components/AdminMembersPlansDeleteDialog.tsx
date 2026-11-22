@@ -1,10 +1,10 @@
 'use client';
 // RESPONSIBILITY: AdminPlansDeleteDialog component owned by admin_plans; responsibility folder: admin_plans_delete_dialog.
 
-import { useEffect, useRef } from 'react';
-import { useTranslations } from 'next-intl';
-import { Trash2 } from 'lucide-react';
 import type { AdminPlansDeleteDialogProps } from '@/app/frontend_admin/admin_members/members_plans/types/AdminMembersPlansComponentTypes';
+import { Trash2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect,useRef } from 'react';
 
 
 export default function AdminPlansDeleteDialog({ open, planName, onClose, onConfirm }: AdminPlansDeleteDialogProps) {

@@ -1,10 +1,10 @@
 'use client';
 // RESPONSIBILITY: AdminEnquiriesEnquiryKanbanCard component owned by admin_enquiries.
 
-import { useTranslations } from 'next-intl';
-import { Phone, Clock, CalendarDays, CheckCircle, User } from 'lucide-react';
-import { maskPhone } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
 import type { AdminEnquiriesEnquiryKanbanCardProps } from '@/app/frontend_admin/admin_members/members_enquiries/types/AdminMembersEnquiriesComponentTypes';
+import { maskPhone } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
+import { CalendarDays,CheckCircle,Clock,Phone,User } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function AdminEnquiriesEnquiryKanbanCard({ enq, colClass, onClick }: AdminEnquiriesEnquiryKanbanCardProps) {
   const t = useTranslations('ADMIN_ENQUIRIES');

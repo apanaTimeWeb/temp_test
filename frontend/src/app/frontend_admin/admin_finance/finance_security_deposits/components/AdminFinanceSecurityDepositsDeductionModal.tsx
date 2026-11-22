@@ -1,6 +1,6 @@
 'use client';
 
-import { Minus, X, CheckCircle, IndianRupee } from 'lucide-react';
+import { CheckCircle,IndianRupee,Minus,X } from 'lucide-react';
 import type { AdminFinanceSecurityDeposit } from '../types/AdminFinanceSecurityDepositsTypes';
 
 export interface AdminFinanceSecurityDepositsDeductionModalProps {

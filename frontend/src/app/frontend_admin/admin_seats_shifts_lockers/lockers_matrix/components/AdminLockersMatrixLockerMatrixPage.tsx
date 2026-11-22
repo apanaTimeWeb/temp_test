@@ -1,22 +1,22 @@
 'use client';
 // RESPONSIBILITY: AdminLockersLockerMatrixPage component owned by admin_lockers; responsibility folder: admin_lockers_components_views.
 
-import { useTranslations } from 'next-intl';
-import { useMemo, useState, useEffect } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { KeyRound, Building2, ShieldAlert, LayoutGrid, List, Search, Filter, Lock, Unlock, Wrench, User, Download, FileSpreadsheet, Printer, Settings } from 'lucide-react';
-import { toast } from 'sonner';
-import { useAdminLockersLockerMatrix } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/hooks/useAdminLockersMatrixLockerMatrix';
 import { ADMIN_LOCKERS_MATRIX_QUERY_KEYS } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/api/admin_lockers_matrix.query_keys';
-import type { AdminLockersLockerMatrixViewModel } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/types/AdminLockersMatrixTypes';
+import {
+ADMIN_LOCKER_MATRIX_STATUS_CLASS,
+AdminLockersMatrixDetailModal,
+} from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/components/AdminLockersMatrixDetailModal';
 import AdminLockersLockerMatrixStats from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/components/AdminLockersMatrixLockerMatrixStats';
+import { useAdminLockersLockerMatrix } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/hooks/useAdminLockersMatrixLockerMatrix';
+import type { AdminLockersLockerMatrixViewModel } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/types/AdminLockersMatrixTypes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import {
-  AdminLockersMatrixDetailModal,
-  ADMIN_LOCKER_MATRIX_STATUS_CLASS,
-} from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/components/AdminLockersMatrixDetailModal';
-import { AdminLockersMatrixSettingsModal, type LockerPricingPolicy } from './AdminLockersMatrixSettingsModal';
+import { useQueryClient } from '@tanstack/react-query';
+import { Download,FileSpreadsheet,KeyRound,LayoutGrid,List,Printer,Search,Settings,ShieldAlert,Unlock,User,Wrench } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect,useMemo,useState } from 'react';
+import { toast } from 'sonner';
+import { AdminLockersMatrixSettingsModal,type LockerPricingPolicy } from './AdminLockersMatrixSettingsModal';
 
 const LEGEND_ITEMS: Array<{ label: string; cls: string; dot: string }> = [
   { cls: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400', dot: 'bg-emerald-400', label: 'statusFree' },

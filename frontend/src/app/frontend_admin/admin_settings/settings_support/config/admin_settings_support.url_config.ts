@@ -1,6 +1,6 @@
 /** Canonical module routes/API endpoints and cohesive module-owned configuration constants. */
-import { Activity, BellRing, BookOpen, LifeBuoy, Ticket } from 'lucide-react';
 import type { AdminSupportNavigationItem } from '@/app/frontend_admin/admin_settings/settings_support/types/AdminSettingsSupportTypes';
+import { BellRing,Ticket } from 'lucide-react';
 
 /** Canonical, source-observed UI route contract. No support-ticket API endpoint is verified in this source scope. */
 export const ADMIN_SETTINGS_SUPPORT_ROUTES = { ROOT: '/admin/admin_settings/settings_support' } as const;

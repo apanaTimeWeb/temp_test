@@ -1,14 +1,14 @@
 'use client';
 // RESPONSIBILITY: AdminStaffDirectoryAuditSection component owned by admin_staff_directory; responsibility folder: admin_staff_directory_audit_section.
 
-import { useState, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-import { Search } from 'lucide-react';
 import { ADMIN_STAFF_DIRECTORY_ACTIVITY_FIXTURES } from '@/app/frontend_admin/admin_staff/staff_directory/mocks/scenarios/admin_staff_directory.scenarios';
 import type { AdminStaffDirectoryAuditSectionProps } from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
-import { AdminStaffDirectoryAuditSessionsView } from './AdminStaffDirectoryAuditSessionsView';
+import { Search } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
 import { AdminStaffDirectoryAuditHistoryView } from './AdminStaffDirectoryAuditHistoryView';
+import { AdminStaffDirectoryAuditSessionsView } from './AdminStaffDirectoryAuditSessionsView';
 
 /** Renders explicitly synthetic audit/activity panels only in demo mode; no API-backed audit endpoint is inferred. */
 export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirectoryAuditSectionProps) {

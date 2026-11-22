@@ -1,9 +1,9 @@
-import type { AdminDashboardReportsReport, AdminDashboardReportsAnalyticsDataset, AdminDashboardReportsAnalyticsApiRecord } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes';
-import { ADMIN_DASHBOARD_REPORTS_SCENARIO_NAMES, type AdminDashboardReportsScenarioName } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/mocks/scenarios/admin_dashboard_reports.scenarios';
+import { ADMIN_DASHBOARD_REPORTS_API } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/config/admin_dashboard_reports.url_config';
+import { ADMIN_DASHBOARD_REPORTS_SCENARIO_NAMES,type AdminDashboardReportsScenarioName } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/mocks/scenarios/admin_dashboard_reports.scenarios';
+import type { AdminDashboardReportsAnalyticsApiRecord,AdminDashboardReportsAnalyticsDataset,AdminDashboardReportsReport } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes';
+import { delay,http,HttpResponse } from 'msw';
 export { ADMIN_DASHBOARD_REPORTS_SCENARIO_NAMES } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/mocks/scenarios/admin_dashboard_reports.scenarios';
 export type AdminDashboardReportsAnalyticsScenario = AdminDashboardReportsScenarioName;
-import { delay, http, HttpResponse } from 'msw';
-import { ADMIN_DASHBOARD_REPORTS_API } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/config/admin_dashboard_reports.url_config';
 
 /** Report catalog metadata only; it contains no fabricated business metrics or backend rows. */
 export const ADMIN_DASHBOARD_REPORTS_FIXTURES: readonly AdminDashboardReportsReport[] = [

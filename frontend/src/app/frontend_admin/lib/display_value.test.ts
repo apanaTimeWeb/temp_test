@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { displayValue } from '@/lib/display_value';
+import { describe,expect,it } from 'vitest';
 
 describe('displayValue', () => {
   it.each([null, undefined, '', '   '])('uses the fallback for blank nullable values: %s', (value) => {

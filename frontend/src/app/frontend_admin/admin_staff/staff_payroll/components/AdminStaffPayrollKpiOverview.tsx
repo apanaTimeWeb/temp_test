@@ -1,18 +1,17 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import {
-  Wallet,
-  CheckCircle2,
-  Clock,
-  Users,
-  TrendingDown,
-  Building2,
-  Calendar,
-  Search,
-} from 'lucide-react';
-import type { AdminStaffPayrollModel } from '@/app/frontend_admin/admin_staff/staff_payroll/types/AdminStaffPayrollTypes';
 import { PAYROLL_MONTHS } from '@/app/frontend_admin/admin_staff/staff_payroll/config/admin_staff_payroll.url_config';
+import type { AdminStaffPayrollModel } from '@/app/frontend_admin/admin_staff/staff_payroll/types/AdminStaffPayrollTypes';
+import {
+Calendar,
+CheckCircle2,
+Clock,
+Search,
+TrendingDown,
+Users,
+Wallet
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   model: AdminStaffPayrollModel;

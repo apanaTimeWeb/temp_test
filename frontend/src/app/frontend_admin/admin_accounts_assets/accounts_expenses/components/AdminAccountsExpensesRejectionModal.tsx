@@ -1,14 +1,14 @@
 'use client';
-import { useState, useCallback, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
-import { AlertTriangle, X } from 'lucide-react';
+import type { AdminAccountsExpensesRejectionModalProps } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/types/AdminAccountsExpensesComponentTypes';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
-import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
-import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
-import type { AdminAccountsExpensesRejectionModalProps } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/types/AdminAccountsExpensesComponentTypes';
+import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
+import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
+import { AlertTriangle,X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useCallback,useEffect,useState } from 'react';
 
 export function AdminAccountsExpensesRejectionModal({
   expense,

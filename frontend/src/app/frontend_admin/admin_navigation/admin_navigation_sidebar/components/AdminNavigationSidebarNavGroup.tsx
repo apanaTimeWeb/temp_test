@@ -1,14 +1,14 @@
 'use client';
 
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import { ChevronDown } from 'lucide-react';
-import type { AdminNavigationGroup } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_navigation_constants';
 import {
-  ADMIN_NAV_GROUP_COLORS,
-  ADMIN_NAV_SUBMODULE_COLORS,
-  DEFAULT_ADMIN_NAV_COLOR,
+ADMIN_NAV_GROUP_COLORS,
+ADMIN_NAV_SUBMODULE_COLORS,
+DEFAULT_ADMIN_NAV_COLOR,
 } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_colors';
+import type { AdminNavigationGroup } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_navigation_constants';
+import { ChevronDown } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 
 interface AdminNavigationSidebarNavGroupProps {
   group: AdminNavigationGroup;

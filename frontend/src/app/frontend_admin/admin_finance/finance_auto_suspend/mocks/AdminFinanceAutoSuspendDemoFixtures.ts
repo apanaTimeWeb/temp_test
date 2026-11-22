@@ -1,6 +1,6 @@
 import type {
-  AdminFinanceAutoSuspendConfig,
-  AdminFinanceAutoSuspendSuspendedStudent,
+AdminFinanceAutoSuspendConfig,
+AdminFinanceAutoSuspendSuspendedStudent,
 } from '../types/AdminFinanceAutoSuspendTypes';
 
 export const ADMIN_FINANCE_DEFAULT_AUTO_SUSPEND_CONFIG: AdminFinanceAutoSuspendConfig = {

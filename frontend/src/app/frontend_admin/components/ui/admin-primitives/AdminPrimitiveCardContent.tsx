@@ -1,4 +1,3 @@
-import type { HTMLAttributes, ReactNode } from 'react';
 import type { AdminSystemCardContentProps } from '@/app/frontend_admin/components/ui/admin-primitives/types/AdminUiAdminPrimitivesComponentTypes';
 
 

@@ -1,7 +1,7 @@
 'use client';
 
+import { Filter,Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Search, Filter } from 'lucide-react';
 
 interface AdminShiftsGapAuditToolbarProps {
   searchQuery: string;

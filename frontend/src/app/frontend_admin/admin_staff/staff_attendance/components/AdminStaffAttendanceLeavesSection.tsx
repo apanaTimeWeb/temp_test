@@ -1,19 +1,19 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-import {
-  Check,
-  X,
-  UserX,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-} from 'lucide-react';
 import type {
-  StaffLeaveRequest,
+StaffLeaveRequest,
 } from '@/app/frontend_admin/admin_staff/staff_attendance/schemas/AdminStaffAttendanceSchema';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
+import {
+ArrowDown,
+ArrowUp,
+ArrowUpDown,
+Check,
+UserX,
+X,
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
 
 interface LeavesProps {
   leaveRequests: StaffLeaveRequest[];

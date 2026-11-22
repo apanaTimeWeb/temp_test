@@ -1,6 +1,6 @@
 // tests/harness/AdminAssetsRegisterHarness.tsx
-import type { ReactNode } from 'react';
 import type { AdminAssetsRegisterScenario } from '@/app/frontend_admin/admin_accounts_assets/assets_register/tests/harness/bootstrap';
+import type { ReactNode } from 'react';
 
 export interface AdminAssetsRegisterHarnessProps {
   children?: ReactNode;

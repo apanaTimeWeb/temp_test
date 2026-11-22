@@ -1,7 +1,7 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import { AdminShellHeader } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminShellHeader';
 import { AdminBranchProvider } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
+import { AdminShellHeader } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminShellHeader';
+import { fireEvent,render,screen,within } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 
 const translations: Record<string, string> = {
   OPEN_MENU: 'Open menu',

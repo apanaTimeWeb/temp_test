@@ -1,5 +1,5 @@
-import { format, parseISO } from 'date-fns';
 import { getAdminFinanceLocale } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/AdminFinanceReferralsLocale';
+import { format,parseISO } from 'date-fns';
 
 export function minorToMajor(amountMinor: number, currency: string, locale: string): number {
   if (!Number.isSafeInteger(amountMinor) || amountMinor < 0) throw new RangeError('Finance currency amounts must be safe nonnegative integers in minor units.');

@@ -1,14 +1,11 @@
-import React from 'react';
-import { describe as suite0_describe, expect as suite0_expect, it as suite0_it } from "vitest";
-import { render as suite0_render, screen as suite0_screen } from "@testing-library/react";
-import { AdminAccountingExpenseRecordSchema as suite0_AdminAccountingExpenseRecordSchema, createAdminAccountingExpenseCategoryFormSchema as suite0_createAdminAccountingExpenseCategoryFormSchema, createAdminAccountingExpenseFormSchema as suite0_createAdminAccountingExpenseFormSchema } from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/schemas/AdminAccountsExpensesSchemas";
-import { AdminAccountsExpensesHarness as Suite0_AdminAccountsExpensesHarness } from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/tests/harness/AdminAccountsExpensesHarness";
-import { AdminAccountsExpensesScenarios as suite0_AdminAccountsExpensesScenarios } from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/tests/harness/bootstrap";
+import { useAdminAccountsExpensesUnsavedChangesGuard as suite1_useAdminAccountsExpensesUnsavedChangesGuard } from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/hooks/useAdminAccountsExpensesUnsavedChangesGuard";
 import suite0_englishMessages from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/locales/admin_accounts_expenses_en.json";
 import suite0_hindiMessages from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/locales/admin_accounts_expenses_hi.json";
-import { act as suite1_act, renderHook as suite1_renderHook } from "@testing-library/react";
-import { afterEach as suite1_afterEach, describe as suite1_describe, expect as suite1_expect, it as suite1_it, vi as suite1_vi } from "vitest";
-import { useAdminAccountsExpensesUnsavedChangesGuard as suite1_useAdminAccountsExpensesUnsavedChangesGuard } from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/hooks/useAdminAccountsExpensesUnsavedChangesGuard";
+import { AdminAccountingExpenseRecordSchema as suite0_AdminAccountingExpenseRecordSchema,createAdminAccountingExpenseCategoryFormSchema as suite0_createAdminAccountingExpenseCategoryFormSchema,createAdminAccountingExpenseFormSchema as suite0_createAdminAccountingExpenseFormSchema } from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/schemas/AdminAccountsExpensesSchemas";
+import { AdminAccountsExpensesHarness as Suite0_AdminAccountsExpensesHarness } from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/tests/harness/AdminAccountsExpensesHarness";
+import { AdminAccountsExpensesScenarios as suite0_AdminAccountsExpensesScenarios } from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/tests/harness/bootstrap";
+import { render as suite0_render,screen as suite0_screen,act as suite1_act,renderHook as suite1_renderHook } from "@testing-library/react";
+import { describe as suite0_describe,expect as suite0_expect,it as suite0_it,afterEach as suite1_afterEach,describe as suite1_describe,expect as suite1_expect,it as suite1_it,vi as suite1_vi } from "vitest";
 
 describe("Consolidated from AdminAccountsExpensesFeatureContracts.test.tsx", () => {
 

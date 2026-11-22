@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
 import { AdminFinanceReferralsHarness } from '@/app/frontend_admin/admin_finance/finance_referrals/tests/harness/AdminFinanceReferralsHarness';
 import { AdminFinanceReferralsScenarios } from '@/app/frontend_admin/admin_finance/finance_referrals/tests/harness/bootstrap';
+import { render,screen } from '@testing-library/react';
+import { describe,expect,it } from 'vitest';
 
 describe('admin_finance_referrals local scenario harness', () => {
   it.each(AdminFinanceReferralsScenarios)('renders the %s state rather than only changing a scenario label', (scenario) => {

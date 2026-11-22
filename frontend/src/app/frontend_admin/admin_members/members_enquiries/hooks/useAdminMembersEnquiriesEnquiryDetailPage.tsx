@@ -1,13 +1,12 @@
 'use client';
 // DATA FLOW: members_enquiries route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
-import { use, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { getEnquiries } from '@/app/frontend_admin/admin_members/members_enquiries/hooks/useAdminMembersEnquiriesPage';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_ENQUIRIES_ENQUIRY_STATUS_BADGE } from '@/app/frontend_admin/admin_members/members_enquiries/config/admin_members_enquiries.url_config';
-import type { EnquiryStatus } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
-import type { AdminEnquiriesEnquiryDetail } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
+import { getEnquiries } from '@/app/frontend_admin/admin_members/members_enquiries/hooks/useAdminMembersEnquiriesPage';
+import type { AdminEnquiriesEnquiryDetail,EnquiryStatus } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
+import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { use,useEffect,useState } from 'react';
 
 /** @description Loads one Admin CRM enquiry and owns only the detail resource state needed by the view-only screen. @dependencies Module-owned browser storage and CRM status mapping. @edge-case Invalid IDs produce a not-found state; unmount prevents stale state updates; absent optional detail fields receive documented display-safe defaults. */
 export default function useAdminEnquiriesEnquiryDetailPage(params: Promise<{ id: string }>) {

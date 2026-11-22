@@ -1,10 +1,10 @@
 'use client';
 // RESPONSIBILITY: AdminAccountsFinancialReportsKpiCards component owned by admin_accounting; responsibility folder: admin_accounts_financial_reports.
 
-import { BarChart2, TrendingDown, TrendingUp } from 'lucide-react';
-import { useTranslations, useLocale } from 'next-intl';
-import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/utils/AdminAccountsFinancialReportsFormatCurrency';
 import type { AdminAccountsFinancialReportsKpiCardsProps } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/types/AdminAccountsFinancialReportsTypes';
+import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/utils/AdminAccountsFinancialReportsFormatCurrency';
+import { BarChart2,TrendingDown,TrendingUp } from 'lucide-react';
+import { useLocale,useTranslations } from 'next-intl';
 
 // Generates decorative SVG sparkline path like Superadmin Dashboard
 const generateSparkline = (title: string) => {

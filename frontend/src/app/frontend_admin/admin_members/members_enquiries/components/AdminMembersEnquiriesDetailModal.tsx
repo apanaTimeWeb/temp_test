@@ -1,26 +1,26 @@
 'use client';
 // RESPONSIBILITY: AdminMembersEnquiriesDetailModal provides executive quick-view oversight of enquiry leads for admins.
 
-import { useEffect } from 'react';
-import {
-  X,
-  Phone,
-  Building2,
-  Clock,
-  Tag,
-  UserCheck,
-  MessageSquare,
-  ExternalLink,
-  CheckCircle2,
-  AlertCircle,
-  ShieldCheck,
-  CalendarDays,
-  FileText,
-} from 'lucide-react';
-import { useLocale, useTranslations } from 'next-intl';
-import type { Enquiry, FollowUp } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
 import { ADMIN_ENQUIRIES_ENQUIRY_STATUS_BADGE } from '@/app/frontend_admin/admin_members/members_enquiries/config/admin_members_enquiries.url_config';
-import { getInitials, maskPhone, formatAdminEnquiriesDate } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
+import type { Enquiry,FollowUp } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
+import { formatAdminEnquiriesDate,getInitials,maskPhone } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
+import {
+AlertCircle,
+Building2,
+CalendarDays,
+CheckCircle2,
+Clock,
+ExternalLink,
+FileText,
+MessageSquare,
+Phone,
+ShieldCheck,
+Tag,
+UserCheck,
+X,
+} from 'lucide-react';
+import { useLocale,useTranslations } from 'next-intl';
+import { useEffect } from 'react';
 
 export interface AdminMembersEnquiriesDetailModalProps {
   isOpen: boolean;

@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useTranslations } from 'next-intl';
 import { reportAdminError } from '@/app/frontend_admin/lib/errorMonitoring';
+import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
 
 export default function ErrorBoundary({
   error,

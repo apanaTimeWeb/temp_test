@@ -1,11 +1,11 @@
 // mocks/scenarios/admin_accounts_daily_settlement.scenarios.ts
 import {
-  ADMIN_DAILY_SETTLEMENT_FIXTURES,
-  ADMIN_DAILY_SETTLEMENT_KPI_FIXTURES,
+ADMIN_DAILY_SETTLEMENT_FIXTURES,
+ADMIN_DAILY_SETTLEMENT_KPI_FIXTURES,
 } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/mocks/fixtures/admin_accounts_daily_settlement.fixtures';
 import type {
-  DailySettlementRecord,
-  DailySettlementKpiSummary,
+DailySettlementKpiSummary,
+DailySettlementRecord,
 } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/types/AdminAccountsDailySettlementTypes';
 
 export interface AdminDailySettlementScenarioState {

@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { AdminStaffAttendanceHarness } from '@/app/frontend_admin/admin_staff/staff_attendance/tests/harness/AdminStaffAttendanceHarness';
 import { AdminStaffAttendancePage } from '@/app/frontend_admin/admin_staff/staff_attendance/components/AdminStaffAttendancePage';
+import { AdminStaffAttendanceHarness } from '@/app/frontend_admin/admin_staff/staff_attendance/tests/harness/AdminStaffAttendanceHarness';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it } from 'vitest';
 
 describe('AdminStaffAttendanceRegressionSuite', () => {
   it('renders page header, KPI cards, and default attendance table', () => {

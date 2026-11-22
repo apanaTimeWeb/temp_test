@@ -1,32 +1,31 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent,render,screen } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
-import React from 'react';
+import { beforeEach,describe,expect,it,vi } from 'vitest';
 
 // Daily settlement imports
 import { AdminAccountsDailySettlementPage } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/components/AdminAccountsDailySettlementPage';
 import { printDailySettlementVoucher } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/components/AdminAccountsDailySettlementTableRow';
-import { ADMIN_DAILY_SETTLEMENT_FIXTURES } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/mocks/fixtures/admin_accounts_daily_settlement.fixtures';
 import dailySettlementMessages from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/locales/admin_accounts_daily_settlement_en.json';
+import { ADMIN_DAILY_SETTLEMENT_FIXTURES } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/mocks/fixtures/admin_accounts_daily_settlement.fixtures';
 
 // Expenses imports
-import { AdminAccountsExpensesHeaderSection } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/components/AdminAccountsExpensesHeaderSection';
 import { AdminAccountsExpensesFilterSection } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/components/AdminAccountsExpensesFilterSection';
+import { AdminAccountsExpensesHeaderSection } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/components/AdminAccountsExpensesHeaderSection';
 import expensesMessages from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/locales/admin_accounts_expenses_en.json';
 
 // Financial Reports imports
 import { AdminAccountsFinancialReportsPage } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/components/AdminAccountsFinancialReportsPage';
-import {
-  buildFinancialReportPdfBlob,
-  exportFinancialReportCsv,
-  exportFinancialReportExcel,
-  printFinancialReport,
-} from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/utils/AdminAccountsFinancialReportsExporter';
-import {
-  ADMIN_ACCOUNTS_FINANCIAL_REPORTS_MONTHLY_FIXTURES,
-  ADMIN_ACCOUNTS_FINANCIAL_REPORTS_CATEGORY_FIXTURES,
-} from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/mocks/AdminAccountsFinancialReportsFixtures';
 import financialReportsMessages from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/locales/admin_accounts_financial_reports_en.json';
+import {
+ADMIN_ACCOUNTS_FINANCIAL_REPORTS_CATEGORY_FIXTURES,
+ADMIN_ACCOUNTS_FINANCIAL_REPORTS_MONTHLY_FIXTURES,
+} from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/mocks/AdminAccountsFinancialReportsFixtures';
+import {
+buildFinancialReportPdfBlob,
+exportFinancialReportCsv,
+exportFinancialReportExcel,
+printFinancialReport,
+} from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/utils/AdminAccountsFinancialReportsExporter';
 
 // Assets register imports
 import { AdminAssetsRegisterPage } from '@/app/frontend_admin/admin_accounts_assets/assets_register/components/AdminAssetsRegisterPage';

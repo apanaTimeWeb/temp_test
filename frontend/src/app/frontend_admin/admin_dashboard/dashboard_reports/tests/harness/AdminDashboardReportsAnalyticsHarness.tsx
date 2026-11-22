@@ -2,11 +2,11 @@
  * Responsibility: render deterministic UI-state coverage for Dashboard Reports scenarios.
  * Test-only component. It does not represent live backend/API behavior.
  */
-import type { ReactNode } from 'react';
 import {
-  AdminDashboardReportsAnalyticsScenarioLabel,
-  type AdminDashboardReportsAnalyticsScenario,
+AdminDashboardReportsAnalyticsScenarioLabel,
+type AdminDashboardReportsAnalyticsScenario,
 } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/tests/harness/bootstrap';
+import type { ReactNode } from 'react';
 
 export interface AdminDashboardReportsAnalyticsHarnessProps {
   children: ReactNode;

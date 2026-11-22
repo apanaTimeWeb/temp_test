@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { isAdminCommunicationValidDate } from '@/app/frontend_admin/admin_communication/communication_notification_center/schemas/AdminCommunicationNotificationCenterApiSchema';
+import { z } from 'zod';
 
 export interface AdminCommunicationValidationMessages {
   complaintTitleRequired: string;

@@ -1,7 +1,7 @@
 'use client';
-import * as SwitchPrimitive from '@radix-ui/react-switch';
 import { joinAdminPrimitiveClasses } from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveClassNames';
 import type { AdminSystemSwitchProps } from '@/app/frontend_admin/components/ui/admin-primitives/types/AdminUiAdminPrimitivesComponentTypes';
+import * as SwitchPrimitive from '@radix-ui/react-switch';
 
 
 export function AdminSystemSwitch({ checked, onCheckedChange, disabled, id, 'aria-label': ariaLabel, 'aria-labelledby': ariaLabelledBy, className }: AdminSystemSwitchProps) {

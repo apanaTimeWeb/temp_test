@@ -1,4 +1,4 @@
-import type { AdminCouponsCoupon, AdminCouponsFormOutput } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
+import type { AdminCouponsCoupon,AdminCouponsFormOutput } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
 import type { AdminMembersCouponsScenario } from '@/app/frontend_admin/admin_members/members_coupons/tests/harness/bootstrap';
 import type { DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { ReactNode } from 'react';

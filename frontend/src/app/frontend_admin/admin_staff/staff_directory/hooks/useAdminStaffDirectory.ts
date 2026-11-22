@@ -1,19 +1,17 @@
 'use client';
 // DATA FLOW: staff_directory route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
-import { useCallback, useMemo, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { useQuery } from '@tanstack/react-query';
 import { fetchAdminStaffDirectory } from '@/app/frontend_admin/admin_staff/staff_directory/api/admin_staff_directory.api';
 import { ADMIN_STAFF_DIRECTORY_QUERY_KEYS } from '@/app/frontend_admin/admin_staff/staff_directory/api/admin_staff_directory.query_keys';
-import { ADMIN_STAFF_DIRECTORY_NAVIGATION } from '@/app/frontend_admin/admin_staff/staff_directory/config/admin_staff_directory.url_config';
-import { ADMIN_STAFF_DIRECTORY_DEMO_BRANCH_OPTIONS } from '@/app/frontend_admin/admin_staff/staff_directory/config/admin_staff_directory.url_config';
-import type { AdminStaffDirectoryTab, AdminStaffDirectoryManager } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
-import type { AdminStaffDirectoryCreateManagerFormValues } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
+import { ADMIN_STAFF_DIRECTORY_DEMO_BRANCH_OPTIONS,ADMIN_STAFF_DIRECTORY_NAVIGATION } from '@/app/frontend_admin/admin_staff/staff_directory/config/admin_staff_directory.url_config';
 import { ADMIN_STAFF_DIRECTORY_FIXTURE_DATA } from '@/app/frontend_admin/admin_staff/staff_directory/mocks/scenarios/admin_staff_directory.scenarios';
+import type { AdminStaffDirectoryCreateManagerFormValues,AdminStaffDirectoryManager,AdminStaffDirectoryTab } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
+import type { AdminStaffDirectoryManagerDetailTab } from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
-import type { AdminStaffDirectoryManagerDetailTab } from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
+import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { usePathname,useRouter,useSearchParams } from 'next/navigation';
+import { useCallback,useMemo,useState } from 'react';
 
 
 

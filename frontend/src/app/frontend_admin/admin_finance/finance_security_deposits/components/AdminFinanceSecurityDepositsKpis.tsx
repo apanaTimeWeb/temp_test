@@ -1,6 +1,6 @@
 'use client';
 
-import { ShieldCheck, IndianRupee, AlertCircle, ArrowDownLeft } from 'lucide-react';
+import { AlertCircle,ArrowDownLeft,IndianRupee,ShieldCheck } from 'lucide-react';
 import type { AdminFinanceSecurityDeposit } from '../types/AdminFinanceSecurityDepositsTypes';
 
 export interface AdminFinanceSecurityDepositsKpisProps {

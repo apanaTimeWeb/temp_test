@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
 import { AdminCommunicationNoticesHarness } from '@/app/frontend_admin/admin_communication/communication_notices/tests/harness/AdminCommunicationNoticesHarness';
 import { AdminCommunicationNoticesScenarios } from '@/app/frontend_admin/admin_communication/communication_notices/tests/harness/bootstrap';
+import { render,screen } from '@testing-library/react';
+import { describe,expect,it } from 'vitest';
 
 describe('admin_communication_notices local scenario harness', () => {
   it.each(AdminCommunicationNoticesScenarios)('renders the %s state rather than only changing a scenario label', (scenario) => {

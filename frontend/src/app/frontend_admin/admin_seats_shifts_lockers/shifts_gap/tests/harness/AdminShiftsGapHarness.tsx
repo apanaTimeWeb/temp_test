@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import { AdminShiftsGapScenarioLabel, type AdminShiftsGapScenario } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/tests/harness/bootstrap';
+import { AdminShiftsGapScenarioLabel } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/tests/harness/bootstrap';
 import type { AdminShiftsGapHarnessProps } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/types/AdminShiftsGapComponentTypes';
 
 

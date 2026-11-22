@@ -1,4 +1,3 @@
-import type { DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/types/AdminUiDataGridComponentTypes';
 
 export function readColumnValue<TRow extends object>(row: TRow, field?: Extract<keyof TRow, string>): TRow[keyof TRow] | undefined {
   return field ? row[field] : undefined;

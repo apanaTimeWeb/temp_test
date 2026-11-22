@@ -1,7 +1,7 @@
 import type {
-  AdminDashboardReportsAnalyticsBranchSummary,
-  AdminDashboardReportsAnalyticsKpi,
-  AdminDashboardReportsReport,
+AdminDashboardReportsAnalyticsBranchSummary,
+AdminDashboardReportsAnalyticsKpi,
+AdminDashboardReportsReport,
 } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes';
 
 function escapeAdminDashboardReportsAnalyticsCsvCell(value: unknown): string {

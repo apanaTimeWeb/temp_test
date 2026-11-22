@@ -1,10 +1,10 @@
 'use client';
 // RESPONSIBILITY: Edit shift details, timings, monthly fee, and active state for shifts management.
 
-import { useState, useEffect, useMemo } from 'react';
-import { IndianRupee, X, Building2, Clock, CheckCircle2, Moon, Sun, AlertTriangle, Save, Power } from 'lucide-react';
-import { toast } from 'sonner';
 import type { AdminShiftsShift } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/types/AdminShiftsManagementTypes';
+import { Building2,Clock,IndianRupee,Moon,Power,Save,Sun,X } from 'lucide-react';
+import { useEffect,useMemo,useState } from 'react';
+import { toast } from 'sonner';
 
 export interface AdminShiftsManagementEditModalProps {
   isOpen: boolean;

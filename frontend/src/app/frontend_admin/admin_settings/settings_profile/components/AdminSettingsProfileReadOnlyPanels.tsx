@@ -1,12 +1,12 @@
 'use client';
 // RESPONSIBILITY: Owns the profile overview, login-history, and sessions read-only presentation states.
 
-import { ArrowDown, ArrowUp, ArrowUpDown, Camera, LogOut, Mail, MonitorSmartphone, Phone, ShieldCheck, CheckCircle2, Building2, Sparkles, Clock, Globe, Shield, Crown, Zap, Layers, Armchair, MessageSquare, Users, FileText } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
-import { toast } from 'sonner';
-import { ADMIN_PROFILE_DEMO_ACCOUNT, ADMIN_PROFILE_DEMO_LOGIN_HISTORY, ADMIN_PROFILE_DEMO_SESSIONS, ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION } from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
+import { ADMIN_PROFILE_DEMO_ACCOUNT,ADMIN_PROFILE_DEMO_LOGIN_HISTORY,ADMIN_PROFILE_DEMO_SESSIONS,ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION } from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
 import type { AdminSettingsProfileReadOnlyPanelsProps } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
+import { Armchair,ArrowDown,ArrowUp,ArrowUpDown,Building2,Camera,CheckCircle2,Clock,Crown,FileText,Layers,LogOut,Mail,MessageSquare,MonitorSmartphone,Phone,Shield,ShieldCheck,Sparkles,Users,Zap } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
 
 /**
  * These three source-backed tab views are read-only illustrative panels. Consolidating their

@@ -1,6 +1,6 @@
 /** Canonical module routes/API endpoints and cohesive module-owned configuration constants. */
-import { Building2, Crown, Edit3, Key, User } from 'lucide-react';
 import type { AdminProfileNavigationItem } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
+import { Building2,Crown,Edit3,Key,User } from 'lucide-react';
 
 /** Canonical route and API contract for admin_settings_profile; API entries are source-observed only. */
 export const ADMIN_SETTINGS_PROFILE_ROUTES = {

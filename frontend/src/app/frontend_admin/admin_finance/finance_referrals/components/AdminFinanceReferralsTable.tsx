@@ -1,11 +1,11 @@
 'use client';
 // Responsibility: Presentational table for Admin Finance Referrals ranking, sorting, and pagination.
 
-import { useTranslations } from 'next-intl';
-import { ArrowUpDown, ArrowUp, ArrowDown, IndianRupee, CheckCircle2, Receipt } from 'lucide-react';
+import type { AdminFinanceDemoReferrer } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsTypes';
 import { formatAdminFinanceCurrency } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/AdminFinanceReferralsFormat';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
-import type { AdminFinanceDemoReferrer } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsTypes';
+import { ArrowDown,ArrowUp,ArrowUpDown,CheckCircle2,IndianRupee,Receipt } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export type ReferralsSortField = 'name' | 'referredCount' | 'bonusEarned' | 'redeemed' | 'balance';
 

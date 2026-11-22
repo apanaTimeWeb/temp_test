@@ -1,14 +1,13 @@
 'use client';
 // RESPONSIBILITY: AdminAccountsExpensesFilterSection component owned by admin_accounting; responsibility folder: admin_accounts_expenses_sections.
 
-import { useTranslations } from 'next-intl';
-import { TrendingUp, Clock, CheckCircle2, XCircle, Search, Calendar, FileSpreadsheet } from 'lucide-react';
 import { ADMIN_ACCOUNTING_EXPENSE_CATEGORIES } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/config/admin_accounts_expenses.url_config';
 import type {
-  AdminAccountsExpensesCategoryFilter,
-  AdminAccountsExpensesStatusFilter,
-  AdminAccountsExpensesFilterSectionProps,
+AdminAccountsExpensesCategoryFilter,
+AdminAccountsExpensesFilterSectionProps
 } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/types/AdminAccountsExpensesComponentTypes';
+import { CheckCircle2,Clock,FileSpreadsheet,Search,TrendingUp,XCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 const CATEGORY_TRANSLATION_KEY = {
   Electricity: 'CATEGORY_ELECTRICITY',
@@ -238,4 +237,4 @@ export function AdminAccountsExpensesFilterSection({
 }
 
 export default AdminAccountsExpensesFilterSection;
-export type { AdminAccountsExpensesCategoryFilter, AdminAccountsExpensesFilterSectionProps };
+export type { AdminAccountsExpensesCategoryFilter,AdminAccountsExpensesFilterSectionProps };

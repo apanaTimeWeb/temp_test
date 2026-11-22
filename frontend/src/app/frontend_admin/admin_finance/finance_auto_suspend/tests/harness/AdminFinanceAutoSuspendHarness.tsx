@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import {
-  AdminFinanceAutoSuspendScenarioLabel,
-  type AdminFinanceAutoSuspendScenario,
+AdminFinanceAutoSuspendScenarioLabel,
+type AdminFinanceAutoSuspendScenario,
 } from './bootstrap';
 
 export interface AdminFinanceAutoSuspendHarnessProps {

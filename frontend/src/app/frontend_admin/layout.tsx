@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react';
-import { Inter } from 'next/font/google';
 import { AdminShellRoute } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminShellRoute';
+import { Inter } from 'next/font/google';
+import type { ReactNode } from 'react';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });

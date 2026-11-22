@@ -2,14 +2,13 @@
 // Responsibility: AdminBlacklistRecordsTable component owned by admin_blacklist; responsibility folder: admin_blacklist_components_tables.
 
 // RESPONSIBILITY: Renders the paginated blacklist record grid; query and mutation ownership stays in AdminMembersBlacklistMain.
-import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
-import { useTranslations } from 'next-intl';
-import { useState, useMemo } from 'react';
-import { Search, Download, FileSpreadsheet, Printer } from 'lucide-react';
-import { toast } from 'sonner';
-import { DataGrid, type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import type { AdminBlacklistRecord } from '@/app/frontend_admin/admin_members/members_blacklist/types/AdminMembersBlacklistTypes';
 import type { AdminBlacklistRecordsTableProps } from '@/app/frontend_admin/admin_members/members_blacklist/types/AdminMembersBlacklistTypes';
+import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
+import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
+import { Download,FileSpreadsheet,Printer,Search } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
 
 
 export default function AdminBlacklistRecordsTable({ records, columns, onRowClicked }: AdminBlacklistRecordsTableProps) {

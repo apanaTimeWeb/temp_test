@@ -1,11 +1,11 @@
 'use client';
 // DATA FLOW: dashboard_reports route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
-import { useEffect, useMemo, useState } from 'react';
-import { ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/mocks/AdminDashboardReportsFixtures';
 import { ADMIN_DASHBOARD_REPORTS_ANALYTICS_EMPTY_DATA } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/config/admin_dashboard_reports.url_config';
+import { ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/mocks/AdminDashboardReportsFixtures';
 import type { AdminDashboardReportsAnalyticsRange } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
+import { useEffect,useMemo,useState } from 'react';
 
 export default function useAdminDashboardReportsAnalyticsViewState(isDemoMode: boolean) {
   const [range, setRange] = useState<AdminDashboardReportsAnalyticsRange>('last3Months');

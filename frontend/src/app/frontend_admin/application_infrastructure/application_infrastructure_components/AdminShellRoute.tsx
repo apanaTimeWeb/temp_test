@@ -1,15 +1,15 @@
 'use client';
-import type { ReactNode } from 'react';
-import { usePathname } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
-import { ThemeProvider } from 'next-themes';
-import { Toaster } from 'sonner';
-import { AdminQueryProvider } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminQueryProvider';
-import { AdminBranchProvider } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { AdminNavigationSidebar } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/components/AdminNavigationSidebar';
+import { AdminBranchProvider } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
+import { AdminQueryProvider } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminQueryProvider';
 import { AdminShellHeader } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminShellHeader';
-import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 import '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/application_infrastructure.css';
+import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
+import { ThemeProvider } from 'next-themes';
+import { usePathname } from 'next/navigation';
+import type { ReactNode } from 'react';
+import { useCallback,useEffect,useState } from 'react';
+import { Toaster } from 'sonner';
 
 /**
  * @description Owns the admin application shell only: provider, responsive sidebar, fixed header, and content offset.

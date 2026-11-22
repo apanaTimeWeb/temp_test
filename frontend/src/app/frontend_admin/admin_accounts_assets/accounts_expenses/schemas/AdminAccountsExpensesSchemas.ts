@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { ADMIN_ACCOUNTING_EXPENSE_CATEGORIES } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/config/admin_accounts_expenses.url_config';
+import { z } from 'zod';
 
 export type AdminAccountingExpenseCategoryValidationKey = 'VALIDATION_NAME_REQUIRED' | 'VALIDATION_BUDGET_NONNEGATIVE';
 export type AdminAccountingExpenseCategoryTranslate = (key: AdminAccountingExpenseCategoryValidationKey) => string;

@@ -1,10 +1,10 @@
-import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
 import Select from '@/components/ui/select/Select';
 import { SelectContent } from '@/components/ui/select/SelectContent';
 import { SelectItem } from '@/components/ui/select/SelectItem';
 import { SelectTrigger } from '@/components/ui/select/SelectTrigger';
 import { SelectValue } from '@/components/ui/select/SelectValue';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 
 describe('global Select primitive', () => {
   it('renders choices as children of a native select and emits value changes', () => {

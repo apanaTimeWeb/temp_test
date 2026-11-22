@@ -1,18 +1,16 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import {
-  TrendingDown,
-  Building2,
-  Clock,
-  Armchair,
-  IndianRupee,
-  Search,
-  Filter,
-  Lightbulb,
-} from 'lucide-react';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
+import {
+Building2,
+Clock,
+IndianRupee,
+Lightbulb,
+Search,
+TrendingDown
+} from 'lucide-react';
+import { useEffect,useMemo,useState } from 'react';
 
 interface ShiftGapAuditRecord {
   id: string;

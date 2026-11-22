@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import { AdminSettingsSupportScenarioLabel, type AdminSettingsSupportScenario } from '@/app/frontend_admin/admin_settings/settings_support/tests/harness/bootstrap';
+import { AdminSettingsSupportScenarioLabel } from '@/app/frontend_admin/admin_settings/settings_support/tests/harness/bootstrap';
 import type { AdminSettingsSupportHarnessProps } from '@/app/frontend_admin/admin_settings/settings_support/types/AdminSettingsSupportTypes';
 
 

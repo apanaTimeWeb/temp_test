@@ -1,9 +1,9 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { renderHook, waitFor } from '@testing-library/react';
-import type { ReactNode } from 'react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useAdminCouponsListQuery } from '@/app/frontend_admin/admin_members/members_coupons/hooks/useAdminMembersCouponsPageHooks';
 import { ADMIN_COUPONS_API_FIXTURE } from '@/app/frontend_admin/admin_members/members_coupons/mocks/scenarios/admin_members_coupons.scenarios';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
+import { renderHook,waitFor } from '@testing-library/react';
+import type { ReactNode } from 'react';
+import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 
 const { fetchAdminCouponsMock, mapAdminCouponsApiRecordsMock, demoModeMock } = vi.hoisted(() => ({
   fetchAdminCouponsMock: vi.fn(),

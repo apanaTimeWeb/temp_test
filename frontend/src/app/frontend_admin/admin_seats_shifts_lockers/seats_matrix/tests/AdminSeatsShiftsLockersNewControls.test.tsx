@@ -1,11 +1,10 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import React from 'react';
+import { AdminLockersMatrixSettingsModal } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/components/AdminLockersMatrixSettingsModal';
 import AdminSeatsMatrixBulkGenerateModal from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/components/AdminSeatsMatrixBulkGenerateModal';
 import { AdminShiftsManagementEditModal } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/components/AdminShiftsManagementEditModal';
 import { AdminShiftsManagementImportModal } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/components/AdminShiftsManagementImportModal';
-import { AdminLockersMatrixSettingsModal } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/components/AdminLockersMatrixSettingsModal';
 import type { AdminShiftsShift } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/types/AdminShiftsManagementTypes';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 
 const mockShift: AdminShiftsShift = {
   id: 'shift-test-1',

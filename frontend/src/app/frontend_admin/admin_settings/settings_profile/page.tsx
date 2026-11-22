@@ -3,19 +3,19 @@
 
 // RESPONSIBILITY: Owns profile tab navigation and delegates each page surface to a feature-local panel.
 // DATA FLOW: role route -> active profile tab -> isolated panel -> demo fixture or explicit contract-blocked state.
-import useAdminSettingsProfileUnsavedChangesGuard from '@/app/frontend_admin/admin_settings/settings_profile/hooks/useAdminSettingsProfileUnsavedChangesGuard';
-import AdminSettingsProfileUnsavedChangesDialog from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfileUnsavedChangesDialog';
-import { useCallback, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { User, ShieldAlert, Sparkles, CheckCircle2, Lock, BellRing } from 'lucide-react';
-import type { AdminProfileNavigationItem, AdminProfileTab } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import { ADMIN_PROFILE_NAVIGATION_ITEMS } from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.url_config';
-import AdminSettingsProfileReadOnlyPanels from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfileReadOnlyPanels';
+import AdminProfileActiveBranchesPanel from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminProfileActiveBranchesPanel';
 import AdminProfileEditForm from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfileEditForm';
 import AdminProfilePasswordForm from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfilePasswordForm';
-import AdminProfileActiveBranchesPanel from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminProfileActiveBranchesPanel';
+import AdminSettingsProfileReadOnlyPanels from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfileReadOnlyPanels';
+import AdminSettingsProfileUnsavedChangesDialog from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfileUnsavedChangesDialog';
+import { ADMIN_PROFILE_NAVIGATION_ITEMS } from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.url_config';
+import useAdminSettingsProfileUnsavedChangesGuard from '@/app/frontend_admin/admin_settings/settings_profile/hooks/useAdminSettingsProfileUnsavedChangesGuard';
+import type { AdminProfileNavigationItem,AdminProfileTab } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
+import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { BellRing,Lock,ShieldAlert,User } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { usePathname,useRouter,useSearchParams } from 'next/navigation';
+import { useCallback,useState } from 'react';
 
 export default function AdminProfilePage() {
   const t = useTranslations('ADMIN_PROFILE');

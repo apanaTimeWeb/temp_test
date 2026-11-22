@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import { AdminStaffDirectoryScenarioLabel, type AdminStaffDirectoryScenario } from '@/app/frontend_admin/admin_staff/staff_directory/tests/harness/bootstrap';
+import { AdminStaffDirectoryScenarioLabel } from '@/app/frontend_admin/admin_staff/staff_directory/tests/harness/bootstrap';
 import type { AdminStaffDirectoryHarnessProps } from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
 
 

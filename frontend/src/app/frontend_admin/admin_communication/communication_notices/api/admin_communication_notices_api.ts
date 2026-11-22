@@ -1,7 +1,7 @@
+import { ADMIN_COMMUNICATION_URLS } from "@/app/frontend_admin/admin_communication/communication_notices/config/admin_communication_notices_communication_url_config_source_routes";
+import { AdminCommunicationComplaintListSchema,AdminCommunicationNoticeListSchema } from "@/app/frontend_admin/admin_communication/communication_notices/schemas/AdminCommunicationNoticesSchema";
 import { apiFetch } from "@/app/frontend_admin/lib/api";
 import { parseApiResponseData } from "@/app/frontend_admin/lib/apiSchema";
-import { ADMIN_COMMUNICATION_URLS } from "@/app/frontend_admin/admin_communication/communication_notices/config/admin_communication_notices_communication_url_config_source_routes";
-import { AdminCommunicationComplaintListSchema, AdminCommunicationNoticeListSchema } from "@/app/frontend_admin/admin_communication/communication_notices/schemas/AdminCommunicationNoticesSchema";
 
 export async function fetchAdminCommunicationComplaints() {
   const payload = await apiFetch<unknown>(ADMIN_COMMUNICATION_URLS.COMPLAINTS);

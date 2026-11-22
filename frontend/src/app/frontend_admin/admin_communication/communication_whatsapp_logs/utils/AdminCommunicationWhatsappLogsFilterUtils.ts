@@ -1,4 +1,4 @@
-import type { AdminCommunicationWhatsappLog, AdminCommunicationWhatsappLogStatus, AdminCommunicationWhatsappLogType } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/types/AdminCommunicationWhatsappLogsTypes';
+import type { AdminCommunicationWhatsappLog,AdminCommunicationWhatsappLogStatus,AdminCommunicationWhatsappLogType } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/types/AdminCommunicationWhatsappLogsTypes';
 
 export interface AdminCommunicationWhatsappLogFilters {
   type: AdminCommunicationWhatsappLogType | 'All';

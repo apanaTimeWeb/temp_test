@@ -1,33 +1,33 @@
 'use client';
 
+import {
+ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS,
+ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_VARIABLES,
+} from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/config/admin_communication_whatsapp_templates_whatsapp_template_constants';
+import useAdminCommunicationWhatsappTemplateState from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/hooks/useAdminCommunicationWhatsappTemplatesWhatsappTemplateState';
+import { isAdminCommunicationPhoneNumberValid } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/utils/AdminCommunicationWhatsappTemplatesWhatsappPhoneUtils';
+import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import { useState, useMemo } from 'react';
 import {
-  X,
-  Send,
-  FileText,
-  Layers,
-  CheckCheck,
-  MessageSquare,
-  ShieldCheck,
-  Copy,
-  Search,
-  CheckCircle2,
-  Clock,
-  Edit2,
-  Plus,
+CheckCheck,
+CheckCircle2,
+Clock,
+Copy,
+Edit2,
+FileText,
+Layers,
+MessageSquare,
+Plus,
+Search,
+Send,
+ShieldCheck,
+X,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
-import {
-  ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_VARIABLES,
-  ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS,
-} from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/config/admin_communication_whatsapp_templates_whatsapp_template_constants';
-import useAdminCommunicationWhatsappTemplateState from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/hooks/useAdminCommunicationWhatsappTemplatesWhatsappTemplateState';
-import { isAdminCommunicationPhoneNumberValid } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/utils/AdminCommunicationWhatsappTemplatesWhatsappPhoneUtils';
+import { useMemo,useState } from 'react';
 
 export function AdminCommunicationWhatsappTemplatesPage() {
   const t = useTranslations('ADMIN_COMMUNICATION');

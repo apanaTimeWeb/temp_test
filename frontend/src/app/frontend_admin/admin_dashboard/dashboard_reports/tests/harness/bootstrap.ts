@@ -4,8 +4,8 @@
  * AdminDashboardReportsAnalyticsHarness.tsx so the module has a discoverable harness artifact.
  */
 import {
-  ADMIN_DASHBOARD_REPORTS_SCENARIO_NAMES,
-  type AdminDashboardReportsScenarioName,
+ADMIN_DASHBOARD_REPORTS_SCENARIO_NAMES,
+type AdminDashboardReportsScenarioName,
 } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/mocks/scenarios/admin_dashboard_reports.scenarios';
 
 export const AdminDashboardReportsAnalyticsScenarios = ADMIN_DASHBOARD_REPORTS_SCENARIO_NAMES;

@@ -1,16 +1,13 @@
 'use client';
 // DATA FLOW: members_directory route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
-import { useCallback, useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { toast } from 'sonner';
-import { useTranslations } from 'next-intl';
-import { ADMIN_MEMBERS_DETAIL_NAVIGATION, ADMIN_MEMBERS_DIRECTORY_NAVIGATION, resolveAdminMembersDirectoryView } from '@/app/frontend_admin/admin_members/members_directory/config/admin_members_directory.url_config';
-import { ADMIN_MEMBERS_FIXTURES } from '@/app/frontend_admin/admin_members/members_directory/mocks/AdminMembersDirectoryFixtures';
-import type { AdminMembersDetailTab, AdminMembersDirectoryTab, AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
+import { ADMIN_MEMBERS_DETAIL_NAVIGATION,ADMIN_MEMBERS_DIRECTORY_NAVIGATION,resolveAdminMembersDirectoryView } from '@/app/frontend_admin/admin_members/members_directory/config/admin_members_directory.url_config';
+import { ADMIN_MEMBERS_CATEGORY_FIXTURES,ADMIN_MEMBERS_DEPARTMENT_FIXTURES,ADMIN_MEMBERS_FIXTURES,ADMIN_MEMBERS_RENEWAL_FIXTURES } from '@/app/frontend_admin/admin_members/members_directory/mocks/AdminMembersDirectoryFixtures';
+import type { AdminMembersCategory,AdminMembersCreateFormValues,AdminMembersDemoMutationResult,AdminMembersDepartment,AdminMembersDetailTab,AdminMembersDirectoryTab,AdminMembersMember,AdminMembersRenewal } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import type { AdminMembersCreateFormValues } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
-import { ADMIN_MEMBERS_CATEGORY_FIXTURES, ADMIN_MEMBERS_DEPARTMENT_FIXTURES, ADMIN_MEMBERS_RENEWAL_FIXTURES } from '@/app/frontend_admin/admin_members/members_directory/mocks/AdminMembersDirectoryFixtures';
-import type { AdminMembersCategory, AdminMembersDepartment, AdminMembersRenewal, AdminMembersDemoMutationResult } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
+import { useTranslations } from 'next-intl';
+import { usePathname,useRouter,useSearchParams } from 'next/navigation';
+import { useCallback,useEffect,useState } from 'react';
+import { toast } from 'sonner';
 
 export default function useAdminMembersDirectoryMain() {
   const t = useTranslations('ADMIN_MEMBERS');

@@ -1,4 +1,3 @@
-import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
 import type { AdminCommunicationWhatsappTemplate } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/types/AdminCommunicationWhatsappTemplatesWhatsappTemplateTypes';
 
 /** Admin WhatsApp Business templates: Only primary Admin-level communications (Welcome Onboarding & Official Notices). Member-level billing, receipts and follow-ups are managed at the Branch Manager counter. */

@@ -1,8 +1,8 @@
 'use client';
 // RESPONSIBILITY: Locker monthly rent, refundable caution deposit, and key replacement policy configuration modal.
 
-import { useState, useEffect } from 'react';
-import { IndianRupee, KeyRound, ShieldCheck, X, Save, Sparkles, Building2, AlertCircle } from 'lucide-react';
+import { AlertCircle,IndianRupee,KeyRound,Save,ShieldCheck,Sparkles,X } from 'lucide-react';
+import { useEffect,useState } from 'react';
 import { toast } from 'sonner';
 
 export interface LockerPricingPolicy {

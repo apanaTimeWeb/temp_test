@@ -1,7 +1,7 @@
 /** Test-only bootstrap, state labels and standalone React harness for canonical profile scenarios. */
 import {
-  AdminSettingsProfileScenarios,
-  type AdminSettingsProfileScenario,
+AdminSettingsProfileScenarios,
+type AdminSettingsProfileScenario,
 } from '@/app/frontend_admin/admin_settings/settings_profile/mocks/scenarios/admin_settings_profile.scenarios';
 
 export { AdminSettingsProfileScenarios };

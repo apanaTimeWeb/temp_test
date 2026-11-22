@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ComponentType, ReactNode, HTMLAttributes, InputHTMLAttributes, LabelHTMLAttributes } from 'react';
+import type { ButtonHTMLAttributes,ComponentType,HTMLAttributes,InputHTMLAttributes,LabelHTMLAttributes,ReactNode } from 'react';
 
 export type AdminSystemBadgeVariant = "default" | "primary" | "success" | "warning" | "danger" | "info" | "outline";
 

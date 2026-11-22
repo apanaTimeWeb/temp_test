@@ -1,8 +1,8 @@
 'use client';
 // RESPONSIBILITY: AdminAccountingSeatGapTableSection component owned by admin_accounting; responsibility folder: admin_accounting_components_tables.
-import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
-import { DataGrid, type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { AdminAccountingSeatGapRow } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/types/AdminAccountsSeatGapReportTypes';
+import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
+import { DataGrid,type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 
 export default function AdminAccountingSeatGapTableSection({ rows, columns, emptyMessage, title }: {
   rows: readonly AdminAccountingSeatGapRow[];

@@ -1,8 +1,7 @@
-import { afterEach as suite0_afterEach, describe as suite0_describe, expect as suite0_expect, it as suite0_it } from "vitest";
-import { cleanup as suite0_cleanup, fireEvent as suite0_fireEvent, render as suite0_render, screen as suite0_screen } from "@testing-library/react";
 import Suite0_AdminAccountingSeatGapSummarySection from "@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/components/AdminAccountsSeatGapReportSeatGapSummarySection";
 import { ADMIN_ACCOUNTING_SEAT_GAP_FIXTURES as suite0_ADMIN_ACCOUNTING_SEAT_GAP_FIXTURES } from "@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/mocks/AdminAccountsSeatGapReportSeatGapFixtures";
-import { describe as suite1_describe, expect as suite1_expect, it as suite1_it } from "vitest";
+import { cleanup as suite0_cleanup,render as suite0_render,screen as suite0_screen } from "@testing-library/react";
+import { afterEach as suite0_afterEach,describe as suite0_describe,expect as suite0_expect,it as suite0_it,describe as suite1_describe,expect as suite1_expect,it as suite1_it } from "vitest";
 
 describe("Consolidated from AdminAccountsSeatGapReportSeatGapSummarySection.test.tsx", () => {
 

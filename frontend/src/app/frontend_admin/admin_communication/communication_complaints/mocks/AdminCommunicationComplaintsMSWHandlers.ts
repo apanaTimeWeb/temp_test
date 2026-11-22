@@ -1,6 +1,6 @@
-import { http, HttpResponse } from 'msw';
 import { ADMIN_COMMUNICATION_COMPLAINTS_API } from '@/app/frontend_admin/admin_communication/communication_complaints/config/admin_communication_complaints.url_config';
-import type { AdminCommunicationComplaintApiRecord, AdminCommunicationNoticeApiRecord } from '@/app/frontend_admin/admin_communication/communication_complaints/schemas/AdminCommunicationComplaintsSchema';
+import type { AdminCommunicationComplaintApiRecord,AdminCommunicationNoticeApiRecord } from '@/app/frontend_admin/admin_communication/communication_complaints/schemas/AdminCommunicationComplaintsSchema';
+import { http,HttpResponse } from 'msw';
 
 /** Test-only frontend read handlers. Mutation contracts are intentionally not mocked. */
 export const ADMIN_COMMUNICATION_MSW_HANDLERS = [

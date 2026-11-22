@@ -1,11 +1,11 @@
 // mocks/scenarios/admin_assets_register.scenarios.ts
 import {
-  ADMIN_ASSET_REGISTER_FIXTURES,
-  ADMIN_ASSET_REGISTER_KPI_FIXTURES,
+ADMIN_ASSET_REGISTER_FIXTURES,
+ADMIN_ASSET_REGISTER_KPI_FIXTURES,
 } from '@/app/frontend_admin/admin_accounts_assets/assets_register/mocks/fixtures/admin_assets_register.fixtures';
 import type {
-  AdminAssetRecord,
-  AdminAssetsRegisterKpiSummary,
+AdminAssetRecord,
+AdminAssetsRegisterKpiSummary,
 } from '@/app/frontend_admin/admin_accounts_assets/assets_register/types/AdminAssetsRegisterTypes';
 
 export interface AdminAssetsRegisterScenarioState {

@@ -1,4 +1,3 @@
-import type { HTMLAttributes, ReactNode } from 'react';
 import { joinAdminPrimitiveClasses } from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveClassNames';
 import type { AdminSystemCardTitleProps } from '@/app/frontend_admin/components/ui/admin-primitives/types/AdminUiAdminPrimitivesComponentTypes';
 

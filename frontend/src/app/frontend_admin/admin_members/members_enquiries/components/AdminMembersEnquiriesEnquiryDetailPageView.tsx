@@ -1,32 +1,28 @@
 'use client';
 
-import { toast, Toaster } from 'sonner';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import { useLocale, useTranslations } from 'next-intl';
-import {
-  ArrowLeft,
-  Phone,
-  MapPin,
-  User,
-  CalendarDays,
-  Tag,
-  Clock,
-  Pencil,
-  MessageSquare,
-  ShieldCheck,
-  Building2,
-  TrendingUp,
-  UserCheck,
-  CheckCircle2,
-  AlertCircle,
-  ExternalLink,
-} from 'lucide-react';
 import { ADMIN_ENQUIRIES_URLS } from '@/app/frontend_admin/admin_members/members_enquiries/config/admin_members_enquiries.url_config';
-import { getInitials, maskPhone } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
 import useAdminEnquiriesEnquiryDetailPage from '@/app/frontend_admin/admin_members/members_enquiries/hooks/useAdminMembersEnquiriesEnquiryDetailPage';
-import { formatAdminEnquiriesDate } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
 import type { FollowUp } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
 import type { AdminEnquiriesEnquiryDetailPageViewProps } from '@/app/frontend_admin/admin_members/members_enquiries/types/AdminMembersEnquiriesComponentTypes';
+import { formatAdminEnquiriesDate,getInitials,maskPhone } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
+import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import {
+AlertCircle,
+ArrowLeft,
+Building2,
+CalendarDays,
+CheckCircle2,
+Clock,
+ExternalLink,
+MessageSquare,
+Pencil,
+Phone,
+ShieldCheck,
+Tag,
+UserCheck
+} from 'lucide-react';
+import { useLocale,useTranslations } from 'next-intl';
+import { Toaster } from 'sonner';
 
 export default function AdminEnquiriesEnquiryDetailPageView({ params }: AdminEnquiriesEnquiryDetailPageViewProps) {
   const t = useTranslations('ADMIN_ENQUIRIES');

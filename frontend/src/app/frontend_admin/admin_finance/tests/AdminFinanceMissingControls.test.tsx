@@ -1,23 +1,19 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import {
-  buildSimplePdfBlob,
-  formatCleanPhoneNumber,
-  buildWhatsAppLink,
-  downloadPaymentInvoicePdf,
-  downloadPaymentReceiptPdf,
-  downloadRefundVoucherPdf,
-} from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
 import { AdminFinancePaymentInvoiceModal } from '@/app/frontend_admin/admin_finance/finance_payments/components/AdminFinancePaymentInvoiceModal';
 import { AdminFinancePaymentReceiptModal } from '@/app/frontend_admin/admin_finance/finance_payments/components/AdminFinancePaymentReceiptModal';
-import { AdminFinanceRefundDetailModal } from '@/app/frontend_admin/admin_finance/finance_refunds/components/AdminFinanceRefundDetailModal';
+import type { AdminFinancePayment } from '@/app/frontend_admin/admin_finance/finance_payments/types/AdminFinancePaymentsComponentTypes';
 import { AdminFinanceReferralsRedeemModal } from '@/app/frontend_admin/admin_finance/finance_referrals/components/AdminFinanceReferralsRedeemModal';
 import { AdminFinanceReferralsTable } from '@/app/frontend_admin/admin_finance/finance_referrals/components/AdminFinanceReferralsTable';
-import { AdminFinanceRefundsTable } from '@/app/frontend_admin/admin_finance/finance_refunds/components/AdminFinanceRefundsTable';
-import type { AdminFinancePayment } from '@/app/frontend_admin/admin_finance/finance_payments/types/AdminFinancePaymentsComponentTypes';
-import type { AdminFinanceRefund } from '@/app/frontend_admin/admin_finance/finance_refunds/types/AdminFinanceRefundsComponentTypes';
 import type { AdminFinanceDemoReferrer } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsTypes';
+import { AdminFinanceRefundDetailModal } from '@/app/frontend_admin/admin_finance/finance_refunds/components/AdminFinanceRefundDetailModal';
+import { AdminFinanceRefundsTable } from '@/app/frontend_admin/admin_finance/finance_refunds/components/AdminFinanceRefundsTable';
+import type { AdminFinanceRefund } from '@/app/frontend_admin/admin_finance/finance_refunds/types/AdminFinanceRefundsComponentTypes';
+import {
+buildSimplePdfBlob,
+buildWhatsAppLink,
+formatCleanPhoneNumber
+} from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 
 // Mock next-intl
 vi.mock('next-intl', () => ({

@@ -1,4 +1,4 @@
-import type { AdminCommunicationNotificationCategory, AdminCommunicationNotificationDomain } from '@/app/frontend_admin/admin_communication/communication_notification_center/types/AdminCommunicationNotificationCenterTypes';
+import type { AdminCommunicationNotificationCategory,AdminCommunicationNotificationDomain } from '@/app/frontend_admin/admin_communication/communication_notification_center/types/AdminCommunicationNotificationCenterTypes';
 
 /** Canonical routes and source-observed API paths owned by the notification-center module. */
 export const ADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES = {

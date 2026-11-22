@@ -1,32 +1,29 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import {
-  X,
-  Building2,
-  AlertTriangle,
-  MessageSquare,
-  CheckCircle2,
-  Clock,
-  Printer,
-  Share2,
-  ShieldAlert,
-  Phone,
-  Mail,
-  User,
-  MapPin,
-  Calendar,
-  Check,
-  Copy,
-} from 'lucide-react';
-import { useState } from 'react';
+import type { Complaint } from '@/app/frontend_admin/admin_communication/communication_complaints/types/AdminCommunicationComplaintsComponentTypes';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import type { Complaint } from '@/app/frontend_admin/admin_communication/communication_complaints/types/AdminCommunicationComplaintsComponentTypes';
-import { resolveComplaintCategory, resolvePriority } from './AdminCommunicationComplaintsTable';
+import {
+Building2,
+Calendar,
+Check,
+CheckCircle2,
+Clock,
+Copy,
+MapPin,
+MessageSquare,
+Printer,
+Share2,
+ShieldAlert,
+User,
+X
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
+import { useState } from 'react';
+import { resolveComplaintCategory,resolvePriority } from './AdminCommunicationComplaintsTable';
 
 export interface AdminCommunicationComplaintDetailModalProps {
   viewItem: Complaint | null;

@@ -1,6 +1,6 @@
 // tests/harness/AdminAccountsDailySettlementHarness.tsx
-import type { ReactNode } from 'react';
 import type { AdminAccountsDailySettlementScenario } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/tests/harness/bootstrap';
+import type { ReactNode } from 'react';
 
 export interface AdminAccountsDailySettlementHarnessProps {
   children?: ReactNode;

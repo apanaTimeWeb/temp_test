@@ -1,6 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
 import { Button } from '@/components/ui/button/Button';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 
 describe('global Button primitive', () => {
   it('keeps the documented minimum touch target and explicit focus styles for every size', () => {

@@ -1,4 +1,4 @@
-import type { ReactNode, SelectHTMLAttributes } from 'react';
+import type { ReactNode,SelectHTMLAttributes } from 'react';
 
 export interface SelectProps {
   value?: string;

@@ -1,5 +1,5 @@
 import type useAdminStaffDirectory from '@/app/frontend_admin/admin_staff/staff_directory/hooks/useAdminStaffDirectory';
-import type { AdminStaffDirectoryCreateManagerFormValues, AdminStaffDirectoryManager, AdminStaffDirectoryTab } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
+import type { AdminStaffDirectoryCreateManagerFormValues,AdminStaffDirectoryManager,AdminStaffDirectoryTab } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
 import type { AdminStaffDirectoryScenario } from '@/app/frontend_admin/admin_staff/staff_directory/tests/harness/bootstrap';
 import type { ReactNode } from 'react';
 

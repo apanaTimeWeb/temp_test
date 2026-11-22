@@ -1,5 +1,5 @@
-import { http, HttpResponse } from 'msw';
 import { ADMIN_COMMUNICATION_NOTIFICATION_CENTER_API } from '@/app/frontend_admin/admin_communication/communication_notification_center/config/admin_communication_notification_center.url_config';
+import { http,HttpResponse } from 'msw';
 
 /** Synthetic API responses for tests only; they do not prove the live backend supports these contracts. */
 export const ADMIN_COMMUNICATION_COMPLAINT_API_FIXTURE = [

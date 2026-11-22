@@ -1,7 +1,7 @@
 'use client';
-import { useEffect } from 'react';
 import { reportAdminError } from '@/app/frontend_admin/lib/errorMonitoring';
 import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
 
 export default function ErrorBoundary({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   const t = useTranslations('ADMIN_DASHBOARD');

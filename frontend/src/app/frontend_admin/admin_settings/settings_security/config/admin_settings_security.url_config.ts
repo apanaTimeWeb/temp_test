@@ -1,9 +1,7 @@
 /** Canonical module routes/API endpoints and cohesive module-owned configuration constants. */
-import type { AdminSecurityEventFilter } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
-import { Activity, Ban, BellRing, KeyRound, Laptop, MonitorSmartphone, Shield, XOctagon, ShieldAlert } from 'lucide-react';
+import type { AdminSecurityEventFilter,AdminSecurityEventFilterOptionLabelKey,AdminSecurityNavigationItemLabelKey,AdminSecurityTab } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
 import type { LucideIcon } from 'lucide-react';
-import type { AdminSecurityTab } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
-import type { AdminSecurityEventFilterOptionLabelKey, AdminSecurityNavigationItemLabelKey } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
+import { Ban,BellRing,KeyRound,Laptop,MonitorSmartphone,ShieldAlert,XOctagon } from 'lucide-react';
 
 
 /** Canonical route and API contract for admin_settings_security; API entries are source-observed only. */

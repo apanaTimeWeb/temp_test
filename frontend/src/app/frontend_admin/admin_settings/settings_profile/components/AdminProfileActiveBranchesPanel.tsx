@@ -1,35 +1,32 @@
 'use client';
 
-import { useMemo, useState } from 'react';
 import {
-  Building2,
-  Search,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  Edit3,
-  Power,
-  Clock,
-  Phone,
-  Users,
-  MapPin,
-  CheckCircle2,
-  AlertTriangle,
-  X,
-  Save,
-} from 'lucide-react';
-import { toast } from 'sonner';
-import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
+ADMIN_PROFILE_ACTIVE_BRANCHES,
+type AdminProfileActiveBranch,
+} from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
-import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
-import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
+import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
+import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import {
-  ADMIN_PROFILE_ACTIVE_BRANCHES,
-  type AdminProfileActiveBranch,
-} from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
+ArrowDown,
+ArrowUp,
+ArrowUpDown,
+Building2,
+Clock,
+Edit3,
+MapPin,
+Phone,
+Power,
+Save,
+Search,
+Users
+} from 'lucide-react';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
 
 export default function AdminProfileActiveBranchesPanel() {
   const [branches, setBranches] = useState<AdminProfileActiveBranch[]>(() => ADMIN_PROFILE_ACTIVE_BRANCHES);

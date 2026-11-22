@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { AdminShiftsMigrationSchema } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/schemas/AdminShiftsManagementMigrationSchema';
+import { describe,expect,it } from 'vitest';
 const valid = { newShift: 'Evening', newSeat: 'C-01', showCustomSlot: false, customStart: '', customEnd: '', payMode: 'Cash' as const, txnId: '', isPaying: false };
 describe('AdminShiftsMigrationSchema', () => {
   it('accepts a normal preview-only draft', () => { expect(AdminShiftsMigrationSchema.safeParse(valid).success).toBe(true); });

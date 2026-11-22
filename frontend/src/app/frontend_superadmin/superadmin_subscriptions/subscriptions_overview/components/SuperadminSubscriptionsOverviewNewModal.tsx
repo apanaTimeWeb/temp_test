@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Package, X, PlusCircle, Check } from 'lucide-react';
-import type { SuperadminSubscriptionRecord, SuperadminSubscriptionPaymentStatus } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/types/SuperadminSubscriptionsOverviewTypes';
+import { PlusCircle, X, Check } from 'lucide-react';
+import type { SuperadminSubscriptionRecord } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/types/SuperadminSubscriptionsOverviewTypes';
 
 interface SuperadminSubscriptionsOverviewNewModalProps {
   isOpen: boolean;
@@ -116,12 +116,14 @@ export default function SuperadminSubscriptionsOverviewNewModal({
                 value={selectedPlan}
                 onChange={(e) => {
                   setSelectedPlan(e.target.value);
+                  if (e.target.value === 'Free Tier') { setCustomPrice(0); setBranchesCount(1); }
                   if (e.target.value === 'Starter') { setCustomPrice(999); setBranchesCount(1); }
                   if (e.target.value === 'Professional') { setCustomPrice(2999); setBranchesCount(3); }
                   if (e.target.value === 'Enterprise') { setCustomPrice(4999); setBranchesCount(10); }
                 }}
                 className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3 py-2 text-slate-100"
               >
+                <option value="Free Tier">Free Community Tier (₹0/mo)</option>
                 <option value="Starter">Starter (1 Branch · ₹999/mo)</option>
                 <option value="Professional">Professional (3 Branches · ₹2,999/mo)</option>
                 <option value="Enterprise">Enterprise (10 Branches · ₹4,999/mo)</option>

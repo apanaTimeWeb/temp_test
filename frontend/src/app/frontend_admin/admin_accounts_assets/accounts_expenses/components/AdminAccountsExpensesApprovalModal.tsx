@@ -1,15 +1,15 @@
 'use client';
-import { useCallback } from 'react';
-import { useTranslations, useLocale } from 'next-intl';
-import { ShieldCheck, ExternalLink, Check } from 'lucide-react';
+import type { AdminAccountsExpensesApprovalModalProps } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/types/AdminAccountsExpensesComponentTypes';
+import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/utils/AdminAccountsExpensesFormatCurrency';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
-import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
-import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
-import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/utils/AdminAccountsExpensesFormatCurrency';
-import type { AdminAccountsExpensesApprovalModalProps } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/types/AdminAccountsExpensesComponentTypes';
+import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
+import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
+import { Check,ExternalLink,ShieldCheck } from 'lucide-react';
+import { useLocale,useTranslations } from 'next-intl';
+import { useCallback } from 'react';
 
 export function AdminAccountsExpensesApprovalModal({
   expense,

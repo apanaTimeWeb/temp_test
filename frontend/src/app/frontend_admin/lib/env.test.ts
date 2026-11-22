@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { FrontendRuntimeConfigSchema, parseFrontendRuntimeConfig } from '@/lib/env';
+import { FrontendRuntimeConfigSchema,parseFrontendRuntimeConfig } from '@/lib/env';
+import { describe,expect,it } from 'vitest';
 
 describe('frontend runtime configuration', () => {
   it('defaults to same-origin API calls and disabled demo mode', () => {

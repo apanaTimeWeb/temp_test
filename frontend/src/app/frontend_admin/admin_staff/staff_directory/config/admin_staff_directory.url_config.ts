@@ -1,9 +1,9 @@
 /** Canonical module routes/API endpoints and cohesive module-owned configuration constants. */
-import {
-  Activity, Ban, CheckCircle2, Clock3, History, UserCheck, UserRound, UserRoundPlus, Users,
-} from 'lucide-react';
 import type { AdminStaffDirectoryTab } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
 import type { AdminStaffDirectoryNavigationItemLabelKey } from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
+import {
+Activity,Ban,CheckCircle2,Clock3,History,UserCheck,UserRound,UserRoundPlus,Users,
+} from 'lucide-react';
 
 
 /** Canonical route and source-observed API paths retained from the existing module contract. */

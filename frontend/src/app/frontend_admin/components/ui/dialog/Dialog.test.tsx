@@ -1,11 +1,11 @@
-import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
 import { Dialog } from '@/components/ui/dialog/Dialog';
-import { DialogTrigger } from '@/components/ui/dialog/DialogTrigger';
-import { DialogContent } from '@/components/ui/dialog/DialogContent';
-import { DialogTitle } from '@/components/ui/dialog/DialogTitle';
-import { DialogDescription } from '@/components/ui/dialog/DialogDescription';
 import { DialogClose } from '@/components/ui/dialog/DialogClose';
+import { DialogContent } from '@/components/ui/dialog/DialogContent';
+import { DialogDescription } from '@/components/ui/dialog/DialogDescription';
+import { DialogTitle } from '@/components/ui/dialog/DialogTitle';
+import { DialogTrigger } from '@/components/ui/dialog/DialogTrigger';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 
 describe('global Dialog primitive', () => {
   it('opens from its trigger and closes from Escape with an accessible name', () => {

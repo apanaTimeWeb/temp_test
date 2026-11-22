@@ -1,28 +1,26 @@
 'use client';
 // Responsibility: AdminSeatsManagementPage component owned by admin_seats; responsibility folder: admin_seats_components_views.
-import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
+import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 
 // RESPONSIBILITY: Read-only seat inventory with local search and canonical status filtering.
 // DATA FLOW: demo fixtures (demo mode only) -> filtered rows -> shared data grid.
 
-import { useEffect, useMemo, useState } from 'react';
-import { useTranslations } from 'next-intl';
-import { ChevronDown, Search, Wrench, Armchair, CheckCircle2, AlertOctagon, Download, FileSpreadsheet, Printer } from 'lucide-react';
-import { toast } from 'sonner';
-import { DataGrid, type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import {
-  ADMIN_SEATS_SEAT_STATUS_BADGE_CLASS,
-  ADMIN_SEATS_MANAGEMENT_STATUS_OPTIONS,
-  type AdminSeatsSeatStatus,
+ADMIN_SEATS_MANAGEMENT_STATUS_OPTIONS,
+ADMIN_SEATS_SEAT_STATUS_BADGE_CLASS
 } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/config/admin_seats_management_constants';
-import { matchesAdminSeatsFilter } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/utils/AdminSeatsManagementFilterUtils';
 import {
-  ADMIN_SEATS_DEMO_SEATS,
-  type AdminSeatsDemoSeat,
+ADMIN_SEATS_DEMO_SEATS
 } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/mocks/AdminSeatsManagementDemoFixtures';
-import type { SeatStatus, Seat } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/types/AdminSeatsManagementComponentTypes';
+import type { Seat,SeatStatus } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/types/AdminSeatsManagementComponentTypes';
+import { matchesAdminSeatsFilter } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/utils/AdminSeatsManagementFilterUtils';
+import { DataGrid,type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
+import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { AlertOctagon,Armchair,CheckCircle2,ChevronDown,Download,FileSpreadsheet,Printer,Search,Wrench } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect,useMemo,useState } from 'react';
+import { toast } from 'sonner';
 
 
 function renderSeatNoCell({ value }: { value: string }) {

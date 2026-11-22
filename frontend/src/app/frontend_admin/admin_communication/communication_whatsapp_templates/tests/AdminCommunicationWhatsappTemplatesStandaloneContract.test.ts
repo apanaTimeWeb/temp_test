@@ -1,5 +1,5 @@
 // Responsibility: verify the isolated admin_communication_whatsapp_templates contract remains discoverable by the host test runner.
-import { describe, expect, it } from 'vitest';
+import { describe,expect,it } from 'vitest';
 
 import adminNavigationEn from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/locales/admin_navigation_sidebar_en.json';
 import adminNavigationHi from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/locales/admin_navigation_sidebar_hi.json';

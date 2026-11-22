@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
 import { AdminAccountsSeatGapReportHarness } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/tests/harness/AdminAccountsSeatGapReportHarness';
 import { AdminAccountsSeatGapReportScenarios } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/tests/harness/bootstrap';
+import { render,screen } from '@testing-library/react';
+import { describe,expect,it } from 'vitest';
 
 describe('admin_accounting_seat_gap_report local scenario harness', () => {
   it.each(AdminAccountsSeatGapReportScenarios)('renders the %s state rather than only changing a scenario label', (scenario) => {

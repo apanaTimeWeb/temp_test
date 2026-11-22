@@ -1,22 +1,22 @@
 'use client';
 // RESPONSIBILITY: AdminSupportTicketsPanel component owned by admin_support; responsibility folder: admin_support_components_sections.
 
-import { useState, useMemo } from 'react';
+import AdminSupportCreateTicketForm from '@/app/frontend_admin/admin_settings/settings_support/components/AdminSettingsSupportCreateTicketForm';
+import { ADMIN_SUPPORT_DEMO_TICKETS } from '@/app/frontend_admin/admin_settings/settings_support/mocks/scenarios/admin_settings_support.scenarios';
 import {
-  MessageSquare,
-  Plus,
-  Ticket,
-  AlertCircle,
-  CheckCircle2,
-  Clock,
-  Search,
-  PhoneCall,
-  Mail,
-  Zap,
+AlertCircle,
+CheckCircle2,
+Clock,
+Mail,
+MessageSquare,
+PhoneCall,
+Plus,
+Search,
+Ticket,
+Zap,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { ADMIN_SUPPORT_DEMO_TICKETS } from '@/app/frontend_admin/admin_settings/settings_support/mocks/scenarios/admin_settings_support.scenarios';
-import AdminSupportCreateTicketForm from '@/app/frontend_admin/admin_settings/settings_support/components/AdminSettingsSupportCreateTicketForm';
+import { useMemo,useState } from 'react';
 
 /** Contains the ticket-list/draft-validation flow, limited to fixtures in explicit demo mode. */
 export default function AdminSupportTicketsPanel() {

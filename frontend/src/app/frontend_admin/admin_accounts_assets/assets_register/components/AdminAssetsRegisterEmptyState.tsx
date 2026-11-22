@@ -1,8 +1,8 @@
 // components/AdminAssetsRegisterEmptyState.tsx
 'use client';
-import { useTranslations } from 'next-intl';
-import { Layers } from 'lucide-react';
 import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
+import { Layers } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   onResetFilters?: () => void;

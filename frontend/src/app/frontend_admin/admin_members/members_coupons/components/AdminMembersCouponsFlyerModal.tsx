@@ -1,10 +1,10 @@
 'use client';
 // RESPONSIBILITY: Printable Coupon Flyers & Vouchers modal for marketing campaigns.
 
-import { useState } from 'react';
-import { Printer, X, Tag, Scissors, Sparkles, Building2, Calendar, Check, Copy } from 'lucide-react';
-import { toast } from 'sonner';
 import type { AdminCouponsCoupon } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
+import { Building2,Calendar,Check,Copy,Printer,Scissors,Sparkles,Tag,X } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 export interface AdminMembersCouponsFlyerModalProps {
   isOpen: boolean;

@@ -1,31 +1,26 @@
 'use client';
 
-import React from 'react';
-import {
-  X,
-  Printer,
-  Share2,
-  Building2,
-  ShieldCheck,
-  AlertTriangle,
-  Clock,
-  Phone,
-  Tag,
-  Wrench,
-  CheckCircle2,
-  Calendar,
-  IndianRupee,
-  Cpu,
-  FileText,
-  MapPin,
-} from 'lucide-react';
 import type { AdminAssetRecord } from '@/app/frontend_admin/admin_accounts_assets/assets_register/types/AdminAssetsRegisterTypes';
 import {
-  formatPaiseToRupees,
-  formatAssetDate,
-  isExpiringSoon,
-  getDaysUntilExpiry,
+formatAssetDate,
+formatPaiseToRupees,
+getDaysUntilExpiry,
+isExpiringSoon,
 } from '@/app/frontend_admin/admin_accounts_assets/assets_register/utils/AdminAssetsRegisterFormatters';
+import {
+Building2,
+Clock,
+Cpu,
+IndianRupee,
+MapPin,
+Phone,
+Printer,
+Share2,
+ShieldCheck,
+Tag,
+Wrench,
+X
+} from 'lucide-react';
 
 interface AdminAssetsRegisterDetailModalProps {
   asset: AdminAssetRecord | null;

@@ -1,27 +1,27 @@
 'use client';
 // Responsibility: responsive admin sidebar presentation, search filtering, and accordion submodule navigation.
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslations } from 'next-intl';
 import {
-  Menu,
-  X,
-  BookOpen,
-  Search,
-} from 'lucide-react';
-import {
-  ADMIN_NAVIGATION_GROUPS,
+ADMIN_NAVIGATION_GROUPS,
 } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_navigation_constants';
 import type { AdminNavigationSidebarProps } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/types/AdminNavigationSidebarComponentTypes';
-import { AdminNavigationSidebarSearch } from './AdminNavigationSidebarSearch';
-import { AdminNavigationSidebarNavGroup } from './AdminNavigationSidebarNavGroup';
-import { AdminNavigationSidebarCollapsedNav } from './AdminNavigationSidebarCollapsedNav';
 import {
-  isGroupActive,
-  isSubmoduleActive,
+BookOpen,
+Menu,
+Search,
+X,
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useCallback,useEffect,useMemo,useRef,useState } from 'react';
+import {
+isGroupActive,
+isSubmoduleActive,
 } from '../utils/AdminNavigationSidebarPathUtils';
+import { AdminNavigationSidebarCollapsedNav } from './AdminNavigationSidebarCollapsedNav';
+import { AdminNavigationSidebarNavGroup } from './AdminNavigationSidebarNavGroup';
+import { AdminNavigationSidebarSearch } from './AdminNavigationSidebarSearch';
 
 /**
  * @description Renders role-owned navigation, interactive search, expandable submodule accordions, and responsive drawer behavior.

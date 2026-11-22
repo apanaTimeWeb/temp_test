@@ -1,23 +1,19 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-import {
-  Eye,
-  Edit3,
-  Clock,
-  Building2,
-  CalendarCheck,
-  CheckCircle2,
-  AlertTriangle,
-  UserX,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-} from 'lucide-react';
-import type { StaffAttendanceRecord } from '@/app/frontend_admin/admin_staff/staff_attendance/schemas/AdminStaffAttendanceSchema';
 import { ATTENDANCE_STATUS_VARIANTS } from '@/app/frontend_admin/admin_staff/staff_attendance/config/admin_staff_attendance.url_config';
+import type { StaffAttendanceRecord } from '@/app/frontend_admin/admin_staff/staff_attendance/schemas/AdminStaffAttendanceSchema';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
+import {
+ArrowDown,
+ArrowUp,
+ArrowUpDown,
+Building2,
+Clock,
+Edit3,
+Eye
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
 
 interface Props {
   records: StaffAttendanceRecord[];

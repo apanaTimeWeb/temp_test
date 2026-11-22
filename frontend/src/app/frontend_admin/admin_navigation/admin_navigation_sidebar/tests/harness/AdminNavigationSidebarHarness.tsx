@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import { AdminNavigationSidebarScenarioLabel, type AdminNavigationSidebarScenario } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/tests/harness/bootstrap';
+import { AdminNavigationSidebarScenarioLabel } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/tests/harness/bootstrap';
 import type { AdminNavigationSidebarHarnessProps } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/types/AdminNavigationSidebarComponentTypes';
 
 

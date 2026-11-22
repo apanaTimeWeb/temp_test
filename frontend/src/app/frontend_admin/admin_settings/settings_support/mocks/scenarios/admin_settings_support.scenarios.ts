@@ -1,5 +1,5 @@
-import { http, HttpResponse } from 'msw';
 import { ADMIN_SUPPORT_URLS } from '@/app/frontend_admin/admin_settings/settings_support/config/admin_settings_support.url_config';
+import { http,HttpResponse } from 'msw';
 
 /**
  * Canonical transport-level mock scenario registry for Admin Settings Support.

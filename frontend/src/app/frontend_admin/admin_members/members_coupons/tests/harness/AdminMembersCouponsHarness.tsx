@@ -1,6 +1,6 @@
-import { useState, type ReactNode } from 'react';
-import { AdminMembersCouponsScenarioLabel, type AdminMembersCouponsScenario } from '@/app/frontend_admin/admin_members/members_coupons/tests/harness/bootstrap';
+import { AdminMembersCouponsScenarioLabel,type AdminMembersCouponsScenario } from '@/app/frontend_admin/admin_members/members_coupons/tests/harness/bootstrap';
 import type { AdminMembersCouponsHarnessProps } from '@/app/frontend_admin/admin_members/members_coupons/types/AdminMembersCouponsComponentTypes';
+import { useState } from 'react';
 
 
 /** Test-only state harness that renders the named UI state rather than only tagging children. */

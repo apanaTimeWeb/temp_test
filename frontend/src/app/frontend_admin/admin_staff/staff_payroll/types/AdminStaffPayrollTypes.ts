@@ -1,8 +1,6 @@
 import type {
-  StaffSalaryRecord,
-  PayrollStatus,
-  PaymentMethod,
-  DisburseSalaryInput,
+DisburseSalaryInput,
+StaffSalaryRecord
 } from '@/app/frontend_admin/admin_staff/staff_payroll/schemas/AdminStaffPayrollSchema';
 
 export interface StaffPayrollFilterState {

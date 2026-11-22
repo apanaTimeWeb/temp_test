@@ -12,4 +12,5 @@ declare module '@/lib/socket' { export const socketService: { subscribe: <T>(eve
 
 declare module '@/lib/display_value' { export function displayValue(value: unknown): string; }
 
-declare module '@/components/ui/*' { import type React from 'react'; export type StubComponentProps = React.PropsWithChildren<Record<string, unknown>>; const Component: React.FC<StubComponentProps>; export default Component; }
+declare module '@/components/ui/*' { import type React from 'react';
+export type StubComponentProps = React.PropsWithChildren<Record<string, unknown>>; const Component: React.FC<StubComponentProps>; export default Component; }

@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import { AdminAccountsFinancialReportsScenarioLabel, type AdminAccountsFinancialReportsScenario } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/tests/harness/bootstrap';
+import { AdminAccountsFinancialReportsScenarioLabel } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/tests/harness/bootstrap';
 import type { AdminAccountsFinancialReportsHarnessProps } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/types/AdminAccountsFinancialReportsTypes';
 
 

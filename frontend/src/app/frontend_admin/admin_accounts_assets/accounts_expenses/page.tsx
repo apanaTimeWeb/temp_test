@@ -1,5 +1,5 @@
-import { AdminAccountsExpensesPage } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/components/AdminAccountsExpensesPage';
 import type { AdminAccountsExpensesRouteView } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/components/AdminAccountsExpensesPage';
+import { AdminAccountsExpensesPage } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/components/AdminAccountsExpensesPage';
 import type { RouteSearchParams } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/types/AdminAccountsExpensesComponentTypes';
 
 

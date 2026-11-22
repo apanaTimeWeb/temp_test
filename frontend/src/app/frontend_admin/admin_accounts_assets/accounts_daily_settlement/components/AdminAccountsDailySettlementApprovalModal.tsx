@@ -1,17 +1,17 @@
 // components/AdminAccountsDailySettlementApprovalModal.tsx
 'use client';
-import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
-import { CheckCircle2, ExternalLink, ShieldCheck } from 'lucide-react';
+import type { ApproveSettlementPayload,DailySettlementRecord } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/types/AdminAccountsDailySettlementTypes';
+import { formatPaiseToRupees,formatSettlementDate } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/utils/AdminAccountsDailySettlementFormatters';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
-import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
-import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
-import type { DailySettlementRecord, ApproveSettlementPayload } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/types/AdminAccountsDailySettlementTypes';
-import { formatPaiseToRupees, formatSettlementDate } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/utils/AdminAccountsDailySettlementFormatters';
+import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
+import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import { displayValue } from '@/lib/display_value';
+import { CheckCircle2,ExternalLink,ShieldCheck } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect,useState } from 'react';
 
 interface Props {
   record: DailySettlementRecord | null;

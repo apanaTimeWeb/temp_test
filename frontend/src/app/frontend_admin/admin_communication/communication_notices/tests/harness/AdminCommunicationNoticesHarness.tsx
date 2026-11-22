@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import { AdminCommunicationNoticesScenarioLabel, type AdminCommunicationNoticesScenario } from '@/app/frontend_admin/admin_communication/communication_notices/tests/harness/bootstrap';
+import { AdminCommunicationNoticesScenarioLabel } from '@/app/frontend_admin/admin_communication/communication_notices/tests/harness/bootstrap';
 import type { AdminCommunicationNoticesHarnessProps } from '@/app/frontend_admin/admin_communication/communication_notices/types/AdminCommunicationNoticesComponentTypes';
 
 

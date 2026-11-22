@@ -1,23 +1,22 @@
 'use client';
 
 import {
-  Undo2,
-  Minus,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  Building,
-  Armchair,
-  Calendar,
-  User,
-  ShieldCheck,
-  ChevronLeft,
-  ChevronRight,
-  AlertTriangle,
+AlertTriangle,
+Armchair,
+ArrowDown,
+ArrowUp,
+ArrowUpDown,
+Building,
+Calendar,
+ChevronLeft,
+ChevronRight,
+Minus,
+ShieldCheck,
+Undo2
 } from 'lucide-react';
 import type {
-  AdminFinanceSecurityDeposit,
-  DepositSortField,
+AdminFinanceSecurityDeposit,
+DepositSortField,
 } from '../types/AdminFinanceSecurityDepositsTypes';
 import { AdminFinanceSecurityDepositsEmptyState } from './AdminFinanceSecurityDepositsEmptyState';
 

@@ -1,10 +1,10 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import type { ReactNode } from 'react';
-import { NextIntlClientProvider } from 'next-intl';
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import messages from '@/app/frontend_admin/admin_members/members_coupons/locales/admin_members_coupons_en.json';
 import ErrorBoundary from '@/app/frontend_admin/admin_members/members_coupons/error';
 import AdminCouponsLoading from '@/app/frontend_admin/admin_members/members_coupons/loading';
+import messages from '@/app/frontend_admin/admin_members/members_coupons/locales/admin_members_coupons_en.json';
+import { cleanup,fireEvent,render,screen } from '@testing-library/react';
+import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
+import { afterEach,describe,expect,it,vi } from 'vitest';
 
 vi.mock('@/lib/errorMonitoring', () => ({ reportAdminError: vi.fn() }));
 

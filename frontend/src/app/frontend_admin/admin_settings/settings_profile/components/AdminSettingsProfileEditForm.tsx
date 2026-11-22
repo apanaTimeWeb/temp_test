@@ -1,16 +1,15 @@
 'use client';
 // RESPONSIBILITY: AdminProfileEditForm component owned by admin_profile; responsibility folder: admin_profile_forms.
 
+import { ADMIN_PROFILE_DEMO_ACCOUNT } from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
+import { AdminProfileEditSchema,getAdminProfileValidationMessageKey,type AdminProfileEditFormValues } from '@/app/frontend_admin/admin_settings/settings_profile/schemas/AdminSettingsProfileSchema';
+import type { AdminSettingsProfileFormProps } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CheckCircle2,FileText,Mail,Phone,User,UserCog } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-import { useTranslations } from 'next-intl';
-import { User, Phone, Mail, FileText, CheckCircle2, UserCog, Sparkles } from 'lucide-react';
-import type { AdminSettingsProfileFormProps } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
-import { AdminProfileEditSchema, type AdminProfileEditFormValues } from '@/app/frontend_admin/admin_settings/settings_profile/schemas/AdminSettingsProfileSchema';
-import { ADMIN_PROFILE_DEMO_ACCOUNT } from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
-import { getAdminProfileValidationMessageKey } from '@/app/frontend_admin/admin_settings/settings_profile/schemas/AdminSettingsProfileSchema';
 
 /** Owns edit-profile draft validation; it never claims to persist without an approved profile API. */
 export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsProfileFormProps) {

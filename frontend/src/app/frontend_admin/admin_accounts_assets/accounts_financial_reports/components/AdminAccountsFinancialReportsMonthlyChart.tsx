@@ -1,13 +1,12 @@
 'use client';
 // RESPONSIBILITY: AdminAccountsFinancialReportsMonthlyChart component owned by admin_accounting; responsibility folder: admin_accounts_financial_reports.
 
-import dynamic from 'next/dynamic';
-import { useTranslations, useLocale } from 'next-intl';
 import AdminAccountsFinancialReportsChartLoadingState from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/components/AdminAccountsFinancialReportsChartLoadingState';
-import type { ApexOptions } from 'apexcharts';
-import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/utils/AdminAccountsFinancialReportsFormatCurrency';
-import type { AdminAccountingFinancialReportPeriodRow } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/types/AdminAccountsFinancialReportsTypes';
 import type { AdminAccountsFinancialReportsMonthlyChartProps } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/types/AdminAccountsFinancialReportsTypes';
+import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/utils/AdminAccountsFinancialReportsFormatCurrency';
+import type { ApexOptions } from 'apexcharts';
+import { useLocale,useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 
 
 const AdminAccountsFinancialReportsApexChart = dynamic(() => import('react-apexcharts'), {

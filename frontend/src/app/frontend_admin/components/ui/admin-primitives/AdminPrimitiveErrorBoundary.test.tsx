@@ -1,7 +1,7 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { useState } from 'react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
 import AdminErrorBoundary from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveErrorBoundary';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { useState } from 'react';
+import { afterEach,describe,expect,it,vi } from 'vitest';
 
 afterEach(() => { vi.restoreAllMocks(); });
 

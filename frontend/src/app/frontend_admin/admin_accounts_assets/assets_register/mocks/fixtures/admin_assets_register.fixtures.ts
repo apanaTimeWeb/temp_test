@@ -1,7 +1,7 @@
 // mocks/fixtures/admin_assets_register.fixtures.ts
 import type {
-  AdminAssetRecord,
-  AdminAssetsRegisterKpiSummary,
+AdminAssetRecord,
+AdminAssetsRegisterKpiSummary,
 } from '@/app/frontend_admin/admin_accounts_assets/assets_register/types/AdminAssetsRegisterTypes';
 
 export const ADMIN_ASSET_REGISTER_FIXTURES: AdminAssetRecord[] = [

@@ -1,8 +1,8 @@
 'use client';
-import { useTranslations } from 'next-intl';
-import { ArrowLeft } from 'lucide-react';
-import useAdminStaffDirectory from '@/app/frontend_admin/admin_staff/staff_directory/hooks/useAdminStaffDirectory';
 import AdminStaffDirectoryViewSIDEBARNAVIGATIONSection from '@/app/frontend_admin/admin_staff/staff_directory/components/AdminStaffDirectoryViewSIDEBARNAVIGATIONSection';
+import useAdminStaffDirectory from '@/app/frontend_admin/admin_staff/staff_directory/hooks/useAdminStaffDirectory';
+import { ArrowLeft } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 /** Canonical staff directory route and shell; API-backed state remains in its feature hook.
  * STAFF_DIRECTORY_NOTICE: Permissions and access are managed under /admin/admin_staff/staff_roles_permissions.

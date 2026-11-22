@@ -6,4 +6,4 @@
  * would mask missing dependencies or weaken type safety. Add a declaration only
  * when a real import in this submodule demonstrably requires an offline host shim.
  */
-export {};
+export { };

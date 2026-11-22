@@ -1,13 +1,11 @@
 'use client';
 // RESPONSIBILITY: AdminBlacklistRecordsSection component owned by admin_blacklist; responsibility folder: admin_blacklist_records_section.
 
-import { useTranslations } from 'next-intl';
-import { type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import type { AdminBlacklistRecord } from '@/app/frontend_admin/admin_members/members_blacklist/types/AdminMembersBlacklistTypes';
 import AdminBlacklistRecordsTable from '@/app/frontend_admin/admin_members/members_blacklist/components/AdminMembersBlacklistRecordsTable';
-import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
-import { SearchX, ShieldAlert } from 'lucide-react';
 import type { AdminBlacklistRecordsSectionProps } from '@/app/frontend_admin/admin_members/members_blacklist/types/AdminMembersBlacklistTypes';
+import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
+import { SearchX,ShieldAlert } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 
 /** Owns the record-count, loading, error, empty and table states as one coherent data section. */

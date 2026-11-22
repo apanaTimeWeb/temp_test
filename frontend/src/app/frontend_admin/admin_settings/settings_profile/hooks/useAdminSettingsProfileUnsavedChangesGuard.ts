@@ -1,6 +1,6 @@
 'use client';
-import { useEffect, useRef } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname,useSearchParams } from 'next/navigation';
+import { useEffect,useRef } from 'react';
 
 /**
  * RESPONSIBILITY: Protect dirty profile drafts from browser exits, eligible links, and history back/forward.

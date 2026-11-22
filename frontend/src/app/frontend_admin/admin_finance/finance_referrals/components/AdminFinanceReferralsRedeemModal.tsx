@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { X, IndianRupee, CheckCircle2, CreditCard, Sparkles, AlertCircle, FileText, Gift, Receipt, Smartphone } from 'lucide-react';
-import { toast } from 'sonner';
 import type { AdminFinanceDemoReferrer } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsTypes';
 import { formatAdminFinanceCurrency } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/AdminFinanceReferralsFormat';
+import { AlertCircle,CheckCircle2,CreditCard,Gift,IndianRupee,Receipt,X } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
+import { toast } from 'sonner';
 
 interface AdminFinanceReferralsRedeemModalProps {
   referrer: AdminFinanceDemoReferrer | null;

@@ -1,28 +1,24 @@
-import Suite0_AdminProfilePage from "@/app/frontend_admin/admin_settings/settings_profile/page";
 import Suite0_AdminProfilePasswordForm from "@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfilePasswordForm";
 import { ADMIN_SETTINGS_PROFILE_API as Suite0_ADMIN_SETTINGS_PROFILE_API } from "@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.url_config";
+import suite1_useAdminSettingsProfileUnsavedChangesGuard from "@/app/frontend_admin/admin_settings/settings_profile/hooks/useAdminSettingsProfileUnsavedChangesGuard";
 import suite0_adminProfileEn from "@/app/frontend_admin/admin_settings/settings_profile/locales/admin_settings_profile_en.json";
 import suite0_adminProfileHi from "@/app/frontend_admin/admin_settings/settings_profile/locales/admin_settings_profile_hi.json";
-import adminShellEn from '@/app/frontend_admin/application_infrastructure/application_infrastructure_locales/admin_shell_en.json';
-import adminShellHi from '@/app/frontend_admin/application_infrastructure/application_infrastructure_locales/admin_shell_hi.json';
+import { ADMIN_PROFILE_DEMO_ACCOUNT as Suite0_ADMIN_PROFILE_DEMO_ACCOUNT,ADMIN_PROFILE_DEMO_LOGIN_HISTORY as Suite0_ADMIN_PROFILE_DEMO_LOGIN_HISTORY,ADMIN_PROFILE_DEMO_SESSIONS as Suite0_ADMIN_PROFILE_DEMO_SESSIONS,ADMIN_PROFILE_MSW_HANDLERS as Suite0_ADMIN_PROFILE_MSW_HANDLERS } from "@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures";
+import Suite0_AdminProfilePage from "@/app/frontend_admin/admin_settings/settings_profile/page";
+import { AdminProfileEditSchema as Suite0_AdminProfileEditSchema,AdminProfilePasswordSchema as Suite0_AdminProfilePasswordSchema,getAdminProfileValidationMessageKey as suite0_getAdminProfileValidationMessageKey } from "@/app/frontend_admin/admin_settings/settings_profile/schemas/AdminSettingsProfileSchema";
+import { AdminSettingsProfileHarness as Suite0_HarnessScenarioComponent } from "@/app/frontend_admin/admin_settings/settings_profile/tests/harness/AdminSettingsProfileHarness";
+import { AdminSettingsProfileScenarioLabel as Suite0_AdminSettingsProfileScenarioLabel,AdminSettingsProfileScenarios as Suite0_HarnessScenarioList } from "@/app/frontend_admin/admin_settings/settings_profile/tests/harness/bootstrap";
 import adminSecurityEn from '@/app/frontend_admin/admin_settings/settings_security/locales/admin_settings_security_en.json';
 import adminSecurityHi from '@/app/frontend_admin/admin_settings/settings_security/locales/admin_settings_security_hi.json';
-import { vi } from 'vitest';
-
-vi.mock('@/app/frontend_admin/lib/runtimeFeatures', () => ({ isFrontendDemoModeEnabled: () => true }));
-import { ADMIN_PROFILE_DEMO_ACCOUNT as Suite0_ADMIN_PROFILE_DEMO_ACCOUNT, ADMIN_PROFILE_DEMO_SESSIONS as Suite0_ADMIN_PROFILE_DEMO_SESSIONS, ADMIN_PROFILE_DEMO_LOGIN_HISTORY as Suite0_ADMIN_PROFILE_DEMO_LOGIN_HISTORY, ADMIN_PROFILE_MSW_HANDLERS as Suite0_ADMIN_PROFILE_MSW_HANDLERS } from "@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures";
-import { AdminProfileEditSchema as Suite0_AdminProfileEditSchema, AdminProfilePasswordSchema as Suite0_AdminProfilePasswordSchema } from "@/app/frontend_admin/admin_settings/settings_profile/schemas/AdminSettingsProfileSchema";
-import { AdminSettingsProfileHarness as Suite0_HarnessScenarioComponent } from "@/app/frontend_admin/admin_settings/settings_profile/tests/harness/AdminSettingsProfileHarness";
-import { AdminSettingsProfileScenarios as Suite0_HarnessScenarioList, AdminSettingsProfileScenarioLabel as Suite0_AdminSettingsProfileScenarioLabel } from "@/app/frontend_admin/admin_settings/settings_profile/tests/harness/bootstrap";
-import { getAdminProfileValidationMessageKey as suite0_getAdminProfileValidationMessageKey } from "@/app/frontend_admin/admin_settings/settings_profile/schemas/AdminSettingsProfileSchema";
+import adminShellEn from '@/app/frontend_admin/application_infrastructure/application_infrastructure_locales/admin_shell_en.json';
+import adminShellHi from '@/app/frontend_admin/application_infrastructure/application_infrastructure_locales/admin_shell_hi.json';
 import * as Suite0_HarnessTestingLibrary from "@testing-library/react";
-import { fireEvent as suite0_fireEvent, render as suite0_render, screen as suite0_screen } from "@testing-library/react";
+import { fireEvent as suite0_fireEvent,render as suite0_render,screen as suite0_screen,act as suite1_act,fireEvent as suite1_fireEvent,renderHook as suite1_renderHook } from "@testing-library/react";
 import { NextIntlClientProvider as Suite0_NextIntlClientProvider } from "next-intl";
 import * as Suite0_HarnessVitest from "vitest";
-import { describe as suite0_describe, expect as suite0_expect, it as suite0_it } from "vitest";
-import { act as suite1_act, fireEvent as suite1_fireEvent, renderHook as suite1_renderHook } from "@testing-library/react";
-import { afterEach as suite1_afterEach, describe as suite1_describe, expect as suite1_expect, it as suite1_it, vi as suite1_vi } from "vitest";
-import suite1_useAdminSettingsProfileUnsavedChangesGuard from "@/app/frontend_admin/admin_settings/settings_profile/hooks/useAdminSettingsProfileUnsavedChangesGuard";
+import { describe as suite0_describe,expect as suite0_expect,it as suite0_it,afterEach as suite1_afterEach,describe as suite1_describe,expect as suite1_expect,it as suite1_it,vi as suite1_vi,vi } from 'vitest';
+
+vi.mock('@/app/frontend_admin/lib/runtimeFeatures', () => ({ isFrontendDemoModeEnabled: () => true }));
 
 describe("Consolidated from AdminSettingsProfileNonMockRegressionSuite.test.tsx", () => {
 

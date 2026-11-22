@@ -1,34 +1,31 @@
 'use client';
-import { useTranslations } from 'next-intl';
-import useAdminStaffDirectory from '@/app/frontend_admin/admin_staff/staff_directory/hooks/useAdminStaffDirectory';
-import type { AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionProps, AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionMAINLISTVIEWSSectionProps, AdminStaffDirectoryManagerTableProps } from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
-import AdminStaffDirectoryCreateManagerForm from '@/app/frontend_admin/admin_staff/staff_directory/components/AdminStaffDirectoryCreateManagerForm';
 import AdminStaffDirectoryAuditSection from '@/app/frontend_admin/admin_staff/staff_directory/components/AdminStaffDirectoryAuditSection';
+import AdminStaffDirectoryCreateManagerForm from '@/app/frontend_admin/admin_staff/staff_directory/components/AdminStaffDirectoryCreateManagerForm';
 import AdminStaffDirectoryDetailLogsSection from '@/app/frontend_admin/admin_staff/staff_directory/components/AdminStaffDirectoryDetailLogsSection';
-import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
-import { useMemo, useState } from 'react';
-import {
-  Eye,
-  MoreVertical,
-  Search,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  Users,
-  UserCheck,
-  UserX,
-  AlertCircle,
-  Download,
-  FileSpreadsheet,
-  Printer,
-  MessageSquare,
-  Mail,
-  CheckCircle2,
-} from 'lucide-react';
-import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
-import type { AdminStaffDirectoryManager, AdminStaffDirectoryTab } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
 import { ADMIN_STAFF_DIRECTORY_STATUS_BADGE_CLASSES } from '@/app/frontend_admin/admin_staff/staff_directory/config/admin_staff_directory.url_config';
-import { maskAdminStaffDirectoryEmail, maskAdminStaffDirectoryPhone, getAdminStaffDirectoryLastActiveLabel } from '@/app/frontend_admin/admin_staff/staff_directory/utils/AdminStaffDirectoryDisplayUtils';
+import type { AdminStaffDirectoryManager } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
+import type { AdminStaffDirectoryManagerTableProps,AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionMAINLISTVIEWSSectionProps,AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionProps } from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
+import { getAdminStaffDirectoryLastActiveLabel,maskAdminStaffDirectoryEmail,maskAdminStaffDirectoryPhone } from '@/app/frontend_admin/admin_staff/staff_directory/utils/AdminStaffDirectoryDisplayUtils';
+import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
+import {
+AlertCircle,
+ArrowDown,
+ArrowUp,
+ArrowUpDown,
+Download,
+Eye,
+FileSpreadsheet,
+Mail,
+MessageSquare,
+Printer,
+Search,
+UserCheck,
+Users,
+UserX
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
 
 // RESPONSIBILITY: AdminStaffDirectoryViewSIDEBARNAVIGATIONSection component owned by admin_staff_directory; responsibility folder: admin_staff_directory_view_sections.
 
@@ -143,7 +140,7 @@ export default function AdminStaffDirectoryViewSIDEBARNAVIGATIONSection({ model 
       );
 }
 
-      export type {AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionProps};
+      export type { AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionProps };
 
       // RESPONSIBILITY: AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionMAINLISTVIEWSSection component owned by admin_staff_directory; responsibility folder: admin_staff_directory_view_sidebarnavigationsection_sections.
 
@@ -176,7 +173,7 @@ export default function AdminStaffDirectoryViewSIDEBARNAVIGATIONSection({ model 
       );
 }
 
-      export type {AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionMAINLISTVIEWSSectionProps};
+      export type { AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionMAINLISTVIEWSSectionProps };
 
       // RESPONSIBILITY: AdminStaffDirectoryManagerTable component owned by admin_staff_directory; responsibility folder: admin_staff_directory_components_tables.
 
@@ -654,4 +651,4 @@ export default function AdminStaffDirectoryViewSIDEBARNAVIGATIONSection({ model 
                 return tab ? <section className="admin-card"><h2 className="p-4 text-lg font-semibold text-text-primary">{t(tabTitleKey[tab])}</h2>{tableContent}</section> : tableContent;
 }
 
-                export type {AdminStaffDirectoryManagerTableProps};
+                export type { AdminStaffDirectoryManagerTableProps };

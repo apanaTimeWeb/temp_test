@@ -1,4 +1,5 @@
 'use client';
+import type { AdminSettingsProfileUnsavedChangesDialogProps } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
@@ -6,7 +7,6 @@ import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter
 import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import { useTranslations } from 'next-intl';
-import type { AdminSettingsProfileUnsavedChangesDialogProps } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
 
 
 /** Confirmation dialog for discarding unsaved profile drafts; no browser confirm() is used. */

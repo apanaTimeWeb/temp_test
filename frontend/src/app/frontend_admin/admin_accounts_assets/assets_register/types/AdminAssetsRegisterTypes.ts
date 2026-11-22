@@ -1,8 +1,8 @@
 // types/AdminAssetsRegisterTypes.ts
 import type {
-  ADMIN_ASSET_CATEGORIES,
-  ADMIN_ASSET_STATUSES,
-  ADMIN_ASSET_AMC_STATUSES,
+ADMIN_ASSET_AMC_STATUSES,
+ADMIN_ASSET_CATEGORIES,
+ADMIN_ASSET_STATUSES,
 } from '@/app/frontend_admin/admin_accounts_assets/assets_register/config/admin_assets_register.url_config';
 
 export type AdminAssetCategory = (typeof ADMIN_ASSET_CATEGORIES)[number];

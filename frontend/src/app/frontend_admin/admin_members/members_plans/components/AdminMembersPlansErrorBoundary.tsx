@@ -1,9 +1,9 @@
 'use client';
 // RESPONSIBILITY: AdminPlansErrorBoundary contains rendering failures for the admin_plans feature and exposes a localized retry action.
 
-import React from 'react';
+import type { AdminPlansErrorBoundaryProps,AdminPlansErrorBoundaryState } from '@/app/frontend_admin/admin_members/members_plans/types/AdminMembersPlansComponentTypes';
 import { useTranslations } from 'next-intl';
-import type { AdminPlansErrorBoundaryProps, AdminPlansErrorBoundaryState } from '@/app/frontend_admin/admin_members/members_plans/types/AdminMembersPlansComponentTypes';
+import React from 'react';
 
 
 function AdminPlansErrorBoundaryFallback({ onRetry }: { onRetry: () => void }) {

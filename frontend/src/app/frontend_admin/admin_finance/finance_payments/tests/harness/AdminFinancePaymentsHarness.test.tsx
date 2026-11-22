@@ -1,7 +1,7 @@
+import { AdminFinancePaymentsHarness,AdminFinancePaymentsScenarios } from '@/app/frontend_admin/admin_finance/finance_payments/tests/harness/AdminFinancePaymentsHarness';
 import '@/app/frontend_admin/admin_finance/finance_payments/tests/harness/bootstrap';
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
-import { AdminFinancePaymentsHarness, AdminFinancePaymentsScenarios } from '@/app/frontend_admin/admin_finance/finance_payments/tests/harness/AdminFinancePaymentsHarness';
+import { render,screen } from '@testing-library/react';
+import { describe,expect,it } from 'vitest';
 
 describe('finance_payments visible scenario harness', () => {
   it.each(AdminFinancePaymentsScenarios)('renders the visible %s state', (scenario) => {

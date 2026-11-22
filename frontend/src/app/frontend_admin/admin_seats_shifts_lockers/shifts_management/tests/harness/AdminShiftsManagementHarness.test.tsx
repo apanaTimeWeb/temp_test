@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
 import { AdminShiftsManagementHarness } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/tests/harness/AdminShiftsManagementHarness';
 import { AdminShiftsManagementScenarios } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/tests/harness/bootstrap';
+import { render,screen } from '@testing-library/react';
+import { describe,expect,it } from 'vitest';
 
 describe('admin_shifts_shift_management local scenario harness', () => {
   it.each(AdminShiftsManagementScenarios)('renders the %s state rather than only changing a scenario label', (scenario) => {

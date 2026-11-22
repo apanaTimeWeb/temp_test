@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import AdminSecurityFailedLoginsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityFailedLoginsPanel';
 import AdminSecurityDeviceSessionsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityDeviceSessionsPanel';
+import AdminSecurityFailedLoginsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityFailedLoginsPanel';
+import { render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }));
 describe('security responsive panels', () => {
   it('renders failed-login records in responsive cards and desktop table', () => {

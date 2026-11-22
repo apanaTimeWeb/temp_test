@@ -1,23 +1,23 @@
 'use client';
 // RESPONSIBILITY: AdminAccountsFinancialReportsPage component owned by admin_accounting; responsibility folder: admin_accounting_components_views.
 
-import { useState, useMemo } from 'react';
-import { BarChart3, Calendar, Printer, FileSpreadsheet, Download } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { AdminAccountsFinancialReportsDashboard } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/components/AdminAccountsFinancialReportsDashboard';
 import {
-  ADMIN_ACCOUNTS_FINANCIAL_REPORTS_MONTHLY_FIXTURES,
-  ADMIN_ACCOUNTS_FINANCIAL_REPORTS_CATEGORY_FIXTURES,
+ADMIN_ACCOUNTS_FINANCIAL_REPORTS_CATEGORY_FIXTURES,
+ADMIN_ACCOUNTS_FINANCIAL_REPORTS_MONTHLY_FIXTURES,
 } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/mocks/AdminAccountsFinancialReportsFixtures';
-import {
-  exportFinancialReportCsv,
-  exportFinancialReportExcel,
-  downloadFinancialReportPdf,
-  printFinancialReport,
-} from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/utils/AdminAccountsFinancialReportsExporter';
 import type { AdminAccountingFinancialReportPeriod } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/types/AdminAccountsFinancialReportsTypes';
+import {
+downloadFinancialReportPdf,
+exportFinancialReportCsv,
+exportFinancialReportExcel,
+printFinancialReport,
+} from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/utils/AdminAccountsFinancialReportsExporter';
+import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { BarChart3,Calendar,Download,FileSpreadsheet,Printer } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
 
 /** Presents report period controls, date range pickers, audit export actions, and gates all sample report data behind explicit demo mode. */
 export function AdminAccountsFinancialReportsPage() {

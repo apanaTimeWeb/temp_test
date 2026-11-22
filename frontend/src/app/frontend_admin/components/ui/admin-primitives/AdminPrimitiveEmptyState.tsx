@@ -1,6 +1,5 @@
-import { FileSearch } from 'lucide-react';
-import type { ComponentType, ReactNode } from 'react';
 import type { AdminEmptyStateProps } from '@/app/frontend_admin/components/ui/admin-primitives/types/AdminUiAdminPrimitivesComponentTypes';
+import { FileSearch } from 'lucide-react';
 
 
 /** Presentational empty state; the owning feature supplies localized text and actions. */

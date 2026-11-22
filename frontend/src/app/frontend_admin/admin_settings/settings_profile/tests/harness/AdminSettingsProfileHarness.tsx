@@ -1,4 +1,4 @@
-import { AdminSettingsProfileScenarioLabel, type AdminSettingsProfileScenario } from '@/app/frontend_admin/admin_settings/settings_profile/tests/harness/bootstrap';
+import { AdminSettingsProfileScenarioLabel } from '@/app/frontend_admin/admin_settings/settings_profile/tests/harness/bootstrap';
 import type { AdminSettingsProfileHarnessProps } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
 
 

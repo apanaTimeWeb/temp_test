@@ -1,9 +1,9 @@
 'use client';
-import type { ReactNode } from 'react';
+import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
+import type { ReactNode } from 'react';
 
 const SUBMODULE_NAVIGATION = [
   { href: ADMIN_ROUTES.SETTINGS_PROFILE, labelKey: 'SUBMODULE_SETTINGS_PROFILE' },

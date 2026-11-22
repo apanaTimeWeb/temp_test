@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import { AdminSeatsManagementScenarioLabel, type AdminSeatsManagementScenario } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/tests/harness/bootstrap';
+import { AdminSeatsManagementScenarioLabel } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/tests/harness/bootstrap';
 import type { AdminSeatsManagementHarnessProps } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/types/AdminSeatsManagementComponentTypes';
 
 

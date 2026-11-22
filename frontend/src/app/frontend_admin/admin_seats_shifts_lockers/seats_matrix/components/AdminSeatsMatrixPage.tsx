@@ -1,45 +1,40 @@
 'use client';
 // RESPONSIBILITY: AdminSeatMatrixSeatMatrixPage component owned by admin_seat_matrix; responsibility folder: admin_seat_matrix_components_views.
 
-import { useTranslations } from 'next-intl';
-import useAdminSeatMatrixDialogFocus from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/hooks/useAdminSeatsMatrixDialogFocus';
-import { useMemo, useRef, useState, useEffect } from 'react';
-import { format, addDays } from 'date-fns';
-import { useQueryClient } from '@tanstack/react-query';
-import {
-  CalendarDays,
-  User,
-  Printer,
-  Download,
-  Building2,
-  Search,
-  Armchair,
-  CheckCircle2,
-  Users,
-  AlertTriangle,
-  LayoutGrid,
-  List,
-  Filter,
-  X,
-  Wrench,
-  Clock,
-  ShieldAlert,
-  ChevronRight,
-  ArrowUpDown,
-  FileSpreadsheet,
-  Layers,
-} from 'lucide-react';
-import { toast } from 'sonner';
-import type { AdminSeatMatrixSeatMatrixViewModel } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/types/AdminSeatsMatrixTypes';
-import { useAdminSeatMatrixSeatMatrix, generateFallbackSeatMatrix } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/hooks/useAdminSeatsMatrixSeatMatrix';
-import AdminSeatsMatrixBulkGenerateModal from './AdminSeatsMatrixBulkGenerateModal';
-import { ADMIN_SEAT_MATRIX_SHIFTS } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/config/admin_seats_matrix.url_config';
 import { ADMIN_SEAT_MATRIX_QUERY_KEYS } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/api/admin_seats_matrix.query_keys';
-import { buildAdminSeatMatrixSeatMatrixCsv, downloadAdminSeatMatrixCsv } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/utils/AdminSeatsMatrixExportUtils';
-import { displayValue } from '@/lib/display_value';
+import { ADMIN_SEAT_MATRIX_SHIFTS } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/config/admin_seats_matrix.url_config';
+import useAdminSeatMatrixDialogFocus from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/hooks/useAdminSeatsMatrixDialogFocus';
+import { generateFallbackSeatMatrix,useAdminSeatMatrixSeatMatrix } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/hooks/useAdminSeatsMatrixSeatMatrix';
+import type { AdminSeatMatrixSeatMatrixViewModel } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/types/AdminSeatsMatrixTypes';
+import { buildAdminSeatMatrixSeatMatrixCsv,downloadAdminSeatMatrixCsv } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/utils/AdminSeatsMatrixExportUtils';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { DataGrid, type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
+import { DataGrid,type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { useQueryClient } from '@tanstack/react-query';
+import { addDays,format } from 'date-fns';
+import {
+AlertTriangle,
+Armchair,
+Building2,
+CheckCircle2,
+Clock,
+Download,
+FileSpreadsheet,
+Filter,
+Layers,
+LayoutGrid,
+List,
+Printer,
+Search,
+User,
+Users,
+Wrench,
+X
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect,useMemo,useRef,useState } from 'react';
+import { toast } from 'sonner';
+import AdminSeatsMatrixBulkGenerateModal from './AdminSeatsMatrixBulkGenerateModal';
 
 const ADMIN_SEAT_MATRIX_LEGEND_ITEMS = [
   { dotCls: 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]', label: 'Available Free', desc: 'Ready for allocation' },

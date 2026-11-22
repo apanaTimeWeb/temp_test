@@ -1,5 +1,5 @@
 /** Canonical module routes/API endpoints and cohesive module-owned configuration constants. */
-import type { AdminDashboardReportsAnalyticsDataset, AdminDashboardReportsAnalyticsRange } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes';
+import type { AdminDashboardReportsAnalyticsDataset,AdminDashboardReportsAnalyticsRange } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes';
 
 /** Canonical browser route and source-observed API contract for dashboard reports. */
 export const ADMIN_DASHBOARD_REPORTS_ROUTES = {

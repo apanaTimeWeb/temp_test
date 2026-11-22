@@ -1,5 +1,5 @@
 // Responsibility: verify the isolated admin_seats_seat_management contract remains discoverable by the host test runner.
-import { describe, expect, it } from 'vitest';
+import { describe,expect,it } from 'vitest';
 
 describe('admin_seats_seat_management standalone contract', () => {
   it('has a module-owned test harness', () => {

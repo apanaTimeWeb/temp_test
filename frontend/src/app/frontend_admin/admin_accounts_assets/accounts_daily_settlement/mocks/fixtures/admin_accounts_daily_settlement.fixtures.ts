@@ -1,5 +1,5 @@
 // mocks/fixtures/admin_accounts_daily_settlement.fixtures.ts
-import type { DailySettlementRecord, DailySettlementKpiSummary } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/types/AdminAccountsDailySettlementTypes';
+import type { DailySettlementKpiSummary,DailySettlementRecord } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/types/AdminAccountsDailySettlementTypes';
 
 export const ADMIN_DAILY_SETTLEMENT_FIXTURES: DailySettlementRecord[] = [
   {

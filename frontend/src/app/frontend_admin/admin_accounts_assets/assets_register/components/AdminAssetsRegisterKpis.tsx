@@ -1,13 +1,13 @@
 // components/AdminAssetsRegisterKpis.tsx
 'use client';
-import { useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-import { Building2, IndianRupee, ShieldCheck, AlertTriangle } from 'lucide-react';
 import type { AdminAssetRecord } from '@/app/frontend_admin/admin_accounts_assets/assets_register/types/AdminAssetsRegisterTypes';
 import {
-  formatPaiseToRupees,
-  isExpiringSoon,
+formatPaiseToRupees,
+isExpiringSoon,
 } from '@/app/frontend_admin/admin_accounts_assets/assets_register/utils/AdminAssetsRegisterFormatters';
+import { AlertTriangle,Building2,IndianRupee,ShieldCheck } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo } from 'react';
 
 interface Props {
   records: AdminAssetRecord[];

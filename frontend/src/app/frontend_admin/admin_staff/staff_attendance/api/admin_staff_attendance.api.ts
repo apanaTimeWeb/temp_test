@@ -1,13 +1,13 @@
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import {
-  ADMIN_STAFF_ATTENDANCE_FIXTURES,
-  ADMIN_STAFF_ROSTER_FIXTURES,
+ADMIN_STAFF_ATTENDANCE_FIXTURES,
+ADMIN_STAFF_ROSTER_FIXTURES,
 } from '@/app/frontend_admin/admin_staff/staff_attendance/mocks/scenarios/admin_staff_attendance.scenarios';
 import type {
-  StaffAttendanceRecord,
-  StaffRosterSlot,
-  RegularizeAttendanceInput,
+RegularizeAttendanceInput,
+StaffAttendanceRecord,
+StaffRosterSlot,
 } from '@/app/frontend_admin/admin_staff/staff_attendance/schemas/AdminStaffAttendanceSchema';
+import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 
 export async function fetchAdminStaffAttendanceList(): Promise<StaffAttendanceRecord[]> {
   if (isFrontendDemoModeEnabled()) {

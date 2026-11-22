@@ -1,9 +1,9 @@
 'use client';
 // Responsibility: AdminFinanceReferralsKpiCards component owned by admin_finance_referrals.
 
-import { Users, Trophy, IndianRupee, TrendingUp } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { formatAdminFinanceCurrency } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/AdminFinanceReferralsFormat';
+import { IndianRupee,TrendingUp,Trophy,Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface AdminFinanceReferralsKpiCardsProps {
   totalReferrals: number;

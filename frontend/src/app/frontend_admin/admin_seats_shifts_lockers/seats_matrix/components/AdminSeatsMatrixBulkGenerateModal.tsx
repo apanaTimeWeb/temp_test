@@ -1,10 +1,10 @@
 'use client';
 // RESPONSIBILITY: Bulk Generate / Add Seats modal for Admin Seats Matrix.
 
-import { useState } from 'react';
-import { Armchair, Building2, Check, Layers, Plus, Sparkles, X, AlertCircle } from 'lucide-react';
-import { toast } from 'sonner';
 import type { AdminSeatMatrixSeatMatrixViewModel } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/types/AdminSeatsMatrixTypes';
+import { Armchair,Building2,Layers,Plus,Sparkles,X } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 export interface AdminSeatsMatrixBulkGenerateModalProps {
   isOpen: boolean;

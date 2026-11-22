@@ -1,52 +1,43 @@
 'use client';
 // Responsibility: Displays comprehensive member profile with fully working tabs: Profile, Attendance, Membership, Renewal History, Payment History, Lost/Damaged History, Activity History, and Documents.
 
-import { useState } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
-import {
-  Activity,
-  Armchair,
-  CalendarClock,
-  Camera,
-  CreditCard,
-  FileText,
-  IndianRupee,
-  MessageSquare,
-  ShieldCheck,
-  UserRound,
-  Users,
-  Eye,
-  Download,
-  CheckCircle,
-  X,
-  Building2,
-  Clock,
-  RotateCcw,
-  Check,
-  Copy,
-  Receipt,
-  AlertTriangle,
-  Calendar,
-  Printer,
-  BookOpen,
-  MapPin,
-  Phone,
-  Mail,
-  Key,
-  TrendingUp,
-  FileSpreadsheet,
-  Award,
-  CalendarCheck,
-  GraduationCap,
-  Layers,
-  Lock,
-  PauseCircle,
-  PhoneCall,
-  ExternalLink,
-} from 'lucide-react';
-import { toast } from 'sonner';
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import { formatAdminMembersDate } from '@/app/frontend_admin/admin_members/members_directory/utils/AdminMembersDirectoryExportUtils';
+import {
+Activity,
+AlertTriangle,
+Armchair,
+Award,
+Building2,
+CalendarCheck,
+Camera,
+Check,
+CheckCircle,
+Clock,
+Copy,
+CreditCard,
+Download,
+ExternalLink,
+Eye,
+FileText,
+GraduationCap,
+IndianRupee,
+Layers,
+Lock,
+Mail,
+MessageSquare,
+PauseCircle,
+PhoneCall,
+Printer,
+Receipt,
+RotateCcw,
+ShieldCheck,
+UserRound,
+X
+} from 'lucide-react';
+import { useLocale,useTranslations } from 'next-intl';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface AdminMembersDirectoryMemberDetailCardProps {
   member: AdminMembersMember;

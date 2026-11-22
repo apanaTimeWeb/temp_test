@@ -4,44 +4,42 @@ import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_a
 // RESPONSIBILITY: Entry page for the admin_communication module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
-import { useEffect, useState, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
+import { filterAdminCommunicationWhatsappLogs } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/utils/AdminCommunicationWhatsappLogsFilterUtils';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
+import type { DataGridCellParams,DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
+import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import {
-  Eye,
-  X,
-  MessageSquare,
-  CheckCircle,
-  Clock,
-  AlertCircle,
-  Copy,
-  CheckCircle2,
-  Calendar,
-  Search,
-  ShieldCheck,
-  CheckCheck,
-  RotateCcw,
-  Download,
-  FileSpreadsheet,
-  Send,
-} from 'lucide-react';
-import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import { filterAdminCommunicationWhatsappLogs } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/utils/AdminCommunicationWhatsappLogsFilterUtils';
-
-import type { AdminCommunicationWhatsappLog } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/types/AdminCommunicationWhatsappLogsTypes';
-import { ADMIN_COMMUNICATION_WHATSAPP_LOGS_FIXTURES } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/mocks/AdminCommunicationWhatsappLogsFixtures';
 import {
-  ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_BADGE,
-  ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_LABEL,
-  ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_BADGE,
-  ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_LABEL,
+AlertCircle,
+Calendar,
+CheckCheck,
+CheckCircle,
+CheckCircle2,
+Clock,
+Copy,
+Download,
+Eye,
+FileSpreadsheet,
+MessageSquare,
+RotateCcw,
+Search,
+Send,
+ShieldCheck,
+X,
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect,useMemo,useState } from 'react';
+
+import {
+ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_LABEL,
+ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_LABEL
 } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/config/admin_communication_whatsapp_logs.url_config';
+import { ADMIN_COMMUNICATION_WHATSAPP_LOGS_FIXTURES } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/mocks/AdminCommunicationWhatsappLogsFixtures';
+import type { AdminCommunicationWhatsappLog } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/types/AdminCommunicationWhatsappLogsTypes';
 
 const WHATSAPP_TYPE_ICONS: Record<string, string> = {
   welcome: '👋',

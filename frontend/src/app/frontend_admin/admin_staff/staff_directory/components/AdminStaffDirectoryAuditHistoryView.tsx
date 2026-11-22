@@ -1,11 +1,11 @@
 'use client';
 // Responsibility: AdminStaffDirectoryAuditHistoryView component owned by admin_staff_directory.
 
-import { useState, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-import { ArrowUpDown, ArrowUp, ArrowDown, Search } from 'lucide-react';
 import { ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_FIXTURES } from '@/app/frontend_admin/admin_staff/staff_directory/mocks/scenarios/admin_staff_directory.scenarios';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
+import { ArrowDown,ArrowUp,ArrowUpDown,Search } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
 
 type HistorySortField = 'managerName' | 'timeKey' | 'statusKey' | 'location';
 

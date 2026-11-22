@@ -1,6 +1,6 @@
 // RESPONSIBILITY: AdminAccountingSeatGapSummarySection component owned by admin_accounting; responsibility folder: admin_accounting_components_cards.
-import { Armchair, AlertTriangle, Clock, Wrench } from 'lucide-react';
 import type { AdminAccountingSeatGapRow } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/types/AdminAccountsSeatGapReportTypes';
+import { AlertTriangle,Armchair,Clock,Wrench } from 'lucide-react';
 
 export default function AdminAccountingSeatGapSummarySection({
   rows,

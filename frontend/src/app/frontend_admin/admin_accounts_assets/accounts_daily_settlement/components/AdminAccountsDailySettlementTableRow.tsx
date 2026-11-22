@@ -1,14 +1,14 @@
 'use client';
 // Responsibility: AdminAccountsDailySettlementTableRow component owned by accounts_daily_settlement.
 
-import { Check, AlertTriangle, Clock, ExternalLink, ShieldAlert, Printer } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import type { DailySettlementRecord } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/types/AdminAccountsDailySettlementTypes';
 import {
-  formatPaiseToRupees,
-  formatSettlementDate,
+formatPaiseToRupees,
+formatSettlementDate,
 } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/utils/AdminAccountsDailySettlementFormatters';
 import { displayValue } from '@/lib/display_value';
+import { AlertTriangle,Check,Clock,ExternalLink,Printer,ShieldAlert } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export function printDailySettlementVoucher(record: DailySettlementRecord) {
   if (typeof window === 'undefined') return;

@@ -1,10 +1,10 @@
 'use client';
-import { Children, isValidElement, useEffect, useRef, type HTMLAttributes, type MouseEvent, type ReactNode } from 'react';
-import { useDialog } from '@/components/ui/dialog/Dialog';
-import { DialogTitle } from '@/components/ui/dialog/DialogTitle';
-import { DialogDescription } from '@/components/ui/dialog/DialogDescription';
-import { useTranslations } from 'next-intl';
 import type { DialogContentProps } from '@/app/frontend_admin/components/ui/dialog/types/AdminUiDialogComponentTypes';
+import { useDialog } from '@/components/ui/dialog/Dialog';
+import { DialogDescription } from '@/components/ui/dialog/DialogDescription';
+import { DialogTitle } from '@/components/ui/dialog/DialogTitle';
+import { useTranslations } from 'next-intl';
+import { Children,isValidElement,useEffect,useRef,type MouseEvent,type ReactNode } from 'react';
 
 
 function containsDialogSlot(children: ReactNode, slot: typeof DialogTitle | typeof DialogDescription): boolean {

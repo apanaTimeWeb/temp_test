@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
+import { describe,expect,it } from 'vitest';
 
 describe('admin brand configuration', () => {
   it('provides non-empty display segments from one infrastructure-owned contract', () => {

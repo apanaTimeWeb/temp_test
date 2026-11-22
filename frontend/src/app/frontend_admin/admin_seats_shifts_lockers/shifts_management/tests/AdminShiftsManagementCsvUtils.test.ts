@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
 import { ADMIN_SHIFTS_DEMO_SHIFTS } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/mocks/scenarios/admin_shifts_management.scenarios';
 import { serializeAdminShiftsCsv } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/utils/AdminShiftsManagementCsvUtils';
+import { describe,expect,it } from 'vitest';
 
 describe('admin shifts CSV export', () => {
   it('exports the complete shift row with stable column names', () => {

@@ -1,6 +1,6 @@
-import { http, HttpResponse } from 'msw';
 import { ADMIN_COMMUNICATION_URLS } from '@/app/frontend_admin/admin_communication/communication_notices/config/admin_communication_notices_communication_url_config_source_routes';
-import type { AdminCommunicationComplaintApiRecord, AdminCommunicationNoticeApiRecord } from '@/app/frontend_admin/admin_communication/communication_notices/schemas/AdminCommunicationNoticesSchema';
+import type { AdminCommunicationComplaintApiRecord,AdminCommunicationNoticeApiRecord } from '@/app/frontend_admin/admin_communication/communication_notices/schemas/AdminCommunicationNoticesSchema';
+import { http,HttpResponse } from 'msw';
 
 /**
  * Canonical transport-level mock scenario registry for Admin Communication Notices.

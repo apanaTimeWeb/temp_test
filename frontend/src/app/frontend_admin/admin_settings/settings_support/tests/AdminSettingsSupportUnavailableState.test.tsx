@@ -1,6 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
 import AdminSettingsSupportMain from '@/app/frontend_admin/admin_settings/settings_support/components/AdminSettingsSupportPage';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { afterEach,describe,expect,it,vi } from 'vitest';
 
 vi.mock('next-intl', () => ({
   useTranslations: (namespace: string) => (key: string) => `${namespace}.${key}`,

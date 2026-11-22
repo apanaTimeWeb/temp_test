@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import { AdminCommunicationWhatsappTemplatesScenarioLabel, type AdminCommunicationWhatsappTemplatesScenario } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/tests/harness/bootstrap';
+import { AdminCommunicationWhatsappTemplatesScenarioLabel } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/tests/harness/bootstrap';
 import type { AdminCommunicationWhatsappTemplatesHarnessProps } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/types/AdminCommunicationWhatsappTemplatesComponentTypes';
 
 

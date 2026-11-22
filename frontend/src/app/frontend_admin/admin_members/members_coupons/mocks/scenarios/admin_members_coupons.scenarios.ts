@@ -1,5 +1,5 @@
-import type { z } from 'zod';
 import { AdminCouponsApiResponseSchema } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
+import type { z } from 'zod';
 
 /**
  * Canonical transport-level mock scenario registry for Admin Members Coupons.

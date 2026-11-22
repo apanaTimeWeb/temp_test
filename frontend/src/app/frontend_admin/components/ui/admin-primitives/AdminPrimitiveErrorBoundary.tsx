@@ -1,6 +1,6 @@
 'use client';
-import React, { type ReactNode } from 'react';
-import type { AdminErrorBoundaryProps, AdminErrorBoundaryState } from '@/app/frontend_admin/components/ui/admin-primitives/types/AdminUiAdminPrimitivesComponentTypes';
+import type { AdminErrorBoundaryProps,AdminErrorBoundaryState } from '@/app/frontend_admin/components/ui/admin-primitives/types/AdminUiAdminPrimitivesComponentTypes';
+import React from 'react';
 
 
 /** Generic error boundary: all localized text is injected by the role/feature owner. */

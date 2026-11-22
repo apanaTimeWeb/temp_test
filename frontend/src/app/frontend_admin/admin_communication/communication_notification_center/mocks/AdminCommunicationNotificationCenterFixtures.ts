@@ -1,5 +1,5 @@
-import type { AdminCommunicationNotification } from '@/app/frontend_admin/admin_communication/communication_notification_center/types/AdminCommunicationNotificationCenterTypes';
 import { ADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES as ADMIN_COMMUNICATION_NOTIFICATION_TARGET_ROUTES } from '@/app/frontend_admin/admin_communication/communication_notification_center/config/admin_communication_notification_center.url_config';
+import type { AdminCommunicationNotification } from '@/app/frontend_admin/admin_communication/communication_notification_center/types/AdminCommunicationNotificationCenterTypes';
 
 /** Synthetic preview records only. These are not fetched notification-service records. */
 export const ADMIN_COMMUNICATION_NOTIFICATION_FIXTURES: AdminCommunicationNotification[] = [

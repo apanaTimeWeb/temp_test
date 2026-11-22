@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { applyAdminApplicationInfrastructureQueryMutation, parseAdminApplicationInfrastructureUrlValue, resolveAdminApplicationInfrastructureNextValue } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
+import { applyAdminApplicationInfrastructureQueryMutation,parseAdminApplicationInfrastructureUrlValue,resolveAdminApplicationInfrastructureNextValue } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
+import { describe,expect,it } from 'vitest';
 
 describe('Admin application infrastructure URL query state parser', () => {
   it('uses the fallback when the query key is missing', () => {

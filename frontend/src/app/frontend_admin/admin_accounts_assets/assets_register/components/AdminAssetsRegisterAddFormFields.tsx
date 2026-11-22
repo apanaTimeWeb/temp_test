@@ -1,14 +1,14 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import {
-  ADMIN_ASSET_CATEGORIES,
-  ADMIN_ASSET_AMC_STATUSES,
+ADMIN_ASSET_AMC_STATUSES,
+ADMIN_ASSET_CATEGORIES,
 } from '@/app/frontend_admin/admin_accounts_assets/assets_register/config/admin_assets_register.url_config';
 import type {
-  AdminAssetCategory,
-  AdminAssetAmcStatus,
+AdminAssetAmcStatus,
+AdminAssetCategory,
 } from '@/app/frontend_admin/admin_accounts_assets/assets_register/types/AdminAssetsRegisterTypes';
+import { useTranslations } from 'next-intl';
 
 interface AdminAssetsRegisterAddFormFieldsProps {
   assetCode: string;

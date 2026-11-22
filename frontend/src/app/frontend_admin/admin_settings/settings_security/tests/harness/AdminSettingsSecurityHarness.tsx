@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import { AdminSettingsSecurityScenarioLabel, type AdminSettingsSecurityScenario } from '@/app/frontend_admin/admin_settings/settings_security/tests/harness/bootstrap';
+import { AdminSettingsSecurityScenarioLabel } from '@/app/frontend_admin/admin_settings/settings_security/tests/harness/bootstrap';
 import type { AdminSettingsSecurityHarnessProps } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
 
 

@@ -1,7 +1,7 @@
 'use client';
 // DATA FLOW: seats_matrix route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
-import { useEffect, useRef, type RefObject } from 'react';
+import { useEffect,useRef,type RefObject } from 'react';
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 

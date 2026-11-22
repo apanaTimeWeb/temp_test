@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import { AdminCommunicationWhatsappLogsScenarioLabel, type AdminCommunicationWhatsappLogsScenario } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/tests/harness/bootstrap';
+import { AdminCommunicationWhatsappLogsScenarioLabel } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/tests/harness/bootstrap';
 import type { AdminCommunicationWhatsappLogsHarnessProps } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/types/AdminCommunicationWhatsappLogsTypes';
 
 

@@ -1,10 +1,8 @@
 'use client';
 
-import React from 'react';
-import { X, Printer, Share2, Building2, CheckCircle2, IndianRupee, Download, Gift, Receipt, FileText } from 'lucide-react';
-import { toast } from 'sonner';
 import type { ReferralPayoutVoucher } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsTypes';
 import { buildWhatsAppLink } from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
+import { Printer,Receipt,Share2,X } from 'lucide-react';
 
 interface AdminFinanceReferralPayoutVoucherModalProps {
   voucher: ReferralPayoutVoucher | null;

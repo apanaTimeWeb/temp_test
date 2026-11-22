@@ -1,12 +1,12 @@
 'use client';
 // RESPONSIBILITY: AdminSecurityDeviceSessionsPanel component owned by admin_security; responsibility folder: admin_security_device_sessions_panel.
 
-import { useState, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-import { ArrowUpDown, ArrowUp, ArrowDown, LogOut, ShieldAlert } from 'lucide-react';
-import { toast } from 'sonner';
 import { ADMIN_SECURITY_DEVICE_SESSION_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
+import { ArrowDown,ArrowUp,ArrowUpDown,LogOut,ShieldAlert } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
 
 /** Renders active device sessions with immediate admin-directed session revocation / force-logout capability. */
 export default function AdminSecurityDeviceSessionsPanel() {

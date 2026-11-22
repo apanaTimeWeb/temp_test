@@ -1,7 +1,7 @@
 'use client';
 
-import type { ElementType } from 'react';
 import { TrendingUp } from 'lucide-react';
+import type { ElementType } from 'react';
 
 export interface AdminDashboardExecutiveKpiItem {
   id: string;

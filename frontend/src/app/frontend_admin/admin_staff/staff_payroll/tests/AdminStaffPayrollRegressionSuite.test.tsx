@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { AdminStaffPayrollHarness } from '@/app/frontend_admin/admin_staff/staff_payroll/tests/harness/AdminStaffPayrollHarness';
 import { AdminStaffPayrollPage } from '@/app/frontend_admin/admin_staff/staff_payroll/components/AdminStaffPayrollPage';
+import { AdminStaffPayrollHarness } from '@/app/frontend_admin/admin_staff/staff_payroll/tests/harness/AdminStaffPayrollHarness';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it } from 'vitest';
 
 describe('AdminStaffPayrollRegressionSuite', () => {
   it('renders page header, KPI summary cards, and default salary table', () => {

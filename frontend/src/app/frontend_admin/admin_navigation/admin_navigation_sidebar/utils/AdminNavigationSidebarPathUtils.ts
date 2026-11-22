@@ -1,8 +1,8 @@
-import type { LucideIcon } from 'lucide-react';
 import {
-  ADMIN_SIDEBAR_NAV,
-  type AdminNavigationGroup,
+ADMIN_SIDEBAR_NAV,
+type AdminNavigationGroup,
 } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_navigation_constants';
+import type { LucideIcon } from 'lucide-react';
 
 export const ALL_HREFS = ADMIN_SIDEBAR_NAV.filter(
   (n): n is { href: string; icon: LucideIcon; label: string } => 'href' in n

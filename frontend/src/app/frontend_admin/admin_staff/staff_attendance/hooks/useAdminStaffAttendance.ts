@@ -1,27 +1,26 @@
 'use client';
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
-import { toast } from 'sonner';
-import { useTranslations } from 'next-intl';
-import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import {
-  ADMIN_STAFF_ATTENDANCE_FIXTURES,
-  ADMIN_STAFF_ROSTER_FIXTURES,
-  ADMIN_STAFF_LEAVE_REQUEST_FIXTURES,
+ADMIN_STAFF_ATTENDANCE_FIXTURES,
+ADMIN_STAFF_LEAVE_REQUEST_FIXTURES,
+ADMIN_STAFF_ROSTER_FIXTURES,
 } from '@/app/frontend_admin/admin_staff/staff_attendance/mocks/scenarios/admin_staff_attendance.scenarios';
 import type {
-  StaffAttendanceRecord,
-  StaffRosterSlot,
-  RegularizeAttendanceInput,
-  StaffLeaveRequest,
+RegularizeAttendanceInput,
+StaffAttendanceRecord,
+StaffLeaveRequest
 } from '@/app/frontend_admin/admin_staff/staff_attendance/schemas/AdminStaffAttendanceSchema';
 import type {
-  StaffAttendanceFilterState,
-  StaffAttendanceViewTab,
-  StaffAttendanceKpiSummary,
-  AdminStaffAttendanceModel,
+AdminStaffAttendanceModel,
+StaffAttendanceFilterState,
+StaffAttendanceKpiSummary,
+StaffAttendanceViewTab,
 } from '@/app/frontend_admin/admin_staff/staff_attendance/types/AdminStaffAttendanceTypes';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
+import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { useTranslations } from 'next-intl';
+import { useCallback,useEffect,useMemo,useState } from 'react';
+import { toast } from 'sonner';
 
 export function useAdminStaffAttendance(): AdminStaffAttendanceModel {
   const t = useTranslations('ADMIN_STAFF_ATTENDANCE');

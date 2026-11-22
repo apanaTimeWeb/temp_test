@@ -1,6 +1,5 @@
 /** Test harness re-exports the canonical module-owned UI scenario vocabulary. */
-import type { AdminMembersDirectoryHarnessProps } from '@/app/frontend_admin/admin_members/members_directory/types/AdminMembersDirectoryComponentTypes';
-import { AdminMembersDirectoryScenarios, type AdminMembersDirectoryScenario } from '@/app/frontend_admin/admin_members/members_directory/mocks/scenarios/admin_members_directory.scenarios';
+import { AdminMembersDirectoryScenarios,type AdminMembersDirectoryScenario } from '@/app/frontend_admin/admin_members/members_directory/mocks/scenarios/admin_members_directory.scenarios';
 export { AdminMembersDirectoryScenarios };
 export type { AdminMembersDirectoryScenario };
 

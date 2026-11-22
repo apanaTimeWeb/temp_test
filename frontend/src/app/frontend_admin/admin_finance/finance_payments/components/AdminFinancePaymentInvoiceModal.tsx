@@ -1,11 +1,10 @@
 'use client';
 
-import React from 'react';
-import { X, Printer, Share2, Building2, User, FileText, Download, CheckCircle2, Mail } from 'lucide-react';
-import { toast } from 'sonner';
 import type { AdminFinancePayment } from '@/app/frontend_admin/admin_finance/finance_payments/types/AdminFinancePaymentsComponentTypes';
-import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinancePaymentsFormat';
-import { downloadPaymentInvoicePdf, buildWhatsAppLink } from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
+import { formatAdminFinanceApiAmount,formatDate } from '@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinancePaymentsFormat';
+import { buildWhatsAppLink,downloadPaymentInvoicePdf } from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
+import { Building2,CheckCircle2,Download,FileText,Mail,Printer,Share2,User,X } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface AdminFinancePaymentInvoiceModalProps {
   payment: AdminFinancePayment | null;

@@ -1,18 +1,18 @@
 'use client';
-import { useState } from 'react';
-import useAdminSecurityTabState from '@/app/frontend_admin/admin_settings/settings_security/hooks/useAdminSettingsSecurityTabState';
-import { useTranslations } from 'next-intl';
-import { LogOut, MonitorSmartphone, Lock, Unlock, UserRoundCheck, UserRoundX } from 'lucide-react';
-import { toast } from 'sonner';
-import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
-import { ADMIN_SECURITY_EVENT_FILTERS, ADMIN_SECURITY_NAV_ITEMS } from '@/app/frontend_admin/admin_settings/settings_security/config/admin_settings_security.url_config';
-import { ADMIN_SECURITY_ACTIVE_SESSION_FIXTURES, ADMIN_SECURITY_EVENT_FIXTURES, ADMIN_SECURITY_BLOCKED_ACCOUNT_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
-import { filterAdminSecurityEvents } from '@/app/frontend_admin/admin_settings/settings_security/utils/AdminSettingsSecurityEventUtils';
-import type { AdminSecurityEventFilter } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import AdminSecurityFailedLoginsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityFailedLoginsPanel';
-import AdminSecurityDeviceSessionsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityDeviceSessionsPanel';
 import AdminSettingsSecurityAuditTrailPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityAuditTrailPanel';
+import AdminSecurityDeviceSessionsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityDeviceSessionsPanel';
+import AdminSecurityFailedLoginsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityFailedLoginsPanel';
+import { ADMIN_SECURITY_EVENT_FILTERS,ADMIN_SECURITY_NAV_ITEMS } from '@/app/frontend_admin/admin_settings/settings_security/config/admin_settings_security.url_config';
+import useAdminSecurityTabState from '@/app/frontend_admin/admin_settings/settings_security/hooks/useAdminSettingsSecurityTabState';
+import { ADMIN_SECURITY_ACTIVE_SESSION_FIXTURES,ADMIN_SECURITY_BLOCKED_ACCOUNT_FIXTURES,ADMIN_SECURITY_EVENT_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
+import type { AdminSecurityEventFilter } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
+import { filterAdminSecurityEvents } from '@/app/frontend_admin/admin_settings/settings_security/utils/AdminSettingsSecurityEventUtils';
+import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
+import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { Lock,LogOut,MonitorSmartphone,Unlock,UserRoundCheck,UserRoundX } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 // Responsibility: AdminSecurityPage presentation component owned by admin_security; responsibility folder: admin_security_components_views.
 

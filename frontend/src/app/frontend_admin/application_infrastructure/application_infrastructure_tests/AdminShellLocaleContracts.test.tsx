@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
 import en from '@/app/frontend_admin/application_infrastructure/application_infrastructure_locales/admin_shell_en.json';
 import hi from '@/app/frontend_admin/application_infrastructure/application_infrastructure_locales/admin_shell_hi.json';
+import { describe,expect,it } from 'vitest';
 
 describe('admin shell locale contracts', () => {
   it('keeps English and Hindi keys aligned for role-shell UI copy', () => {

@@ -1,7 +1,7 @@
 'use client';
 
+import { Armchair,CheckCircle,ShieldCheck,Undo2,X } from 'lucide-react';
 import { useState } from 'react';
-import { Undo2, X, CheckCircle, ShieldCheck, AlertTriangle, Armchair } from 'lucide-react';
 import type { AdminFinanceSecurityDeposit } from '../types/AdminFinanceSecurityDepositsTypes';
 
 export interface AdminFinanceSecurityDepositsRefundModalProps {

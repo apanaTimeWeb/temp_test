@@ -1,15 +1,14 @@
 'use client';
 // RESPONSIBILITY: AdminAccountsExpensesTableSection component owned by admin_accounting; responsibility folder: admin_accounts_expenses_sections.
 
-import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
-import { useMemo } from 'react';
-import { useTranslations, useLocale } from 'next-intl';
-import { Trash2, Check, X, ExternalLink, Clock, CheckCircle2, XCircle, Eye, Building2, User, FileText } from 'lucide-react';
-import { DataGrid, type DataGridCellParams, type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { AdminAccountingExpense } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/schemas/AdminAccountsExpensesSchemas';
-import { ADMIN_ACCOUNTING_EXPENSE_MODE_BADGE } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/config/admin_accounts_expenses.url_config';
-import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/utils/AdminAccountsExpensesFormatCurrency';
 import type { AdminAccountsExpensesTableSectionProps } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/types/AdminAccountsExpensesComponentTypes';
+import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/utils/AdminAccountsExpensesFormatCurrency';
+import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
+import { DataGrid,type DataGridCellParams,type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
+import { Building2,Check,CheckCircle2,Clock,Eye,Trash2,User,X,XCircle } from 'lucide-react';
+import { useLocale,useTranslations } from 'next-intl';
+import { useMemo } from 'react';
 
 const CATEGORY_TRANSLATION_KEY = {
   Electricity: 'CATEGORY_ELECTRICITY',

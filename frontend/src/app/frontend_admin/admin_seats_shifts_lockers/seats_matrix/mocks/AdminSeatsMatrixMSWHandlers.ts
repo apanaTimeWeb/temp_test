@@ -1,5 +1,5 @@
-import { http, HttpResponse } from 'msw';
 import { ADMIN_SEAT_MATRIX_URLS } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/config/admin_seats_matrix.url_config';
+import { http,HttpResponse } from 'msw';
 
 
 /** Module-owned synthetic API response fixtures for tests/MSW only. */

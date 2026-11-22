@@ -1,4 +1,4 @@
-import type { AdminShiftsShiftGapFixture, AdminShiftOverstayIncident } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/types/AdminShiftsGapTypes';
+import type { AdminShiftOverstayIncident,AdminShiftsShiftGapFixture } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/types/AdminShiftsGapTypes';
 
 /** Illustrative single-day gap data. The page hides these records outside explicit demo mode. */
 export const ADMIN_SHIFTS_DEMO_SHIFT_GAPS: readonly AdminShiftsShiftGapFixture[] = [

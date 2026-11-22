@@ -1,5 +1,5 @@
 /** No live host API or authorization declarations are inferred here. */
-export {};
+export { };
 
 declare module '*.css';
 

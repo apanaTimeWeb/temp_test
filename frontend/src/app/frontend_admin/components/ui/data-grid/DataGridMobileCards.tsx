@@ -1,8 +1,6 @@
 // Responsibility: render responsive mobile cards for the shared DataGrid primitive.
-import type { ReactNode } from 'react';
-import { Inbox } from 'lucide-react';
-import type { DataGridColumn } from '@/components/ui/data-grid/DataGrid';
 import type { DataGridMobileCardsProps } from '@/app/frontend_admin/components/ui/data-grid/types/AdminUiDataGridComponentTypes';
+import { Inbox } from 'lucide-react';
 
 
 export function DataGridMobileCards<TRow extends object>({

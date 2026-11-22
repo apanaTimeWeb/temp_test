@@ -1,34 +1,33 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
-import {
-  Settings,
-  Ban,
-  RotateCcw,
-  UserCheck,
-  ShieldAlert,
-  Search,
-  X,
-  Download,
-  Printer,
-  QrCode,
-  Building,
-} from 'lucide-react';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import {
-  ADMIN_FINANCE_DEFAULT_AUTO_SUSPEND_CONFIG,
-  ADMIN_FINANCE_DEMO_SUSPENDED_STUDENTS,
+Ban,
+Download,
+Printer,
+QrCode,
+RotateCcw,
+Search,
+Settings,
+ShieldAlert,
+UserCheck,
+X
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
+import {
+ADMIN_FINANCE_DEFAULT_AUTO_SUSPEND_CONFIG,
+ADMIN_FINANCE_DEMO_SUSPENDED_STUDENTS,
 } from '../mocks/AdminFinanceAutoSuspendDemoFixtures';
 import type {
-  AdminFinanceAutoSuspendConfig,
-  AdminFinanceAutoSuspendSuspendedStudent,
-  SuspendSortField,
+AdminFinanceAutoSuspendConfig,
+AdminFinanceAutoSuspendSuspendedStudent,
+SuspendSortField,
 } from '../types/AdminFinanceAutoSuspendTypes';
+import { AdminFinanceAutoSuspendKioskModal } from './AdminFinanceAutoSuspendKioskModal';
 import { AdminFinanceAutoSuspendTable } from './AdminFinanceAutoSuspendTable';
 import { AdminFinanceAutoSuspendWhatsAppModal } from './AdminFinanceAutoSuspendWhatsAppModal';
-import { AdminFinanceAutoSuspendKioskModal } from './AdminFinanceAutoSuspendKioskModal';
 
 export function AdminFinanceAutoSuspendPage() {
   const t = useTranslations('ADMIN_FINANCE_AUTO_SUSPEND');

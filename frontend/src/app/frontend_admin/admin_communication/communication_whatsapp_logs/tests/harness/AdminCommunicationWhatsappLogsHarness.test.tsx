@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
 import { AdminCommunicationWhatsappLogsHarness } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/tests/harness/AdminCommunicationWhatsappLogsHarness';
 import { AdminCommunicationWhatsappLogsScenarios } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/tests/harness/bootstrap';
+import { render,screen } from '@testing-library/react';
+import { describe,expect,it } from 'vitest';
 
 describe('admin_communication_whatsapp_logs local scenario harness', () => {
   it.each(AdminCommunicationWhatsappLogsScenarios)('renders the %s state rather than only changing a scenario label', (scenario) => {

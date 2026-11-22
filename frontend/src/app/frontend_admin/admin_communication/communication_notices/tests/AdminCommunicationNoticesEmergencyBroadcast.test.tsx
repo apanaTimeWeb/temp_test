@@ -1,8 +1,8 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AdminCommunicationNoticesPage from '@/app/frontend_admin/admin_communication/communication_notices/components/AdminCommunicationNoticesPage';
 import { AdminBranchProvider } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { beforeEach,describe,expect,it,vi } from 'vitest';
 
 // Mock runtimeFeatures for demo mode
 vi.mock('@/app/frontend_admin/lib/runtimeFeatures', () => ({

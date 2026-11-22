@@ -1,7 +1,7 @@
 'use client';
 
+import { AlertOctagon,CheckCircle2,Lock,QrCode,Unlock,X } from 'lucide-react';
 import { useState } from 'react';
-import { ShieldAlert, X, QrCode, Lock, Unlock, AlertOctagon, CheckCircle2, RotateCcw } from 'lucide-react';
 import type { AdminFinanceAutoSuspendSuspendedStudent } from '../types/AdminFinanceAutoSuspendTypes';
 
 export interface AdminFinanceAutoSuspendKioskModalProps {

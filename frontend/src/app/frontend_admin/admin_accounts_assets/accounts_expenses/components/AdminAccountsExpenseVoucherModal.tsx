@@ -1,24 +1,22 @@
 'use client';
 
-import React from 'react';
-import {
-  X,
-  Printer,
-  Share2,
-  Building2,
-  User,
-  CheckCircle2,
-  Clock,
-  XCircle,
-  Receipt,
-  ExternalLink,
-  ShieldCheck,
-  Tag,
-  CreditCard,
-  FileText,
-} from 'lucide-react';
 import type { AdminAccountingExpense } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/schemas/AdminAccountsExpensesSchemas';
 import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/utils/AdminAccountsExpensesFormatCurrency';
+import {
+Building2,
+CheckCircle2,
+Clock,
+CreditCard,
+ExternalLink,
+FileText,
+Printer,
+Receipt,
+Share2,
+Tag,
+User,
+X,
+XCircle
+} from 'lucide-react';
 
 interface AdminAccountsExpenseVoucherModalProps {
   expense: AdminAccountingExpense | null;

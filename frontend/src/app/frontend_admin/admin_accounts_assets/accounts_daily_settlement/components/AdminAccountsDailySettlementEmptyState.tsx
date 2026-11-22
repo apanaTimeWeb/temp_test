@@ -1,8 +1,8 @@
 // components/AdminAccountsDailySettlementEmptyState.tsx
 'use client';
-import { useTranslations } from 'next-intl';
-import { ReceiptText } from 'lucide-react';
 import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
+import { ReceiptText } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   onResetFilters?: () => void;

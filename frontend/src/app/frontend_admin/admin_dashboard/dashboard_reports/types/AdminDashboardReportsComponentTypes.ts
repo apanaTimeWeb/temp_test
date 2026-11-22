@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
 import type { AdminDashboardReportsAnalyticsScenario } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/mocks/scenarios/admin_dashboard_reports.scenarios';
+import type { ReactNode } from 'react';
 
 export type AdminDashboardReportsReportCategory = 'members' | 'finance' | 'seats_shifts' | 'accounts_assets' | 'staff';
 export type AdminDashboardReportsAnalyticsKpiValueKind = 'currency' | 'count';

@@ -1,7 +1,7 @@
 'use client';
-import { useState, type ReactNode } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { AdminQueryProviderProps } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/types/AdminApplicationInfrastructureApplicationInfrastructureComponentsComponentTypes';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
+import { useState } from 'react';
 
 
 /** Owns one stable QueryClient for the Admin frontend role. */

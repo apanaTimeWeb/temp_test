@@ -1,7 +1,7 @@
 'use client';
-import React, { type MouseEvent, type ReactElement, type ReactNode } from 'react';
-import { useDialog } from '@/components/ui/dialog/Dialog';
 import type { DialogTriggerProps } from '@/app/frontend_admin/components/ui/dialog/types/AdminUiDialogComponentTypes';
+import { useDialog } from '@/components/ui/dialog/Dialog';
+import React,{ type MouseEvent,type ReactElement } from 'react';
 
 
 export function DialogTrigger({ children, asChild = false, className = '' }: DialogTriggerProps) {

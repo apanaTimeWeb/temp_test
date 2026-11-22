@@ -1,13 +1,11 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import { NextIntlClientProvider } from 'next-intl';
-import type { ReactNode } from 'react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import AdminCouponsPage from '@/app/frontend_admin/admin_members/members_coupons/components/AdminMembersCouponsPage';
-import { AdminCouponsDialog as AdminCouponsCreateDialog } from '@/app/frontend_admin/admin_members/members_coupons/components/AdminMembersCouponsPage';
+import AdminCouponsPage,{ AdminCouponsDialog as AdminCouponsCreateDialog } from '@/app/frontend_admin/admin_members/members_coupons/components/AdminMembersCouponsPage';
 import englishMessages from '@/app/frontend_admin/admin_members/members_coupons/locales/admin_members_coupons_en.json';
 import type { AdminCouponsCoupon } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
-import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
+import type { DataGridCellParams,DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
+import { fireEvent,render,screen,waitFor,within } from '@testing-library/react';
+import { NextIntlClientProvider } from 'next-intl';
+import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 
 const { toastInfoMock, toastSuccessMock } = vi.hoisted(() => ({ toastInfoMock: vi.fn(), toastSuccessMock: vi.fn() }));
 vi.mock('sonner', () => {

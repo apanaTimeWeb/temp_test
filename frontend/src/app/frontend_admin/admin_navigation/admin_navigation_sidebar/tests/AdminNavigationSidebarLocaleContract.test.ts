@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
 import en from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/locales/admin_navigation_sidebar_en.json';
 import hi from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/locales/admin_navigation_sidebar_hi.json';
+import { describe,expect,it } from 'vitest';
 
 describe('admin navigation locale ownership', () => {
   it('uses a module-owned namespace and keeps English/Hindi keys aligned', () => {

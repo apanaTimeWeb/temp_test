@@ -1,9 +1,9 @@
-import {
-  Armchair,
-  Users,
-  WalletCards,
-} from 'lucide-react';
 import { ADMIN_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/config/admin_dashboard_overview.url_config';
+import {
+Armchair,
+Users,
+WalletCards,
+} from 'lucide-react';
 
 export const ADMIN_DASHBOARD_DESTINATIONS = [
   {

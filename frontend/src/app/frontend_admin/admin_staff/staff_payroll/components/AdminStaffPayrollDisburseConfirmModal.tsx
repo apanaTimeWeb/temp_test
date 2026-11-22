@@ -1,19 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
-import { AlertTriangle, CheckCircle2, ShieldAlert } from 'lucide-react';
+import type {
+DisburseSalaryInput,
+PaymentMethod,
+StaffSalaryRecord,
+} from '@/app/frontend_admin/admin_staff/staff_payroll/schemas/AdminStaffPayrollSchema';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
-import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
-import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
-import type {
-  StaffSalaryRecord,
-  PaymentMethod,
-  DisburseSalaryInput,
-} from '@/app/frontend_admin/admin_staff/staff_payroll/schemas/AdminStaffPayrollSchema';
+import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
+import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
+import { CheckCircle2,ShieldAlert } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect,useState } from 'react';
 
 interface Props {
   record: StaffSalaryRecord | null;

@@ -6,7 +6,7 @@ declare module '@/lib/logger' {
   export const logger: { debug?: (...args: unknown[]) => void; info?: (...args: unknown[]) => void; warn?: (...args: unknown[]) => void; error?: (...args: unknown[]) => void };
 }
 declare module '@/components/ui/*' {
-  import type { ComponentType, HTMLAttributes } from 'react';
+  import type { ComponentType,HTMLAttributes } from 'react';
   const HostUiPrimitive: ComponentType<HTMLAttributes<HTMLElement>>;
   export default HostUiPrimitive;
 }

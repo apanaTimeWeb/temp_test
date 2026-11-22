@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
 import { ADMIN_NAVIGATION_URLS } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar.url_config';
 import { ADMIN_SIDEBAR_NAV } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_navigation_constants';
 import type { AdminNavItem } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/types/AdminNavigationSidebarTypes';
+import { describe,expect,it } from 'vitest';
 
 const EXPECTED_DOMAIN_DESTINATIONS = [
   ['DASHBOARD', '/admin/admin_dashboard'],
