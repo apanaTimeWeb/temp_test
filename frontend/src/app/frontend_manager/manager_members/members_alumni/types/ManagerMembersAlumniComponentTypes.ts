@@ -1,6 +1,6 @@
 /** Module-local component props and UI/state types extracted from component files. */
 import type { ManagerMembersAlumniSearchParams } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniMainTypes';
-import type { ErrorInfo, ReactNode } from 'react';
+import type { ErrorInfo,ReactNode } from 'react';
 
 export interface ManagerMembersAlumniErrorFallbackProps {
   onRetry: () => void;
@@ -16,7 +16,21 @@ export interface ManagerMembersAlumniErrorBoundaryState {
   hasError: boolean;
 }
 
-export type MembersAlumniRow = { id: string; name: string; phone: string; leftDate: string; duration: string; exam: string; currentStatus: string };
+export type MembersAlumniDepositStatus = 'Refunded' | 'Settled' | 'Held' | 'No Deposit';
+
+export type MembersAlumniRow = {
+  id: string;
+  name: string;
+  phone: string;
+  leftDate: string;
+  duration: string;
+  exam: string;
+  currentStatus: string;
+  designation?: string;
+  testimonial?: string;
+  depositSettlementStatus?: MembersAlumniDepositStatus;
+  depositAmount?: number;
+};
 
 export type ManagerMembersAlumniPageProps = {
   searchParams?: Promise<ManagerMembersAlumniSearchParams>;

@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { formatManagerAssetsMaintenanceCurrency, toManagerAssetsMaintenanceMinorUnits } from '../utils/ManagerAssetsMaintenanceFormatting';
+import { describe,expect,it } from 'vitest';
+import { formatManagerAssetsMaintenanceCurrency,toManagerAssetsMaintenanceMinorUnits } from '../utils/ManagerAssetsMaintenanceFormatting';
 
 describe('maintenance currency formatting', () => {
   it('formats minor units and converts major units', () => {

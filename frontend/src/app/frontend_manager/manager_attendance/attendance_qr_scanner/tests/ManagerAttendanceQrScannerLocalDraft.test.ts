@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { managerEngagementLocalDraftSchema } from '@/app/frontend_manager/manager_attendance/attendance_qr_scanner/types/ManagerAttendanceQrScannerLocalDraft';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerAttendanceQrScannerLocalDraft', () => {
   it('trims and validates a usable local draft without implying delivery or persistence', () => {

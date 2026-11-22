@@ -1,6 +1,6 @@
-import { http, HttpResponse } from 'msw';
 import { MANAGER_MEMBERS_NEW_ADMISSION_API } from '@/app/frontend_manager/manager_members/members_new_admission/config/manager_members_new_admission.url_config';
 import { managerStudentsMockState } from '@/app/frontend_manager/manager_members/members_new_admission/mocks/manager_members_new_admission_fixtures/ManagerMembersNewAdmissionFixtures';
+import { http,HttpResponse } from 'msw';
 
 /** Read-only fixtures only. No create handler is registered without a supplied mutation contract. */
 const TEST_REQUEST_ID = 'msw-members-new-admission';

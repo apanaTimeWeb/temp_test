@@ -1,5 +1,5 @@
 'use client';
-import ManagerCommunicationWhatsappLogsPage from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_views/ManagerCommunicationWhatsappLogsPage.tsx';
+import ManagerCommunicationWhatsappLogsPage from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_views/ManagerCommunicationWhatsappLogsPage';
 import type { ManagerCommunicationWhatsappLogsMainProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/types/ManagerCommunicationWhatsappLogsMainTypes';
 
 export function ManagerCommunicationWhatsappLogsMain(props: ManagerCommunicationWhatsappLogsMainProps) {

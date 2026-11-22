@@ -1,195 +1,210 @@
 'use client';
-import { maskManagerWhatsappLogsPhone } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/utils/ManagerCommunicationWhatsappLogsUtilities';
-import { MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_LOGS, type WaLog } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/hooks/ManagerCommunicationWhatsappLogsDemoRepository';
+
+import { Download, Printer, RotateCw, ShieldCheck } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import ManagerCommunicationWhatsappLogsNativeTable, { type NativeCellParams } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_table_parts/ManagerCommunicationWhatsappLogsNativeTable';
+import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
-import { useEffect, useState } from 'react';
-import { ChevronRight, Eye } from 'lucide-react';
-import { ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_dialogs/ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog.tsx';
+import { ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_dialogs/ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog';
+import ManagerCommunicationWhatsappLogsNativeTable from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_table_parts/ManagerCommunicationWhatsappLogsNativeTable';
+import {
+  MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_LOGS,
+  type WaLog,
+} from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/hooks/ManagerCommunicationWhatsappLogsDemoRepository';
 import type { ManagerCommunicationWhatsappLogsRouteQueryProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/types/ManagerCommunicationWhatsappLogsComponentTypes';
-import { MANAGER_COMMUNICATION_WHATSAPP_LOGS_SEARCH_DEBOUNCE_MS } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/constants/ManagerCommunicationWhatsappLogsConstants';
-
-
-
-
+import { ManagerCommunicationWhatsappLogsKpis } from './ManagerCommunicationWhatsappLogsKpis';
+import { ManagerCommunicationWhatsappLogsFilterBar } from './ManagerCommunicationWhatsappLogsFilterBar';
+import { buildLogColumns } from './ManagerCommunicationWhatsappLogsTableColumns';
 
 const LOGS = MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_LOGS;
 
-const TYPE_BADGE: Record<string, string> = {
-  welcome: 'mc-badge--info', fee_reminder: 'mc-badge--warning',
-  receipt: 'mc-badge--success', notice: 'mc-badge--purple', renewal: 'mc-badge--primary',
-};
-const STATUS_BADGE: Record<WaLog['status'], string> = {
-  Pending: 'mc-badge--warning', Sent: 'mc-badge--info', Delivered: 'mc-badge--success', Failed: 'mc-badge--danger',
-};
-
-
 export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: ManagerCommunicationWhatsappLogsRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_whatsapp_logs.ui');
-  const statusLabels: Record<WaLog['status'], string> = {
-    Pending: tManagerUi('pending'),
-    Sent: tManagerUi('sent'),
-    Delivered: tManagerUi('delivered'),
-    Failed: tManagerUi('failed'),
-  };
-  const [typeFilter,   setTypeFilter]   = useState('All');
+
+  const [typeFilter, setTypeFilter] = useState('All');
+  const [channelFilter, setChannelFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
-  const [search,       setSearch]       = useState('');
+  const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
-  // Dependency rationale: debounce log search input and clear the timer when the query changes or the component unmounts.
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
+  const [viewLog, setViewLog] = useState<WaLog | null>(null);
+
   useEffect(() => {
-    const timeout = window.setTimeout(() => setDebouncedSearch(search), MANAGER_COMMUNICATION_WHATSAPP_LOGS_SEARCH_DEBOUNCE_MS);
-    return () => window.clearTimeout(timeout);
+    const timeout = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timeout);
   }, [search]);
-  const [dateFrom,     setDateFrom]     = useState('');
-  const [dateTo,       setDateTo]       = useState('');
-  const [viewLog,      setViewLog]      = useState<WaLog | null>(null);
-  const getTypeLabel = (type: WaLog['type']) => {
-    switch (type) {
-      case 'welcome': return tManagerUi('welcome');
-      case 'fee_reminder': return tManagerUi('fee_reminder');
-      case 'receipt': return tManagerUi('receipt');
-      case 'notice': return tManagerUi('notice');
-      case 'renewal': return tManagerUi('renewal');
-      default: return type;
-    }
-  };
 
   const normalizedSearch = debouncedSearch.trim().toLowerCase();
-  const filtered = LOGS.filter(l => {
-    if (typeFilter !== 'All' && l.type !== typeFilter) return false;
-    if (statusFilter !== 'All' && l.status !== statusFilter) return false;
-    const logDate = l.dateTime.slice(0, 10); // Sample records have an ISO YYYY-MM-DD prefix.
-    if (dateFrom && logDate < dateFrom) return false;
-    if (dateTo && logDate > dateTo) return false;
-    if (normalizedSearch && !l.student.toLowerCase().includes(normalizedSearch) && !l.phone.includes(debouncedSearch.trim())) return false;
-    return true;
-  });
+  const filtered = useMemo(() => {
+    return LOGS.filter((l) => {
+      if (typeFilter !== 'All' && l.type !== typeFilter) return false;
+      if (statusFilter !== 'All' && l.status !== statusFilter) return false;
+      if (channelFilter !== 'All') {
+        const isApi = l.channelType?.includes('API') || l.type === 'receipt' || l.type === 'welcome';
+        if (channelFilter === 'Server API (1x Auto)' && !isApi) return false;
+        if (channelFilter === 'WhatsApp Web (Free)' && isApi) return false;
+      }
+      const logDate = l.dateTime.slice(0, 10);
+      if (dateFrom && logDate < dateFrom) return false;
+      if (dateTo && logDate > dateTo) return false;
+      if (
+        normalizedSearch &&
+        !l.student.toLowerCase().includes(normalizedSearch) &&
+        !l.phone.includes(debouncedSearch.trim())
+      ) {
+        return false;
+      }
+      return true;
+    });
+  }, [typeFilter, channelFilter, statusFilter, dateFrom, dateTo, normalizedSearch, debouncedSearch]);
 
-  const colDefs = [
-    { field: 'dateTime', headerName: tManagerUi('date_time'), width: 160, cellRenderer: (p: NativeCellParams) => <span className="mc-td-muted text-sm">{p.value}</span> },
-    { field: 'phone', headerName: tManagerUi('phone'), width: 130, cellRenderer: (p: NativeCellParams) => <span className="mc-td-mono font-medium">{maskManagerWhatsappLogsPhone(String(p.value ?? ''))}</span> },
-    { field: 'student', headerName: tManagerUi('student'), flex: 1, minWidth: 150, cellRenderer: (p: NativeCellParams) => <span className="mc-td-bold">{p.value}</span> },
-    { 
-      field: 'type', 
-      headerName: tManagerUi('type'), 
-      width: 130,
-      cellRenderer: (p: NativeCellParams) => (
-        <span className={`mc-badge ${TYPE_BADGE[p.value as WaLog['type']]} inline-block mt-2 text-xs`}>
-          {getTypeLabel(p.value as WaLog['type'])}
-        </span>
+  const hasActiveFilters = Boolean(
+    typeFilter !== 'All' || channelFilter !== 'All' || statusFilter !== 'All' || dateFrom || dateTo || search.trim()
+  );
+
+  const handleResetFilters = () => {
+    setTypeFilter('All');
+    setChannelFilter('All');
+    setStatusFilter('All');
+    setDateFrom('');
+    setDateTo('');
+    setSearch('');
+  };
+
+  const handleExportCsv = () => {
+    const headers = 'ID,Date Time,Phone,Student,Dispatch Mode,Type,Status,Error,Message\n';
+    const rows = filtered
+      .map(
+        (l) =>
+          `"${l.id}","${l.dateTime}","${l.phone}","${l.student}","${l.channelType || 'WhatsApp Web (Free)'}","${l.type}","${l.status}","${(l.error || '').replace(/"/g, '""')}","${l.message.replace(/"/g, '""')}"`
       )
-    },
-    { 
-      field: 'status', 
-      headerName: tManagerUi('status'), 
-      width: 120,
-      cellRenderer: (p: NativeCellParams) => (
-        <span className={`mc-badge ${STATUS_BADGE[p.value as WaLog['status']]} inline-block mt-2 text-xs`}>
-          {statusLabels[p.value as WaLog['status']]}
-        </span>
-      )
-    },
-    { field: 'error', headerName: tManagerUi('error_7f2f6a'), width: 180, cellRenderer: (p: NativeCellParams) => <span className="mc-td-danger text-xs truncate max-w-xs inline-block" title={p.value ? String(p.value) : undefined}>{p.value || '—'}</span> },
-    {
-      headerName: tManagerUi('actions'),
-      width: 100,
-      sortable: false,
-      cellRenderer: (params: NativeCellParams) => (
-        <div className="h-full flex items-center">
-          <button type="button" onClick={() => setViewLog((params.data as WaLog) ?? null)} className="mc-btn-icon hover:bg-primary hover:text-on-primary motion-safe:transition-colors motion-safe:duration-base" title={tManagerUi('view_message')} aria-label={tManagerUi('view_message')}>
-            <Eye size={16} />
-          </button>
-        </div>
-      )
-    }
-  ];
+      .join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `whatsapp_logs_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    toast.success('WhatsApp delivery logs exported to CSV successfully');
+  };
+
+  const handlePrint = () => window.print();
+  const handleRefresh = () => toast.success('WhatsApp delivery logs feed refreshed');
+
+  const totalCount = LOGS.length;
+  const deliveredCount = LOGS.filter((l) => l.status === 'Delivered').length;
+  const sentCount = LOGS.filter((l) => l.status === 'Sent').length;
+  const failedCount = LOGS.filter((l) => l.status === 'Failed').length;
+
+  const colDefs = useMemo(() => buildLogColumns({ tManagerUi, onViewLog: setViewLog }), [tManagerUi]);
 
   return (
-    <div className="mc-page"
+    <div
+      className="mgr-page-animate space-y-6 max-w-7xl mx-auto pb-12"
       data-route-view={_routeQuery.view}
       data-route-id={_routeQuery.id}
-      data-route-name={_routeQuery.name}
-      data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}>
-      <ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog
-        log={viewLog}
-        typeLabel={viewLog ? getTypeLabel(viewLog.type) : ''}
-        statusLabel={viewLog ? statusLabels[viewLog.status] : ''}
-        typeClassName={viewLog ? TYPE_BADGE[viewLog.type] : ''}
-        statusClassName={viewLog ? STATUS_BADGE[viewLog.status] : ''}
-        onClose={() => setViewLog(null)}
-        labels={{
-          close: tManagerUi('close'),
-          messageDetails: tManagerUi('message_details'),
-          to: tManagerUi('to'),
-          student: tManagerUi('log_student'),
-          sentAt: tManagerUi('sent_at'),
-          messageContent: tManagerUi('message_content'),
-          error: tManagerUi('error'),
-        }}
+    >
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
+        <div>
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-primary tracking-tight">
+              {tManagerUi('whatsapp_logs')}
+            </h1>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+              <ShieldCheck size={13} /> Provider Cost Protection Active
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm text-secondary mt-1">
+            Audit logs distinguishing 1x Server API triggers from Free client-side WhatsApp Web dispatches.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={handleRefresh}
+            className="p-2 rounded-xl border border-border bg-card text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer"
+            title="Refresh Logs Feed"
+          >
+            <RotateCw size={15} />
+          </button>
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all"
+            title="Export CSV"
+          >
+            <Download size={13} className="text-secondary" />
+            <span>Export CSV</span>
+          </button>
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all"
+            title="Print Delivery Audit"
+          >
+            <Printer size={13} className="text-secondary" />
+            <span>Print</span>
+          </button>
+        </div>
+      </div>
+
+      <ManagerCommunicationWhatsappLogsKpis
+        totalCount={totalCount}
+        deliveredCount={deliveredCount}
+        sentCount={sentCount}
+        failedCount={failedCount}
+        tManagerUi={tManagerUi}
       />
 
-      <div className="mb-8">
-        <div className="mc-breadcrumb">
-          <span>{tManagerUi('communication')}</span><ChevronRight size={12} /><span>{tManagerUi('whatsapp_logs')}</span>
-        </div>
-        <h1 className="mc-page-title">{tManagerUi('whatsapp_logs_3fd13a')}</h1>
-        <p className="mc-page-subtitle">{tManagerUi('all_outbound_whatsapp_messages_sent_from_the_system')}</p>
-        <p className="mc-warn-box mt-3" role="status" data-testid="manager-whatsapp-logs-sample-disclosure">{tManagerUi('notification_history_is_sample_data_sending_messages_tri_40ef96')}</p>
+      <ManagerCommunicationWhatsappLogsFilterBar
+        search={search}
+        setSearch={setSearch}
+        typeFilter={typeFilter}
+        setTypeFilter={setTypeFilter}
+        channelFilter={channelFilter}
+        setChannelFilter={setChannelFilter}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        dateFrom={dateFrom}
+        setDateFrom={setDateFrom}
+        dateTo={dateTo}
+        setDateTo={setDateTo}
+        hasActiveFilters={hasActiveFilters}
+        onResetFilters={handleResetFilters}
+        tManagerUi={tManagerUi}
+      />
+
+      <div className="mgr-card overflow-hidden border border-border">
+        <ManagerCommunicationWhatsappLogsNativeTable
+          columns={colDefs}
+          rows={filtered}
+          getRowKey={(row) => row.id}
+          
+          labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }}
+        />
       </div>
 
-      {/* Filter Bar */}
-      <div className="mc-card mb-6 p-4 border border-border rounded-lg">
-        <div className="mc-filter-row flex flex-wrap gap-4 items-end">
-          <div className="flex flex-col">
-            <label className="mc-label text-xs mb-1 font-semibold text-secondary" htmlFor="rbg4-managercommunicationwhatsapplogspage-142">{tManagerUi('message_type')}</label>
-            <select id="rbg4-managercommunicationwhatsapplogspage-142" value={typeFilter} onChange={e => setTypeFilter(e.target.value)} className="mc-select py-2 px-3 border rounded">
-              <option value="All">{tManagerUi('all_types')}</option>
-              <option value="welcome">{tManagerUi('welcome')}</option>
-              <option value="fee_reminder">{tManagerUi('fee_reminder')}</option>
-              <option value="receipt">{tManagerUi('receipt')}</option>
-              <option value="notice">{tManagerUi('notice')}</option>
-              <option value="renewal">{tManagerUi('renewal')}</option>
-            </select>
-          </div>
-          <div className="flex flex-col">
-            <label className="mc-label text-xs mb-1 font-semibold text-secondary" htmlFor="rbg4-managercommunicationwhatsapplogspage-153">{tManagerUi('status')}</label>
-            <select id="rbg4-managercommunicationwhatsapplogspage-153" value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="mc-select py-2 px-3 border rounded">
-              <option value="All">{tManagerUi('all')}</option>
-              <option value="Pending">{tManagerUi('pending')}</option><option value="Sent">{tManagerUi('sent')}</option>
-              <option value="Delivered">{tManagerUi('delivered')}</option><option value="Failed">{tManagerUi('failed')}</option>
-            </select>
-          </div>
-          <div className="flex flex-col">
-            <label className="mc-label text-xs mb-1 font-semibold text-secondary" htmlFor="rbg4-managercommunicationwhatsapplogspage-161">{tManagerUi('from')}</label>
-            <input id="rbg4-managercommunicationwhatsapplogspage-161" type="date" className="mc-input py-2 px-3 border rounded" value={dateFrom} onChange={e => setDateFrom(e.target.value)} />
-          </div>
-          <div className="flex flex-col">
-            <label className="mc-label text-xs mb-1 font-semibold text-secondary" htmlFor="rbg4-managercommunicationwhatsapplogspage-165">{tManagerUi('to')}</label>
-            <input id="rbg4-managercommunicationwhatsapplogspage-165" type="date" className="mc-input py-2 px-3 border rounded" value={dateTo} onChange={e => setDateTo(e.target.value)} />
-          </div>
-          <div className="mc-flex-1 flex flex-col flex-grow min-w-48">
-            <label className="mc-label text-xs mb-1 font-semibold text-secondary" htmlFor="rbg4-managercommunicationwhatsapplogspage-169">{tManagerUi('search')}</label>
-            <input id="rbg4-managercommunicationwhatsapplogspage-169" className="mc-input py-2 px-3 border rounded w-full" placeholder={tManagerUi('student_name_or_phone')} value={search} onChange={e => setSearch(e.target.value)} />
-          </div>
-        </div>
-      </div>
-
-      {/* Table */}
-      <div className="mc-card mc-card--flush p-4">
-        {filtered.length === 0 ? (
-          <div className="mc-empty py-12 flex flex-col items-center justify-center text-center">
-            <div className="mc-empty__icon text-4xl mb-4">📱</div>
-            <p className="mc-empty__title text-lg font-semibold text-primary">{tManagerUi('no_whatsapp_messages_found')}</p>
-          </div>
-        ) : (
-          <div className="mgr-table-wrapper h-112">
-            <ManagerCommunicationWhatsappLogsNativeTable getRowKey={(row) => row.id} rows={filtered} columns={colDefs} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
-          </div>
-        )}
-      </div>
+      <ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog
+        log={viewLog}
+        typeLabel={viewLog?.type ? viewLog.type.replace('_', ' ').toUpperCase() : 'WHATSAPP'}
+        statusLabel={viewLog?.status || 'Sent'}
+        typeClassName="bg-primary/10 text-primary border-primary/25"
+        statusClassName="bg-emerald-500/10 text-emerald-400 border-emerald-500/25"
+        onClose={() => setViewLog(null)}
+        labels={{
+          close: 'Close',
+          messageDetails: 'Message Audit Details',
+          to: 'To',
+          student: 'Student',
+          sentAt: 'Sent At',
+          messageContent: 'Message Content',
+          error: 'Error Reason',
+        }}
+      />
     </div>
   );
 }

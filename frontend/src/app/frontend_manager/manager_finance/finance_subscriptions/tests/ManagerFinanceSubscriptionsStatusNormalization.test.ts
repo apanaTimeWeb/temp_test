@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { normalizeManagerSubscriptionsPaymentStatus, normalizeManagerSubscriptionsRefundStatus } from '@/app/frontend_manager/manager_finance/finance_subscriptions/utils/ManagerFinanceSubscriptionsStatusNormalization';
+import { normalizeManagerSubscriptionsPaymentStatus,normalizeManagerSubscriptionsRefundStatus } from '@/app/frontend_manager/manager_finance/finance_subscriptions/utils/ManagerFinanceSubscriptionsStatusNormalization';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerFinanceSubscriptionsStatusNormalization', () => {
   it('preserves known payment states and does not treat unknown states as valid', () => {

@@ -1,18 +1,18 @@
 "use client";
 
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
+import { useEffect,useState } from 'react';
 import { ManagerMembersReferralBonusMain } from '../../components/ManagerMembersReferralBonusMain';
 import messagesEn from '../../locales/manager_members_referral_bonus_domain_en.json';
 import messagesHi from '../../locales/manager_members_referral_bonus_domain_hi.json';
 import {
-  startManagerMembersReferralBonusWorker,
-  stopManagerMembersReferralBonusWorker,
-  HARNESS_SCENARIO_OPTIONS,
-  MANAGER_MEMBERS_REFERRAL_BONUS_SCENARIO_PROBE_URL,
-  type ManagerMembersReferralBonusHarnessScenario,
+HARNESS_SCENARIO_OPTIONS,
+MANAGER_MEMBERS_REFERRAL_BONUS_SCENARIO_PROBE_URL,
+startManagerMembersReferralBonusWorker,
+stopManagerMembersReferralBonusWorker,
+type ManagerMembersReferralBonusHarnessScenario,
 } from './bootstrap';
 
 type ManagerMembersReferralBonusHarnessProps = {

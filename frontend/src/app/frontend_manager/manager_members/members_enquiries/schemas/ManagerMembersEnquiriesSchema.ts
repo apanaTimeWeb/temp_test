@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { MANAGER_CRM_STATUS_VALUES } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
+import { z } from 'zod';
 
 export const managerCrmAddEnquirySchema = z.object({
   name: z.string().trim().min(2, 'Full name must be at least 2 characters'),

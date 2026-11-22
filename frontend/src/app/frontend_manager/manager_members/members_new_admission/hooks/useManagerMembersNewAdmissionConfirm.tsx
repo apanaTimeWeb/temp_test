@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback, useId, useRef, useState } from 'react';
-import { useManagerNewAdmissionDialogFocus } from '@/app/frontend_manager/manager_members/members_new_admission/hooks/ManagerMembersNewAdmissionDialogFocus.ts';
+import { useManagerNewAdmissionDialogFocus } from '@/app/frontend_manager/manager_members/members_new_admission/hooks/ManagerMembersNewAdmissionDialogFocus';
 import type { PendingConfirmation } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
+import { useCallback,useId,useRef,useState } from 'react';
 
 
 
@@ -11,6 +11,7 @@ export function useManagerMembersNewAdmissionConfirm() {
   const [pending, setPending] = useState<PendingConfirmation | null>(null);
   const pendingRef = useRef<PendingConfirmation | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
   const titleId = useId();
 
   const settle = useCallback((confirmed: boolean) => {
@@ -19,10 +20,16 @@ export function useManagerMembersNewAdmissionConfirm() {
     pendingRef.current = null;
     setPending(null);
     current.resolve(confirmed);
+    if (previousFocusRef.current && typeof previousFocusRef.current.focus === 'function') {
+      previousFocusRef.current.focus();
+    }
   }, []);
 
   const confirm = useCallback((message: string, cancelLabel: string, continueLabel: string): Promise<boolean> => {
     if (pendingRef.current) return Promise.resolve(false);
+    if (typeof document !== 'undefined' && document.activeElement instanceof HTMLElement) {
+      previousFocusRef.current = document.activeElement;
+    }
     return new Promise<boolean>((resolve) => {
       const next = { message, cancelLabel, continueLabel, resolve };
       pendingRef.current = next;
@@ -33,7 +40,7 @@ export function useManagerMembersNewAdmissionConfirm() {
   useManagerNewAdmissionDialogFocus(dialogRef, () => settle(false), Boolean(pending));
 
   const dialog = pending ? (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" data-testid="managermembersnewadmission-unsaved-confirm-overlay">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" data-testid="managermembersnewadmission-unsaved-confirm-overlay">
       <div
         ref={dialogRef}
         tabIndex={-1}

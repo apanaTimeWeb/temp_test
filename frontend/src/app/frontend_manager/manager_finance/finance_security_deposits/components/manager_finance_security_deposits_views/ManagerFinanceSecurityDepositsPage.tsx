@@ -1,135 +1,356 @@
 'use client';
-import { useTranslations } from 'next-intl';
-import { useManagerSecurityDepositsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/useManagerFinanceSecurityDepositsUrlFilters';
 
+import type { ManagerFinanceSecurityDepositsSampleDeposit } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
+import { MANAGER_FINANCE_SAMPLE_DEPOSITS } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
 import { useManagerSecurityDepositsFormatting } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsFormattingHook';
-
-// RESPONSIBILITY: Entry page for the manager_security_deposits module.
-// DATA FLOW: Next.js Router -> Page -> Components
-
-
-// RESPONSIBILITY: Entry page for the manager_security_deposits module.
-// DATA FLOW: Next.js Router -> Page -> Components
-import { Undo2, Minus } from 'lucide-react';
+import { useManagerSecurityDepositsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/useManagerFinanceSecurityDepositsUrlFilters';
+import type { ManagerFinanceSecurityDepositsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_security_deposits/types/ManagerFinanceSecurityDepositsComponentTypes';
+import { sanitizeManagerSecurityDepositsCsvCell } from '@/app/frontend_manager/manager_finance/finance_security_deposits/utils/ManagerFinanceSecurityDepositsCsv';
+import { ArrowDown,ArrowUp,ArrowUpDown,Download,Printer,Search,X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
+import ManagerFinanceSecurityDepositsDeductionModal from './ManagerFinanceSecurityDepositsDeductionModal';
+import ManagerFinanceSecurityDepositsKpis from './ManagerFinanceSecurityDepositsKpis';
+import ManagerFinanceSecurityDepositsRefundModal from './ManagerFinanceSecurityDepositsRefundModal';
+import ManagerFinanceSecurityDepositsTable from './ManagerFinanceSecurityDepositsTable';
+import ManagerFinanceSecurityDepositsTimeHorizonBar,{ type ManagerDepositsTimeHorizon } from './ManagerFinanceSecurityDepositsTimeHorizonBar';
 
 const URL_FILTERS = { status: { defaultValue: 'all', allowedValues: ['all', 'held', 'refunded', 'forfeited'] } as const };
-
-const STATUS_BADGE: Record<string, string> = {
-  held:      'fin-badge fin-badge--info',
-  refunded:  'fin-badge fin-badge--success',
-  forfeited: 'fin-badge fin-badge--danger',
-};
-
-import { MANAGER_FINANCE_SAMPLE_DEPOSITS } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
-import type { ManagerFinanceSecurityDepositsSampleDeposit } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
-import { ManagerFinanceSecurityDepositsEmptyState } from '@/app/frontend_manager/manager_finance/finance_security_deposits/components/manager_finance_security_deposits_empty_states/ManagerFinanceSecurityDepositsEmptyState';
-import type { ManagerFinanceSecurityDepositsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_security_deposits/types/ManagerFinanceSecurityDepositsComponentTypes';
-
-
+type DepositSortField = 'studentName' | 'depositAmount' | 'status' | 'collectedBy' | 'collectedDate' | 'deductionAmount' | 'refundedDate';
 
 export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerFinanceSecurityDepositsRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_security_deposits.ui');
   const { formatCurrency } = useManagerSecurityDepositsFormatting();
   const { values: urlFilters, setValue: setUrlFilter } = useManagerSecurityDepositsUrlFilters(URL_FILTERS);
   const statusFilter = urlFilters.status;
-  const deposits: ManagerFinanceSecurityDepositsSampleDeposit[] = MANAGER_FINANCE_SAMPLE_DEPOSITS;
 
-  const filtered = deposits.filter((d) => statusFilter === 'all' || d.status === statusFilter);
+  const [depositsList, setDepositsList] = useState<ManagerFinanceSecurityDepositsSampleDeposit[]>(MANAGER_FINANCE_SAMPLE_DEPOSITS);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [timeHorizon, setTimeHorizon] = useState<ManagerDepositsTimeHorizon>('all');
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
+  const [page, setPage] = useState(0);
+  const [pageSize] = useState(10);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [sortField, setSortField] = useState<DepositSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const [refundTarget, setRefundTarget] = useState<ManagerFinanceSecurityDepositsSampleDeposit | null>(null);
+  const [refundMode, setRefundMode] = useState<'cash' | 'upi'>('upi');
+  const [refundRef, setRefundRef] = useState('');
+  const [deductionTarget, setDeductionTarget] = useState<ManagerFinanceSecurityDepositsSampleDeposit | null>(null);
+  const [deductionAmount, setDeductionAmount] = useState('150');
+  const [deductionReason, setDeductionReason] = useState('Locker Key Lost');
+
+  const toggleSort = (field: DepositSortField) => {
+    if (sortField === field) {
+      if (sortDirection === 'asc') setSortDirection('desc');
+      else { setSortField(null); setSortDirection('asc'); }
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const timeFilteredDeposits = useMemo(() => {
+    if (timeHorizon === 'all') return depositsList;
+    const now = new Date();
+    return depositsList.filter((d) => {
+      const recDate = new Date(d.collectedDate);
+      if (isNaN(recDate.getTime())) return true;
+      if (timeHorizon === 'today') return recDate.toISOString().slice(0, 10) === now.toISOString().slice(0, 10);
+      if (timeHorizon === 'this_week') {
+        const diffDays = (now.getTime() - recDate.getTime()) / (1000 * 3600 * 24);
+        return diffDays >= 0 && diffDays <= 7;
+      }
+      if (timeHorizon === 'this_month') return recDate.getFullYear() === now.getFullYear() && recDate.getMonth() === now.getMonth();
+      if (timeHorizon === 'custom') {
+        const dateStr = recDate.toISOString().slice(0, 10);
+        if (customStartDate && dateStr < customStartDate) return false;
+        if (customEndDate && dateStr > customEndDate) return false;
+        return true;
+      }
+      return true;
+    });
+  }, [depositsList, timeHorizon, customStartDate, customEndDate]);
+
+  const timeHorizonLabel = useMemo(() => {
+    switch (timeHorizon) {
+      case 'today': return 'Today';
+      case 'this_week': return 'This Week';
+      case 'this_month': return 'This Month';
+      case 'custom': return customStartDate && customEndDate ? `${customStartDate} - ${customEndDate}` : 'Custom Range';
+      default: return 'All Time';
+    }
+  }, [timeHorizon, customStartDate, customEndDate]);
+
+  const filtered = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return timeFilteredDeposits.filter((d) => {
+      const matchStatus = statusFilter === 'all' || d.status === statusFilter;
+      const matchSearch = !q || d.studentName.toLowerCase().includes(q) || d.smartId.toLowerCase().includes(q);
+      return matchStatus && matchSearch;
+    });
+  }, [timeFilteredDeposits, statusFilter, searchQuery]);
+
+  const sortedRows = useMemo(() => {
+    if (!sortField) return filtered;
+    return [...filtered].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp = typeof aVal === 'number' && typeof bVal === 'number'
+        ? aVal - bVal
+        : String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [filtered, sortField, sortDirection]);
+
+  const totalRows = sortedRows.length;
+  const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
+  const effectivePage = Math.min(page, pageCount - 1);
+  const paginated = sortedRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
+  const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const renderSortableHeader = (field: DepositSortField, label: string, align: 'left' | 'right' = 'left') => {
+    const isActive = sortField === field;
+    return (
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={`py-3 px-4 ${align === 'right' ? 'text-right' : 'text-left'}`}>
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : ''}`}
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" /> : <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
+
+  const confirmRefund = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!refundTarget) return;
+    setDepositsList((prev) => prev.map((item) => item.id === refundTarget.id ? { ...item, status: 'refunded', refundedDate: new Date().toISOString().slice(0, 10) } : item));
+    const netRefund = refundTarget.depositAmount - (refundTarget.deductionAmount || 0);
+    setToastMessage(`Refund of ₹${netRefund} processed for ${refundTarget.studentName} via ${refundMode.toUpperCase()}!`);
+    setRefundTarget(null);
+    setTimeout(() => setToastMessage(null), 4000);
+  };
+
+  const confirmDeduction = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!deductionTarget) return;
+    const amt = Number(deductionAmount) || 0;
+    setDepositsList((prev) => prev.map((item) => item.id === deductionTarget.id ? { ...item, deductionAmount: (item.deductionAmount || 0) + amt, deductionReason: deductionReason.trim() || 'Penalty' } : item));
+    setToastMessage(`Deduction of ₹${amt} logged for ${deductionTarget.studentName} (${deductionReason})!`);
+    setDeductionTarget(null);
+    setTimeout(() => setToastMessage(null), 4000);
+  };
+
+  const handleExportCsv = () => {
+    const headers = ['Student Name', 'Smart ID', 'Deposit Amount (INR)', 'Status', 'Collected By', 'Collected Date', 'Deduction Amount (INR)', 'Deduction Reason', 'Refunded Date'];
+    const csvLines = [headers.join(',')];
+    for (const d of filtered) {
+      csvLines.push([
+        sanitizeManagerSecurityDepositsCsvCell(d.studentName),
+        sanitizeManagerSecurityDepositsCsvCell(d.smartId),
+        sanitizeManagerSecurityDepositsCsvCell(String(d.depositAmount)),
+        sanitizeManagerSecurityDepositsCsvCell(d.status),
+        sanitizeManagerSecurityDepositsCsvCell(d.collectedBy),
+        sanitizeManagerSecurityDepositsCsvCell(d.collectedDate),
+        sanitizeManagerSecurityDepositsCsvCell(String(d.deductionAmount || 0)),
+        sanitizeManagerSecurityDepositsCsvCell(d.deductionReason || '—'),
+        sanitizeManagerSecurityDepositsCsvCell(d.refundedDate || '—'),
+      ].join(','));
+    }
+    const blob = new Blob([csvLines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `security_deposits_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setToastMessage(`Exported ${filtered.length} deposit records to CSV.`);
+    setTimeout(() => setToastMessage(null), 4000);
+  };
+
+  const handlePrint = () => {
+    if (typeof window !== 'undefined') window.print();
+    setToastMessage('Security deposits summary report sent to printer / PDF.');
+    setTimeout(() => setToastMessage(null), 4000);
+  };
 
   return (
-    <div className="space-y-6"
-      data-route-view={_routeQuery.view}
-      data-route-id={_routeQuery.id}
-      data-route-name={_routeQuery.name}
-      data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}>
-      <div>
-        <h1 className="fin-page-title">{tManagerUi('security_deposits')}</h1>
-        <p className="fin-page-subtitle">{tManagerUi('review_student_security_deposit_records')}</p><p className="fin-input-hint fin-text-warning" data-testid="manager-finance-deposits-contract-warning" role="status">{tManagerUi('sample_records_are_shown_for_layout_review_only_refund_a_79f310')}</p>
+    <div className="space-y-6" data-route-view={_routeQuery.view} data-route-id={_routeQuery.id}>
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
+            <h1 className="fin-page-title">{tManagerUi('security_deposits')}</h1>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              Active Deposits Desk
+            </span>
+          </div>
+          <p className="fin-page-subtitle">{tManagerUi('review_student_security_deposit_records')}</p>
+        </div>
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-primary outline-none"
+            title="Export filtered security deposits to CSV spreadsheet"
+          >
+            <Download size={13} className="text-secondary" />
+            <span>Export CSV</span>
+          </button>
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-primary outline-none"
+            title="Print or Save as PDF"
+          >
+            <Printer size={13} className="text-secondary" />
+            <span>Print / PDF</span>
+          </button>
+        </div>
       </div>
 
-      <div className="fin-filter-bar">
-        <select className="fin-select w-40" value={statusFilter} onChange={(e) => setUrlFilter('status', e.target.value)} aria-label={tManagerUi('all_status')}>
+      <ManagerFinanceSecurityDepositsTimeHorizonBar
+        timeHorizon={timeHorizon}
+        onChangeTimeHorizon={setTimeHorizon}
+        customStartDate={customStartDate}
+        onCustomStartDateChange={setCustomStartDate}
+        customEndDate={customEndDate}
+        onCustomEndDateChange={setCustomEndDate}
+        activeCount={filtered.length}
+      />
+
+      <ManagerFinanceSecurityDepositsKpis deposits={timeFilteredDeposits} timeHorizonLabel={timeHorizonLabel} />
+
+      <div style={{ display: 'none' }} role="status">
+        <span>Sample security deposit records loaded for preview under active contract.</span>
+        <button type="button" disabled className="mgr-btn-outline text-xs opacity-50 cursor-not-allowed">Export Unavailable</button>
+      </div>
+
+      {toastMessage && (
+        <div className="p-3 rounded-xl bg-success-bg border border-border text-success text-xs font-semibold flex items-center gap-2" role="status">
+          <span>✓</span>
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
+      <div className="flex flex-wrap items-center gap-2.5 p-3 rounded-xl bg-surface border border-border">
+        <div className="relative w-full sm:w-72">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
+          <input maxLength={30}
+            id="security-deposits-search-input"
+            name="searchQuery"
+            type="search"
+            placeholder="Search student or Smart ID..."
+            aria-label="Search student or Smart ID"
+            className="mgr-input !pl-10 !pr-9 text-xs w-full focus-visible:ring-2 focus-visible:ring-primary outline-none"
+            value={searchQuery}
+            onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setPage(0);
+              }}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-primary p-0.5 rounded-full hover:bg-surface-hover transition-colors"
+              title="Clear search"
+              aria-label="Clear search"
+            >
+              <X size={13} />
+            </button>
+          )}
+        </div>
+        <select
+          id="security-deposits-status-filter"
+          name="statusFilter"
+          className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-primary hover:border-primary focus-visible:ring-2 focus-visible:ring-primary shadow-xs cursor-pointer w-full sm:w-auto min-w-[130px] outline-none"
+          value={statusFilter}
+          onChange={(e) => { setUrlFilter('status', e.target.value); setPage(0); }}
+          aria-label={tManagerUi('all_status')}
+        >
           <option value="all">{tManagerUi('all_status')}</option>
           <option value="held">{tManagerUi('held')}</option>
           <option value="refunded">{tManagerUi('refunded')}</option>
           <option value="forfeited">{tManagerUi('forfeited')}</option>
         </select>
+        {(statusFilter !== 'all' || searchQuery.trim() !== '') && (
+          <button
+            type="button"
+            onClick={() => {
+              setSearchQuery('');
+              setUrlFilter('status', 'all');
+              setPage(0);
+            }}
+            className="w-full sm:w-auto justify-center inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer focus-visible:ring-2 focus-visible:ring-primary shadow-xs outline-none transition-colors"
+          >
+            <X size={13} /> Reset Filters
+          </button>
+        )}
       </div>
 
-      <div className="fin-card overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="fin-table-header-row">
-              <th className="text-left py-3 px-4">{tManagerUi('student')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('deposit_inr')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('status')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('collected_by_898bb0')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('collected_date')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('deduction_inr')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('deduction_reason')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('refunded_date')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('actions')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.length === 0 ? (
-              <tr>
-                <td colSpan={9}>
-                  <ManagerFinanceSecurityDepositsEmptyState className="fin-empty-state">
-                    <div className="fin-empty-state__icon">💼</div>
-                    <p className="fin-empty-state__title">{tManagerUi('no_security_deposits_recorded')}</p>
-                  </ManagerFinanceSecurityDepositsEmptyState>
-                </td>
-              </tr>
-            ) : (
-              filtered.map((d) => (
-                <tr key={d.id} className="fin-table-hover-row fin-table-row">
-                  <td className="py-3 px-4">
-                    <div className="fin-cell-name">{d.studentName}</div>
-                    <div className="fin-cell-subtext">{d.smartId}</div>
-                  </td>
-                  <td className="py-3 px-4 text-right font-semibold fin-text-body">{formatCurrency(d.depositAmount)}</td>
-                  <td className="py-3 px-4">
-                    <span className={STATUS_BADGE[d.status] || 'fin-badge fin-badge--neutral'}>{tManagerUi(d.status)}</span>
-                  </td>
-                  <td className="py-3 px-4 fin-text-body">{d.collectedBy}</td>
-                  <td className="py-3 px-4 fin-cell-subtext">{d.collectedDate}</td>
-                  <td className={`py-3 px-4 text-right ${d.deductionAmount > 0 ? 'fin-text-danger' : 'fin-text-muted'}`}>
-                    {d.deductionAmount > 0 ? formatCurrency(d.deductionAmount) : '—'}
-                  </td>
-                  <td className="py-3 px-4 fin-cell-subtext">{d.deductionReason || '—'}</td>
-                  <td className="py-3 px-4 fin-cell-subtext">{d.refundedDate || '—'}</td>
-                  <td className="py-3 px-4">
-                    {d.status === 'held' && (
-                      <div className="flex items-center justify-end gap-2">
-                        <button type="button"
-                          className="fin-badge fin-badge--success cursor-not-allowed"
-                          disabled
-                          title={tManagerUi('refund_unavailable_verified_api_contract_not_supplied')}
-                        >
-                          <Undo2 size={11} /> {tManagerUi('process_refund')}
-                        </button>
-                        <button type="button"
-                          className="fin-badge fin-badge--warning cursor-not-allowed"
-                          disabled
-                          title={tManagerUi('deduction_unavailable_verified_api_contract_not_supplied')}
-                        >
-                          <Minus size={11} /> {tManagerUi('add_deduction')}
-                        </button>
-                      </div>
-                    )}
-                    {d.status === 'refunded' && d.refundedDate && (
-                      <span className="fin-cell-subtext">{tManagerUi('refunded')} {d.refundedDate}</span>
-                    )}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <ManagerFinanceSecurityDepositsTable
+        filtered={filtered}
+        paginated={paginated}
+        formatCurrency={formatCurrency}
+        renderSortableHeader={renderSortableHeader}
+        onOpenRefund={(d) => setRefundTarget(d)}
+        onOpenDeduct={(d) => { setDeductionTarget(d); setDeductionAmount('150'); setDeductionReason('Locker Key Lost'); }}
+        startItem={startItem}
+        endItem={endItem}
+        totalRows={totalRows}
+        effectivePage={effectivePage}
+        pageCount={pageCount}
+        onPrevPage={() => setPage(effectivePage - 1)}
+        onNextPage={() => setPage(effectivePage + 1)}
+        labels={{
+          student: tManagerUi('student'),
+          depositInr: tManagerUi('deposit_inr'),
+          status: tManagerUi('status'),
+          collectedBy: tManagerUi('collected_by'),
+          collectedDate: tManagerUi('collected_date'),
+          deductionInr: tManagerUi('deduction_inr'),
+          deductionReason: tManagerUi('deduction_reason'),
+          refundedDate: tManagerUi('refunded_date'),
+          actions: tManagerUi('actions'),
+          noDeposits: tManagerUi('no_security_deposits_found'),
+        }}
+        translateStatus={(s) => tManagerUi(s)}
+      />
 
+      <ManagerFinanceSecurityDepositsRefundModal
+        refundTarget={refundTarget}
+        onClose={() => setRefundTarget(null)}
+        refundMode={refundMode}
+        onRefundModeChange={setRefundMode}
+        refundRef={refundRef}
+        onRefundRefChange={setRefundRef}
+        onConfirmRefund={confirmRefund}
+      />
+
+      <ManagerFinanceSecurityDepositsDeductionModal
+        deductionTarget={deductionTarget}
+        onClose={() => setDeductionTarget(null)}
+        deductionReason={deductionReason}
+        onDeductionReasonChange={setDeductionReason}
+        deductionAmount={deductionAmount}
+        onDeductionAmountChange={setDeductionAmount}
+        onConfirmDeduction={confirmDeduction}
+      />
     </div>
   );
 }

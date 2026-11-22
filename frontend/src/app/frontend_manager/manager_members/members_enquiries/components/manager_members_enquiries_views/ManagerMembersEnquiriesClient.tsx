@@ -1,27 +1,65 @@
 'use client';
-import { useTranslations } from 'next-intl';
 
+import { ButtonLoader,LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { ManagerMembersEnquiriesHeaderBanner } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_sections/ManagerMembersEnquiriesHeaderBanner';
+import { ManagerMembersEnquiriesTable } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_table_parts/ManagerMembersEnquiriesTable';
+import { ManagerMembersEnquiriesBulkToolbar } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesBulkToolbar';
+import { ManagerMembersEnquiriesBulkWhatsAppModal } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesBulkWhatsAppModal';
+import { ManagerMembersEnquiriesKanban } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesKanban';
+import { ManagerMembersEnquiriesKpis } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesKpis';
+import { ManagerMembersEnquiriesTimeHorizonBar } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesTimeHorizonBar';
+import { ManagerMembersEnquiriesToolbar } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesToolbar';
 import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
-
+import {
+useManagerMembersEnquiries,
+type ManagerCrmTimeHorizon,
+} from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesEnquiries';
+import { getManagerEnquiriesDemoPassWhatsAppUrl } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
+import { RefreshCw } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { LayoutGrid, List, Plus, Search } from 'lucide-react';
-import { useManagerMembersEnquiries } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesEnquiries';
-import { ManagerMembersEnquiriesKanban } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesKanban.tsx';
-import { ManagerMembersEnquiriesTable } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_table_parts/ManagerMembersEnquiriesTable.tsx';
-import { MANAGER_CRM_STATUS_OPTIONS } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
+import { useMemo } from 'react';
+import { toast } from 'sonner';
 
-// RESPONSIBILITY: Main Client view for CRM Enquiries. It does not own backend persistence or cross-feature business logic.
+// RESPONSIBILITY: Main Client view for CRM Enquiries with Executive Pipeline Analytics, Horizon Filtering and Bulk WhatsApp Dispatch.
 
 export function ManagerMembersEnquiriesClient() {
   const tManagerUi = useTranslations('manager.manager_enquiries.ui');
   const router = useRouter();
+
   const {
-    isError, isPending, isFetching, refetch, filtered,
-    view, setView,
-    search, setSearch,
-    statusFilter, setStatusFilter,
+    isError,
+    isPending,
+    isFetching,
+    refetch,
+    filtered,
+    view,
+    setView,
+    search,
+    setSearch,
+    statusFilter,
+    setStatusFilter,
+    timeHorizon,
+    setTimeHorizon,
+    customStartDate,
+    setCustomStartDate,
+    customEndDate,
+    setCustomEndDate,
+    stats,
     getCardsByStatus,
+    selectedIds,
+    selectedEnquiries,
+    bulkWhatsAppModalOpen,
+    setBulkWhatsAppModalOpen,
+    toggleSelectOne,
+    toggleSelectAll,
+    selectByStatus,
+    selectAllFiltered,
+    clearSelection,
+    deleteSelected,
+    markEnquiryAsLost,
   } = useManagerMembersEnquiries();
+
   const statusLabels = {
     New: tManagerUi('new'),
     Visited: tManagerUi('visited'),
@@ -30,93 +68,181 @@ export function ManagerMembersEnquiriesClient() {
     Lost: tManagerUi('lost'),
   };
 
+  const horizonLabel = useMemo(() => {
+    switch (timeHorizon) {
+      case 'all': return 'All Time';
+      case 'today': return 'Today';
+      case 'this_week': return 'This Week';
+      case 'this_month': return 'This Month';
+      case 'custom':
+        return customStartDate && customEndDate
+          ? `${customStartDate} to ${customEndDate}`
+          : 'Custom Range';
+      default: return 'All Time';
+    }
+  }, [timeHorizon, customStartDate, customEndDate]);
+
+  const escapeCsv = (v: unknown) => {
+    let s = String(v ?? '');
+    return /^[\u0000-\u0020]*[=+\-@]/.test(s) ? `'"${s.replace(/"/g, '""')}"` : `"${s.replace(/"/g, '""')}"`;
+  };
+
+  const handleExportCsv = () => {
+    const headers = ['Name', 'Phone', 'Shift', 'Status', 'Handled By', 'Date'].map(escapeCsv).join(',');
+    const rows = filtered
+      .map((e) => [e.name, e.phone, e.shift, e.status, e.handledBy || '', e.addedDate || ''].map(escapeCsv).join(','))
+      .join('\r\n');
+    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = Object.assign(document.createElement('a'), {
+      href: url,
+      download: `crm_enquiries_${horizonLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`,
+      hidden: true,
+    });
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+
+  const timeHorizonOptions: Array<{ id: ManagerCrmTimeHorizon; label: string }> = [
+    { id: 'all', label: 'All Time' },
+    { id: 'today', label: 'Today' },
+    { id: 'this_week', label: 'This Week' },
+    { id: 'this_month', label: 'This Month' },
+    { id: 'custom', label: 'Custom Range' },
+  ];
+
   if (isError) {
     return (
-      <section className="crm-page p-8" role="alert" aria-live="assertive">
-        <p className="text-danger font-semibold">{tManagerUi('unable_to_load_the_enquiry_pipeline')}</p>
-        <p className="text-secondary mt-2">{tManagerUi('check_your_connection_and_try_again')}</p>
-        <button type="button" className="mgr-btn-primary mt-4" onClick={() => { void refetch(); }} disabled={isFetching}>
-          {isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}
-        </button>
+      <section className="crm-page p-6 sm:p-8" role="alert" aria-live="assertive">
+        <div className="rounded-2xl border border-border bg-danger-bg p-8 text-center max-w-xl mx-auto shadow-xs">
+          <p className="text-destructive font-semibold text-base mb-1">{tManagerUi('unable_to_load_the_enquiry_pipeline')}</p>
+          <p className="text-secondary text-sm mb-6">{tManagerUi('check_your_connection_and_try_again')}</p>
+          <button
+            type="button"
+            className="mgr-btn-primary inline-flex items-center gap-2"
+            onClick={() => { void refetch(); }}
+            disabled={isFetching}
+          >
+            {isFetching ? <ButtonLoader icon="search" /> : <RefreshCw size={15} />}
+            {isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}
+          </button>
+        </div>
       </section>
     );
   }
 
+  const hasActiveFilters = Boolean(search || statusFilter !== 'All' || timeHorizon !== 'all');
+
   return (
-    <div className="crm-page">
-      {/* ── Page Header ── */}
-      <div className="crm-page-header">
-        <nav className="crm-breadcrumb">{tManagerUi('crm_to_enquiries')}</nav>
-        <div className="crm-page-header-row">
-          <div>
-            <h1 className="crm-page-title">{tManagerUi('enquiry_pipeline')}</h1>
-            <p className="crm-page-subtitle">
-              {isPending ? tManagerUi('loading') : tManagerUi('lead_count', { count: filtered.length })} {'•'} {tManagerUi('track_every_prospect_from_enquiry_to_admission')}
-            </p>
-            <p className="crm-contract-warning mt-3" role="status" data-testid="manager-crm-pipeline-contract-warning">{tManagerUi('crm_mutations_unavailable_host_contract')}</p>
-          </div>
-          <div className="crm-page-header-actions">
-            {/* View toggle */}
-            <div className="flex bg-floating p-1 rounded-md border border-border">
-              <button type="button"
-                className={`min-h-11 min-w-11 p-1.5 rounded text-secondary hover:text-primary motion-safe:transition-colors ${view === 'kanban' ? 'bg-card shadow-sm text-primary' : ''}`}
-                onClick={() => setView('kanban')} title={tManagerUi('kanban_view')} aria-label={tManagerUi('show_kanban_view')} aria-pressed={view === 'kanban'}
-              >
-                <LayoutGrid size={16} />
-              </button>
-              <button type="button"
-                className={`min-h-11 min-w-11 p-1.5 rounded text-secondary hover:text-primary motion-safe:transition-colors ${view === 'table' ? 'bg-card shadow-sm text-primary' : ''}`}
-                onClick={() => setView('table')} title={tManagerUi('table_view')} aria-label={tManagerUi('show_table_view')} aria-pressed={view === 'table'}
-              >
-                <List size={16} />
-              </button>
-            </div>
-            <button type="button" className="mgr-btn-primary" onClick={() => router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADD)}>
-              <Plus size={16} /> {tManagerUi('add_enquiry')}
-            </button>
-          </div>
-        </div>
-      </div>
+    <div className="crm-page w-full max-w-full min-w-0 space-y-5 overflow-x-hidden">
+      {/* ── Executive Header Banner ── */}
+      <ManagerMembersEnquiriesHeaderBanner
+        filteredCount={filtered.length}
+        horizonLabel={horizonLabel}
+        isFetching={isFetching}
+        onRefresh={() => { void refetch(); }}
+        view={view}
+        onViewChange={setView}
+        onAddEnquiry={() => router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADD)}
+        onOpenBulkWhatsApp={() => setBulkWhatsAppModalOpen(true)}
+      />
 
-      {/* ── Toolbar ── */}
-      <div className="flex flex-wrap gap-3 mb-6 items-center">
-        <div className="relative flex-grow max-w-md">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-          <input
-            type="text"
-            className="w-full pl-9 pr-3 py-2 bg-card border border-border rounded-md text-sm text-primary outline-none focus:border-primary motion-safe:transition-colors"
-            placeholder={tManagerUi('search_by_name_or_phone')}
-            aria-label={tManagerUi('search_by_name_or_phone')}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-        <select
-          className="min-h-11 py-2 px-3 bg-card border border-border rounded-md text-sm text-primary outline-none focus:border-primary motion-safe:transition-colors"
-          aria-label={tManagerUi('status')}
-          value={statusFilter}
-          onChange={(event) => {
-            const nextStatus = event.currentTarget.value;
-            if (nextStatus === 'All' || MANAGER_CRM_STATUS_OPTIONS.includes(nextStatus as (typeof MANAGER_CRM_STATUS_OPTIONS)[number])) {
-              setStatusFilter(nextStatus as typeof statusFilter);
-            }
-          }}
-        >
-          <option value="All">{tManagerUi('all_statuses')}</option>
-          {MANAGER_CRM_STATUS_OPTIONS.map((status) => (
-            <option key={status} value={status}>{statusLabels[status]}</option>
-          ))}
-        </select>
-      </div>
+      {/* ── Main Global Time Horizon Filter Bar ── */}
+      <ManagerMembersEnquiriesTimeHorizonBar
+        timeHorizon={timeHorizon}
+        setTimeHorizon={setTimeHorizon}
+        timeHorizonOptions={timeHorizonOptions}
+        customStartDate={customStartDate}
+        setCustomStartDate={setCustomStartDate}
+        customEndDate={customEndDate}
+        setCustomEndDate={setCustomEndDate}
+      />
 
-      {/* ── Views ── */}
-      {isPending ? (
-        <div className="flex items-center justify-center p-24 text-secondary">{tManagerUi('loading_pipeline')}</div>
+      {/* ── Executive CRM Funnel KPI Cards Grid ── */}
+      <ManagerMembersEnquiriesKpis stats={stats} horizonLabel={horizonLabel} />
+
+      {/* ── Toolbar: Search, Status Filter & CSV Export ── */}
+      <ManagerMembersEnquiriesToolbar
+        search={search}
+        setSearch={setSearch}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        statusLabels={statusLabels}
+        filteredCount={filtered.length}
+        horizonLabel={horizonLabel}
+        hasActiveFilters={hasActiveFilters}
+        onResetFilters={() => {
+          setSearch('');
+          setStatusFilter('All');
+          setTimeHorizon('all');
+          setCustomStartDate('');
+          setCustomEndDate('');
+          clearSelection();
+        }}
+        onExportCsv={handleExportCsv}
+        onOpenBulkWhatsApp={() => setBulkWhatsAppModalOpen(true)}
+      />
+
+      {/* ── Views: Kanban Board or Table ── */}
+      {filtered.length === 0 && !isPending ? (
+        <div className="flex flex-col items-center justify-center p-16 text-center bg-card rounded-2xl border border-border space-y-3">
+          <div className="w-12 h-12 rounded-full bg-primary-subtle text-primary flex items-center justify-center text-xl font-bold">
+            🔍
+          </div>
+          <p className="text-base font-bold text-foreground">
+            No enquiries found for {horizonLabel}
+          </p>
+          <p className="text-xs text-muted-foreground max-w-sm">
+            There are no leads matching your selected time horizon or filter criteria.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setTimeHorizon('all');
+              setSearch('');
+              setStatusFilter('All');
+              setCustomStartDate('');
+              setCustomEndDate('');
+              clearSelection();
+            }}
+            className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:bg-primary-hover shadow-xs transition-all cursor-pointer"
+          >
+            View All Time Leads
+          </button>
+        </div>
+      ) : isPending ? (
+        <div className="flex items-center justify-center p-24 bg-card rounded-2xl border border-border" role="status">
+          <LibraryLoader size="md" icon="search" variant="breath" />
+        </div>
       ) : view === 'kanban' ? (
-        <ManagerMembersEnquiriesKanban isEmpty={filtered.length === 0} getCardsByStatus={getCardsByStatus} />
+        <ManagerMembersEnquiriesKanban
+          isEmpty={filtered.length === 0}
+          getCardsByStatus={getCardsByStatus}
+        />
       ) : (
-        <ManagerMembersEnquiriesTable filtered={filtered} />
+        <ManagerMembersEnquiriesTable
+          filtered={filtered}
+          onQuickWhatsApp={(enq) => {
+            const url = getManagerEnquiriesDemoPassWhatsAppUrl(enq);
+            const w = window.open(url, '_blank', 'noopener,noreferrer');
+            if (w) w.opener = null;
+          }}
+          onMarkLost={(id, reason, notes) => {
+            markEnquiryAsLost(id, reason, notes);
+            toast.success('Enquiry marked as Lost');
+          }}
+        />
       )}
+
+      {/* ── Bulk WhatsApp Queue Dialog Modal ── */}
+      <ManagerMembersEnquiriesBulkWhatsAppModal
+        isOpen={bulkWhatsAppModalOpen}
+        onClose={() => setBulkWhatsAppModalOpen(false)}
+        recipients={selectedEnquiries.length > 0 ? selectedEnquiries : filtered}
+        onClearSelection={clearSelection}
+      />
     </div>
   );
 }

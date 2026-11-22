@@ -1,18 +1,18 @@
 "use client";
 
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
+import { useEffect,useState } from 'react';
 import { ManagerAssetsRegisterMain } from '../../components/ManagerAssetsRegisterMain';
 import messagesEn from '../../locales/manager_assets_register_domain_en.json';
 import messagesHi from '../../locales/manager_assets_register_domain_hi.json';
 import {
-  startManagerAssetsRegisterWorker,
-  stopManagerAssetsRegisterWorker,
-  HARNESS_SCENARIO_OPTIONS,
-  MANAGER_ASSETS_REGISTER_SCENARIO_PROBE_URL,
-  type ManagerAssetsRegisterHarnessScenario,
+HARNESS_SCENARIO_OPTIONS,
+MANAGER_ASSETS_REGISTER_SCENARIO_PROBE_URL,
+startManagerAssetsRegisterWorker,
+stopManagerAssetsRegisterWorker,
+type ManagerAssetsRegisterHarnessScenario,
 } from './bootstrap';
 
 type ManagerAssetsRegisterHarnessProps = {

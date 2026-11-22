@@ -1,13 +1,13 @@
 "use client";
 
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
+import { useEffect,useState } from 'react';
 import messagesEn from '../../locales/manager_navigation_navigation_domain_en.json';
 import messagesHi from '../../locales/manager_navigation_navigation_domain_hi.json';
-import { MANAGER_NAVIGATION_NAVIGATION_SCENARIOS, type ManagerNavigationNavigationScenario } from '../../mocks/scenarios/manager_navigation_navigation.scenarios';
-import { startManagerNavigationNavigationWorker, stopManagerNavigationNavigationWorker, MANAGER_NAVIGATION_NAVIGATION_SCENARIO_PROBE_URL } from './bootstrap';
+import { MANAGER_NAVIGATION_NAVIGATION_SCENARIOS,type ManagerNavigationNavigationScenario } from '../../mocks/scenarios/manager_navigation_navigation.scenarios';
+import { MANAGER_NAVIGATION_NAVIGATION_SCENARIO_PROBE_URL,startManagerNavigationNavigationWorker,stopManagerNavigationNavigationWorker } from './bootstrap';
 
 type Props = { children: ReactNode; locale?: string; theme?: 'light' | 'dark'; sessionMode?: 'host-default' | 'authenticated' | 'unauthenticated'; scenario?: ManagerNavigationNavigationScenario['id'] };
 /** Navigation harness preserves the supplied contract-blocked scenario registry; it does not fabricate route/API behavior. */

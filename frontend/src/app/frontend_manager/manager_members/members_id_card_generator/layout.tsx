@@ -1,5 +1,9 @@
-import type { Metadata } from 'next';
 import '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_styles/ManagerMembersIdCardGeneratorManager_id_card_generator.css';
+import '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_styles/ManagerMembersIdCardGeneratorThemeFullYear.css';
+import '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_styles/ManagerMembersIdCardGeneratorThemeHalfYearly.css';
+import '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_styles/ManagerMembersIdCardGeneratorThemeMonthly.css';
+import '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_styles/ManagerMembersIdCardGeneratorThemeQuarterly.css';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'ID Card Generator | Library OS',

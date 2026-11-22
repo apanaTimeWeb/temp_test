@@ -1,17 +1,12 @@
-import { useTranslations } from 'next-intl';
+import { ManagerPageLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
-// RESPONSIBILITY: Renders the Next.js native loading skeleton for the manager_daily_settlement module.
-// DATA FLOW: Next.js Router -> loading.tsx
-export default function Loading() {
-  const tManagerUi = useTranslations('manager.manager_daily_settlement.ui');
-
+/** Feature-owned loading boundary for asynchronous page transitions. */
+export default function ManagerFeatureLoading() {
   return (
-    <div className="flex h-full w-full items-center justify-center p-8" role="status" aria-live="polite" aria-busy="true">
-      <span className="sr-only">{tManagerUi('loading_this_section')}</span>
-      <div aria-hidden="true" className="motion-safe:animate-pulse motion-reduce:animate-none space-y-4 w-full max-w-3xl">
-        <div className="h-8 bg-muted rounded w-1/4" />
-        <div className="h-64 bg-muted rounded w-full" />
-      </div>
-    </div>
+    <ManagerPageLoader
+      size="md"
+      icon="scale"
+      variant="contra"
+    />
   );
 }

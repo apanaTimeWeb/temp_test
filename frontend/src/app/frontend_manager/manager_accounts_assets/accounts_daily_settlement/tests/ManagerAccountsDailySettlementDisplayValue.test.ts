@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { displayValue } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/utils/ManagerAccountsDailySettlementDisplayValue';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerAccountsDailySettlementDisplayValue', () => {
   it('uses an en dash for nullable, empty, and object values', () => {

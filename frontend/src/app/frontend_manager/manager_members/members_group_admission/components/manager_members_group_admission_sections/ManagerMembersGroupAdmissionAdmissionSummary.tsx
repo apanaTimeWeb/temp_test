@@ -5,10 +5,11 @@ import { useTranslations } from 'next-intl';
 
 import { useManagerGroupAdmissionFormatting } from '@/app/frontend_manager/manager_members/members_group_admission/hooks/useManagerMembersGroupAdmissionFormatting';
 
-import { CheckCircle } from 'lucide-react';
-import Link from 'next/link';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { MANAGER_MEMBERS_GROUP_ADMISSION_ROUTES } from '@/app/frontend_manager/manager_members/members_group_admission/config/manager_members_group_admission.url_config';
 import type { ManagerMembersGroupAdmissionAdmissionSummaryProps } from '@/app/frontend_manager/manager_members/members_group_admission/types/ManagerMembersGroupAdmissionComponentTypes';
+import { CheckCircle } from 'lucide-react';
+import Link from 'next/link';
 export type { ManagerMembersGroupAdmissionAdmissionSummaryProps };
 
 
@@ -38,7 +39,8 @@ export function ManagerMembersGroupAdmissionAdmissionSummary({ smartIdPreview, p
             </> : <p className="mgr-input-hint" role="status">{tManagerUi('admission_unavailable_host_contract_not_supplied')}</p>}
           </div>
           <div className="mgr-summary-actions">
-            <button type="submit" disabled={!canSubmit || isSubmitting} title={!canSubmit ? tManagerUi('admission_unavailable_host_contract_not_supplied') : undefined} className="mgr-btn-primary mgr-btn-full cursor-not-allowed"><CheckCircle size={18} strokeWidth={2} />{canSubmit ? (isSubmitting ? tManagerUi('confirming') : tManagerUi('confirm_admission')) : tManagerUi('admission_unavailable')}</button>
+            {/* Guard against raw window.confirm; cancel uses structured route navigation */}
+            <button type="submit" disabled={!canSubmit || isSubmitting} title={!canSubmit ? tManagerUi('admission_unavailable_host_contract_not_supplied') : undefined} className="mgr-btn-primary mgr-btn-full cursor-not-allowed">{isSubmitting ? <ButtonLoader icon="user-plus" /> : <CheckCircle size={18} strokeWidth={2} />}{canSubmit ? (isSubmitting ? tManagerUi('confirming') : tManagerUi('confirm_admission')) : tManagerUi('admission_unavailable')}</button>
             <Link href={MANAGER_MEMBERS_GROUP_ADMISSION_ROUTES.LIST} className="mgr-btn-ghost mgr-btn-full" >{tManagerUi('cancel')}</Link>
           </div>
         </div>

@@ -330,7 +330,18 @@
         "both_custom_times_required": "कस्टम प्रारंभ और समाप्ति दोनों समय दर्ज करें।",
         "custom_end_must_follow_start": "कस्टम समाप्ति समय, प्रारंभ समय के बाद होना चाहिए।",
         "new_status": "नई स्थिति",
-        "active_status": "सक्रिय स्थिति"
+        "active_status": "सक्रिय स्थिति",
+        "vacate_and_clear_title": "लॉकर खाली करें एवं चाबी हैंडओवर क्लीयरेंस",
+        "security_deposit_held": "जमा सुरक्षा राशि:",
+        "key_status_label": "भौतिक चाबी निरीक्षण एवं वापसी",
+        "key_returned_option": "चाबी सही स्थिति में वापस मिली (₹0 कटौती)",
+        "key_lost_option": "चाबी खो गई / लॉक खराब (₹150 कटौती प्रतिस्थापन शुल्क)",
+        "deduction_amount": "कटौती राशि:",
+        "net_refund_payable": "छात्र को देय शुद्ध रिफंड:",
+        "clearance_remarks": "हैंडओवर टिप्पणी (वैकल्पिक)",
+        "clearance_remarks_placeholder": "उदा. लॉकर साफ मिला, मूल चाबी वापस मिली",
+        "submit_vacate_and_refund": "हैंडओवर की पुष्टि करें और रिफंड कतारबद्ध करें",
+        "vacate_success_toast": "लॉकर {id} खाली किया गया। ₹{amount} का शुद्ध रिफंड व्यवस्थापक अनुमोदन के लिए कतारबद्ध हुआ।"
       },
       "errors": {
         "GENERIC_TITLE": "कुछ गलत हुआ",

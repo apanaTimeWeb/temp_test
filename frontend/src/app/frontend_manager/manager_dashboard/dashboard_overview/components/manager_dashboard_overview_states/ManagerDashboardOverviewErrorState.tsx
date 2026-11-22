@@ -1,8 +1,8 @@
 'use client';
 // RESPONSIBILITY: Render the dashboard overview error state component within the components feature. It does not own backend persistence or cross-feature business logic.
 // RESPONSIBILITY: Render the dashboard overview error state component within the components feature. It does not own backend persistence or cross-feature business logic.
-import { useTranslations } from 'next-intl';
 import type { ManagerDashboardOverviewErrorStateProps } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewComponentTypes';
+import { useTranslations } from 'next-intl';
 export type { ManagerDashboardOverviewErrorStateProps };
 
 

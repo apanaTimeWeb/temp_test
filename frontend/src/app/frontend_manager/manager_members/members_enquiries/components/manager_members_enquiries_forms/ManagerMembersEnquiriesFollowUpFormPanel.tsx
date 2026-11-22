@@ -2,13 +2,13 @@
 // RESPONSIBILITY: Render the members enquiries follow up form panel component within the components feature. It does not own backend persistence or cross-feature business logic.
 
 // RESPONSIBILITY: Render the members enquiries follow up form panel component within the components feature. It does not own backend persistence or cross-feature business logic.
-import { useEffect } from 'react';
+import { useManagerMembersEnquiriesConfirm } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesConfirm';
+import { useManagerMembersEnquiriesUnsavedChangesGuard } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesUnsavedChangesGuard';
+import type { ManagerMembersEnquiriesFollowUpFormPanelProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
+import { CalendarDays,Edit2,Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useManagerMembersEnquiriesConfirm } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesConfirm.tsx';
-import { useManagerMembersEnquiriesUnsavedChangesGuard } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesUnsavedChangesGuard';
-import { CalendarDays, Edit2, Plus } from 'lucide-react';
-import type { ManagerMembersEnquiriesFollowUpFormPanelProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
+import { useEffect } from 'react';
 export type { ManagerMembersEnquiriesFollowUpFormPanelProps };
 
 
@@ -28,6 +28,7 @@ export function ManagerMembersEnquiriesFollowUpFormPanel({
   nextFollowUpStatusClassName,
   editFollowUpLabel,
   onDirtyChange,
+  onAddFollowUp,
 }: ManagerMembersEnquiriesFollowUpFormPanelProps) {
   const tManagerUi = useTranslations('manager.manager_enquiries.ui');
   const router = useRouter();
@@ -39,6 +40,18 @@ export function ManagerMembersEnquiriesFollowUpFormPanel({
   const dateError = form.formState.errors.date;
   const remarkError = form.formState.errors.remark;
 
+  const handleManualAdd = () => {
+    const dateVal = form.getValues('date');
+    const remarkVal = form.getValues('remark');
+    if (!remarkVal || !remarkVal.trim()) {
+      form.setError('remark', { message: 'Follow-up remark is required.' });
+      return;
+    }
+    const targetDate = dateVal && dateVal.trim() ? dateVal : new Date().toISOString().slice(0, 10);
+    onAddFollowUp?.({ date: targetDate, remark: remarkVal.trim() });
+    form.reset({ date: '', remark: '' });
+  };
+
   return (
     <>
     {unsavedConfirmDialog}
@@ -48,7 +61,7 @@ export function ManagerMembersEnquiriesFollowUpFormPanel({
       <form onSubmit={(event) => event.preventDefault()} noValidate className="crm-form-stack">
         <div className="crm-field">
           <label htmlFor="crm-followup-date" className="crm-label crm-label--required">{dateLabel}</label>
-          <input
+          <input maxLength={30}
             id="crm-followup-date"
             type="date"
             min={minimumDate}
@@ -61,7 +74,7 @@ export function ManagerMembersEnquiriesFollowUpFormPanel({
         </div>
         <div className="crm-field">
           <label htmlFor="crm-followup-remark" className="crm-label crm-label--required">{remarkLabel}</label>
-          <textarea
+          <textarea maxLength={1000}
             id="crm-followup-remark"
             rows={3}
             className={`crm-textarea${remarkError ? ' crm-textarea--error' : ''}`}
@@ -71,8 +84,16 @@ export function ManagerMembersEnquiriesFollowUpFormPanel({
           />
           {remarkError && <p id="crm-followup-remark-error" className="crm-error" role="alert">{remarkError.message}</p>}
         </div>
-        <button type="submit" className="crm-btn-primary crm-btn-full cursor-not-allowed" disabled title={unavailableTitle}>
+        <button type="submit" className="crm-btn-primary crm-btn-full cursor-not-allowed opacity-60" disabled title={unavailableTitle}>
           <Plus size={15} />{submitLabel}
+        </button>
+        <button
+          type="button"
+          onClick={handleManualAdd}
+          className="crm-btn-primary crm-btn-full mt-2 bg-primary text-on-primary"
+          data-testid="manager-crm-manual-followup-btn"
+        >
+          <Plus size={15} /> Log Follow-up to Timeline
         </button>
       </form>
       <div className="crm-divider" />

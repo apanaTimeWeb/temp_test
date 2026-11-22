@@ -1,32 +1,150 @@
 'use client';
 // RESPONSIBILITY: Define or render the table structure for the components feature. It does not own backend persistence or cross-feature business logic.
-// RESPONSIBILITY: Define or render the table structure for the components feature. It does not own backend persistence or cross-feature business logic.
+import type { ManagerSeatsHistoryNativeCellParams,ManagerSeatsHistoryNativeColumn,ManagerSeatsHistoryNativeTableProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryComponentTypes';
 import { displayValue } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/utils/ManagerSeatsHistoryDisplayValue';
-import { createElement, type ReactNode } from 'react';
-import type { ManagerSeatsHistoryNativeCellParams, ManagerSeatsHistoryNativeColumn, ManagerSeatsHistoryNativeTableProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryComponentTypes';
-export type { ManagerSeatsHistoryNativeCellParams, ManagerSeatsHistoryNativeColumn, ManagerSeatsHistoryNativeTableProps };
-
-
-
-
+import { ArrowDown,ArrowUp,ArrowUpDown } from 'lucide-react';
+import { createElement,useMemo,useState,type ReactNode } from 'react';
+export type { ManagerSeatsHistoryNativeCellParams,ManagerSeatsHistoryNativeColumn,ManagerSeatsHistoryNativeTableProps };
 
 /** Accessible, keyboard-native data table owned by the seats/shifts/lockers feature. */
 export function ManagerSeatsHistoryNativeTable<T extends object>({ rows, columns, getRowKey, label }: ManagerSeatsHistoryNativeTableProps<T>) {
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [sortField, setSortField] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const changeSort = (field: string) => {
+    setPage(0);
+    if (sortField === field) setSortDirection((dir) => (dir === 'asc' ? 'desc' : 'asc'));
+    else { setSortField(field); setSortDirection('asc'); }
+  };
+
+  const sortedRows = useMemo(() => {
+    if (!sortField) return rows;
+    const getValue = (row: T): unknown => (row as unknown as Record<string, unknown>)[sortField];
+    return [...rows].sort((a, b) => {
+      const left = getValue(a);
+      const right = getValue(b);
+      const comparison = typeof left === 'number' && typeof right === 'number'
+        ? left - right
+        : String(left ?? '').localeCompare(String(right ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? comparison : -comparison;
+    });
+  }, [rows, sortField, sortDirection]);
+
+  const totalRows = sortedRows.length;
+  const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
+  const effectivePage = Math.min(page, pageCount - 1);
+  const visibleRows = sortedRows.slice(effectivePage * pageSize, effectivePage * pageSize + pageSize);
+  const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
+  const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
   return (
-    <div className="ss-table-wrapper overflow-x-auto">
-      <table className="ss-table w-full" aria-label={label}>
-        <thead><tr>{columns.map((column, index) => <th scope="col" key={`${column.headerName}-${index}`}>{column.headerName}</th>)}</tr></thead>
-        <tbody>{rows.map((row, rowIndex) => <tr key={getRowKey(row, rowIndex)}>
-          {columns.map((column, columnIndex) => {
-            const field = column.field == null ? undefined : String(column.field);
-            const value = field ? (row as unknown as Record<string, unknown>)[field] : undefined;
-            const params: ManagerSeatsHistoryNativeCellParams<T> = { value, data: row };
-            let content: ReactNode = displayValue(value);
-            if (column.cellRenderer) content = createElement(column.cellRenderer, params);
-            else if (column.valueFormatter) content = column.valueFormatter(params);
-            return <td key={`${column.headerName}-${columnIndex}`}>{content}</td>;
-          })}</tr>)}</tbody>
-      </table>
+    <div className="w-full">
+      <div className="overflow-x-auto -mx-3.5 sm:mx-0 px-3.5 sm:px-0">
+        <table className="ss-table min-w-[760px] w-full text-left" aria-label={label}>
+          <thead>
+            <tr className="border-b border-border bg-floating text-xs uppercase text-secondary font-semibold">
+              {columns.map((column, index) => {
+                const field = column.field == null ? undefined : String(column.field);
+                const isActive = sortField === field;
+                return (
+                  <th
+                    scope="col"
+                    key={`${column.headerName}-${index}`}
+                    aria-sort={field && isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+                    className="px-3.5 py-3 font-semibold whitespace-nowrap text-xs"
+                  >
+                    {field ? (
+                      <button
+                        type="button"
+                        onClick={() => changeSort(field)}
+                        className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 cursor-pointer"
+                        aria-label={`Sort by ${column.headerName ?? field}, currently ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'unsorted'}`}
+                      >
+                        <span>{column.headerName}</span>
+                        {isActive ? (
+                          sortDirection === 'asc' ? (
+                            <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+                          ) : (
+                            <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+                          )
+                        ) : (
+                          <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 transition-colors shrink-0" aria-hidden="true" />
+                        )}
+                      </button>
+                    ) : (
+                      column.headerName
+                    )}
+                  </th>
+                );
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {visibleRows.map((row, rowIndex) => (
+              <tr key={getRowKey(row, effectivePage * pageSize + rowIndex)} className="border-b border-border last:border-0 hover:bg-surface-hover transition-colors h-11">
+                {columns.map((column, columnIndex) => {
+                  const field = column.field == null ? undefined : String(column.field);
+                  const value = field ? (row as unknown as Record<string, unknown>)[field] : undefined;
+                  const params: ManagerSeatsHistoryNativeCellParams<T> = { value, data: row };
+                  let content: ReactNode = displayValue(value);
+                  if (column.cellRenderer) content = createElement(column.cellRenderer, params);
+                  else if (column.valueFormatter) content = column.valueFormatter(params);
+                  return <td key={`${column.headerName}-${columnIndex}`} className="px-3.5 py-2.5 align-middle text-xs">{content}</td>;
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border pt-3.5 text-xs text-secondary">
+        <span>
+          Showing {startItem}–{endItem} of {totalRows} results
+        </span>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1.5">
+            <label htmlFor="rows-per-page-seats-history" className="text-xs text-secondary whitespace-nowrap">
+              Rows per page:
+            </label>
+            <select
+              id="rows-per-page-seats-history"
+              value={pageSize}
+              onChange={(e) => {
+                setPageSize(Number(e.target.value));
+                setPage(0);
+              }}
+              className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary"
+            >
+              <option value={10}>10</option>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="mgr-btn-ghost mgr-btn-sm"
+              disabled={effectivePage <= 0}
+              onClick={() => setPage((current) => Math.max(0, current - 1))}
+            >
+              Previous
+            </button>
+            <span className="text-xs text-secondary px-1">
+              Page {effectivePage + 1} of {pageCount}
+            </span>
+            <button
+              type="button"
+              className="mgr-btn-ghost mgr-btn-sm"
+              disabled={effectivePage >= pageCount - 1}
+              onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

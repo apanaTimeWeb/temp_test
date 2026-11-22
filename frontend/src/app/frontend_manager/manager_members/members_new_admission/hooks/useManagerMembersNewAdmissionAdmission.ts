@@ -1,9 +1,9 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { ManagerMembersNewAdmissionAdmissionSchema,type ManagerMembersNewAdmissionAdmissionFormValues } from '@/app/frontend_manager/manager_members/members_new_admission/schemas/ManagerMembersNewAdmissionAdmissionSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSearchParams } from 'next/navigation';
-import { ManagerMembersNewAdmissionAdmissionSchema, type ManagerMembersNewAdmissionAdmissionFormValues } from '@/app/frontend_manager/manager_members/members_new_admission/schemas/ManagerMembersNewAdmissionAdmissionSchema';
+import { useForm } from 'react-hook-form';
 
 /** Admission form state and validation only. No create mutation is available without an authoritative host contract. */
 export function useManagerNewAdmissionAdmission() {
@@ -12,18 +12,42 @@ export function useManagerNewAdmissionAdmission() {
   const defaultPhone = searchParams.get('phone') ?? '';
   const form = useForm<ManagerMembersNewAdmissionAdmissionFormValues>({
     resolver: zodResolver(ManagerMembersNewAdmissionAdmissionSchema),
-    mode: 'onBlur',
+    mode: 'onChange',
     reValidateMode: 'onChange',
     defaultValues: {
       fullName: defaultName,
       phone: defaultPhone,
+      email: '',
+      gender: '',
+      dob: '',
+      address: '',
+      parentName: '',
+      parentPhone: '',
+      college: '',
+      preparationFor: '',
+      avatar: '',
+      photoUrl: '',
+      branch: '',
+      bloodGroup: '',
+      medicalIssues: '',
+      disability: '',
       shift: '',
       seat: '',
       locker: '',
       plan: '',
+      registrationFee: '',
+      securityDeposit: '',
+      couponCode: '',
       manualDiscount: '',
       amountPaid: '',
       paymentMode: '',
+      paymentType: 'full',
+      promiseDueDate: '',
+      promiseRemarks: '',
+      remarks: '',
+      floor: '',
+      referredBy: '',
+      documents: [],
     },
   });
 

@@ -1,8 +1,8 @@
 /** Module-local component props and UI/state types extracted from component files. */
 import type { ManagerMembersEnquiriesFollowUpFormData } from '@/app/frontend_manager/manager_members/members_enquiries/schemas/ManagerMembersEnquiriesSchema';
 import type { ManagerMembersEnquiriesSearchParams } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesMainTypes';
-import type { ManagerMembersEnquiriesEnquiry, ManagerMembersEnquiriesEnquiryStatus, ManagerMembersEnquiriesFollowUp } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
-import type { ErrorInfo, ReactNode } from 'react';
+import type { ManagerMembersEnquiriesEnquiry,ManagerMembersEnquiriesEnquiryStatus,ManagerMembersEnquiriesFollowUp } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
+import type { ErrorInfo,ReactNode } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 
 export type ManagerMembersEnquiriesEmptyStateProps = { children: ReactNode; className?: string; testId?: string };
@@ -24,6 +24,7 @@ export interface ManagerMembersEnquiriesFollowUpFormPanelProps {
   nextFollowUpStatusClassName: string;
   editFollowUpLabel: string;
   onDirtyChange?: (dirty: boolean) => void;
+  onAddFollowUp?: (data: { date: string; remark: string }) => void;
 }
 
 export interface ManagerMembersEnquiriesActivityTimelineProps {
@@ -74,6 +75,11 @@ export interface ManagerMembersEnquiriesErrorBoundaryState {
 // RESPONSIBILITY: Renders the Table view for CRM Enquiries. It does not own backend persistence or cross-feature business logic.
 export interface ManagerMembersEnquiriesTableProps {
   filtered: ManagerMembersEnquiriesEnquiry[];
+  selectedIds?: string[];
+  onToggleSelectOne?: (id: string) => void;
+  onToggleSelectAll?: () => void;
+  onQuickWhatsApp?: (enquiry: ManagerMembersEnquiriesEnquiry) => void;
+  onMarkLost?: (id: string, reason: string, notes?: string) => void;
 }
 
 export type ManagerMembersEnquiriesAddPageRouteProps = {
@@ -99,6 +105,9 @@ export interface ManagerMembersEnquiriesEnquiryActionsPanelProps {
   convertLabel: string;
   alreadyLostLabel: string;
   markLostUnavailableLabel: string;
+  onMarkLost?: () => void;
+  onSendDemoPass?: () => void;
+  onSendLocation?: () => void;
 }
 
 export interface ManagerMembersEnquiriesInfoItemProps {

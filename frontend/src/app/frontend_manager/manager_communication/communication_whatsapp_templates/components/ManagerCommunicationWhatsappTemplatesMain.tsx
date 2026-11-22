@@ -1,5 +1,5 @@
 'use client';
-import ManagerCommunicationWhatsappTemplatesPage from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/components/manager_communication_whatsapp_templates_views/ManagerCommunicationWhatsappTemplatesPage.tsx';
+import ManagerCommunicationWhatsappTemplatesPage from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/components/manager_communication_whatsapp_templates_views/ManagerCommunicationWhatsappTemplatesPage';
 import type { ManagerCommunicationWhatsappTemplatesMainProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/types/ManagerCommunicationWhatsappTemplatesMainTypes';
 
 export function ManagerCommunicationWhatsappTemplatesMain(props: ManagerCommunicationWhatsappTemplatesMainProps) {

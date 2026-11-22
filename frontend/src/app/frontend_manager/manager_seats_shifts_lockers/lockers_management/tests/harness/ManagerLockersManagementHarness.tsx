@@ -1,16 +1,16 @@
 'use client';
 
 
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { NextIntlClientProvider } from 'next-intl';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
+import { http,HttpResponse } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { http, HttpResponse } from 'msw';
-import { managerSeatsShiftsLockersHandlers } from '../../mocks/manager_lockers_management_handlers/ManagerLockersManagementHandlers';
+import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
+import { useEffect,useState } from 'react';
 import { MANAGER_LOCKERS_MANAGEMENT_API } from '../../config/manager_lockers_management.url_config';
 import enMessages from '../../locales/manager_lockers_management_domain_en.json';
 import hiMessages from '../../locales/manager_lockers_management_domain_hi.json';
+import { managerSeatsShiftsLockersHandlers } from '../../mocks/manager_lockers_management_handlers/ManagerLockersManagementHandlers';
 
 type ManagerLockersManagementHarnessProps = { children: ReactNode; locale?: string; theme?: 'light' | 'dark'; sessionMode?: 'host-default' | 'authenticated' | 'unauthenticated'; scenario?: 'ACTIVE' | 'EMPTY' | 'SERVER_500' | 'TIMEOUT' | 'UNAUTHORIZED';};
 

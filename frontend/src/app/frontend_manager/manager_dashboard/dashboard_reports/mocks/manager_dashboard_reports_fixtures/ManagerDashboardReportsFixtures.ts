@@ -1,4 +1,4 @@
-import type { ManagerDashboardReportsData, ManagerDashboardReportsDateRange } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
+import type { ManagerDashboardReportsData,ManagerDashboardReportsDateRange } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
 
 /** Explicitly empty, test-only response fixture. It contains no fabricated operational totals. */
 export const MANAGER_REPORTS_EMPTY_FIXTURE: ManagerDashboardReportsData = {
@@ -63,6 +63,13 @@ export const MANAGER_REPORTS_WEEK_FIXTURE: ManagerDashboardReportsData = {
     { item: 'AC Filter Cleaning', location: 'Quiet Study Hall', reported: '2026-10-26', priority: 'Medium' },
     { item: 'Desk Light Replacement', location: 'Row 4 Desk B', reported: '2026-10-28', priority: 'Low' },
   ],
+  shiftProfitabilityRows: [
+    { shift: 'Morning Shift', timing: '06:00 AM – 02:00 PM', studentsCount: 34, monthlyRate: 700, grossRevenue: 23800, collectionRate: '97%', marginRating: 'High' },
+    { shift: 'Afternoon Shift', timing: '11:00 AM – 04:00 PM', studentsCount: 20, monthlyRate: 600, grossRevenue: 12000, collectionRate: '95%', marginRating: 'Good' },
+    { shift: 'Evening Shift', timing: '02:00 PM – 10:00 PM', studentsCount: 44, monthlyRate: 700, grossRevenue: 30800, collectionRate: '98%', marginRating: 'High' },
+    { shift: 'Night Shift', timing: '10:00 PM – 06:00 AM', studentsCount: 12, monthlyRate: 600, grossRevenue: 7200, collectionRate: '91%', marginRating: 'Moderate' },
+    { shift: 'Full Day Access', timing: '06:00 AM – 10:00 PM', studentsCount: 24, monthlyRate: 1500, grossRevenue: 36000, collectionRate: '99%', marginRating: 'High' },
+  ],
 };
 
 /**
@@ -116,6 +123,13 @@ export const MANAGER_REPORTS_POPULATED_FIXTURE: ManagerDashboardReportsData = {
     { item: 'Ergonomic Chair #12', location: 'Silent Zone A', reported: '2026-10-14', priority: 'High' },
     { item: 'Locker #44 Key Lock', location: 'Locker Bay 2', reported: '2026-10-15', priority: 'Low' },
   ],
+  shiftProfitabilityRows: [
+    { shift: 'Morning Shift', timing: '06:00 AM – 02:00 PM', studentsCount: 36, monthlyRate: 700, grossRevenue: 25200, collectionRate: '97%', marginRating: 'High' },
+    { shift: 'Afternoon Shift', timing: '11:00 AM – 04:00 PM', studentsCount: 22, monthlyRate: 600, grossRevenue: 13200, collectionRate: '94%', marginRating: 'Good' },
+    { shift: 'Evening Shift', timing: '02:00 PM – 10:00 PM', studentsCount: 46, monthlyRate: 700, grossRevenue: 32200, collectionRate: '98%', marginRating: 'High' },
+    { shift: 'Night Shift', timing: '10:00 PM – 06:00 AM', studentsCount: 14, monthlyRate: 600, grossRevenue: 8400, collectionRate: '92%', marginRating: 'Moderate' },
+    { shift: 'Full Day Access', timing: '06:00 AM – 10:00 PM', studentsCount: 24, monthlyRate: 1500, grossRevenue: 36000, collectionRate: '99%', marginRating: 'High' },
+  ],
 };
 
 /** 30-day operational report preview fixture. */
@@ -166,6 +180,13 @@ export const MANAGER_REPORTS_LAST30_FIXTURE: ManagerDashboardReportsData = {
   maintenanceRows: [
     { item: 'Wi-Fi Access Point 2', location: 'First Floor Study', reported: '2026-10-10', priority: 'High' },
     { item: 'Water Dispenser Sensor', location: 'Cafeteria Wing', reported: '2026-10-12', priority: 'Medium' },
+  ],
+  shiftProfitabilityRows: [
+    { shift: 'Morning Shift', timing: '06:00 AM – 02:00 PM', studentsCount: 35, monthlyRate: 700, grossRevenue: 24500, collectionRate: '96%', marginRating: 'High' },
+    { shift: 'Afternoon Shift', timing: '11:00 AM – 04:00 PM', studentsCount: 21, monthlyRate: 600, grossRevenue: 12600, collectionRate: '93%', marginRating: 'Good' },
+    { shift: 'Evening Shift', timing: '02:00 PM – 10:00 PM', studentsCount: 45, monthlyRate: 700, grossRevenue: 31500, collectionRate: '97%', marginRating: 'High' },
+    { shift: 'Night Shift', timing: '10:00 PM – 06:00 AM', studentsCount: 13, monthlyRate: 600, grossRevenue: 7800, collectionRate: '90%', marginRating: 'Moderate' },
+    { shift: 'Full Day Access', timing: '06:00 AM – 10:00 PM', studentsCount: 25, monthlyRate: 1500, grossRevenue: 37500, collectionRate: '99%', marginRating: 'High' },
   ],
 };
 

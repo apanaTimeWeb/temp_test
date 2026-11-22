@@ -1,15 +1,15 @@
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
-import { setupServer } from 'msw/node';
 import { MANAGER_LOCKERS_MANAGEMENT_API } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/config/manager_lockers_management.url_config';
 import {
-  MANAGER_SEATS_SHIFTS_LOCKERS_ALLOCATIONS_FIXTURE,
-  MANAGER_SEATS_SHIFTS_LOCKERS_HISTORY_FIXTURE,
-  MANAGER_SEATS_SHIFTS_LOCKERS_LOCKERS_FIXTURE,
-  MANAGER_SEATS_SHIFTS_LOCKERS_SEAT_MATRIX_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_ALLOCATIONS_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_HISTORY_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_LOCKERS_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_SEAT_MATRIX_FIXTURE,
 } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/mocks/manager_lockers_management_fixtures/ManagerLockersManagementApiFixtures';
 import { managerSeatsShiftsLockersHandlers } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/mocks/manager_lockers_management_handlers/ManagerLockersManagementHandlers';
+import { normalizeManagerLockerMatrixStatus,normalizeManagerSeatMatrixStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementMatrixStatus';
 import { normalizeManagerSeatsAllocationStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementStatusNormalization';
-import { normalizeManagerLockerMatrixStatus, normalizeManagerSeatMatrixStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementMatrixStatus';
+import { setupServer } from 'msw/node';
+import { afterAll,afterEach,beforeAll,describe,expect,it } from 'vitest';
 
 const server = setupServer(...managerSeatsShiftsLockersHandlers);
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));

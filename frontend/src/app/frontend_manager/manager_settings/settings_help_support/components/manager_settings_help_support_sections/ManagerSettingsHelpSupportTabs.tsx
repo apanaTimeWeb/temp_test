@@ -1,8 +1,8 @@
 'use client';
 // RESPONSIBILITY: Render the settings help support tabs component within the components feature. It does not own backend persistence or cross-feature business logic.
 
-import { useTranslations } from 'next-intl';
 import type { ManagerSettingsHelpSupportTabsProps } from '@/app/frontend_manager/manager_settings/settings_help_support/types/ManagerSettingsHelpSupportTypes';
+import { useTranslations } from 'next-intl';
 
 export function ManagerSettingsHelpSupportTabs({ tabs, activeTab, onSelect }: ManagerSettingsHelpSupportTabsProps) {
   const tManagerUi = useTranslations('manager.manager_help_support.ui');

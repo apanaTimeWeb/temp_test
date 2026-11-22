@@ -1,6 +1,6 @@
 /** Module-local component props and UI/state types extracted from component files. */
-import type { ManagerDashboardOverviewActionItem, ManagerDashboardOverviewKpiData, ManagerDashboardOverviewRecentAdmission, ManagerDashboardOverviewRecentEnquiry, ManagerDashboardOverviewSeatData } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewTypes';
-import type { ErrorInfo, ReactNode } from 'react';
+import type { ManagerDashboardOverviewActionItem,ManagerDashboardOverviewKpiData,ManagerDashboardOverviewRecentAdmission,ManagerDashboardOverviewRecentEnquiry,ManagerDashboardOverviewSeatData } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewTypes';
+import type { ErrorInfo,ReactNode } from 'react';
 
 export type ManagerDashboardOverviewEmptyStateProps = { children: ReactNode; className?: string; testId?: string };
 
@@ -11,6 +11,8 @@ export interface ManagerDashboardOverviewErrorFallbackProps {
 // RESPONSIBILITY: Renders the read-only grid of KPI cards. Receives data via props. No API calls.
 export interface ManagerDashboardOverviewKpiGridProps {
   kpiData: ManagerDashboardOverviewKpiData[];
+  timeRange?: 'today' | 'this_week' | 'this_month' | 'custom';
+  timeRangeLabel?: string;
 }
 
 export type ManagerDashboardOverviewQuickLinkTitleKey =
@@ -30,6 +32,7 @@ export interface ManagerDashboardOverviewRecentActivityProps {
   enquiries: ManagerDashboardOverviewRecentEnquiry[];
   studentsHref: string;
   enquiriesHref: string;
+  timeRangeLabel?: string;
 }
 
 export interface ManagerDashboardOverviewErrorBoundaryProps {
@@ -49,6 +52,31 @@ export interface ManagerDashboardOverviewActionItemsProps { items: ManagerDashbo
 // RESPONSIBILITY: Renders the seat matrix visual grid and handles routing to student list with seat filter. It does not own backend persistence or cross-feature business logic.
 export interface ManagerDashboardOverviewSeatMatrixProps {
   seatData: ManagerDashboardOverviewSeatData[];
+}
+
+export interface ManagerDashboardOverviewLiveShiftBarProps {
+  currentShiftName?: string;
+  shiftTiming?: string;
+  timeRemaining?: string;
+  activeOccupancy?: number;
+  totalCapacity?: number;
+  overstayCount?: number;
+  timeRangeLabel?: string;
+}
+
+export interface ManagerDashboardOverviewCashDrawerCardProps {
+  cashInDrawer?: number;
+  digitalCollections?: number;
+  totalCollections?: number;
+  settlementStatus?: 'pending' | 'verified';
+  timeRangeLabel?: string;
+}
+
+export interface ManagerDashboardOverviewOperationalAlertsProps {
+  dropoutRiskCount?: number;
+  facilityTicketsCount?: number;
+  hotLeadsCount?: number;
+  timeRangeLabel?: string;
 }
 
 export type ManagerDashboardOverviewTrendTone = 'up' | 'down' | 'neutral';

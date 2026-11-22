@@ -2,9 +2,9 @@
  * Module-local MSW lifecycle for the members_referral_bonus standalone harness.
  * The __harness__ probe is test-only and is not a backend or feature API route.
  */
-import { delay, http, HttpResponse, type RequestHandler } from 'msw';
+import { delay,http,HttpResponse,type RequestHandler } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { MANAGER_MEMBERS_REFERRAL_BONUS_SCENARIOS as MODULE_SCENARIOS, type MembersReferralBonusScenario as HarnessScenario } from '../../mocks/scenarios/manager_members_referral_bonus.scenarios';
+import { MANAGER_MEMBERS_REFERRAL_BONUS_SCENARIOS as MODULE_SCENARIOS,type MembersReferralBonusScenario as HarnessScenario } from '../../mocks/scenarios/manager_members_referral_bonus.scenarios';
 // No module-owned handler array was supplied for this module. Keep business API mocking empty rather than inventing an endpoint.
 const MODULE_HANDLERS: RequestHandler[] = [];
 

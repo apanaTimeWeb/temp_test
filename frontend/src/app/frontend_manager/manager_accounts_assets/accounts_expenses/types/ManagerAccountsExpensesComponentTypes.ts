@@ -17,6 +17,7 @@ export type ManagerAccountsExpensesExpenseSummaryCardsProps = {
   visibleExpenses: readonly ManagerAccountsExpensesExpenseSample[];
   formatCurrency: (amount: number) => string;
   labels: { totalExpenses: string; thisMonth: string; entries: string; categories: string };
+  timeHorizonLabel?: string;
 };
 
 export type Labels = {

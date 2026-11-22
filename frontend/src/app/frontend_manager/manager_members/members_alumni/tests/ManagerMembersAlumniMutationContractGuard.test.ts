@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { apiFetch } from '@/lib/api';
 import { createManagerStudent } from '@/app/frontend_manager/manager_members/members_alumni/api/manager_members_alumni.api';
+import { apiFetch } from '@/lib/api';
+import { beforeEach,describe,expect,it,vi } from 'vitest';
 
 vi.mock('@/lib/api', () => ({ apiFetch: vi.fn() }));
 

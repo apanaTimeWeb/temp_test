@@ -1,6 +1,6 @@
 import { ManagerFinanceAutoSuspendMain } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/components/ManagerFinanceAutoSuspendMain';
-import type { ManagerFinanceAutoSuspendMainProps } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendMainTypes';
 import type { ManagerFinanceAutoSuspendPageProps } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendComponentTypes';
+import type { ManagerFinanceAutoSuspendMainProps } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendMainTypes';
 
 
 

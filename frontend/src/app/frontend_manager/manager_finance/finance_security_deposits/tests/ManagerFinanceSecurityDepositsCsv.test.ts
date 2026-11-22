@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { sanitizeManagerSecurityDepositsCsvCell } from '@/app/frontend_manager/manager_finance/finance_security_deposits/utils/ManagerFinanceSecurityDepositsCsv';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerFinanceSecurityDepositsCsv', () => {
   it('neutralizes spreadsheet formula prefixes, including leading whitespace/control characters', () => {

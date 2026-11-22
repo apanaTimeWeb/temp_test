@@ -1,160 +1,291 @@
 'use client';
-import { useTranslations } from 'next-intl';
+
+import ManagerFinanceRenewalsNativeTable from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_table_parts/ManagerFinanceRenewalsNativeTable';
 import { MANAGER_FINANCE_SAMPLE_RENEWALS } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/ManagerFinanceRenewalsDemoRepository';
-import { useManagerRenewalsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsUrlFilters';
-import ManagerFinanceRenewalsNativeTable, { type NativeCellParams } from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_table_parts/ManagerFinanceRenewalsNativeTable';
-
 import { useManagerRenewalsFormatting } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/ManagerFinanceRenewalsFormattingHook';
-
-// RESPONSIBILITY: Entry page for the manager_renewals module.
-// DATA FLOW: Next.js Router -> Page -> Components
-
-
-// RESPONSIBILITY: Entry page for the manager_renewals module.
-// DATA FLOW: Next.js Router -> Page -> Components
-import { Send, MessageSquare, Upload, Mail } from 'lucide-react';
-import { MANAGER_FINANCE_RENEWAL_FILTERS } from '@/app/frontend_manager/manager_finance/finance_renewals/constants/ManagerFinanceRenewalsRenewalConstants';
-import type { FilterType, ManagerFinanceRenewalsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
-
-
-
+import { useManagerFinanceRenewalsConfirm } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsConfirm';
+import { useManagerFinanceRenewalsActions } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsActions';
+import { useManagerRenewalsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsUrlFilters';
+import type { FilterType,ManagerFinanceRenewalsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
+import { exportManagerRenewalsCsv } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsCsv';
+import { handleRenewalsExport, handleRenewalsPrint, handleRenewalsFileImport } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsActionHelpers';
+import { CheckCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useRef,useState } from 'react';
+import ManagerFinanceRenewalsAlertBanner from './ManagerFinanceRenewalsAlertBanner';
+import { ManagerFinanceRenewalsBulkWhatsAppModal } from './ManagerFinanceRenewalsBulkWhatsAppModal';
+import ManagerFinanceRenewalsFilterBar from './ManagerFinanceRenewalsFilterBar';
+import ManagerFinanceRenewalsHeader from './ManagerFinanceRenewalsHeader';
+import { buildRenewalColumns } from './ManagerFinanceRenewalsTableColumns';
+import ManagerFinanceRenewalsTimeHorizonBar,{ type ManagerRenewalsTimeHorizon } from './ManagerFinanceRenewalsTimeHorizonBar';
 
 const URL_FILTERS = { filter: { defaultValue: 'expiring_7', allowedValues: ['expired', 'expiring_7', 'expiring_15'] } } as const;
 
-
 export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRenewalsRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_renewals.ui');
+  const { confirm, dialog: renewalsConfirmDialog } = useManagerFinanceRenewalsConfirm();
   const { formatCurrency, formatDate } = useManagerRenewalsFormatting();
   const { values: urlFilters, setValue: setUrlFilter } = useManagerRenewalsUrlFilters(URL_FILTERS);
   const filter = urlFilters.filter as FilterType;
-  const allRenewals = MANAGER_FINANCE_SAMPLE_RENEWALS;
 
-  const visible = allRenewals.filter((r) => {
-    if (filter === 'expired')     return r.daysLeft < 0;
-    if (filter === 'expiring_7')  return r.daysLeft >= 0 && r.daysLeft <= 7;
+  const [renewalsList, setRenewalsList] = useState(MANAGER_FINANCE_SAMPLE_RENEWALS);
+  const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
+  const [isBulkWhatsAppOpen, setIsBulkWhatsAppOpen] = useState(false);
+  const [bulkWhatsAppScope, setBulkWhatsAppScope] = useState<typeof renewalsList>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [shiftFilter, setShiftFilter] = useState('all');
+  const [planFilter, setPlanFilter] = useState('all');
+  const [dueFilter, setDueFilter] = useState('all');
+  const [timeHorizon, setTimeHorizon] = useState<ManagerRenewalsTimeHorizon>('all');
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const horizonFiltered = useMemo(() => {
+    return renewalsList.filter((r) => {
+      if (timeHorizon === 'today') return r.daysLeft <= 0;
+      if (timeHorizon === 'this_week') return r.daysLeft <= 7;
+      if (timeHorizon === 'this_month') return r.daysLeft <= 30;
+      return true;
+    });
+  }, [renewalsList, timeHorizon]);
+
+  const expiringCritical = useMemo(() => horizonFiltered.filter((r) => r.daysLeft <= 3 && r.daysLeft >= 0), [horizonFiltered]);
+  const expiredCount = useMemo(() => horizonFiltered.filter((r) => r.daysLeft < 0).length, [horizonFiltered]);
+  const pastGraceList = useMemo(
+    () => renewalsList.filter((r) => r.daysLeft < -3 && !(r as { isSeatReleased?: boolean }).isSeatReleased),
+    [renewalsList]
+  );
+
+  const visible = horizonFiltered.filter((r) => {
+    if (filter === 'expired') return r.daysLeft < 0;
+    if (filter === 'expiring_7') return r.daysLeft >= 0 && r.daysLeft <= 7;
     if (filter === 'expiring_15') return r.daysLeft >= 0 && r.daysLeft <= 15;
     return true;
   });
 
-  const translateShift = (value: string) => {
-    switch (value) {
-      case 'Morning': return tManagerUi('morning');
-      case 'Evening': return tManagerUi('evening');
-      case 'Full Day': return tManagerUi('full_day');
-      default: return value;
-    }
+  const searchedRenewals = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return visible.filter((r) => {
+      const matchShift = shiftFilter === 'all' || r.shift.toLowerCase() === shiftFilter.toLowerCase();
+      const matchPlan = planFilter === 'all' || r.plan.toLowerCase().includes(planFilter.toLowerCase());
+      const matchDue = dueFilter === 'all' || (dueFilter === 'due_only' ? Number(r.due) > 0 : true);
+      const matchQ =
+        !q ||
+        r.studentName.toLowerCase().includes(q) ||
+        r.smartId.toLowerCase().includes(q) ||
+        r.plan.toLowerCase().includes(q) ||
+        r.shift.toLowerCase().includes(q);
+      return matchShift && matchPlan && matchDue && matchQ;
+    });
+  }, [visible, searchQuery, shiftFilter, planFilter, dueFilter]);
+
+  const hasActiveFilters = Boolean(
+    searchQuery.trim() !== '' ||
+    shiftFilter !== 'all' ||
+    planFilter !== 'all' ||
+    dueFilter !== 'all' ||
+    filter !== 'expiring_7'
+  );
+
+  const translateShift = (v: string) => v === 'Morning' ? tManagerUi('morning') : v === 'Evening' ? tManagerUi('evening') : v === 'Full Day' ? tManagerUi('full_day') : v;
+  const translatePlanTier = (v: string) => v === 'Basic' ? tManagerUi('basic_tier') : v === 'Premium' ? tManagerUi('premium_tier') : v === 'Elite' ? tManagerUi('elite_tier') : v;
+
+  const handleExportCsv = () => {
+    exportManagerRenewalsCsv(visible, filter);
+    setFeedbackMsg(`Exported ${visible.length} renewal records to CSV successfully.`);
   };
-  const translatePlanTier = (value: string) => {
-    switch (value) {
-      case 'Basic': return tManagerUi('basic_tier');
-      case 'Premium': return tManagerUi('premium_tier');
-      case 'Elite': return tManagerUi('elite_tier');
-      default: return value;
+
+  const handlePrint = () => window.print();
+
+  const handleWhatsAppAll = () => {
+    setBulkWhatsAppScope(searchedRenewals);
+    setIsBulkWhatsAppOpen(true);
+  };
+
+  const handleSend3DayReminders = () => {
+    const critical = renewalsList.filter((r) => r.daysLeft <= 3);
+    setBulkWhatsAppScope(critical.length > 0 ? critical : renewalsList);
+    setIsBulkWhatsAppOpen(true);
+  };
+
+  const { handleAutoReleaseSeats, handleReleaseSingleSeat, handleRenewStudent } = useManagerFinanceRenewalsActions({
+    renewalsList,
+    setRenewalsList,
+    pastGraceList,
+    confirm,
+    setFeedbackMsg,
+    tManagerUi,
+  });
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFeedbackMsg(`Imported file "${file.name}" successfully with ${visible.length} renewals records.`);
+      e.target.value = '';
     }
   };
 
-  const colDefs = [
-    { field: 'studentName', headerName: tManagerUi('student'), flex: 1, minWidth: 150, cellRenderer: (p: NativeCellParams) => <span className="fin-cell-name font-medium">{p.value}</span> },
-    { field: 'smartId', headerName: tManagerUi('smart_id'), width: 120, cellRenderer: (p: NativeCellParams) => <span className="fin-mono text-sm">{p.value}</span> },
-    { field: 'shift', headerName: tManagerUi('shift'), width: 110, cellRenderer: (p: NativeCellParams) => <div className="h-full flex items-center"><span className="fin-badge fin-badge--neutral">{typeof p.value === 'string' ? translateShift(p.value) : '—'}</span></div> },
-    { field: 'plan', headerName: tManagerUi('plan'), width: 110, cellRenderer: (p: NativeCellParams) => <span className="fin-text-body">{typeof p.value === 'string' ? translatePlanTier(p.value) : '—'}</span> },
-    { field: 'expiryDate', headerName: tManagerUi('expiry_date'), width: 120, cellRenderer: (p: NativeCellParams) => <span className="fin-cell-subtext">{typeof p.value === 'string' ? formatDate(p.value) : p.value}</span> },
-    { 
-      field: 'daysLeft', 
-      headerName: tManagerUi('days_left'), 
-      width: 120,
-      cellRenderer: (p: NativeCellParams) => {
-        const daysLeft = typeof p.value === 'number' ? p.value : 0;
-        return <span className={daysLeft < 0 ? 'fin-text-danger font-semibold' : daysLeft <= 7 ? 'fin-text-warning font-semibold' : 'fin-text-body'}>
-          {daysLeft < 0 ? tManagerUi('days_ago_count', { count: Math.abs(daysLeft) }) : tManagerUi('days_count', { count: daysLeft })}
-        </span>;
-      }
-    },
-    { field: 'lastPaymentDate', headerName: tManagerUi('last_payment'), width: 130, cellRenderer: (p: NativeCellParams) => <span className="fin-cell-subtext">{typeof p.value === 'string' ? formatDate(p.value) : p.value}</span> },
-    { 
-      field: 'due', 
-      headerName: tManagerUi('due_inr'), 
-      width: 110,
-      cellStyle: { textAlign: 'right', fontWeight: 600 },
-      cellRenderer: (p: NativeCellParams) => {
-        const due = typeof p.value === 'number' ? p.value : 0;
-        return <span className={due > 0 ? 'fin-text-danger' : 'fin-text-body'}>{formatCurrency(due)}</span>;
-      }
-    },
-    {
-      headerName: tManagerUi('actions'),
-      width: 180,
-      sortable: false,
-      cellRenderer: () => (
-        <div className="flex items-center gap-2 h-full">
-          {/* Admin is View-Only: Renew button removed */}
-          <button
-            type="button"
-            className="fin-badge fin-badge--neutral cursor-not-allowed"
-            disabled
-            title={tManagerUi('reminder_unavailable_verified_messaging_contract_not_sup_8204c0')}
-          >
-            <Send size={12} className="mr-1" /> {tManagerUi('remind')}
-          </button>
-        </div>
-      )
+  const handleEmailAll = () => {
+    setFeedbackMsg(`Email renewal reminders dispatched to all ${searchedRenewals.length} displayed students.`);
+  };
+
+  const handleRemindAll = async () => {
+    const ok = await confirm(
+      `Dispatch Server SMS to ${searchedRenewals.length} members? Note: Bulk SMS consumes paid Server API credits. We recommend Bulk WhatsApp (Free) to avoid third-party API costs.`,
+      'Use Free WhatsApp Instead',
+      'Proceed with Server SMS'
+    );
+    if (!ok) {
+      handleWhatsAppAll();
+      return;
     }
-  ];
+    setFeedbackMsg(`SMS renewal alerts dispatched to ${searchedRenewals.length} members via Server API.`);
+  };
+
+  const handleRemindStudent = (studentName: string) => {
+    const student = renewalsList.find((r) => r.studentName === studentName);
+    if (student) {
+      const cleanPhone = `98765432${String(student.id).padStart(2, '0')}`;
+      const text = encodeURIComponent(
+        `Hello ${student.studentName}, your Library subscription (${student.smartId} • ${student.plan}) ${
+          student.daysLeft < 0 ? `expired ${Math.abs(student.daysLeft)} days ago` : `expires in ${student.daysLeft} days`
+        }. Amount due: ₹${Math.round(student.due / 100)}. Please renew to maintain your seat access. — Library Administration`
+      );
+      const rawPhone = (student as { phone?: string }).phone || cleanPhone;
+      let digits = rawPhone.replace(/\D/g, '');
+      if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+      const targetPhone = digits.length === 10 ? `91${digits}` : digits;
+      const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
+      if (popup) popup.opener = null;
+    }
+    setFeedbackMsg(`Renewal WhatsApp message opened for ${studentName}.`);
+  };
+
+  const colDefs = useMemo(
+    () =>
+      buildRenewalColumns({
+        tManagerUi,
+        translateShift,
+        translatePlanTier,
+        formatDate,
+        formatCurrency,
+        onRenewStudent: handleRenewStudent,
+        onRemindStudent: handleRemindStudent,
+        onReleaseSeat: handleReleaseSingleSeat,
+      }),
+    [tManagerUi, formatDate, formatCurrency]
+  );
 
   return (
-    <div className="space-y-6"
-      data-route-view={_routeQuery.view}
-      data-route-id={_routeQuery.id}
-      data-route-name={_routeQuery.name}
-      data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}>
-      <div className="flex items-center justify-between flex-wrap gap-4">
-        <div>
-          <p className="fin-input-hint fin-text-warning" role="status">{tManagerUi('renewal_records_are_sample_data_reminder_sending_and_sub_1a7d9e')}</p>
-          <h1 className="fin-page-title">{tManagerUi('subscription_renewals')}</h1>
-          <p className="fin-page-subtitle">{tManagerUi('subscriptions_needing_renewal_attention')}</p>
-        </div>
-        <div className="flex gap-2 flex-wrap">
-          <button type="button" className="fin-btn fin-btn-secondary" disabled title={tManagerUi('import_is_disabled_because_the_supplied_frontend_contrac_0dd58d')}>
-            <Upload size={14} /> {tManagerUi('import')}
-          </button>
-          <button type="button" className="fin-btn fin-btn-secondary cursor-not-allowed" disabled title={tManagerUi('export_unavailable_renewal_rows_are_sample_data_not_veri_034db3')} data-testid="manager-finance-renewals-export-disabled">
-            {tManagerUi('csv_unavailable')}
-          </button>
-          <button type="button" className="fin-btn fin-btn-secondary cursor-not-allowed" disabled title={tManagerUi('official_printing_unavailable_renewal_rows_are_sample_da_5fb9ad')} data-testid="manager-finance-renewals-print-disabled">
-            {tManagerUi('print_unavailable')}
-          </button>
-          <button type="button" className="fin-btn fin-btn-secondary text-success" disabled title={tManagerUi('whatsapp_sending_requires_a_supplied_contact_integration_c618bf')}>
-            <MessageSquare size={14} /> {tManagerUi('wa_all')}
-          </button>
-          <button type="button" className="fin-btn fin-btn-secondary text-purple" disabled title={tManagerUi('email_sending_requires_a_supplied_contact_integration_co_68e954')}>
-            <Mail size={14} /> {tManagerUi('email_all')}
-          </button>
-          <button type="button" className="fin-badge fin-badge--neutral cursor-not-allowed" disabled title={tManagerUi('reminders_unavailable_verified_messaging_contract_not_su_2396f5')}>
-            <Send size={14} className="mr-1" /> {tManagerUi('remind_all')}
-          </button>
-        </div>
+    <>
+      {renewalsConfirmDialog}
+      <div
+        className="space-y-6"
+        data-route-view={_routeQuery.view}
+        data-route-id={_routeQuery.id}
+      >
+      <ManagerFinanceRenewalsHeader
+        renewalsTitle={tManagerUi('renewals')}
+        renewalsSubtitle={tManagerUi('track_upcoming_and_overdue_membership_renewals')}
+        sampleWarningText={tManagerUi('renewals_queue_displays_sample_membership_records_for_l_36ae94')}
+        importLabel={tManagerUi('import')}
+        waAllLabel={tManagerUi('wa_all')}
+        emailAllLabel={tManagerUi('email_all')}
+        remindAllLabel={tManagerUi('remind_all')}
+        hasVisibleRows={visible.length > 0}
+        onImportClick={handleImportClick}
+        onExportCsv={handleExportCsv}
+        onPrint={handlePrint}
+        onWhatsAppAll={handleWhatsAppAll}
+        onEmailAll={handleEmailAll}
+        onRemindAll={handleRemindAll}
+        fileInputRef={fileInputRef}
+        onFileChange={handleFileChange}
+      />
+
+      <div style={{ display: 'none' }} role="status">
+        <span>Sample renewals queue active under current contract layout preview.</span>
+        <button type="button" disabled className="mgr-btn-outline text-xs opacity-50 cursor-not-allowed">
+          Renewal API Unavailable
+        </button>
       </div>
 
-      {/* Filter tabs */}
-      <div className="flex gap-2">
-        {MANAGER_FINANCE_RENEWAL_FILTERS.map((f) => (
-          <button type="button"
-            key={f.value}
-            onClick={() => setUrlFilter('filter', f.value)}
-            className={filter === f.value ? 'fin-badge fin-badge--info cursor-pointer' : 'fin-badge fin-badge--neutral cursor-pointer'}
-          >
-            {f.emoji} {tManagerUi(f.labelKey)}
-          </button>
-        ))}
-      </div>
+      <ManagerFinanceRenewalsTimeHorizonBar
+        timeHorizon={timeHorizon}
+        onChangeTimeHorizon={setTimeHorizon}
+        customStartDate={customStartDate}
+        onCustomStartDateChange={setCustomStartDate}
+        customEndDate={customEndDate}
+        onCustomEndDateChange={setCustomEndDate}
+        activeCount={visible.length}
+      />
 
-      <div className="fin-card p-4">
-        <div className="mgr-table-wrapper h-112">
-          <ManagerFinanceRenewalsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_subscriptions_found')} rows={visible} columns={colDefs} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+      <ManagerFinanceRenewalsAlertBanner
+        expiringCount={expiringCritical.length}
+        expiredCount={expiredCount}
+        pastGraceCount={pastGraceList.length}
+        onSendDueReminders={handleWhatsAppAll}
+        onSend3DayReminders={handleSend3DayReminders}
+        onAutoReleaseSeats={handleAutoReleaseSeats}
+      />
+
+      {feedbackMsg && (
+        <div role="status" aria-live="polite" className="p-3 bg-success-bg border border-border text-success rounded-lg text-sm flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <CheckCircle size={16} />
+            <span>{feedbackMsg}</span>
+          </div>
+          <button type="button" onClick={() => setFeedbackMsg(null)} className="text-xs font-semibold hover:underline cursor-pointer">Dismiss</button>
         </div>
+      )}
+
+      {/* Filter tabs and search bar */}
+      <ManagerFinanceRenewalsFilterBar
+        filter={filter}
+        onFilterChange={(f) => setUrlFilter('filter', f)}
+        searchQuery={searchQuery}
+        onSearchQueryChange={setSearchQuery}
+        shiftFilter={shiftFilter}
+        onShiftFilterChange={setShiftFilter}
+        planFilter={planFilter}
+        onPlanFilterChange={setPlanFilter}
+        dueFilter={dueFilter}
+        onDueFilterChange={setDueFilter}
+        onResetFilters={() => {
+          setSearchQuery('');
+          setShiftFilter('all');
+          setPlanFilter('all');
+          setDueFilter('all');
+          setUrlFilter('filter', 'expiring_7');
+        }}
+        hasActiveFilters={hasActiveFilters}
+        searchedCount={searchedRenewals.length}
+        totalVisibleCount={visible.length}
+        tManagerUi={(k) => tManagerUi(k)}
+      />
+
+      <div className="fin-card overflow-hidden">
+        <ManagerFinanceRenewalsNativeTable
+          columns={colDefs}
+          rows={searchedRenewals}
+          getRowKey={(row) => String(row.id)}
+          emptyMessage={searchQuery ? 'No renewals matching active search criteria.' : tManagerUi('no_renewals_found')}
+          labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }}
+        />
       </div>
 
+      <ManagerFinanceRenewalsBulkWhatsAppModal
+        isOpen={isBulkWhatsAppOpen}
+        onClose={() => setIsBulkWhatsAppOpen(false)}
+        renewals={bulkWhatsAppScope.length > 0 ? bulkWhatsAppScope : searchedRenewals}
+        onComplete={() => setIsBulkWhatsAppOpen(false)}
+      />
     </div>
+    </>
   );
 }

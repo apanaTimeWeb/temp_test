@@ -1,6 +1,6 @@
 import { ManagerAssetsMaintenanceMain } from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/components/ManagerAssetsMaintenanceMain';
+import type { ManagerAssetsMaintenancePageProps,QueryValue } from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/types/ManagerAssetsMaintenanceComponentTypes';
 import type { ManagerAssetsMaintenanceMainProps } from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/types/ManagerAssetsMaintenanceTypes';
-import type { ManagerAssetsMaintenancePageProps, QueryValue } from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/types/ManagerAssetsMaintenanceComponentTypes';
 
 
 

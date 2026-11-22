@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
 import { MANAGER_COMMUNICATION_SAMPLE_NOTIFICATION_HISTORY } from '@/app/frontend_manager/manager_communication/communication_notification_center/hooks/ManagerCommunicationNotificationCenterDemoRepository';
 import { MANAGER_COMMUNICATION_SAMPLE_NOTIFICATION_HISTORY as FIXTURE_SOURCE } from '@/app/frontend_manager/manager_communication/communication_notification_center/mocks/manager_communication_notification_center_fixtures/ManagerCommunicationNotificationCenterOperationalSampleFixtures';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerCommunicationNotificationCenterDemoRepository', () => {
   it('returns a defensive notification-history snapshot rather than aliasing fixture objects', () => {

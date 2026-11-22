@@ -1,0 +1,77 @@
+export interface AdminShiftsApiRecord {
+  id?: string | number;
+  [key: string]: unknown;
+}
+
+
+export type AdminShiftsSeatMatrixStatus = 'free' | 'occupied' | 'expiring' | 'maintenance' | 'unknown';
+export interface AdminShiftsSeatMatrixViewModel {
+  id: string;
+  uuid?: string;
+  status: AdminShiftsSeatMatrixStatus;
+  student?: string;
+  smartId?: string;
+  phone?: string;
+  shift?: string;
+  plan?: string;
+  locker?: string;
+  validFrom?: string;
+  expiry?: string;
+}
+
+export type AdminShiftsLockerMatrixStatus = 'free' | 'occupied' | 'maintenance' | 'unknown';
+export interface AdminShiftsLockerMatrixViewModel {
+  id: string;
+  uuid?: string;
+  status: AdminShiftsLockerMatrixStatus;
+}
+export interface AdminShiftsShift {
+  id: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+  occupancy: number;
+  capacity: number;
+  active: boolean;
+}
+export interface AdminShiftsBookedBlock {
+  startH: number;
+  endH: number;
+  label: string;
+}
+
+export interface AdminShiftsGapBlock {
+  startH: number;
+  endH: number;
+  seats: number;
+  revLoss: number;
+}
+
+export interface AdminShiftsShiftGapFixture {
+  id: string;
+  name: string;
+  occupied: number;
+  capacity: number;
+  booked: AdminShiftsBookedBlock[];
+  gaps: AdminShiftsGapBlock[];
+}
+
+export type AdminShiftOverstayAction = 'FINED' | 'WARNED' | 'SHIFT_UPGRADED';
+export type AdminShiftOverstayStatus = 'RECOVERED' | 'WAIVED' | 'PENDING_CLEARANCE';
+
+export interface AdminShiftOverstayIncident {
+  id: string;
+  date: string;
+  branchName: string;
+  seatNumber: string;
+  studentName: string;
+  smartId: string;
+  bookedShift: string;
+  scheduledEndTime: string;
+  actualDepartureTime: string;
+  overstayMinutes: number;
+  managerAction: AdminShiftOverstayAction;
+  fineAmount: number;
+  status: AdminShiftOverstayStatus;
+}
+

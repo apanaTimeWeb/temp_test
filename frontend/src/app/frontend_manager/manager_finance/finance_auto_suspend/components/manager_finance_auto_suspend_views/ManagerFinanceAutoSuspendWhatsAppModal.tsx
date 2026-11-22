@@ -1,0 +1,199 @@
+'use client';
+
+import type { ManagerFinanceAutoSuspendSuspendedStudent as SuspendedStudent } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendTypes';
+import { AlertCircle,Armchair,Copy,MessageCircle,Phone,Send,User,X } from 'lucide-react';
+import { useEffect,useState } from 'react';
+import { toast } from 'sonner';
+
+export interface ManagerFinanceAutoSuspendWhatsAppModalProps {
+  isOpen: boolean;
+  student: SuspendedStudent | null;
+  onClose: () => void;
+  onSentSuccess: (studentId: number) => void;
+}
+
+export default function ManagerFinanceAutoSuspendWhatsAppModal({
+  isOpen,
+  student,
+  onClose,
+  onSentSuccess,
+}: ManagerFinanceAutoSuspendWhatsAppModalProps) {
+  const [phone, setPhone] = useState('');
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if (!isOpen || !student) return;
+
+    const initialPhone = student.phone || '9876543210';
+    setPhone(initialPhone);
+
+    const defaultMsg = `Namaste ${student.studentName} (ID: ${student.smartId}),\n\nThis is an official notice from Library Administration. Your library seat ${student.seat} (${student.shift} Shift) is currently suspended due to overdue fee payment (${student.daysOverdue} days overdue).\n\nPlease visit the library desk or clear your pending dues to restore your seat access immediately.\n\nThank you,\nLibrary Management`;
+    setMessage(defaultMsg);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, student, onClose]);
+
+  if (!isOpen || !student) return null;
+
+  const handleCopy = () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(message);
+      toast.success('Reminder message copied to clipboard!');
+    }
+  };
+
+  const handleSendWhatsApp = () => {
+    let clean = phone.replace(/\D/g, '');
+    if (clean.length === 11 && clean.startsWith('0')) {
+      clean = clean.slice(1);
+    }
+    const targetPhone = clean.length === 10 ? `91${clean}` : clean;
+    const encoded = encodeURIComponent(message);
+    const url = `https://wa.me/${targetPhone}?text=${encoded}`;
+
+    const popup = window.open(url, '_blank', 'noopener,noreferrer');
+    if (popup) popup.opener = null;
+
+    onSentSuccess(student.id);
+    toast.success(`WhatsApp reminder opened for ${student.studentName} (+91 ${clean})`);
+    onClose();
+  };
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="whatsapp-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in"
+      onClick={onClose}
+    >
+      <div
+        className="bg-card border border-border rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 space-y-5"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Modal Header */}
+        <div className="flex items-center justify-between border-b border-border pb-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <MessageCircle size={22} />
+            </div>
+            <div>
+              <h3 id="whatsapp-modal-title" className="text-lg font-bold text-primary tracking-tight">
+                Send WhatsApp Reminder
+              </h3>
+              <p className="text-xs text-secondary">
+                Send instant suspension notice to student's WhatsApp
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer transition-colors"
+            title="Close dialog"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Student Context Card */}
+        <div className="p-4 rounded-xl bg-surface border border-border space-y-2">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <User size={15} className="text-secondary" />
+              <span className="font-bold text-sm text-primary">{student.studentName}</span>
+              <span className="text-xs font-mono text-secondary">({student.smartId})</span>
+            </div>
+            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-bold bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
+              {student.daysOverdue} Days Overdue
+            </span>
+          </div>
+
+          <div className="flex items-center gap-4 text-xs text-secondary flex-wrap pt-1">
+            <span className="flex items-center gap-1">
+              <Armchair size={13} className="text-primary" />
+              <span>Seat: <strong className="text-primary">{student.seat}</strong> ({student.shift})</span>
+            </span>
+            <span className="flex items-center gap-1">
+              <AlertCircle size={13} className="text-amber-500" />
+              <span>Suspended: <strong className="text-primary">{student.suspendedSince}</strong></span>
+            </span>
+          </div>
+        </div>
+
+        {/* WhatsApp Phone Input */}
+        <div className="space-y-1.5">
+          <label htmlFor="wa-student-phone" className="block text-xs font-semibold text-secondary uppercase tracking-wider">
+            WhatsApp Mobile Number
+          </label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-secondary pointer-events-none">
+              +91
+            </span>
+            <input maxLength={15}
+              id="wa-student-phone"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="9876543210"
+              className="mgr-input !pl-11 text-xs w-full font-mono"
+            />
+            <Phone size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
+          </div>
+        </div>
+
+        {/* Message Editor */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between">
+            <label htmlFor="wa-student-message" className="block text-xs font-semibold text-secondary uppercase tracking-wider">
+              Reminder Message Preview
+            </label>
+            <span className="text-[11px] text-secondary">
+              {message.length} chars
+            </span>
+          </div>
+          <textarea maxLength={1000}
+            id="wa-student-message"
+            rows={6}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className="w-full rounded-xl border border-border bg-surface p-3 text-xs text-primary leading-relaxed focus:outline-none focus:border-primary resize-y font-sans"
+          />
+        </div>
+
+        {/* Modal Actions */}
+        <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-border flex-wrap">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 rounded-xl text-xs font-semibold border border-border text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer transition-colors active:scale-95"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleCopy}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary cursor-pointer transition-colors active:scale-95"
+            title="Copy message to clipboard"
+          >
+            <Copy size={13} />
+            <span>Copy Text</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleSendWhatsApp}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm cursor-pointer transition-all active:scale-95"
+            title="Open WhatsApp with message"
+          >
+            <Send size={13} />
+            <span>Send via WhatsApp</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

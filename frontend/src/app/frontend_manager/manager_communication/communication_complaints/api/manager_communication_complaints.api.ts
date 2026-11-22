@@ -1,8 +1,8 @@
-import { apiFetch } from '@/lib/api';
 import { MANAGER_COMMUNICATION_COMPLAINTS_URL } from '@/app/frontend_manager/manager_communication/communication_complaints/config/manager_communication_complaints.url_config';
+import { MANAGER_COMPLAINTS_API_FIXTURES } from '@/app/frontend_manager/manager_communication/communication_complaints/mocks/manager_communication_complaints_fixtures/ManagerCommunicationComplaintsApiFixtures';
 import { managerComplaintsComplaintResponseListSchema } from '@/app/frontend_manager/manager_communication/communication_complaints/schemas/ManagerCommunicationComplaintsSchema';
 import type { ManagerCommunicationComplaintsComplaint } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
-import { MANAGER_COMPLAINTS_API_FIXTURES } from '@/app/frontend_manager/manager_communication/communication_complaints/mocks/manager_communication_complaints_fixtures/ManagerCommunicationComplaintsApiFixtures';
+import { apiFetch } from '@/lib/api';
 
 function toValidatedCalendarDate(value: string): string {
   if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
@@ -29,12 +29,15 @@ export async function fetchManagerCommunicationComplaints(): Promise<ManagerComm
   return raw.map((item) => ({
     id: item.id,
     title: item.subject,
-    student: null,
+    student: item.student ?? null,
+    phone: item.phone ?? null,
+    seatTag: item.seatTag ?? null,
+    priority: item.priority ?? 'Normal',
     description: item.description,
     status: item.status === 'open' ? 'Open' : item.status === 'resolved' ? 'Resolved' : 'In-Progress',
     date: toValidatedCalendarDate(item.createdAt),
-    resolvedBy: null,
-    resolvedDate: null,
-    resolvedNote: null,
+    resolvedBy: item.status === 'resolved' ? 'Facility Manager' : null,
+    resolvedDate: item.status === 'resolved' ? toValidatedCalendarDate(item.createdAt) : null,
+    resolvedNote: item.status === 'resolved' ? 'Issue inspected and resolved by library team.' : null,
   }));
 }

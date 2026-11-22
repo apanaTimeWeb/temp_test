@@ -1,11 +1,15 @@
 /** Module-local component props and UI/state types extracted from component files. */
 import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
-import type { ErrorInfo, ReactNode } from 'react';
+import type { ErrorInfo,ReactNode } from 'react';
+export type { SeatData };
 
 // RESPONSIBILITY: Renders the seat detail modal popover. It does not own backend persistence or cross-feature business logic.
 export interface ManagerSeatsMatrixModalProps {
   selectedSeat: SeatData | null;
   onClose: () => void;
+  onUpdateSeat?: (seatId: string, updates: Partial<SeatData>) => void;
+  onOpenStudentProfile?: (seat: SeatData) => void;
+  onOpenSwapModal?: (seat: SeatData) => void;
 }
 
 export interface ManagerSeatsMatrixErrorFallbackProps {

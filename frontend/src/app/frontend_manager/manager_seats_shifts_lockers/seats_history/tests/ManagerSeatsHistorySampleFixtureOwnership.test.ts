@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync,readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { describe,expect,it } from 'vitest';
 
 const moduleRootCandidates = [
   join(process.cwd(), 'src/app/frontend_manager/manager_seats_shifts_lockers/seats_history'),
@@ -37,8 +37,7 @@ describe('Canonical sample-fixture ownership and unknown-status safety — seats
     if (existsSync(join(moduleRoot, normalizerPath))) expect(readSource(normalizerPath)).toContain("return 'unknown'");
     expect(existsSync(join(moduleRoot, 'config/manager_seats_history.url_config.ts'))).toBe(true);
     expect(existsSync(join(moduleRoot, '..', 'seats_matrix', 'config/manager_seats_matrix.url_config.ts'))).toBe(true);
-    expect(existsSync(join(moduleRoot, '..', 'lockers_matrix', 'config/manager_lockers_matrix.url_config.ts'))).toBe(true);
-    expect(existsSync(join(moduleRoot, '..', 'shifts_migration', 'config/manager_shifts_migration.url_config.ts'))).toBe(true);
+    expect(existsSync(join(moduleRoot, '..', 'lockers_management', 'config/manager_lockers_management.url_config.ts'))).toBe(true);
     expect(existsSync(join(moduleRoot, 'components/manager_seats_history_dialogs/ManagerSeatsHistorySeatMatrixModal.tsx'))).toBe(false);
     expect(existsSync(join(moduleRoot, 'components/manager_seats_history_sections/ManagerSeatsHistoryShiftMigrationSummary.tsx'))).toBe(false);
   });

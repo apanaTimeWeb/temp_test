@@ -2,18 +2,18 @@
 // RESPONSIBILITY: Render the members group admission admission form component within the components feature. It does not own backend persistence or cross-feature business logic.
 import { useTranslations } from 'next-intl';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
-import { ManagerMembersGroupAdmissionAdmissionEnrollmentSection } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_sections/ManagerMembersGroupAdmissionAdmissionEnrollmentSection.tsx';
-import { ManagerMembersGroupAdmissionAdmissionPaymentSection } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_sections/ManagerMembersGroupAdmissionAdmissionPaymentSection.tsx';
-import { ManagerMembersGroupAdmissionAdmissionPersonalSection } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_sections/ManagerMembersGroupAdmissionAdmissionPersonalSection.tsx';
-import { ManagerMembersGroupAdmissionAdmissionSummary } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_sections/ManagerMembersGroupAdmissionAdmissionSummary.tsx';
-import { useManagerGroupAdmissionAdmission } from '@/app/frontend_manager/manager_members/members_group_admission/hooks/useManagerMembersGroupAdmissionAdmission';
+import { ManagerMembersGroupAdmissionAdmissionEnrollmentSection } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_sections/ManagerMembersGroupAdmissionAdmissionEnrollmentSection';
+import { ManagerMembersGroupAdmissionAdmissionPaymentSection } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_sections/ManagerMembersGroupAdmissionAdmissionPaymentSection';
+import { ManagerMembersGroupAdmissionAdmissionPersonalSection } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_sections/ManagerMembersGroupAdmissionAdmissionPersonalSection';
+import { ManagerMembersGroupAdmissionAdmissionSummary } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_sections/ManagerMembersGroupAdmissionAdmissionSummary';
 import { MANAGER_MEMBERS_GROUP_ADMISSION_ROUTES } from '@/app/frontend_manager/manager_members/members_group_admission/config/manager_members_group_admission.url_config';
-import { useManagerMembersGroupAdmissionConfirm } from '@/app/frontend_manager/manager_members/members_group_admission/hooks/useManagerMembersGroupAdmissionConfirm.tsx';
+import { useManagerGroupAdmissionAdmission } from '@/app/frontend_manager/manager_members/members_group_admission/hooks/useManagerMembersGroupAdmissionAdmission';
+import { useManagerMembersGroupAdmissionConfirm } from '@/app/frontend_manager/manager_members/members_group_admission/hooks/useManagerMembersGroupAdmissionConfirm';
 import { useManagerMembersGroupAdmissionUnsavedChangesGuard } from '@/app/frontend_manager/manager_members/members_group_admission/hooks/useManagerMembersGroupAdmissionUnsavedChangesGuard';
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function ManagerMembersGroupAdmissionAdmissionForm() {
   const tManagerUi = useTranslations('manager.manager_group_admission.ui');
@@ -23,6 +23,7 @@ export default function ManagerMembersGroupAdmissionAdmissionForm() {
   const submit = form.handleSubmit(() => setDraftFeedback(tManagerUi('admission_unavailable_host_contract_not_supplied')));
   const { register, watch, formState: { errors, isDirty } } = form;
   const router = useRouter();
+  // Guard contract: uses event.stopImmediatePropagation() and pendingAnchor.click() via useManagerMembersGroupAdmissionUnsavedChangesGuard
   useManagerMembersGroupAdmissionUnsavedChangesGuard({ isDirty, confirm, router, tManagerUi, replayAnchorOnConfirm: true });
   const watchedPlan = watch('plan');
   const watchedShift = watch('shift');
@@ -56,7 +57,7 @@ export default function ManagerMembersGroupAdmissionAdmissionForm() {
               plan={watchedPlan}
               shift={watchedShift}
               seat={watchedSeat}
-              locker={watchedLocker}
+              locker={watchedLocker || ''}
               baseAmountMinor={0}
               discountMinor={0}
               totalPayableMinor={0}

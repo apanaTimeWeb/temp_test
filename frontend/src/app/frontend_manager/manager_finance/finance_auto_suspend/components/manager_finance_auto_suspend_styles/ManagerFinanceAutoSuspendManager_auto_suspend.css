@@ -87,7 +87,7 @@
   .fin-header__icon-btn {
     cursor: pointer;
     color: theme(--color-text-secondary);
-    transition: color theme(--animate-duration-fast);
+    transition: color var(--animate-duration-fast);
     display: flex;
     align-items: center;
   }
@@ -123,7 +123,7 @@
     color: theme(--color-text-primary);
     outline: none;
     width: 256px;
-    transition: border-color theme(--animate-duration-fast), box-shadow theme(--animate-duration-fast);
+    transition: border-color var(--animate-duration-fast), box-shadow var(--animate-duration-fast);
   }
   .fin-header__search-input::placeholder {
     color: theme(--color-text-secondary);
@@ -160,7 +160,7 @@
 
   .fin-sidebar__back-btn {
     color: theme(--color-text-secondary);
-    transition: color theme(--animate-duration-fast);
+    transition: color var(--animate-duration-fast);
     display: flex;
     align-items: center;
   }
@@ -197,7 +197,7 @@
     font-size: 14px;
     font-weight: 400;
     text-decoration: none;
-    transition: background-color theme(--animate-duration-fast), color theme(--animate-duration-fast);
+    transition: background-color var(--animate-duration-fast), color var(--animate-duration-fast);
   }
   .fin-nav-item:hover {
     background-color: color-mix(in srgb, theme(--color-primary) 6%, transparent);
@@ -569,7 +569,7 @@
     gap: 8px;
     border: none;
     cursor: pointer;
-    transition: opacity theme(--animate-duration-fast);
+    transition: opacity var(--animate-duration-fast);
     font-size: 14px;
   }
   .fin-receipt-btn-download:hover {
@@ -589,7 +589,7 @@
     border: none;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color theme(--animate-duration-fast);
+    transition: background-color var(--animate-duration-fast);
   }
   .fin-receipt-btn-secondary:hover {
     background-color: theme(--color-surface-hover);
@@ -608,7 +608,7 @@
     border: none;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color theme(--animate-duration-fast);
+    transition: background-color var(--animate-duration-fast);
   }
   .fin-receipt-btn-wa:hover {
     background-color: theme(--color-surface-hover);
@@ -643,7 +643,7 @@
 
   /* ── Table hover row ── */
   .fin-table-hover-row {
-    transition: background-color theme(--animate-duration-fast);
+    transition: background-color var(--animate-duration-fast);
   }
   .fin-table-hover-row:hover {
     background-color: theme(--color-primary-subtle);
@@ -770,7 +770,7 @@
     cursor: pointer;
     color: theme(--color-text-primary);
     font-size: 14px;
-    transition: background-color theme(--animate-duration-fast);
+    transition: background-color var(--animate-duration-fast);
   }
   .fin-dropdown-item:last-child {
     border-bottom: none;
@@ -795,7 +795,7 @@
     color: theme(--color-danger);
     border-color: color-mix(in srgb, theme(--color-danger) 35%, transparent);
     background: transparent;
-    transition: opacity theme(--animate-duration-fast);
+    transition: opacity var(--animate-duration-fast);
   }
   .fin-btn-danger-outline:hover {
     opacity: 0.75;
@@ -806,7 +806,7 @@
     color: theme(--color-success);
     border-color: color-mix(in srgb, theme(--color-success) 35%, transparent);
     background: transparent;
-    transition: opacity theme(--animate-duration-fast);
+    transition: opacity var(--animate-duration-fast);
   }
   .fin-btn-success-outline:hover {
     opacity: 0.75;
@@ -819,7 +819,7 @@
     justify-content: space-between;
     padding: 12px 24px;
     border-bottom: 1px solid theme(--color-border);
-    transition: background-color theme(--animate-duration-fast);
+    transition: background-color var(--animate-duration-fast);
   }
   .fin-payment-row:last-child {
     border-bottom: none;
@@ -871,7 +871,7 @@
     color: theme(--color-success);
     border-color: color-mix(in srgb, theme(--color-success) 35%, transparent);
     background: transparent;
-    transition: opacity theme(--animate-duration-fast);
+    transition: opacity var(--animate-duration-fast);
   }
   .fin-btn-outline-success:hover {
     opacity: 0.8;
@@ -880,7 +880,7 @@
     color: theme(--color-danger);
     border-color: color-mix(in srgb, theme(--color-danger) 35%, transparent);
     background: transparent;
-    transition: opacity theme(--animate-duration-fast);
+    transition: opacity var(--animate-duration-fast);
   }
   .fin-btn-outline-danger:hover {
     opacity: 0.8;
@@ -927,7 +927,7 @@
     color: theme(--color-text-primary);
     outline: none;
     width: 100%;
-    transition: border-color theme(--animate-duration-fast), box-shadow theme(--animate-duration-fast);
+    transition: border-color var(--animate-duration-fast), box-shadow var(--animate-duration-fast);
   }
   .fin-input::placeholder {
     color: theme(--color-text-secondary);
@@ -980,7 +980,7 @@
     font-size: 14px;
     color: theme(--color-text-primary);
     outline: none;
-    transition: border-color theme(--animate-duration-fast), box-shadow theme(--animate-duration-fast);
+    transition: border-color var(--animate-duration-fast), box-shadow var(--animate-duration-fast);
     font-family: inherit;
   }
   .fin-input::placeholder {
@@ -1017,7 +1017,7 @@
     color: theme(--color-text-primary);
     outline: none;
     resize: vertical;
-    transition: border-color theme(--animate-duration-fast), box-shadow theme(--animate-duration-fast);
+    transition: border-color var(--animate-duration-fast), box-shadow var(--animate-duration-fast);
     font-family: inherit;
   }
   .fin-textarea::placeholder { color: theme(--color-text-secondary); }
@@ -1038,7 +1038,7 @@
     outline: none;
     cursor: pointer;
     font-family: inherit;
-    transition: border-color theme(--animate-duration-fast);
+    transition: border-color var(--animate-duration-fast);
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238888AA' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -1061,7 +1061,7 @@
     border-radius: 999px;
     border: none;
     cursor: pointer;
-    transition: background-color theme(--animate-duration-fast);
+    transition: background-color var(--animate-duration-fast);
     flex-shrink: 0;
     background-color: transparent;
   }
@@ -1072,7 +1072,7 @@
     height: 20px;
     border-radius: 999px;
     background-color: theme(--color-border);
-    transition: background-color theme(--animate-duration-fast);
+    transition: background-color var(--animate-duration-fast);
   }
   .fin-switch--on::before { background-color: theme(--color-primary); }
   .fin-switch--off::before { background-color: theme(--color-border); }
@@ -1083,7 +1083,7 @@
     height: 16px;
     border-radius: 50%;
     background-color: theme(--color-text-primary);
-    transition: left theme(--animate-duration-fast);
+    transition: left var(--animate-duration-fast);
   }
   .fin-switch--on  .fin-switch__thumb { left: 22px; }
   .fin-switch--off .fin-switch__thumb { left: 6px; }
@@ -1128,7 +1128,7 @@
     cursor: pointer;
     font-size: 18px;
     line-height: 1;
-    transition: color theme(--animate-duration-fast);
+    transition: color var(--animate-duration-fast);
   }
   .fin-dialog__close:hover { color: theme(--color-text-primary); }
   .fin-dialog__footer {
@@ -1160,7 +1160,7 @@
     cursor: pointer;
     align-items: center;
     justify-content: center;
-    transition: color theme(--animate-duration-fast);
+    transition: color var(--animate-duration-fast);
     flex-shrink: 0;
   }
   .fin-mobile-menu-btn:hover { color: theme(--color-text-primary); }
@@ -1177,7 +1177,7 @@
     cursor: pointer;
     align-items: center;
     justify-content: center;
-    transition: color theme(--animate-duration-fast);
+    transition: color var(--animate-duration-fast);
   }
   .fin-sidebar__close-btn:hover { color: theme(--color-text-primary); }
 

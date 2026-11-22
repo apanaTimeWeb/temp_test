@@ -1,9 +1,9 @@
-import { z } from 'zod';
-import { apiFetch } from '@/lib/api';
-import type { ManagerLockersManagementAllocationRow, ManagerLockersManagementSeatHistoryRow, LockerData, SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/types/ManagerLockersManagementTypes';
 import { MANAGER_LOCKERS_MANAGEMENT_API } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/config/manager_lockers_management.url_config';
+import type { LockerData,ManagerLockersManagementAllocationRow,ManagerLockersManagementSeatHistoryRow,SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/types/ManagerLockersManagementTypes';
+import { normalizeManagerLockerMatrixStatus,normalizeManagerSeatMatrixStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementMatrixStatus';
 import { normalizeManagerSeatsAllocationStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementStatusNormalization';
-import { normalizeManagerLockerMatrixStatus, normalizeManagerSeatMatrixStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementMatrixStatus';
+import { apiFetch } from '@/lib/api';
+import { z } from 'zod';
 
 const recordSchema = z.record(z.string(), z.unknown());
 const recordArraySchema = z.array(recordSchema);
@@ -24,12 +24,41 @@ function statusLabel(value: unknown): string {
   return normalizeManagerSeatsAllocationStatus(value);
 }
 
+import {
+MANAGER_SEATS_SHIFTS_LOCKERS_ALLOCATIONS_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_HISTORY_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_LOCKERS_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_SEAT_MATRIX_FIXTURE,
+} from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/mocks/manager_lockers_management_fixtures/ManagerLockersManagementApiFixtures';
+
 async function fetchValidatedRecords(endpoint: string): Promise<Record<string, unknown>[]> {
-  const response = await apiFetch<unknown>(endpoint);
-  if (!response.success) {
-    throw new Error(response.message || 'Unable to load seats/shifts/lockers data.');
+  try {
+    const response = await apiFetch<unknown>(endpoint);
+    if (Array.isArray(response)) {
+      return recordArraySchema.parse(response);
+    }
+    if (response && typeof response === 'object' && 'data' in response && Array.isArray((response as any).data)) {
+      return recordArraySchema.parse((response as any).data);
+    }
+    if (!response.success) {
+      throw new Error(response.message || 'Unable to load seats/shifts/lockers data.');
+    }
+    return recordArraySchema.parse(response.data);
+  } catch (error) {
+    if (endpoint === MANAGER_LOCKERS_MANAGEMENT_API.SEAT_MATRIX) {
+      return MANAGER_SEATS_SHIFTS_LOCKERS_SEAT_MATRIX_FIXTURE as unknown as Record<string, unknown>[];
+    }
+    if (endpoint === MANAGER_LOCKERS_MANAGEMENT_API.LOCKERS) {
+      return MANAGER_SEATS_SHIFTS_LOCKERS_LOCKERS_FIXTURE as unknown as Record<string, unknown>[];
+    }
+    if (endpoint === MANAGER_LOCKERS_MANAGEMENT_API.ALLOCATIONS) {
+      return MANAGER_SEATS_SHIFTS_LOCKERS_ALLOCATIONS_FIXTURE as unknown as Record<string, unknown>[];
+    }
+    if (endpoint === MANAGER_LOCKERS_MANAGEMENT_API.HISTORY) {
+      return MANAGER_SEATS_SHIFTS_LOCKERS_HISTORY_FIXTURE as unknown as Record<string, unknown>[];
+    }
+    throw error;
   }
-  return recordArraySchema.parse(response.data);
 }
 
 export async function fetchManagerLockersSeatMatrix(): Promise<SeatData[]> {

@@ -1,0 +1,411 @@
+'use client';
+
+import {
+checkMemberDepositSettlement,
+getDepositSettlementFinanceUrl,
+type MemberDepositSettlementInfo,
+} from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniDepositSettlement';
+import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
+import {
+Armchair,
+Award,
+Calendar,
+Check,
+Clock,
+ExternalLink,
+GraduationCap,
+ShieldAlert,
+ShieldCheck,
+X
+} from 'lucide-react';
+import { useEffect,useState } from 'react';
+import { toast } from 'sonner';
+
+export interface ManagerGraduateAlumniDetails {
+  exam: string;
+  designation: string;
+  currentStatus: 'Cleared Exam' | 'Employed' | 'Higher Studies' | 'Relocated' | 'Other';
+  duration: string;
+  testimonial: string;
+  leftDate: string;
+  releaseSeat: boolean;
+  depositSettlementStatus: 'Refunded' | 'Settled' | 'Held' | 'No Deposit';
+  depositAmount?: number;
+}
+
+export interface ManagerMembersDirectoryGraduateAlumniModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  member: ManagerMembersDirectoryRecord | null;
+  onGraduate: (member: ManagerMembersDirectoryRecord, details: ManagerGraduateAlumniDetails) => void;
+}
+
+export function ManagerMembersDirectoryGraduateAlumniModal({
+  isOpen,
+  onClose,
+  member,
+  onGraduate,
+}: ManagerMembersDirectoryGraduateAlumniModalProps) {
+  const [exam, setExam] = useState('');
+  const [designation, setDesignation] = useState('');
+  const [currentStatus, setCurrentStatus] = useState<ManagerGraduateAlumniDetails['currentStatus']>('Cleared Exam');
+  const [duration, setDuration] = useState('12 Months');
+  const [leftDate, setLeftDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [testimonial, setTestimonial] = useState('');
+  const [releaseSeat, setReleaseSeat] = useState(true);
+  const [depositInfo, setDepositInfo] = useState<MemberDepositSettlementInfo>({
+    hasHeldDeposit: false,
+    amount: 0,
+    status: 'No Deposit',
+  });
+  const [depositAction, setDepositAction] = useState<'refund_now' | 'leave_held'>('refund_now');
+
+  useEffect(() => {
+    if (member) {
+      setExam(member.preparationFor || '');
+      setReleaseSeat(Boolean(member.seat));
+      setDesignation('');
+      setTestimonial('');
+      setLeftDate(new Date().toISOString().slice(0, 10));
+
+      const dep = checkMemberDepositSettlement(member);
+      setDepositInfo(dep);
+      setDepositAction(dep.hasHeldDeposit ? 'refund_now' : 'refund_now');
+    }
+  }, [member]);
+
+  if (!isOpen || !member) return null;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!exam.trim()) {
+      toast.error('Qualified Exam or Achievement is required.');
+      return;
+    }
+
+    const depositSettlementStatus = depositInfo.hasHeldDeposit
+      ? depositAction === 'refund_now'
+        ? 'Refunded'
+        : 'Held'
+      : depositInfo.status === 'Refunded'
+        ? 'Refunded'
+        : 'No Deposit';
+
+    onGraduate(member, {
+      exam: exam.trim(),
+      designation: designation.trim(),
+      currentStatus,
+      duration: duration.trim() || '12 Months',
+      testimonial: testimonial.trim(),
+      leftDate,
+      releaseSeat,
+      depositSettlementStatus,
+      depositAmount: depositInfo.hasHeldDeposit ? depositInfo.amount : undefined,
+    });
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="graduate-alumni-title"
+    >
+      <div className="w-full max-w-xl rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-5 max-h-[90vh] flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-border pb-3 shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center">
+              <GraduationCap size={22} />
+            </div>
+            <div>
+              <h3 id="graduate-alumni-title" className="text-base font-bold text-primary">
+                Graduate Member to Alumni
+              </h3>
+              <p className="text-xs text-secondary">
+                Transition student to the alumni network and record their success
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close modal"
+            className="text-secondary hover:text-primary p-1 rounded-lg hover:bg-surface-zebra transition-colors"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Member Preview Strip */}
+        <div className="p-3.5 rounded-xl bg-surface-zebra border border-border flex items-center justify-between text-xs">
+          <div>
+            <span className="font-bold text-primary block text-sm">{member.name}</span>
+            <span className="text-secondary">ID: {member.id} · Phone: {member.phone}</span>
+          </div>
+          <div className="text-right">
+            <span className="inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold bg-primary/10 text-primary mb-0.5">
+              {member.seat ? `Seat ${member.seat}` : 'General / No Seat'}
+            </span>
+            <span className="text-secondary block text-[11px]">{member.type} Plan</span>
+          </div>
+        </div>
+
+        {/* Form Body */}
+        <form onSubmit={handleSubmit} className="space-y-4 overflow-y-auto pr-1 flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="alumni-exam" className="block text-xs font-semibold text-secondary mb-1">
+                Target / Qualified Exam *
+              </label>
+              <div className="relative">
+                <Award size={15} className="absolute left-3 top-2.5 text-secondary" />
+                <input maxLength={30}
+                  id="alumni-exam"
+                  type="text"
+                  required
+                  placeholder="e.g. UPSC CSE, SBI PO, NEET, CA"
+                  value={exam}
+                  onChange={(e) => setExam(e.target.value)}
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-border bg-input-bg text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="alumni-designation" className="block text-xs font-semibold text-secondary mb-1">
+                Designation / Rank / Outcome
+              </label>
+              <input maxLength={30}
+                id="alumni-designation"
+                type="text"
+                placeholder="e.g. AIR 142 (IAS), Officer (Scale I)"
+                value={designation}
+                onChange={(e) => setDesignation(e.target.value)}
+                className="w-full px-3 py-2 text-xs rounded-xl border border-border bg-input-bg text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label htmlFor="alumni-status" className="block text-xs font-semibold text-secondary mb-1">
+                Current Status
+              </label>
+              <select
+                id="alumni-status"
+                value={currentStatus}
+                onChange={(e) => setCurrentStatus(e.target.value as ManagerGraduateAlumniDetails['currentStatus'])}
+                className="w-full px-3 py-2 text-xs rounded-xl border border-border bg-input-bg text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="Cleared Exam">Cleared Exam</option>
+                <option value="Employed">Employed</option>
+                <option value="Higher Studies">Higher Studies</option>
+                <option value="Relocated">Relocated</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="alumni-duration" className="block text-xs font-semibold text-secondary mb-1">
+                Study Duration
+              </label>
+              <div className="relative">
+                <Clock size={14} className="absolute left-3 top-2.5 text-secondary" />
+                <input maxLength={30}
+                  id="alumni-duration"
+                  type="text"
+                  placeholder="e.g. 14 Months"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-border bg-input-bg text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="alumni-leftDate" className="block text-xs font-semibold text-secondary mb-1">
+                Graduation Date
+              </label>
+              <div className="relative">
+                <Calendar size={14} className="absolute left-3 top-2.5 text-secondary" />
+                <input maxLength={30}
+                  id="alumni-leftDate"
+                  type="date"
+                  value={leftDate}
+                  onChange={(e) => setLeftDate(e.target.value)}
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-border bg-input-bg text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="alumni-testimonial" className="block text-xs font-semibold text-secondary mb-1">
+              Testimonial / Success Quote (Optional)
+            </label>
+            <textarea maxLength={1000}
+              id="alumni-testimonial"
+              rows={2}
+              placeholder="e.g. The silent AC library and high-speed wifi were essential to my daily consistency."
+              value={testimonial}
+              onChange={(e) => setTestimonial(e.target.value)}
+              className="w-full p-2.5 text-xs rounded-xl border border-border bg-input-bg text-primary focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+            />
+          </div>
+
+          {/* Seat & Locker Auto-Vacate Option */}
+          {member.seat && (
+            <div className="p-3 rounded-xl bg-purple-500/5 border border-purple-500/20 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <Armchair size={16} className="text-purple-600 shrink-0" />
+                <div>
+                  <span className="text-xs font-semibold text-primary block">
+                    Vacate Assigned Seat {member.seat} {member.locker ? `& Locker ${member.locker}` : ''}
+                  </span>
+                  <span className="text-[11px] text-secondary block">
+                    Frees up the desk in the Seat Matrix for new admissions
+                  </span>
+                </div>
+              </div>
+              <input
+                type="checkbox"
+                id="release-seat-checkbox"
+                checked={releaseSeat}
+                onChange={(e) => setReleaseSeat(e.target.checked)}
+                className="w-4 h-4 rounded text-purple-600 focus:ring-purple-500 cursor-pointer"
+              />
+            </div>
+          )}
+
+          {/* Exit Clearance & Deposit Settlement Verification */}
+          {depositInfo.hasHeldDeposit ? (
+            <div
+              className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-3"
+              data-testid="held-deposit-clearance-box"
+            >
+              <div className="flex items-start justify-between gap-2.5">
+                <div className="flex items-start gap-2.5">
+                  <ShieldAlert size={18} className="text-amber-500 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-amber-500">
+                        Active Security Deposit Held: ₹{depositInfo.amount}
+                      </span>
+                      <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-500/20 text-amber-400">
+                        Pending Settlement
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-secondary mt-0.5">
+                      Student has an active refundable deposit on record. Settle or verify refund before closing account to prevent risk of unreturned dues.
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href={getDepositSettlementFinanceUrl(member.name, member.phone)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-500/40 transition-colors shrink-0"
+                  title="Open Finance Security Deposits desk in new tab"
+                >
+                  <span>Settle Deposit ↗</span>
+                  <ExternalLink size={12} />
+                </a>
+              </div>
+
+              {/* Settlement Action Radio Group */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-amber-500/20 text-xs">
+                <label
+                  className={`flex items-center gap-2 p-2 rounded-lg border cursor-pointer transition-colors ${
+                    depositAction === 'refund_now'
+                      ? 'bg-amber-500/15 border-amber-500/50 text-primary font-semibold'
+                      : 'bg-surface/50 border-border text-secondary hover:bg-surface'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="depositAction"
+                    value="refund_now"
+                    checked={depositAction === 'refund_now'}
+                    onChange={() => setDepositAction('refund_now')}
+                    className="w-3.5 h-3.5 text-amber-500 focus:ring-amber-400 cursor-pointer"
+                  />
+                  <span>Mark Refunded Now (₹{depositInfo.amount})</span>
+                </label>
+
+                <label
+                  className={`flex items-center gap-2 p-2 rounded-lg border cursor-pointer transition-colors ${
+                    depositAction === 'leave_held'
+                      ? 'bg-amber-500/15 border-amber-500/50 text-primary font-semibold'
+                      : 'bg-surface/50 border-border text-secondary hover:bg-surface'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="depositAction"
+                    value="leave_held"
+                    checked={depositAction === 'leave_held'}
+                    onChange={() => setDepositAction('leave_held')}
+                    className="w-3.5 h-3.5 text-amber-500 focus:ring-amber-400 cursor-pointer"
+                  />
+                  <span>Keep Held (Settle Later in Alumni)</span>
+                </label>
+              </div>
+            </div>
+          ) : (
+            <div className="p-3 rounded-xl bg-surface border border-border flex items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2.5">
+                <ShieldCheck size={16} className="text-emerald-500 shrink-0" />
+                <div>
+                  <span className="font-semibold text-primary block">
+                    Verify No-Dues & Deposit Clearance
+                  </span>
+                  <span className="text-[11px] text-secondary block">
+                    {depositInfo.status === 'Refunded'
+                      ? 'Security deposit is already refunded. Safe to graduate without outstanding financial dues.'
+                      : 'No active held security deposit on record. Locker & account clearance verified.'}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <a
+                  href={getDepositSettlementFinanceUrl(member.name, member.phone)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-[11px] text-secondary hover:text-primary hover:underline"
+                  title="View Security Deposits ledger"
+                >
+                  <span>Ledger</span>
+                  <ExternalLink size={10} />
+                </a>
+                <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                  Clearance Verified
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Footer Actions */}
+          <div className="flex items-center justify-end gap-2 pt-3 border-t border-border shrink-0">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-xs font-semibold rounded-xl border border-border text-secondary hover:text-primary hover:bg-surface-zebra transition-colors cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-purple-600 hover:bg-purple-700 text-white shadow-sm transition-colors cursor-pointer"
+            >
+              <Check size={14} />
+              <span>Graduate to Alumni</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+export default ManagerMembersDirectoryGraduateAlumniModal;
+

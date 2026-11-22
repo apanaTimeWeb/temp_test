@@ -1,0 +1,69 @@
+'use client';
+
+import type { AdminAccountsExpensesHeaderSectionProps } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/types/AdminAccountsExpensesComponentTypes';
+import { FileSpreadsheet,Plus,Receipt } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+
+export function AdminAccountsExpensesHeaderSection({
+  onAddExpense,
+  canMutate,
+  onExportCsv,
+  onExportExcel,
+}: AdminAccountsExpensesHeaderSectionProps) {
+  const t = useTranslations('ADMIN_ACCOUNTING.EXPENSES');
+
+  return (
+    <header className="space-y-2">
+      <div className="flex items-center gap-2">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-300">
+          <Receipt className="h-3.5 w-3.5" />
+          Operational Expense Ledger
+        </span>
+      </div>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">Library Operational Expenses</h1>
+          <p className="mt-1 text-xs sm:text-sm text-slate-400">
+            Track utility bills, facility maintenance, housekeeping purchases, and branch petty cash approvals
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          {onExportCsv && (
+            <button
+              type="button"
+              onClick={onExportCsv}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800/80 px-3 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-700/80 transition-all shadow-sm"
+              title="Export Expenses CSV"
+            >
+              <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-400" />
+              CSV
+            </button>
+          )}
+          {onExportExcel && (
+            <button
+              type="button"
+              onClick={onExportExcel}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800/80 px-3 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-700/80 transition-all shadow-sm"
+              title="Export Formatted Excel Sheet (.xls)"
+            >
+              <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-500" />
+              Excel
+            </button>
+          )}
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-500 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={!canMutate}
+            title={!canMutate ? t('CREATE_BLOCKED') : undefined}
+            onClick={onAddExpense}
+          >
+            <Plus size={16} strokeWidth={2.5} aria-hidden="true" />
+            {t('ADD_EXPENSE')}
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+export default AdminAccountsExpensesHeaderSection;

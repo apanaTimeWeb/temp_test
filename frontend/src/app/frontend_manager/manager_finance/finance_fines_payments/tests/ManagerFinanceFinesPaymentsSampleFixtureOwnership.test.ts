@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync,readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { describe,expect,it } from 'vitest';
 
 const moduleRootCandidates = [
   join(process.cwd(), 'src/app/frontend_manager/manager_finance/finance_fines_payments'),
@@ -38,13 +38,13 @@ describe('Finance sample-fixture ownership and disabled actions — finance_fine
     expect(readSource('mocks/manager_finance_fines_payments_fixtures/ManagerFinanceFinesPaymentsComponentSampleFixtures.ts')).toMatch(/Component-level Finance preview records|static layout fixtures/i);
   });
 
-  it('routes refund requests to the canonical refunds owner without duplicate UI', () => {
+  it('keeps refund management owned canonically by security deposits without duplicate UI in fines payments', () => {
     const pageSource = readSource('components/manager_finance_fines_payments_views/ManagerFinanceFinesPaymentsFinesAndPaymentsPage.tsx');
     const routeSource = readSource('config/manager_finance_fines_payments.url_config.ts');
-    expect(pageSource).toMatch(/tab\.id === 'refundRequests'[\s\S]*?router\.push\(MANAGER_FINANCE_FINES_PAYMENTS_ROUTES\.REFUNDS\)/);
+    expect(pageSource).not.toContain('refundRequests');
     expect(pageSource).not.toContain('ManagerFinanceFinesPaymentsRefundRequestPanel');
-    expect(routeSource).toContain("REFUNDS: '/frontend_manager/manager_finance/finance_refunds'");
+    expect(routeSource).toContain("REFUNDS: '/frontend_manager/manager_finance/finance_security_deposits'");
     expect(existsSync(join(moduleRoot, 'components/manager_finance_fines_payments_widgets/ManagerFinanceFinesPaymentsRefundRequestPanel.tsx'))).toBe(false);
-    expect(existsSync(join(moduleRoot, '..', 'finance_refunds/config/manager_finance_refunds.url_config.ts'))).toBe(true);
+    expect(existsSync(join(moduleRoot, '..', 'finance_security_deposits/config/manager_finance_security_deposits.url_config.ts'))).toBe(true);
   });
 });

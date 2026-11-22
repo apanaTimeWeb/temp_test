@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, type RefObject } from 'react';
+import { useEffect,useRef,type RefObject } from 'react';
 
 /** Feature-owned modal keyboard and focus lifecycle. Runtime behavior still needs browser verification. */
 export function useManagerSecurityDepositsDialogFocus(dialogRef: RefObject<HTMLElement | null>, onClose: () => void, active: boolean | string = true) {

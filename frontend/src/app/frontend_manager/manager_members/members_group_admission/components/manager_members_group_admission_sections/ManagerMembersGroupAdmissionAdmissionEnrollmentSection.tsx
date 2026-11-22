@@ -3,8 +3,8 @@
 // RESPONSIBILITY: Render the members group admission admission enrollment section section of the components feature. It does not own backend persistence or cross-feature business logic.
 import { useTranslations } from 'next-intl';
 
-import { Armchair, FileText, Lock } from 'lucide-react';
 import type { ManagerMembersGroupAdmissionAdmissionEnrollmentSectionProps } from '@/app/frontend_manager/manager_members/members_group_admission/types/ManagerMembersGroupAdmissionComponentTypes';
+import { Armchair,FileText,Lock } from 'lucide-react';
 export type { ManagerMembersGroupAdmissionAdmissionEnrollmentSectionProps };
 
 

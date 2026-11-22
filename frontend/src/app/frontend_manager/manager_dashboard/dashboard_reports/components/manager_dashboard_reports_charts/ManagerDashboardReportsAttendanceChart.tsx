@@ -1,17 +1,34 @@
 'use client';
 // RESPONSIBILITY: Render the daily attendance trend bar chart visualization using supplied feature data. It does not own backend persistence or cross-feature business logic.
-import { useTranslations } from 'next-intl';
-import dynamic from 'next/dynamic';
-import type { ApexOptions } from 'apexcharts';
 import { ManagerDashboardReportsChartDataTable } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_table_parts/ManagerDashboardReportsChartDataTable';
 import { useManagerDashboardReportsChartTheme } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/hooks/useManagerDashboardReportsChartTheme';
 import type { ManagerDashboardReportsAttendancePoint } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
+import type { ApexOptions } from 'apexcharts';
+import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-export function ManagerDashboardReportsAttendanceChart({ data }: { data: ManagerDashboardReportsAttendancePoint[] }) {
+export function ManagerDashboardReportsAttendanceChart({
+  data,
+  dateRange,
+}: {
+  data: ManagerDashboardReportsAttendancePoint[];
+  dateRange?: string;
+}) {
   const tManagerUi = useTranslations('manager.manager_reports.ui');
   const chartTheme = useManagerDashboardReportsChartTheme();
+
+  const titlePrefix = dateRange === 'This Month'
+    ? 'Monthly'
+    : dateRange === 'This Week'
+      ? 'Weekly'
+      : dateRange === 'This Year'
+        ? 'Yearly'
+        : dateRange && dateRange !== 'Today'
+          ? dateRange
+          : 'Daily';
+  const chartTitle = `${titlePrefix} Attendance Trend`;
 
   const options: ApexOptions = {
     chart: {
@@ -58,7 +75,7 @@ export function ManagerDashboardReportsAttendanceChart({ data }: { data: Manager
 
   return (
     <div className="mgr-chart-card">
-      <h3 className="mgr-chart-title">{tManagerUi('daily_attendance_trend')}</h3>
+      <h3 className="mgr-chart-title">{chartTitle}</h3>
       {data.length === 0 ? (
         <p className="p-6 text-sm text-secondary" role="status">{tManagerUi('no_report_data_available')}</p>
       ) : (
@@ -70,7 +87,7 @@ export function ManagerDashboardReportsAttendanceChart({ data }: { data: Manager
             series={[{ name: tManagerUi('attendance_percentage'), data: data.map((item) => item.avg) }]}
           />
           <ManagerDashboardReportsChartDataTable
-            caption={tManagerUi('daily_attendance_trend')}
+            caption={chartTitle}
             rows={data.map((item) => ({ label: item.day, value: `${item.avg}%` }))}
           />
         </>

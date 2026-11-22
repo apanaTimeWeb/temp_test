@@ -29,6 +29,17 @@ export const managerReportsSchema = z.object({
   seatRows: z.array(z.object({ shift: z.string().trim().min(1), occupancy: percentageDisplay, avgDuration: z.string().trim().min(1) })),
   lockerRows: z.array(z.object({ type: z.string().trim().min(1), occupied: nonNegativeNumber, total: nonNegativeNumber, pct: percentageDisplay })),
   maintenanceRows: z.array(z.object({ item: z.string().trim().min(1), location: z.string().trim().min(1), reported: z.string().trim().min(1), priority: z.enum(['High', 'Medium', 'Low']) })),
+  shiftProfitabilityRows: z.array(
+    z.object({
+      shift: z.string().trim().min(1),
+      timing: z.string().trim().min(1),
+      studentsCount: nonNegativeNumber,
+      monthlyRate: nonNegativeNumber,
+      grossRevenue: nonNegativeNumber,
+      collectionRate: percentageDisplay,
+      marginRating: z.enum(['High', 'Good', 'Moderate']),
+    })
+  ).optional(),
 }).superRefine((report, context) => {
   report.lockerRows.forEach((row, index) => { if (row.occupied > row.total) context.addIssue({ code: 'custom', path: ['lockerRows', index, 'occupied'], message: 'occupied_exceeds_total' }); });
 });

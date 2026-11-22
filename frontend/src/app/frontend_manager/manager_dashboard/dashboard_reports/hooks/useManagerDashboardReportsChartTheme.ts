@@ -1,7 +1,7 @@
 'use client';
 // RESPONSIBILITY: Provide theme-aware chart colors and configuration for ApexCharts conforming to WEB_FRONTEND_UI_UX_DESIGN.md Section 10.
 
-import { useEffect, useState } from 'react';
+import { useEffect,useState } from 'react';
 
 export interface ManagerReportsChartTheme {
   isDark: boolean;

@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { displayValue } from '@/app/frontend_manager/manager_accounts_assets/assets_register/utils/ManagerAssetsRegisterDisplayValue';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerAssetsRegisterDisplayValue', () => {
   it('uses an en dash for nullable, empty, and object values', () => {

@@ -1,0 +1,82 @@
+.responsiveRegion {
+  min-width: 0;
+}
+
+@media (max-width: 767px) {
+  .responsiveRegion.responsiveRegion {
+    overflow-x: visible;
+  }
+
+  .responsiveRegion.responsiveRegion :global(.sa-semantic-table) {
+    display: block;
+    width: 100%;
+    border-collapse: separate;
+  }
+
+  .responsiveRegion.responsiveRegion :global(.sa-semantic-table thead) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .responsiveRegion.responsiveRegion :global(.sa-semantic-table tbody) {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .responsiveRegion.responsiveRegion :global(.sa-semantic-table tbody tr) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.25rem;
+    min-width: 0;
+    height: auto !important;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-card);
+  }
+
+  .responsiveRegion.responsiveRegion :global(.sa-semantic-table tbody td) {
+    display: grid;
+    grid-template-columns: minmax(7rem, 0.7fr) minmax(0, 1.3fr);
+    align-items: start;
+    gap: 0.75rem;
+    min-width: 0;
+    padding: 0.5rem 0.25rem;
+    overflow-wrap: anywhere;
+    border: 0;
+  }
+
+  .responsiveRegion.responsiveRegion :global(.sa-semantic-table tbody td::before) {
+    content: attr(data-label);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .responsiveRegion.responsiveRegion :global(.sa-semantic-table tbody td[data-primary-cell='true']) {
+    font-weight: 700;
+  }
+
+  .responsiveRegion.responsiveRegion :global(.sa-semantic-table tbody td[data-status-cell='true']) {
+    border-top: 1px solid var(--border);
+    margin-top: 0.25rem;
+    padding-top: 0.75rem;
+  }
+
+  .responsiveRegion.responsiveRegion :global(.sa-semantic-table tbody td[colspan]) {
+    display: block;
+    text-align: center;
+  }
+
+  .responsiveRegion.responsiveRegion :global(.sa-semantic-table tbody td[colspan]::before) {
+    content: none;
+  }
+}

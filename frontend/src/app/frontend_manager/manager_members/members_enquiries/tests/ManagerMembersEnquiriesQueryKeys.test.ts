@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { MANAGER_CRM_QUERY_KEYS } from '@/app/frontend_manager/manager_members/members_enquiries/api/manager_members_enquiries.query_keys';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerMembersEnquiriesQueryKeys', () => {
   it('uses the canonical module namespace and distinct resource keys', () => {

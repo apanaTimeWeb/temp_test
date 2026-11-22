@@ -172,7 +172,8 @@
         "invalid_resource_description": "This link is missing a valid record identifier. Return to the feature list and open the record again.",
         "previous_page": "Previous page",
         "next_page": "Next page",
-        "confirm_leave_with_unsaved_changes": "You have unsaved changes. Leave this page and discard them?"
+        "confirm_leave_with_unsaved_changes": "You have unsaved changes. Leave this page and discard them?",
+        "no_matching_expenses_found": "No matching expenses found."
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",

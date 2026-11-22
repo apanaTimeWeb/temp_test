@@ -1,6 +1,6 @@
 import { ManagerFinancePaymentPromisesMain } from '@/app/frontend_manager/manager_finance/finance_payment_promises/components/ManagerFinancePaymentPromisesMain';
-import type { ManagerFinancePaymentPromisesMainProps } from '@/app/frontend_manager/manager_finance/finance_payment_promises/types/ManagerFinancePaymentPromisesMainTypes';
 import type { ManagerFinancePaymentPromisesPageProps } from '@/app/frontend_manager/manager_finance/finance_payment_promises/types/ManagerFinancePaymentPromisesComponentTypes';
+import type { ManagerFinancePaymentPromisesMainProps } from '@/app/frontend_manager/manager_finance/finance_payment_promises/types/ManagerFinancePaymentPromisesMainTypes';
 
 
 

@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
 import { MANAGER_ACCOUNTING_SAMPLE_ASSETS } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/hooks/ManagerAccountsExpensesDemoRepository';
 import { MANAGER_ACCOUNTING_SAMPLE_ASSETS as FIXTURE_SOURCE } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/mocks/manager_accounts_expenses_fixtures/ManagerAccountsExpensesAssetSampleFixtures';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerAccountsExpensesDemoRepository', () => {
   it('returns a defensive sample snapshot rather than aliasing fixture objects', () => {

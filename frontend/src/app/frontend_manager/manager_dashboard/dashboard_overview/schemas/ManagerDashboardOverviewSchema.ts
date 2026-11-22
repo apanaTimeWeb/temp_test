@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { MANAGER_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/config/manager_dashboard_overview.url_config';
+import { z } from 'zod';
 
 const ManagerDashboardOverviewKpiDataSchema = z.object({
   title: z.string().trim().min(1),

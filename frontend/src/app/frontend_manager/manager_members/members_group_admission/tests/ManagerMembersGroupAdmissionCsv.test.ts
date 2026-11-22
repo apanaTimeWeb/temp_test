@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { sanitizeManagerGroupAdmissionCsvCell } from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionCsv';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerMembersGroupAdmissionCsv', () => {
   it('neutralizes spreadsheet formula prefixes, including leading whitespace/control characters', () => {

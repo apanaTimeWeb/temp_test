@@ -2,9 +2,9 @@
 // RESPONSIBILITY: Contain rendering failures within the components feature subtree. It does not own backend persistence or cross-feature business logic.
 
 // RESPONSIBILITY: Contain rendering failures within the components feature subtree. It does not own backend persistence or cross-feature business logic.
-import { Component, type ErrorInfo } from 'react';
 import { ManagerDashboardOverviewErrorFallback } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_error_boundary/ManagerDashboardOverviewErrorFallback';
-import type { ManagerDashboardOverviewErrorBoundaryProps, ManagerDashboardOverviewErrorBoundaryState } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewComponentTypes';
+import type { ManagerDashboardOverviewErrorBoundaryProps,ManagerDashboardOverviewErrorBoundaryState } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewComponentTypes';
+import { Component,type ErrorInfo } from 'react';
 
 
 

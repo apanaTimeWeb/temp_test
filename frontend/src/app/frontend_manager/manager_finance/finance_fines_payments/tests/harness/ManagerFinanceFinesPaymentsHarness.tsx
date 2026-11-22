@@ -1,18 +1,18 @@
 "use client";
 
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
+import { useEffect,useState } from 'react';
 import { ManagerFinanceFinesPaymentsMain } from '../../components/ManagerFinanceFinesPaymentsMain';
 import messagesEn from '../../locales/manager_finance_fines_payments_domain_en.json';
 import messagesHi from '../../locales/manager_finance_fines_payments_domain_hi.json';
 import {
-  startManagerFinanceFinesPaymentsWorker,
-  stopManagerFinanceFinesPaymentsWorker,
-  HARNESS_SCENARIO_OPTIONS,
-  MANAGER_FINANCE_FINES_PAYMENTS_SCENARIO_PROBE_URL,
-  type ManagerFinanceFinesPaymentsHarnessScenario,
+HARNESS_SCENARIO_OPTIONS,
+MANAGER_FINANCE_FINES_PAYMENTS_SCENARIO_PROBE_URL,
+startManagerFinanceFinesPaymentsWorker,
+stopManagerFinanceFinesPaymentsWorker,
+type ManagerFinanceFinesPaymentsHarnessScenario,
 } from './bootstrap';
 
 type ManagerFinanceFinesPaymentsHarnessProps = {

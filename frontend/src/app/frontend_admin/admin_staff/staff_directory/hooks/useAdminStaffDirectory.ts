@@ -1,0 +1,98 @@
+'use client';
+// DATA FLOW: staff_directory route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
+import { fetchAdminStaffDirectory } from '@/app/frontend_admin/admin_staff/staff_directory/api/admin_staff_directory.api';
+import { ADMIN_STAFF_DIRECTORY_QUERY_KEYS } from '@/app/frontend_admin/admin_staff/staff_directory/api/admin_staff_directory.query_keys';
+import { ADMIN_STAFF_DIRECTORY_DEMO_BRANCH_OPTIONS,ADMIN_STAFF_DIRECTORY_NAVIGATION } from '@/app/frontend_admin/admin_staff/staff_directory/config/admin_staff_directory.url_config';
+import { ADMIN_STAFF_DIRECTORY_FIXTURE_DATA } from '@/app/frontend_admin/admin_staff/staff_directory/mocks/scenarios/admin_staff_directory.scenarios';
+import type { AdminStaffDirectoryCreateManagerFormValues,AdminStaffDirectoryManager,AdminStaffDirectoryTab } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
+import type { AdminStaffDirectoryManagerDetailTab } from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
+import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { usePathname,useRouter,useSearchParams } from 'next/navigation';
+import { useCallback,useMemo,useState } from 'react';
+
+
+
+
+
+export function createAdminStaffDirectoryDemoManager(
+  existing: readonly AdminStaffDirectoryManager[],
+  values: AdminStaffDirectoryCreateManagerFormValues,
+  branch: string,
+  id: string,
+): { manager: AdminStaffDirectoryManager; duplicate: false } | { manager: null; duplicate: true } {
+  const username = values.username.trim().toLocaleLowerCase();
+  const email = values.email.trim().toLocaleLowerCase();
+  if (existing.some((manager) => manager.username.trim().toLocaleLowerCase() === username || manager.email.trim().toLocaleLowerCase() === email)) {
+    return { manager: null, duplicate: true };
+  }
+  return {
+    duplicate: false,
+    manager: {
+      id,
+      name: values.fullName.trim(),
+      username: values.username.trim(),
+      email: values.email.trim(),
+      phone: values.phone.trim(),
+      branch,
+      status: values.initialStatus,
+      lastActive: 'Never',
+    },
+  };
+}
+
+export function addAdminStaffDirectoryDemoManager(existing: readonly AdminStaffDirectoryManager[], manager: AdminStaffDirectoryManager): AdminStaffDirectoryManager[] {
+  return [manager, ...existing];
+}
+
+export default function useAdminStaffDirectory() {
+  const t = useTranslations('ADMIN_STAFF_DIRECTORY');
+  const isDemoMode = isFrontendDemoModeEnabled();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const requestedTab = searchParams.get('view');
+  const activeTab: AdminStaffDirectoryTab = ADMIN_STAFF_DIRECTORY_NAVIGATION.some((item) => item.id === requestedTab) ? requestedTab as AdminStaffDirectoryTab : 'all';
+  const setActiveTab = useCallback((tab: AdminStaffDirectoryTab) => { const next = new URLSearchParams(searchParams.toString()); next.set('view', tab); router.push(`${pathname}?${next.toString()}`, { scroll: false }); }, [pathname, router, searchParams]);
+  const [demoManagersOverride, setDemoManagersOverride] = useState<AdminStaffDirectoryManager[] | null>(null);
+  const [viewingManager, setViewingManager] = useState<AdminStaffDirectoryManager | null>(null);
+  const [managerDetailTab, setManagerDetailTab] = useState<AdminStaffDirectoryManagerDetailTab>('overview');
+  const { selectedBranch, isAllBranches } = useAdminBranch();
+  const managersQuery = useQuery({ queryKey: ADMIN_STAFF_DIRECTORY_QUERY_KEYS.list(), queryFn: fetchAdminStaffDirectory, enabled: !isDemoMode });
+  const rawManagers = isDemoMode ? demoManagersOverride ?? ADMIN_STAFF_DIRECTORY_FIXTURE_DATA : (managersQuery.data ?? []);
+  const managers = useMemo(() => {
+    if (isAllBranches || !selectedBranch) return rawManagers;
+    return rawManagers.filter((m) =>
+      !m.branch ||
+      m.branch.toLowerCase().includes(selectedBranch.name.toLowerCase()) ||
+      selectedBranch.name.toLowerCase().includes(m.branch.toLowerCase())
+    );
+  }, [rawManagers, isAllBranches, selectedBranch]);
+  const isLoading = !isDemoMode && managersQuery.isPending;
+  const hasLoadError = !isDemoMode && managersQuery.isError;
+  const handleAddManager = (values: AdminStaffDirectoryCreateManagerFormValues): 'created' | 'duplicate' | 'blocked' => {
+    if (!isDemoMode) return 'blocked';
+    const branchOption = ADMIN_STAFF_DIRECTORY_DEMO_BRANCH_OPTIONS.find((option) => option.id === values.branchId);
+    if (!branchOption) return 'blocked';
+    const branch = branchOption.id === 'b1' ? t('BRANCH_DOWNTOWN') : t('BRANCH_WESTSIDE');
+    const result = createAdminStaffDirectoryDemoManager(managers, values, branch, `MGR-DEMO-${Date.now()}`);
+    if (result.duplicate) return 'duplicate';
+    setDemoManagersOverride((current) => addAdminStaffDirectoryDemoManager(current ?? ADMIN_STAFF_DIRECTORY_FIXTURE_DATA, result.manager));
+    setActiveTab('all');
+    return 'created';
+  };
+  const handleUpdateManagerStatus = useCallback((managerId: string, status: AdminStaffDirectoryManager['status']) => {
+    setDemoManagersOverride((current) => {
+      const list = current ?? ADMIN_STAFF_DIRECTORY_FIXTURE_DATA;
+      return list.map((m) => (m.id === managerId ? { ...m, status } : m));
+    });
+    if (viewingManager && viewingManager.id === managerId) {
+      setViewingManager((prev) => (prev ? { ...prev, status } : null));
+    }
+  }, [viewingManager]);
+  const openManagerDetails = (manager: AdminStaffDirectoryManager) => { setViewingManager(manager); setManagerDetailTab('overview'); };
+  const managerCounts = useMemo(() => ({ all: managers.length, active: managers.filter((manager) => manager.status === 'Active').length, suspended: managers.filter((manager) => manager.status === 'Suspended').length, deactivated: managers.filter((manager) => manager.status === 'Deactivated').length }), [managers]);
+  return { activeTab, setActiveTab, viewingManager, setViewingManager, managerDetailTab, setManagerDetailTab, navItems: ADMIN_STAFF_DIRECTORY_NAVIGATION, managers, dummyManagers: managers, managerCounts, isDemoMode, isLoading, hasLoadError, retryLoadManagers: managersQuery.refetch, handleAddManager, handleUpdateManagerStatus, openManagerDetails } as const;
+}

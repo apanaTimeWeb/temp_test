@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { formatManagerExpensesCurrency, toManagerExpensesMinorUnits } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/utils/ManagerAccountsExpensesFormatting';
+import { formatManagerExpensesCurrency,toManagerExpensesMinorUnits } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/utils/ManagerAccountsExpensesFormatting';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerAccountsExpensesFormatting', () => {
   it('formats integer minor units as currency', () => {

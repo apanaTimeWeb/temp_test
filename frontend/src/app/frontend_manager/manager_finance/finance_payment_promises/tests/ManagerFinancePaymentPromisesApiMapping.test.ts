@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { managerFinancePaymentApiSchema, managerFinanceRefundApiSchema } from '@/app/frontend_manager/manager_finance/finance_payment_promises/schemas/ManagerFinancePaymentPromisesSchema';
-import { mapManagerPaymentPromisesPayment, mapManagerPaymentPromisesRefund } from '@/app/frontend_manager/manager_finance/finance_payment_promises/utils/ManagerFinancePaymentPromisesApiMapping';
+import { managerFinancePaymentApiSchema,managerFinanceRefundApiSchema } from '@/app/frontend_manager/manager_finance/finance_payment_promises/schemas/ManagerFinancePaymentPromisesSchema';
+import { mapManagerPaymentPromisesPayment,mapManagerPaymentPromisesRefund } from '@/app/frontend_manager/manager_finance/finance_payment_promises/utils/ManagerFinancePaymentPromisesApiMapping';
+import { describe,expect,it } from 'vitest';
 
 describe('Manager Finance API mapping preserves missing contract data', () => {
   it('does not synthesize receipt IDs, cash mode, late-fee zero, or INR currency', () => {

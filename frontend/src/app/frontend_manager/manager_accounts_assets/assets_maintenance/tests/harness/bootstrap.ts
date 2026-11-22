@@ -2,10 +2,10 @@
  * Module-local MSW lifecycle for the assets_maintenance standalone harness.
  * The __harness__ probe is test-only and is not a backend or feature API route.
  */
-import { delay, http, HttpResponse, type RequestHandler } from 'msw';
+import { delay,http,HttpResponse,type RequestHandler } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { MANAGER_ASSETS_MAINTENANCE_SCENARIOS as MODULE_SCENARIOS, type AssetsMaintenanceScenario as HarnessScenario } from '../../mocks/scenarios/manager_assets_maintenance.scenarios';
 import { MANAGER_ASSETS_MAINTENANCE_HANDLERS as MODULE_HANDLERS_SOURCE } from '../../mocks/ManagerAssetsMaintenanceHandlers';
+import { MANAGER_ASSETS_MAINTENANCE_SCENARIOS as MODULE_SCENARIOS,type AssetsMaintenanceScenario as HarnessScenario } from '../../mocks/scenarios/manager_assets_maintenance.scenarios';
 // This list contains only module-owned, source-backed business handlers; no API routes are inferred here.
 const MODULE_HANDLERS: RequestHandler[] = [...MODULE_HANDLERS_SOURCE];
 
@@ -80,5 +80,5 @@ export function stopManagerAssetsMaintenanceWorker(): void {
 }
 
 // Preserve the existing maintenance-log helper export consumed by module-local tooling.
-export { getManagerAssetsMaintenanceSampleLogs } from '../../mocks/ManagerAssetsMaintenanceRepository';
 export { MANAGER_ASSETS_MAINTENANCE_HANDLERS } from '../../mocks/ManagerAssetsMaintenanceHandlers';
+export { getManagerAssetsMaintenanceSampleLogs } from '../../mocks/ManagerAssetsMaintenanceRepository';

@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { displayValue } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementDisplayValue';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerLockersManagementDisplayValue', () => {
   it('uses an en dash for nullable, empty, and object values', () => {

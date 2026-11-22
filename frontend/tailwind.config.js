@@ -12,6 +12,7 @@ module.exports = {
         card: 'var(--color-bg-card, #111111)',
         input: 'var(--color-bg-input, #1A1A1A)',
         border: 'var(--color-border, #27272A)',
+        popover: 'var(--color-bg-card, #111111)',
         primary: {
           DEFAULT: 'var(--color-primary, #FACC15)',
           hover: 'var(--color-primary-hover, #EAB308)',
@@ -31,8 +32,14 @@ module.exports = {
         warning: 'var(--color-warning, #F59E0B)',
         info: 'var(--color-info, #1D4ED8)',
         surface: {
+          DEFAULT: 'var(--color-bg-card, #111111)',
           hover: 'var(--color-surface-hover, rgba(250, 204, 21, 0.08))',
           highlight: 'var(--color-surface-highlight, rgba(250, 204, 21, 0.05))',
+          zebra: 'var(--color-surface-zebra, #141414)',
+        },
+        overlay: {
+          DEFAULT: 'var(--color-bg-overlay, #242424)',
+          backdrop: 'var(--color-overlay-backdrop, rgba(0, 0, 0, 0.6))',
         },
         skeleton: {
           base: 'var(--color-skeleton-base, #111111)',

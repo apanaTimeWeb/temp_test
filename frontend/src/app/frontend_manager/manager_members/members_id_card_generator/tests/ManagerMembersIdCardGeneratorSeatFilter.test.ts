@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { normalizeManagerIdCardGeneratorSeatFilter } from '@/app/frontend_manager/manager_members/members_id_card_generator/utils/ManagerMembersIdCardGeneratorSeatFilter';
+import { describe,expect,it } from 'vitest';
 
 describe('normalizeManagerIdCardGeneratorSeatFilter', () => {
   it('matches a prefixed seat label with the unprefixed route parameter', () => {

@@ -271,13 +271,12 @@
   /* ══════════════════ PAGE WRAPPER ══════════════════ */
 
   .ss-page {
-    min-height: 100vh;
-    padding: 1.5rem;
-    background-color: theme(--color-page);
+    min-height: 100%;
+    padding: 0;
     color: theme(--color-text-primary);
   }
   @media (min-width: 768px) {
-    .ss-page { padding: 2rem; }
+    .ss-page { padding: 0; }
   }
 
   /* Extra bottom padding when a sticky footer is present */
@@ -2457,8 +2456,7 @@
     }
 
     .ss-page {
-      padding: 0.75rem;
-      padding-top: 1rem;
+      padding: 0;
     }
 
     .ss-page-title {
@@ -2599,8 +2597,7 @@
   /* Extra-small (< 480px) */
   @media (max-width: 479px) {
     .ss-page {
-      padding: 0.625rem;
-      padding-top: 0.75rem;
+      padding: 0;
     }
 
     .ss-kpi-card__value {

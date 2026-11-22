@@ -1,4 +1,4 @@
-import type { ManagerFinanceRenewalsPaymentStatus, ManagerFinanceRenewalsRefundStatus } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsTypes';
+import type { ManagerFinanceRenewalsPaymentStatus,ManagerFinanceRenewalsRefundStatus } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsTypes';
 
 /** Preserve only statuses explicitly understood by this frontend contract. Unknown values must never be presented as valid or pending. */
 export function normalizeManagerRenewalsPaymentStatus(status: string): ManagerFinanceRenewalsPaymentStatus {

@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { formatManagerNewAdmissionCurrency, fromManagerNewAdmissionMinorUnits, toManagerNewAdmissionMinorUnits } from '@/app/frontend_manager/manager_members/members_new_admission/utils/ManagerMembersNewAdmissionCurrencyFormatting';
+import { formatManagerNewAdmissionCurrency,fromManagerNewAdmissionMinorUnits,toManagerNewAdmissionMinorUnits } from '@/app/frontend_manager/manager_members/members_new_admission/utils/ManagerMembersNewAdmissionCurrencyFormatting';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerMembersNewAdmissionCurrencyFormatting', () => {
   it('converts major units to integer minor units without floating-point drift', () => {

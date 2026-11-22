@@ -9,6 +9,6 @@ export default async function ManagerMembersDirectoryPage({ searchParams }: Mana
   const params = searchParams ? await searchParams : {};
   return <ManagerMembersDirectoryMain
     view={firstValue(params.view)} id={firstValue(params.id)} name={firstValue(params.name)}
-    phone={firstValue(params.phone)} smartId={firstValue(params.smartId)}
+    phone={firstValue(params.phone)} smartId={firstValue(params.smartId)} seat={firstValue(params.seat)}
   />;
 }

@@ -1,149 +1,752 @@
 'use client';
-import type { ManagerAttendanceAbsenteeReportMainProps } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/types/ManagerAttendanceAbsenteeReportMainTypes';
-import { useLocale, useTranslations } from 'next-intl';
-import ManagerAttendanceAbsenteeReportNativeTable, { type NativeColumn, type NativeCellParams } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportNativeTable';
 
-import { MANAGER_ATTENDANCE_ABSENTEE_REPORT_ROUTES } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/config/manager_attendance_absentee_report.url_config';
+import { createManagerAbsenteeReportAbsenteeColumns } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportColumns';
+import ManagerAttendanceAbsenteeReportNativeTable from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportNativeTable';
 import { useManagerAbsenteeReportDemoData } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/hooks/useManagerAttendanceAbsenteeReportDemoData';
+import type { ManagerAttendanceAbsenteeReportMainProps } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/types/ManagerAttendanceAbsenteeReportMainTypes';
+import {
+AlertTriangle,
+Clock,
+Download,
+FileCheck,
+MessageSquare,
+Printer,
+RotateCcw,
+Search,
+ShieldCheck,
+Users,
+X
+} from 'lucide-react';
+import { useLocale,useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
+import type { ManagerAttendanceAbsenteeReportSampleAbsentee } from '../../hooks/ManagerAttendanceAbsenteeReportDemoRepository';
+import { ManagerAttendanceAbsenteeBulkWhatsAppModal } from './ManagerAttendanceAbsenteeBulkWhatsAppModal';
+import { ManagerAttendanceAbsenteeDetailsModal } from './ManagerAttendanceAbsenteeDetailsModal';
+import ManagerAttendanceAbsenteeTimeHorizonBar,{
+type ManagerAbsenteeTimeHorizon,
+} from './ManagerAttendanceAbsenteeTimeHorizonBar';
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { ChevronRight, Send } from 'lucide-react';
-import { createManagerAbsenteeReportAbsenteeColumns } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportColumns.tsx';
+const SHIFT_OPTIONS = [
+  { id: 'All', label: 'All Shifts' },
+  { id: 'Morning', label: 'Morning' },
+  { id: 'Afternoon', label: 'Afternoon' },
+  { id: 'Evening', label: 'Evening' },
+  { id: 'Night', label: 'Night' },
+  { id: 'Full Day', label: 'Full Day' },
+];
 
+const THRESHOLD_OPTIONS = [
+  { id: '3', label: '3+ Days' },
+  { id: '5', label: '5+ Days' },
+  { id: '7', label: '7+ Days Critical' },
+  { id: 'all', label: 'Show All' },
+];
 
+const ALERT_STATUS_OPTIONS = [
+  { id: 'all', label: 'All Statuses' },
+  { id: 'pending', label: 'Pending Alert' },
+  { id: 'notified', label: 'Notified' },
+] as const;
 
-// RESPONSIBILITY: Render the attendance_absentee_report feature view while preserving supported deep-link query state.
-// DATA FLOW: Route searchParams -> Main props -> this view's route context.
-export default function ManagerAttendanceAbsenteeReportPage({ view, id, name, phone, smartId }: ManagerAttendanceAbsenteeReportMainProps) {
+export default function ManagerAttendanceAbsenteeReportPage({
+  view,
+  id,
+  name,
+  phone,
+  smartId,
+}: ManagerAttendanceAbsenteeReportMainProps) {
   const tManagerUi = useTranslations('manager.manager_absentee_report.ui');
   const locale = useLocale();
-  const rows = useManagerAbsenteeReportDemoData();
+
+  const initialRows = useManagerAbsenteeReportDemoData();
+
+  // Distribute sample dates relative to current date so all time horizons yield meaningful demo records
+  const initialRowsWithDates: ManagerAttendanceAbsenteeReportSampleAbsentee[] = useMemo(() => {
+    const today = new Date();
+    const fmt = (d: Date) => d.toISOString().slice(0, 10);
+    return initialRows.map((r, idx) => {
+      const d = new Date(today);
+      if (idx === 0) {
+        d.setDate(d.getDate() - 1);
+      } else if (idx === 1) {
+        d.setDate(d.getDate() - 3);
+      } else if (idx === 2) {
+        d.setDate(d.getDate() - 5);
+      } else if (idx === 3) {
+        d.setDate(d.getDate() - 8);
+      } else {
+        d.setDate(d.getDate() - 14);
+      }
+      return { ...r, lastSeen: fmt(d) };
+    });
+  }, [initialRows]);
+
+  const [rowsList, setRowsList] = useState(initialRowsWithDates);
+  const [isBulkWhatsAppOpen, setIsBulkWhatsAppOpen] = useState(false);
+  const [selectedAbsentee, setSelectedAbsentee] = useState<ManagerAttendanceAbsenteeReportSampleAbsentee | null>(null);
+
+  const [timeHorizon, setTimeHorizon] = useState<ManagerAbsenteeTimeHorizon>('all');
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
   const [threshold, setThreshold] = useState('3');
-  const [shift, setShift]         = useState('All');
-  const shiftLabels: Record<string, string> = { Morning: tManagerUi('morning'), Afternoon: tManagerUi('afternoon'), Evening: tManagerUi('evening') };
+  const [shift, setShift] = useState('All');
+  const [alertStatusFilter, setAlertStatusFilter] = useState<'all' | 'pending' | 'notified'>('all');
+  const [leaveStatusFilter, setLeaveStatusFilter] = useState<'all' | 'unexcused_risk' | 'on_leave'>('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const filtered = rows.filter(r => {
-    const thr = threshold === 'all' ? 0 : parseInt(threshold);
-    return r.daysAbsent >= thr && (shift === 'All' || r.shift === shift);
-  });
+  const shiftLabels: Record<string, string> = {
+    Morning: tManagerUi('morning'),
+    Afternoon: tManagerUi('afternoon'),
+    Evening: tManagerUi('evening'),
+    Night: tManagerUi('night'),
+    'Full Day': tManagerUi('full_day'),
+  };
 
-  const critical  = filtered.filter(r => r.daysAbsent >= 7);
-  const moderate  = filtered.filter(r => r.daysAbsent >= 3 && r.daysAbsent < 7);
+  const handleAlertWhatsApp = (item: ManagerAttendanceAbsenteeReportSampleAbsentee) => {
+    let cleanPhone = (item.parentPhone || '9876543210').replace(/\D/g, '');
+    if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) cleanPhone = cleanPhone.slice(1);
+    const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+    const text = encodeURIComponent(
+      `Dear Parent / Student, this is an official attendance notice from Central Library. ${item.name} (${item.smartId}, ${item.shift} Shift) has been absent for ${item.daysAbsent} consecutive days. Last attended date: ${item.lastSeen}. Kindly ensure regular study attendance. — Central Library Administration`
+    );
+    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
+    if (popup) popup.opener = null;
+    setRowsList((prev) => prev.map((r) => (r.smartId === item.smartId ? { ...r, notified: true } : r)));
+    if (selectedAbsentee && selectedAbsentee.smartId === item.smartId) {
+      setSelectedAbsentee({ ...selectedAbsentee, notified: true });
+    }
+    toast.success(`WhatsApp notice dispatched for ${item.name}`);
+  };
 
-  const badgeClass = (d: number) => d >= 7 ? 'eng-badge--danger' : 'eng-badge--warning';
-  
-  const colDefs = createManagerAbsenteeReportAbsenteeColumns({
-    student: tManagerUi('student'),
-    smartId: tManagerUi('smart_id'),
-    shift: tManagerUi('shift'),
-    daysAbsent: tManagerUi('days_absent'),
-    days: tManagerUi('days'),
-    lastSeen: tManagerUi('last_seen'),
-    parentContact: tManagerUi('parent_contact'),
-    actions: tManagerUi('actions'),
-    samplePreviouslyNotified: tManagerUi('sample_previously_notified'),
-    parentAlertsUnavailable: tManagerUi('parent_alerts_unavailable_verified_messaging_integration_9cbc80'),
-    alertUnavailable: tManagerUi('alert_unavailable'),
-    locale,
-  }, shiftLabels, badgeClass);
+  const handleMarkExcused = (smartId: string, reason: string, duration?: string) => {
+    setRowsList((prev) =>
+      prev.map((r) =>
+        r.smartId === smartId
+          ? {
+              ...r,
+              excused: true,
+              leaveReason: reason,
+              leaveDuration: duration || '10 Days',
+            }
+          : r
+      )
+    );
+    if (selectedAbsentee && selectedAbsentee.smartId === smartId) {
+      setSelectedAbsentee({
+        ...selectedAbsentee,
+        excused: true,
+        leaveReason: reason,
+        leaveDuration: duration || '10 Days',
+      });
+    }
+    toast.success(`Absence for ${smartId} marked as Excused / On Leave (${reason})`);
+  };
+
+  const handleRevokeExcused = (smartId: string) => {
+    setRowsList((prev) =>
+      prev.map((r) => (r.smartId === smartId ? { ...r, excused: false, leaveReason: undefined } : r))
+    );
+    if (selectedAbsentee && selectedAbsentee.smartId === smartId) {
+      setSelectedAbsentee({ ...selectedAbsentee, excused: false, leaveReason: undefined });
+    }
+    toast.info(`Excused status revoked for ${smartId}`);
+  };
+
+  const timeFilteredRows = useMemo(() => {
+    if (timeHorizon === 'all') return rowsList;
+    const now = new Date();
+    return rowsList.filter((r) => {
+      const recDate = new Date(r.lastSeen);
+      if (isNaN(recDate.getTime())) return true;
+      if (timeHorizon === 'today') return recDate.toISOString().slice(0, 10) === now.toISOString().slice(0, 10);
+      if (timeHorizon === 'this_week') {
+        const diffDays = (now.getTime() - recDate.getTime()) / (1000 * 3600 * 24);
+        return diffDays >= 0 && diffDays <= 7;
+      }
+      if (timeHorizon === 'this_month') return recDate.getFullYear() === now.getFullYear() && recDate.getMonth() === now.getMonth();
+      if (timeHorizon === 'custom') {
+        const dateStr = recDate.toISOString().slice(0, 10);
+        if (customStartDate && dateStr < customStartDate) return false;
+        if (customEndDate && dateStr > customEndDate) return false;
+        return true;
+      }
+      return true;
+    });
+  }, [rowsList, timeHorizon, customStartDate, customEndDate]);
+
+  const filtered = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    const thr = threshold === 'all' ? 0 : parseInt(threshold, 10);
+    return timeFilteredRows.filter((r) => {
+      const matchThr = r.daysAbsent >= thr;
+      const matchShift = shift === 'All' || r.shift === shift;
+      const matchAlertStatus =
+        alertStatusFilter === 'all' ||
+        (alertStatusFilter === 'notified' ? r.notified : !r.notified);
+      const matchLeaveStatus =
+        leaveStatusFilter === 'all' ||
+        (leaveStatusFilter === 'unexcused_risk' ? !r.excused : Boolean(r.excused));
+      const matchQ =
+        !q ||
+        r.name.toLowerCase().includes(q) ||
+        r.smartId.toLowerCase().includes(q) ||
+        (r.parentPhone && r.parentPhone.includes(q)) ||
+        (r.parentEmail && r.parentEmail.toLowerCase().includes(q));
+      return matchThr && matchShift && matchAlertStatus && matchLeaveStatus && matchQ;
+    });
+  }, [timeFilteredRows, threshold, shift, alertStatusFilter, leaveStatusFilter, searchQuery]);
+
+  const critical = filtered.filter((r) => r.daysAbsent >= 7 && !r.excused);
+  const moderate = filtered.filter((r) => r.daysAbsent >= 3 && r.daysAbsent < 7 && !r.excused);
+  const onLeaveStudents = filtered.filter((r) => Boolean(r.excused));
+  const notifiedCount = filtered.filter((r) => r.notified).length;
+
+  const hasActiveFilters = Boolean(
+    searchQuery.trim() !== '' ||
+      shift !== 'All' ||
+      threshold !== '3' ||
+      timeHorizon !== 'all' ||
+      alertStatusFilter !== 'all' ||
+      leaveStatusFilter !== 'all' ||
+      customStartDate !== '' ||
+      customEndDate !== ''
+  );
+
+  const handleResetFilters = () => {
+    setSearchQuery('');
+    setShift('All');
+    setThreshold('3');
+    setTimeHorizon('all');
+    setAlertStatusFilter('all');
+    setLeaveStatusFilter('all');
+    setCustomStartDate('');
+    setCustomEndDate('');
+    toast.info('Absentee filters reset to default.');
+  };
+
+  const escapeCsv = (v: unknown) => {
+    let s = String(v ?? '');
+    return /^[\u0000-\u0020]*[=+\-@]/.test(s) ? `'"${s.replace(/"/g, '""')}"` : `"${s.replace(/"/g, '""')}"`;
+  };
+
+  const handleExportCsv = () => {
+    const headers = [
+      'Student Name',
+      'Smart ID',
+      'Shift',
+      'Days Absent',
+      'Last Seen',
+      'Parent Phone',
+      'Parent Email',
+      'Alert Status',
+      'Excused Status',
+      'Leave Reason',
+    ]
+      .map(escapeCsv)
+      .join(',');
+
+    const rows = filtered
+      .map((item) =>
+        [
+          item.name,
+          item.smartId,
+          item.shift,
+          item.daysAbsent,
+          item.lastSeen,
+          item.parentPhone,
+          item.parentEmail,
+          item.notified ? 'Notified' : 'Pending Alert',
+          item.excused ? 'Excused Leave' : 'Unexcused',
+          item.leaveReason || '',
+        ]
+          .map(escapeCsv)
+          .join(',')
+      )
+      .join('\r\n');
+
+    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = Object.assign(document.createElement('a'), {
+      href: url,
+      download: `absentee_report_${new Date().toISOString().slice(0, 10)}.csv`,
+      hidden: true,
+    });
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success('Absentee report exported to CSV successfully');
+  };
+
+  const badgeClass = (d: number) => (d >= 7 ? 'eng-badge--danger' : 'eng-badge--warning');
+
+  const colDefs = useMemo(
+    () =>
+      createManagerAbsenteeReportAbsenteeColumns(
+        {
+          student: tManagerUi('student'),
+          smartId: tManagerUi('smart_id'),
+          shift: tManagerUi('shift'),
+          daysAbsent: tManagerUi('days_absent'),
+          days: tManagerUi('days'),
+          lastSeen: tManagerUi('last_seen'),
+          parentContact: tManagerUi('parent_contact'),
+          actions: tManagerUi('actions'),
+          samplePreviouslyNotified: tManagerUi('sample_previously_notified'),
+          parentAlertsUnavailable: tManagerUi('parent_alerts_unavailable_verified_messaging_integration_9cbc80'),
+          alertUnavailable: tManagerUi('alert_unavailable'),
+          locale,
+        },
+        shiftLabels,
+        badgeClass,
+        handleAlertWhatsApp,
+        (item) => setSelectedAbsentee(item)
+      ),
+    [tManagerUi, locale, shiftLabels]
+  );
 
   return (
-    <div className="eng-page" data-route-view={view} data-route-id={id} data-route-name={name} data-route-phone={phone} data-route-smart-id={smartId}>
-      {/* ── Breadcrumb ── */}
-      <div className="eng-breadcrumb">
-        <Link href={MANAGER_ATTENDANCE_ABSENTEE_REPORT_ROUTES.attendance}>{tManagerUi('engagement')}</Link>
-        <ChevronRight size={12} className="eng-breadcrumb-sep"/>
-        <span>{tManagerUi('absentee_report')}</span>
-      </div>
-
-      {/* ── Page Header ── */}
-      <div className="eng-page-header">
-        <div className="eng-page-title-row">
-          <div>
-            <h1 className="eng-page-title">{tManagerUi('absentee_report_23bf56')}</h1>
-            <p className="eng-page-subtitle">{tManagerUi('students_with_consecutive_absences_requiring_attention')}</p>
-            <p className="eng-input-hint eng-text-warning" data-testid="manager-engagement-absentee-contract-warning" role="status">{tManagerUi('student_contact_rows_are_sample_data_individual_and_bulk_64dbd3')}</p>
+    <div className="space-y-6" data-route-view={view} data-route-id={id}>
+      {/* ── Clean Executive Page Header ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-3 flex-wrap">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-primary">
+              {tManagerUi('absentee_report_23bf56')}
+            </h1>
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-primary-subtle text-primary font-bold border border-border">
+              {filtered.length} Students
+            </span>
           </div>
-          <div className="eng-page-actions">
-            <button type="button" disabled title={tManagerUi('bulk_alerts_unavailable_verified_messaging_integration_c_f7eade')} className="eng-btn eng-btn--ghost cursor-not-allowed">
-              <Send size={14}/> {tManagerUi('bulk_alerts_unavailable')}
-            </button>
+          <p className="text-xs sm:text-sm text-secondary mt-1">
+            {tManagerUi('students_with_consecutive_absences_requiring_attention')}
+          </p>
+        </div>
+
+        {/* Action Buttons: Print Report, Export CSV, Bulk WhatsApp Alerts */}
+        <div className="flex items-center flex-wrap gap-2.5">
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
+            title="Print Absentee Report"
+          >
+            <Printer size={14} />
+            <span>Print Report</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
+            title="Export Absentee Report as CSV"
+          >
+            <Download size={14} />
+            <span>Export CSV</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsBulkWhatsAppOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors cursor-pointer"
+            title="Launch bulk WhatsApp alerts queue for absentees"
+          >
+            <MessageSquare size={14} />
+            <span>Bulk WhatsApp Alerts ({filtered.length})</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ── Global Time Horizon Filter Bar with Glowing Halos ── */}
+      <ManagerAttendanceAbsenteeTimeHorizonBar
+        timeHorizon={timeHorizon}
+        onChangeTimeHorizon={setTimeHorizon}
+        customStartDate={customStartDate}
+        onCustomStartDateChange={setCustomStartDate}
+        customEndDate={customEndDate}
+        onCustomEndDateChange={setCustomEndDate}
+        activeCount={filtered.length}
+      />
+
+      {/* ── Clean Executive KPI Cards ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {/* Total Absentees */}
+        <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 p-5 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                {tManagerUi('total_absentees')}
+              </span>
+              <div className="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 flex items-center justify-center transition-transform group-hover:scale-110 shadow-xs">
+                <Users size={20} />
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white font-mono">
+                {filtered.length}
+              </div>
+              <p className="mt-1 text-xs text-slate-400">
+                Above {threshold === 'all' ? '0' : threshold} days absence
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Critical (7+ Days) Unexcused Dropout Risk */}
+        <div className="group relative overflow-hidden rounded-2xl border border-rose-500/40 bg-gradient-to-br from-rose-950/80 via-[#260e19] to-rose-900/60 p-5 shadow-lg shadow-rose-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-rose-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#f87171" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-rose-400 uppercase tracking-wider">
+                Critical Risk (7+ D)
+              </span>
+              <div className="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/40 flex items-center justify-center transition-transform group-hover:scale-110 shadow-xs">
+                <AlertTriangle size={20} />
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-rose-400 font-mono">
+                {critical.length}
+              </div>
+              <p className="mt-1 text-xs text-slate-400">Unexcused dropout & seat loss risk</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Moderate (3-6 Days) */}
+        <div className="group relative overflow-hidden rounded-2xl border border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261708] to-amber-900/60 p-5 shadow-lg shadow-amber-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-amber-400 uppercase tracking-wider">
+                Moderate (3-6 D)
+              </span>
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center transition-transform group-hover:scale-110 shadow-xs">
+                <Clock size={20} />
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-amber-400 font-mono">
+                {moderate.length}
+              </div>
+              <p className="mt-1 text-xs text-slate-400">Active attendance monitoring</p>
+            </div>
+          </div>
+        </div>
+
+        {/* On Leave / Excused */}
+        <div className="group relative overflow-hidden rounded-2xl border border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0e2540] to-sky-900/60 p-5 shadow-lg shadow-sky-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-sky-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-sky-400 uppercase tracking-wider">
+                On Leave / Excused
+              </span>
+              <div className="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/40 flex items-center justify-center transition-transform group-hover:scale-110 shadow-xs">
+                <FileCheck size={20} />
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-sky-400 font-mono">
+                {onLeaveStudents.length}
+              </div>
+              <p className="mt-1 text-xs text-slate-400">Approved leave (seats protected)</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Parents Notified */}
+        <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 p-5 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
+                {tManagerUi('parents_notified')}
+              </span>
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center transition-transform group-hover:scale-110 shadow-xs">
+                <ShieldCheck size={20} />
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-emerald-400 font-mono">
+                {notifiedCount}
+              </div>
+              <p className="mt-1 text-xs text-slate-400">Of {filtered.length} total filtered absentees</p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* ── KPI Stats ── */}
-      <div className="eng-stats-row">
-        <div className="eng-stat-card">
-          <div className="eng-stat-label">{tManagerUi('total_absentees')}</div>
-          <div className="eng-stat-value">{filtered.length}</div>
-          <div className="eng-stat-sub">{tManagerUi('above')} {threshold === 'all' ? '0' : threshold} {tManagerUi('day_threshold')}</div>
-        </div>
-        <div className="eng-stat-card">
-          <div className="eng-stat-label">{tManagerUi('critical_7_days')}</div>
-          <div className="eng-stat-value eng-stat-value--danger">{critical.length}</div>
-          <div className="eng-stat-sub">{tManagerUi('immediate_action_needed')}</div>
-        </div>
-        <div className="eng-stat-card">
-          <div className="eng-stat-label">{tManagerUi('moderate_3_6_days')}</div>
-          <div className="eng-stat-value eng-stat-value--warning">{moderate.length}</div>
-          <div className="eng-stat-sub">{tManagerUi('monitoring_required')}</div>
-        </div>
-        <div className="eng-stat-card">
-          <div className="eng-stat-label">{tManagerUi('parents_notified')}</div>
-          <div className="eng-stat-value eng-stat-value--success">{filtered.filter(r=>r.notified).length}</div>
-          <div className="eng-stat-sub">{tManagerUi('of')} {filtered.length} {tManagerUi('total')}</div>
-        </div>
-      </div>
+      {/* ── Toolbar: Non-overlapping Search, Shift Filter & Thresholds ── */}
+      <div className="flex flex-col gap-3.5 p-3.5 sm:p-4 rounded-2xl bg-card border border-border shadow-xs">
+        {/* Top Row: Shift Pills & Alert Status Filter with Glowing Halos */}
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3 pb-3 border-b border-border/70">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 xl:pb-0 scrollbar-none">
+            <span className="text-xs font-semibold text-secondary shrink-0 mr-1">Shift:</span>
+            {SHIFT_OPTIONS.map((opt) => {
+              const isActive = shift === opt.id;
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => setShift(opt.id)}
+                  style={
+                    isActive
+                      ? {
+                          boxShadow: '0 0 16px rgba(99, 102, 241, 0.45)',
+                          backgroundColor: '#6366f1',
+                          borderColor: '#818cf8',
+                          color: '#ffffff',
+                        }
+                      : undefined
+                  }
+                  className={`inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    isActive
+                      ? 'border shadow-sm font-bold'
+                      : 'bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover border border-border/80'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
 
-      {/* ── Filters ── */}
-      <div className="eng-card eng-card--flush eng-mb-6 p-4 border-b border-border">
-        <div className="eng-filter-bar flex items-center justify-between">
-          <div className="flex gap-6 items-center">
-            <div className="eng-filter-field flex flex-col">
-              <label htmlFor="manager-engagement-absentee-threshold" className="eng-label mb-1 text-xs font-semibold text-secondary">{tManagerUi('days_threshold')}</label>
-              <select id="manager-engagement-absentee-threshold" className="eng-select eng-filter-select py-1 px-2 border rounded" value={threshold}
-                onChange={e => setThreshold(e.target.value)}>
-                <option value="3">{tManagerUi('label_3_days')}</option>
-                <option value="5">{tManagerUi('label_5_days')}</option>
-                <option value="7">{tManagerUi('label_7_days_critical')}</option>
-                <option value="all">{tManagerUi('show_all')}</option>
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 xl:pb-0 scrollbar-none shrink-0">
+            <span className="text-xs font-semibold text-secondary shrink-0 mr-1">Alert:</span>
+            {ALERT_STATUS_OPTIONS.map((opt) => {
+              const isActive = alertStatusFilter === opt.id;
+              const glowColor =
+                opt.id === 'pending'
+                  ? 'rgba(245, 158, 11, 0.45)'
+                  : opt.id === 'notified'
+                  ? 'rgba(16, 185, 129, 0.45)'
+                  : 'rgba(99, 102, 241, 0.45)';
+              const bgActive =
+                opt.id === 'pending'
+                  ? '#d97706'
+                  : opt.id === 'notified'
+                  ? '#059669'
+                  : '#6366f1';
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => setAlertStatusFilter(opt.id)}
+                  style={
+                    isActive
+                      ? {
+                          boxShadow: `0 0 16px ${glowColor}`,
+                          backgroundColor: bgActive,
+                          borderColor: bgActive,
+                          color: '#ffffff',
+                        }
+                      : undefined
+                  }
+                  className={`inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    isActive
+                      ? 'border shadow-sm font-bold'
+                      : 'bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover border border-border/80'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Leave / Dropout Risk Status Filter */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 xl:pb-0 scrollbar-none shrink-0">
+            <span className="text-xs font-semibold text-secondary shrink-0 mr-1">Status:</span>
+            {[
+              { id: 'all', label: 'All Absentees' },
+              { id: 'unexcused_risk', label: 'Dropout Risk (Unexcused)' },
+              { id: 'on_leave', label: 'On Leave / Excused' },
+            ].map((opt) => {
+              const isActive = leaveStatusFilter === opt.id;
+              const glowColor =
+                opt.id === 'unexcused_risk'
+                  ? 'rgba(239, 68, 68, 0.45)'
+                  : opt.id === 'on_leave'
+                  ? 'rgba(59, 130, 246, 0.45)'
+                  : 'rgba(99, 102, 241, 0.45)';
+              const bgActive =
+                opt.id === 'unexcused_risk'
+                  ? '#dc2626'
+                  : opt.id === 'on_leave'
+                  ? '#2563eb'
+                  : '#6366f1';
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => setLeaveStatusFilter(opt.id as any)}
+                  style={
+                    isActive
+                      ? {
+                          boxShadow: `0 0 16px ${glowColor}`,
+                          backgroundColor: bgActive,
+                          borderColor: bgActive,
+                          color: '#ffffff',
+                        }
+                      : undefined
+                  }
+                  className={`inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    isActive
+                      ? 'border shadow-sm font-bold'
+                      : 'bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover border border-border/80'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="inline-flex items-center gap-1.5 text-xs text-secondary hover:text-danger hover:bg-danger/10 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer shrink-0 ml-1"
+                title="Reset all active filters"
+              >
+                <RotateCcw size={12} />
+                <span>Reset Filters</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Bottom Row: Non-Overlapping Search & Threshold Controls */}
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+          {/* Guaranteed Non-Overlapping Search Box with Z-10 Icon and Clear Button */}
+          <div className="relative flex-1 min-w-[240px] flex items-center">
+            <input maxLength={100}
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search student name, smart ID, phone, or email..."
+              style={{ paddingLeft: '2.5rem', paddingRight: '2.25rem' }}
+              className="w-full text-xs rounded-xl bg-card border border-border py-2 text-primary placeholder:text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+            />
+            <Search
+              size={16}
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none z-10"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-secondary hover:text-primary rounded-md hover:bg-surface-hover transition-colors cursor-pointer z-10"
+                title="Clear search"
+              >
+                <X size={14} />
+              </button>
+            )}
+          </div>
+
+          {/* Threshold Segmented Options & Badges */}
+          <div className="flex flex-wrap items-center gap-2 justify-between md:justify-end">
+            <div className="flex items-center gap-1.5">
+              <label htmlFor="absentee-threshold-select" className="text-xs text-secondary whitespace-nowrap">
+                Threshold:
+              </label>
+              <select
+                id="absentee-threshold-select"
+                value={threshold}
+                onChange={(e) => setThreshold(e.target.value)}
+                className="rounded-xl border border-border bg-card px-2.5 py-1.5 text-xs text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary cursor-pointer"
+              >
+                {THRESHOLD_OPTIONS.map((opt) => (
+                  <option key={opt.id} value={opt.id}>
+                    {opt.label}
+                  </option>
+                ))}
               </select>
             </div>
-            <div className="eng-filter-field flex flex-col">
-              <label htmlFor="manager-engagement-absentee-shift" className="eng-label mb-1 text-xs font-semibold text-secondary">{tManagerUi('shift')}</label>
-              <select id="manager-engagement-absentee-shift" className="eng-select eng-filter-select py-1 px-2 border rounded" value={shift}
-                onChange={e => setShift(e.target.value)}>
-                <option value="All">{tManagerUi('all')}</option>
-                <option value="Morning">{tManagerUi('morning')}</option>
-                <option value="Afternoon">{tManagerUi('afternoon')}</option>
-                <option value="Evening">{tManagerUi('evening')}</option>
-              </select>
+
+            <div className="flex items-center gap-1.5 shrink-0">
+              <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-rose-500/15 text-rose-400 border border-rose-500/30">
+                {critical.length} Critical
+              </span>
+              <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/30">
+                {moderate.length} Moderate
+              </span>
             </div>
-          </div>
-          <div className="eng-filter-badges flex gap-2">
-            <span className="eng-badge eng-badge--danger px-2 py-1 rounded-full text-xs">{critical.length} {tManagerUi('critical')}</span>
-            <span className="eng-badge eng-badge--warning px-2 py-1 rounded-full text-xs">{moderate.length} {tManagerUi('moderate')}</span>
-            <span className="eng-badge eng-badge--success px-2 py-1 rounded-full text-xs">{filtered.filter(r=>r.notified).length} {tManagerUi('notified')}</span>
           </div>
         </div>
       </div>
 
-      {/* ── Table ── */}
-      <div className="eng-card eng-card--flush p-4">
+      {/* ── Native Table Ledger ── */}
+      <div className="rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-xs">
         {filtered.length === 0 ? (
-          <div className="eng-empty py-12 flex flex-col items-center justify-center text-center">
-            <div className="eng-empty-icon text-4xl mb-4">🎉</div>
-            <p className="eng-empty-title text-lg font-semibold text-primary mb-1">{tManagerUi('no_absentees_above_threshold')}</p>
-            <p className="eng-empty-sub text-sm text-secondary">{tManagerUi('all_students_have_great_attendance_above_the_selected_th_12de3c')}</p>
+          <div className="py-12 flex flex-col items-center justify-center text-center">
+            <div className="text-4xl mb-3">🎉</div>
+            <p className="text-base font-semibold text-primary mb-1">
+              {tManagerUi('no_absentees_above_threshold')}
+            </p>
+            <p className="text-xs text-secondary max-w-md">
+              {tManagerUi('all_students_have_great_attendance_above_the_selected_th_12de3c')}
+            </p>
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="mt-4 px-3.5 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-primary hover:bg-surface-hover cursor-pointer"
+              >
+                Reset Filters
+              </button>
+            )}
           </div>
         ) : (
-          <div className="mgr-table-wrapper h-112">
-            <ManagerAttendanceAbsenteeReportNativeTable getRowKey={(row) => row.id} rows={filtered} columns={colDefs} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+          <div className="w-full overflow-hidden">
+            <ManagerAttendanceAbsenteeReportNativeTable
+              getRowKey={(row) => row.id}
+              rows={filtered}
+              columns={colDefs}
+              labels={{
+                previous: tManagerUi('previous_page'),
+                next: tManagerUi('next_page'),
+              }}
+            />
           </div>
         )}
       </div>
+
+      {/* ── Single Absentee Details Modal ── */}
+      <ManagerAttendanceAbsenteeDetailsModal
+        isOpen={Boolean(selectedAbsentee)}
+        absentee={selectedAbsentee}
+        onClose={() => setSelectedAbsentee(null)}
+        onSendWhatsApp={handleAlertWhatsApp}
+        onMarkExcused={handleMarkExcused}
+        onRevokeExcused={handleRevokeExcused}
+      />
+
+      {/* ── Bulk WhatsApp Notice Modal ── */}
+      <ManagerAttendanceAbsenteeBulkWhatsAppModal
+        isOpen={isBulkWhatsAppOpen}
+        onClose={() => setIsBulkWhatsAppOpen(false)}
+        absentees={filtered}
+        onComplete={() => {
+          setIsBulkWhatsAppOpen(false);
+          setRowsList((prev) =>
+            prev.map((r) => (filtered.some((f) => f.smartId === r.smartId) ? { ...r, notified: true } : r))
+          );
+          toast.success('Bulk WhatsApp alerts queued successfully!');
+        }}
+      />
     </div>
   );
 }

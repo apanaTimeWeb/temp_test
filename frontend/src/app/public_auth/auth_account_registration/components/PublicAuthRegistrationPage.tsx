@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { BookOpen, Eye, EyeOff } from 'lucide-react';
+import { BookOpen, Eye, EyeOff, User, Building, Mail, Phone, Lock, CheckCircle2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { PublicAuthRegistrationApiError, getPublicAuthRegistrationApiErrorMessage } from '@/app/public_auth/auth_account_registration/api/PublicAuthRegistrationApi';
 import { PUBLIC_AUTH_REGISTRATION_URLS } from '@/app/public_auth/auth_account_registration/config/public_auth_registration_url_config';
@@ -16,11 +16,88 @@ import { PUBLIC_AUTH_REGISTRATION_DEMO } from '@/app/public_auth/auth_account_re
 import { createPublicAuthRegistrationSchema, type PublicAuthRegistrationFormData } from '@/app/public_auth/auth_account_registration/schemas/PublicAuthRegistrationValidationSchemas';
 import type { PublicAuthRegistrationRequest } from '@/app/public_auth/auth_account_registration/types/PublicAuthRegistrationApiTypes';
 
-/**
- * Owns public account-creation fields, client validation, loading/error feedback, and post-acceptance setup navigation.
- * Dependencies: the approved host signup endpoint, RHF/Zod, next-intl, and the existing setup-wizard route.
- * Edge cases: editable fields and repeated submit are disabled while pending; failures retain fields and unlock retry; password confirmation is client-only and is never sent.
- */
+const REGISTRATION_CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  * { box-sizing: border-box; }
+
+  .reg-bg {
+    background: #030712;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .dot-grid {
+    background-image: radial-gradient(rgba(99,102,241,0.12) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .aurora-orb-1 {
+    position: absolute;
+    width: 650px; height: 650px;
+    background: radial-gradient(ellipse, rgba(99,102,241,0.16) 0%, transparent 65%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .aurora-orb-2 {
+    position: absolute;
+    width: 550px; height: 550px;
+    background: radial-gradient(ellipse, rgba(34,211,238,0.10) 0%, transparent 65%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .glass-card {
+    background: rgba(8,8,24,0.8);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+    border: 1px solid rgba(99,102,241,0.22);
+    box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 50px rgba(99,102,241,0.08);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #a78bfa 0%, #6366f1 40%, #22d3ee 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .input-field {
+    background: rgba(10,10,28,0.85);
+    border: 1px solid rgba(99,102,241,0.2);
+    color: #fff;
+    transition: all 0.2s;
+    outline: none;
+  }
+
+  .input-field::placeholder {
+    color: rgba(148,163,184,0.45);
+  }
+
+  .input-field:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+  }
+
+  .input-error {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239,68,68,0.1) !important;
+  }
+
+  .shimmer-btn {
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #22d3ee, #6366f1);
+    background-size: 200% auto;
+    animation: shimmer 3s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  .glow-indigo {
+    box-shadow: 0 0 30px rgba(99,102,241,0.45);
+  }
+`;
+
 export default function PublicAuthRegistrationPage() {
   const t = useTranslations('AUTH');
   const router = useRouter();
@@ -53,7 +130,7 @@ export default function PublicAuthRegistrationPage() {
     resolver: zodResolver(validationSchema),
     defaultValues: { ownerName: '', libraryName: '', email: '', phone: '', password: '', confirmPassword: '' },
   });
-  // Data-flow rationale: edits invalidate the reusable idempotency key; both subscription methods are dependencies and the observer is cleaned up on unmount.
+
   useEffect(() => {
     const subscription = watch(() => clearKey());
     return () => subscription.unsubscribe();
@@ -83,7 +160,6 @@ export default function PublicAuthRegistrationPage() {
       for (const validationError of validationErrors) {
         const field = fieldMap[validationError.field];
         if (field) {
-          // Use localized module copy, not an unapproved server-supplied message.
           setError(field, { type: 'server', message: t('errors.requestFailed') });
         } else {
           hasUnknownField = true;
@@ -104,66 +180,305 @@ export default function PublicAuthRegistrationPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-page p-4 text-primary sm:p-8">
-      <div className="w-full max-w-2xl space-y-6">
-        <div className="flex items-center justify-center gap-3">
-          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-on-primary"><BookOpen size={18} strokeWidth={2} aria-hidden="true" /></span>
-          <span className="text-xl font-bold">{t('BRAND')}</span>
+    <main className="reg-bg relative min-h-screen flex items-center justify-center p-4 sm:p-8 text-white overflow-hidden">
+      <style dangerouslySetInnerHTML={{ __html: REGISTRATION_CSS }} />
+
+      {/* Ambient background glows */}
+      <div className="absolute inset-0 dot-grid opacity-50" />
+      <div className="aurora-orb-1" style={{ top: '-10%', left: '-10%' }} />
+      <div className="aurora-orb-2" style={{ bottom: '-10%', right: '-10%' }} />
+
+      <div className="w-full max-w-2xl relative z-10 space-y-6 my-8">
+        {/* Brand Header */}
+        <div className="flex flex-col items-center justify-center gap-2">
+          <div className="flex items-center gap-3">
+            <div className="relative w-11 h-11">
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl blur-md opacity-80" />
+              <div className="relative w-11 h-11 bg-gradient-to-br from-indigo-500 via-indigo-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg border border-white/20">
+                <BookOpen className="w-5 h-5 text-white" />
+              </div>
+            </div>
+            <span className="text-2xl font-black tracking-tight text-white">
+              Library<span className="gradient-text">OS</span>
+            </span>
+          </div>
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-xs font-semibold text-indigo-300">
+            <CheckCircle2 size={12} className="text-cyan-400" />
+            Empowering Modern Indian Study Libraries
+          </span>
         </div>
-        <section className="rounded-2xl border border-border bg-card p-5 shadow-card sm:p-8" aria-labelledby="auth-signup-title">
-          <header className="mb-6 space-y-2">
-            <h1 id="auth-signup-title" className="text-2xl font-bold">{t('SIGNUP.title')}</h1>
-            <p className="text-sm text-secondary">{t('SIGNUP.description')}</p>
+
+        {/* Signup Glass Card */}
+        <section className="glass-card rounded-3xl p-6 sm:p-10" aria-labelledby="auth-signup-title">
+          <header className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-white/5 pb-5">
+            <div>
+              <h1 id="auth-signup-title" className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+                {t('SIGNUP.title')}
+              </h1>
+              <p className="mt-1 text-xs sm:text-sm text-slate-400">{t('SIGNUP.description')}</p>
+            </div>
+            {demoFillEnabled && (
+              <button
+                data-testid="auth-signup-demo-fill"
+                type="button"
+                disabled={isBusy}
+                onClick={() => {
+                  setValue('ownerName', PUBLIC_AUTH_REGISTRATION_DEMO.ownerName, { shouldDirty: true });
+                  setValue('libraryName', PUBLIC_AUTH_REGISTRATION_DEMO.libraryName, { shouldDirty: true });
+                  setValue('email', PUBLIC_AUTH_REGISTRATION_DEMO.email, { shouldDirty: true });
+                  setValue('phone', PUBLIC_AUTH_REGISTRATION_DEMO.phone, { shouldDirty: true });
+                  setValue('password', PUBLIC_AUTH_REGISTRATION_DEMO.password, { shouldDirty: true });
+                  setValue('confirmPassword', PUBLIC_AUTH_REGISTRATION_DEMO.confirmPassword, { shouldDirty: true });
+                }}
+                className="self-start rounded-lg border border-indigo-500/30 bg-indigo-500/10 px-3 py-1.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                {t('COMMON.demoFill')}
+              </button>
+            )}
           </header>
 
           <form data-testid="auth-signup-form" onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
-            {demoFillEnabled && <button data-testid="auth-signup-demo-fill" type="button" disabled={isBusy} onClick={() => { setValue('ownerName', PUBLIC_AUTH_REGISTRATION_DEMO.ownerName, { shouldDirty: true }); setValue('libraryName', PUBLIC_AUTH_REGISTRATION_DEMO.libraryName, { shouldDirty: true }); setValue('email', PUBLIC_AUTH_REGISTRATION_DEMO.email, { shouldDirty: true }); setValue('phone', PUBLIC_AUTH_REGISTRATION_DEMO.phone, { shouldDirty: true }); setValue('password', PUBLIC_AUTH_REGISTRATION_DEMO.password, { shouldDirty: true }); setValue('confirmPassword', PUBLIC_AUTH_REGISTRATION_DEMO.confirmPassword, { shouldDirty: true }); }} className="min-h-11 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">{t('COMMON.demoFill')}</button>}
-            <div className="space-y-1.5">
-              <label htmlFor="auth-signup-owner" className="block text-sm font-medium text-secondary">{t('SIGNUP.ownerName')}<span aria-hidden="true" className="ml-1">*</span><span className="sr-only">{t('COMMON.required')}</span></label>
-              <input id="auth-signup-owner" data-testid="auth-signup-owner-name-input" required type="text" autoComplete="name" {...register('ownerName')} aria-invalid={Boolean(errors.ownerName)} aria-describedby={errors.ownerName ? 'auth-signup-owner-error' : undefined} className="min-h-11 w-full rounded-lg border border-border bg-input px-3 text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:bg-surface-highlight disabled:text-disabled" disabled={isBusy} />
-              {errors.ownerName && <p id="auth-signup-owner-error" data-testid="auth-signup-owner-validation-error" className="text-sm text-danger" role="alert">{errors.ownerName.message}</p>}
-            </div>
-            <div className="space-y-1.5">
-              <label htmlFor="auth-signup-library" className="block text-sm font-medium text-secondary">{t('SIGNUP.libraryName')}<span aria-hidden="true" className="ml-1">*</span><span className="sr-only">{t('COMMON.required')}</span></label>
-              <input id="auth-signup-library" data-testid="auth-signup-library-name-input" required type="text" autoComplete="organization" {...register('libraryName')} aria-invalid={Boolean(errors.libraryName)} aria-describedby={errors.libraryName ? 'auth-signup-library-error' : undefined} className="min-h-11 w-full rounded-lg border border-border bg-input px-3 text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:bg-surface-highlight disabled:text-disabled" disabled={isBusy} />
-              {errors.libraryName && <p id="auth-signup-library-error" data-testid="auth-signup-library-validation-error" className="text-sm text-danger" role="alert">{errors.libraryName.message}</p>}
-            </div>
-            <div className="space-y-1.5">
-              <label htmlFor="auth-signup-email" className="block text-sm font-medium text-secondary">{t('SIGNUP.email')}<span aria-hidden="true" className="ml-1">*</span><span className="sr-only">{t('COMMON.required')}</span></label>
-              <input id="auth-signup-email" data-testid="auth-signup-email-input" required type="email" autoComplete="email" {...register('email')} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? 'auth-signup-email-error' : undefined} className="min-h-11 w-full rounded-lg border border-border bg-input px-3 text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:bg-surface-highlight disabled:text-disabled" disabled={isBusy} />
-              {errors.email && <p id="auth-signup-email-error" data-testid="auth-signup-email-validation-error" className="text-sm text-danger" role="alert">{errors.email.message}</p>}
-            </div>
-            <div className="space-y-1.5">
-              <label htmlFor="auth-signup-phone" className="block text-sm font-medium text-secondary">{t('SIGNUP.phone')}<span aria-hidden="true" className="ml-1">*</span><span className="sr-only">{t('COMMON.required')}</span></label>
-              <input id="auth-signup-phone" data-testid="auth-signup-phone-input" required type="tel" autoComplete="tel" {...register('phone')} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'auth-signup-phone-error' : 'auth-signup-phone-help'} className="min-h-11 w-full rounded-lg border border-border bg-input px-3 text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:bg-surface-highlight disabled:text-disabled" disabled={isBusy} />
-              {errors.phone ? <p id="auth-signup-phone-error" data-testid="auth-signup-phone-validation-error" className="text-sm text-danger" role="alert">{errors.phone.message}</p> : <p id="auth-signup-phone-help" className="text-xs text-secondary">{t('SIGNUP.phoneHelp')}</p>}
-            </div>
-            <div className="space-y-1.5">
-              <label htmlFor="auth-signup-password" className="block text-sm font-medium text-secondary">{t('SIGNUP.password')}<span aria-hidden="true" className="ml-1">*</span><span className="sr-only">{t('COMMON.required')}</span></label>
-              <div className="relative">
-                <input id="auth-signup-password" data-testid="auth-signup-password-input" required type={showPassword ? 'text' : 'password'} autoComplete="new-password" {...register('password')} aria-invalid={Boolean(errors.password)} aria-describedby={errors.password ? 'auth-signup-password-error' : undefined} className="min-h-11 w-full rounded-lg border border-border bg-input px-3 pr-14 text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:bg-surface-highlight disabled:text-disabled" disabled={isBusy} />
-                <button data-testid="auth-signup-password-toggle" type="button" onClick={() => setShowPassword((value) => !value)} aria-label={showPassword ? t('PASSWORD.hide') : t('PASSWORD.show')} aria-pressed={showPassword} className="absolute right-1 top-1 flex h-11 w-11 items-center justify-center rounded-md text-secondary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:bg-surface-highlight disabled:text-disabled" disabled={isBusy}>{showPassword ? <EyeOff size={18} strokeWidth={2} aria-hidden="true" /> : <Eye size={18} strokeWidth={2} aria-hidden="true" />}</button>
+            {/* Owner & Library Name Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label htmlFor="auth-signup-owner" className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  {t('SIGNUP.ownerName')}
+                  <span aria-hidden="true" className="ml-1 text-indigo-400">*</span>
+                  <span className="sr-only">{t('COMMON.required')}</span>
+                </label>
+                <div className="relative">
+                  <input maxLength={30}
+                    id="auth-signup-owner"
+                    data-testid="auth-signup-owner-name-input"
+                    required
+                    type="text"
+                    autoComplete="name"
+                    placeholder="Enter owner full name"
+                    disabled={isBusy}
+                    {...register('ownerName')}
+                    aria-invalid={Boolean(errors.ownerName)}
+                    aria-describedby={errors.ownerName ? 'auth-signup-owner-error' : undefined}
+                    className={`input-field min-h-11 w-full rounded-xl px-4 py-2.5 text-sm ${errors.ownerName ? 'input-error' : ''}`}
+                  />
+                </div>
+                {errors.ownerName && (
+                  <p id="auth-signup-owner-error" data-testid="auth-signup-owner-validation-error" className="text-xs text-rose-400 font-medium flex items-center gap-1 mt-1" role="alert">
+                    <span>⚠</span>{errors.ownerName.message}
+                  </p>
+                )}
               </div>
-              {errors.password && <p id="auth-signup-password-error" data-testid="auth-signup-password-validation-error" className="text-sm text-danger" role="alert">{errors.password.message}</p>}
-              <PublicAuthRegistrationPasswordStrengthMeter password={password} />
-            </div>
-            <div className="space-y-1.5">
-              <label htmlFor="auth-signup-confirm" className="block text-sm font-medium text-secondary">{t('SIGNUP.confirmPassword')}<span aria-hidden="true" className="ml-1">*</span><span className="sr-only">{t('COMMON.required')}</span></label>
-              <div className="relative">
-                <input id="auth-signup-confirm" data-testid="auth-signup-confirm-password-input" required type={showConfirmPassword ? 'text' : 'password'} autoComplete="new-password" {...register('confirmPassword')} aria-invalid={Boolean(errors.confirmPassword)} aria-describedby={errors.confirmPassword ? 'auth-signup-confirm-error' : undefined} className={`min-h-11 w-full rounded-lg border bg-input px-3 pr-14 text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${confirmPassword && confirmPassword === password && !errors.confirmPassword ? 'border-success' : 'border-border'} disabled:cursor-not-allowed disabled:bg-surface-highlight disabled:text-disabled`}  disabled={isBusy} />
-                <button data-testid="auth-signup-confirm-password-toggle" type="button" onClick={() => setShowConfirmPassword((value) => !value)} aria-label={showConfirmPassword ? t('PASSWORD.hide') : t('PASSWORD.show')} aria-pressed={showConfirmPassword} className="absolute right-1 top-1 flex h-11 w-11 items-center justify-center rounded-md text-secondary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:bg-surface-highlight disabled:text-disabled" disabled={isBusy}>{showConfirmPassword ? <EyeOff size={18} strokeWidth={2} aria-hidden="true" /> : <Eye size={18} strokeWidth={2} aria-hidden="true" />}</button>
+
+              <div className="space-y-1.5">
+                <label htmlFor="auth-signup-library" className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  {t('SIGNUP.libraryName')}
+                  <span aria-hidden="true" className="ml-1 text-indigo-400">*</span>
+                  <span className="sr-only">{t('COMMON.required')}</span>
+                </label>
+                <div className="relative">
+                  <input maxLength={30}
+                    id="auth-signup-library"
+                    data-testid="auth-signup-library-name-input"
+                    required
+                    type="text"
+                    autoComplete="organization"
+                    placeholder="e.g. Apex Study Library"
+                    disabled={isBusy}
+                    {...register('libraryName')}
+                    aria-invalid={Boolean(errors.libraryName)}
+                    aria-describedby={errors.libraryName ? 'auth-signup-library-error' : undefined}
+                    className={`input-field min-h-11 w-full rounded-xl px-4 py-2.5 text-sm ${errors.libraryName ? 'input-error' : ''}`}
+                  />
+                </div>
+                {errors.libraryName && (
+                  <p id="auth-signup-library-error" data-testid="auth-signup-library-validation-error" className="text-xs text-rose-400 font-medium flex items-center gap-1 mt-1" role="alert">
+                    <span>⚠</span>{errors.libraryName.message}
+                  </p>
+                )}
               </div>
-              {errors.confirmPassword && <p id="auth-signup-confirm-error" data-testid="auth-signup-confirm-validation-error" className="text-sm text-danger" role="alert">{errors.confirmPassword.message}</p>}
             </div>
 
-            {errors.root?.server?.message && <p data-testid="auth-signup-server-error-state" className="rounded-lg border border-danger bg-danger-bg p-3 text-sm text-danger" role="alert" aria-live="assertive">{errors.root.server.message}</p>}
-            <button id="auth-signup-submit" data-testid="auth-signup-submit" type="submit" disabled={isBusy} className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 font-semibold text-on-primary motion-safe:transition-colors motion-safe:duration-base hover:bg-primary-hover disabled:cursor-not-allowed disabled:bg-surface-highlight disabled:text-disabled focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-              {(isBusy) && <span className="h-4 w-4 motion-safe:animate-spin rounded-full border-2 border-current border-r-transparent motion-reduce:animate-none" aria-hidden="true" />}
+            {/* Email & Phone Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label htmlFor="auth-signup-email" className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  {t('SIGNUP.email')}
+                  <span aria-hidden="true" className="ml-1 text-indigo-400">*</span>
+                  <span className="sr-only">{t('COMMON.required')}</span>
+                </label>
+                <div className="relative">
+                  <input maxLength={30}
+                    id="auth-signup-email"
+                    data-testid="auth-signup-email-input"
+                    required
+                    type="email"
+                    autoComplete="email"
+                    placeholder="admin@yourlibrary.com"
+                    disabled={isBusy}
+                    {...register('email')}
+                    aria-invalid={Boolean(errors.email)}
+                    aria-describedby={errors.email ? 'auth-signup-email-error' : undefined}
+                    className={`input-field min-h-11 w-full rounded-xl px-4 py-2.5 text-sm ${errors.email ? 'input-error' : ''}`}
+                  />
+                </div>
+                {errors.email && (
+                  <p id="auth-signup-email-error" data-testid="auth-signup-email-validation-error" className="text-xs text-rose-400 font-medium flex items-center gap-1 mt-1" role="alert">
+                    <span>⚠</span>{errors.email.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                <label htmlFor="auth-signup-phone" className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  {t('SIGNUP.phone')}
+                  <span aria-hidden="true" className="ml-1 text-indigo-400">*</span>
+                  <span className="sr-only">{t('COMMON.required')}</span>
+                </label>
+                <div className="relative">
+                  <input
+                    id="auth-signup-phone"
+                    data-testid="auth-signup-phone-input"
+                    required
+                    type="tel"
+                    autoComplete="tel"
+                    placeholder="+91 98765 43210"
+                    maxLength={15}
+                    disabled={isBusy}
+                    {...register('phone')}
+                    aria-invalid={Boolean(errors.phone)}
+                    aria-describedby={errors.phone ? 'auth-signup-phone-error' : 'auth-signup-phone-help'}
+                    className={`input-field min-h-11 w-full rounded-xl px-4 py-2.5 text-sm ${errors.phone ? 'input-error' : ''}`}
+                  />
+                </div>
+                {errors.phone ? (
+                  <p id="auth-signup-phone-error" data-testid="auth-signup-phone-validation-error" className="text-xs text-rose-400 font-medium flex items-center gap-1 mt-1" role="alert">
+                    <span>⚠</span>{errors.phone.message}
+                  </p>
+                ) : (
+                  <p id="auth-signup-phone-help" className="text-[11px] text-slate-400">{t('SIGNUP.phoneHelp')}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Passwords Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label htmlFor="auth-signup-password" className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  {t('SIGNUP.password')}
+                  <span aria-hidden="true" className="ml-1 text-indigo-400">*</span>
+                  <span className="sr-only">{t('COMMON.required')}</span>
+                </label>
+                <div className="relative">
+                  <input maxLength={30}
+                    id="auth-signup-password"
+                    data-testid="auth-signup-password-input"
+                    required
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
+                    placeholder="Create password"
+                    disabled={isBusy}
+                    {...register('password')}
+                    aria-invalid={Boolean(errors.password)}
+                    aria-describedby={errors.password ? 'auth-signup-password-error' : undefined}
+                    className={`input-field min-h-11 w-full rounded-xl px-4 py-2.5 pr-12 text-sm ${errors.password ? 'input-error' : ''}`}
+                  />
+                  <button
+                    data-testid="auth-signup-password-toggle"
+                    type="button"
+                    disabled={isBusy}
+                    onClick={() => setShowPassword((v) => !v)}
+                    aria-label={showPassword ? t('PASSWORD.hide') : t('PASSWORD.show')}
+                    aria-pressed={showPassword}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p id="auth-signup-password-error" data-testid="auth-signup-password-validation-error" className="text-xs text-rose-400 font-medium flex items-center gap-1 mt-1" role="alert">
+                    <span>⚠</span>{errors.password.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                <label htmlFor="auth-signup-confirm" className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  {t('SIGNUP.confirmPassword')}
+                  <span aria-hidden="true" className="ml-1 text-indigo-400">*</span>
+                  <span className="sr-only">{t('COMMON.required')}</span>
+                </label>
+                <div className="relative">
+                  <input maxLength={30}
+                    id="auth-signup-confirm"
+                    data-testid="auth-signup-confirm-password-input"
+                    required
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
+                    placeholder="Confirm password"
+                    disabled={isBusy}
+                    {...register('confirmPassword')}
+                    aria-invalid={Boolean(errors.confirmPassword)}
+                    aria-describedby={errors.confirmPassword ? 'auth-signup-confirm-error' : undefined}
+                    className={`input-field min-h-11 w-full rounded-xl px-4 py-2.5 pr-12 text-sm ${confirmPassword && confirmPassword === password && !errors.confirmPassword ? 'border-emerald-500' : ''} ${errors.confirmPassword ? 'input-error' : ''}`}
+                  />
+                  <button
+                    data-testid="auth-signup-confirm-password-toggle"
+                    type="button"
+                    disabled={isBusy}
+                    onClick={() => setShowConfirmPassword((v) => !v)}
+                    aria-label={showConfirmPassword ? t('PASSWORD.hide') : t('PASSWORD.show')}
+                    aria-pressed={showConfirmPassword}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                  >
+                    {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+                {errors.confirmPassword && (
+                  <p id="auth-signup-confirm-error" data-testid="auth-signup-confirm-validation-error" className="text-xs text-rose-400 font-medium flex items-center gap-1 mt-1" role="alert">
+                    <span>⚠</span>{errors.confirmPassword.message}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Password Strength Meter */}
+            <div className="pt-1">
+              <PublicAuthRegistrationPasswordStrengthMeter password={password} />
+            </div>
+
+            {/* Server Error Notification */}
+            {errors.root?.server?.message && (
+              <p data-testid="auth-signup-server-error-state" className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-xs sm:text-sm text-rose-300 flex items-center gap-2" role="alert" aria-live="assertive">
+                <span>⚠️</span>
+                <span>{errors.root.server.message}</span>
+              </p>
+            )}
+
+            {/* Submit Button */}
+            <button
+              id="auth-signup-submit"
+              data-testid="auth-signup-submit"
+              type="submit"
+              disabled={isBusy}
+              className="submit-btn shimmer-btn glow-indigo flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-black text-white hover:opacity-95 active:scale-[0.99] transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer shadow-lg mt-4"
+            >
+              {isBusy && <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-r-transparent" aria-hidden="true" />}
               {isBusy ? t('SIGNUP.submitting') : t('SIGNUP.submit')}
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-secondary">{t('SIGNUP.alreadyAccount')}{' '}<Link data-testid="auth-signup-back-to-login-link" href={PUBLIC_AUTH_REGISTRATION_URLS.LOGIN} className="font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">{t('SIGNUP.login')}</Link></p>
+          {/* Already have an account */}
+          <div className="mt-8 pt-6 border-t border-white/5 text-center">
+            <p className="text-xs sm:text-sm text-slate-400">
+              {t('SIGNUP.alreadyAccount')}{' '}
+              <Link
+                data-testid="auth-signup-back-to-login-link"
+                href={PUBLIC_AUTH_REGISTRATION_URLS.LOGIN}
+                className="font-bold text-indigo-400 hover:text-indigo-300 transition-colors"
+              >
+                {t('SIGNUP.login')}
+              </Link>
+            </p>
+          </div>
         </section>
       </div>
     </main>

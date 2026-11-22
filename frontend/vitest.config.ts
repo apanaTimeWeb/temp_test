@@ -10,7 +10,10 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     include: [
       'src/app/public_auth/**/*.{test,spec}.{ts,tsx}',
-      'src/app/frontend_manager/manager_members/members_id_card_generator/**/*.{test,spec}.{ts,tsx}',
+      'src/app/frontend_manager/**/*.{test,spec}.{ts,tsx}',
+      'src/app/frontend_admin/**/*.{test,spec}.{ts,tsx}',
+      'src/app/frontend_superadmin/**/*.{test,spec}.{ts,tsx}',
+      'src/components/**/*.{test,spec}.{ts,tsx}',
     ],
   },
   resolve: {

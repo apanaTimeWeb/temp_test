@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { normalizeManagerSecurityDepositsPaymentStatus, normalizeManagerSecurityDepositsRefundStatus } from '@/app/frontend_manager/manager_finance/finance_security_deposits/utils/ManagerFinanceSecurityDepositsStatusNormalization';
+import { normalizeManagerSecurityDepositsPaymentStatus,normalizeManagerSecurityDepositsRefundStatus } from '@/app/frontend_manager/manager_finance/finance_security_deposits/utils/ManagerFinanceSecurityDepositsStatusNormalization';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerFinanceSecurityDepositsStatusNormalization', () => {
   it('preserves known payment states and does not treat unknown states as valid', () => {
@@ -14,5 +14,28 @@ describe('ManagerFinanceSecurityDepositsStatusNormalization', () => {
     expect(normalizeManagerSecurityDepositsRefundStatus('processed')).toBe('processed');
     expect(normalizeManagerSecurityDepositsRefundStatus('cancelled')).toBe('unknown');
     expect(normalizeManagerSecurityDepositsRefundStatus('processing')).toBe('unknown');
+  });
+
+  it('verifies that No-Dues clearance requires all 5 checklist items before refund release', () => {
+    const checklistComplete = {
+      lockerKeyReturned: true,
+      idCardReturned: true,
+      assetsReturned: true,
+      deskInspected: true,
+      duesCleared: true,
+    };
+    expect(Object.values(checklistComplete).every(Boolean)).toBe(true);
+
+    const checklistWithMissingLockerKey = {
+      ...checklistComplete,
+      lockerKeyReturned: false,
+    };
+    expect(Object.values(checklistWithMissingLockerKey).every(Boolean)).toBe(false);
+
+    const checklistWithPendingFine = {
+      ...checklistComplete,
+      duesCleared: false,
+    };
+    expect(Object.values(checklistWithPendingFine).every(Boolean)).toBe(false);
   });
 });

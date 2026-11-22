@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { formatCurrency, formatDate, formatDateTime, toMinorUnits } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsFormatting';
+import { formatCurrency,formatDate,formatDateTime,toMinorUnits } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsFormatting';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerFinanceRenewalsFormatting', () => {
   it('formats integer minor units using the supplied currency and locale', () => {

@@ -10,6 +10,13 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  devIndicators: {
+    buildActivity: true,
+    buildActivityPosition: 'bottom-left',
+  },
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@tanstack/react-query'],
+  },
   webpack: (config) => {
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
@@ -80,6 +87,42 @@ const nextConfig = {
         source: '/manager/:path*',
         destination: '/frontend_manager/:path*',
       },
+      {
+        source: '/admin',
+        destination: '/frontend_admin/admin_dashboard/dashboard_overview',
+      },
+      {
+        source: '/admin/dashboard',
+        destination: '/frontend_admin/admin_dashboard/dashboard_overview',
+      },
+      {
+        source: '/admin/admin_dashboard',
+        destination: '/frontend_admin/admin_dashboard/dashboard_overview',
+      },
+      {
+        source: '/admin/:path*',
+        destination: '/frontend_admin/:path*',
+      },
+      {
+        source: '/superadmin',
+        destination: '/frontend_superadmin/superadmin_dashboard/dashboard_overview',
+      },
+      {
+        source: '/superadmin/dashboard',
+        destination: '/frontend_superadmin/superadmin_dashboard/dashboard_overview',
+      },
+      {
+        source: '/superadmin/superadmin_dashboard',
+        destination: '/frontend_superadmin/superadmin_dashboard/dashboard_overview',
+      },
+      {
+        source: '/superadmin/superadmin_setup-wizard',
+        destination: '/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup',
+      },
+      {
+        source: '/superadmin/:path*',
+        destination: '/frontend_superadmin/:path*',
+      },
     ];
   },
   async redirects() {
@@ -87,6 +130,70 @@ const nextConfig = {
       {
         source: '/',
         destination: '/auth/login',
+        permanent: false,
+      },
+      {
+        source: '/superadmin/superadmin_support/support_complaints',
+        destination: '/superadmin/superadmin_support/support_tickets',
+        permanent: false,
+      },
+      {
+        source: '/superadmin/superadmin_communication/communication_whatsapp_logs',
+        destination: '/superadmin/superadmin_communication/communication_notification_center?tab=logs',
+        permanent: false,
+      },
+      {
+        source: '/superadmin/superadmin_communication/communication_whatsapp_templates',
+        destination: '/superadmin/superadmin_communication/communication_notification_center?tab=templates',
+        permanent: false,
+      },
+      // 1. Data Backup Legacy to Module 14 redirects
+      {
+        source: '/superadmin/superadmin_system/system_backup_overview',
+        destination: '/superadmin/superadmin_data/data_overview',
+        permanent: false,
+      },
+      {
+        source: '/superadmin/superadmin_system/system_backup_configuration',
+        destination: '/superadmin/superadmin_data/data_backup_operations',
+        permanent: false,
+      },
+      {
+        source: '/superadmin/superadmin_system/system_backup_history',
+        destination: '/superadmin/superadmin_data/data_restore_operations',
+        permanent: false,
+      },
+      {
+        source: '/superadmin/superadmin_system/system_backup_schedules',
+        destination: '/superadmin/superadmin_data/data_backup_operations',
+        permanent: false,
+      },
+      {
+        source: '/superadmin/superadmin_system/system_data_export_jobs',
+        destination: '/superadmin/superadmin_data/data_export_management',
+        permanent: false,
+      },
+      // 2. Session Management Unification redirect
+      {
+        source: '/superadmin/superadmin_security/security_user_sessions',
+        destination: '/superadmin/superadmin_security/security_active_sessions',
+        permanent: false,
+      },
+      // 3. Billing Invoices Redundancy redirect
+      {
+        source: '/superadmin/superadmin_billing/billing_overview',
+        destination: '/superadmin/superadmin_billing/billing_invoices',
+        permanent: false,
+      },
+      // 4. Analytics Reports Redundancy redirects
+      {
+        source: '/superadmin/superadmin_analytics/analytics_overview',
+        destination: '/superadmin/superadmin_analytics/analytics_platform_reports',
+        permanent: false,
+      },
+      {
+        source: '/superadmin/superadmin_analytics/analytics_financials',
+        destination: '/superadmin/superadmin_analytics/analytics_billing_reports',
         permanent: false,
       },
     ];

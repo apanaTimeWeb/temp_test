@@ -1,6 +1,6 @@
 import { ManagerFinanceTrustScoresMain } from '@/app/frontend_manager/manager_finance/finance_trust_scores/components/ManagerFinanceTrustScoresMain';
-import type { ManagerFinanceTrustScoresMainProps } from '@/app/frontend_manager/manager_finance/finance_trust_scores/types/ManagerFinanceTrustScoresMainTypes';
 import type { ManagerFinanceTrustScoresPageProps } from '@/app/frontend_manager/manager_finance/finance_trust_scores/types/ManagerFinanceTrustScoresComponentTypes';
+import type { ManagerFinanceTrustScoresMainProps } from '@/app/frontend_manager/manager_finance/finance_trust_scores/types/ManagerFinanceTrustScoresMainTypes';
 
 
 

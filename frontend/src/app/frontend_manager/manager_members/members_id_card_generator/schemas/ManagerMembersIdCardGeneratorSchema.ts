@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { MANAGER_STUDENT_STATUSES } from '@/app/frontend_manager/manager_members/members_id_card_generator/constants/ManagerMembersIdCardGeneratorConstants';
+import { z } from 'zod';
 
 export const ManagerStudentSchema = z.object({
   id: z.string().min(1),
@@ -13,6 +13,8 @@ export const ManagerStudentSchema = z.object({
   dueMinor: z.number().int().nonnegative(),
   currency: z.string().regex(/^[A-Z]{3}$/).refine((code) => { try { new Intl.NumberFormat('en', { style: 'currency', currency: code }); return true; } catch { return false; } }, 'invalid_currency_code'),
   joined: z.string().min(1),
+  locker: z.string().optional(),
+  expiryDate: z.string().optional(),
   branch: z.string().optional(),
   avatar: z.string().url().optional(),
 });

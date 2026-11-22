@@ -7,6 +7,7 @@ This directory is a quarantined Manager Library domain root. It owns the domain 
 ## Frozen child modules
 
 - `settings_branch_info` — `/frontend_manager/manager_settings/settings_branch_info`
+- `settings_security` — `/frontend_manager/manager_settings/settings_security`
 - `settings_help_support` — `/frontend_manager/manager_settings/settings_help_support`
 
 ## Route ownership

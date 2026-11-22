@@ -1,0 +1,308 @@
+'use client';
+
+import { AlertCircle,ArrowDown,ArrowUp,ArrowUpDown,CheckCircle,Clock,RotateCcw } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { formatManagerHelpSupportCalendarDate } from '../../utils/ManagerSettingsHelpSupportDateFormatting';
+import { ManagerSettingsHelpSupportEmptyState } from '../ManagerSettingsHelpSupportEmptyState';
+import { ManagerSettingsHelpSupportTicketsToolbar } from './ManagerSettingsHelpSupportTicketsToolbar';
+
+export interface ManagerSettingsHelpSupportTicketItem {
+  id: string;
+  subject: string;
+  category: string;
+  priority: string;
+  status: string;
+  date: string;
+}
+
+export type TicketSortField = 'id' | 'subject' | 'category' | 'priority' | 'status' | 'date';
+
+interface ManagerSettingsHelpSupportTicketsTableProps {
+  filteredTickets: ManagerSettingsHelpSupportTicketItem[];
+  paginatedTickets: ManagerSettingsHelpSupportTicketItem[];
+  totalAllTicketsCount?: number;
+  searchQuery: string;
+  setSearchQuery: (val: string) => void;
+  categoryFilter: string;
+  setCategoryFilter: (val: string) => void;
+  statusFilter: string;
+  setStatusFilter: (val: string) => void;
+  priorityFilter: string;
+  setPriorityFilter: (val: string) => void;
+  hasActiveFilters: boolean;
+  onResetFilters: () => void;
+  onExportCsv: () => void;
+  sortField: TicketSortField | null;
+  sortDirection: 'asc' | 'desc';
+  toggleSort: (field: TicketSortField) => void;
+  locale: string;
+  totalRows: number;
+  startItem: number;
+  endItem: number;
+  effectivePage: number;
+  pageCount: number;
+  pageSize: number;
+  setPageSize: (size: number) => void;
+  setPage: (updater: number | ((prev: number) => number)) => void;
+}
+
+export function ManagerSettingsHelpSupportTicketsTable({
+  filteredTickets,
+  paginatedTickets,
+  totalAllTicketsCount,
+  searchQuery,
+  setSearchQuery,
+  categoryFilter,
+  setCategoryFilter,
+  statusFilter,
+  setStatusFilter,
+  priorityFilter,
+  setPriorityFilter,
+  hasActiveFilters,
+  onResetFilters,
+  onExportCsv,
+  sortField,
+  sortDirection,
+  toggleSort,
+  locale,
+  totalRows,
+  startItem,
+  endItem,
+  effectivePage,
+  pageCount,
+  pageSize,
+  setPageSize,
+  setPage,
+}: ManagerSettingsHelpSupportTicketsTableProps) {
+  const tManagerUi = useTranslations('manager.manager_help_support.ui');
+
+  const renderSortableHeader = (field: TicketSortField, label: string) => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className="p-4 font-semibold"
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${
+            isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'
+          }`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown
+              size={14}
+              className="text-secondary/50 group-hover:text-secondary transition-colors shrink-0"
+              aria-hidden="true"
+            />
+          )}
+        </button>
+      </th>
+    );
+  };
+
+  const renderStatus = (status: string) => {
+    if (status === 'Open') {
+      return (
+        <div className="flex items-center gap-1.5 text-sm">
+          <Clock size={14} className="text-warning shrink-0" />
+          <span className="text-warning font-medium">{tManagerUi('ticket_status_open')}</span>
+        </div>
+      );
+    }
+    if (status === 'In Progress') {
+      return (
+        <div className="flex items-center gap-1.5 text-sm">
+          <Clock size={14} className="text-info shrink-0" />
+          <span className="text-info font-medium">{status}</span>
+        </div>
+      );
+    }
+    if (status === 'Resolved') {
+      return (
+        <div className="flex items-center gap-1.5 text-sm">
+          <CheckCircle size={14} className="text-success shrink-0" />
+          <span className="text-success font-medium">{status}</span>
+        </div>
+      );
+    }
+    return (
+      <div className="flex items-center gap-1.5 text-sm">
+        <CheckCircle size={14} className="text-success shrink-0" />
+        <span className="text-success font-medium">
+          {status === 'Closed' ? tManagerUi('ticket_status_closed') : status}
+        </span>
+      </div>
+    );
+  };
+
+  return (
+    <div className="mgr-card p-0 overflow-hidden">
+      <ManagerSettingsHelpSupportTicketsToolbar
+        totalTicketsCount={filteredTickets.length}
+        totalAllTicketsCount={totalAllTicketsCount}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        categoryFilter={categoryFilter}
+        setCategoryFilter={setCategoryFilter}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        priorityFilter={priorityFilter}
+        setPriorityFilter={setPriorityFilter}
+        hasActiveFilters={hasActiveFilters}
+        onResetFilters={onResetFilters}
+        onExportCsv={onExportCsv}
+      />
+
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-surface-highlight border-b border-border text-secondary text-xs uppercase font-semibold">
+              {renderSortableHeader('id', tManagerUi('ticket_id'))}
+              {renderSortableHeader('subject', tManagerUi('subject'))}
+              {renderSortableHeader('category', tManagerUi('category'))}
+              {renderSortableHeader('priority', tManagerUi('priority'))}
+              {renderSortableHeader('status', tManagerUi('status'))}
+              {renderSortableHeader('date', tManagerUi('date'))}
+            </tr>
+          </thead>
+          <tbody>
+            {filteredTickets.length === 0 ? (
+              <tr>
+                <td colSpan={6}>
+                  <ManagerSettingsHelpSupportEmptyState
+                    className="p-10 text-center text-secondary"
+                    testId="manager-help-support-tickets-empty"
+                  >
+                    <div className="flex flex-col items-center justify-center gap-2.5 max-w-sm mx-auto">
+                      <div className="w-10 h-10 rounded-full bg-surface-highlight flex items-center justify-center text-secondary mb-1">
+                        <AlertCircle size={20} />
+                      </div>
+                      <p className="text-sm font-medium text-primary">
+                        {searchQuery
+                          ? 'No tickets found matching your search query.'
+                          : tManagerUi('no_tickets_found')}
+                      </p>
+                      {hasActiveFilters && (
+                        <button
+                          type="button"
+                          onClick={onResetFilters}
+                          className="mt-1 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-xs font-semibold text-primary hover:bg-surface-hover transition-colors cursor-pointer"
+                        >
+                          <RotateCcw size={12} />
+                          <span>Reset all filters</span>
+                        </button>
+                      )}
+                    </div>
+                  </ManagerSettingsHelpSupportEmptyState>
+                </td>
+              </tr>
+            ) : (
+              paginatedTickets.map((t) => (
+                <tr
+                  key={t.id}
+                  className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12 motion-safe:transition-colors"
+                >
+                  <td className="p-4 text-sm font-mono font-medium text-primary">{t.id}</td>
+                  <td className="p-4 text-sm font-medium text-primary">{t.subject}</td>
+                  <td className="p-4 text-sm text-secondary">
+                    {t.category === 'Finance'
+                      ? tManagerUi('ticket_category_finance')
+                      : t.category === 'General'
+                      ? tManagerUi('ticket_category_general')
+                      : t.category}
+                  </td>
+                  <td className="p-4">
+                    <span
+                      className={`px-2.5 py-1 rounded-full text-xs font-bold ${
+                        t.priority === 'High'
+                          ? 'bg-danger-bg text-danger'
+                          : t.priority === 'Medium'
+                          ? 'bg-warning-bg text-warning'
+                          : 'bg-success-bg text-success'
+                      }`}
+                    >
+                      {t.priority === 'High'
+                        ? tManagerUi('high')
+                        : t.priority === 'Medium'
+                        ? tManagerUi('medium')
+                        : t.priority === 'Low'
+                        ? tManagerUi('low')
+                        : t.priority}
+                    </span>
+                  </td>
+                  <td className="p-4">{renderStatus(t.status)}</td>
+                  <td className="p-4 text-sm text-secondary font-mono">
+                    {formatManagerHelpSupportCalendarDate(t.date, locale)}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+
+        {totalRows > 0 && (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-secondary">
+            <span>
+              Showing {startItem}–{endItem} of {totalRows} results
+            </span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5">
+                <label
+                  htmlFor="rows-per-page-settings-help-support"
+                  className="text-xs text-secondary whitespace-nowrap"
+                >
+                  Rows per page:
+                </label>
+                <select
+                  id="rows-per-page-settings-help-support"
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setPage(0);
+                  }}
+                  className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary"
+                >
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  className="mgr-btn-ghost mgr-btn-sm"
+                  disabled={effectivePage <= 0}
+                  onClick={() => setPage((current) => Math.max(0, current - 1))}
+                >
+                  Previous
+                </button>
+                <span className="text-xs text-secondary px-1">
+                  Page {effectivePage + 1} of {pageCount}
+                </span>
+                <button
+                  type="button"
+                  className="mgr-btn-ghost mgr-btn-sm"
+                  disabled={effectivePage >= pageCount - 1}
+                  onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

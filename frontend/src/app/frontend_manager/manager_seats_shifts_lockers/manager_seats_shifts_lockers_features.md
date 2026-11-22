@@ -12,8 +12,7 @@ This directory is a quarantined Manager Library domain root. It owns the domain 
 - `shifts_migration` — `/frontend_manager/manager_seats_shifts_lockers/shifts_migration`
 - `seats_allocations` — `/frontend_manager/manager_seats_shifts_lockers/seats_allocations`
 - `seats_history` — `/frontend_manager/manager_seats_shifts_lockers/seats_history`
-- `lockers_management` — `/frontend_manager/manager_seats_shifts_lockers/lockers_management`
-- `lockers_matrix` — `/frontend_manager/manager_seats_shifts_lockers/lockers_matrix`
+- `lockers_management` — `/frontend_manager/manager_seats_shifts_lockers/lockers_management` (Unified Locker Hub: floor grid matrix view and table view)
 
 ## Route ownership
 

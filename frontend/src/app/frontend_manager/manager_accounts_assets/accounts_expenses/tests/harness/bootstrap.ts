@@ -2,10 +2,10 @@
  * Module-local MSW lifecycle for the accounts_expenses standalone harness.
  * The __harness__ probe is test-only and is not a backend or feature API route.
  */
-import { delay, http, HttpResponse, type RequestHandler } from 'msw';
+import { delay,http,HttpResponse,type RequestHandler } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { MANAGER_ACCOUNTS_EXPENSES_SCENARIOS as MODULE_SCENARIOS, type AccountsExpensesScenario as HarnessScenario } from '../../mocks/scenarios/manager_accounts_expenses.scenarios';
 import { MANAGER_ACCOUNTING_HANDLERS as MODULE_HANDLERS_SOURCE } from '../../mocks/manager_accounts_expenses_handlers/ManagerAccountsExpensesHandlers';
+import { MANAGER_ACCOUNTS_EXPENSES_SCENARIOS as MODULE_SCENARIOS,type AccountsExpensesScenario as HarnessScenario } from '../../mocks/scenarios/manager_accounts_expenses.scenarios';
 // This list contains only module-owned, source-backed business handlers; no API routes are inferred here.
 const MODULE_HANDLERS: RequestHandler[] = [...MODULE_HANDLERS_SOURCE];
 

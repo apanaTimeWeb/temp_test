@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { normalizeManagerTrustScoresPaymentStatus, normalizeManagerTrustScoresRefundStatus } from '@/app/frontend_manager/manager_finance/finance_trust_scores/utils/ManagerFinanceTrustScoresStatusNormalization';
+import { normalizeManagerTrustScoresPaymentStatus,normalizeManagerTrustScoresRefundStatus } from '@/app/frontend_manager/manager_finance/finance_trust_scores/utils/ManagerFinanceTrustScoresStatusNormalization';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerFinanceTrustScoresStatusNormalization', () => {
   it('preserves known payment states and does not treat unknown states as valid', () => {

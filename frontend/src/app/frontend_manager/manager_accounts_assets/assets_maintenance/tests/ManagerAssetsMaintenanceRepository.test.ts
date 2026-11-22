@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe,expect,it } from 'vitest';
 import { getManagerAssetsMaintenanceSampleLogs } from '../mocks/ManagerAssetsMaintenanceRepository';
 
 describe('maintenance sample repository', () => {

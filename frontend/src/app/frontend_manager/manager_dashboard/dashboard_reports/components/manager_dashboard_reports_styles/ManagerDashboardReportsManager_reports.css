@@ -56,7 +56,7 @@
   .mgr-reports-theme .mgr-section-title { margin: 0; font-size: 1rem; line-height: 1.4; font-weight: 650; color: theme(--color-text-primary); }
   .mgr-reports-theme .mgr-section-gap { margin-bottom: 20px; }
   .mgr-reports-theme .mgr-kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
-  .mgr-reports-theme .mgr-kpi-card { min-width: 0; padding: 16px; border: 1px solid theme(--color-border); border-radius: theme(--radius-lg); background: theme(--color-card); }
+  .mgr-reports-theme .mgr-kpi-card { min-width: 0; }
   .mgr-reports-theme .mgr-kpi-top-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .mgr-reports-theme .mgr-kpi-icon { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: theme(--radius-md); background: theme(--color-primary-subtle); color: theme(--color-primary); }
   .mgr-reports-theme .mgr-kpi-label { margin-top: 12px; color: theme(--color-text-secondary); font-size: .8125rem; }
@@ -87,3 +87,28 @@
 @keyframes mgr-reports-pulse { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
 @media (max-width: 1024px) { .mgr-reports-theme .mgr-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 480px) { .mgr-reports-theme .mgr-kpi-grid { grid-template-columns: minmax(0, 1fr); } .mgr-reports-theme .mgr-page-header { flex-direction: column; } }
+
+/* Executive Owner Print / PDF Stylesheet */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+  .mgr-reports-theme button,
+  .mgr-reports-no-print,
+  nav,
+  aside {
+    display: none !important;
+  }
+  .mgr-reports-theme .mgr-card {
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 14px !important;
+  }
+  .mgr-reports-theme .mgr-chart-grid,
+  .mgr-reports-theme .mgr-reports-table-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}

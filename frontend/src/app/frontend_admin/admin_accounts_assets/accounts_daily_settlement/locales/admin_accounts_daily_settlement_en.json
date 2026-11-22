@@ -1,0 +1,93 @@
+{
+  "ADMIN_ACCOUNTS_DAILY_SETTLEMENT": {
+    "TITLE": "Daily Cash Settlement & Handover Audit",
+    "SUBTITLE": "Review, verify, and approve branch manager end-of-shift cash handovers, bank deposits, and drawer reconciliation.",
+    "LIVE_UNAVAILABLE": "Running in demonstration mode. Live backend sync is simulated.",
+    "TABS": {
+      "ALL": "All Settlements",
+      "PENDING": "Pending Approval",
+      "APPROVED": "Cleared & Approved",
+      "FLAGGED": "Flagged Discrepancies"
+    },
+    "KPIS": {
+      "EXPECTED_CASH": "Expected Counter Cash",
+      "CLEARED_CASH": "Cleared To Bank",
+      "PENDING_HANDOVER": "Pending Approval",
+      "DISCREPANCY_SHORTAGE": "Discrepancy / Shortage",
+      "SUB_EXPECTED": "Across all active branch shifts today",
+      "SUB_CLEARED": "Verified deposits & transfers",
+      "SUB_PENDING": "Awaiting admin clearance",
+      "SUB_DISCREPANCY": "Shortages flagged for audit"
+    },
+    "FILTERS": {
+      "BRANCH_PLACEHOLDER": "Filter by Branch",
+      "ALL_BRANCHES": "All Branches",
+      "SEARCH_PLACEHOLDER": "Search by manager name, branch, or ref #...",
+      "DATE_RANGE": "Date Range",
+      "CLEAR_FILTERS": "Reset"
+    },
+    "TABLE": {
+      "DATE_SHIFT": "Date & Shift",
+      "BRANCH": "Branch",
+      "MANAGER": "Manager",
+      "OPENING_CASH": "Opening Cash",
+      "COLLECTIONS": "Cash / UPI Collected",
+      "EXPENSES": "Expenses Paid",
+      "EXPECTED_CASH": "Expected Closing",
+      "HANDOVER_CASH": "Actual Handover",
+      "VARIANCE": "Variance",
+      "STATUS": "Audit Status",
+      "ACTIONS": "Actions"
+    },
+    "STATUS": {
+      "PENDING_APPROVAL": "Pending Clearance",
+      "APPROVED": "Approved & Cleared",
+      "DISCREPANCY_FLAGGED": "Discrepancy Flagged"
+    },
+    "ACTIONS": {
+      "APPROVE_CLEAR": "Approve & Clear",
+      "FLAG_DISCREPANCY": "Flag Issue",
+      "VIEW_DETAILS": "View Audit Trail",
+      "VIEW_SLIP": "View Deposit Slip",
+      "FILTER_ACTIONS": "Actions"
+    },
+    "MODAL_APPROVE": {
+      "TITLE": "Approve Cash Handover & Clear",
+      "DESCRIPTION": "Verify manager counter cash handover against physical cash count or bank deposit slip credit.",
+      "BRANCH": "Branch",
+      "MANAGER": "Submitting Manager",
+      "EXPECTED": "Expected Drawer Cash",
+      "ACTUAL": "Manager Reported Cash",
+      "BANK_REF": "Bank Deposit / IMPS Reference",
+      "NO_SLIP": "No bank deposit slip attached (Direct cash counter handover)",
+      "VERIFIED_AMOUNT_LABEL": "Physically Verified Cash Amount (₹)",
+      "ADMIN_NOTES_LABEL": "Admin Audit Notes (Optional)",
+      "ADMIN_NOTES_PLACEHOLDER": "e.g., Verified in SBI statement / Cash received physically by Satyam",
+      "SUBMIT": "Confirm Clearance & Mark Approved",
+      "CANCEL": "Cancel",
+      "SUCCESS_TOAST": "Settlement {id} approved successfully and cash drawer cleared."
+    },
+    "MODAL_FLAG": {
+      "TITLE": "Flag Settlement Discrepancy",
+      "DESCRIPTION": "Record an unverified shortage, drawer mismatch, or missing deposit slip. This triggers an internal audit lock.",
+      "REASON_LABEL": "Discrepancy Category",
+      "REASON_PLACEHOLDER": "Select reason...",
+      "REASONS": {
+        "CASH_SHORTAGE": "Physical Cash Shortage (Missing Drawer Cash)",
+        "MISSING_SLIP": "Missing Bank Deposit / CDM Slip",
+        "UNAUTHORIZED_EXPENSE": "Unapproved Manager Counter Expense Deducted",
+        "RECORD_MISMATCH": "System Shift Sales vs Cash Ledger Mismatch"
+      },
+      "NOTES_LABEL": "Mandatory Audit Investigation Notes",
+      "NOTES_PLACEHOLDER": "Explain discrepancy details, CCTV verification notes, or manager explanation...",
+      "SUBMIT": "Flag Discrepancy & Alert Manager",
+      "CANCEL": "Dismiss",
+      "SUCCESS_TOAST": "Discrepancy flagged on settlement {id}. Manager notified."
+    },
+    "EMPTY": {
+      "TITLE": "No Settlement Records Found",
+      "DESCRIPTION": "No daily settlements match your active filters or date criteria."
+    }
+  }
+}
+

@@ -217,7 +217,7 @@
    5.  PAGE LAYOUT
 ──────────────────────────────────────────────────────────── */
 
-.eng-page { padding: 32px; }
+.eng-page { padding: 0; }
 
 .eng-breadcrumb {
   display: flex; align-items: center; gap: 6px;

@@ -1,6 +1,6 @@
 import { ManagerAssetsRegisterMain } from '@/app/frontend_manager/manager_accounts_assets/assets_register/components/ManagerAssetsRegisterMain';
-import type { ManagerAssetsRegisterMainProps } from '@/app/frontend_manager/manager_accounts_assets/assets_register/types/ManagerAssetsRegisterMainTypes';
 import type { ManagerAssetsRegisterPageProps } from '@/app/frontend_manager/manager_accounts_assets/assets_register/types/ManagerAssetsRegisterComponentTypes';
+import type { ManagerAssetsRegisterMainProps } from '@/app/frontend_manager/manager_accounts_assets/assets_register/types/ManagerAssetsRegisterMainTypes';
 
 
 

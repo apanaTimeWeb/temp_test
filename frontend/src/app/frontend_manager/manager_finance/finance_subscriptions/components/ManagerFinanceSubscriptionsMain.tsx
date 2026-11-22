@@ -1,5 +1,5 @@
 'use client';
-import ManagerFinanceSubscriptionsPage from '@/app/frontend_manager/manager_finance/finance_subscriptions/components/manager_finance_subscriptions_views/ManagerFinanceSubscriptionsPage.tsx';
+import ManagerFinanceSubscriptionsPage from '@/app/frontend_manager/manager_finance/finance_subscriptions/components/manager_finance_subscriptions_views/ManagerFinanceSubscriptionsPage';
 import type { ManagerFinanceSubscriptionsMainProps } from '@/app/frontend_manager/manager_finance/finance_subscriptions/types/ManagerFinanceSubscriptionsMainTypes';
 
 // RESPONSIBILITY: Route query state into the manager finance finance subscriptions feature view.

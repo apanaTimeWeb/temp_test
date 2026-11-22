@@ -1,10 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { fetchManagerSeatsMatrix } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/api/manager_seats_matrix.api';
 import { MANAGER_SEATS_MATRIX_QUERY_KEYS } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/api/manager_seats_matrix.query_keys';
-import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
+import type { SeatData,ShiftType } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
+import { useQuery } from '@tanstack/react-query';
+import { useMemo,useState } from 'react';
 
 /** DATA FLOW: Feature-owned inputs/state -> hook result for its caller; no backend/API flow is inferred without source evidence. */
 
@@ -12,9 +12,137 @@ import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_locke
 export function useManagerSeatsMatrix() {
   const [activeTab, setActiveTab] = useState('All');
   const [selectedSeat, setSelectedSeat] = useState<SeatData | null>(null);
+  const [overrides, setOverrides] = useState<Record<string, Partial<SeatData>>>({});
+  const [addedSeats, setAddedSeats] = useState<SeatData[]>([]);
   const query = useQuery({ queryKey: MANAGER_SEATS_MATRIX_QUERY_KEYS.seatMatrix, queryFn: fetchManagerSeatsMatrix });
-  const seats = query.data ?? [];
-  const visible = useMemo(() => activeTab === 'All' ? seats : seats.filter((seat) => seat.shift === activeTab || seat.status === 'free' || seat.status === 'maintenance' || seat.status === 'unknown'), [activeTab, seats]);
+  const rawSeats = query.data ?? [];
+  const allSeats = useMemo(() => [...rawSeats, ...addedSeats], [rawSeats, addedSeats]);
+  const seats = useMemo(() => allSeats.map((s) => ({ ...s, ...(overrides[s.id] ?? {}) })), [allSeats, overrides]);
+  const visible = useMemo(() => {
+    if (activeTab === 'All') return seats;
+    return seats.map((seat) => {
+      if (seat.status === 'maintenance' || seat.status === 'unknown') {
+        return seat;
+      }
+
+      // Check per-shift allocation dictionary if provided
+      const shiftAlloc = seat.shiftAllocations?.[activeTab as ShiftType];
+      if (shiftAlloc) {
+        return {
+          ...seat,
+          status: shiftAlloc.status || 'occupied',
+          student: shiftAlloc.student,
+          smartId: shiftAlloc.smartId,
+          studentGender: shiftAlloc.studentGender,
+          expiry: shiftAlloc.expiry,
+          shift: activeTab,
+        };
+      }
+
+      // If seat is explicitly booked for this shift or Full Day
+      const isAllocatedInThisShift =
+        seat.shift === activeTab ||
+        seat.shift === 'Full Day' ||
+        Boolean(seat.shift && seat.shift.includes(activeTab));
+
+      if (isAllocatedInThisShift) {
+        return {
+          ...seat,
+          shift: activeTab,
+        };
+      }
+
+      // If seat is occupied in another shift (e.g. Evening), it is free/available in this shift!
+      return {
+        ...seat,
+        status: 'free' as const,
+        student: undefined,
+        smartId: undefined,
+        studentGender: undefined,
+        expiry: undefined,
+        shift: activeTab,
+      };
+    });
+  }, [activeTab, seats]);
   const freeCount = useMemo(() => visible.filter((seat) => seat.status === 'free').length, [visible]);
-  return { ...query, visible, freeCount, activeTab, setActiveTab, selectedSeat, setSelectedSeat };
+
+  const addSeat = (newSeat: SeatData) => {
+    setAddedSeats((prev) => [...prev, newSeat]);
+  };
+
+  const updateSeat = (seatId: string, updates: Partial<SeatData>) => {
+    setOverrides((prev) => ({ ...prev, [seatId]: { ...(prev[seatId] ?? {}), ...updates } }));
+    if (selectedSeat && selectedSeat.id === seatId) {
+      setSelectedSeat((prev) => (prev ? { ...prev, ...updates } : null));
+    }
+  };
+
+  const swapSeats = (sourceSeatId: string, targetSeatId: string): boolean => {
+    const source = allSeats.find((s) => s.id === sourceSeatId) ?? visible.find((s) => s.id === sourceSeatId);
+    const target = allSeats.find((s) => s.id === targetSeatId) ?? visible.find((s) => s.id === targetSeatId);
+    if (!source || !target) return false;
+
+    const sourceCurrent = { ...source, ...(overrides[sourceSeatId] ?? {}) };
+    const targetCurrent = { ...target, ...(overrides[targetSeatId] ?? {}) };
+
+    const sourceData = {
+      student: sourceCurrent.student,
+      smartId: sourceCurrent.smartId,
+      studentGender: sourceCurrent.studentGender,
+      shift: sourceCurrent.shift,
+      expiry: sourceCurrent.expiry,
+      status: sourceCurrent.status,
+      shiftAllocations: sourceCurrent.shiftAllocations,
+    };
+
+    const targetData = {
+      student: targetCurrent.student,
+      smartId: targetCurrent.smartId,
+      studentGender: targetCurrent.studentGender,
+      shift: targetCurrent.shift,
+      expiry: targetCurrent.expiry,
+      status: targetCurrent.status,
+      shiftAllocations: targetCurrent.shiftAllocations,
+    };
+
+    setOverrides((prev) => ({
+      ...prev,
+      [sourceSeatId]: {
+        ...(prev[sourceSeatId] ?? {}),
+        student: targetData.student || undefined,
+        smartId: targetData.smartId || undefined,
+        studentGender: targetData.studentGender || undefined,
+        shift: targetData.shift || undefined,
+        expiry: targetData.expiry || undefined,
+        status: targetData.student ? targetData.status : ('free' as const),
+        shiftAllocations: targetData.shiftAllocations,
+      },
+      [targetSeatId]: {
+        ...(prev[targetSeatId] ?? {}),
+        student: sourceData.student || undefined,
+        smartId: sourceData.smartId || undefined,
+        studentGender: sourceData.studentGender || undefined,
+        shift: sourceData.shift || undefined,
+        expiry: sourceData.expiry || undefined,
+        status: sourceData.student ? sourceData.status : ('free' as const),
+        shiftAllocations: sourceData.shiftAllocations,
+      },
+    }));
+
+    if (selectedSeat && selectedSeat.id === sourceSeatId) {
+      setSelectedSeat({
+        ...sourceCurrent,
+        student: targetData.student || undefined,
+        smartId: targetData.smartId || undefined,
+        studentGender: targetData.studentGender || undefined,
+        shift: targetData.shift || undefined,
+        expiry: targetData.expiry || undefined,
+        status: targetData.student ? targetData.status : ('free' as const),
+      });
+    }
+
+    return true;
+  };
+
+  return { ...query, visible, freeCount, activeTab, setActiveTab, selectedSeat, setSelectedSeat, updateSeat, addSeat, swapSeats };
 }

@@ -1,0 +1,113 @@
+{
+  "ADMIN_ASSETS_REGISTER": {
+    "TITLE": "Asset Register & AMC Maintenance Lifecycle",
+    "SUBTITLE": "Govern high-value physical library infrastructure, warranty coverage, vendor AMC contracts, and preventative servicing schedules.",
+    "LIVE_UNAVAILABLE": "Running in demonstration mode. Live backend sync is simulated.",
+    "KPIS": {
+      "TOTAL_ASSETS": "Total Physical Assets",
+      "TOTAL_CAPEX": "Total Capital Expenditure",
+      "ACTIVE_AMC": "Protected Under AMC",
+      "WARRANTY_ALERTS": "Warranty Expiring Soon",
+      "SUB_ASSETS": "Assets across all active branches",
+      "SUB_CAPEX": "Cumulative original purchase valuation",
+      "SUB_AMC": "Active vendor service contracts",
+      "SUB_WARRANTY": "Expiring within next 30 days"
+    },
+    "TABS": {
+      "ALL": "All Assets",
+      "WARRANTY_ALERT": "Warranty Alerts (30 Days)",
+      "ACTIVE_AMC": "Active AMC",
+      "NEEDS_SERVICE": "Needs Service / Overdue"
+    },
+    "FILTERS": {
+      "ALL_BRANCHES": "All Branches",
+      "ALL_CATEGORIES": "All Categories",
+      "SEARCH_PLACEHOLDER": "Search by asset name, code, serial #, or vendor...",
+      "CLEAR_FILTERS": "Reset"
+    },
+    "CATEGORIES": {
+      "AC_HVAC": "Air Conditioners (AC / HVAC)",
+      "INVERTER_POWER": "Inverters & Heavy Power UPS",
+      "FURNITURE": "Study Desks & Ergonomic Chairs",
+      "WATER_PURIFIER": "Commercial RO Water & Chillers",
+      "CCTV_SECURITY": "CCTV Surveillance & NVR",
+      "NETWORK_HARDWARE": "Routers, Switches & Wi-Fi",
+      "ELECTRONICS": "Biometric, Displays & Computing",
+      "OTHER": "General Infrastructure"
+    },
+    "STATUS": {
+      "OPERATIONAL": "Operational",
+      "MAINTENANCE_REQUIRED": "Service Overdue",
+      "UNDER_REPAIR": "Under Repair",
+      "DISPOSED": "Disposed / Decommissioned"
+    },
+    "AMC_STATUS": {
+      "ACTIVE_AMC": "Active AMC",
+      "UNDER_WARRANTY": "OEM Warranty",
+      "EXPIRED_NO_AMC": "Expired / No AMC",
+      "NOT_APPLICABLE": "N/A (Non-mechanical)"
+    },
+    "TABLE": {
+      "ASSET": "Asset & Code",
+      "BRANCH": "Branch & Location",
+      "CATEGORY": "Category",
+      "PURCHASE": "Purchase Date & Cost",
+      "WARRANTY_EXPIRY": "Warranty Expiry",
+      "AMC_STATUS": "Protection Status",
+      "VENDOR": "Primary Vendor",
+      "STATUS": "Operational Health",
+      "ACTIONS": "Actions"
+    },
+    "ACTIONS": {
+      "ADD_ASSET": "Add Capital Asset",
+      "MANAGE_AMC": "AMC & Service",
+      "VIEW_DETAILS": "View Lifecycle"
+    },
+    "MODAL_ADD": {
+      "TITLE": "Register New Capital Asset",
+      "DESCRIPTION": "Add high-capital physical infrastructure to central inventory with warranty and vendor details.",
+      "ASSET_CODE_LABEL": "Asset Tag / Inventory Code",
+      "ASSET_CODE_PLACEHOLDER": "e.g. KB-AC-02",
+      "NAME_LABEL": "Asset Name & Model",
+      "NAME_PLACEHOLDER": "e.g. Daikin 1.5T Inverter Split AC",
+      "CATEGORY_LABEL": "Category",
+      "BRANCH_LABEL": "Branch",
+      "LOCATION_LABEL": "Location Within Branch",
+      "LOCATION_PLACEHOLDER": "e.g. Floor 1 Silent Hall A",
+      "PURCHASE_DATE_LABEL": "Purchase Date",
+      "PURCHASE_COST_LABEL": "Purchase Cost (₹)",
+      "VENDOR_NAME_LABEL": "Vendor / Supplier Name",
+      "VENDOR_NAME_PLACEHOLDER": "e.g. Daikin Direct India",
+      "VENDOR_CONTACT_LABEL": "Vendor Phone / Support Contact",
+      "VENDOR_CONTACT_PLACEHOLDER": "e.g. 1800-102-4455 / +91 98110 22334",
+      "WARRANTY_EXPIRY_LABEL": "Warranty Expiration Date",
+      "AMC_STATUS_LABEL": "Initial Maintenance Coverage",
+      "SERIAL_LABEL": "Serial Number (Optional)",
+      "NOTES_LABEL": "Admin Notes (Optional)",
+      "SUBMIT": "Register Asset",
+      "CANCEL": "Cancel",
+      "SUCCESS_TOAST": "Asset {code} registered successfully."
+    },
+    "MODAL_AMC": {
+      "TITLE": "Update AMC & Preventative Service Contract",
+      "DESCRIPTION": "Configure Annual Maintenance Contract (AMC), vendor SLA, and next scheduled service date.",
+      "AMC_STATUS_LABEL": "Coverage Status",
+      "AMC_VENDOR_NAME_LABEL": "AMC Service Provider",
+      "AMC_VENDOR_NAME_PLACEHOLDER": "e.g. UrbanCompany Enterprise / Daikin Direct Care",
+      "AMC_VENDOR_CONTACT_LABEL": "Technician / Helpline Contact",
+      "AMC_VENDOR_CONTACT_PLACEHOLDER": "e.g. +91 98991 44552",
+      "AMC_EXPIRY_LABEL": "Contract Renewal Date",
+      "NEXT_SERVICE_LABEL": "Next Scheduled Service Date (Optional)",
+      "NOTES_LABEL": "Contract Terms / Service Notes",
+      "NOTES_PLACEHOLDER": "e.g. Includes 4 quarterly preventative visits and chemical jet cleaning.",
+      "SUBMIT": "Update AMC Contract",
+      "CANCEL": "Dismiss",
+      "SUCCESS_TOAST": "AMC coverage updated for {name}."
+    },
+    "EMPTY": {
+      "TITLE": "No Assets Registered",
+      "DESCRIPTION": "No physical assets match your active category or filter parameters."
+    }
+  }
+}
+

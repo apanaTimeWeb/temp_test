@@ -8,5 +8,5 @@ export interface ManagerFinanceAutoSuspendRefund { id: string; studentName: stri
 
 
 export interface ManagerFinanceAutoSuspendConfig { daysBeforeSuspend: number; currentlySuspended: number; autoRestoredThisMonth: number; manualRestores: number; }
-export interface ManagerFinanceAutoSuspendSuspendedStudent { id: number; studentId: number; studentName: string; smartId: string; seat: string; shift: string; daysOverdue: number; suspendedSince: string; }
+export interface ManagerFinanceAutoSuspendSuspendedStudent { id: number; studentId: number; studentName: string; smartId: string; seat: string; shift: string; daysOverdue: number; suspendedSince: string; phone?: string; }
 

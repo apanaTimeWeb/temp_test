@@ -1,6 +1,6 @@
 import { ManagerLockersManagementMain } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/components/ManagerLockersManagementMain';
-import { parseManagerLockersView, type ManagerLockersManagementMainProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/types/ManagerLockersManagementMainTypes';
 import type { ManagerLockersManagementPageProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/types/ManagerLockersManagementComponentTypes';
+import { parseManagerLockersView,type ManagerLockersManagementMainProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/types/ManagerLockersManagementMainTypes';
 
 
 

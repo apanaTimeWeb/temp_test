@@ -239,7 +239,7 @@
         "upi": "UPI",
         "card": "कार्ड",
         "bank_transfer": "बैंक ट्रांसफ़र",
-        "search_select_preview_only_until_authoritative_card_contract_is_supplied": "छात्र कार्ड का पूर्वावलोकन देखने के लिए खोजें और चयन करें। प्रमाणित वैधता और पहचान-सत्यापन विवरण मिलने तक आधिकारिक प्रिंट और साझा करने की सुविधा उपलब्ध नहीं है।",
+        "search_select_preview_only_until_authoritative_card_contract_is_supplied": "लाइब्रेरी के नामांकित छात्र का चयन करें, उनका स्मार्ट आईडी कार्ड देखें, प्रिंट करें या व्हाट्सएप पर साझा करें।",
         "id_card_preview_only_contract_warning": "यह केवल दृश्य पूर्वावलोकन है। दिए गए छात्र-रीड कॉन्ट्रैक्ट में प्रमाणित वैधता या पहचान-सत्यापन डेटा नहीं है, इसलिए प्रिंट करना और भेजना अक्षम है।",
         "expiry_date_unavailable_from_student_contract": "छात्र API कॉन्ट्रैक्ट में समाप्ति तिथि उपलब्ध नहीं है",
         "not_provided": "उपलब्ध नहीं",

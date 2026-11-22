@@ -2,9 +2,9 @@
  * Module-local MSW lifecycle for the finance_trust_scores standalone harness.
  * The __harness__ probe is test-only and is not a backend or feature API route.
  */
-import { delay, http, HttpResponse, type RequestHandler } from 'msw';
+import { delay,http,HttpResponse,type RequestHandler } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { MANAGER_FINANCE_TRUST_SCORES_SCENARIOS as MODULE_SCENARIOS, type FinanceTrustScoresScenario as HarnessScenario } from '../../mocks/scenarios/manager_finance_trust_scores.scenarios';
+import { MANAGER_FINANCE_TRUST_SCORES_SCENARIOS as MODULE_SCENARIOS,type FinanceTrustScoresScenario as HarnessScenario } from '../../mocks/scenarios/manager_finance_trust_scores.scenarios';
 // No module-owned handler array was supplied for this module. Keep business API mocking empty rather than inventing an endpoint.
 const MODULE_HANDLERS: RequestHandler[] = [];
 

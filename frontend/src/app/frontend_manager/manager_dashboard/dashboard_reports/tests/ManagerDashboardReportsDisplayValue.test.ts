@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { displayValue } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/utils/ManagerDashboardReportsDisplayValue';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerDashboardReportsDisplayValue', () => {
   it('uses an en dash for nullable, empty, and object values', () => {

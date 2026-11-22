@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { managerFinanceCollectFeeDraftSchema } from '@/app/frontend_manager/manager_finance/finance_collect_fee/schemas/ManagerFinanceCollectFeeDraftSchema';
+import { describe,expect,it } from 'vitest';
 
 const validDraft = { member: 'student-1', amount: '125.50', mode: 'cash' as const, txnId: '', couponCode: '', lateFee: '', monthsToRenew: '1' as const, remark: '' };
 
@@ -15,5 +15,10 @@ describe('managerFinanceCollectFeeDraftSchema', () => {
   it('requires a transaction reference for non-cash modes', () => {
     expect(managerFinanceCollectFeeDraftSchema.safeParse({ ...validDraft, mode: 'upi' }).success).toBe(false);
     expect(managerFinanceCollectFeeDraftSchema.safeParse({ ...validDraft, mode: 'upi', txnId: 'txn-demo' }).success).toBe(true);
+  });
+  it('enforces maximum constraint on late fee', () => {
+    expect(managerFinanceCollectFeeDraftSchema.safeParse({ ...validDraft, lateFee: '500' }).success).toBe(true);
+    expect(managerFinanceCollectFeeDraftSchema.safeParse({ ...validDraft, lateFee: '50000' }).success).toBe(true);
+    expect(managerFinanceCollectFeeDraftSchema.safeParse({ ...validDraft, lateFee: '50001' }).success).toBe(false);
   });
 });

@@ -1848,13 +1848,68 @@
 .crm-mobile-enquiry-label { color: theme(--color-text-secondary); font-size: 11px; }
 .crm-mobile-enquiry-actions { display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid theme(--color-border); padding-top: 10px; }
 .crm-mobile-enquiry-actions .mgr-btn-icon { min-width: 44px; min-height: 44px; }
-@media (max-width: 720px) {
-  .crm-mobile-enquiry-list { display: grid; gap: 12px; }
-  .crm-table-wrap { display: none; }
+@media (max-width: 767px) {
+  .crm-mobile-enquiry-list { display: flex !important; flex-direction: column !important; gap: 12px !important; width: 100% !important; max-width: 100% !important; }
+  .crm-table-wrap { display: none !important; }
 }
 /* RBG3 accessibility baseline: visible keyboard focus within the owning feature. */
 .crm-theme :where(button, a, input, select, textarea, [tabindex]):focus-visible {
   outline: 2px solid theme(--color-focus-ring);
   outline-offset: 2px;
 }
+
+/* ── Dark Aurora Glassmorphism Overrides ── */
+.crm-theme,
+.crm-page {
+  background-color: transparent !important;
+  color: #ffffff !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.crm-theme .crm-mobile-enquiry-card {
+  background-color: rgba(12, 15, 40, 0.95) !important;
+  border-color: rgba(99, 102, 241, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.crm-theme .crm-card,
+.crm-theme .crm-card--flush {
+  background-color: rgba(12, 15, 40, 0.95) !important;
+  border-color: rgba(99, 102, 241, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.crm-theme .crm-kanban-col {
+  background-color: rgba(8, 10, 28, 0.8) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  border-radius: 16px !important;
+  padding: 12px !important;
+}
+
+.crm-theme .crm-kanban-card {
+  background-color: rgba(12, 15, 40, 0.95) !important;
+  border-color: rgba(99, 102, 241, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.crm-theme .crm-table-wrap {
+  background-color: transparent !important;
+}
+
+.crm-theme .crm-table thead tr {
+  background-color: #07091c !important;
+  border-color: rgba(99, 102, 241, 0.25) !important;
+}
+
+.crm-theme .crm-table tbody tr {
+  border-color: rgba(99, 102, 241, 0.15) !important;
+}
+
+.crm-theme .crm-table tbody tr:hover {
+  background-color: rgba(99, 102, 241, 0.1) !important;
+}
+
 

@@ -10,8 +10,12 @@ export const MANAGER_MEMBERS_ENQUIRIES_ROUTES = {
   LIST: managerMembersEnquiriesView('enquiries'),
   ADD: managerMembersEnquiriesView('add'),
   DETAIL: (id: string) => managerMembersEnquiriesView('detail', { id }),
-  /** This route carries no name/phone PII in the URL. */
-  ADMISSION_CONVERSION: () => '/frontend_manager/manager_members/members_new_admission',
+  /** Canonical destination for converting an enquiry into admission without exposing name/phone PII in the URL. */
+  ADMISSION_CONVERSION: (enquiryId?: string) =>
+    enquiryId
+      ? `/frontend_manager/manager_members/members_new_admission?enquiryId=${encodeURIComponent(enquiryId)}`
+      : '/frontend_manager/manager_members/members_new_admission',
+  NEW_ADMISSION: '/frontend_manager/manager_members/members_new_admission',
 } as const;
 
 /** Existing source-backed API-relative paths only; write operations remain fail-closed. */

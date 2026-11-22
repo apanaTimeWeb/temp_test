@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { formatManagerSeatsCurrency, toManagerSeatsMinorUnits } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementFormatting';
+import { formatManagerSeatsCurrency,toManagerSeatsMinorUnits } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementFormatting';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerLockersManagementFormatting', () => {
   it('formats integer minor units as currency', () => {

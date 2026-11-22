@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect,useRef } from 'react';
 type ManagerUnsavedConfirm = (message: string, cancelLabel: string, continueLabel: string) => Promise<boolean>;
 type ManagerUnsavedRouter = { push: (href: string) => void };
 type ManagerUnsavedTranslator = (key: 'confirm_leave_with_unsaved_changes' | 'cancel' | 'continue') => string;

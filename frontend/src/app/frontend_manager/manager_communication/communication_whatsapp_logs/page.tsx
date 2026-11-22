@@ -1,6 +1,6 @@
 import { ManagerCommunicationWhatsappLogsMain } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/ManagerCommunicationWhatsappLogsMain';
-import type { ManagerCommunicationWhatsappLogsMainProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/types/ManagerCommunicationWhatsappLogsMainTypes';
 import type { ManagerCommunicationWhatsappLogsPageProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/types/ManagerCommunicationWhatsappLogsComponentTypes';
+import type { ManagerCommunicationWhatsappLogsMainProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/types/ManagerCommunicationWhatsappLogsMainTypes';
 
 
 

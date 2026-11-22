@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
+import { describe,expect,it } from 'vitest';
 
 describe('maskManagerMemberPhone', () => {
   it('reveals only the final four digits for a phone with formatting', () => {

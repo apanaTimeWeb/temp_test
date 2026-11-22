@@ -1,12 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
 import { getManagerMemberDirectoryDemoRecords } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryDemoRepository';
-import type { ManagerMembersDirectoryRecord, ManagerMembersDirectoryTab } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
-import { MANAGER_MEMBERS_DIRECTORY_SEARCH_DEBOUNCE_MS } from '@/app/frontend_manager/manager_members/members_directory/constants/ManagerMembersDirectoryConstants';
+import type { ManagerMembersDirectoryRecord,ManagerMembersDirectoryTab } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
+import { useEffect,useMemo,useState } from 'react';
 
 /** DATA FLOW: Feature-owned inputs/state -> hook result for its caller; no backend/API flow is inferred without source evidence. */
 
 /** Owns the member-directory filters and query-driven profile selection state. */
-export type ManagerMembersDirectoryRouteIntent = { view?: string; id?: string; name?: string; phone?: string; smartId?: string };
+export type ManagerMembersDirectoryRouteIntent = { view?: string; id?: string; name?: string; phone?: string; smartId?: string; seat?: string };
 
 function resolveProfileQuery(intent: ManagerMembersDirectoryRouteIntent): string {
   return (intent.id ?? intent.smartId ?? intent.name ?? intent.phone ?? '').trim();
@@ -15,32 +14,39 @@ function resolveProfileQuery(intent: ManagerMembersDirectoryRouteIntent): string
 export function useManagerMemberDirectoryPageState(routeIntent: ManagerMembersDirectoryRouteIntent = {}) {
   const hasProfileIntent = routeIntent.view === 'profile' || routeIntent.view === 'edit';
   const [activeTab, setActiveTab] = useState<ManagerMembersDirectoryTab>(hasProfileIntent ? 'Member Profile' : 'All Members');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(routeIntent.seat ? routeIntent.seat.trim() : '');
   const [profileSearch, setProfileSearch] = useState(hasProfileIntent ? resolveProfileQuery(routeIntent) : 'LIB-001');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
   const [debouncedProfileSearch, setDebouncedProfileSearch] = useState(profileSearch);
-  // Dependency rationale: debounce the general directory search independently so rapid edits do not trigger repeated filtering.
+  // Dependency rationale: debounce the general directory search independently (300ms) so rapid edits do not trigger repeated filtering.
   useEffect(() => {
-    const timeout = window.setTimeout(() => setDebouncedSearchQuery(searchQuery), MANAGER_MEMBERS_DIRECTORY_SEARCH_DEBOUNCE_MS);
+    const timeout = window.setTimeout(() => setDebouncedSearchQuery(searchQuery), 300);
     return () => window.clearTimeout(timeout);
   }, [searchQuery]);
-  // Dependency rationale: debounce profile search independently because it has a separate field and result intent.
+  // Dependency rationale: debounce profile search independently (300ms) because it has a separate field and result intent.
   useEffect(() => {
-    const timeout = window.setTimeout(() => setDebouncedProfileSearch(profileSearch), MANAGER_MEMBERS_DIRECTORY_SEARCH_DEBOUNCE_MS);
+    const timeout = window.setTimeout(() => setDebouncedProfileSearch(profileSearch), 300);
     return () => window.clearTimeout(timeout);
   }, [profileSearch]);
 
   // Dependency rationale: synchronize the active tab and profile query with the current route intent; every route field used below is in the dependency list.
   useEffect(() => {
-    if (routeIntent.view === 'profile' || routeIntent.view === 'edit') {
+    if (routeIntent.seat) {
+      setActiveTab('All Members');
+      setSearchQuery(routeIntent.seat.trim());
+    } else if (routeIntent.view === 'profile' || routeIntent.view === 'edit') {
       setActiveTab('Member Profile');
       setProfileSearch(resolveProfileQuery(routeIntent));
     } else if (routeIntent.view === undefined) {
       setActiveTab('All Members');
       setProfileSearch('LIB-001');
     }
-  }, [routeIntent.view, routeIntent.id, routeIntent.name, routeIntent.phone, routeIntent.smartId]);
-  const members: ManagerMembersDirectoryRecord[] = useMemo(() => getManagerMemberDirectoryDemoRecords(), []);
+  }, [routeIntent.view, routeIntent.id, routeIntent.name, routeIntent.phone, routeIntent.smartId, routeIntent.seat]);
+  const [members, setMembers] = useState<ManagerMembersDirectoryRecord[]>(() => getManagerMemberDirectoryDemoRecords());
+
+  const updateMember = (updatedMember: ManagerMembersDirectoryRecord) => {
+    setMembers((prev) => prev.map((m) => (m.id === updatedMember.id ? updatedMember : m)));
+  };
 
   const filteredMembers = useMemo(() => {
     let filtered = members;
@@ -49,15 +55,34 @@ export function useManagerMemberDirectoryPageState(routeIntent: ManagerMembersDi
     if (activeTab === 'Suspended Members') filtered = filtered.filter((member) => member.status === 'Suspended');
     if (debouncedSearchQuery) {
       const normalizedQuery = debouncedSearchQuery.toLowerCase();
-      filtered = filtered.filter((member) => member.name.toLowerCase().includes(normalizedQuery) || member.id.toLowerCase().includes(normalizedQuery));
+      filtered = filtered.filter((member) => (
+        member.name.toLowerCase().includes(normalizedQuery) ||
+        member.id.toLowerCase().includes(normalizedQuery) ||
+        (member.phone && member.phone.toLowerCase().includes(normalizedQuery)) ||
+        (member.email && member.email.toLowerCase().includes(normalizedQuery)) ||
+        (member.smartId && member.smartId.toLowerCase().includes(normalizedQuery)) ||
+        (member.seat && member.seat.toLowerCase().includes(normalizedQuery))
+      ));
     }
     return filtered;
   }, [activeTab, members, debouncedSearchQuery]);
 
-  const profileMember = useMemo(
-    () => members.find((record) => `${record.id} ${record.name}`.toLowerCase().includes(debouncedProfileSearch.trim().toLowerCase())) ?? null,
-    [members, debouncedProfileSearch],
-  );
+  const profileMember = useMemo(() => {
+    const q = debouncedProfileSearch.trim().toLowerCase();
+    if (!q) return members[0] ?? null;
+    const exactId = members.find((r) => r.id.toLowerCase() === q || (r.smartId && r.smartId.toLowerCase() === q));
+    if (exactId) return exactId;
+    const cleanDigits = q.replace(/\D/g, '');
+    if (cleanDigits.length >= 4) {
+      const exactPhone = members.find((r) => r.phone && r.phone.replace(/\D/g, '').includes(cleanDigits));
+      if (exactPhone) return exactPhone;
+    }
+    const idPrefix = members.find((r) => r.id.toLowerCase().startsWith(q));
+    if (idPrefix) return idPrefix;
+    const nameMatch = members.find((r) => r.name.toLowerCase().includes(q));
+    if (nameMatch) return nameMatch;
+    return members.find((r) => `${r.id} ${r.name}`.toLowerCase().includes(q)) ?? null;
+  }, [members, debouncedProfileSearch]);
 
-  return { activeTab, setActiveTab, searchQuery, setSearchQuery, profileSearch, setProfileSearch, members, filteredMembers, profileMember };
+  return { activeTab, setActiveTab, searchQuery, setSearchQuery, profileSearch, setProfileSearch, members, filteredMembers, profileMember, updateMember };
 }

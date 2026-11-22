@@ -2,10 +2,10 @@
  * Module-local MSW lifecycle for the attendance_daily standalone harness.
  * The __harness__ probe is test-only and is not a backend or feature API route.
  */
-import { delay, http, HttpResponse, type RequestHandler } from 'msw';
+import { delay,http,HttpResponse,type RequestHandler } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { MANAGER_ATTENDANCE_DAILY_SCENARIOS as MODULE_SCENARIOS, type AttendanceDailyScenario as HarnessScenario } from '../../mocks/scenarios/manager_attendance_daily.scenarios';
 import { MANAGER_ENGAGEMENT_HANDLERS as MODULE_HANDLERS_SOURCE } from '../../mocks/manager_attendance_daily_handlers/ManagerAttendanceDailyHandlers';
+import { MANAGER_ATTENDANCE_DAILY_SCENARIOS as MODULE_SCENARIOS,type AttendanceDailyScenario as HarnessScenario } from '../../mocks/scenarios/manager_attendance_daily.scenarios';
 // This list contains only module-owned, source-backed business handlers; no API routes are inferred here.
 const MODULE_HANDLERS: RequestHandler[] = [...MODULE_HANDLERS_SOURCE];
 

@@ -11,4 +11,26 @@ export interface ManagerDashboardReportsSeatRow { shift:string; occupancy:string
 export interface ManagerDashboardReportsLockerRow { type:string; occupied:number; total:number; pct:string }
 export interface ManagerDashboardReportsMaintenanceRow { item:string; location:string; reported:string; priority:'High'|'Medium'|'Low' }
 export interface ManagerDashboardReportsComplaintPoint { name:string; value:number }
-export interface ManagerDashboardReportsData { kpiCards:ManagerDashboardReportsKpiCard[]; occupancyData:ManagerDashboardReportsSeriesPoint[]; growthData:ManagerDashboardReportsGrowthPoint[]; attendanceData:ManagerDashboardReportsAttendancePoint[]; absenteesChartData:ManagerDashboardReportsAbsenteeChartPoint[]; complaintsData:ManagerDashboardReportsComplaintPoint[]; absenteeRows:ManagerDashboardReportsTableAbsenteeRow[]; conversionRows:ManagerDashboardReportsConversionRow[]; seatRows:ManagerDashboardReportsSeatRow[]; lockerRows:ManagerDashboardReportsLockerRow[]; maintenanceRows:ManagerDashboardReportsMaintenanceRow[] }
+export interface ManagerDashboardReportsShiftProfitabilityRow {
+  shift: string;
+  timing: string;
+  studentsCount: number;
+  monthlyRate: number;
+  grossRevenue: number;
+  collectionRate: string;
+  marginRating: 'High' | 'Good' | 'Moderate';
+}
+export interface ManagerDashboardReportsData {
+  kpiCards: ManagerDashboardReportsKpiCard[];
+  occupancyData: ManagerDashboardReportsSeriesPoint[];
+  growthData: ManagerDashboardReportsGrowthPoint[];
+  attendanceData: ManagerDashboardReportsAttendancePoint[];
+  absenteesChartData: ManagerDashboardReportsAbsenteeChartPoint[];
+  complaintsData: ManagerDashboardReportsComplaintPoint[];
+  absenteeRows: ManagerDashboardReportsTableAbsenteeRow[];
+  conversionRows: ManagerDashboardReportsConversionRow[];
+  seatRows: ManagerDashboardReportsSeatRow[];
+  lockerRows: ManagerDashboardReportsLockerRow[];
+  maintenanceRows: ManagerDashboardReportsMaintenanceRow[];
+  shiftProfitabilityRows?: ManagerDashboardReportsShiftProfitabilityRow[];
+}

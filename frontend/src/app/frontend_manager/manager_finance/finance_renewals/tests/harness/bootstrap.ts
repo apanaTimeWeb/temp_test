@@ -2,9 +2,9 @@
  * Module-local MSW lifecycle for the finance_renewals standalone harness.
  * The __harness__ probe is test-only and is not a backend or feature API route.
  */
-import { delay, http, HttpResponse, type RequestHandler } from 'msw';
+import { delay,http,HttpResponse,type RequestHandler } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { MANAGER_FINANCE_RENEWALS_SCENARIOS as MODULE_SCENARIOS, type FinanceRenewalsScenario as HarnessScenario } from '../../mocks/scenarios/manager_finance_renewals.scenarios';
+import { MANAGER_FINANCE_RENEWALS_SCENARIOS as MODULE_SCENARIOS,type FinanceRenewalsScenario as HarnessScenario } from '../../mocks/scenarios/manager_finance_renewals.scenarios';
 // No module-owned handler array was supplied for this module. Keep business API mocking empty rather than inventing an endpoint.
 const MODULE_HANDLERS: RequestHandler[] = [];
 

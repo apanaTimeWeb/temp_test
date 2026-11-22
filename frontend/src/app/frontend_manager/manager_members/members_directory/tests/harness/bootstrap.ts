@@ -2,10 +2,10 @@
  * Module-local MSW lifecycle for the members_directory standalone harness.
  * The __harness__ probe is test-only and is not a backend or feature API route.
  */
-import { delay, http, HttpResponse, type RequestHandler } from 'msw';
+import { delay,http,HttpResponse,type RequestHandler } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { MANAGER_MEMBERS_DIRECTORY_SCENARIOS as MODULE_SCENARIOS, type MembersDirectoryScenario as HarnessScenario } from '../../mocks/scenarios/manager_members_directory.scenarios';
 import { MANAGER_MEMBERS_HANDLERS as MODULE_HANDLERS_SOURCE } from '../../mocks/manager_members_directory_handlers/ManagerMembersDirectoryHandlers';
+import { MANAGER_MEMBERS_DIRECTORY_SCENARIOS as MODULE_SCENARIOS,type MembersDirectoryScenario as HarnessScenario } from '../../mocks/scenarios/manager_members_directory.scenarios';
 // This list contains only module-owned, source-backed business handlers; no API routes are inferred here.
 const MODULE_HANDLERS: RequestHandler[] = [...MODULE_HANDLERS_SOURCE];
 

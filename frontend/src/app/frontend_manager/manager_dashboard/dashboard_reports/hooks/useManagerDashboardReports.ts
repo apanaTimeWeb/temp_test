@@ -1,8 +1,8 @@
 'use client';
-import { useQuery } from '@tanstack/react-query';
-import { fetchManagerReports, ManagerDashboardReportsContractBlockedError } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/api/manager_dashboard_reports.api';
+import { fetchManagerReports,ManagerDashboardReportsContractBlockedError } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/api/manager_dashboard_reports.api';
 import { getManagerReportsQueryKey } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/api/manager_dashboard_reports.query_keys';
 import type { ManagerDashboardReportsDateRange } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
+import { useQuery } from '@tanstack/react-query';
 /** DATA FLOW: Feature-owned inputs/state -> hook result for its caller; no backend/API flow is inferred without source evidence. */
 
 /** Owns Reports server-state reads; selected range remains UI state in the page. */

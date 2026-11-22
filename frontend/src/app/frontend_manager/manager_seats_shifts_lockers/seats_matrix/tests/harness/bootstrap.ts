@@ -2,10 +2,10 @@
  * Module-local MSW lifecycle for the seats_matrix standalone harness.
  * The __harness__ probe is test-only and is not a backend or feature API route.
  */
-import { delay, http, HttpResponse, type RequestHandler } from 'msw';
+import { delay,http,HttpResponse,type RequestHandler } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { MANAGER_SEATS_MATRIX_SCENARIOS as MODULE_SCENARIOS, type SeatsMatrixScenario as HarnessScenario } from '../../mocks/scenarios/manager_seats_matrix.scenarios';
 import { managerSeatsShiftsLockersHandlers as MODULE_HANDLERS_SOURCE } from '../../mocks/manager_seats_matrix_handlers/ManagerSeatsMatrixHandlers';
+import { MANAGER_SEATS_MATRIX_SCENARIOS as MODULE_SCENARIOS,type SeatsMatrixScenario as HarnessScenario } from '../../mocks/scenarios/manager_seats_matrix.scenarios';
 // This list contains only module-owned, source-backed business handlers; no API routes are inferred here.
 const MODULE_HANDLERS: RequestHandler[] = [...MODULE_HANDLERS_SOURCE];
 

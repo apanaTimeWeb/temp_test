@@ -29,6 +29,8 @@ export interface ManagerMembersEnquiriesEnquiry {
   isToday?: boolean;
   isUpcoming?: boolean;
   convertedDate?: string;
+  lostReason?: string;
+  lostDate?: string;
 }
 
 export interface ManagerMembersEnquiriesApiEnquiry {

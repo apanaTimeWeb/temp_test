@@ -3,9 +3,10 @@
 // RESPONSIBILITY: Define or render the table structure for the components feature. It does not own backend persistence or cross-feature business logic.
 import { displayValue } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/utils/ManagerAttendanceAbsenteeReportDisplayValue';
 
-import { useMemo, useState } from 'react';
-import type { ManagerAttendanceAbsenteeReportNativeTableProps, NativeCellParams, NativeColumn, ManagerAttendanceAbsenteeReportSortDirection } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/types/ManagerAttendanceAbsenteeReportComponentTypes';
-export type { NativeCellParams, NativeColumn };
+import type { ManagerAttendanceAbsenteeReportNativeTableProps,ManagerAttendanceAbsenteeReportSortDirection,NativeCellParams,NativeColumn } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/types/ManagerAttendanceAbsenteeReportComponentTypes';
+import { ArrowDown,ArrowUp,ArrowUpDown } from 'lucide-react';
+import { useMemo,useState } from 'react';
+export type { NativeCellParams,NativeColumn };
 
 
 
@@ -17,7 +18,7 @@ export default function ManagerAttendanceAbsenteeReportNativeTable<T extends obj
   const [sortField, setSortField] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<ManagerAttendanceAbsenteeReportSortDirection>('asc');
   const [page, setPage] = useState(0);
-  const pageSize = 10;
+  const [pageSize, setPageSize] = useState(10);
   const sortedRows = useMemo(() => {
     if (!sortField) return rows;
     const getValue = (row: T): unknown => (row as unknown as Record<string, unknown>)[sortField];
@@ -40,14 +41,30 @@ export default function ManagerAttendanceAbsenteeReportNativeTable<T extends obj
   return <div className="w-full min-w-0">
     <div className="overflow-x-auto">
       <table className="w-full border-collapse text-left" aria-rowcount={rows.length + 1}>
-        <thead><tr className="border-b border-border bg-surface text-xs text-secondary">
+        <thead><tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold">
           {columns.map((column, index) => <th key={column.field ?? column.headerName ?? JSON.stringify(column)} scope="col" aria-sort={sortField === column.field ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="px-3 py-3 font-semibold whitespace-nowrap">
-            {column.field && column.sortable !== false ? <button type="button" className="inline-flex items-center gap-1 text-left" onClick={() => changeSort(String(column.field))} aria-label={`Sort by ${column.headerName ?? column.field}`}>
-              {column.headerName ?? column.field} {sortField === column.field ? (sortDirection === 'asc' ? '↑' : '↓') : null}
-            </button> : (column.headerName ?? column.field ?? '—')}
+            {column.field && column.sortable !== false ? (
+              <button
+                type="button"
+                className="group inline-flex items-center gap-1.5 text-left"
+                onClick={() => changeSort(String(column.field))}
+                aria-label={`Sort by ${column.headerName ?? column.field}, currently ${sortField === column.field ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'unsorted'}`}
+              >
+                <span>{column.headerName ?? column.field}</span>
+                {sortField === column.field ? (
+                  sortDirection === 'asc' ? (
+                    <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+                  ) : (
+                    <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+                  )
+                ) : (
+                  <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 transition-colors shrink-0" aria-hidden="true" />
+                )}
+              </button>
+            ) : (column.headerName ?? column.field ?? '—')}
           </th>)}
         </tr></thead>
-        <tbody>{visibleRows.map((row, rowIndex) => <tr key={getRowKey(row)} className="border-b border-border last:border-0 hover:bg-surface-hover">
+        <tbody>{visibleRows.map((row, rowIndex) => <tr key={getRowKey(row)} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12">
           {columns.map((column, columnIndex) => {
             const rawValue = column.field ? (row as unknown as Record<string, unknown>)[column.field] : undefined;
             const value: NativeCellParams<T>['value'] = typeof rawValue === 'string' || typeof rawValue === 'number' || typeof rawValue === 'boolean' ? rawValue : rawValue == null ? null : String(rawValue);
@@ -58,9 +75,54 @@ export default function ManagerAttendanceAbsenteeReportNativeTable<T extends obj
         </tr>)}</tbody>
       </table>
     </div>
-    {rows.length > pageSize && <div className="flex items-center justify-between gap-3 border-t border-border px-3 py-3 text-sm text-secondary">
-      <span> {Math.min(effectivePage * pageSize + 1, rows.length)}–{Math.min((effectivePage + 1) * pageSize, rows.length)} / {rows.length} </span>
-      <div className="flex gap-2"><button type="button" className="mgr-btn-ghost mgr-btn-sm" disabled={page <= 0} onClick={() => setPage((current) => Math.max(0, current - 1))}>{labels?.previous ?? 'Previous page'}</button><button type="button" className="mgr-btn-ghost mgr-btn-sm" disabled={page >= pageCount - 1} onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}>{labels?.next ?? 'Next page'}</button></div>
-    </div>}
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-3 py-3 text-sm text-secondary">
+      <span>
+        {(labels as any)?.range
+          ? (labels as any).range(rows.length === 0 ? 0 : effectivePage * pageSize + 1, Math.min((effectivePage + 1) * pageSize, rows.length), rows.length)
+          : `Showing ${rows.length === 0 ? 0 : effectivePage * pageSize + 1}–${Math.min((effectivePage + 1) * pageSize, rows.length)} of ${rows.length} results`}
+      </span>
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-1.5">
+          <label htmlFor="rows-per-page-managerattendanceabsenteereportnativetable" className="text-xs text-secondary whitespace-nowrap">
+            Rows per page:
+          </label>
+          <select
+            id="rows-per-page-managerattendanceabsenteereportnativetable"
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+              setPage(0);
+            }}
+            className="rounded-lg border border-border bg-card px-2 py-1 text-xs text-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
+          >
+            <option value={10}>10</option>
+            <option value={25}>25</option>
+            <option value={50}>50</option>
+          </select>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="px-2.5 py-1 rounded-lg border border-border text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            disabled={effectivePage <= 0}
+            onClick={() => setPage((current) => Math.max(0, current - 1))}
+          >
+            {labels?.previous ?? 'Previous page'}
+          </button>
+          <span className="text-xs text-secondary px-1">
+            Page <strong className="text-primary font-semibold">{effectivePage + 1}</strong> of{' '}
+            <strong className="text-primary font-semibold">{pageCount}</strong>
+          </span>
+          <button
+            type="button"
+            className="px-2.5 py-1 rounded-lg border border-border text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            disabled={effectivePage >= pageCount - 1}
+            onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
+          >
+            {labels?.next ?? 'Next page'}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>;
 }

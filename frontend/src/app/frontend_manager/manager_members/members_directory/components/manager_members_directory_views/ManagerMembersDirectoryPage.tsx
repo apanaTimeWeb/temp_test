@@ -1,125 +1,278 @@
 'use client';
-import { useLocale, useTranslations } from 'next-intl';
-import Link from 'next/link';
-import { MANAGER_MEMBERS_DIRECTORY_ROUTES } from '@/app/frontend_manager/manager_members/members_directory/config/manager_members_directory.url_config';
-import { displayValue } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDisplayValue';
-import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
-
-import { Search } from 'lucide-react';
-import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
-import { ManagerMembersDirectoryEmptyState } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_states/ManagerMembersDirectoryEmptyState';
-import { ManagerMembersDirectorySupportingSections } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectorySupportingSections.tsx';
-import { ManagerMembersDirectoryKpiSection } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryKpiSection.tsx';
-import { ManagerMembersDirectoryHeader } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryHeader.tsx';
-import { MANAGER_MEMBERS_STATUS_BADGES, MANAGER_MEMBERS_TABS } from '@/app/frontend_manager/manager_members/members_directory/constants/ManagerMembersDirectoryConstants';
+import { ManagerMembersDirectoryBulkToolbar } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryBulkToolbar';
+import { ManagerMembersDirectoryBulkWhatsAppModal } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryBulkWhatsAppModal';
+import { ManagerMembersDirectoryHeader } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryHeader';
+import { ManagerMembersDirectoryKpiSection } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryKpiSection';
+import { ManagerMembersDirectoryProfileSection } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryProfileSection';
+import { ManagerMembersDirectorySupportingSections } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectorySupportingSections';
+import {
+ManagerMembersDirectoryTable,
+type MemberSortField,
+} from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryTable';
+import ManagerMembersDirectoryTimeHorizonBar from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryTimeHorizonBar';
+import { useManagerMembersDirectoryBulkWhatsApp } from '@/app/frontend_manager/manager_members/members_directory/hooks/useManagerMembersDirectoryBulkWhatsApp';
 import { useManagerMemberDirectoryPageState } from '@/app/frontend_manager/manager_members/members_directory/hooks/useManagerMembersDirectoryPageState';
-import { ManagerMembersDirectoryProfileSection } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryProfileSection.tsx';
+import { useManagerMembersDirectoryTimeFilter } from '@/app/frontend_manager/manager_members/members_directory/hooks/useManagerMembersDirectoryTimeFilter';
 import type { ManagerMembersDirectoryRouteQueryProps } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryComponentTypes';
-
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
 
 export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersDirectoryRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
-  const locale = useLocale();
-  const { activeTab, setActiveTab, searchQuery, setSearchQuery, profileSearch, setProfileSearch, members, filteredMembers, profileMember } = useManagerMemberDirectoryPageState(_routeQuery);
+  const {
+    activeTab,
+    setActiveTab,
+    searchQuery,
+    setSearchQuery,
+    profileSearch,
+    setProfileSearch,
+    members,
+    filteredMembers,
+    profileMember,
+    updateMember,
+  } = useManagerMemberDirectoryPageState(_routeQuery);
   const editIntent = _routeQuery.view === 'edit';
-  const tabDestinations: Partial<Record<(typeof MANAGER_MEMBERS_TABS)[number]['name'], string>> = {
-    'Add Member': MANAGER_MEMBERS_DIRECTORY_ROUTES.newAdmission,
-    'Membership Renewal': MANAGER_MEMBERS_DIRECTORY_ROUTES.membershipRenewal,
-    'Member Documents': MANAGER_MEMBERS_DIRECTORY_ROUTES.memberDocuments,
+
+  const {
+    timeHorizon,
+    setTimeHorizon,
+    customStartDate,
+    setCustomStartDate,
+    customEndDate,
+    setCustomEndDate,
+    timeFilteredMembers,
+    timeHorizonLabel,
+  } = useManagerMembersDirectoryTimeFilter(members);
+
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [planFilter, setPlanFilter] = useState('all');
+  const [shiftFilter, setShiftFilter] = useState('all');
+  const [genderFilter, setGenderFilter] = useState('all');
+  const [expiryFilter, setExpiryFilter] = useState('all');
+  const [sortField, setSortField] = useState<MemberSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: MemberSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
   };
 
+  const multiFilteredMembers = useMemo(() => {
+    return timeFilteredMembers.filter((m) => {
+      // 1. Status tab filter
+      if (activeTab === 'Active Members' && m.status !== 'Active') return false;
+      if (activeTab === 'Expired Members' && m.status !== 'Expired') return false;
+      if (activeTab === 'Suspended Members' && m.status !== 'Suspended') return false;
 
+      // 2. Search query filter
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const matches =
+          m.name.toLowerCase().includes(q) ||
+          m.id.toLowerCase().includes(q) ||
+          (m.phone && m.phone.toLowerCase().includes(q)) ||
+          (m.email && m.email.toLowerCase().includes(q)) ||
+          (m.smartId && m.smartId.toLowerCase().includes(q)) ||
+          (m.seat && m.seat.toLowerCase().includes(q));
+        if (!matches) return false;
+      }
+
+      // 3. Dropdown filters
+      if (planFilter !== 'all' && m.type !== planFilter) return false;
+      if (shiftFilter !== 'all' && m.shift !== shiftFilter) return false;
+      if (genderFilter !== 'all' && m.gender !== genderFilter) return false;
+      if (expiryFilter !== 'all') {
+        const today = new Date();
+        const expiry = new Date(m.expiryDate);
+        const diffDays = Math.ceil((expiry.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+        if (expiryFilter === '7days' && (diffDays < 0 || diffDays > 7)) return false;
+        if (expiryFilter === '30days' && (diffDays < 0 || diffDays > 30)) return false;
+      }
+      return true;
+    });
+  }, [timeFilteredMembers, activeTab, searchQuery, planFilter, shiftFilter, genderFilter, expiryFilter]);
+
+  const hasActiveFilters =
+    searchQuery.trim().length > 0 ||
+    planFilter !== 'all' ||
+    shiftFilter !== 'all' ||
+    genderFilter !== 'all' ||
+    expiryFilter !== 'all' ||
+    timeHorizon !== 'all' ||
+    Boolean(customStartDate) ||
+    Boolean(customEndDate) ||
+    activeTab !== 'All Members';
+
+  const handleResetFilters = () => {
+    setSearchQuery('');
+    setPlanFilter('all');
+    setShiftFilter('all');
+    setGenderFilter('all');
+    setExpiryFilter('all');
+    setTimeHorizon('all');
+    setCustomStartDate('');
+    setCustomEndDate('');
+    setActiveTab('All Members');
+    setPage(0);
+  };
+
+  const sortedMembers = useMemo(() => {
+    if (!sortField) return multiFilteredMembers;
+    return [...multiFilteredMembers].sort((a, b) => {
+      const aVal = String(a[sortField] ?? '');
+      const bVal = String(b[sortField] ?? '');
+      const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [multiFilteredMembers, sortField, sortDirection]);
+
+  const totalRows = sortedMembers.length;
+  const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
+  const effectivePage = Math.min(page, pageCount - 1);
+  const paginatedMembers = sortedMembers.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
+  const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const {
+    selectedIds,
+    selectedMembers,
+    isModalOpen,
+    setIsModalOpen,
+    toggleSelectOne,
+    toggleSelectAll,
+    selectAllFiltered,
+    clearSelection,
+    quickWhatsApp,
+  } = useManagerMembersDirectoryBulkWhatsApp(members, paginatedMembers, sortedMembers);
+
+  const escapeCsvVal = (val: unknown): string => {
+    const s = String(val ?? '');
+    return s.includes(',') || s.includes('"') || s.includes('\n') ? `"${s.replace(/"/g, '""')}"` : `"${s}"`;
+  };
+
+  const handleExportCsv = () => {
+    const headers = ['Member ID', 'Name', 'Phone', 'Plan', 'Status', 'Expiry Date'];
+    const rows = sortedMembers.map((m) => [
+      escapeCsvVal(m.id),
+      escapeCsvVal(m.name),
+      escapeCsvVal(m.phone),
+      escapeCsvVal(m.type),
+      escapeCsvVal(m.status),
+      escapeCsvVal(m.expiryDate),
+    ].join(','));
+    const csv = [headers.join(','), ...rows].join('\r\n');
+    const anchor = Object.assign(document.createElement('a'), {
+      href: URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })),
+      download: `students_directory_${new Date().toISOString().slice(0, 10)}.csv`,
+    });
+    anchor.click();
+    URL.revokeObjectURL(anchor.href);
+  };
 
   return (
-    <div className="mgr-page-animate relative pb-12"
+    <div
+      className="mgr-page-animate relative pb-12 w-full max-w-full min-w-0 overflow-x-hidden"
       data-route-view={_routeQuery.view}
       data-route-id={_routeQuery.id}
-      data-route-name={_routeQuery.name}
-      data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}>
-      <ManagerMembersDirectoryHeader />
-      <p role="status" data-testid="manager-members-demo-mode-banner" className="mb-5 rounded-xl border border-warning bg-warning-bg px-4 py-3 text-sm text-warning">
-        {tManagerUi('demo_mode_existing_members_are_sample_records_new_member_014d0f')}
-      </p>
+    >
+      <ManagerMembersDirectoryHeader onExportCsv={handleExportCsv} />
 
-      <ManagerMembersDirectoryKpiSection
-        totalMembers={members.length}
-        activeMembers={members.filter(m => m.status === 'Active').length}
-        expiredMembers={members.filter(m => m.status === 'Expired').length}
-        suspendedMembers={members.filter(m => m.status === 'Suspended').length}
+      <ManagerMembersDirectoryTimeHorizonBar
+        timeHorizon={timeHorizon}
+        onChangeTimeHorizon={setTimeHorizon}
+        customStartDate={customStartDate}
+        onCustomStartDateChange={setCustomStartDate}
+        customEndDate={customEndDate}
+        onCustomEndDateChange={setCustomEndDate}
+        activeCount={multiFilteredMembers.length}
       />
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
-        {/* Left Sidebar Tabs */}
-        <div className="xl:col-span-3 space-y-2">
-          {MANAGER_MEMBERS_TABS.map(tab => {
-            const isActive = activeTab === tab.name;
-            const commonClassName = `w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold motion-safe:transition-all ${
-              isActive ? 'bg-primary text-on-primary shadow-card' : 'text-secondary hover:bg-card hover:text-primary'
-            }`;
-            const destination = tabDestinations[tab.name];
-            if (destination) {
-              return (
-                <Link key={tab.name} href={destination} className={commonClassName}>
-                  <tab.icon size={18} aria-hidden="true" className="opacity-70" />
-                  {tManagerUi(tab.labelKey)}
-                </Link>
-              );
-            }
-            return (
-              <button key={tab.name} type="button" onClick={() => setActiveTab(tab.name)} aria-pressed={isActive} className={commonClassName}>
-                <tab.icon size={18} aria-hidden="true" className={isActive ? 'text-primary' : 'opacity-70'} />
-                {tManagerUi(tab.labelKey)}
-              </button>
-            );
-          })}
-        </div>
+      <ManagerMembersDirectoryKpiSection
+        totalMembers={timeFilteredMembers.length}
+        activeMembers={timeFilteredMembers.filter((m) => m.status === 'Active').length}
+        expiredMembers={timeFilteredMembers.filter((m) => m.status === 'Expired').length}
+        suspendedMembers={timeFilteredMembers.filter((m) => m.status === 'Suspended').length}
+        activeTab={activeTab}
+        timeHorizonLabel={timeHorizonLabel}
+        onSelectTab={(tab) => {
+          setActiveTab(tab);
+          setPage(0);
+        }}
+      />
 
-        {/* Right Content Area */}
-        <div className="xl:col-span-9 mgr-card p-6 min-h-96">
-          
-          {/* GRIDS (All, Active, Expired, Suspended) */}
-          {['All Members', 'Active Members', 'Expired Members', 'Suspended Members'].includes(activeTab) && (
-            <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-border pb-4">
-                <h2 className="text-xl font-bold text-primary">{tManagerUi(MANAGER_MEMBERS_TABS.find((tab) => tab.name === activeTab)?.labelKey ?? 'tab_all_members')}</h2>
-                <div className="relative w-full sm:w-64">
-                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-                  <label htmlFor="manager-members-search" className="sr-only">{tManagerUi('search_by_name_or_id')}</label>
-                  <input id="manager-members-search" type="text" className="mgr-input pl-9" placeholder={tManagerUi('search_by_name_or_id')} 
-                    value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="flex-1 w-full overflow-x-auto">
-                {filteredMembers.length === 0 ? (
-                  <ManagerMembersDirectoryEmptyState />
-                ) : (
-                  <table className="mgr-table w-full">
-                    <thead><tr><th scope="col">{tManagerUi('member_id_7a88b2')}</th><th scope="col">{tManagerUi('name')}</th><th scope="col">{tManagerUi('phone')}</th><th scope="col">{tManagerUi('plan')}</th><th scope="col">{tManagerUi('status')}</th><th scope="col">{tManagerUi('expiry_date')}</th></tr></thead>
-                    <tbody>{filteredMembers.map((member) => { const badge = MANAGER_MEMBERS_STATUS_BADGES[member.status]; return <tr key={member.id}><td><span className="font-mono text-primary">{member.id}</span></td><td className="font-bold text-primary">{member.name}</td><td>{maskManagerMemberPhone(member.phone)}</td><td><span className="mgr-badge mgr-badge--info">{member.type}</span></td><td><span className={`mgr-badge ${badge?.className ?? 'mgr-badge--neutral'}`}>{badge ? tManagerUi(badge.labelKey) : tManagerUi('status_unknown')}</span></td><td>{formatManagerMemberDirectoryCalendarDate(displayValue(member.expiryDate), locale)}</td></tr>; })}</tbody>
-                  </table>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* MEMBER PROFILE */}
-          {activeTab === 'Member Profile' && (
-            <>
-            {editIntent && <p className="mb-4 rounded-xl border border-warning bg-warning-bg px-4 py-3 text-sm text-warning" role="status" data-testid="manager-members-edit-contract-notice">{tManagerUi('profile_edit_unavailable_host_contract_not_supplied')}</p>}
-            <ManagerMembersDirectoryProfileSection
-              searchValue={profileSearch}
-              onSearchChange={setProfileSearch}
-              member={profileMember}
+      {/* ── Main Full-Width Content Card ── */}
+      <div className="mgr-card p-3.5 sm:p-5 lg:p-6 min-h-96 w-full max-w-full min-w-0 shadow-card border border-border overflow-x-hidden">
+        {/* GRIDS (All, Active, Expired, Suspended) */}
+        {['All Members', 'Active Members', 'Expired Members', 'Suspended Members'].includes(activeTab) && (
+          <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
+            {/* Table and Filter Bar */}
+            <ManagerMembersDirectoryTable
+              sortedMembers={sortedMembers}
+              paginatedMembers={paginatedMembers}
+              totalRows={totalRows}
+              searchQuery={searchQuery}
+              setSearchQuery={(val) => { setSearchQuery(val); setPage(0); }}
+              planFilter={planFilter}
+              setPlanFilter={(val) => { setPlanFilter(val); setPage(0); }}
+              shiftFilter={shiftFilter}
+              setShiftFilter={(val) => { setShiftFilter(val); setPage(0); }}
+              genderFilter={genderFilter}
+              setGenderFilter={(val) => { setGenderFilter(val); setPage(0); }}
+              expiryFilter={expiryFilter}
+              setExpiryFilter={(val) => { setExpiryFilter(val); setPage(0); }}
+              hasActiveFilters={hasActiveFilters}
+              onResetFilters={handleResetFilters}
+              onExportCsv={handleExportCsv}
+              sortField={sortField}
+              sortDirection={sortDirection}
+              onToggleSort={toggleSort}
+              onSelectMemberProfile={(memberId) => {
+                setProfileSearch(memberId);
+                setActiveTab('Member Profile');
+              }}
+              onOpenBulkWhatsApp={() => setIsModalOpen(true)}
+              onQuickWhatsApp={quickWhatsApp}
+              page={page}
+              pageSize={pageSize}
+              pageCount={pageCount}
+              startItem={startItem}
+              endItem={endItem}
+              onPageChange={setPage}
+              onPageSizeChange={(newSize) => { setPageSize(newSize); setPage(0); }}
             />
-            </>
-          )}
+          </div>
+        )}
 
-          <ManagerMembersDirectorySupportingSections activeTab={activeTab} />
+        {/* MEMBER PROFILE */}
+        {activeTab === 'Member Profile' && (
+          <ManagerMembersDirectoryProfileSection
+            searchValue={profileSearch}
+            onSearchChange={setProfileSearch}
+            member={profileMember}
+            onUpdateMember={updateMember}
+            initialEdit={editIntent}
+            onBack={() => setActiveTab('All Members')}
+          />
+        )}
 
-        </div>
+        <ManagerMembersDirectorySupportingSections activeTab={activeTab} />
       </div>
+
+      <ManagerMembersDirectoryBulkWhatsAppModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        members={selectedMembers.length > 0 ? selectedMembers : sortedMembers}
+        onComplete={() => {
+          setIsModalOpen(false);
+          clearSelection();
+        }}
+      />
     </div>
   );
 }

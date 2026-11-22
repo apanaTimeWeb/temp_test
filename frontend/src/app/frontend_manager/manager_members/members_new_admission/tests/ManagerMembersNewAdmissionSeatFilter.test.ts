@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { normalizeManagerNewAdmissionSeatFilter } from '@/app/frontend_manager/manager_members/members_new_admission/utils/ManagerMembersNewAdmissionSeatFilter';
+import { describe,expect,it } from 'vitest';
 
 describe('normalizeManagerNewAdmissionSeatFilter', () => {
   it('matches a prefixed seat label with the unprefixed route parameter', () => {

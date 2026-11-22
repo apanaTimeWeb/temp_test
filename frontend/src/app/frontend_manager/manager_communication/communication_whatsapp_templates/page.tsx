@@ -1,6 +1,6 @@
 import { ManagerCommunicationWhatsappTemplatesMain } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/components/ManagerCommunicationWhatsappTemplatesMain';
-import type { ManagerCommunicationWhatsappTemplatesMainProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/types/ManagerCommunicationWhatsappTemplatesMainTypes';
 import type { ManagerCommunicationWhatsappTemplatesPageProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/types/ManagerCommunicationWhatsappTemplatesComponentTypes';
+import type { ManagerCommunicationWhatsappTemplatesMainProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/types/ManagerCommunicationWhatsappTemplatesMainTypes';
 
 
 

@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { createManagerMemberDirectoryDemoRecord,getNextManagerMemberDirectoryDemoId } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryDemoRepository';
 import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
-import { createManagerMemberDirectoryDemoRecord, getNextManagerMemberDirectoryDemoId } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryDemoRepository';
 import { ManagerMembersDirectoryDemoCreateSchema } from '@/app/frontend_manager/manager_members/members_directory/schemas/ManagerMembersDirectoryDemoSchema';
+import { describe,expect,it } from 'vitest';
 
 const validInput = {
   name: '  Test Member  ',

@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { managerFinanceFineCollectionDraftSchema } from '@/app/frontend_manager/manager_finance/finance_fines_payments/schemas/ManagerFinanceFinesPaymentsFineCollectionDraftSchema';
+import { describe,expect,it } from 'vitest';
 
 const validDraft = { member: 'Sample member', fineId: 'Overdue Book', amount: '150', mode: 'upi', txnId: 'UPI-REF-1' };
 

@@ -1,8 +1,8 @@
 /** Module-local component props and UI/state types extracted from component files. */
 import type { ManagerMembersNewAdmissionAdmissionFormValues } from '@/app/frontend_manager/manager_members/members_new_admission/schemas/ManagerMembersNewAdmissionAdmissionSchema';
 import type { ManagerMembersNewAdmissionSearchParams } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionMainTypes';
-import type { ErrorInfo, ReactNode } from 'react';
-import type { FieldErrors, UseFormRegister } from 'react-hook-form';
+import type { ErrorInfo,ReactNode } from 'react';
+import type { FieldErrors,UseFormRegister,UseFormSetValue,UseFormWatch } from 'react-hook-form';
 
 export interface ManagerMembersNewAdmissionErrorFallbackProps {
   onRetry: () => void;
@@ -11,16 +11,37 @@ export interface ManagerMembersNewAdmissionErrorFallbackProps {
 export interface ManagerMembersNewAdmissionAdmissionEnrollmentSectionProps {
   register: UseFormRegister<ManagerMembersNewAdmissionAdmissionFormValues>;
   errors: FieldErrors<ManagerMembersNewAdmissionAdmissionFormValues>;
+  setValue?: UseFormSetValue<ManagerMembersNewAdmissionAdmissionFormValues>;
+  watch?: UseFormWatch<ManagerMembersNewAdmissionAdmissionFormValues>;
+  selectedShifts?: string[];
+  onToggleShift?: (shiftId: string) => void;
+  watchedShift?: string;
+}
+
+export interface DynamicPlanOption {
+  id: string;
+  label: string;
+  months: number;
+  totalAmount: number;
+  savingsText?: string;
 }
 
 export interface ManagerMembersNewAdmissionAdmissionPaymentSectionProps {
   register: UseFormRegister<ManagerMembersNewAdmissionAdmissionFormValues>;
   errors: FieldErrors<ManagerMembersNewAdmissionAdmissionFormValues>;
+  setValue?: UseFormSetValue<ManagerMembersNewAdmissionAdmissionFormValues>;
+  watch?: UseFormWatch<ManagerMembersNewAdmissionAdmissionFormValues>;
+  planOptions?: DynamicPlanOption[];
+  effectiveMonthlyRate?: number;
+  finalPayable?: number;
+  watchedLocker?: string;
 }
 
 export interface ManagerMembersNewAdmissionAdmissionPersonalSectionProps {
   register: UseFormRegister<ManagerMembersNewAdmissionAdmissionFormValues>;
   errors: FieldErrors<ManagerMembersNewAdmissionAdmissionFormValues>;
+  setValue?: UseFormSetValue<ManagerMembersNewAdmissionAdmissionFormValues>;
+  watch?: UseFormWatch<ManagerMembersNewAdmissionAdmissionFormValues>;
 }
 
 export interface ManagerMembersNewAdmissionAdmissionSummaryProps {
@@ -28,7 +49,7 @@ export interface ManagerMembersNewAdmissionAdmissionSummaryProps {
   plan: string;
   shift: string;
   seat: string;
-  locker: string;
+  locker?: string;
   baseAmountMinor: number;
   discountMinor: number;
   totalPayableMinor: number;
@@ -38,6 +59,8 @@ export interface ManagerMembersNewAdmissionAdmissionSummaryProps {
   canSubmit: boolean;
   pricingAvailable?: boolean;
   hasUnsavedChanges?: boolean;
+  breakdown?: { label: string; amount: number; isNegative?: boolean }[];
+  durationLabel?: string;
 }
 
 export interface ManagerMembersNewAdmissionErrorBoundaryProps {

@@ -1,0 +1,19 @@
+{
+  "title": "Branch & Quota Upgrade Requests",
+  "subtitle": "SuperAdmin review gate for branch expansion attempts and resource quota limit increases",
+  "kpis": {
+    "pendingReview": "Pending Review",
+    "branchExpansions": "Branch Expansions",
+    "approvedQuotas": "Approved Quotas",
+    "rejectedRequests": "Rejected Requests"
+  },
+  "actions": {
+    "approve": "Approve & Expand Quota",
+    "reject": "Reject Request",
+    "resetFilters": "Reset All Filters"
+  },
+  "modals": {
+    "approveTitle": "Approve Resource Quota Expansion",
+    "rejectTitle": "Reject Quota Request"
+  }
+}

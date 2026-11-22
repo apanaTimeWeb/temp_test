@@ -1,4 +1,4 @@
-import type { ManagerFinanceFinesPaymentsPaymentStatus, ManagerFinanceFinesPaymentsRefundStatus } from '@/app/frontend_manager/manager_finance/finance_fines_payments/types/ManagerFinanceFinesPaymentsTypes';
+import type { ManagerFinanceFinesPaymentsPaymentStatus,ManagerFinanceFinesPaymentsRefundStatus } from '@/app/frontend_manager/manager_finance/finance_fines_payments/types/ManagerFinanceFinesPaymentsTypes';
 
 /** Preserve only statuses explicitly understood by this frontend contract. Unknown values must never be presented as valid or pending. */
 export function normalizeManagerFinesPaymentsPaymentStatus(status: string): ManagerFinanceFinesPaymentsPaymentStatus {

@@ -1,0 +1,25 @@
+{
+  "SUPERADMIN_DATA_BACKUP_OPERATIONS": {
+    "PAGE_TITLE": "Backup Schedules & Full Platform Recovery",
+    "PAGE_SUBTITLE": "Configure automated cron backup policies, multi-cloud replication, and trigger on-demand full platform snapshots",
+    "CREATE_SCHEDULE_BUTTON": "Create Backup Schedule",
+    "FULL_BACKUP_BUTTON": "Trigger Full Platform Backup",
+    "TABLE_TITLE": "Active Automated Backup Schedules",
+    "SEARCH_PLACEHOLDER": "Search schedules by name...",
+    "COLUMN_NAME": "Schedule Name & Frequency",
+    "COLUMN_SCOPE": "Scope",
+    "COLUMN_STORAGE": "Target Storage",
+    "COLUMN_RETENTION": "Retention",
+    "COLUMN_NEXT_RUN": "Next Run",
+    "COLUMN_STATUS": "Status",
+    "COLUMN_ACTIONS": "Actions",
+    "STATUS_ACTIVE": "Active",
+    "STATUS_PAUSED": "Paused",
+    "TOGGLE_PAUSE": "Pause",
+    "TOGGLE_RESUME": "Resume",
+    "FULL_BACKUP_BANNER_TITLE": "Full Platform Disaster Recovery Snapshot",
+    "FULL_BACKUP_BANNER_DESC": "Generates a synchronized, encrypted image of all tenant PostgreSQL databases, binary object storage, and WAL records replicated across AWS S3 and Cloudflare R2.",
+    "EMPTY_TITLE": "No Backup Schedules Found",
+    "EMPTY_DESC": "Establish an automated cron schedule to guarantee strict compliance with your 15-minute RPO target."
+  }
+}

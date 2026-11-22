@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
 import { MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/hooks/ManagerAttendanceAbsenteeReportDemoRepository';
 import { MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE as FIXTURE_SOURCE } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/mocks/manager_attendance_absentee_report_fixtures/ManagerAttendanceAbsenteeReportSampleFixtures';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerAttendanceAbsenteeReportDemoRepository', () => {
   it('returns a defensive sample snapshot rather than aliasing fixture objects', () => {

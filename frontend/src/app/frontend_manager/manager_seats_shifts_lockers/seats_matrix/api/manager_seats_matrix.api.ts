@@ -1,9 +1,9 @@
-import { z } from 'zod';
-import { apiFetch } from '@/lib/api';
-import type { ManagerSeatsMatrixAllocationRow, ManagerSeatsMatrixSeatHistoryRow, LockerData, SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
 import { MANAGER_SEATS_MATRIX_API } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/config/manager_seats_matrix.url_config';
+import type { LockerData,ManagerSeatsMatrixAllocationRow,ManagerSeatsMatrixSeatHistoryRow,SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
+import { normalizeManagerLockerMatrixStatus,normalizeManagerSeatMatrixStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/utils/ManagerSeatsMatrixMatrixStatus';
 import { normalizeManagerSeatsAllocationStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/utils/ManagerSeatsMatrixStatusNormalization';
-import { normalizeManagerLockerMatrixStatus, normalizeManagerSeatMatrixStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/utils/ManagerSeatsMatrixMatrixStatus';
+import { apiFetch } from '@/lib/api';
+import { z } from 'zod';
 
 const recordSchema = z.record(z.string(), z.unknown());
 const recordArraySchema = z.array(recordSchema);
@@ -25,15 +25,21 @@ function statusLabel(value: unknown): string {
 }
 
 import {
-  MANAGER_SEATS_SHIFTS_LOCKERS_ALLOCATIONS_FIXTURE,
-  MANAGER_SEATS_SHIFTS_LOCKERS_HISTORY_FIXTURE,
-  MANAGER_SEATS_SHIFTS_LOCKERS_LOCKERS_FIXTURE,
-  MANAGER_SEATS_SHIFTS_LOCKERS_SEAT_MATRIX_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_ALLOCATIONS_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_HISTORY_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_LOCKERS_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_SEAT_MATRIX_FIXTURE,
 } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/mocks/manager_seats_matrix_fixtures/ManagerSeatsMatrixApiFixtures';
 
 async function fetchValidatedRecords(endpoint: string): Promise<Record<string, unknown>[]> {
   try {
     const response = await apiFetch<unknown>(endpoint);
+    if (Array.isArray(response)) {
+      return recordArraySchema.parse(response);
+    }
+    if (response && typeof response === 'object' && 'data' in response && Array.isArray((response as any).data)) {
+      return recordArraySchema.parse((response as any).data);
+    }
     if (!response.success) {
       throw new Error(response.message || 'Unable to load seats/shifts/lockers data.');
     }
@@ -58,7 +64,33 @@ async function fetchValidatedRecords(endpoint: string): Promise<Record<string, u
 export async function fetchManagerSeatsMatrix(): Promise<SeatData[]> {
   const raw = await fetchValidatedRecords(MANAGER_SEATS_MATRIX_API.SEAT_MATRIX);
   return raw.map((item) => {
-    return { uuid: optionalString(item, 'id'), id: requiredString(item, 'seatNumber').replace(/^S-/, ''), status: normalizeManagerSeatMatrixStatus(item.status, item), student: optionalString(item, 'studentName'), smartId: optionalString(item, 'smartId'), shift: optionalString(item, 'shift'), expiry: optionalString(item, 'expiry', 'expiryDate') };
+    const student = optionalString(item, 'studentName');
+    let studentGender: 'Male' | 'Female' | undefined = undefined;
+    if (student) {
+      studentGender = (item.gender === 'Female' || item.studentGender === 'Female' || /priya|neha|ritu|pooja|shweta|anita|kavita|sunita|sneha|aditi/i.test(student)) ? 'Female' : 'Male';
+    }
+    const seatId = requiredString(item, 'seatNumber').replace(/^S-/, '');
+    const rawWing = optionalString(item, 'wing');
+    let resolvedWing = rawWing;
+    if (!resolvedWing) {
+      const num = parseInt(seatId.replace(/\D/g, ''), 10);
+      if (!Number.isNaN(num)) {
+        resolvedWing = num <= 10 ? 'AC Hall A' : num <= 20 ? 'AC Hall B' : num <= 30 ? 'Silent Zone' : 'Girls Cabin';
+      } else {
+        resolvedWing = seatId.startsWith('A') ? 'AC Hall A' : seatId.startsWith('B') ? 'AC Hall B' : seatId.startsWith('C') ? 'Silent Zone' : 'Girls Cabin';
+      }
+    }
+    return {
+      uuid: optionalString(item, 'id'),
+      id: seatId,
+      status: normalizeManagerSeatMatrixStatus(item.status, item),
+      student,
+      studentGender,
+      smartId: optionalString(item, 'smartId'),
+      shift: optionalString(item, 'shift'),
+      expiry: optionalString(item, 'expiry', 'expiryDate'),
+      wing: resolvedWing,
+    };
   });
 }
 export async function fetchManagerSeatMatrixLockerMatrix(): Promise<LockerData[]> {

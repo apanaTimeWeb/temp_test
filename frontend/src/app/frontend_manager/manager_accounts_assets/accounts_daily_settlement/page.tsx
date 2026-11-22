@@ -1,6 +1,6 @@
 import { ManagerAccountsDailySettlementMain } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/components/ManagerAccountsDailySettlementMain';
-import type { ManagerAccountsDailySettlementMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/types/ManagerAccountsDailySettlementMainTypes';
 import type { ManagerAccountsDailySettlementPageProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/types/ManagerAccountsDailySettlementComponentTypes';
+import type { ManagerAccountsDailySettlementMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/types/ManagerAccountsDailySettlementMainTypes';
 
 
 

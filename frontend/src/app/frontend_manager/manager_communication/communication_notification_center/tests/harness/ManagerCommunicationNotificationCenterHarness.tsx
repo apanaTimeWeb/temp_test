@@ -1,18 +1,18 @@
 "use client";
 
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
+import { useEffect,useState } from 'react';
 import { ManagerCommunicationNotificationCenterMain } from '../../components/ManagerCommunicationNotificationCenterMain';
 import messagesEn from '../../locales/manager_communication_notification_center_domain_en.json';
 import messagesHi from '../../locales/manager_communication_notification_center_domain_hi.json';
 import {
-  startManagerCommunicationNotificationCenterWorker,
-  stopManagerCommunicationNotificationCenterWorker,
-  HARNESS_SCENARIO_OPTIONS,
-  MANAGER_COMMUNICATION_NOTIFICATION_CENTER_SCENARIO_PROBE_URL,
-  type ManagerCommunicationNotificationCenterHarnessScenario,
+HARNESS_SCENARIO_OPTIONS,
+MANAGER_COMMUNICATION_NOTIFICATION_CENTER_SCENARIO_PROBE_URL,
+startManagerCommunicationNotificationCenterWorker,
+stopManagerCommunicationNotificationCenterWorker,
+type ManagerCommunicationNotificationCenterHarnessScenario,
 } from './bootstrap';
 
 type ManagerCommunicationNotificationCenterHarnessProps = {

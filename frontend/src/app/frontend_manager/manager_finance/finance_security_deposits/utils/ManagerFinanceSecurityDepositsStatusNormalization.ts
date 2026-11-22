@@ -1,4 +1,4 @@
-import type { ManagerFinanceSecurityDepositsPaymentStatus, ManagerFinanceSecurityDepositsRefundStatus } from '@/app/frontend_manager/manager_finance/finance_security_deposits/types/ManagerFinanceSecurityDepositsTypes';
+import type { ManagerFinanceSecurityDepositsPaymentStatus,ManagerFinanceSecurityDepositsRefundStatus } from '@/app/frontend_manager/manager_finance/finance_security_deposits/types/ManagerFinanceSecurityDepositsTypes';
 
 /** Preserve only statuses explicitly understood by this frontend contract. Unknown values must never be presented as valid or pending. */
 export function normalizeManagerSecurityDepositsPaymentStatus(status: string): ManagerFinanceSecurityDepositsPaymentStatus {

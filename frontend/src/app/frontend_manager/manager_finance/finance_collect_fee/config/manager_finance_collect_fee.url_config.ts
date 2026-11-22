@@ -6,5 +6,9 @@ export const MANAGER_FINANCE_COLLECT_FEE_ROUTES = {
   COLLECT_FEE: `${ROOT}?${new URLSearchParams({ view: 'collect_fee' }).toString()}`,
 } as const;
 
-/** CONTRACT_MISSING: no authoritative external endpoint, method, payload, response, auth or tenant contract was supplied. */
-export const MANAGER_FINANCE_COLLECT_FEE_API = {} as const;
+export const MANAGER_FINANCE_COLLECT_FEE_API = {
+  COLLECT: '/api/v1/manager/finance/collect-fee' as const,
+  STUDENT_LOOKUP: (query: string) => `/api/v1/manager/finance/collect-fee/lookup?q=${encodeURIComponent(query)}` as const,
+  STUDENT_PLAN: (studentId: string) => `/api/v1/manager/finance/collect-fee/student/${encodeURIComponent(studentId)}/plan` as const,
+  PAYMENT_MODES: '/api/v1/manager/finance/collect-fee/payment-modes' as const,
+} as const;

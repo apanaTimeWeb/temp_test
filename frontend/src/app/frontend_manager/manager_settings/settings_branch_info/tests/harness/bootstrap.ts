@@ -2,10 +2,10 @@
  * Module-local MSW lifecycle for the settings_branch_info standalone harness.
  * The __harness__ probe is test-only and is not a backend or feature API route.
  */
-import { delay, http, HttpResponse, type RequestHandler } from 'msw';
+import { delay,http,HttpResponse,type RequestHandler } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { MANAGER_SETTINGS_BRANCH_INFO_SCENARIOS as MODULE_SCENARIOS, type SettingsBranchInfoScenario as HarnessScenario } from '../../mocks/scenarios/manager_settings_branch_info.scenarios';
 import { MANAGER_BRANCH_INFO_HANDLERS as MODULE_HANDLERS_SOURCE } from '../../mocks/manager_settings_branch_info_handlers/ManagerSettingsBranchInfoHandlers';
+import { MANAGER_SETTINGS_BRANCH_INFO_SCENARIOS as MODULE_SCENARIOS,type SettingsBranchInfoScenario as HarnessScenario } from '../../mocks/scenarios/manager_settings_branch_info.scenarios';
 // This list contains only module-owned, source-backed business handlers; no API routes are inferred here.
 const MODULE_HANDLERS: RequestHandler[] = [...MODULE_HANDLERS_SOURCE];
 

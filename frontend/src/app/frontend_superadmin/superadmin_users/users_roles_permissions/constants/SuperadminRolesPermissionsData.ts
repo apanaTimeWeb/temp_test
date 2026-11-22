@@ -1,0 +1,197 @@
+// RESPONSIBILITY: Canonical presets for 10 roles.
+import type {
+  RoleDefinition,
+  SystemModuleKey,
+  ActionPermissionKey,
+} from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/types/SuperadminRolesPermissionsManagementTypes';
+import {
+  createEmptyPermissionMatrix,
+  buildRoleMatrix,
+} from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/constants/SuperadminRolesPermissionsMetadata';
+
+// 1. SuperAdmin: Full platform-wide control
+const superadminPermissions = createEmptyPermissionMatrix();
+for (const m of Object.keys(superadminPermissions) as SystemModuleKey[]) {
+  for (const a of Object.keys(superadminPermissions[m]) as ActionPermissionKey[]) {
+    superadminPermissions[m][a] = true;
+  }
+}
+
+// 2. Branch Manager: Members (view, create, edit), Lockers (view, create, edit), Finance (view), Accounts (none), Staff (assigned staff), Settings (none)
+const branchManagerPermissions = buildRoleMatrix({
+  members: { view: true, create: true, edit: true, print: true, download: true },
+  lockers_management: { view: true, create: true, edit: true, approve: true, print: true },
+  branch_operations: { view: true, create: true, edit: true, print: true },
+  seats_shifts: { view: true, create: true, edit: true, approve: true },
+  finance_billing: { view: true, print: true },
+  accounts_expenses: { view: false, create: false, edit: false, manage_settings: false },
+  staff_management: { view: true, edit: true },
+  communication: { view: true, create: true },
+  reports_analytics: { view: true, export: true, print: true },
+  system_settings: { view: false, manage_settings: false },
+});
+
+export const INITIAL_ROLES: RoleDefinition[] = [
+  {
+    id: 'role-superadmin',
+    name: 'SuperAdmin',
+    roleCategory: 'internal_platform',
+    description: 'Platform-wide supreme control across all tenants, databases and core billing.',
+    scope: 'platform_wide',
+    userCount: 3,
+    isSystemRole: true,
+    temporaryExpiryAllowed: false,
+    permissions: superadminPermissions,
+    updatedAt: '2026-11-20',
+  },
+  {
+    id: 'role-support-admin',
+    name: 'Support Admin',
+    roleCategory: 'internal_platform',
+    description: 'Limited platform support: customer issues, audit verification, read metrics.',
+    scope: 'platform_wide',
+    userCount: 5,
+    isSystemRole: true,
+    temporaryExpiryAllowed: true,
+    permissions: buildRoleMatrix({
+      members: { view: true, print: true },
+      lockers_management: { view: true },
+      branch_operations: { view: true },
+      finance_billing: { view: true, approve: true, reject: true },
+      communication: { view: true, create: true },
+      reports_analytics: { view: true, export: true },
+    }),
+    updatedAt: '2026-11-19',
+  },
+  {
+    id: 'role-finance-admin',
+    name: 'Finance Admin',
+    roleCategory: 'internal_platform',
+    description: 'SaaS billing, recurring payments collection, refunds and revenue analytics.',
+    scope: 'platform_wide',
+    userCount: 2,
+    isSystemRole: true,
+    temporaryExpiryAllowed: true,
+    permissions: buildRoleMatrix({
+      finance_billing: { view: true, create: true, edit: true, approve: true, reject: true, export: true, print: true, download: true, manage_settings: true },
+      accounts_expenses: { view: true, approve: true, reject: true, export: true, download: true },
+      reports_analytics: { view: true, export: true, download: true },
+    }),
+    updatedAt: '2026-11-18',
+  },
+  {
+    id: 'role-library-admin',
+    name: 'Library Admin',
+    roleCategory: 'tenant_library',
+    description: 'Full supervisory authority over own library account and all its child branches.',
+    scope: 'tenant_all_branches',
+    userCount: 14,
+    isSystemRole: true,
+    temporaryExpiryAllowed: false,
+    permissions: buildRoleMatrix({
+      members: { view: true, create: true, edit: true, delete_archive: true, export: true, print: true, download: true },
+      lockers_management: { view: true, create: true, edit: true, delete_archive: true, approve: true, export: true },
+      branch_operations: { view: true, create: true, edit: true, manage_settings: true },
+      seats_shifts: { view: true, create: true, edit: true, manage_settings: true },
+      finance_billing: { view: true, create: true, edit: true, export: true, print: true },
+      accounts_expenses: { view: true, create: true, edit: true, approve: true, export: true },
+      staff_management: { view: true, create: true, edit: true, delete_archive: true },
+      communication: { view: true, create: true, edit: true },
+      reports_analytics: { view: true, export: true, print: true },
+      system_settings: { view: true, manage_settings: true },
+    }),
+    updatedAt: '2026-11-19',
+  },
+  {
+    id: 'role-branch-manager',
+    name: 'Branch Manager',
+    roleCategory: 'tenant_library',
+    description: 'Operational desk manager for assigned branch only (Members, Seats, Shifts, Lockers).',
+    scope: 'single_branch',
+    userCount: 28,
+    isSystemRole: true,
+    temporaryExpiryAllowed: true,
+    permissions: branchManagerPermissions,
+    updatedAt: '2026-11-20',
+  },
+  {
+    id: 'role-librarian',
+    name: 'Librarian',
+    roleCategory: 'tenant_library',
+    description: 'Study space operations: seat allocations, lockers & shifts.',
+    scope: 'single_branch',
+    userCount: 19,
+    isSystemRole: true,
+    temporaryExpiryAllowed: true,
+    permissions: buildRoleMatrix({
+      members: { view: true },
+      lockers_management: { view: true, create: true, edit: true, approve: true, print: true, download: true },
+      reports_analytics: { view: true, print: true },
+    }),
+    updatedAt: '2026-11-15',
+  },
+  {
+    id: 'role-accountant',
+    name: 'Accountant',
+    roleCategory: 'tenant_library',
+    description: 'Finance and bookkeeping: cash tally, daily expense ledger, member fees collection.',
+    scope: 'tenant_all_branches',
+    userCount: 6,
+    isSystemRole: true,
+    temporaryExpiryAllowed: true,
+    permissions: buildRoleMatrix({
+      members: { view: true },
+      finance_billing: { view: true, create: true, edit: true, export: true, print: true },
+      accounts_expenses: { view: true, create: true, edit: true, approve: true, export: true, print: true },
+      reports_analytics: { view: true, export: true },
+    }),
+    updatedAt: '2026-11-17',
+  },
+  {
+    id: 'role-receptionist',
+    name: 'Receptionist',
+    roleCategory: 'tenant_library',
+    description: 'Front desk reception: visitor check-in, seat allocations, member enquiries.',
+    scope: 'single_branch',
+    userCount: 35,
+    isSystemRole: true,
+    temporaryExpiryAllowed: true,
+    permissions: buildRoleMatrix({
+      members: { view: true, create: true, print: true },
+      branch_operations: { view: true, create: true },
+      seats_shifts: { view: true, create: true, edit: true },
+      communication: { view: true },
+    }),
+    updatedAt: '2026-11-12',
+  },
+  {
+    id: 'role-communication-staff',
+    name: 'Communication Staff',
+    roleCategory: 'tenant_library',
+    description: 'Member communication permissions: WhatsApp broadcasts, renewal SMS & alerts.',
+    scope: 'tenant_all_branches',
+    userCount: 4,
+    isSystemRole: true,
+    temporaryExpiryAllowed: true,
+    permissions: buildRoleMatrix({
+      members: { view: true },
+      communication: { view: true, create: true, edit: true, approve: true, export: true },
+    }),
+    updatedAt: '2026-11-10',
+  },
+  {
+    id: 'role-custom-staff',
+    name: 'Custom Staff Role',
+    roleCategory: 'custom_staff',
+    description: 'Customizable role configured per SuperAdmin or Library Admin specific policy.',
+    scope: 'custom_scope',
+    userCount: 2,
+    isSystemRole: false,
+    temporaryExpiryAllowed: true,
+    permissions: buildRoleMatrix({
+      members: { view: true, create: true },
+      branch_operations: { view: true },
+    }),
+    updatedAt: '2026-11-19',
+  },
+];

@@ -1,8 +1,8 @@
-import { http, HttpResponse } from 'msw';
 import {
-  getManagerEnquiriesMockEnquiries,
-  getManagerEnquiriesMockEnquiry,
+getManagerEnquiriesMockEnquiries,
+getManagerEnquiriesMockEnquiry,
 } from '@/app/frontend_manager/manager_members/members_enquiries/mocks/manager_members_enquiries_fixtures/ManagerMembersEnquiriesFixtures';
+import { http,HttpResponse } from 'msw';
 
 /** Read-only MSW handlers mirror the current list/detail read contracts. No mock mutation endpoints are invented. */
 const TEST_REQUEST_ID = 'msw-manager-members-enquiries';

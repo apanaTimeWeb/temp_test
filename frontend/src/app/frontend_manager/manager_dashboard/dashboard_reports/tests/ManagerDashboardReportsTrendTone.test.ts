@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { getManagerReportsTrendTone } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/utils/ManagerDashboardReportsTrendTone';
+import { describe,expect,it } from 'vitest';
 
 describe('getManagerReportsTrendTone', () => {
   it('uses down tone only for explicitly negative values', () => expect(getManagerReportsTrendTone('-4.2%')).toBe('down'));

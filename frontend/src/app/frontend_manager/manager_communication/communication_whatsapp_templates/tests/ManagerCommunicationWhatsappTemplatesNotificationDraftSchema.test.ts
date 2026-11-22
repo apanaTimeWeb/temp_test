@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { managerCommunicationNotificationDraftSchema } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/schemas/ManagerCommunicationWhatsappTemplatesNotificationDraftSchema';
+import { describe,expect,it } from 'vitest';
 
 const validDraft = { recipient: 'LIB-001', type: 'Manual member notification', channel: 'Email', message: 'Sample draft' };
 

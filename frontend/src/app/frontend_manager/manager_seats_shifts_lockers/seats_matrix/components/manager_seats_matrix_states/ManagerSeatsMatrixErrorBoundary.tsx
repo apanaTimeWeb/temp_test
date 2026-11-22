@@ -2,9 +2,9 @@
 // RESPONSIBILITY: Contain rendering failures within the components feature subtree. It does not own backend persistence or cross-feature business logic.
 
 // RESPONSIBILITY: Contain rendering failures within the components feature subtree. It does not own backend persistence or cross-feature business logic.
-import { Component, type ErrorInfo } from 'react';
 import { ManagerSeatsMatrixErrorFallback } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_error_boundary/ManagerSeatsMatrixErrorFallback';
-import type { ManagerSeatsMatrixErrorBoundaryProps, ManagerSeatsMatrixErrorBoundaryState } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixComponentTypes';
+import type { ManagerSeatsMatrixErrorBoundaryProps,ManagerSeatsMatrixErrorBoundaryState } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixComponentTypes';
+import { Component,type ErrorInfo } from 'react';
 
 
 

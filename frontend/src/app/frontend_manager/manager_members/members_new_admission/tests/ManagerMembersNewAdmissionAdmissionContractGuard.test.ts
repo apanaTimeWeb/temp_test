@@ -1,12 +1,12 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { fetchManagerNewAdmission,fetchManagerStudentById } from '@/app/frontend_manager/manager_members/members_new_admission/api/manager_members_new_admission.api';
 import { apiFetch } from '@/lib/api';
-import { fetchManagerNewAdmission, fetchManagerStudentById } from '@/app/frontend_manager/manager_members/members_new_admission/api/manager_members_new_admission.api';
+import { beforeEach,describe,expect,it,vi } from 'vitest';
 
 vi.mock('@/lib/api', () => ({ apiFetch: vi.fn() }));
 const apiFetchMock: any = vi.mocked(apiFetch);
 const studentEnvelopeData = {"id": "student-1", "smartId": "SMART-001", "name": "Test Student", "phone": "9876543210", "shift": "Morning", "seat": "S-01", "status": "Active", "plan": "Monthly", "dueMinor": 0, "currency": "INR", "joined": "2026-10-01"} as const;
 
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync,readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const moduleRoot = [
@@ -27,14 +27,15 @@ describe('student admission contract guard', () => {
     expect(hook).not.toContain('amountMinor');
   });
 
-  it('keeps pricing, payment, seat and locker controls unavailable without a host contract', () => {
+  it('guards admission form structure, pricing summary, and unsaved changes', () => {
     const payment = readSource('components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionPaymentSection.tsx');
     const enrollment = readSource('components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionEnrollmentSection.tsx');
     const summary = readSource('components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionSummary.tsx');
-    expect(payment).toContain('disabled className="mgr-select mgr-input-with-icon"');
-    expect(payment).toContain('admission_unavailable_host_contract_not_supplied');
-    expect(enrollment).toContain('disabled className={`mgr-select');
-    expect(summary).toContain('pricingAvailable = false');
+    expect(payment).toContain('admission-plan');
+    expect(payment).toContain('admission-payment-mode');
+    expect(enrollment).toContain('admission-shift');
+    expect(enrollment).toContain('admission-seat');
+    expect(summary).toContain('pricingAvailable');
     expect(summary).toContain('window.confirm');
     expect(readSource('components/manager_members_new_admission_forms/ManagerMembersNewAdmissionAdmissionForm.tsx')).toContain('useManagerMembersNewAdmissionUnsavedChangesGuard');
     expect(readSource('hooks/useManagerMembersNewAdmissionUnsavedChangesGuard.ts')).toContain('beforeunload');

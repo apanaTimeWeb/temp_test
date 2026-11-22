@@ -1,4 +1,10 @@
-import '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_styles/ManagerCommunicationWhatsappLogsManager_whatsapp_logs.css';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'WhatsApp Logs | Library OS',
+  description: 'Automated WhatsApp message delivery logs, webhook receipts, and failure diagnostics',
+};
+
 export default function CommunicationModuleLayout({ children }: { children: React.ReactNode }) {
-  return <div className="communication-theme">{children}</div>;
+  return <>{children}</>;
 }

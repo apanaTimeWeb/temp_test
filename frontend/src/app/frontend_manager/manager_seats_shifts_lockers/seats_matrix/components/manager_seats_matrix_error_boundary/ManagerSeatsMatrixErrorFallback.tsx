@@ -2,8 +2,8 @@
 // RESPONSIBILITY: Render the recovery fallback for errors in the components feature. It does not own backend persistence or cross-feature business logic.
 
 // RESPONSIBILITY: Render the recovery fallback for errors in the components feature. It does not own backend persistence or cross-feature business logic.
-import { useTranslations } from 'next-intl';
 import type { ManagerSeatsMatrixErrorFallbackProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixComponentTypes';
+import { useTranslations } from 'next-intl';
 export type { ManagerSeatsMatrixErrorFallbackProps };
 
 

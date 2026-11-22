@@ -1,18 +1,18 @@
 "use client";
 
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
+import { useEffect,useState } from 'react';
 import { ManagerAccountsSeatGapReportMain } from '../../components/ManagerAccountsSeatGapReportMain';
 import messagesEn from '../../locales/manager_accounts_seat_gap_report_domain_en.json';
 import messagesHi from '../../locales/manager_accounts_seat_gap_report_domain_hi.json';
 import {
-  startManagerAccountsSeatGapReportWorker,
-  stopManagerAccountsSeatGapReportWorker,
-  HARNESS_SCENARIO_OPTIONS,
-  MANAGER_ACCOUNTS_SEAT_GAP_REPORT_SCENARIO_PROBE_URL,
-  type ManagerAccountsSeatGapReportHarnessScenario,
+HARNESS_SCENARIO_OPTIONS,
+MANAGER_ACCOUNTS_SEAT_GAP_REPORT_SCENARIO_PROBE_URL,
+startManagerAccountsSeatGapReportWorker,
+stopManagerAccountsSeatGapReportWorker,
+type ManagerAccountsSeatGapReportHarnessScenario,
 } from './bootstrap';
 
 type ManagerAccountsSeatGapReportHarnessProps = {

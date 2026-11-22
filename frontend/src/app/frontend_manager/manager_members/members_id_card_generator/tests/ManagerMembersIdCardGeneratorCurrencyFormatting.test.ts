@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { formatManagerIdCardGeneratorCurrency, fromManagerIdCardGeneratorMinorUnits, toManagerIdCardGeneratorMinorUnits } from '@/app/frontend_manager/manager_members/members_id_card_generator/utils/ManagerMembersIdCardGeneratorCurrencyFormatting';
+import { formatManagerIdCardGeneratorCurrency,fromManagerIdCardGeneratorMinorUnits,toManagerIdCardGeneratorMinorUnits } from '@/app/frontend_manager/manager_members/members_id_card_generator/utils/ManagerMembersIdCardGeneratorCurrencyFormatting';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerMembersIdCardGeneratorCurrencyFormatting', () => {
   it('converts major units to integer minor units without floating-point drift', () => {

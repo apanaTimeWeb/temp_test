@@ -1,5 +1,5 @@
 'use client';
-import ManagerFinancePaymentPromisesPage from '@/app/frontend_manager/manager_finance/finance_payment_promises/components/manager_finance_payment_promises_views/ManagerFinancePaymentPromisesPage.tsx';
+import ManagerFinancePaymentPromisesPage from '@/app/frontend_manager/manager_finance/finance_payment_promises/components/manager_finance_payment_promises_views/ManagerFinancePaymentPromisesPage';
 import type { ManagerFinancePaymentPromisesMainProps } from '@/app/frontend_manager/manager_finance/finance_payment_promises/types/ManagerFinancePaymentPromisesMainTypes';
 
 // RESPONSIBILITY: Route query state into the finance payment promises feature view.

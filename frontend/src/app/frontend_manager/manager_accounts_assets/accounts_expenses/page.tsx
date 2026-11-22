@@ -1,6 +1,6 @@
 import { ManagerAccountsExpensesMain } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/ManagerAccountsExpensesMain';
-import type { ManagerAccountsExpensesMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/types/ManagerAccountsExpensesMainTypes';
 import type { ManagerAccountsExpensesPageProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/types/ManagerAccountsExpensesComponentTypes';
+import type { ManagerAccountsExpensesMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/types/ManagerAccountsExpensesMainTypes';
 
 
 

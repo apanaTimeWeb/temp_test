@@ -26,6 +26,16 @@ export interface ManagerFinanceCollectFeeReceiptPreviewProps {
   isSubmitting: boolean;
   isCollectAvailable: boolean;
   receiptNumber: string;
+  collectedBy?: string;
+  feeCategory?: string;
+  collectionTypeLabel?: string;
+  billingMonth?: string;
+  billingPeriod?: string;
+  nextDueDate?: string;
+  balanceRemaining?: number;
+  paymentDate?: string;
+  txnId?: string;
+  lineItems?: { id: string; label: string; amount: number }[];
   onCollect: () => void;
   onCancel: () => void;
 }

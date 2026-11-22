@@ -6,6 +6,8 @@ export interface ManagerFinanceCollectFeeSearchParams {
   name?: ManagerFinanceCollectFeeQueryValue;
   phone?: ManagerFinanceCollectFeeQueryValue;
   smartId?: ManagerFinanceCollectFeeQueryValue;
+  amount?: ManagerFinanceCollectFeeQueryValue;
+  promiseId?: ManagerFinanceCollectFeeQueryValue;
 }
 
 export interface ManagerFinanceCollectFeeMainProps {
@@ -14,4 +16,6 @@ export interface ManagerFinanceCollectFeeMainProps {
   name?: string;
   phone?: string;
   smartId?: string;
+  amount?: string;
+  promiseId?: string;
 }

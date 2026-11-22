@@ -1,6 +1,6 @@
 import { ManagerMembersEnquiriesMain } from '@/app/frontend_manager/manager_members/members_enquiries/components/ManagerMembersEnquiriesMain';
-import type { ManagerMembersEnquiriesMainProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesMainTypes';
 import type { ManagerMembersEnquiriesPageProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
+import type { ManagerMembersEnquiriesMainProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesMainTypes';
 
 
 

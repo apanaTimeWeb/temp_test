@@ -1,102 +1,538 @@
 'use client';
-import type { ManagerAssetsRegisterMainProps } from '@/app/frontend_manager/manager_accounts_assets/assets_register/types/ManagerAssetsRegisterMainTypes';
-import { useTranslations } from 'next-intl';
 
+import {
+MANAGER_ACCOUNTING_SAMPLE_ASSETS,
+type ManagerAssetsRegisterAsset,
+} from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
 import { useManagerAssetsCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterFormattingHook';
-import { MANAGER_ACCOUNTING_SAMPLE_ASSETS } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
-import type { ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/mocks/manager_assets_register_fixtures/ManagerAssetsRegisterAssetSampleFixtures';
+import type { ManagerAssetsRegisterMainProps } from '@/app/frontend_manager/manager_accounts_assets/assets_register/types/ManagerAssetsRegisterMainTypes';
+import {
+CheckCircle2,
+Download,
+IndianRupee,
+Package,
+Plus,
+Printer,
+Trash2,
+Wrench
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
+import { ManagerAssetsRegisterAddModal } from '../manager_assets_register_dialogs/ManagerAssetsRegisterAddModal';
+import { ManagerAssetsRegisterConfirmModal } from '../manager_assets_register_dialogs/ManagerAssetsRegisterConfirmModal';
+import { ManagerAssetsRegisterDetailsModal } from '../manager_assets_register_dialogs/ManagerAssetsRegisterDetailsModal';
+import {
+ManagerAssetsRegisterTable,
+type AssetSortField,
+} from './ManagerAssetsRegisterTable';
+import { ManagerAssetsRegisterToolbar } from './ManagerAssetsRegisterToolbar';
 
-
-// RESPONSIBILITY: Entry page for the manager_assets module.
-// DATA FLOW: Next.js Router -> Page -> Components
-
-import { useState } from 'react';
-import { ManagerAssetsRegisterEmptyState } from '@/app/frontend_manager/manager_accounts_assets/assets_register/components/manager_assets_register_empty_states/ManagerAssetsRegisterEmptyState';
-
-const STATUS_BADGE: Record<string, string> = {
-  active:      'fin-badge--success',
-  maintenance: 'fin-badge--warning',
-  disposed:    'fin-badge--neutral',
-};
-
-// RESPONSIBILITY: Render the assets_register feature view while preserving supported deep-link query state.
-// DATA FLOW: Route searchParams -> Main props -> this view's route context.
-export default function ManagerAssetsRegisterPage({ view, id, name, phone, smartId }: ManagerAssetsRegisterMainProps) {
+export default function ManagerAssetsRegisterPage({
+  view,
+  id,
+  name,
+  phone,
+  smartId,
+}: ManagerAssetsRegisterMainProps) {
   const tManagerUi = useTranslations('manager.manager_assets.ui');
   const formatManagerAssetsCurrency = useManagerAssetsCurrencyFormatter();
-  const assets = MANAGER_ACCOUNTING_SAMPLE_ASSETS;
-  const [catFilter, setCatFilter] = useState('all');
 
-  const categories = [...new Set(MANAGER_ACCOUNTING_SAMPLE_ASSETS.map(a => a.category))];
+  const [assets, setAssets] = useState<ManagerAssetsRegisterAsset[]>(
+    MANAGER_ACCOUNTING_SAMPLE_ASSETS as ManagerAssetsRegisterAsset[]
+  );
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [catFilter, setCatFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [sortField, setSortField] = useState<AssetSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  // Modals state
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [pendingNewAsset, setPendingNewAsset] = useState<ManagerAssetsRegisterAsset | null>(null);
+  const [selectedDetailsAsset, setSelectedDetailsAsset] = useState<ManagerAssetsRegisterAsset | null>(null);
+  const [pendingDeleteAsset, setPendingDeleteAsset] = useState<ManagerAssetsRegisterAsset | null>(null);
+
+  const categories = useMemo(() => [...new Set(assets.map((a) => a.category))], [assets]);
+
   const categoryLabel = (category: string) => {
     switch (category) {
-      case 'Appliance': return tManagerUi('category_appliance');
-      case 'Security': return tManagerUi('category_security');
-      case 'Furniture': return tManagerUi('category_furniture');
-      case 'Electronics': return tManagerUi('category_electronics');
-      default: return category;
+      case 'Appliance':
+        return tManagerUi('category_appliance');
+      case 'Security':
+        return tManagerUi('category_security');
+      case 'Furniture':
+        return tManagerUi('category_furniture');
+      case 'Electronics':
+        return tManagerUi('category_electronics');
+      default:
+        return category;
     }
   };
-  const statusLabel = (status: ManagerAssetsRegisterAsset['status']) => ({ active: tManagerUi('asset_status_active'), maintenance: tManagerUi('asset_status_maintenance'), disposed: tManagerUi('asset_status_disposed') } as const)[status];
-  const visible = catFilter === 'all' ? assets : assets.filter(a => a.category === catFilter);
-  const totalValue = assets.filter(a => a.status !== 'disposed').reduce((s, a) => s + a.currentValue, 0);
+
+  const statusLabel = (status: ManagerAssetsRegisterAsset['status']) => {
+    switch (status) {
+      case 'active':
+        return tManagerUi('asset_status_active') || 'Active';
+      case 'maintenance':
+        return tManagerUi('asset_status_maintenance') || 'Maintenance';
+      case 'disposed':
+        return tManagerUi('asset_status_disposed') || 'Disposed';
+      default:
+        return status;
+    }
+  };
+
+  const handleRequestAddAsset = (newAsset: ManagerAssetsRegisterAsset) => {
+    setPendingNewAsset(newAsset);
+  };
+
+  const handleConfirmAddAsset = () => {
+    if (!pendingNewAsset) return;
+    setAssets((prev) => [pendingNewAsset, ...prev]);
+    toast.success(`Asset "${pendingNewAsset.name}" successfully added to Library Register!`);
+    setPendingNewAsset(null);
+  };
+
+  const handleToggleAssetStatus = (targetAsset: ManagerAssetsRegisterAsset) => {
+    const nextStatus = targetAsset.status === 'active' ? 'maintenance' : 'active';
+    setAssets((prev) =>
+      prev.map((a) => (a.id === targetAsset.id ? { ...a, status: nextStatus } : a))
+    );
+    if (selectedDetailsAsset && selectedDetailsAsset.id === targetAsset.id) {
+      setSelectedDetailsAsset({ ...selectedDetailsAsset, status: nextStatus });
+    }
+    toast.success(
+      `Asset "${targetAsset.name}" moved to ${nextStatus === 'active' ? 'ACTIVE & OPERATIONAL' : 'UNDER MAINTENANCE'}!`
+    );
+  };
+
+  const handleDeleteAsset = (assetId: number) => {
+    const target = assets.find((a) => a.id === assetId);
+    if (!target) return;
+    setAssets((prev) => prev.filter((a) => a.id !== assetId));
+    toast.success(`Asset record for "${target.name}" has been removed from register.`);
+  };
+
+  const handleResetFilters = () => {
+    setStatusFilter('all');
+    setCatFilter('all');
+    setSearchQuery('');
+    setPage(0);
+    toast.info('Filters have been reset to default.');
+  };
+
+  const toggleSort = (field: AssetSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const visible = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return assets.filter((a) => {
+      const matchStatus = statusFilter === 'all' || a.status === statusFilter;
+      const matchCat = catFilter === 'all' || a.category === catFilter;
+      const matchQ =
+        !q ||
+        a.name.toLowerCase().includes(q) ||
+        a.location.toLowerCase().includes(q) ||
+        a.category.toLowerCase().includes(q);
+      return matchStatus && matchCat && matchQ;
+    });
+  }, [assets, statusFilter, catFilter, searchQuery]);
+
+  const sortedRows = useMemo(() => {
+    if (!sortField) return visible;
+    return [...visible].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp =
+        typeof aVal === 'number' && typeof bVal === 'number'
+          ? aVal - bVal
+          : String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, {
+              numeric: true,
+              sensitivity: 'base',
+            });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [visible, sortField, sortDirection]);
+
+  const totalRows = sortedRows.length;
+  const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
+  const effectivePage = Math.min(page, pageCount - 1);
+  const paginated = sortedRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+
+  const escapeCsv = (v: unknown) => {
+    let s = String(v ?? '');
+    return /^[\u0000-\u0020]*[=+\-@]/.test(s) ? `'"${s.replace(/"/g, '""')}"` : `"${s.replace(/"/g, '""')}"`;
+  };
+
+  const handleExportCsv = () => {
+    const headers = [
+      'Asset ID',
+      'Asset Name',
+      'Category',
+      'Purchase Date',
+      'Purchase Cost (INR)',
+      'Current Value (INR)',
+      'Location',
+      'Status',
+    ]
+      .map(escapeCsv)
+      .join(',');
+
+    const rows = sortedRows
+      .map((a) =>
+        [
+          a.id,
+          a.name,
+          a.category,
+          a.purchaseDate,
+          (a.purchaseValue / 100).toFixed(2),
+          (a.currentValue / 100).toFixed(2),
+          a.location,
+          a.status,
+        ]
+          .map(escapeCsv)
+          .join(',')
+      )
+      .join('\r\n');
+
+    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = Object.assign(document.createElement('a'), {
+      href: url,
+      download: `assets_register_${new Date().toISOString().slice(0, 10)}.csv`,
+      hidden: true,
+    });
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success('Assets register exported to CSV successfully.');
+  };
+
+  const totalBookValue = assets
+    .filter((a) => a.status !== 'disposed')
+    .reduce((s, a) => s + a.currentValue, 0);
+
+  const totalCount = assets.length || 1;
+  const activeCount = assets.filter((a) => a.status === 'active').length;
+  const maintenanceCount = assets.filter((a) => a.status === 'maintenance').length;
+  const disposedCount = assets.filter((a) => a.status === 'disposed').length;
+
+  const activePct = Math.round((activeCount / totalCount) * 100);
+  const maintenancePct = Math.round((maintenanceCount / totalCount) * 100);
+  const disposedPct = Math.max(0, 100 - activePct - maintenancePct);
 
   return (
-    <div className="space-y-6" data-route-view={view} data-route-id={id} data-route-name={name} data-route-phone={phone} data-route-smart-id={smartId}>
-      <div className="flex items-center justify-between">
+    <div className="space-y-6" data-route-view={view} data-route-id={id}>
+      {/* Header with Title and Action Buttons */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="fin-page-title">{tManagerUi('asset_manager')}</h1>
-          <p className="fin-page-subtitle">{tManagerUi('review_the_sample_asset_register_asset_changes_are_unava_f6b9af')}</p>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-primary">
+            {tManagerUi('asset_manager') || 'Asset Register'}
+          </h1>
+          <p className="text-xs sm:text-sm text-secondary mt-1">
+            Track, audit, and manage society physical assets, book values, locations, and operational conditions.
+          </p>
         </div>
-        <button type="button" disabled title={tManagerUi('asset_creation_unavailable_host_mutation_contract_not_su_ca30d9')} className="fin-badge fin-badge--info cursor-not-allowed">{tManagerUi('add_asset_unavailable')}</button>
+
+        {/* Action Buttons: Print, Export CSV, Add Modal */}
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
+            title="Print Assets Register"
+          >
+            <Printer size={14} />
+            <span>Print Report</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
+            title="Export Assets Register as CSV"
+          >
+            <Download size={14} />
+            <span>Export CSV</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsAddModalOpen(true)}
+            style={{
+              boxShadow: '0 0 16px rgba(99, 102, 241, 0.4)',
+              backgroundColor: '#6366f1',
+              borderColor: '#818cf8',
+            }}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-white border hover:opacity-95 transition-all cursor-pointer"
+          >
+            <Plus size={14} />
+            <span>Add Library Asset</span>
+          </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="fin-kpi-card"><p className="fin-kpi-label">{tManagerUi('total_assets')}</p><p className="fin-kpi-value">{assets.length}</p></div>
-        <div className="fin-kpi-card"><p className="fin-kpi-label fin-text-success">{tManagerUi('current_value')}</p><p className="fin-kpi-value fin-text-success">{formatManagerAssetsCurrency(totalValue)}</p></div>
-        <div className="fin-kpi-card fin-kpi-card--warning"><p className="fin-kpi-label fin-kpi-label--warning">{tManagerUi('under_maintenance')}</p><p className="fin-kpi-value fin-kpi-value--warning">{assets.filter(a=>a.status==='maintenance').length}</p></div>
-        <div className="fin-kpi-card"><p className="fin-kpi-label fin-text-muted">{tManagerUi('disposed')}</p><p className="fin-kpi-value fin-text-muted">{assets.filter(a=>a.status==='disposed').length}</p></div>
+      {/* KPI Overview Summary Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Total Assets Overview */}
+        <div className="group relative overflow-hidden p-5 rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              {tManagerUi('total_assets') || 'Total Assets'}
+            </p>
+            <p className="text-2xl sm:text-3xl font-extrabold text-white mt-1 font-sans">{assets.length}</p>
+            <span className="text-[11px] text-slate-400 font-medium">Branch inventory units</span>
+          </div>
+          <div className="w-11 h-11 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
+            <Package size={22} />
+          </div>
+        </div>
+
+        {/* Active & Operational Overview */}
+        <div className="group relative overflow-hidden p-5 rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <p className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
+              Operational
+            </p>
+            <p className="text-2xl sm:text-3xl font-extrabold text-emerald-400 mt-1 font-sans">{activeCount}</p>
+            <span className="text-[11px] text-emerald-200/70 font-medium">In service & healthy</span>
+          </div>
+          <div className="w-11 h-11 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
+            <CheckCircle2 size={22} />
+          </div>
+        </div>
+
+        {/* Under Maintenance Overview */}
+        <div className="group relative overflow-hidden p-5 rounded-2xl border border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261708] to-amber-900/60 shadow-lg shadow-amber-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <p className="text-xs font-semibold text-amber-400 uppercase tracking-wider">
+              {tManagerUi('under_maintenance') || 'Under Maintenance'}
+            </p>
+            <p className="text-2xl sm:text-3xl font-extrabold text-amber-400 mt-1 font-sans">{maintenanceCount}</p>
+            <span className="text-[11px] text-amber-200/70 font-medium">Under active AMC / repair</span>
+          </div>
+          <div className="w-11 h-11 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
+            <Wrench size={22} />
+          </div>
+        </div>
+
+        {/* Total Book Value Overview */}
+        <div className="group relative overflow-hidden p-5 rounded-2xl border border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0e2540] to-sky-900/60 shadow-lg shadow-sky-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-sky-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <p className="text-xs font-semibold text-sky-400 uppercase tracking-wider">
+              Total Book Value
+            </p>
+            <p className="text-2xl sm:text-3xl font-extrabold text-sky-400 font-mono mt-1">
+              {formatManagerAssetsCurrency(totalBookValue)}
+            </p>
+            <span className="text-[11px] text-sky-200/70 font-medium">Non-disposed net assets</span>
+          </div>
+          <div className="w-11 h-11 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
+            <IndianRupee size={22} />
+          </div>
+        </div>
       </div>
 
-      <div className="fin-filter-bar">
-        <select className="fin-select w-44" value={catFilter} onChange={e => setCatFilter(e.target.value)} aria-label={tManagerUi('all_categories')}>
-          <option value="all">{tManagerUi('all_categories')}</option>
-          {categories.map(c => <option key={c} value={c}>{categoryLabel(c)}</option>)}
-        </select>
+      {/* Progress Breakdown Visualizer */}
+      <div className="p-4 rounded-2xl bg-card border border-border shadow-xs space-y-2.5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+          <h3 className="text-xs sm:text-sm font-semibold text-primary">
+            Asset Inventory Health & Operational Conditions
+          </h3>
+          <span className="text-xs text-secondary font-medium">
+            {assets.length} Total Inventory Records
+          </span>
+        </div>
+        <div className="w-full h-2.5 rounded-full overflow-hidden flex bg-surface-highlight">
+          <div
+            style={{ width: `${activePct}%` }}
+            className="bg-emerald-500 h-full transition-all duration-300"
+            title={`Active (${activePct}%)`}
+          />
+          <div
+            style={{ width: `${maintenancePct}%` }}
+            className="bg-amber-500 h-full transition-all duration-300"
+            title={`Maintenance (${maintenancePct}%)`}
+          />
+          <div
+            style={{ width: `${disposedPct}%` }}
+            className="bg-slate-500 h-full transition-all duration-300"
+            title={`Disposed (${disposedPct}%)`}
+          />
+        </div>
+        <div className="flex flex-wrap gap-4 text-xs text-secondary pt-1">
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Operational ({activePct}%)
+          </span>
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> Maintenance ({maintenancePct}%)
+          </span>
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="w-2.5 h-2.5 rounded-full bg-slate-500" /> Disposed ({disposedPct}%)
+          </span>
+        </div>
       </div>
 
-      <div className="fin-card overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="fin-table-header-row">
-              <th className="text-left py-3 px-4">{tManagerUi('asset_name')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('category')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('purchase_date')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('purchase_value_inr')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('current_value_inr')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('location')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('status')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {visible.length === 0 ? (
-              <tr><td colSpan={7}><ManagerAssetsRegisterEmptyState className="fin-empty-state"><div className="fin-empty-state__icon">🏷️</div><p className="fin-empty-state__title">{tManagerUi('no_assets_found')}</p></ManagerAssetsRegisterEmptyState></td></tr>
-            ) : visible.map(a => (
-              <tr key={a.id} className={`fin-table-hover-row fin-table-row ${a.status === 'disposed' ? 'opacity-50' : ''}`}>
-                <td className="py-3 px-4 fin-cell-name">{a.name}</td>
-                <td className="py-3 px-4"><span className="fin-badge fin-badge--neutral">{categoryLabel(a.category)}</span></td>
-                <td className="py-3 px-4 fin-cell-subtext">{a.purchaseDate}</td>
-                <td className="py-3 px-4 text-right fin-cell-subtext">{formatManagerAssetsCurrency(a.purchaseValue)}</td>
-                <td className="py-3 px-4 text-right font-semibold fin-text-body">{formatManagerAssetsCurrency(a.currentValue)}</td>
-                <td className="py-3 px-4 fin-cell-subtext">{a.location}</td>
-                <td className="py-3 px-4"><span className={`fin-badge ${STATUS_BADGE[a.status]}`}>{statusLabel(a.status)}</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {/* Interactive Toolbar with Glowing Filter Pills and Non-overlapping Search */}
+      <ManagerAssetsRegisterToolbar
+        statusFilter={statusFilter}
+        onStatusChange={(newStatus) => {
+          setStatusFilter(newStatus);
+          setPage(0);
+        }}
+        categoryFilter={catFilter}
+        onCategoryChange={(newCategory) => {
+          setCatFilter(newCategory);
+          setPage(0);
+        }}
+        searchQuery={searchQuery}
+        onSearchChange={(newQuery) => {
+          setSearchQuery(newQuery);
+          setPage(0);
+        }}
+        categories={categories}
+        categoryLabel={categoryLabel}
+        counts={{
+          all: assets.length,
+          active: activeCount,
+          maintenance: maintenanceCount,
+          disposed: disposedCount,
+        }}
+        onResetFilters={handleResetFilters}
+      />
 
-      <p className="fin-input-hint fin-text-warning" role="status" data-testid="manager-accounting-assets-contract-warning">{tManagerUi('sample_data_only_asset_values_and_rows_are_not_persisted_80ac83')}</p>
+      {/* Assets Records Table */}
+      <ManagerAssetsRegisterTable
+        paginated={paginated}
+        totalRows={totalRows}
+        filteredCount={visible.length}
+        searchQuery={searchQuery}
+        sortField={sortField}
+        sortDirection={sortDirection}
+        onToggleSort={toggleSort}
+        formatCurrency={formatManagerAssetsCurrency}
+        categoryLabel={categoryLabel}
+        statusLabel={statusLabel}
+        onViewDetails={(asset) => setSelectedDetailsAsset(asset)}
+        onToggleStatus={handleToggleAssetStatus}
+        onDeleteAsset={(id) => {
+          const item = assets.find((a) => a.id === id);
+          if (item) setPendingDeleteAsset(item);
+        }}
+        page={page}
+        pageSize={pageSize}
+        pageCount={pageCount}
+        onPageChange={setPage}
+        onPageSizeChange={(newSize) => {
+          setPageSize(newSize);
+          setPage(0);
+        }}
+      />
+
+      {/* Add Asset Modal */}
+      <ManagerAssetsRegisterAddModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onAddAsset={handleRequestAddAsset}
+      />
+
+      {/* Confirm Asset Registration Modal */}
+      <ManagerAssetsRegisterConfirmModal
+        isOpen={Boolean(pendingNewAsset)}
+        assetData={pendingNewAsset}
+        onConfirm={handleConfirmAddAsset}
+        onCancel={() => setPendingNewAsset(null)}
+      />
+
+      {/* Asset Details Modal */}
+      <ManagerAssetsRegisterDetailsModal
+        isOpen={Boolean(selectedDetailsAsset)}
+        asset={selectedDetailsAsset}
+        formatCurrency={formatManagerAssetsCurrency}
+        categoryLabel={categoryLabel}
+        statusLabel={statusLabel}
+        onClose={() => setSelectedDetailsAsset(null)}
+        onScheduleMaintenance={handleToggleAssetStatus}
+      />
+
+      {/* Delete Asset Confirmation Dialog */}
+      {pendingDeleteAsset && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-asset-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setPendingDeleteAsset(null);
+          }}
+        >
+          <div className="relative w-full max-w-sm rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-rose-500/15 text-rose-500 border border-rose-500/30 flex items-center justify-center shrink-0">
+                <Trash2 size={20} />
+              </div>
+              <div>
+                <h3 id="delete-asset-title" className="text-sm font-bold text-primary">
+                  Delete Asset Record
+                </h3>
+                <p className="text-xs text-secondary mt-0.5 truncate max-w-[200px]">
+                  #{pendingDeleteAsset.id} — {pendingDeleteAsset.name}
+                </p>
+              </div>
+            </div>
+            <p className="text-xs text-secondary leading-relaxed">
+              Are you sure you want to remove this asset from the library register? This record will be permanently deleted.
+            </p>
+            <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-border">
+              <button
+                type="button"
+                onClick={() => setPendingDeleteAsset(null)}
+                className="px-3.5 py-1.5 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  handleDeleteAsset(pendingDeleteAsset.id);
+                  setPendingDeleteAsset(null);
+                }}
+                style={{
+                  boxShadow: '0 0 16px rgba(239, 68, 68, 0.45)',
+                  backgroundColor: '#ef4444',
+                  borderColor: '#f87171',
+                }}
+                className="px-4 py-1.5 rounded-xl text-white text-xs font-semibold border hover:opacity-95 transition-all cursor-pointer"
+              >
+                Delete Asset
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

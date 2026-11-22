@@ -1,52 +1,80 @@
 'use client';
 // RESPONSIBILITY: Render the navigation navigation sidebar navigation UI for navigation. It does not own backend persistence or cross-feature business logic.
-// RESPONSIBILITY: Render the navigation navigation sidebar navigation UI for navigation. It does not own backend persistence or cross-feature business logic.
-import { useTranslations } from 'next-intl';
 
+import { BookOpen,Menu,Search,X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import { BookOpen, ChevronDown, LogOut, Menu, X } from 'lucide-react';
-import { MANAGER_NAVIGATION_HREFS, MANAGER_NAVIGATION_ITEMS } from '@/app/frontend_manager/manager_navigation/navigation/constants/ManagerNavigationNavigationConstants';
+import { usePathname,useSearchParams } from 'next/navigation';
+import { useEffect,useRef,useState } from 'react';
+
 import { MANAGER_NAVIGATION_NAVIGATION_ROUTES } from '@/app/frontend_manager/manager_navigation/navigation/config/manager_navigation_navigation.url_config';
+import { MANAGER_NAVIGATION_HREFS,MANAGER_NAVIGATION_ITEMS } from '@/app/frontend_manager/manager_navigation/navigation/constants/ManagerNavigationNavigationConstants';
 import type { ManagerNavigationSidebarProps } from '@/app/frontend_manager/manager_navigation/navigation/types/ManagerNavigationNavigationComponentTypes';
+import { ManagerNavigationSidebarNavSection } from './ManagerNavigationSidebarNavSection';
+import { ManagerNavigationSidebarSearch } from './ManagerNavigationSidebarSearch';
+
 export type { ManagerNavigationSidebarProps };
 
-
-
 export default function ManagerNavigationSidebar({
-  collapsed,
-  onToggle,
-  mobileOpen,
-  onMobileClose,
+  collapsed, onToggle, mobileOpen, onMobileClose,
 }: ManagerNavigationSidebarProps) {
   const tManagerUi = useTranslations('manager.manager_navigation.ui');
+  const getNavLabel = (key: string) => {
+    const text = tManagerUi(key);
+    if (!text || text.startsWith('manager.manager_nav')) {
+      if (key === 'nav_help_support' || key === 'group_help_support') return 'Help & Support';
+      if (key === 'nav_security_settings') return 'Security';
+    }
+    return text;
+  };
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [showLogout, setShowLogout] = useState(false);
-  const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
+  const [expandedGroups, setExpandedGroups] = useState<string[]>(() =>
+    MANAGER_NAVIGATION_ITEMS.filter((item) => item.kind === 'group').map((item) => item.labelKey)
+  );
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const mobileTriggerRef = useRef<HTMLButtonElement>(null);
   const mobileDrawerRef = useRef<HTMLElement>(null);
-  const logoutDialogRef = useRef<HTMLDivElement>(null);
 
-// Dependency rationale: mobileOpen controls the body lock, focus hand-off, and Escape listener lifetime.
+  // Dependency rationale: mobileOpen controls the body lock, focus hand-off, and Escape listener lifetime.
   useEffect(() => {
     if (!mobileOpen) return;
 
     const previousOverflow = document.body.style.overflow;
     const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     document.body.style.overflow = 'hidden';
-    const focusable = (): HTMLElement[] => (Array.from(mobileDrawerRef.current?.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])') ?? []) as HTMLElement[]).filter((element) => !element.hasAttribute('hidden') && element.getAttribute('aria-hidden') !== 'true');
+    const focusable = (): HTMLElement[] =>
+      Array.from(
+        mobileDrawerRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        ) ?? []
+      ).filter((el) => !el.hasAttribute('hidden') && el.getAttribute('aria-hidden') !== 'true');
     (focusable()[0] ?? mobileTriggerRef.current)?.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') { event.preventDefault(); onMobileClose(); return; }
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        onMobileClose();
+        return;
+      }
       if (event.key !== 'Tab') return;
       const items = focusable();
-      if (!items.length) { event.preventDefault(); mobileDrawerRef.current?.focus(); return; }
-      const first = items[0]; const last = items[items.length - 1];
-      if (event.shiftKey && (document.activeElement === first || !mobileDrawerRef.current?.contains(document.activeElement))) { event.preventDefault(); last.focus(); }
-      else if (!event.shiftKey && (document.activeElement === last || !mobileDrawerRef.current?.contains(document.activeElement))) { event.preventDefault(); first.focus(); }
+      if (!items.length) {
+        event.preventDefault();
+        mobileDrawerRef.current?.focus();
+        return;
+      }
+      const first = items[0];
+      const last = items[items.length - 1];
+      const isOutside = !mobileDrawerRef.current?.contains(document.activeElement);
+      if (event.shiftKey && (document.activeElement === first || isOutside)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (document.activeElement === last || isOutside)) {
+        event.preventDefault();
+        first.focus();
+      }
     };
 
     document.addEventListener('keydown', handleKeyDown);
@@ -56,30 +84,6 @@ export default function ManagerNavigationSidebar({
       if (previousFocus?.isConnected) previousFocus.focus();
     };
   }, [mobileOpen, onMobileClose]);
-
-  // Dependency rationale: showLogout controls dialog focus trapping and keyboard-listener lifetime.
-  useEffect(() => {
-    if (!showLogout) return;
-    const dialog = logoutDialogRef.current;
-    if (!dialog) return;
-    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const getFocusable = (): HTMLElement[] => Array.from(dialog.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])')) as HTMLElement[];
-    (getFocusable()[0] ?? dialog).focus();
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') { event.preventDefault(); setShowLogout(false); return; }
-      if (event.key !== 'Tab') return;
-      const items = getFocusable();
-      if (!items.length) { event.preventDefault(); dialog.focus(); return; }
-      const first = items[0]; const last = items[items.length - 1];
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      if (previousFocus?.isConnected) previousFocus.focus();
-    };
-  }, [showLogout]);
 
   const isActive = (href: string) => {
     const target = new URL(href, 'https://manager.invalid');
@@ -103,12 +107,23 @@ export default function ManagerNavigationSidebar({
     return null;
   })();
 
-  // Dependency rationale: expand the group containing the active route whenever the active group or pathname changes.
+  // Expand the active group on route transition or initial mount without wiping manual toggles
   useEffect(() => {
-    setExpandedGroups(activeGroupKey ? [activeGroupKey] : []);
+    if (activeGroupKey) {
+      setExpandedGroups((prev) => (prev.includes(activeGroupKey) ? prev : [...prev, activeGroupKey]));
+    }
   }, [activeGroupKey, pathname]);
 
-  const navigationSections = MANAGER_NAVIGATION_ITEMS.reduce<Array<{ key: string; labelKey?: string; items: Array<Extract<(typeof MANAGER_NAVIGATION_ITEMS)[number], { kind: 'link' }>> }>>((sections, item) => {
+  const isSearching = searchQuery.trim().length > 0;
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+
+  const navigationSections = MANAGER_NAVIGATION_ITEMS.reduce<
+    Array<{
+      key: string;
+      labelKey?: string;
+      items: Array<Extract<(typeof MANAGER_NAVIGATION_ITEMS)[number], { kind: 'link' }>>;
+    }>
+  >((sections, item) => {
     if (item.kind === 'group') {
       sections.push({ key: item.labelKey, labelKey: item.labelKey, items: [] });
     } else {
@@ -118,6 +133,35 @@ export default function ManagerNavigationSidebar({
     }
     return sections;
   }, []);
+
+  const filteredSections = isSearching
+    ? navigationSections
+        .map((section) => {
+          const sectionLabel = section.labelKey ? (getNavLabel(section.labelKey) ?? '').toLowerCase() : '';
+          const groupMatches = sectionLabel.includes(normalizedQuery);
+          const matchingItems = section.items.filter((item) => {
+            const itemLabel = (getNavLabel(item.labelKey) ?? '').toLowerCase();
+            const href = item.href.toLowerCase();
+            return groupMatches || itemLabel.includes(normalizedQuery) || href.includes(normalizedQuery);
+          });
+          return {
+            ...section,
+            items: matchingItems,
+          };
+        })
+        .filter((section) => section.items.length > 0)
+    : navigationSections;
+
+  const toggleGroup = (groupKey: string) => {
+    setExpandedGroups((current) =>
+      current.includes(groupKey) ? current.filter((key) => key !== groupKey) : [...current, groupKey]
+    );
+  };
+
+  const handleLinkClick = () => {
+    if (mobileOpen) onMobileClose();
+    if (isSearching) setSearchQuery('');
+  };
 
   return (
     <>
@@ -152,68 +196,84 @@ export default function ManagerNavigationSidebar({
             {mobileOpen ? <X size={18} strokeWidth={2} /> : <Menu size={18} strokeWidth={2} />}
           </button>
           {(!collapsed || mobileOpen) && (
-            <Link href={MANAGER_NAVIGATION_NAVIGATION_ROUTES.DASHBOARD} className="mgr-sidebar-brand" onClick={mobileOpen ? onMobileClose : undefined}>
+            <Link
+              href={MANAGER_NAVIGATION_NAVIGATION_ROUTES.DASHBOARD}
+              className="mgr-sidebar-brand group"
+              onClick={mobileOpen ? onMobileClose : undefined}
+            >
               <span className="mgr-sidebar-brand-mark" aria-hidden="true">
-                <BookOpen size={18} strokeWidth={2} />
+                <BookOpen size={18} strokeWidth={2.2} className="text-white transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]" />
               </span>
-              <span className="mgr-sidebar-brand-name">{tManagerUi('libraryos')}</span>
+              <div className="flex flex-col min-w-0 justify-center">
+                <span className="mgr-sidebar-brand-name flex items-center leading-none">
+                  <span className="text-white font-extrabold tracking-tight">Library</span>
+                  <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent font-black ml-0.5">OS</span>
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400 leading-none mt-1">
+                  Manager
+                </span>
+              </div>
             </Link>
           )}
         </div>
 
-        <nav className="mgr-sidebar-nav" data-testid="manager-navigation" aria-label={tManagerUi('manager_navigation')}>
-          {navigationSections.map((section) => {
-            const expanded = section.key === 'primary' || expandedGroups.includes(section.key);
-            if (section.key === 'primary') {
-              return <div key={section.key} className="mgr-nav-section">{section.items.map((item) => {
-                const active = isActive(item.href);
-                const Icon = item.icon;
-                return <Link key={item.href} href={item.href} className={`mgr-nav-item${active ? ' active' : ''}`} data-testid={`manager-nav-link-${item.href.replace(/[^a-zA-Z0-9]+/g, '-')}`} aria-current={active ? 'page' : undefined} title={collapsed && !mobileOpen ? tManagerUi(item.labelKey) : undefined} onClick={mobileOpen ? onMobileClose : undefined}><Icon size={18} strokeWidth={2} className="mgr-nav-item-icon" aria-hidden="true" />{(!collapsed || mobileOpen) && <span className="mgr-nav-label">{tManagerUi(item.labelKey)}</span>}</Link>;
-              })}</div>;
-            }
-            return <section key={section.key} className="mgr-nav-section">
-              {(!collapsed || mobileOpen) && <button type="button" className="mgr-nav-group-label" aria-expanded={expanded} aria-controls={`manager-nav-group-${section.key}`} data-testid={`manager-nav-group-toggle-${section.key}`} onClick={() => setExpandedGroups((current) => current.includes(section.key) ? current.filter((key) => key !== section.key) : [...current, section.key])}><span>{tManagerUi(section.labelKey!)}</span><ChevronDown size={14} aria-hidden="true" className={`mgr-nav-group-chevron${expanded ? ' is-expanded' : ''}`} /></button>}
-              <div id={`manager-nav-group-${section.key}`} hidden={!expanded} className="mgr-nav-group-items">{section.items.map((item) => {
-                const active = isActive(item.href);
-                const Icon = item.icon;
-                return <Link key={item.href} href={item.href} className={`mgr-nav-item${active ? ' active' : ''}`} data-testid={`manager-nav-link-${item.href.replace(/[^a-zA-Z0-9]+/g, '-')}`} aria-current={active ? 'page' : undefined} title={collapsed && !mobileOpen ? tManagerUi(item.labelKey) : undefined} onClick={mobileOpen ? onMobileClose : undefined}><Icon size={18} strokeWidth={2} className="mgr-nav-item-icon" aria-hidden="true" />{(!collapsed || mobileOpen) && <span className="mgr-nav-label">{tManagerUi(item.labelKey)}</span>}</Link>;
-              })}</div>
-            </section>;
-          })}
+        <ManagerNavigationSidebarSearch
+          collapsed={collapsed}
+          mobileOpen={mobileOpen}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          searchInputRef={searchInputRef}
+          onToggle={onToggle}
+        />
+
+        <nav
+          className="mgr-sidebar-nav"
+          data-testid="manager-navigation"
+          aria-label={tManagerUi('manager_navigation')}
+        >
+          {filteredSections.length === 0 ? (
+            <div className="mgr-nav-search-empty" role="status" data-testid="manager-nav-search-empty">
+              <Search size={24} className="mgr-nav-search-empty-icon" aria-hidden="true" />
+              <p className="mgr-nav-search-empty-title">
+                {tManagerUi('no_matching_modules') ?? 'No matching modules'}
+              </p>
+              <p className="mgr-nav-search-empty-sub">
+                {tManagerUi('no_results_for') ?? 'No results for'} &ldquo;{searchQuery}&rdquo;
+              </p>
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="mgr-nav-search-empty-btn"
+                data-testid="manager-nav-search-empty-clear"
+              >
+                {tManagerUi('clear_search') ?? 'Clear search'}
+              </button>
+            </div>
+          ) : (
+            filteredSections.map((section) => {
+              const expanded = isSearching
+                ? true
+                : collapsed && !mobileOpen
+                ? true
+                : section.key === 'primary' || expandedGroups.includes(section.key);
+
+              return (
+                <ManagerNavigationSidebarNavSection
+                  key={section.key}
+                  section={section}
+                  expanded={expanded}
+                  collapsed={collapsed}
+                  mobileOpen={mobileOpen}
+                  isActive={isActive}
+                  getNavLabel={getNavLabel}
+                  onToggleGroup={toggleGroup}
+                  onLinkClick={handleLinkClick}
+                />
+              );
+            })
+          )}
         </nav>
-
-        {(!collapsed || mobileOpen) && (
-          <div className="mgr-sidebar-footer">
-            <div className="mgr-avatar" aria-hidden="true">{tManagerUi('mg')}</div>
-            <div className="mgr-sidebar-user-info">
-              <p className="mgr-sidebar-user-name">{tManagerUi('manager')}</p>
-              <p className="mgr-sidebar-user-email">{tManagerUi('manager_library_com')}</p>
-            </div>
-            <button
-              type="button"
-              className="mgr-logout-btn"
-              aria-label={tManagerUi('log_out')}
-              data-testid="manager-logout-open"
-              onClick={() => setShowLogout(true)}
-            >
-              <LogOut size={18} strokeWidth={2} />
-            </button>
-          </div>
-        )}
       </aside>
-
-      {showLogout && (
-        <div className="mgr-modal-overlay" role="presentation" onMouseDown={() => setShowLogout(false)}>
-          <div ref={logoutDialogRef} tabIndex={-1} className="mgr-modal mgr-logout-modal" role="dialog" data-testid="manager-logout-dialog" aria-modal="true" aria-labelledby="manager-logout-title" onMouseDown={(event) => event.stopPropagation()}>
-            <p id="manager-logout-title" className="mgr-modal-title">{tManagerUi('sign_out_unavailable')}</p>
-            <p className="mgr-modal-desc" role="status" data-testid="manager-signout-contract-warning">{tManagerUi('actual_sign_out_requires_the_host_authentication_provide_1b9c36')}</p>
-            <div className="mgr-modal-footer">
-              <button type="button" className="mgr-btn-ghost" data-testid="manager-logout-cancel" onClick={() => setShowLogout(false)}>{tManagerUi('close')}</button>
-              <button type="button" className="mgr-btn-danger" disabled title={tManagerUi('sign_out_unavailable_host_authentication_contract_not_su_b8edeb')}>{tManagerUi('sign_out_unavailable')}</button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }

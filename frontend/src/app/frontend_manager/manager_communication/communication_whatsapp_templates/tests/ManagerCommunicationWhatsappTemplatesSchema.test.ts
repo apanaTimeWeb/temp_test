@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { managerCommunicationComplaintResponseListSchema, managerCommunicationNoticeResponseListSchema, managerCommunicationComplaintResponseSchema, managerCommunicationNoticeResponseSchema } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/schemas/ManagerCommunicationWhatsappTemplatesSchema';
-import { MANAGER_COMMUNICATION_MOCK_COMPLAINT_RESPONSE, MANAGER_COMMUNICATION_MOCK_NOTICE_RESPONSE } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/mocks/manager_communication_whatsapp_templates_fixtures/ManagerCommunicationWhatsappTemplatesMockFixtures';
+import { MANAGER_COMMUNICATION_MOCK_COMPLAINT_RESPONSE,MANAGER_COMMUNICATION_MOCK_NOTICE_RESPONSE } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/mocks/manager_communication_whatsapp_templates_fixtures/ManagerCommunicationWhatsappTemplatesMockFixtures';
+import { managerCommunicationComplaintResponseListSchema,managerCommunicationComplaintResponseSchema,managerCommunicationNoticeResponseListSchema,managerCommunicationNoticeResponseSchema } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/schemas/ManagerCommunicationWhatsappTemplatesSchema';
+import { describe,expect,it } from 'vitest';
 
 describe('manager communication response schemas', () => {
   it('keeps module-owned read fixtures aligned with the validated response contracts', () => {

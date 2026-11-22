@@ -164,3 +164,388 @@ body {
   min-height: 100vh;
   transition: background-color 200ms ease, color 200ms ease;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Manager Theme Scope — Matches Login Aurora & Indigo Palette
+   Applied ONLY when inside .mgr-theme (Manager Portal only)
+   ───────────────────────────────────────────────────────────── */
+html .mgr-theme,
+html:not(.dark) .mgr-theme,
+html.dark .mgr-theme,
+:root .mgr-theme,
+.mgr-theme {
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
+  --color-primary-subtle: rgba(99, 102, 241, 0.15);
+  --color-bg-page: #030712;
+  --color-page: #030712;
+  --color-bg-card: rgba(11, 12, 32, 0.95);
+  --color-card: rgba(11, 12, 32, 0.95);
+  --color-surface: rgba(11, 12, 32, 0.95);
+  --color-bg-sidebar: #050516;
+  --color-sidebar: #050516;
+  --color-bg-header: rgba(7, 7, 26, 0.95);
+  --color-header: rgba(7, 7, 26, 0.95);
+  --color-bg-input: rgba(10, 10, 28, 0.95);
+  --color-input: rgba(10, 10, 28, 0.95);
+  --color-bg-floating: #0e0f2b;
+  --color-bg-overlay: rgba(3, 7, 18, 0.95);
+  --color-overlay: rgba(3, 7, 18, 0.95);
+  --color-overlay-backdrop: rgba(3, 7, 18, 0.75);
+  --color-surface-hover: rgba(99, 102, 241, 0.12);
+  --color-surface-highlight: rgba(99, 102, 241, 0.08);
+  --color-surface-zebra: #080918;
+  --color-focus-ring: #6366f1;
+  --color-border: rgba(99, 102, 241, 0.25);
+  --color-border-focus: #6366f1;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #94a3b8;
+  --color-text-disabled: #475569;
+  --color-text-on-primary: #ffffff;
+  --color-text-on-danger: #ffffff;
+  --color-text-on-warning: #111111;
+  --color-text-on-success: #ffffff;
+  --color-text-on-info: #ffffff;
+  --color-skeleton-base: rgba(11, 12, 32, 0.9);
+  --color-skeleton-highlight: rgba(15, 16, 42, 0.95);
+
+  /* Status Tokens */
+  --color-success: #10b981;
+  --color-success-text: #34d399;
+  --color-success-bg: rgba(16, 185, 129, 0.15);
+  --color-warning: #f59e0b;
+  --color-warning-text: #fbbf24;
+  --color-warning-bg: rgba(245, 158, 11, 0.15);
+  --color-danger: #ef4444;
+  --color-danger-text: #f87171;
+  --color-danger-bg: rgba(239, 68, 68, 0.15);
+  --color-info: #22d3ee;
+  --color-info-text: #22d3ee;
+  --color-info-bg: rgba(34, 211, 238, 0.15);
+
+  background-color: #030712;
+  background-image: radial-gradient(rgba(99, 102, 241, 0.08) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-attachment: fixed;
+  color: #ffffff;
+}
+
+/* Globally hide all scrollbars across the application while preserving full scrollability */
+*, *::before, *::after {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* ============================================================
+   AURORA CYBER-LUXURY DUAL-RING LOADER
+   ============================================================ */
+
+.loader-box,
+.library-loader-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Aurora aura glow */
+.loader-box .loader-aura,
+.library-loader-box .loader-aura {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  filter: blur(16px);
+  opacity: 0.6;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.35) 0%, rgba(139, 92, 246, 0.2) 45%, rgba(34, 211, 238, 0.1) 70%, transparent 85%);
+}
+
+/* Outer ring — CW spin (sab variants) */
+.loader-box .loader-ring,
+.library-loader-box .loader-ring {
+  width: 100%;
+  height: 100%;
+  animation: spinCW 1.4s linear infinite;
+}
+
+/* Inner ring base — perfectly concentric (inset 0) matching complaints contra double ring */
+.loader-box .inner-svg,
+.library-loader-box .inner-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  animation: spinCCW 2.4s linear infinite;
+}
+
+/* Center icon */
+.loader-box .loader-icon,
+.library-loader-box .loader-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+  color: #FFFFFF;
+}
+
+.loader-box .loader-icon svg,
+.library-loader-box .loader-icon svg {
+  width: 45%;
+  height: 45%;
+  filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.7)) drop-shadow(0 0 4px rgba(34, 211, 238, 0.5));
+}
+
+/* breath variant — icon pulse */
+@keyframes bookBreath {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(0.9); }
+}
+.loader-box.breath .loader-icon svg,
+.library-loader-box.breath .loader-icon svg {
+  animation: bookBreath 1.8s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* flip variant — icon flip (generic, kisi bhi icon pe) */
+@keyframes flipIcon {
+  0%, 45%, 100% { transform: scaleX(1); opacity: 1; }
+  60%, 80%      { transform: scaleX(0.35); opacity: 0.5; }
+}
+.loader-box.flip .loader-icon svg,
+.library-loader-box.flip .loader-icon svg {
+  animation: flipIcon 2.4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Button ke andar xs — aura halka karo */
+.loader-box.button-loader .loader-aura,
+.library-loader-box.button-loader .loader-aura {
+  opacity: 0.25;
+}
+
+/* Keyframes */
+@keyframes spinCW  { to { transform: rotate(360deg); } }
+@keyframes spinCCW { to { transform: rotate(-360deg); } }
+
+/* Reduced motion — respect karo */
+@media (prefers-reduced-motion: reduce) {
+  .loader-box .loader-ring,
+  .library-loader-box .loader-ring { animation-duration: 4s !important; }
+  .loader-box .inner-svg,
+  .library-loader-box .inner-svg   { animation-duration: 6s !important; }
+  .loader-box.breath .loader-icon svg,
+  .library-loader-box.breath .loader-icon svg,
+  .loader-box.flip .loader-icon svg,
+  .library-loader-box.flip .loader-icon svg { animation: none !important; }
+}
+
+/* Screen-reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================
+   SUPERADMIN SETTINGS BRANDING & LIVE PREVIEW STYLES
+   ============================================================ */
+.sys-preview-sidebar-wrap {
+  background-color: #0b0f19;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.875rem;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+}
+.sys-preview-sidebar-bg {
+  background-color: #0b0f19;
+}
+.sys-preview-card-bg {
+  background-color: #111827;
+}
+.sys-preview-icon {
+  background: var(--preview-primary, #FACC15);
+  color: #000000;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--preview-primary, #FACC15) 40%, transparent);
+}
+.sys-preview-nav-active {
+  background: color-mix(in srgb, var(--preview-primary, #FACC15) 15%, transparent);
+  color: var(--preview-primary, #FACC15);
+  border-left: 3px solid var(--preview-primary, #FACC15);
+}
+.sys-preview-dot-active {
+  background: var(--preview-primary, #FACC15);
+  box-shadow: 0 0 6px var(--preview-primary, #FACC15);
+}
+.sys-preview-dot-inactive {
+  background: #475569;
+}
+.sys-preview-login-btn {
+  background: linear-gradient(135deg, var(--preview-primary, #FACC15), var(--preview-accent, #EAB308));
+  color: #000000;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--preview-primary, #FACC15) 30%, transparent);
+  transition: all 150ms ease;
+}
+.sys-preview-login-btn:hover {
+  filter: brightness(1.05);
+}
+.sys-preview-id-header {
+  background: linear-gradient(135deg, var(--preview-primary, #FACC15), var(--preview-accent, #EAB308));
+  color: #000000;
+}
+.sys-preview-id-title {
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: #000000;
+  line-height: 1.2;
+}
+.sys-preview-id-subtitle {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.75);
+}
+.sys-preview-swatch-primary {
+  background-color: var(--preview-primary, #FACC15);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--preview-primary, #FACC15) 45%, transparent);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0.625rem;
+}
+.sys-preview-swatch-accent {
+  background-color: var(--preview-accent, #EAB308);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--preview-accent, #EAB308) 45%, transparent);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0.625rem;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   GLOBAL PRINT STYLES: Crisp, 1-Page Landscape Superadmin Printing
+   Eliminates 4-page table overflow, hides non-printable shell elements,
+   and standardizes typography and borders for high-density document printing.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media print {
+  @page {
+    size: landscape;
+    margin: 8mm 6mm;
+  }
+
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    background-image: none !important;
+    color: #0f172a !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 8.5pt !important;
+    line-height: 1.3 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide navigation, sidebars, top headers, floating toolbars, inputs, buttons, toasts */
+  #superadmin-navigation-sidebar,
+  .sa-sidebar,
+  header,
+  nav,
+  button,
+  input,
+  select,
+  textarea,
+  .no-print,
+  [role="status"],
+  [role="dialog"]:not(.print-target),
+  .fixed,
+  .sticky,
+  [data-testid*="breadcrumb"],
+  [data-testid*="pagination"] {
+    display: none !important;
+  }
+
+  main,
+  .sa-main-content,
+  #main-content,
+  div[data-feature-module] {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+  }
+
+  /* Fit tables precisely within landscape printable width without horizontal spill */
+  table {
+    width: 100% !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    font-size: 8pt !important;
+    page-break-inside: auto !important;
+    word-break: break-word !important;
+  }
+
+  thead {
+    display: table-header-group !important;
+  }
+
+  tr {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+  }
+
+  th {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+    padding: 4px 6px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    font-size: 7.5pt !important;
+    text-align: left !important;
+  }
+
+  td {
+    border: 1px solid #e2e8f0 !important;
+    padding: 4px 6px !important;
+    color: #1e293b !important;
+  }
+
+  tr:nth-child(even) td {
+    background-color: #f8fafc !important;
+  }
+}
+
+
+
+

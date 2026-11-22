@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { managerEngagementLocalDraftSchema } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/types/ManagerAttendanceAbsenteeReportLocalDraft';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerAttendanceAbsenteeReportLocalDraft', () => {
   it('trims and validates a usable local draft without implying delivery or persistence', () => {

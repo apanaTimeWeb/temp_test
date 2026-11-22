@@ -5,15 +5,31 @@ import { useTranslations } from 'next-intl';
 
 import { useManagerNewAdmissionFormatting } from '@/app/frontend_manager/manager_members/members_new_admission/hooks/useManagerMembersNewAdmissionFormatting';
 
-import { CheckCircle } from 'lucide-react';
-import Link from 'next/link';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { MANAGER_MEMBERS_NEW_ADMISSION_ROUTES } from '@/app/frontend_manager/manager_members/members_new_admission/config/manager_members_new_admission.url_config';
 import type { ManagerMembersNewAdmissionAdmissionSummaryProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
+import { CheckCircle } from 'lucide-react';
+import Link from 'next/link';
 export type { ManagerMembersNewAdmissionAdmissionSummaryProps };
 
 
 
-export function ManagerMembersNewAdmissionAdmissionSummary({ smartIdPreview, plan, shift, seat, locker, baseAmountMinor, discountMinor, totalPayableMinor, amountPaidMinor, currency, isSubmitting, canSubmit, pricingAvailable = false }: ManagerMembersNewAdmissionAdmissionSummaryProps) {
+export function ManagerMembersNewAdmissionAdmissionSummary({
+  smartIdPreview,
+  plan,
+  shift,
+  seat,
+  locker,
+  baseAmountMinor,
+  discountMinor,
+  totalPayableMinor,
+  amountPaidMinor,
+  currency,
+  isSubmitting,
+  canSubmit,
+  pricingAvailable = false,
+  breakdown,
+}: ManagerMembersNewAdmissionAdmissionSummaryProps) {
   const tManagerUi = useTranslations('manager.manager_new_admission.ui');
   const { formatCurrency } = useManagerNewAdmissionFormatting();
   const balanceMinor = Math.max(0, totalPayableMinor - amountPaidMinor);
@@ -30,15 +46,53 @@ export function ManagerMembersNewAdmissionAdmissionSummary({ smartIdPreview, pla
             <div className="mgr-summary-row"><span className="mgr-summary-label">{tManagerUi('locker')}</span><span className="mgr-summary-value">{locker || '—'}</span></div>
             {pricingAvailable ? <>
               <div className="mgr-summary-divider" />
-              <div className="mgr-summary-row"><span className="mgr-summary-label">{tManagerUi('base_amount')}</span><span className="mgr-summary-value">{formatCurrency(baseAmountMinor, currency)}</span></div>
-              <div className="mgr-summary-row"><span className="mgr-summary-label">{tManagerUi('discount')}</span><span className="mgr-text-warning">− {formatCurrency(discountMinor, currency)}</span></div>
+              {breakdown && breakdown.length > 0 ? (
+                <div className="space-y-1.5 py-1">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-secondary">Itemized Invoice</p>
+                  {breakdown.map((item, idx) => (
+                    <div key={idx} className="flex items-center justify-between text-xs">
+                      <span className="text-secondary">{item.label}</span>
+                      <span className={item.isNegative ? 'mgr-text-warning font-semibold' : 'font-semibold text-primary'}>
+                        {item.isNegative ? '− ' : ''}{formatCurrency(item.amount * 100, currency)}
+                      </span>
+                    </div>
+                  ))}
+                  <div className="mgr-summary-divider my-2" />
+                </div>
+              ) : (
+                <>
+                  <div className="mgr-summary-row"><span className="mgr-summary-label">{tManagerUi('base_amount')}</span><span className="mgr-summary-value">{formatCurrency(baseAmountMinor, currency)}</span></div>
+                  <div className="mgr-summary-row"><span className="mgr-summary-label">{tManagerUi('discount')}</span><span className="mgr-text-warning">− {formatCurrency(discountMinor, currency)}</span></div>
+                </>
+              )}
               <div className="mgr-summary-total-row"><span className="mgr-summary-total-label">{tManagerUi('total_payable')}</span><span className="mgr-summary-total-value">{formatCurrency(totalPayableMinor, currency)}</span></div>
               <div className="mgr-summary-row"><span className="mgr-summary-label">{tManagerUi('paid_now')}</span><span className="mgr-text-success">{formatCurrency(amountPaidMinor, currency)}</span></div>
-              {balanceMinor > 0 && <div className="mgr-summary-row"><span className="mgr-summary-label">{tManagerUi('balance_due')}</span><span className="mgr-text-danger">{formatCurrency(balanceMinor, currency)}</span></div>}
-            </> : <p className="mgr-input-hint" role="status">{tManagerUi('admission_unavailable_host_contract_not_supplied')}</p>}
+              {balanceMinor > 0 && (
+                <div className="mgr-summary-row">
+                  <span className="mgr-summary-label">{tManagerUi('balance_due')}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="mgr-text-danger">{formatCurrency(balanceMinor, currency)}</span>
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30">
+                      Auto Promise
+                    </span>
+                  </div>
+                </div>
+              )}
+            </> : <p className="mgr-input-hint text-xs text-secondary mt-2" role="status">Select plan, shift, and seat to compute admission invoice</p>}
           </div>
           <div className="mgr-summary-actions">
-            <button type="submit" disabled={!canSubmit || isSubmitting} title={!canSubmit ? tManagerUi('admission_unavailable_host_contract_not_supplied') : undefined} className="mgr-btn-primary mgr-btn-full cursor-not-allowed"><CheckCircle size={18} strokeWidth={2} />{canSubmit ? (isSubmitting ? tManagerUi('confirming') : tManagerUi('confirm_admission')) : tManagerUi('admission_unavailable')}</button>
+            {/* Guard against raw window.confirm; cancel uses structured route navigation */}
+            {/* BUG-27: Clear button label regardless of validation state; proper disabled state */}
+            <button
+              type="submit"
+              disabled={!canSubmit || isSubmitting}
+              title={!canSubmit ? 'Please complete all required fields (Name, Phone, Gender, Shift, Seat, Plan, Amount)' : undefined}
+              aria-label={isSubmitting ? 'Confirming Admission' : 'Confirm Admission'}
+              className={`mgr-btn-primary mgr-btn-full flex items-center justify-center gap-2${!canSubmit || isSubmitting ? ' cursor-not-allowed opacity-50' : ''}`}
+            >
+              {isSubmitting ? <ButtonLoader icon="user-check" /> : <CheckCircle size={18} strokeWidth={2} />}
+              {isSubmitting ? tManagerUi('confirming') : tManagerUi('confirm_admission')}
+            </button>
             <Link href={MANAGER_MEMBERS_NEW_ADMISSION_ROUTES.LIST} className="mgr-btn-ghost mgr-btn-full">{tManagerUi('cancel')}</Link>
           </div>
         </div>

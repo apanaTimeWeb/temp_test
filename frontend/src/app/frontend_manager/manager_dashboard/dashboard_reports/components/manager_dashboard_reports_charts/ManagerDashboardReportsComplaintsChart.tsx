@@ -1,11 +1,11 @@
 'use client';
 // RESPONSIBILITY: Render the complaints status donut chart visualization using supplied feature data. It does not own backend persistence or cross-feature business logic.
-import { useTranslations } from 'next-intl';
-import dynamic from 'next/dynamic';
-import type { ApexOptions } from 'apexcharts';
 import { ManagerDashboardReportsChartDataTable } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_table_parts/ManagerDashboardReportsChartDataTable';
 import { useManagerDashboardReportsChartTheme } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/hooks/useManagerDashboardReportsChartTheme';
 import type { ManagerDashboardReportsComplaintPoint } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
+import type { ApexOptions } from 'apexcharts';
+import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -26,7 +26,7 @@ export function ManagerDashboardReportsComplaintsChart({ data }: { data: Manager
     colors: [chartTheme.danger, chartTheme.warning, chartTheme.info],
     stroke: {
       show: true,
-      colors: [chartTheme.isDark ? '#111111' : '#FFFFFF'],
+      colors: [chartTheme.cardBg],
       width: 2,
     },
     legend: {

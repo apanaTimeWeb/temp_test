@@ -10,6 +10,8 @@ export type ManagerFinanceCollectFeeRouteQueryProps = {
   name?: string;
   phone?: string;
   smartId?: string;
+  amount?: string;
+  promiseId?: string;
 };
 
 export type PendingConfirmation = { message: string; cancelLabel: string; continueLabel: string; resolve: (confirmed: boolean) => void };
