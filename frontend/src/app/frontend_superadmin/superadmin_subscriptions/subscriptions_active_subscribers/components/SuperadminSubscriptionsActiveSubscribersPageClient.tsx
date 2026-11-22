@@ -11,6 +11,7 @@
 import SuperadminSubscriptionsActiveSubscribersSemanticTable, { type SemanticColumnDef, type SemanticCellParams } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/components/SuperadminSubscriptionsActiveSubscribersSemanticTable';
 import SuperadminSubscriptionsActiveSubscribersKpis from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/components/SuperadminSubscriptionsActiveSubscribersKpis';
 import SuperadminSubscriptionsActiveSubscribersFilterToolbar from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/components/SuperadminSubscriptionsActiveSubscribersFilterToolbar';
+import SuperadminSubscriptionsBulkWhatsAppModal from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/components/SuperadminSubscriptionsBulkWhatsAppModal';
 
 import { useState, useMemo, useCallback } from 'react';
 import { toast } from 'sonner';
@@ -45,6 +46,7 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
   const [planFilter, setPlanFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [cycleFilter, setCycleFilter] = useState('all');
+  const [isBulkWhatsAppOpen, setIsBulkWhatsAppOpen] = useState(false);
 
   const showToast = useCallback((msg: string) => {
     toast.message(msg, { id: 'superadmin:superadmin_subscriptions:ActiveSubscribers:feedback' });
@@ -257,6 +259,8 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
         onExportCsv={handleExportCsv}
         onExportExcel={handleExportExcel}
         onPrintRoster={handlePrintRoster}
+        onBulkWhatsApp={() => setIsBulkWhatsAppOpen(true)}
+        filteredCount={filteredSubs.length}
       />
 
       {/* Semantic Subscribers Table */}
@@ -268,6 +272,13 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
           paginationPageSize={10}
         />
       )}
+
+      {/* Bulk WhatsApp Modal */}
+      <SuperadminSubscriptionsBulkWhatsAppModal
+        isOpen={isBulkWhatsAppOpen}
+        onClose={() => setIsBulkWhatsAppOpen(false)}
+        subscribers={filteredSubs}
+      />
     </div>
   );
 }

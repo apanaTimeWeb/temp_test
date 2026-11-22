@@ -1,6 +1,6 @@
 'use client';
 
-import { Search, X, RotateCcw, Download, FileSpreadsheet, Printer } from 'lucide-react';
+import { Search, X, RotateCcw, Download, FileSpreadsheet, Printer, MessageSquare } from 'lucide-react';
 
 export interface SuperadminSubscriptionsActiveSubscribersFilterToolbarProps {
   searchQuery: string;
@@ -16,6 +16,8 @@ export interface SuperadminSubscriptionsActiveSubscribersFilterToolbarProps {
   onExportCsv: () => void;
   onExportExcel: () => void;
   onPrintRoster: () => void;
+  onBulkWhatsApp?: () => void;
+  filteredCount?: number;
 }
 
 export function SuperadminSubscriptionsActiveSubscribersFilterToolbar({
@@ -32,6 +34,8 @@ export function SuperadminSubscriptionsActiveSubscribersFilterToolbar({
   onExportCsv,
   onExportExcel,
   onPrintRoster,
+  onBulkWhatsApp,
+  filteredCount,
 }: SuperadminSubscriptionsActiveSubscribersFilterToolbarProps) {
   return (
     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-4 rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 shadow-md flex-wrap">
@@ -107,7 +111,20 @@ export function SuperadminSubscriptionsActiveSubscribersFilterToolbar({
       )}
 
       {/* Action / Export Toolbar Buttons */}
-      <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+      <div className="flex items-center gap-2 w-full sm:w-auto justify-end flex-wrap">
+        {onBulkWhatsApp && (
+          <button
+            type="button"
+            onClick={onBulkWhatsApp}
+            disabled={(filteredCount ?? 0) === 0}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/15 hover:bg-emerald-500/25 text-xs font-semibold text-emerald-300 transition-all cursor-pointer shadow-xs disabled:opacity-40 disabled:cursor-not-allowed"
+            title="Broadcast WhatsApp to filtered subscribers"
+          >
+            <MessageSquare size={13} className="text-emerald-400" />
+            <span>Bulk WhatsApp ({filteredCount ?? 0})</span>
+          </button>
+        )}
+
         <button
           type="button"
           onClick={onExportCsv}
