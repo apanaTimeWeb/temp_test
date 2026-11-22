@@ -69,6 +69,13 @@ export const INITIAL_PLATFORM_MODULE_STATES: PlatformModuleState[] = [
   { moduleId: 'mod_sms', platformDefault: true, starterPlanAllowed: true, professionalPlanAllowed: true, enterprisePlanAllowed: true },
   { moduleId: 'mod_barcode_qr', platformDefault: true, starterPlanAllowed: true, professionalPlanAllowed: true, enterprisePlanAllowed: true },
   { moduleId: 'mod_api_access', platformDefault: true, starterPlanAllowed: false, professionalPlanAllowed: false, enterprisePlanAllowed: true },
+  { moduleId: 'mod_lockers', platformDefault: true, starterPlanAllowed: true, professionalPlanAllowed: true, enterprisePlanAllowed: true },
+  { moduleId: 'mod_attendance', platformDefault: true, starterPlanAllowed: true, professionalPlanAllowed: true, enterprisePlanAllowed: true },
+  { moduleId: 'mod_complaints', platformDefault: true, starterPlanAllowed: true, professionalPlanAllowed: true, enterprisePlanAllowed: true },
+  { moduleId: 'mod_enquiries', platformDefault: true, starterPlanAllowed: true, professionalPlanAllowed: true, enterprisePlanAllowed: true },
+  { moduleId: 'mod_id_cards', platformDefault: true, starterPlanAllowed: true, professionalPlanAllowed: true, enterprisePlanAllowed: true },
+  { moduleId: 'mod_trust_scores', platformDefault: true, starterPlanAllowed: false, professionalPlanAllowed: true, enterprisePlanAllowed: true },
+  { moduleId: 'mod_assets', platformDefault: true, starterPlanAllowed: false, professionalPlanAllowed: true, enterprisePlanAllowed: true },
 ];
 
 export const INITIAL_TENANT_OVERRIDES: TenantModuleOverride[] = [
