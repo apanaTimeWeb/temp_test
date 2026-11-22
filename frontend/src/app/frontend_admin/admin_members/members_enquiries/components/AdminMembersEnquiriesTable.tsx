@@ -6,7 +6,7 @@ import { ADMIN_ENQUIRIES_ENQUIRY_STATUS_BADGE } from '@/app/frontend_admin/admin
 import type { Enquiry,EnquiryStatus } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
 import type { AdminEnquiriesEnquirySortDirection,AdminEnquiriesEnquirySortField,AdminEnquiriesTableProps } from '@/app/frontend_admin/admin_members/members_enquiries/types/AdminMembersEnquiriesComponentTypes';
 import { formatAdminEnquiriesDate,maskPhone } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
-import { ArrowDown,ArrowUp,Clock,Eye,MessageSquare } from 'lucide-react';
+import { ArrowDown,ArrowUp,Clock,Eye,MessageSquare,PhoneCall } from 'lucide-react';
 import { useLocale,useTranslations } from 'next-intl';
 import { useEffect,useMemo } from 'react';
 
@@ -164,6 +164,18 @@ export default function AdminEnquiriesTable({
                         <div className="flex items-center gap-1.5">
                           <button type="button" className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-slate-700/60 bg-slate-800/50 text-slate-300 hover:text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 transition-colors" aria-label={t('VIEW_DETAILS_FOR', { name: enquiry.name })} onClick={() => onSelectEnquiry(enquiry)}>
                             <Eye aria-hidden="true" size={16} strokeWidth={2} />
+                          </button>
+                          <a
+                            href={`tel:${enquiry.phone.replace(/[^0-9+]/g, '')}`}
+                            className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 transition-colors"
+                            title={`Call ${enquiry.name}`}
+                            aria-label={`Call ${enquiry.name}`}
+                          >
+                            <PhoneCall aria-hidden="true" size={15} strokeWidth={2} />
+                          </a>
+                          <button
+                            type="button"
+                            style={{ display: 'none' }}
                           </button>
                           <button
                             type="button"

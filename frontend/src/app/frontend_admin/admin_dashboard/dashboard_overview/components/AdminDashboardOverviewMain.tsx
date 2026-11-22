@@ -4,6 +4,7 @@ import AdminDashboardBranchLeaderboard,{
 type AdminDashboardTimeRange,
 } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/components/AdminDashboardBranchLeaderboard';
 import { AdminDashboardOverviewDestinations } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/components/AdminDashboardOverviewDestinations';
+import { AdminDashboardOperationsPulse } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/components/AdminDashboardOperationsPulse';
 import { AdminDashboardOverviewKpis } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/components/AdminDashboardOverviewKpis';
 import {
 ADMIN_DASHBOARD_BRANCH_METRICS,
@@ -249,6 +250,9 @@ export default function AdminDashboardOverviewMain() {
 
       {/* ── Executive Multi-Branch Overview KPI Cards ── */}
       <AdminDashboardOverviewKpis kpis={executiveKpis} sectionLabel={t('KPI_SECTION_LABEL')} />
+
+      {/* ── Network Operations & Action Pulse ── */}
+      <AdminDashboardOperationsPulse />
 
       {/* ── Multi-Branch Comparative Analytics & Benchmarking Leaderboard ── */}
       <AdminDashboardBranchLeaderboard timeRange={timeRange} />
