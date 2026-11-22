@@ -57,8 +57,8 @@ export default function SuperadminSecurityLoginSecurityLockedAccountsTable({
           <CheckCircle2 size={24} className="mx-auto mb-2 text-emerald-400" />
           No accounts currently locked out. All administrator logins operating normally.
         </div>
-      ): (
-        <>
+      ) : (
+        <div className="space-y-4">
           <div className="overflow-x-auto">
           <table className="w-full text-left text-xs text-slate-300">
             <thead className="bg-[#0a0d26]/80 text-slate-300 font-semibold uppercase tracking-wider border-b border-indigo-500/20">
@@ -117,7 +117,7 @@ export default function SuperadminSecurityLoginSecurityLockedAccountsTable({
           onPageSizeChange={setPageSize}
           itemLabel="locked accounts"
         />
-        </>
+        </div>
       )}
     </div>
   );
