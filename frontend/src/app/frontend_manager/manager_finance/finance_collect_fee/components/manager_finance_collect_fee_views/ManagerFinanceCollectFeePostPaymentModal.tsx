@@ -160,7 +160,7 @@ export default function ManagerFinanceCollectFeePostPaymentModal({
             className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
           >
             <MessageSquare size={16} />
-            <span>Share via WhatsApp (Free Web)</span>
+            <span>Send WhatsApp Receipt (Free Web)</span>
           </button>
 
           <button
