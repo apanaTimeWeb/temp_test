@@ -44,7 +44,7 @@ export default function SuperadminBillingInvoicesSemanticTable<T extends object>
       <div className="flex justify-end border-b border-indigo-500/20 bg-indigo-950/25 p-3">
         <label className="flex items-center gap-2 text-xs text-slate-300">
           <span>{tCopy('COPY.TABLE_FILTER_ROWS')}</span>
-          <input
+          <input maxLength={100}
             type="search"
             value={filterText}
             onChange={(event) => {

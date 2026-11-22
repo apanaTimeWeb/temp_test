@@ -61,7 +61,7 @@ export default function SuperadminSecurityPasswordStrengthEvaluator() {
 
       <div className="space-y-3 pt-1">
         <div className="relative">
-          <input
+          <input maxLength={100}
             type={showTestPassword ? 'text' : 'password'}
             value={testPassword}
             onChange={(e) => setTestPassword(e.target.value)}

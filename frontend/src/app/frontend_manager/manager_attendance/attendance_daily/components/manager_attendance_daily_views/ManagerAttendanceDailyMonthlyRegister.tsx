@@ -164,7 +164,7 @@ export function ManagerAttendanceDailyMonthlyRegister({
               size={14}
               className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none"
             />
-            <input
+            <input maxLength={30}
               type="text"
               placeholder="Search member name, smart ID, or seat..."
               value={searchQuery}

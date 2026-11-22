@@ -144,7 +144,7 @@ export default function SuperadminUserSecurityControlsTab({
           </div>
           <div className="flex-1">
             <label className="text-[11px] text-slate-400">Audit Justification / Note</label>
-            <input
+            <input maxLength={250}
               type="text"
               placeholder="e.g. Interim duty cover during vacation"
               value={tempNote}

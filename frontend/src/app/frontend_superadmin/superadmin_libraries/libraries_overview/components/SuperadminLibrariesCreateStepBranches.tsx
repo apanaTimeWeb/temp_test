@@ -131,7 +131,7 @@ export default function SuperadminLibrariesCreateStepBranches({
               <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Branch Name <span className="text-rose-400">*</span>
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 required
                 placeholder="e.g. South Extension Main Branch"
@@ -145,7 +145,7 @@ export default function SuperadminLibrariesCreateStepBranches({
               <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Unique Branch Code <span className="text-rose-400">*</span>
               </label>
-              <input
+              <input maxLength={30}
                 type="text"
                 required
                 placeholder="e.g. APX-BR01"
@@ -160,7 +160,7 @@ export default function SuperadminLibrariesCreateStepBranches({
             <label className="block text-xs font-semibold text-slate-300 mb-1">
               Branch Address <span className="text-rose-400">*</span>
             </label>
-            <input
+            <input maxLength={250}
               type="text"
               required
               placeholder="e.g. 2nd Floor, Apex Plaza, Main Market, South Ext Part 1"
@@ -183,7 +183,7 @@ export default function SuperadminLibrariesCreateStepBranches({
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Branch Email</label>
-              <input
+              <input maxLength={254}
                 type="email"
                 placeholder="branch1@apexlibrary.in"
                 value={currentBranch.branchEmail}
@@ -193,7 +193,7 @@ export default function SuperadminLibrariesCreateStepBranches({
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Branch Manager</label>
-              <input
+              <input maxLength={100}
                 type="text"
                 placeholder="e.g. Vikram Mehta"
                 value={currentBranch.branchManager}
@@ -206,7 +206,7 @@ export default function SuperadminLibrariesCreateStepBranches({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Working Hours</label>
-              <input
+              <input maxLength={100}
                 type="text"
                 value={currentBranch.workingHours}
                 onChange={(e) => updateCurrent({ workingHours: e.target.value })}
@@ -215,7 +215,7 @@ export default function SuperadminLibrariesCreateStepBranches({
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Weekly Holidays</label>
-              <input
+              <input maxLength={30}
                 type="text"
                 value={currentBranch.weeklyHolidays}
                 onChange={(e) => updateCurrent({ weeklyHolidays: e.target.value })}

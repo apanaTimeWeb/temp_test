@@ -138,7 +138,7 @@ export function ManagerAccountsDailySettlementTimeHorizonBar({
           }`}
         >
           <Calendar size={13} className={isCustomActive ? 'text-amber-400 ml-1' : 'text-secondary ml-1'} />
-          <input
+          <input maxLength={100}
             type="date"
             className="px-2 py-1 bg-card border border-border rounded-lg text-xs font-semibold text-primary outline-none focus:border-primary cursor-pointer"
             value={settlementDate}

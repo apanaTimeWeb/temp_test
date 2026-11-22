@@ -108,7 +108,7 @@ export function ManagerLockersManagementLostKeyModal({
             </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-secondary">₹</span>
-              <input
+              <input maxLength={30}
                 id="lost-key-fine-input"
                 data-testid="manager-lost-key-fine-input"
                 type="number"

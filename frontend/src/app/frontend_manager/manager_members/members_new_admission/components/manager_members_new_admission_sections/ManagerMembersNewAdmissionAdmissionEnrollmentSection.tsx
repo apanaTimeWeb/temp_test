@@ -202,7 +202,7 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
             <label className="mgr-label" htmlFor="admission-shift-summary">Consolidated Shift</label>
             <div className="mgr-input-icon-wrap">
               <FileText size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input
+              <input maxLength={30}
                 id="admission-shift-summary"
                 type="text"
                 readOnly

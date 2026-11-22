@@ -204,7 +204,7 @@ export function ManagerMembersGroupAdmissionCardView({
               <label className="text-xs font-medium text-secondary block mb-1">Date of Birth (Optional)</label>
               <div className="mgr-input-icon-wrap">
                 <Calendar size={15} className="mgr-input-icon text-secondary" />
-                <input
+                <input maxLength={100}
                   type="date"
                   max={new Date().toISOString().split('T')[0]}
                   min="1950-01-01"

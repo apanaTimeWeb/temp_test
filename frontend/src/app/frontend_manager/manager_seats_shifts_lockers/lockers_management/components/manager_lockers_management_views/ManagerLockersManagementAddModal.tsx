@@ -80,7 +80,7 @@ export function ManagerLockersManagementAddModal({
               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none">
                 <Key size={15} />
               </div>
-              <input
+              <input maxLength={30}
                 id="rbg4-managerseatsshiftslockerslockersclient-153"
                 autoFocus
                 className={`mgr-input !pl-10 pr-3 text-xs w-full uppercase font-mono tracking-wider h-9 rounded-xl border border-border bg-surface text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary ${

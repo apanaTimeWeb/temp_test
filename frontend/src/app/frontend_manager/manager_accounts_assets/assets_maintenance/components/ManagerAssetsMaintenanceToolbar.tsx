@@ -144,7 +144,7 @@ export function ManagerAssetsMaintenanceToolbar({
       <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
         {/* Search Input with non-overlapping padding and clear button */}
         <div className="relative flex-1 flex items-center">
-          <input
+          <input maxLength={100}
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}

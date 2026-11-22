@@ -104,7 +104,7 @@ export function SuperadminDataArchiveRetentionRuleModal({
               Retention Duration (Days) *
             </label>
             <div className="flex items-center gap-3">
-              <input
+              <input maxLength={100}
                 type="number"
                 min={1}
                 {...register('retentionPeriodDays', { valueAsNumber: true })}

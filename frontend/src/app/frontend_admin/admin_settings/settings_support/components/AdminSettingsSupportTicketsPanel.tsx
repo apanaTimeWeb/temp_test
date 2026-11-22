@@ -198,7 +198,7 @@ export default function AdminSupportTicketsPanel() {
           {/* Search Bar */}
           <div className="relative min-w-[220px]">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
+            <input maxLength={30}
               type="text"
               placeholder="Search tickets by subject or ID..."
               value={searchQuery}

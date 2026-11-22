@@ -190,7 +190,7 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
                   {charCount} / {MAX_CHARS} {tManagerUi('characters')}
                 </span>
               </div>
-              <textarea maxLength={1000}
+              <textarea
                 id="whatsapp-template-body-input"
                 ref={textareaRef}
                 className="mgr-input h-36 text-sm leading-relaxed rounded-xl font-sans resize-none py-3 px-3.5 w-full bg-surface/50 border border-border focus:border-primary"

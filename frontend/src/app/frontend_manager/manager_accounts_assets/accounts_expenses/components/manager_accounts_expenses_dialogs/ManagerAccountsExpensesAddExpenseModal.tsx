@@ -190,7 +190,7 @@ export function ManagerAccountsExpensesAddExpenseModal({
             <label htmlFor="expense-description-input" className="text-xs font-semibold text-secondary block mb-1">
               Description / Purpose <span className="text-destructive">*</span>
             </label>
-            <input
+            <input maxLength={250}
               id="expense-description-input"
               type="text"
               placeholder="e.g. Broadband recharge, RO filter service, Study hall cleaning..."
@@ -212,7 +212,7 @@ export function ManagerAccountsExpensesAddExpenseModal({
               </label>
               <div className="relative">
                 <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-secondary">₹</span>
-                <input
+                <input maxLength={30}
                   id="expense-amount-input"
                   type="number"
                   step="any"
@@ -234,7 +234,7 @@ export function ManagerAccountsExpensesAddExpenseModal({
               <label htmlFor="expense-voucher-input" className="text-xs font-semibold text-secondary block mb-1">
                 Bill / Voucher # <span className="font-normal text-xs text-secondary">(Optional)</span>
               </label>
-              <input
+              <input maxLength={30}
                 id="expense-voucher-input"
                 type="text"
                 placeholder="e.g. V-9901, REC-441"
@@ -337,7 +337,7 @@ export function ManagerAccountsExpensesAddExpenseModal({
             <label htmlFor="expense-paidby-input" className="text-xs font-semibold text-secondary block mb-1">
               Disbursed By (Staff / Manager Name)
             </label>
-            <input
+            <input maxLength={30}
               id="expense-paidby-input"
               type="text"
               placeholder="e.g. Branch Manager Satyam"

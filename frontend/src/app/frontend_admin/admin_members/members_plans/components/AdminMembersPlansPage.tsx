@@ -413,7 +413,7 @@ export default function AdminPlansPage() {
       <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-800/80 bg-slate-900/50 backdrop-blur-xl p-3 shadow-lg">
         <div className="relative min-w-[260px] max-w-sm flex-1">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
-          <input
+          <input maxLength={100}
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}

@@ -43,7 +43,7 @@ export function ManagerCommunicationWhatsappLogsFilterBar({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
         <div className="relative lg:col-span-2">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-          <input
+          <input maxLength={100}
             type="text"
             className="mgr-input pl-9 pr-3 py-2 text-xs w-full rounded-xl bg-surface/50 border border-border focus:border-primary"
             placeholder="Search student or phone..."

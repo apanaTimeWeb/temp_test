@@ -376,7 +376,7 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
       <div className="flex flex-wrap items-center gap-2.5 p-3 rounded-xl bg-surface border border-border">
         <div className="relative w-full sm:w-72">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
-          <input
+          <input maxLength={30}
             id="promises-search-input" name="searchQuery" type="text"
             placeholder="Search student name or Smart ID..."
             className="mgr-input !pl-10 !pr-9 text-xs w-full focus-visible:ring-2 focus-visible:ring-primary outline-none"

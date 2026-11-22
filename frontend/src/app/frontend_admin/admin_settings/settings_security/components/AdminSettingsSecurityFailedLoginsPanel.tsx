@@ -80,7 +80,7 @@ export default function AdminSecurityFailedLoginsPanel() {
         </div>
         <div className="relative min-w-[220px] max-w-sm">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary" />
-          <input
+          <input maxLength={100}
             type="text"
             value={searchQuery}
             onChange={(e) => {

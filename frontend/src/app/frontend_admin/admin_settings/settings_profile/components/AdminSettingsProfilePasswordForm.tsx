@@ -64,7 +64,7 @@ export default function AdminProfilePasswordForm({ onDirtyChange }: AdminSetting
             <span className="text-danger-text" aria-hidden="true">*</span>
           </div>
           <div className="relative">
-            <input
+            <input maxLength={30}
               id="admin-profile-current-password"
               type={showCurrentPassword ? 'text' : 'password'}
               autoComplete="current-password"
@@ -107,7 +107,7 @@ export default function AdminProfilePasswordForm({ onDirtyChange }: AdminSetting
               <span className="text-danger-text" aria-hidden="true">*</span>
             </div>
             <div className="relative">
-              <input
+              <input maxLength={30}
                 id="admin-profile-new-password"
                 type={showNewPassword ? 'text' : 'password'}
                 autoComplete="new-password"
@@ -148,7 +148,7 @@ export default function AdminProfilePasswordForm({ onDirtyChange }: AdminSetting
               <span className="text-danger-text" aria-hidden="true">*</span>
             </div>
             <div className="relative">
-              <input
+              <input maxLength={30}
                 id="admin-profile-confirm-password"
                 type={showConfirmPassword ? 'text' : 'password'}
                 autoComplete="new-password"

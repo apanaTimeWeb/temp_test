@@ -28,7 +28,7 @@ export function ManagerNavigationSidebarSearch({
       <div className="mgr-sidebar-search">
         <div className="mgr-sidebar-search-wrap">
           <Search size={14} className="mgr-sidebar-search-icon" aria-hidden="true" />
-          <input
+          <input maxLength={100}
             ref={searchInputRef}
             type="text"
             value={searchQuery}

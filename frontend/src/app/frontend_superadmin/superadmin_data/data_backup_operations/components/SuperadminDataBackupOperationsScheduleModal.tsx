@@ -97,7 +97,7 @@ export function SuperadminDataBackupOperationsScheduleModal({
         <form onSubmit={handleSubmit(onSubmit)} className="p-5 space-y-4 text-xs">
           <div>
             <label className="block font-semibold text-foreground mb-1">Policy / Schedule Name</label>
-            <input
+            <input maxLength={100}
               type="text"
               {...register('name')}
               placeholder="e.g. Daily Tenant Database Snapshot"
@@ -124,7 +124,7 @@ export function SuperadminDataBackupOperationsScheduleModal({
 
             <div>
               <label className="block font-semibold text-foreground mb-1">Cron Expression</label>
-              <input
+              <input maxLength={100}
                 type="text"
                 {...register('cronExpression')}
                 className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-border text-pink-400 font-mono text-xs focus:outline-none focus:border-pink-500"
@@ -150,7 +150,7 @@ export function SuperadminDataBackupOperationsScheduleModal({
 
             <div>
               <label className="block font-semibold text-foreground mb-1">Retention Window (Days)</label>
-              <input
+              <input maxLength={100}
                 type="number"
                 min={1}
                 {...register('retentionDays', { valueAsNumber: true })}

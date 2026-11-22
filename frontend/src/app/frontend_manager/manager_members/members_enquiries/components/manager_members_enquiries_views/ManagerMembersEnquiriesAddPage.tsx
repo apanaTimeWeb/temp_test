@@ -88,7 +88,7 @@ export default function ManagerMembersEnquiriesAddPage(_routeQuery: ManagerMembe
           <div className="space-y-3">
             <div className="crm-field">
               <label htmlFor="enq-name" className="crm-label crm-label--required font-semibold block mb-1">{tManagerUi('full_name')}</label>
-              <input id="enq-name" type="text" autoComplete="name" className={`mgr-input w-full${errors.name ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'enq-name-error' : undefined} {...register('name')} />
+              <input maxLength={30} id="enq-name" type="text" autoComplete="name" className={`mgr-input w-full${errors.name ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'enq-name-error' : undefined} {...register('name')} />
               {errors.name && <p id="enq-name-error" className="crm-error text-danger mt-1" role="alert">{errors.name.message}</p>}
             </div>
             <div className="crm-field">

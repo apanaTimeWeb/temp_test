@@ -49,7 +49,7 @@ export default function SuperadminLibrariesOnboardingSetupStep3Form({ onNext, in
           <label className="sa-wizard-field-label" htmlFor="superadmin-superadminsetupwizardstep3form-33-input">
             {tCopy("COPY.TOTAL_SEATS")} <span className="sa-wizard-field-required">*</span>
           </label>
-          <input id="superadmin-superadminsetupwizardstep3form-33-input" type="number" min={1} max={9999} step={1} inputMode="numeric"
+          <input maxLength={30} id="superadmin-superadminsetupwizardstep3form-33-input" type="number" min={1} max={9999} step={1} inputMode="numeric"
             {...register('count', { valueAsNumber: true })} aria-invalid={Boolean(errors.count)} aria-describedby={errors.count ? 'step3-count-error' : undefined}
             className={inputCls(!!errors.count)} data-testid="superadmin-setup-wizard-setup-wizard-step3-form-superadmin-superadminsetupwizardstep3form-33-input-1" />
           {errors.count && <p id="step3-count-error" role="alert" className="sa-wizard-field-error">{translateValidationMessage(errors.count.message)}</p>}

@@ -89,7 +89,7 @@ export const SuperadminSettingsGeneralGstTaxCard: React.FC = () => {
           <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
             Legal Business Name <span className="text-rose-400">*</span>
           </label>
-          <input
+          <input maxLength={100}
             type="text"
             value={config.legalName}
             onChange={(e) => setConfig({ ...config, legalName: e.target.value })}
@@ -103,7 +103,7 @@ export const SuperadminSettingsGeneralGstTaxCard: React.FC = () => {
           <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
             Trade Brand Name <span className="text-rose-400">*</span>
           </label>
-          <input
+          <input maxLength={100}
             type="text"
             value={config.tradeName}
             onChange={(e) => setConfig({ ...config, tradeName: e.target.value })}
@@ -117,7 +117,7 @@ export const SuperadminSettingsGeneralGstTaxCard: React.FC = () => {
           <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
             Registered Office Address <span className="text-rose-400">*</span>
           </label>
-          <input
+          <input maxLength={250}
             type="text"
             value={config.billingAddress}
             onChange={(e) => setConfig({ ...config, billingAddress: e.target.value })}
@@ -130,7 +130,7 @@ export const SuperadminSettingsGeneralGstTaxCard: React.FC = () => {
         <div className="grid grid-cols-3 gap-3 md:col-span-2">
           <div className="space-y-1.5">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-300">City</label>
-            <input
+            <input maxLength={100}
               type="text"
               value={config.city}
               onChange={(e) => setConfig({ ...config, city: e.target.value })}
@@ -139,7 +139,7 @@ export const SuperadminSettingsGeneralGstTaxCard: React.FC = () => {
           </div>
           <div className="space-y-1.5">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-300">State & Code</label>
-            <input
+            <input maxLength={30}
               type="text"
               value={`${config.state} (${config.stateCode})`}
               onChange={(e) => setConfig({ ...config, state: e.target.value })}
@@ -148,7 +148,7 @@ export const SuperadminSettingsGeneralGstTaxCard: React.FC = () => {
           </div>
           <div className="space-y-1.5">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-300">PIN Code</label>
-            <input
+            <input maxLength={30}
               type="text"
               value={config.pinCode}
               onChange={(e) => setConfig({ ...config, pinCode: e.target.value })}
@@ -162,7 +162,7 @@ export const SuperadminSettingsGeneralGstTaxCard: React.FC = () => {
           <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
             15-Digit GSTIN <span className="text-rose-400">*</span>
           </label>
-          <input
+          <input maxLength={100}
             type="text"
             value={config.gstin}
             onChange={(e) => setConfig({ ...config, gstin: e.target.value.toUpperCase() })}
@@ -175,7 +175,7 @@ export const SuperadminSettingsGeneralGstTaxCard: React.FC = () => {
           <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
             SAC Code (SaaS Provisioning) <span className="text-rose-400">*</span>
           </label>
-          <input
+          <input maxLength={30}
             type="text"
             value={config.sacCode}
             onChange={(e) => setConfig({ ...config, sacCode: e.target.value })}
@@ -211,7 +211,7 @@ export const SuperadminSettingsGeneralGstTaxCard: React.FC = () => {
           <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
             Invoice Numbering Prefix
           </label>
-          <input
+          <input maxLength={100}
             type="text"
             value={config.invoicePrefix}
             onChange={(e) => setConfig({ ...config, invoicePrefix: e.target.value })}

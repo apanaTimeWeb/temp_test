@@ -25,7 +25,7 @@ export function ManagerMembersGroupAdmissionAdmissionPaymentSection({ register, 
           </div>
           <div className="mgr-form-field">
             <label className="mgr-label" htmlFor="admission-discount">{tManagerUi('manual_discount')}</label>
-            <div className="mgr-input-icon-wrap"><IndianRupee size={18} strokeWidth={2} className="mgr-input-icon" /><input id="admission-discount" {...register('manualDiscount')} disabled type="number" min="0" step="1" className="mgr-input mgr-input-with-icon" /></div>
+            <div className="mgr-input-icon-wrap"><IndianRupee size={18} strokeWidth={2} className="mgr-input-icon" /><input maxLength={30} id="admission-discount" {...register('manualDiscount')} disabled type="number" min="0" step="1" className="mgr-input mgr-input-with-icon" /></div>
             {errors.manualDiscount && <p className="mgr-error" role="alert">{errors.manualDiscount.message}</p>}
           </div>
           <div className="mgr-form-field mgr-form-field-full">
@@ -34,7 +34,7 @@ export function ManagerMembersGroupAdmissionAdmissionPaymentSection({ register, 
           </div>
           <div className="mgr-form-field">
             <label className="mgr-label mgr-label-required" htmlFor="admission-amount">{tManagerUi('amount_paid_now')}</label>
-            <div className="mgr-input-icon-wrap"><IndianRupee size={18} strokeWidth={2} className="mgr-input-icon" /><input id="admission-amount" {...register('amountPaid')} disabled type="number" min="1" step="1" className={`mgr-input mgr-input-with-icon${errors.amountPaid ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.amountPaid)} /></div>
+            <div className="mgr-input-icon-wrap"><IndianRupee size={18} strokeWidth={2} className="mgr-input-icon" /><input maxLength={30} id="admission-amount" {...register('amountPaid')} disabled type="number" min="1" step="1" className={`mgr-input mgr-input-with-icon${errors.amountPaid ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.amountPaid)} /></div>
             {errors.amountPaid && <p className="mgr-error" role="alert">{errors.amountPaid.message}</p>}
           </div>
         </div>

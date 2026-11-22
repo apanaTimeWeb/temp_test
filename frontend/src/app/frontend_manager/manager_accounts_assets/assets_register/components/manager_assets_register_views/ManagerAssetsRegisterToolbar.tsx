@@ -143,7 +143,7 @@ export function ManagerAssetsRegisterToolbar({
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
         {/* Search Input with non-overlapping padding and clear button */}
         <div className="relative flex-1 flex items-center">
-          <input
+          <input maxLength={100}
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}

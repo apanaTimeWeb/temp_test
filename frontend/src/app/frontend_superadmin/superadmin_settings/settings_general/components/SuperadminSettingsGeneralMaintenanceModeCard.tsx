@@ -122,7 +122,7 @@ export function SuperadminSettingsGeneralMaintenanceModeCard() {
             <Clock size={13} className="text-indigo-400" aria-hidden="true" />
             Estimated Downtime Display
           </label>
-          <input
+          <input maxLength={30}
             id="settings-maintenance-downtime"
             type="text"
             placeholder="e.g. 45 Minutes, 2 Hours"
@@ -138,7 +138,7 @@ export function SuperadminSettingsGeneralMaintenanceModeCard() {
             <KeyRound size={13} className="text-rose-400" aria-hidden="true" />
             Emergency Header Bypass Token
           </label>
-          <input
+          <input maxLength={30}
             id="settings-maintenance-bypass-key"
             type="text"
             {...register('maintenance.emergencyBypassKey')}
@@ -153,7 +153,7 @@ export function SuperadminSettingsGeneralMaintenanceModeCard() {
             <Network size={13} className="text-indigo-400" aria-hidden="true" />
             Whitelisted CIDRs & IP Addresses (Comma-separated)
           </label>
-          <input
+          <input maxLength={30}
             id="settings-maintenance-ips"
             type="text"
             placeholder="103.24.120.0/24, 182.74.88.10/32"

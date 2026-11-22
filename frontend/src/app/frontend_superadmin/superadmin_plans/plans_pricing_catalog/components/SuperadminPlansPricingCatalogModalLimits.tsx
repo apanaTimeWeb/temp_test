@@ -22,7 +22,7 @@ export default function SuperadminPlansPricingCatalogModalLimits({
             <label className="block text-[11px] font-semibold text-slate-300 mb-1" htmlFor="subscription-plan-branches">
               {t('COPY.MAX_BRANCHES')}
             </label>
-            <input
+            <input maxLength={30}
               id="subscription-plan-branches"
               type="number"
               min={1}
@@ -33,7 +33,7 @@ export default function SuperadminPlansPricingCatalogModalLimits({
           </div>
           <div>
             <label className="block text-[11px] font-semibold text-slate-300 mb-1">Max Admins</label>
-            <input
+            <input maxLength={100}
               type="number"
               min={1}
               className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-100 focus:border-indigo-500"
@@ -42,7 +42,7 @@ export default function SuperadminPlansPricingCatalogModalLimits({
           </div>
           <div>
             <label className="block text-[11px] font-semibold text-slate-300 mb-1">Max Staff</label>
-            <input
+            <input maxLength={100}
               type="number"
               min={1}
               className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-100 focus:border-indigo-500"
@@ -53,7 +53,7 @@ export default function SuperadminPlansPricingCatalogModalLimits({
             <label className="block text-[11px] font-semibold text-slate-300 mb-1" htmlFor="subscription-plan-members">
               {t('COPY.MAX_MEMBERS')}
             </label>
-            <input
+            <input maxLength={30}
               id="subscription-plan-members"
               type="number"
               min={1}
@@ -69,7 +69,7 @@ export default function SuperadminPlansPricingCatalogModalLimits({
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
           <label className="block text-[11px] font-semibold text-slate-300 mb-1">Storage Limit</label>
-          <input
+          <input maxLength={100}
             type="text"
             placeholder="e.g. 25 GB"
             className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-100 focus:border-indigo-500"
@@ -78,7 +78,7 @@ export default function SuperadminPlansPricingCatalogModalLimits({
         </div>
         <div>
           <label className="block text-[11px] font-semibold text-slate-300 mb-1">SMS Credits / mo</label>
-          <input
+          <input maxLength={100}
             type="number"
             min={0}
             className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-100 focus:border-indigo-500"
@@ -87,7 +87,7 @@ export default function SuperadminPlansPricingCatalogModalLimits({
         </div>
         <div>
           <label className="block text-[11px] font-semibold text-slate-300 mb-1">WhatsApp Credits / mo</label>
-          <input
+          <input maxLength={100}
             type="number"
             min={0}
             className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-100 focus:border-indigo-500"

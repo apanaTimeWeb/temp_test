@@ -382,7 +382,7 @@ export function AdminFinanceSecurityDepositsPage() {
               size={14}
               className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none"
             />
-            <input
+            <input maxLength={100}
               type="text"
               value={searchQuery}
               onChange={(e) => {

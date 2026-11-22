@@ -183,14 +183,14 @@ export function ManagerDashboardOverviewHeaderBar({
         {timeRange === 'custom' ? (
           <div className="flex items-center gap-2 bg-card border border-primary p-1.5 rounded-xl text-xs shadow-xs animate-in fade-in duration-200">
             <span className="text-muted-foreground font-medium pl-1">From:</span>
-            <input
+            <input maxLength={100}
               type="date"
               value={customStartDate}
               onChange={(e) => onCustomStartDateChange(e.target.value)}
               className="rounded-lg bg-surface-highlight border border-border px-2 py-1 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
             />
             <span className="text-muted-foreground font-medium">To:</span>
-            <input
+            <input maxLength={100}
               type="date"
               value={customEndDate}
               onChange={(e) => onCustomEndDateChange(e.target.value)}

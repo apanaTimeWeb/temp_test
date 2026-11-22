@@ -17,7 +17,7 @@ export default function SuperadminNavigationShellCommandPalette() {
             <h2 id="superadmin-command-palette-title" className="sr-only">{t('COPY.GLOBAL_COMMAND_PALETTE')}</h2>
             <div className="sa-command-palette-search-row">
               <Search size={19} aria-hidden="true" className="text-secondary shrink-0" />
-              <input
+              <input maxLength={100}
                 ref={inputRef}
                 type="search"
                 value={query}

@@ -43,7 +43,7 @@ export default function SuperadminSubscriptionsActiveSubscribersSemanticTable<T 
           </span>
           <div className="relative flex items-center">
             <Search className="absolute left-3 h-4 w-4 text-indigo-400 pointer-events-none" />
-            <input
+            <input maxLength={100}
               type="search"
               value={filterText}
               onChange={(event) => { setFilterText(event.currentTarget.value); setPage(0); onPageChange?.(0); }}

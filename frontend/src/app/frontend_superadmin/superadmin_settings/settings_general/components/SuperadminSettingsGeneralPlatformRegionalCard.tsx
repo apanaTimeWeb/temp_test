@@ -37,7 +37,7 @@ export const SuperadminSettingsGeneralPlatformRegionalCard: FC = () => {
           <label htmlFor="settings-platform-name" className="text-xs font-bold uppercase tracking-wider text-slate-300">
             Platform Name <span className="text-rose-400">*</span>
           </label>
-          <input
+          <input maxLength={30}
             id="settings-platform-name"
             type="text"
             className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
@@ -55,7 +55,7 @@ export const SuperadminSettingsGeneralPlatformRegionalCard: FC = () => {
           <label htmlFor="settings-support-email" className="text-xs font-bold uppercase tracking-wider text-slate-300">
             Global Support Email <span className="text-rose-400">*</span>
           </label>
-          <input
+          <input maxLength={30}
             id="settings-support-email"
             type="email"
             className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
@@ -155,7 +155,7 @@ export const SuperadminSettingsGeneralPlatformRegionalCard: FC = () => {
               <label htmlFor="settings-platform-logo-url" className="text-xs font-medium text-slate-400">
                 Logo Asset URL / SVG Path
               </label>
-              <input
+              <input maxLength={30}
                 id="settings-platform-logo-url"
                 type="text"
                 className="mt-1 w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 placeholder:text-slate-500 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
@@ -168,7 +168,7 @@ export const SuperadminSettingsGeneralPlatformRegionalCard: FC = () => {
               <label htmlFor="settings-favicon-url" className="text-xs font-medium text-slate-400">
                 Favicon Asset URL
               </label>
-              <input
+              <input maxLength={30}
                 id="settings-favicon-url"
                 type="text"
                 className="mt-1 w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 placeholder:text-slate-500 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"

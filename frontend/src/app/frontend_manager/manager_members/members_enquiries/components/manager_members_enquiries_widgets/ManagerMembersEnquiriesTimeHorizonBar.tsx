@@ -54,7 +54,7 @@ export function ManagerMembersEnquiriesTimeHorizonBar({
           <div className="flex items-center gap-2 flex-wrap text-xs bg-[#060818] p-1.5 rounded-xl border border-indigo-500/25">
             <label className="flex items-center gap-1.5 text-slate-300">
               <span className="text-[11px] font-medium text-slate-400">From:</span>
-              <input
+              <input maxLength={100}
                 type="date"
                 value={customStartDate}
                 onChange={(e) => setCustomStartDate(e.target.value)}
@@ -63,7 +63,7 @@ export function ManagerMembersEnquiriesTimeHorizonBar({
             </label>
             <label className="flex items-center gap-1.5 text-slate-300">
               <span className="text-[11px] font-medium text-slate-400">To:</span>
-              <input
+              <input maxLength={100}
                 type="date"
                 value={customEndDate}
                 onChange={(e) => setCustomEndDate(e.target.value)}

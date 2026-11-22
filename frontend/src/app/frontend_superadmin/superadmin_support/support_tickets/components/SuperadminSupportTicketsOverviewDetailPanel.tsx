@@ -916,7 +916,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
 
                 {/* Upload form */}
                 <div className="p-3.5 rounded-xl border border-sky-500/25 bg-[#081524]/60 flex flex-col sm:flex-row items-center gap-3">
-                  <input
+                  <input maxLength={100}
                     type="text"
                     placeholder="Enter file name (e.g. gateway_trace.log, screenshot.png)"
                     value={newAttachmentName}
@@ -1166,7 +1166,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
 
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">Root Cause Analysis</label>
-                <input
+                <input maxLength={100}
                   type="text"
                   placeholder="e.g. Memory leak in background worker / Network gateway timeout"
                   value={rootCause}

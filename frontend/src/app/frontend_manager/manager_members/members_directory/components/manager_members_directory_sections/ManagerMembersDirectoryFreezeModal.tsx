@@ -146,7 +146,7 @@ export function ManagerMembersDirectoryFreezeModal({
               <label htmlFor="leave-start-date" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
                 Leave Start Date *
               </label>
-              <input
+              <input maxLength={30}
                 id="leave-start-date"
                 type="date"
                 required
@@ -160,7 +160,7 @@ export function ManagerMembersDirectoryFreezeModal({
               <label htmlFor="leave-end-date" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
                 Leave End Date *
               </label>
-              <input
+              <input maxLength={30}
                 id="leave-end-date"
                 type="date"
                 required

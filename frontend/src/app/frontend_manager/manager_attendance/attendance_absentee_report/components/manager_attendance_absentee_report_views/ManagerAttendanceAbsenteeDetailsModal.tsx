@@ -248,7 +248,7 @@ export function ManagerAttendanceAbsenteeDetailsModal({
                 <label htmlFor="leave-days-input" className="text-[11px] text-secondary whitespace-nowrap">
                   Leave Duration:
                 </label>
-                <input
+                <input maxLength={30}
                   id="leave-days-input"
                   type="text"
                   placeholder="e.g. 10 Days"

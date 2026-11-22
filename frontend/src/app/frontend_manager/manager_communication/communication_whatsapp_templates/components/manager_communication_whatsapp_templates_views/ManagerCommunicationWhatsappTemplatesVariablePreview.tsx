@@ -478,7 +478,7 @@ export const ManagerCommunicationWhatsappTemplatesVariablePreview: React.FC<
                 <User size={11} className="text-emerald-400" />
                 <span>Student Name &#123;name&#125;</span>
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 value={customProfile.name}
                 onChange={(e) =>
@@ -494,7 +494,7 @@ export const ManagerCommunicationWhatsappTemplatesVariablePreview: React.FC<
                 <IndianRupee size={11} className="text-amber-400" />
                 <span>Amount &#123;amount&#125;</span>
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 value={customProfile.amount}
                 onChange={(e) =>
@@ -510,7 +510,7 @@ export const ManagerCommunicationWhatsappTemplatesVariablePreview: React.FC<
                 <Calendar size={11} className="text-rose-400" />
                 <span>Due Date &#123;duedate&#125;</span>
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 value={customProfile.duedate}
                 onChange={(e) =>
@@ -526,7 +526,7 @@ export const ManagerCommunicationWhatsappTemplatesVariablePreview: React.FC<
                 <BookOpen size={11} className="text-purple-400" />
                 <span>Plan &#123;planname&#125;</span>
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 value={customProfile.planname}
                 onChange={(e) =>
@@ -542,7 +542,7 @@ export const ManagerCommunicationWhatsappTemplatesVariablePreview: React.FC<
                 <Armchair size={11} className="text-sky-400" />
                 <span>Seat Tag &#123;seat&#125;</span>
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 value={customProfile.seat}
                 onChange={(e) =>
@@ -558,7 +558,7 @@ export const ManagerCommunicationWhatsappTemplatesVariablePreview: React.FC<
                 <MapPin size={11} className="text-indigo-400" />
                 <span>Library &#123;libraryname&#125;</span>
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 value={customProfile.libraryname}
                 onChange={(e) =>

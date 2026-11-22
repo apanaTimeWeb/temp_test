@@ -45,7 +45,7 @@ export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirec
         <h2 className="text-lg font-semibold text-text-primary">{t('ACTIVITY_TITLE')}</h2>
         <div className="relative min-w-[220px] max-w-sm">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary" />
-          <input
+          <input maxLength={100}
             type="text"
             value={activitySearchQuery}
             onChange={(e) => {

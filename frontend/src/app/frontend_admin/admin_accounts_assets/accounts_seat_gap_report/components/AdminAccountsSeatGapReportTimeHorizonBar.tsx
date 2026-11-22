@@ -59,7 +59,7 @@ export function AdminAccountsSeatGapReportTimeHorizonBar({
         </div>
         {timeRange === 'custom' && (
           <div className="flex items-center gap-1.5 text-xs">
-            <input
+            <input maxLength={100}
               type="date"
               value={customStartDate}
               onChange={(e) => setCustomStartDate(e.target.value)}
@@ -67,7 +67,7 @@ export function AdminAccountsSeatGapReportTimeHorizonBar({
               className="rounded-lg border border-border bg-surface px-2.5 py-1 text-xs text-text-primary focus:outline-none focus:ring-1 focus:ring-primary"
             />
             <span className="text-text-muted">to</span>
-            <input
+            <input maxLength={100}
               type="date"
               value={customEndDate}
               onChange={(e) => setCustomEndDate(e.target.value)}

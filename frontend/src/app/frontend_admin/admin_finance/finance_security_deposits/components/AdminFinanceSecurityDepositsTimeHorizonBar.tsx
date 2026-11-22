@@ -59,7 +59,7 @@ export function AdminFinanceSecurityDepositsTimeHorizonBar({
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-1.5">
             <span className="text-secondary text-[11px]">From:</span>
-            <input
+            <input maxLength={100}
               type="date"
               value={customStartDate}
               onChange={(e) => onCustomStartDateChange(e.target.value)}
@@ -68,7 +68,7 @@ export function AdminFinanceSecurityDepositsTimeHorizonBar({
           </div>
           <div className="flex items-center gap-1.5">
             <span className="text-secondary text-[11px]">To:</span>
-            <input
+            <input maxLength={100}
               type="date"
               value={customEndDate}
               onChange={(e) => onCustomEndDateChange(e.target.value)}

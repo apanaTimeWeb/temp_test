@@ -25,7 +25,7 @@ export default function AdminAccountingSeatGapFilterSection({
           </label>
           <div className="relative">
             <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
-            <input
+            <input maxLength={30}
               id="seat-gap-search"
               type="text"
               placeholder="Search seat no, floor, shift..."

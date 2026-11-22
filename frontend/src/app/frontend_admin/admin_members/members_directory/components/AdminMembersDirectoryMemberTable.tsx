@@ -213,7 +213,7 @@ export default function AdminMembersMemberTable({
           {/* SEARCH INPUT */}
           <div className="relative flex-1 min-w-[200px]">
             <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sky-400 pointer-events-none" />
-            <input
+            <input maxLength={100}
               type="search"
               value={searchQuery}
               onChange={(e) => {

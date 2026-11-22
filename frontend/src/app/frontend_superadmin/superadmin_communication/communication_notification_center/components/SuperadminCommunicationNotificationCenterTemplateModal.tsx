@@ -177,7 +177,7 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
           <div className="space-y-3.5">
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-200">Email Subject</label>
-              <input
+              <input maxLength={100}
                 type="text"
                 value={emailSubject}
                 onChange={(e) => setEmailSubject(e.target.value)}

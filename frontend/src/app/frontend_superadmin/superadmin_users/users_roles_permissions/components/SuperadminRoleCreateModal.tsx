@@ -82,7 +82,7 @@ export default function SuperadminRoleCreateModal({
         <form onSubmit={handleSubmit} className="my-4 space-y-3.5 text-xs">
           <div>
             <label className="block font-semibold text-slate-300 mb-1">Role Name *</label>
-            <input
+            <input maxLength={100}
               type="text"
               required
               placeholder="e.g. Senior Shift Supervisor"

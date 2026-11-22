@@ -115,7 +115,7 @@ export function AdminCommunicationComplaintsBranchBar({
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative min-w-[240px] max-w-sm flex-1">
             <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
-            <input
+            <input maxLength={100}
               type="text"
               value={search}
               onChange={(e) => onSearchChange(e.target.value)}

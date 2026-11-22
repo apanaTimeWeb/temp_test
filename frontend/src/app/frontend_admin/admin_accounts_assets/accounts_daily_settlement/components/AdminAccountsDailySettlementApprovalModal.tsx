@@ -135,7 +135,7 @@ export function AdminAccountsDailySettlementApprovalModal({
             <label htmlFor="verified-cash" className="block text-xs font-semibold text-foreground">
               {t('VERIFIED_AMOUNT_LABEL')}
             </label>
-            <input
+            <input maxLength={30}
               id="verified-cash"
               type="number"
               step="any"

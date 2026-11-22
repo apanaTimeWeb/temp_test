@@ -121,7 +121,7 @@ export const SuperadminIntegrationsOverviewGatewayConfigModal: React.FC<
               {Object.entries(credentials).map(([key, val]) => (
                 <div key={key} className="space-y-1">
                   <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">{key}</span>
-                  <input
+                  <input maxLength={100}
                     type="text"
                     value={val}
                     onChange={(e) => handleCredentialChange(key, e.target.value)}
@@ -140,7 +140,7 @@ export const SuperadminIntegrationsOverviewGatewayConfigModal: React.FC<
           {/* Operational Notes */}
           <div>
             <label className="block font-medium text-slate-300 mb-1">Operational Notes / Webhook URL</label>
-            <input
+            <input maxLength={250}
               type="text"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}

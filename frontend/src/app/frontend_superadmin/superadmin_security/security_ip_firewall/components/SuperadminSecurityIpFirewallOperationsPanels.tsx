@@ -40,7 +40,7 @@ export default function SuperadminSecurityIpFirewallOperationsPanels({
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2.5">
-              <input
+              <input maxLength={250}
                 type="text"
                 disabled
                 aria-disabled="true"

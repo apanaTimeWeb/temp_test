@@ -160,7 +160,7 @@ export function ManagerMembersDirectoryGraduateAlumniModal({
               </label>
               <div className="relative">
                 <Award size={15} className="absolute left-3 top-2.5 text-secondary" />
-                <input
+                <input maxLength={30}
                   id="alumni-exam"
                   type="text"
                   required
@@ -176,7 +176,7 @@ export function ManagerMembersDirectoryGraduateAlumniModal({
               <label htmlFor="alumni-designation" className="block text-xs font-semibold text-secondary mb-1">
                 Designation / Rank / Outcome
               </label>
-              <input
+              <input maxLength={30}
                 id="alumni-designation"
                 type="text"
                 placeholder="e.g. AIR 142 (IAS), Officer (Scale I)"
@@ -212,7 +212,7 @@ export function ManagerMembersDirectoryGraduateAlumniModal({
               </label>
               <div className="relative">
                 <Clock size={14} className="absolute left-3 top-2.5 text-secondary" />
-                <input
+                <input maxLength={30}
                   id="alumni-duration"
                   type="text"
                   placeholder="e.g. 14 Months"
@@ -229,7 +229,7 @@ export function ManagerMembersDirectoryGraduateAlumniModal({
               </label>
               <div className="relative">
                 <Calendar size={14} className="absolute left-3 top-2.5 text-secondary" />
-                <input
+                <input maxLength={30}
                   id="alumni-leftDate"
                   type="date"
                   value={leftDate}

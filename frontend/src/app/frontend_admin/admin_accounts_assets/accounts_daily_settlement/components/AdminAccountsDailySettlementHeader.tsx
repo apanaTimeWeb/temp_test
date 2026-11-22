@@ -97,7 +97,7 @@ export function AdminAccountsDailySettlementHeader({
             </button>
           </div>
           {dateMode === 'custom' && (
-            <input
+            <input maxLength={100}
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}

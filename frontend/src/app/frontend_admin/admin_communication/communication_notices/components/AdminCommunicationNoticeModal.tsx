@@ -155,7 +155,7 @@ export function AdminCommunicationNoticeModal({
                 <label htmlFor="admin-communication-notice-title" className="uppercase tracking-[0.07em] text-sm font-semibold mb-1 block text-text-primary">
                   {t('NOTICE_TITLE_LABEL')} <span className="text-danger-text">*</span>
                 </label>
-                <input
+                <input maxLength={30}
                   id="admin-communication-notice-title"
                   className="min-h-11 border-border bg-input text-body text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 py-2 px-3 border rounded w-full"
                   placeholder={t('NOTICE_TITLE_PLACEHOLDER')}
@@ -217,7 +217,7 @@ export function AdminCommunicationNoticeModal({
                 <label htmlFor="admin-communication-notice-valid-till" className="uppercase tracking-[0.07em] text-sm font-semibold mb-1 block text-text-primary">
                   {t('NOTICE_VALID_TILL_LABEL')} <span className="text-danger-text">*</span>
                 </label>
-                <input
+                <input maxLength={30}
                   id="admin-communication-notice-valid-till"
                   type="date"
                   className="min-h-11 border-border bg-input text-body text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 py-2 px-3 border rounded w-full"

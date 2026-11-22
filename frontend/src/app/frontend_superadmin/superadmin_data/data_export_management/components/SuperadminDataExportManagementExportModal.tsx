@@ -258,7 +258,7 @@ export function SuperadminDataExportManagementExportModal({
             <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
               Audit Reason / Purpose *
             </label>
-            <input
+            <input maxLength={250}
               type="text"
               {...register('reason')}
               placeholder="e.g. Annual library accreditation compliance audit"

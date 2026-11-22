@@ -28,7 +28,7 @@ export function SuperadminCommunicationNoticesFilters({
         {/* Search Input */}
         <div className="relative flex-1 max-w-md">
           <Search className="w-4 h-4 text-indigo-400 absolute left-3.5 top-3" />
-          <input
+          <input maxLength={100}
             type="text"
             placeholder="Search by title, message, or author..."
             value={searchTerm}

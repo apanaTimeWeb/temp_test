@@ -109,7 +109,7 @@ export function ManagerAttendanceAbsenteeTimeHorizonBar({
           <div className="flex items-center gap-2 flex-wrap text-xs bg-surface-highlight/80 p-1.5 rounded-xl border border-border/80 w-full sm:w-auto">
             <label className="flex items-center gap-1.5 text-secondary">
               <span className="text-[11px] font-medium">From:</span>
-              <input
+              <input maxLength={100}
                 type="date"
                 value={customStartDate}
                 onChange={(e) => onCustomStartDateChange(e.target.value)}
@@ -118,7 +118,7 @@ export function ManagerAttendanceAbsenteeTimeHorizonBar({
             </label>
             <label className="flex items-center gap-1.5 text-secondary">
               <span className="text-[11px] font-medium">To:</span>
-              <input
+              <input maxLength={100}
                 type="date"
                 value={customEndDate}
                 onChange={(e) => onCustomEndDateChange(e.target.value)}

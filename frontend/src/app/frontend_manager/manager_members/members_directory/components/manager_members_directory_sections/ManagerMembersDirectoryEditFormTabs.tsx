@@ -34,7 +34,7 @@ export function ManagerMembersDirectoryEditFormTabs({ activeTab, formData, onCha
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div>
             <label htmlFor="edit-member-name" className="block text-xs font-semibold text-secondary mb-1">Student Full Name *</label>
-            <input id="edit-member-name" type="text" required aria-required="true" aria-describedby={errorId} className={INPUT_CLS} value={formData.name} onChange={(e) => onChange('name', e.target.value)} />
+            <input maxLength={30} id="edit-member-name" type="text" required aria-required="true" aria-describedby={errorId} className={INPUT_CLS} value={formData.name} onChange={(e) => onChange('name', e.target.value)} />
           </div>
           <div>
             <label htmlFor="edit-member-phone" className="block text-xs font-semibold text-secondary mb-1">Phone Number (10 Digits) *</label>
@@ -54,7 +54,7 @@ export function ManagerMembersDirectoryEditFormTabs({ activeTab, formData, onCha
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div>
             <label htmlFor="edit-member-email" className="block text-xs font-semibold text-secondary mb-1">Email Address</label>
-            <input id="edit-member-email" type="email" className={INPUT_CLS} value={formData.email || ''} onChange={(e) => onChange('email', e.target.value)} />
+            <input maxLength={30} id="edit-member-email" type="email" className={INPUT_CLS} value={formData.email || ''} onChange={(e) => onChange('email', e.target.value)} />
           </div>
           <div>
             <label htmlFor="edit-member-gender" className="block text-xs font-semibold text-secondary mb-1">Gender</label>
@@ -66,11 +66,11 @@ export function ManagerMembersDirectoryEditFormTabs({ activeTab, formData, onCha
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div>
             <label htmlFor="edit-member-dob" className="block text-xs font-semibold text-secondary mb-1">Date of Birth</label>
-            <input id="edit-member-dob" type="date" className={INPUT_CLS} value={formData.dob || ''} onChange={(e) => onChange('dob', e.target.value)} />
+            <input maxLength={30} id="edit-member-dob" type="date" className={INPUT_CLS} value={formData.dob || ''} onChange={(e) => onChange('dob', e.target.value)} />
           </div>
           <div>
             <label htmlFor="edit-member-address" className="block text-xs font-semibold text-secondary mb-1">Residential Address</label>
-            <input id="edit-member-address" type="text" className={INPUT_CLS} value={formData.address || ''} onChange={(e) => onChange('address', e.target.value)} />
+            <input maxLength={250} id="edit-member-address" type="text" className={INPUT_CLS} value={formData.address || ''} onChange={(e) => onChange('address', e.target.value)} />
           </div>
         </div>
       </div>
@@ -171,7 +171,7 @@ export function ManagerMembersDirectoryEditFormTabs({ activeTab, formData, onCha
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div>
             <label htmlFor="edit-member-guardian" className="block text-xs font-semibold text-secondary mb-1">Parent / Guardian Name</label>
-            <input id="edit-member-guardian" type="text" placeholder="Guardian Full Name" className={INPUT_CLS} value={formData.guardian || ''} onChange={(e) => onChange('guardian', e.target.value)} />
+            <input maxLength={30} id="edit-member-guardian" type="text" placeholder="Guardian Full Name" className={INPUT_CLS} value={formData.guardian || ''} onChange={(e) => onChange('guardian', e.target.value)} />
           </div>
           <div>
             <label htmlFor="edit-member-emergency" className="block text-xs font-semibold text-secondary mb-1">Guardian Emergency Contact (Optional)</label>
@@ -196,7 +196,7 @@ export function ManagerMembersDirectoryEditFormTabs({ activeTab, formData, onCha
           </div>
           <div>
             <label htmlFor="edit-member-department" className="block text-xs font-semibold text-secondary mb-1">Course / College / Department</label>
-            <input id="edit-member-department" type="text" placeholder="B.Tech / General Studies" className={INPUT_CLS} value={formData.department || ''} onChange={(e) => onChange('department', e.target.value)} />
+            <input maxLength={30} id="edit-member-department" type="text" placeholder="B.Tech / General Studies" className={INPUT_CLS} value={formData.department || ''} onChange={(e) => onChange('department', e.target.value)} />
           </div>
         </div>
       </div>
@@ -220,7 +220,7 @@ export function ManagerMembersDirectoryEditFormTabs({ activeTab, formData, onCha
         </div>
         <div>
           <label htmlFor="edit-member-expiry" className="block text-xs font-semibold text-secondary mb-1">Plan Expiry Date *</label>
-          <input id="edit-member-expiry" type="date" required aria-required="true" aria-describedby={errorId} className={INPUT_CLS} value={formData.expiryDate} onChange={(e) => onChange('expiryDate', e.target.value)} />
+          <input maxLength={30} id="edit-member-expiry" type="date" required aria-required="true" aria-describedby={errorId} className={INPUT_CLS} value={formData.expiryDate} onChange={(e) => onChange('expiryDate', e.target.value)} />
         </div>
       </div>
     </div>

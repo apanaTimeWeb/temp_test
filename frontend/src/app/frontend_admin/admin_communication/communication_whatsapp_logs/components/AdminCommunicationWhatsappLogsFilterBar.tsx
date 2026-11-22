@@ -203,7 +203,7 @@ export function AdminCommunicationWhatsappLogsFilterBar({
           <label htmlFor="admin-communication-wa-date-from" className="block uppercase tracking-wider text-[11px] mb-1 font-semibold text-slate-400">
             {t('WHATSAPP_FILTER_FROM')}
           </label>
-          <input
+          <input maxLength={30}
             id="admin-communication-wa-date-from"
             type="date"
             className="w-full rounded-xl border border-slate-700/80 bg-slate-950/70 py-2 px-3 text-xs text-white focus:border-emerald-500 focus:outline-none"
@@ -217,7 +217,7 @@ export function AdminCommunicationWhatsappLogsFilterBar({
           <label htmlFor="admin-communication-wa-date-to" className="block uppercase tracking-wider text-[11px] mb-1 font-semibold text-slate-400">
             {t('WHATSAPP_FILTER_TO')}
           </label>
-          <input
+          <input maxLength={30}
             id="admin-communication-wa-date-to"
             type="date"
             className="w-full rounded-xl border border-slate-700/80 bg-slate-950/70 py-2 px-3 text-xs text-white focus:border-emerald-500 focus:outline-none"
@@ -233,7 +233,7 @@ export function AdminCommunicationWhatsappLogsFilterBar({
           </label>
           <div className="relative">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
+            <input maxLength={30}
               id="admin-communication-wa-log-search"
               className="w-full rounded-xl border border-slate-700/80 bg-slate-950/70 pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
               placeholder={t('WHATSAPP_FILTER_SEARCH_PLACEHOLDER')}

@@ -52,7 +52,7 @@ export function ManagerMembersDirectoryFilterBar({
         <label htmlFor="manager-members-search" className="sr-only">
           {tManagerUi('search_by_name_or_id')}
         </label>
-        <input
+        <input maxLength={30}
           id="manager-members-search"
           type="search"
           className="mgr-input !pl-10 text-xs w-full"

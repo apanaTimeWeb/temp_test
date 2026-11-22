@@ -632,7 +632,7 @@ export default function ManagerAttendanceAbsenteeReportPage({
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
           {/* Guaranteed Non-Overlapping Search Box with Z-10 Icon and Clear Button */}
           <div className="relative flex-1 min-w-[240px] flex items-center">
-            <input
+            <input maxLength={100}
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}

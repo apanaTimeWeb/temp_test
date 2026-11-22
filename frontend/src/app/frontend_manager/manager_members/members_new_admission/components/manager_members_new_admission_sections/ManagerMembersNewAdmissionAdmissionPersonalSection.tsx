@@ -75,7 +75,7 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             </label>
             <div className="mgr-input-icon-wrap">
               <User size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input
+              <input maxLength={30}
                 id="admission-full-name"
                 {...register('fullName')}
                 className={`mgr-input mgr-input-with-icon${errors.fullName ? ' mgr-input-error' : ''}`}
@@ -94,8 +94,8 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             </label>
             <div className="mgr-input-icon-wrap">
               <Phone size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input
-                id="admission-phone" maxLength={15} inputMode="tel" {...register('phone', {
+              <input maxLength={30}
+                id="admission-phone" {...register('phone', {
                   onChange: (e) => {
                     const clean = e.target.value.replace(/\D/g, '').slice(0, 10);
                     e.target.value = clean;
@@ -130,7 +130,7 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             </label>
             <div className="mgr-input-icon-wrap">
               <Mail size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input
+              <input maxLength={30}
                 id="admission-email"
                 {...register('email')}
                 type="email"
@@ -170,7 +170,7 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             </label>
             <div className="mgr-input-icon-wrap">
               <Calendar size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input
+              <input maxLength={30}
                 id="admission-dob"
                 {...register('dob')}
                 type="date"
@@ -186,7 +186,7 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             <label className="mgr-label" htmlFor="admission-address">Permanent / Local Address</label>
             <div className="mgr-input-icon-wrap">
               <MapPin size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input id="admission-address" {...register('address')} type="text" className="mgr-input mgr-input-with-icon" placeholder="House/Flat No, Street, Landmark, City, Pincode" />
+              <input maxLength={250} id="admission-address" {...register('address')} type="text" className="mgr-input mgr-input-with-icon" placeholder="House/Flat No, Street, Landmark, City, Pincode" />
             </div>
           </div>
 
@@ -195,7 +195,7 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             <label className="mgr-label" htmlFor="admission-parent-name">Parent / Guardian Name</label>
             <div className="mgr-input-icon-wrap">
               <User size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input id="admission-parent-name" {...register('parentName')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Guardian Full Name (Father/Mother)" />
+              <input maxLength={30} id="admission-parent-name" {...register('parentName')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Guardian Full Name (Father/Mother)" />
             </div>
           </div>
 
@@ -206,8 +206,8 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             </label>
             <div className="mgr-input-icon-wrap">
               <ShieldAlert size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input
-                id="admission-parent-phone" maxLength={15} inputMode="tel" {...register('parentPhone', {
+              <input maxLength={30}
+                id="admission-parent-phone" {...register('parentPhone', {
                   onChange: (e) => {
                     const clean = e.target.value.replace(/\D/g, '').slice(0, 10);
                     e.target.value = clean;
@@ -239,7 +239,7 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             </label>
             <div className="mgr-input-icon-wrap">
               <GraduationCap size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input id="admission-college" {...register('college')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Delhi University / Self-Study" />
+              <input maxLength={30} id="admission-college" {...register('college')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Delhi University / Self-Study" />
             </div>
           </div>
 
@@ -267,7 +267,7 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             </label>
             <div className="mgr-input-icon-wrap">
               <Building size={18} strokeWidth={2} className="mgr-input-icon text-primary" />
-              <input
+              <input maxLength={30}
                 id="admission-branch"
                 type="text"
                 readOnly
@@ -301,7 +301,7 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             <label className="mgr-label" htmlFor="admission-medical-issues">Medical Issues / Allergies (Optional)</label>
             <div className="mgr-input-icon-wrap">
               <Activity size={18} strokeWidth={2} className="mgr-input-icon text-warning" />
-              <input id="admission-medical-issues" {...register('medicalIssues')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Asthma, Dust Allergy, None" />
+              <input maxLength={30} id="admission-medical-issues" {...register('medicalIssues')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Asthma, Dust Allergy, None" />
             </div>
           </div>
 
@@ -310,7 +310,7 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             <label className="mgr-label" htmlFor="admission-disability">Disability / Special Needs (Optional)</label>
             <div className="mgr-input-icon-wrap">
               <Accessibility size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input id="admission-disability" {...register('disability')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Wheelchair access, None" />
+              <input maxLength={30} id="admission-disability" {...register('disability')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Wheelchair access, None" />
             </div>
           </div>
 

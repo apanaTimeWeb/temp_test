@@ -35,7 +35,7 @@ export default function SuperadminLibrariesOnboardingSetupStep1Form({ onNext, in
         <label className="sa-wizard-field-label" htmlFor="superadmin-superadminsetupwizardstep1form-18-input">
           {tCopy("COPY.LIBRARY_NAME")} <span className="sa-wizard-field-required">*</span>
         </label>
-        <input id="superadmin-superadminsetupwizardstep1form-18-input" {...register('name')} aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'step1-name-error' : undefined} placeholder={tCopy("COPY.E_G_CITY_READING_HUB")} className={inputCls(!!errors.name)}  data-testid="superadmin-setup-wizard-setup-wizard-step1-form-superadmin-superadminsetupwizardstep1form-18-input-1"/>
+        <input maxLength={30} id="superadmin-superadminsetupwizardstep1form-18-input" {...register('name')} aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'step1-name-error' : undefined} placeholder={tCopy("COPY.E_G_CITY_READING_HUB")} className={inputCls(!!errors.name)}  data-testid="superadmin-setup-wizard-setup-wizard-step1-form-superadmin-superadminsetupwizardstep1form-18-input-1"/>
         {errors.name && <p id="step1-name-error" role="alert" className="sa-wizard-field-error">{translateValidationMessage(errors.name.message)}</p>}
       </div>
 
@@ -53,14 +53,14 @@ export default function SuperadminLibrariesOnboardingSetupStep1Form({ onNext, in
           <label className="sa-wizard-field-label" htmlFor="superadmin-superadminsetupwizardstep1form-36-input">
             {tCopy("COPY.CITY")} <span className="sa-wizard-field-required">*</span>
           </label>
-          <input id="superadmin-superadminsetupwizardstep1form-36-input" {...register('city')} aria-invalid={Boolean(errors.city)} aria-describedby={errors.city ? 'step1-city-error' : undefined} placeholder={tCopy("COPY.CITY")} className={inputCls(!!errors.city)}  data-testid="superadmin-setup-wizard-setup-wizard-step1-form-superadmin-superadminsetupwizardstep1form-36-input-3"/>
+          <input maxLength={30} id="superadmin-superadminsetupwizardstep1form-36-input" {...register('city')} aria-invalid={Boolean(errors.city)} aria-describedby={errors.city ? 'step1-city-error' : undefined} placeholder={tCopy("COPY.CITY")} className={inputCls(!!errors.city)}  data-testid="superadmin-setup-wizard-setup-wizard-step1-form-superadmin-superadminsetupwizardstep1form-36-input-3"/>
           {errors.city && <p id="step1-city-error" role="alert" className="sa-wizard-field-error">{translateValidationMessage(errors.city.message)}</p>}
         </div>
         <div className="space-y-1.5">
           <label className="sa-wizard-field-label" htmlFor="superadmin-superadminsetupwizardstep1form-43-input">
             {tCopy("COPY.GST_NUMBER")} <span className="sa-wizard-field-optional">{tCopy("COPY.OPTIONAL")}</span>
           </label>
-          <input id="superadmin-superadminsetupwizardstep1form-43-input" {...register('gst')} placeholder={tCopy("COPY.TEXT_22AAAAA0000A1Z5")} className={inputCls()}  data-testid="superadmin-setup-wizard-setup-wizard-step1-form-superadmin-superadminsetupwizardstep1form-43-input-4"/>
+          <input maxLength={30} id="superadmin-superadminsetupwizardstep1form-43-input" {...register('gst')} placeholder={tCopy("COPY.TEXT_22AAAAA0000A1Z5")} className={inputCls()}  data-testid="superadmin-setup-wizard-setup-wizard-step1-form-superadmin-superadminsetupwizardstep1form-43-input-4"/>
         </div>
       </div>
     </form>

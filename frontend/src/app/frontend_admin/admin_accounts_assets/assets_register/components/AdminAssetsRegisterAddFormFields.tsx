@@ -80,7 +80,7 @@ export function AdminAssetsRegisterAddFormFields({
           <label htmlFor="modal-asset-code" className="font-semibold text-foreground">
             {tModal('ASSET_CODE_LABEL')} *
           </label>
-          <input
+          <input maxLength={30}
             id="modal-asset-code"
             type="text"
             required
@@ -96,7 +96,7 @@ export function AdminAssetsRegisterAddFormFields({
           <label htmlFor="modal-asset-name" className="font-semibold text-foreground">
             {tModal('NAME_LABEL')} *
           </label>
-          <input
+          <input maxLength={30}
             id="modal-asset-name"
             type="text"
             required
@@ -150,7 +150,7 @@ export function AdminAssetsRegisterAddFormFields({
           <label htmlFor="modal-asset-loc" className="font-semibold text-foreground">
             {tModal('LOCATION_LABEL')} *
           </label>
-          <input
+          <input maxLength={30}
             id="modal-asset-loc"
             type="text"
             required
@@ -166,7 +166,7 @@ export function AdminAssetsRegisterAddFormFields({
           <label htmlFor="modal-asset-cost" className="font-semibold text-foreground">
             {tModal('PURCHASE_COST_LABEL')} *
           </label>
-          <input
+          <input maxLength={30}
             id="modal-asset-cost"
             type="number"
             step="any"
@@ -184,7 +184,7 @@ export function AdminAssetsRegisterAddFormFields({
           <label htmlFor="modal-asset-pdate" className="font-semibold text-foreground">
             {tModal('PURCHASE_DATE_LABEL')} *
           </label>
-          <input
+          <input maxLength={30}
             id="modal-asset-pdate"
             type="date"
             required
@@ -199,7 +199,7 @@ export function AdminAssetsRegisterAddFormFields({
           <label htmlFor="modal-asset-wdate" className="font-semibold text-foreground">
             {tModal('WARRANTY_EXPIRY_LABEL')} *
           </label>
-          <input
+          <input maxLength={30}
             id="modal-asset-wdate"
             type="date"
             required
@@ -214,7 +214,7 @@ export function AdminAssetsRegisterAddFormFields({
           <label htmlFor="modal-asset-vname" className="font-semibold text-foreground">
             {tModal('VENDOR_NAME_LABEL')} *
           </label>
-          <input
+          <input maxLength={30}
             id="modal-asset-vname"
             type="text"
             required
@@ -230,7 +230,7 @@ export function AdminAssetsRegisterAddFormFields({
           <label htmlFor="modal-asset-vcontact" className="font-semibold text-foreground">
             {tModal('VENDOR_CONTACT_LABEL')} *
           </label>
-          <input
+          <input maxLength={30}
             id="modal-asset-vcontact"
             type="text"
             required
@@ -265,7 +265,7 @@ export function AdminAssetsRegisterAddFormFields({
           <label htmlFor="modal-asset-serial" className="font-semibold text-foreground">
             {tModal('SERIAL_LABEL')}
           </label>
-          <input
+          <input maxLength={30}
             id="modal-asset-serial"
             type="text"
             value={serialNumber}

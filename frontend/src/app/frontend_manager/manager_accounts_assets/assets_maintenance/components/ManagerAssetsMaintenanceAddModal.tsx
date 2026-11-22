@@ -356,7 +356,7 @@ export function ManagerAssetsMaintenanceAddModal({
                 <Building2 size={13} className="text-primary" />
                 Assigned Vendor (Optional)
               </label>
-              <input
+              <input maxLength={30}
                 id="maintenance-vendor"
                 type="text"
                 placeholder="e.g. Daikin Care Services"
@@ -369,7 +369,7 @@ export function ManagerAssetsMaintenanceAddModal({
                 <IndianRupee size={13} className="text-emerald-500" />
                 Estimated Cost (₹) (Optional)
               </label>
-              <input
+              <input maxLength={30}
                 id="maintenance-cost"
                 type="number"
                 min="0"
@@ -445,7 +445,7 @@ export function ManagerAssetsMaintenanceAddModal({
               <Calendar size={13} className="text-primary" />
               Scheduled Date *
             </label>
-            <input
+            <input maxLength={30}
               id="maintenance-scheduledDate"
               type="date"
               className={`mgr-input w-full text-xs ${errors.scheduledDate ? 'border-danger' : ''}`}

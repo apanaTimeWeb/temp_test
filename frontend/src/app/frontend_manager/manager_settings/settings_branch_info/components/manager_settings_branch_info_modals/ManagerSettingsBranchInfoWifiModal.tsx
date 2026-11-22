@@ -446,7 +446,7 @@ export function ManagerSettingsBranchInfoWifiModal({
                       <label className="text-[10px] text-slate-300 font-semibold block mb-1">
                         Network Name (SSID) *
                       </label>
-                      <input
+                      <input maxLength={30}
                         type="text"
                         value={ssid}
                         onChange={(e) => setSsid(e.target.value)}
@@ -460,7 +460,7 @@ export function ManagerSettingsBranchInfoWifiModal({
                       <label className="text-[10px] text-slate-300 font-semibold block mb-1">
                         Wi-Fi Password
                       </label>
-                      <input
+                      <input maxLength={100}
                         type="text"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}

@@ -88,7 +88,7 @@ export default function AdminMembersDirectorySecondaryViews({ model }: AdminMemb
           <form id="admin-members-category-create" className="my-4 grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto_auto] p-4 rounded-xl border border-slate-800 bg-slate-900/60" onSubmit={submitCategory}>
             <div className="grid gap-1">
               <label htmlFor="admin-members-category-name" className="admin-label">{t('CATEGORY_NAME_LABEL')}</label>
-              <input id="admin-members-category-name" className="admin-input" value={categoryName} onChange={(event) => setCategoryName(event.target.value)} required maxLength={80} aria-invalid={Boolean(categoryError)} aria-describedby={categoryError ? 'admin-members-category-name-error' : undefined} />
+              <input maxLength={30} id="admin-members-category-name" className="admin-input" value={categoryName} onChange={(event) => setCategoryName(event.target.value)} required maxLength={80} aria-invalid={Boolean(categoryError)} aria-describedby={categoryError ? 'admin-members-category-name-error' : undefined} />
               {categoryError && <p id="admin-members-category-name-error" role="alert" className="text-sm text-danger-text">{categoryError}</p>}
             </div>
             <button type="submit" className="admin-btn-primary self-end min-h-11" aria-label={t('CATEGORY_SAVE')}>Save Category</button>
@@ -185,11 +185,11 @@ export default function AdminMembersDirectorySecondaryViews({ model }: AdminMemb
           <form id="admin-members-department-create" className="my-4 grid gap-3 sm:grid-cols-2 p-4 rounded-xl border border-slate-800 bg-slate-900/60" onSubmit={submitDepartment}>
             <div className="grid gap-1">
               <label htmlFor="admin-members-department-name" className="admin-label">{t('DEPARTMENT_NAME_LABEL')}</label>
-              <input id="admin-members-department-name" className="admin-input" value={departmentName} onChange={(event) => setDepartmentName(event.target.value)} required maxLength={100} />
+              <input maxLength={30} id="admin-members-department-name" className="admin-input" value={departmentName} onChange={(event) => setDepartmentName(event.target.value)} required maxLength={100} />
             </div>
             <div className="grid gap-1">
               <label htmlFor="admin-members-department-head" className="admin-label">{t('DEPARTMENT_HEAD_LABEL')}</label>
-              <input id="admin-members-department-head" className="admin-input" value={departmentHead} onChange={(event) => setDepartmentHead(event.target.value)} required maxLength={100} />
+              <input maxLength={30} id="admin-members-department-head" className="admin-input" value={departmentHead} onChange={(event) => setDepartmentHead(event.target.value)} required maxLength={100} />
             </div>
             {departmentError && <p role="alert" className="text-sm text-danger-text sm:col-span-2">{departmentError}</p>}
             <div className="flex flex-wrap gap-2 sm:col-span-2">

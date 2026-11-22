@@ -225,7 +225,7 @@ export default function PublicAuthPasswordRecoveryPage() {
                     <span aria-hidden="true" className="ml-1 text-indigo-400">*</span>
                     <span className="sr-only">{t('COMMON.required')}</span>
                   </label>
-                  <input
+                  <input maxLength={30}
                     id="auth-forgot-identity"
                     data-testid="auth-forgot-identity-input"
                     required

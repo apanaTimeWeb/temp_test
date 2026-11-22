@@ -38,7 +38,7 @@ export default function SuperadminLibrariesCreateStepOrganization({
           <label className="block text-xs font-semibold text-slate-300 mb-1">
             Library Name <span className="text-rose-400">*</span>
           </label>
-          <input
+          <input maxLength={100}
             type="text"
             required
             placeholder="e.g. Apex Knowledge Hub"
@@ -62,7 +62,7 @@ export default function SuperadminLibrariesCreateStepOrganization({
               <span>Auto-Generate</span>
             </button>
           </div>
-          <input
+          <input maxLength={30}
             type="text"
             required
             placeholder="e.g. APX-DEL-101"
@@ -88,7 +88,7 @@ export default function SuperadminLibrariesCreateStepOrganization({
           <label className="block text-xs font-semibold text-slate-300 mb-1">
             Legal / Business Registered Name <span className="text-rose-400">*</span>
           </label>
-          <input
+          <input maxLength={100}
             type="text"
             required
             placeholder="e.g. Apex Reading Spaces Pvt Ltd"
@@ -102,7 +102,7 @@ export default function SuperadminLibrariesCreateStepOrganization({
           <label className="block text-xs font-semibold text-slate-300 mb-1">
             Organization Owner Name <span className="text-rose-400">*</span>
           </label>
-          <input
+          <input maxLength={100}
             type="text"
             required
             placeholder="e.g. Rajesh Kumar Sharma"
@@ -135,7 +135,7 @@ export default function SuperadminLibrariesCreateStepOrganization({
             <Mail size={11} className="text-indigo-400" />
             <span>Official Email Address</span> <span className="text-rose-400">*</span>
           </label>
-          <input
+          <input maxLength={250}
             type="email"
             required
             placeholder="admin@apexlibrary.in"
@@ -166,7 +166,7 @@ export default function SuperadminLibrariesCreateStepOrganization({
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div>
           <label className="block text-xs font-semibold text-slate-300 mb-1">City</label>
-          <input
+          <input maxLength={100}
             type="text"
             required
             placeholder="New Delhi"
@@ -177,7 +177,7 @@ export default function SuperadminLibrariesCreateStepOrganization({
         </div>
         <div>
           <label className="block text-xs font-semibold text-slate-300 mb-1">State</label>
-          <input
+          <input maxLength={100}
             type="text"
             required
             placeholder="Delhi"
@@ -188,7 +188,7 @@ export default function SuperadminLibrariesCreateStepOrganization({
         </div>
         <div>
           <label className="block text-xs font-semibold text-slate-300 mb-1">PIN Code</label>
-          <input
+          <input maxLength={30}
             type="text"
             placeholder="110001"
             value={data.pincode}
@@ -198,7 +198,7 @@ export default function SuperadminLibrariesCreateStepOrganization({
         </div>
         <div>
           <label className="block text-xs font-semibold text-slate-300 mb-1">Country</label>
-          <input
+          <input maxLength={100}
             type="text"
             value={data.country}
             onChange={(e) => onChange({ ...data, country: e.target.value })}
@@ -214,7 +214,7 @@ export default function SuperadminLibrariesCreateStepOrganization({
             <Globe size={11} className="text-slate-400" />
             <span>Website (Optional)</span>
           </label>
-          <input
+          <input maxLength={100}
             type="url"
             placeholder="https://apexlibrary.in"
             value={data.website || ''}

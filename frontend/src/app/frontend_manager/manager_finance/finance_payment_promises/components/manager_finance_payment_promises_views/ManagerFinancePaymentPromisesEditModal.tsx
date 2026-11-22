@@ -218,7 +218,7 @@ export default function ManagerFinancePaymentPromisesEditModal({
               </label>
               <div className="relative">
                 <IndianRupee size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-                <input
+                <input maxLength={30}
                   id="edit-promised-amount"
                   name="promisedAmount"
                   type="number"
@@ -242,7 +242,7 @@ export default function ManagerFinancePaymentPromisesEditModal({
               <label htmlFor="edit-expected-date" className="text-xs font-semibold text-primary block mb-1">
                 Revised Expected Payment Date *
               </label>
-              <input
+              <input maxLength={30}
                 id="edit-expected-date"
                 name="expectedDate"
                 type="date"

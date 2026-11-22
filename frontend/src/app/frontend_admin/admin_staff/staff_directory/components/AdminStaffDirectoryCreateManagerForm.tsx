@@ -178,12 +178,12 @@ export default function AdminStaffDirectoryCreateManagerForm({ onCreate, canCrea
         <div className="admin-shared-card-grid">
           <div>
             <label htmlFor="admin-staff-users-full-name" className="admin-label">{t('FULL_NAME')}</label>
-            <input id="admin-staff-users-full-name" type="text" autoComplete="name" className="admin-input" required placeholder={t('FULL_NAME_PLACEHOLDER')} {...form.register('fullName')} aria-invalid={Boolean(errors.fullName)} aria-describedby={errors.fullName ? 'admin-staff-users-full-name-error' : undefined} />
+            <input maxLength={30} id="admin-staff-users-full-name" type="text" autoComplete="name" className="admin-input" required placeholder={t('FULL_NAME_PLACEHOLDER')} {...form.register('fullName')} aria-invalid={Boolean(errors.fullName)} aria-describedby={errors.fullName ? 'admin-staff-users-full-name-error' : undefined} />
             {errors.fullName && <p id="admin-staff-users-full-name-error" className="admin-error" role="alert">{errors.fullName.message}</p>}
           </div>
           <div>
             <label htmlFor="admin-staff-users-username" className="admin-label">{t('USERNAME')}</label>
-            <input id="admin-staff-users-username" type="text" autoComplete="username" className="admin-input" required placeholder={t('USERNAME_PLACEHOLDER')} {...form.register('username')} aria-invalid={Boolean(errors.username)} aria-describedby={errors.username ? 'admin-staff-users-username-error' : undefined} />
+            <input maxLength={30} id="admin-staff-users-username" type="text" autoComplete="username" className="admin-input" required placeholder={t('USERNAME_PLACEHOLDER')} {...form.register('username')} aria-invalid={Boolean(errors.username)} aria-describedby={errors.username ? 'admin-staff-users-username-error' : undefined} />
             {errors.username && <p id="admin-staff-users-username-error" className="admin-error" role="alert">{errors.username.message}</p>}
           </div>
         </div>
@@ -191,7 +191,7 @@ export default function AdminStaffDirectoryCreateManagerForm({ onCreate, canCrea
         <div className="admin-shared-card-grid">
           <div>
             <label htmlFor="admin-staff-users-email" className="admin-label">{t('EMAIL')}</label>
-            <input id="admin-staff-users-email" type="email" autoComplete="email" className="admin-input" required placeholder={t('EMAIL_PLACEHOLDER')} {...form.register('email')} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? 'admin-staff-users-email-error' : undefined} />
+            <input maxLength={30} id="admin-staff-users-email" type="email" autoComplete="email" className="admin-input" required placeholder={t('EMAIL_PLACEHOLDER')} {...form.register('email')} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? 'admin-staff-users-email-error' : undefined} />
             {errors.email && <p id="admin-staff-users-email-error" className="admin-error" role="alert">{errors.email.message}</p>}
           </div>
           <div>

@@ -74,7 +74,7 @@ Smart Library Management System - Confidential Admin Export`;
           </label>
           <div className="relative">
             <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sky-400 pointer-events-none" />
-            <input
+            <input maxLength={30}
               id="admin-members-document-search"
               type="search"
               className="admin-input pl-10"

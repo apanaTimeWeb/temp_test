@@ -158,7 +158,7 @@ export function SuperadminCommunicationNotificationCenterComposeModal() {
           {/* Subject / Title */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-slate-200">Notification Title / Email Subject</label>
-            <input
+            <input maxLength={100}
               type="text"
               {...register('title')}
               className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 shadow-inner"
@@ -185,7 +185,7 @@ export function SuperadminCommunicationNotificationCenterComposeModal() {
               Optional Test Transmission Override
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              <input
+              <input maxLength={100}
                 type="email"
                 {...register('testRecipient.email')}
                 placeholder="Test email (e.g. admin@test.com)"

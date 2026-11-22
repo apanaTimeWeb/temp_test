@@ -376,7 +376,7 @@ export default function SuperadminPlansPromotionsPageClient() {
                   <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="superadmin-billing-promo-code">
                     {tCopy("COPY.COUPON_CODE")}
                   </label>
-                  <input
+                  <input maxLength={30}
                     id="superadmin-billing-promo-code"
                     type="text"
                     autoComplete="off"
@@ -395,7 +395,7 @@ export default function SuperadminPlansPromotionsPageClient() {
                     <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="superadmin-billing-promo-discount">
                       {tCopy("COPY.DISCOUNT_FLAT")}
                     </label>
-                    <input
+                    <input maxLength={30}
                       id="superadmin-billing-promo-discount"
                       type="text"
                       placeholder={tCopy("COPY.E_G_20")}
@@ -411,7 +411,7 @@ export default function SuperadminPlansPromotionsPageClient() {
                     <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="superadmin-billing-promo-max-uses">
                       {tCopy("COPY.MAX_USES")}
                     </label>
-                    <input
+                    <input maxLength={30}
                       id="superadmin-billing-promo-max-uses"
                       type="number"
                       min={1}
@@ -430,7 +430,7 @@ export default function SuperadminPlansPromotionsPageClient() {
                   <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="superadmin-billing-promo-expiry">
                     {tCopy("COPY.EXPIRY_DATE")}
                   </label>
-                  <input
+                  <input maxLength={30}
                     id="superadmin-billing-promo-expiry"
                     type="date"
                     className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3.5 py-2 text-xs sm:text-sm text-slate-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"

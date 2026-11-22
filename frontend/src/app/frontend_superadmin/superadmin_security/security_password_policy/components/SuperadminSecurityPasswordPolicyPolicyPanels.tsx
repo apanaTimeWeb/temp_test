@@ -126,7 +126,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
             <label htmlFor="security-min-password-length" className="text-xs font-semibold text-slate-200">
               Minimum Length (Characters)
             </label>
-            <input
+            <input maxLength={30}
               id="security-min-password-length"
               type="number"
               step={1}
@@ -146,7 +146,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
             <label htmlFor="security-password-expiry-days" className="text-xs font-semibold text-slate-200">
               Password Expiration (Days)
             </label>
-            <input
+            <input maxLength={30}
               id="security-password-expiry-days"
               type="number"
               step={1}
@@ -167,7 +167,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
               <History size={13} className="text-indigo-400" />
               <span>Prevent History Reuse</span>
             </label>
-            <input
+            <input maxLength={30}
               id="security-password-history-count"
               type="number"
               step={1}

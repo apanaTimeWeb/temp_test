@@ -478,7 +478,7 @@ export function ManagerAccountsDailySettlementDenominationAndHandoverModal({
                     <label className="text-[11px] text-secondary block mb-1">
                       Handover Received By (Owner / Authority)
                     </label>
-                    <input
+                    <input maxLength={100}
                       type="text"
                       value={ownerName}
                       onChange={(e) => setOwnerName(e.target.value)}
@@ -490,7 +490,7 @@ export function ManagerAccountsDailySettlementDenominationAndHandoverModal({
                     <label className="text-[11px] text-secondary block mb-1">
                       Handed Over By (Manager / Cashier)
                     </label>
-                    <input
+                    <input maxLength={100}
                       type="text"
                       value={managerName}
                       onChange={(e) => setManagerName(e.target.value)}

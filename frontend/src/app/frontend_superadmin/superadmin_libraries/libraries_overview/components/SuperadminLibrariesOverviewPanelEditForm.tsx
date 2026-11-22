@@ -36,7 +36,7 @@ export default function SuperadminLibrariesOverviewPanelEditForm({
           <label htmlFor="superadmin-libraries-name" className="block text-xs font-semibold text-slate-300 mb-1.5">
             {t('COPY.LIBRARY_NAME')}
           </label>
-          <input
+          <input maxLength={30}
             id="superadmin-libraries-name"
             className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-indigo-500/30 bg-[#131d38] text-white placeholder:text-slate-500 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none transition-all"
             aria-invalid={Boolean(errors.name)}
@@ -59,7 +59,7 @@ export default function SuperadminLibrariesOverviewPanelEditForm({
           <label htmlFor="superadmin-libraries-owner" className="block text-xs font-semibold text-slate-300 mb-1.5">
             {t('COPY.OWNER_NAME')}
           </label>
-          <input
+          <input maxLength={30}
             id="superadmin-libraries-owner"
             className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-indigo-500/30 bg-[#131d38] text-white placeholder:text-slate-500 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none transition-all"
             aria-invalid={Boolean(errors.owner)}
@@ -80,7 +80,7 @@ export default function SuperadminLibrariesOverviewPanelEditForm({
           <label htmlFor="superadmin-libraries-email" className="block text-xs font-semibold text-slate-300 mb-1.5">
             {t('COPY.EMAIL')}
           </label>
-          <input
+          <input maxLength={30}
             id="superadmin-libraries-email"
             type="email"
             autoComplete="email"
@@ -123,7 +123,7 @@ export default function SuperadminLibrariesOverviewPanelEditForm({
         <label htmlFor="superadmin-libraries-gst" className="block text-xs font-semibold text-slate-300 mb-1.5">
           {t('COPY.GST_NUMBER_SAMPLE_IDENTIFIER')}
         </label>
-        <input
+        <input maxLength={30}
           id="superadmin-libraries-gst"
           className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-indigo-500/30 bg-[#131d38] text-white placeholder:text-slate-500 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none transition-all"
           aria-invalid={Boolean(errors.gstNumber)}
@@ -143,7 +143,7 @@ export default function SuperadminLibrariesOverviewPanelEditForm({
           <label htmlFor="superadmin-libraries-location" className="block text-xs font-semibold text-slate-300 mb-1.5">
             {t('COPY.LOCATION')}
           </label>
-          <input
+          <input maxLength={30}
             id="superadmin-libraries-location"
             className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-indigo-500/30 bg-[#131d38] text-white placeholder:text-slate-500 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none transition-all"
             aria-invalid={Boolean(errors.location)}

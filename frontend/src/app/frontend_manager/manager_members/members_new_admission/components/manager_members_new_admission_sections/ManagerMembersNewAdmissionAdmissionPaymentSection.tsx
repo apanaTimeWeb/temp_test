@@ -103,7 +103,7 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
             </div>
             <div className="mgr-input-icon-wrap">
               <IndianRupee size={18} strokeWidth={2} className="mgr-input-icon text-secondary" />
-              <input
+              <input maxLength={30}
                 id="admission-reg-fee"
                 {...register('registrationFee')}
                 type="number"
@@ -177,7 +177,7 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
               <div className="mgr-input-icon-wrap flex-1">
                 <IndianRupee size={18} strokeWidth={2} className="mgr-input-icon text-secondary" />
-                <input
+                <input maxLength={30}
                   id="admission-security-deposit"
                   {...register('securityDeposit')}
                   type="number"
@@ -206,7 +206,7 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
             </label>
             <div className="mgr-input-icon-wrap">
               <Tag size={18} strokeWidth={2} className="mgr-input-icon text-secondary" />
-              <input id="admission-coupon" {...register('couponCode')} type="text" className="mgr-input mgr-input-with-icon uppercase" placeholder="e.g. WELCOME100 / FESTIVE" />
+              <input maxLength={30} id="admission-coupon" {...register('couponCode')} type="text" className="mgr-input mgr-input-with-icon uppercase" placeholder="e.g. WELCOME100 / FESTIVE" />
             </div>
           </div>
 
@@ -217,7 +217,7 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
             </label>
             <div className="mgr-input-icon-wrap">
               <IndianRupee size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input
+              <input maxLength={30}
                 id="admission-discount"
                 {...register('manualDiscount')}
                 type="number"
@@ -357,7 +357,7 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
             </div>
             <div className="mgr-input-icon-wrap">
               <IndianRupee size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input
+              <input maxLength={30}
                 id="admission-amount"
                 {...register('amountPaid')}
                 type="number"
@@ -440,7 +440,7 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
                   </div>
                   <div className="mgr-input-icon-wrap">
                     <Calendar size={18} strokeWidth={2} className="mgr-input-icon text-secondary" />
-                    <input
+                    <input maxLength={30}
                       id="admission-promise-date"
                       {...register('promiseDueDate')}
                       type="date"
@@ -456,7 +456,7 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
                   </label>
                   <div className="mgr-input-icon-wrap">
                     <MessageSquare size={18} strokeWidth={2} className="mgr-input-icon text-secondary" />
-                    <input
+                    <input maxLength={250}
                       id="admission-promise-remarks"
                       {...register('promiseRemarks')}
                       type="text"
@@ -483,7 +483,7 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
             </label>
             <div className="mgr-input-icon-wrap">
               <MessageSquare size={18} strokeWidth={2} className="mgr-input-icon text-secondary" />
-              <input id="admission-remarks" {...register('remarks')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Student requested quiet corner near window, fee paid in full" />
+              <input maxLength={250} id="admission-remarks" {...register('remarks')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Student requested quiet corner near window, fee paid in full" />
             </div>
           </div>
         </div>

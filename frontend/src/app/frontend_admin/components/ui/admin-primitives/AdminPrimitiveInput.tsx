@@ -5,7 +5,7 @@ import { forwardRef } from 'react';
 
 
 const AdminSystemInput = forwardRef<HTMLInputElement, AdminSystemInputProps>(({ className, type, ...props }, ref) => (
-  <input type={type} ref={ref} className={joinAdminPrimitiveClasses('min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-60', className)} {...props} />
+  <input maxLength={100} type={type} ref={ref} className={joinAdminPrimitiveClasses('min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-60', className)} {...props} />
 ));
 AdminSystemInput.displayName = 'AdminSystemInput';
 export { AdminSystemInput,AdminSystemInput as Input };

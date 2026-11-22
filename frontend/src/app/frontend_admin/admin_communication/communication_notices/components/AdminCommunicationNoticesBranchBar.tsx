@@ -23,7 +23,7 @@ export function AdminCommunicationNoticesBranchBar({
       {/* Search Input Bar (Branch filtering is governed solely via the global Admin Shell Header) */}
       <div className="relative flex-1 min-w-[260px] max-w-lg">
         <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-tertiary pointer-events-none" />
-        <input
+        <input maxLength={100}
           type="text"
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}

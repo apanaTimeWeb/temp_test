@@ -254,7 +254,7 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
         <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-[280px]">
           <div className="relative flex-1 min-w-[200px] max-w-sm">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400" />
-            <input
+            <input maxLength={100}
               type="text"
               value={search}
               onChange={(e) => {

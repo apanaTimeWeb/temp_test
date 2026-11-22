@@ -109,7 +109,7 @@ export function ManagerLockersManagementToolbar({
       <div className="flex flex-wrap items-center gap-2.5">
         <div className="relative flex-1 sm:w-72 min-w-[220px]">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
-          <input
+          <input maxLength={30}
             type="search"
             placeholder="Search locker ID, student name, or Smart ID..."
             className="mgr-input !pl-10 !pr-9 text-xs w-full h-9 rounded-xl border border-border bg-surface text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary"

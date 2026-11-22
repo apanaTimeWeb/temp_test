@@ -88,7 +88,7 @@ export default function SuperadminBillingTransactionsLedger() {
       <div className="flex flex-wrap items-center gap-3 p-3.5 rounded-xl border border-indigo-500/20 bg-[#080b22]/90">
         <div className="relative flex-1 min-w-[220px]">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-          <input
+          <input maxLength={30}
             type="search"
             placeholder="Search by Transaction ID, Invoice ID, Tenant, UTR..."
             value={searchQuery}

@@ -478,7 +478,7 @@ export default function PublicAuthSignInPage() {
                   <span aria-hidden="true" className="ml-1 text-indigo-400">*</span>
                   <span className="sr-only">{t('COMMON.required')}</span>
                 </label>
-                <input
+                <input maxLength={30}
                   id="login-email"
                   data-testid="auth-login-email-input"
                   type="email"
@@ -516,7 +516,7 @@ export default function PublicAuthSignInPage() {
                   </Link>
                 </div>
                 <div className="relative">
-                  <input
+                  <input maxLength={30}
                     id="login-password"
                     data-testid="auth-login-password-input"
                     type={showPw ? 'text' : 'password'}

@@ -247,7 +247,7 @@ export default function PublicAuthRegistrationPage() {
                   <span className="sr-only">{t('COMMON.required')}</span>
                 </label>
                 <div className="relative">
-                  <input
+                  <input maxLength={30}
                     id="auth-signup-owner"
                     data-testid="auth-signup-owner-name-input"
                     required
@@ -275,7 +275,7 @@ export default function PublicAuthRegistrationPage() {
                   <span className="sr-only">{t('COMMON.required')}</span>
                 </label>
                 <div className="relative">
-                  <input
+                  <input maxLength={30}
                     id="auth-signup-library"
                     data-testid="auth-signup-library-name-input"
                     required
@@ -306,7 +306,7 @@ export default function PublicAuthRegistrationPage() {
                   <span className="sr-only">{t('COMMON.required')}</span>
                 </label>
                 <div className="relative">
-                  <input
+                  <input maxLength={30}
                     id="auth-signup-email"
                     data-testid="auth-signup-email-input"
                     required
@@ -368,7 +368,7 @@ export default function PublicAuthRegistrationPage() {
                   <span className="sr-only">{t('COMMON.required')}</span>
                 </label>
                 <div className="relative">
-                  <input
+                  <input maxLength={30}
                     id="auth-signup-password"
                     data-testid="auth-signup-password-input"
                     required
@@ -407,7 +407,7 @@ export default function PublicAuthRegistrationPage() {
                   <span className="sr-only">{t('COMMON.required')}</span>
                 </label>
                 <div className="relative">
-                  <input
+                  <input maxLength={30}
                     id="auth-signup-confirm"
                     data-testid="auth-signup-confirm-password-input"
                     required

@@ -42,7 +42,7 @@ export function SuperadminSubscriptionsActiveSubscribersFilterToolbar({
       {/* Search Input */}
       <div className="relative flex-1 min-w-[200px] w-full sm:w-auto">
         <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
-        <input
+        <input maxLength={100}
           type="search"
           placeholder="Search by tenant, plan, contact..."
           value={searchQuery}

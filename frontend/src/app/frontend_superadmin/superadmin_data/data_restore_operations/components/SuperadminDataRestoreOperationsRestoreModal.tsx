@@ -153,7 +153,7 @@ export function SuperadminDataRestoreOperationsRestoreModal({
               <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Type <span className="font-mono font-bold text-rose-600 dark:text-rose-400">{RESTORE_TYPE_CONFIRM_KEY}</span> to confirm *
               </label>
-              <input
+              <input maxLength={30}
                 type="text"
                 {...register('confirmationText')}
                 placeholder={RESTORE_TYPE_CONFIRM_KEY}

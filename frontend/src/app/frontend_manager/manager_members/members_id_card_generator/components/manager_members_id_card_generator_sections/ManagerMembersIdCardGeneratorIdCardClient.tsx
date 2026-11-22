@@ -207,7 +207,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                 <div className="mgr-input-icon-wrap flex-1">
                   <Search size={16} strokeWidth={2} className="mgr-input-icon" />
                   <label className="sr-only" htmlFor="manager-id-card-search">{tManagerUi('search_students')}</label>
-                  <input id="manager-id-card-search" className="mgr-input mgr-input-with-icon text-xs py-1.5" placeholder={tManagerUi('search_name_smart_id_phone')} value={search} onChange={(event) => setSearch(event.target.value)} />
+                  <input maxLength={30} id="manager-id-card-search" className="mgr-input mgr-input-with-icon text-xs py-1.5" placeholder={tManagerUi('search_name_smart_id_phone')} value={search} onChange={(event) => setSearch(event.target.value)} />
                 </div>
               </div>
 

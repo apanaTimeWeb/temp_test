@@ -44,7 +44,7 @@ export default function SuperadminUsersDirectorySemanticTable<T extends object>(
         </span>
         <div className="relative w-full sm:w-72">
           <Search size={15} className="text-indigo-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-          <input
+          <input maxLength={100}
             type="search"
             value={filterText}
             onChange={(event) => { setFilterText(event.currentTarget.value); setPage(0); }}

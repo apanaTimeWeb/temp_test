@@ -76,7 +76,7 @@ export const SuperadminIntegrationsOverviewApiKeyGenerateModal: React.FC<
             <label className="block font-medium text-slate-300 mb-1">
               Key Name / Client Identifier
             </label>
-            <input
+            <input maxLength={100}
               type="text"
               required
               value={keyName}
@@ -120,7 +120,7 @@ export const SuperadminIntegrationsOverviewApiKeyGenerateModal: React.FC<
               Restricted IP Allowlist (CIDR or IPv4)
             </label>
             <div className="flex gap-2 mb-2">
-              <input
+              <input maxLength={100}
                 type="text"
                 value={newIpInput}
                 onChange={(e) => setNewIpInput(e.target.value)}

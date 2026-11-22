@@ -149,7 +149,7 @@ export function AdminEnquiriesAddPage() {
                 <label htmlFor="enq-name" className="text-body font-medium text-text-primary after:ml-0.5 after:text-danger-text after:content-['*']">
                   {t('FULL_NAME')}
                 </label>
-                <input
+                <input maxLength={30}
                   id="enq-name"
                   type="text"
                   placeholder={t('NAME_PLACEHOLDER')}

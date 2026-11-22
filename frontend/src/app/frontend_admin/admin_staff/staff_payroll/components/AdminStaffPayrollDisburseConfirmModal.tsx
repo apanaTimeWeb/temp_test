@@ -111,7 +111,7 @@ export function AdminStaffPayrollDisburseConfirmModal({
             <label className="block text-xs font-semibold text-text-secondary">
               {t('FIELD_TXN_REF')}
             </label>
-            <input
+            <input maxLength={100}
               type="text"
               required
               value={transactionRef}

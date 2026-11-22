@@ -209,7 +209,7 @@ export function SearchableCombobox({
           <div className="p-2 border-b border-border bg-card flex items-center gap-2">
             <div className="relative flex items-center flex-1 min-w-0">
               <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
-              <input
+              <input maxLength={100}
                 ref={searchInputRef}
                 type="text"
                 value={search}

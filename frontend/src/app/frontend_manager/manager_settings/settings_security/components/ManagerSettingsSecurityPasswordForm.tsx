@@ -135,7 +135,7 @@ export function ManagerSettingsSecurityPasswordForm() {
             Current Password
           </label>
           <div className="relative">
-            <input
+            <input maxLength={30}
               id="currentPassword"
               name="currentPassword"
               type={showCurrent ? 'text' : 'password'}
@@ -166,7 +166,7 @@ export function ManagerSettingsSecurityPasswordForm() {
             New Password
           </label>
           <div className="relative">
-            <input
+            <input maxLength={30}
               id="newPassword"
               name="newPassword"
               type={showNew ? 'text' : 'password'}
@@ -251,7 +251,7 @@ export function ManagerSettingsSecurityPasswordForm() {
             Confirm New Password
           </label>
           <div className="relative">
-            <input
+            <input maxLength={30}
               id="confirmPassword"
               name="confirmPassword"
               type={showConfirm ? 'text' : 'password'}

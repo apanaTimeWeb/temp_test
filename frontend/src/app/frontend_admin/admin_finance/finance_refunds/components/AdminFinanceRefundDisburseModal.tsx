@@ -183,7 +183,7 @@ export function AdminFinanceRefundDisburseModal({
                 </label>
                 <span className="text-[11px] text-text-muted font-mono">12-Digit Banking Ref</span>
               </div>
-              <input
+              <input maxLength={30}
                 id="refund-utr"
                 type="text"
                 required
@@ -204,7 +204,7 @@ export function AdminFinanceRefundDisburseModal({
               <label htmlFor="refund-beneficiary" className="text-xs font-bold uppercase tracking-wider text-text-secondary block">
                 {channel === 'UPI' ? 'Beneficiary UPI ID' : channel === 'BANK' ? 'Account Number / IFSC' : 'Handed Over To'}
               </label>
-              <input
+              <input maxLength={30}
                 id="refund-beneficiary"
                 type="text"
                 value={beneficiary}
@@ -218,7 +218,7 @@ export function AdminFinanceRefundDisburseModal({
               <label htmlFor="refund-receipt-no" className="text-xs font-bold uppercase tracking-wider text-text-secondary block">
                 Official Receipt Number
               </label>
-              <input
+              <input maxLength={30}
                 id="refund-receipt-no"
                 type="text"
                 value={receiptNo}
@@ -233,7 +233,7 @@ export function AdminFinanceRefundDisburseModal({
             <label htmlFor="refund-notes" className="text-xs font-bold uppercase tracking-wider text-text-secondary block">
               Accounting Remarks
             </label>
-            <input
+            <input maxLength={250}
               id="refund-notes"
               type="text"
               value={notes}

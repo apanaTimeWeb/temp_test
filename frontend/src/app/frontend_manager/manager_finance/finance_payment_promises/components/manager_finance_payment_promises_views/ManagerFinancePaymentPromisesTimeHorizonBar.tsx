@@ -73,7 +73,7 @@ export default function ManagerFinancePaymentPromisesTimeHorizonBar({
             <div className="flex items-center gap-2 flex-wrap text-xs bg-muted p-1.5 rounded-lg border border-border">
               <label htmlFor="promises-custom-from" className="flex items-center gap-1 text-secondary">
                 <span>From:</span>
-                <input
+                <input maxLength={30}
                   id="promises-custom-from"
                   name="customStartDate"
                   type="date"
@@ -84,7 +84,7 @@ export default function ManagerFinancePaymentPromisesTimeHorizonBar({
               </label>
               <label htmlFor="promises-custom-to" className="flex items-center gap-1 text-secondary">
                 <span>To:</span>
-                <input
+                <input maxLength={30}
                   id="promises-custom-to"
                   name="customEndDate"
                   type="date"

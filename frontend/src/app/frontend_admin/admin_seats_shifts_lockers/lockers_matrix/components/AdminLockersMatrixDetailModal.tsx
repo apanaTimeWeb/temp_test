@@ -166,7 +166,7 @@ export function AdminLockersMatrixDetailModal({
                 <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">
                   Student Full Name <span className="text-rose-400">*</span>
                 </label>
-                <input
+                <input maxLength={100}
                   type="text"
                   required
                   placeholder="e.g. Aarav Sharma"
@@ -181,7 +181,7 @@ export function AdminLockersMatrixDetailModal({
                   <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">
                     Smart Card / Student ID
                   </label>
-                  <input
+                  <input maxLength={30}
                     type="text"
                     value={smartId}
                     onChange={(e) => setSmartId(e.target.value)}
@@ -238,7 +238,7 @@ export function AdminLockersMatrixDetailModal({
                 <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">
                   Validity Expiry Date
                 </label>
-                <input
+                <input maxLength={100}
                   type="date"
                   value={expiryDate}
                   onChange={(e) => setExpiryDate(e.target.value)}

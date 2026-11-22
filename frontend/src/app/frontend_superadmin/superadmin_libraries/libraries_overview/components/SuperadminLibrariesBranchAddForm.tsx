@@ -71,7 +71,7 @@ export default function SuperadminLibrariesBranchAddForm({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label className="block text-[11px] font-semibold text-slate-300 mb-1">Branch Name *</label>
-          <input
+          <input maxLength={100}
             type="text"
             required
             placeholder="e.g. Gomti Nagar Branch"
@@ -82,7 +82,7 @@ export default function SuperadminLibrariesBranchAddForm({
         </div>
         <div>
           <label className="block text-[11px] font-semibold text-slate-300 mb-1">Branch Code / Tag</label>
-          <input
+          <input maxLength={30}
             type="text"
             placeholder="e.g. GN-02"
             value={branchCode}
@@ -92,7 +92,7 @@ export default function SuperadminLibrariesBranchAddForm({
         </div>
         <div>
           <label className="block text-[11px] font-semibold text-slate-300 mb-1">City</label>
-          <input
+          <input maxLength={100}
             type="text"
             placeholder="e.g. Lucknow"
             value={city}
@@ -102,7 +102,7 @@ export default function SuperadminLibrariesBranchAddForm({
         </div>
         <div>
           <label className="block text-[11px] font-semibold text-slate-300 mb-1">Street Address</label>
-          <input
+          <input maxLength={250}
             type="text"
             placeholder="e.g. Sector 4, Main Market"
             value={address}
@@ -134,7 +134,7 @@ export default function SuperadminLibrariesBranchAddForm({
         </div>
         <div>
           <label className="block text-[11px] font-semibold text-slate-300 mb-1">Assigned Branch Manager</label>
-          <input
+          <input maxLength={100}
             type="text"
             placeholder="e.g. Priya Sharma"
             value={managerName}
@@ -144,7 +144,7 @@ export default function SuperadminLibrariesBranchAddForm({
         </div>
         <div>
           <label className="block text-[11px] font-semibold text-slate-300 mb-1">Manager Phone</label>
-          <input
+          <input maxLength={100}
             type="text"
             placeholder="e.g. +91 98765 43210"
             value={managerPhone}

@@ -183,7 +183,7 @@ export function AdminShiftsGapOverstayAuditTable() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500 pointer-events-none" />
-          <input
+          <input maxLength={100}
             type="text"
             placeholder="Search shift, branch, or monetization strategy..."
             value={searchQuery}

@@ -333,7 +333,7 @@ export function ManagerSeatsHistoryClient() {
                 size={15}
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none"
               />
-              <input
+              <input maxLength={30}
                 aria-label={tManagerUi('search_by_student_name_or_id')}
                 data-testid="manager-seats-history-search-input"
                 type="search"
@@ -441,7 +441,7 @@ export function ManagerSeatsHistoryClient() {
             {/* Date From */}
             <div className="flex items-center gap-1.5 px-2.5 h-9 rounded-xl border border-border bg-surface text-xs shrink-0">
               <span className="text-[10px] font-bold uppercase tracking-wider text-secondary">From:</span>
-              <input
+              <input maxLength={100}
                 aria-label={tManagerUi('date_from')}
                 type="date"
                 className="bg-transparent text-primary text-xs focus:outline-none cursor-pointer"
@@ -453,7 +453,7 @@ export function ManagerSeatsHistoryClient() {
             {/* Date To */}
             <div className="flex items-center gap-1.5 px-2.5 h-9 rounded-xl border border-border bg-surface text-xs shrink-0">
               <span className="text-[10px] font-bold uppercase tracking-wider text-secondary">To:</span>
-              <input
+              <input maxLength={100}
                 aria-label={tManagerUi('date_to')}
                 type="date"
                 className="bg-transparent text-primary text-xs focus:outline-none cursor-pointer"

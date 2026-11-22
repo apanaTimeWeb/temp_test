@@ -51,7 +51,7 @@ export const SuperadminSettingsGeneralSecurityPoliciesCard: FC = () => {
             <label htmlFor="settings-min-password-length" className="text-xs font-semibold text-slate-300">
               Minimum Password Length (Characters)
             </label>
-            <input
+            <input maxLength={30}
               id="settings-min-password-length"
               type="number"
               min={8}

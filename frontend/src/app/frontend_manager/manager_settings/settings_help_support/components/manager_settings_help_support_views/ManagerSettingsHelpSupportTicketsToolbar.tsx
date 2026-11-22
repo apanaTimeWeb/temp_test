@@ -97,7 +97,7 @@ export function ManagerSettingsHelpSupportTicketsToolbar({
             size={15}
             className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none z-10"
           />
-          <input
+          <input maxLength={30}
             type="text"
             placeholder="Search ticket ID, subject..."
             className="mgr-input !pl-10 !py-2 text-xs w-full"

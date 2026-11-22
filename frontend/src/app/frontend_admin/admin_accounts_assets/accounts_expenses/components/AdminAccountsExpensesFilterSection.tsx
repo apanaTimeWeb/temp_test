@@ -119,7 +119,7 @@ export function AdminAccountsExpensesFilterSection({
                   Search Expenses
                 </label>
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                <input
+                <input maxLength={250}
                   id="admin-expense-search"
                   type="text"
                   placeholder="Search expense description, payee..."
@@ -170,7 +170,7 @@ export function AdminAccountsExpensesFilterSection({
                   </select>
                   {timeRange === 'custom' && (
                     <div className="flex items-center gap-1">
-                      <input
+                      <input maxLength={100}
                         type="date"
                         aria-label="Start date filter"
                         value={customStartDate}
@@ -178,7 +178,7 @@ export function AdminAccountsExpensesFilterSection({
                         className="min-h-11 rounded-md border border-border bg-input px-2.5 py-1 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                       />
                       <span className="text-xs text-muted-foreground">to</span>
-                      <input
+                      <input maxLength={100}
                         type="date"
                         aria-label="End date filter"
                         value={customEndDate}

@@ -152,7 +152,7 @@ export function ManagerSeatsMatrixModalActionsTab({
                 <label htmlFor="quick-student-name" className="text-xs font-semibold text-secondary uppercase block mb-1">
                   New / Walk-in Student Full Name
                 </label>
-                <input
+                <input maxLength={30}
                   id="quick-student-name"
                   type="text"
                   required

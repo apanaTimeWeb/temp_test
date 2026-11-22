@@ -343,7 +343,7 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
                 </label>
                 <span className="text-xs text-rose-400 font-bold">*</span>
               </div>
-              <input
+              <input maxLength={30}
                 id="admin-coupon-code"
                 {...codeRegistration}
                 ref={codeRegistration.ref}
@@ -444,7 +444,7 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
                   <span className="absolute left-3 top-2.5 text-xs font-bold text-slate-400">
                     {form.watch('type') === 'Percent' ? '%' : '₹'}
                   </span>
-                  <input
+                  <input maxLength={30}
                     id="admin-coupon-discount"
                     type="number"
                     min="0.01"
@@ -472,7 +472,7 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
                   </label>
                   <span className="text-xs text-rose-400 font-bold">*</span>
                 </div>
-                <input
+                <input maxLength={30}
                   id="admin-coupon-max-uses"
                   type="number"
                   min="1"
@@ -496,7 +496,7 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
                   </label>
                   <span className="text-xs text-rose-400 font-bold">*</span>
                 </div>
-                <input
+                <input maxLength={30}
                   id="admin-coupon-expiry"
                   type="date"
                   {...form.register('expiry')}

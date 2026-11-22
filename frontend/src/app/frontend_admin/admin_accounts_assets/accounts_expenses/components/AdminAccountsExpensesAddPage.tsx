@@ -114,7 +114,7 @@ export default function AdminAccountsExpensesAddPage({ onSaveExpense, onCancel }
         </div>
         <div>
           <label className="block text-sm font-medium text-text-secondary" htmlFor="expense-date">{t('DATE')}</label>
-          <input id="expense-date" type="date" required aria-invalid={Boolean(form.formState.errors.date)} aria-describedby={form.formState.errors.date ? 'expense-date-error' : undefined} className="mt-1 min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('date')} />
+          <input maxLength={30} id="expense-date" type="date" required aria-invalid={Boolean(form.formState.errors.date)} aria-describedby={form.formState.errors.date ? 'expense-date-error' : undefined} className="mt-1 min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('date')} />
           {form.formState.errors.date && <p id="expense-date-error" role="alert" className="mt-1 text-caption text-danger-text">{form.formState.errors.date.message}</p>}
         </div>
         <div>
@@ -126,16 +126,16 @@ export default function AdminAccountsExpensesAddPage({ onSaveExpense, onCancel }
         </div>
         <div>
           <label className="block text-sm font-medium text-text-secondary" htmlFor="expense-description">{t('DESCRIPTION')}</label>
-          <input id="expense-description" placeholder="e.g. Monthly electricity bill, AC Filter Service" required aria-invalid={Boolean(form.formState.errors.description)} aria-describedby={form.formState.errors.description ? 'expense-description-error' : undefined} className="mt-1 min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('description')} />
+          <input maxLength={250} id="expense-description" placeholder="e.g. Monthly electricity bill, AC Filter Service" required aria-invalid={Boolean(form.formState.errors.description)} aria-describedby={form.formState.errors.description ? 'expense-description-error' : undefined} className="mt-1 min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('description')} />
           {form.formState.errors.description && <p id="expense-description-error" role="alert" className="mt-1 text-caption text-danger-text">{form.formState.errors.description.message}</p>}
         </div>
         <div>
           <label className="block text-sm font-medium text-text-secondary" htmlFor="expense-vendor">{t('VENDOR')}</label>
-          <input id="expense-vendor" placeholder="e.g. BSES Rajdhani, Local Store, Urban Company" className="mt-1 min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('vendorName')} />
+          <input maxLength={30} id="expense-vendor" placeholder="e.g. BSES Rajdhani, Local Store, Urban Company" className="mt-1 min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('vendorName')} />
         </div>
         <div>
           <label className="block text-sm font-medium text-text-secondary" htmlFor="expense-amount">{t('AMOUNT_INR')}</label>
-          <input id="expense-amount" type="number" min="0.01" step="0.01" required aria-invalid={Boolean(form.formState.errors.amount)} aria-describedby={form.formState.errors.amount ? 'expense-amount-error' : undefined} className="mt-1 min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('amount', { valueAsNumber: true })} />
+          <input maxLength={30} id="expense-amount" type="number" min="0.01" step="0.01" required aria-invalid={Boolean(form.formState.errors.amount)} aria-describedby={form.formState.errors.amount ? 'expense-amount-error' : undefined} className="mt-1 min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('amount', { valueAsNumber: true })} />
           {form.formState.errors.amount && <p id="expense-amount-error" role="alert" className="mt-1 text-caption text-danger-text">{form.formState.errors.amount.message}</p>}
           {(form.watch('amount') ?? 0) > 2000 && (
             <div className="mt-2.5 flex items-start gap-2.5 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-300">
@@ -151,7 +151,7 @@ export default function AdminAccountsExpensesAddPage({ onSaveExpense, onCancel }
         </div>
         <div>
           <label className="block text-sm font-medium text-text-secondary" htmlFor="expense-paid-by">{t('PAID_BY')}</label>
-          <input id="expense-paid-by" placeholder="e.g. Rahul Sharma (Manager), Satyam Gupta (Admin)" required aria-invalid={Boolean(form.formState.errors.paidBy)} aria-describedby={form.formState.errors.paidBy ? 'expense-paid-by-error' : undefined} className="mt-1 min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('paidBy')} />
+          <input maxLength={30} id="expense-paid-by" placeholder="e.g. Rahul Sharma (Manager), Satyam Gupta (Admin)" required aria-invalid={Boolean(form.formState.errors.paidBy)} aria-describedby={form.formState.errors.paidBy ? 'expense-paid-by-error' : undefined} className="mt-1 min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('paidBy')} />
           {form.formState.errors.paidBy && <p id="expense-paid-by-error" role="alert" className="mt-1 text-caption text-danger-text">{form.formState.errors.paidBy.message}</p>}
         </div>
         <div>

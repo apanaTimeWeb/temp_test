@@ -54,7 +54,7 @@ export default function PublicAuthPasswordResetOtpInput({ value, disabled, inval
       <p id="auth-reset-otp-label" className="text-sm font-medium text-secondary">{label}<span aria-hidden="true" className="ml-1">*</span><span className="sr-only">{requiredLabel}</span></p>
       <div className="flex justify-center gap-1 sm:gap-3" role="group" aria-labelledby="auth-reset-otp-label" onPaste={onOtpPaste} data-testid="auth-reset-otp-group">
         {digits.map((digit, index) => (
-          <input
+          <input maxLength={100}
             key={`auth-reset-otp-${index + 1}`}
             ref={(element) => { refs.current[index] = element; }}
             id={`auth-reset-otp-${index + 1}`}

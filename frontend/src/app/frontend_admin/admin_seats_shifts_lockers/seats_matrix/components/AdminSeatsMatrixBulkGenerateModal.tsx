@@ -202,7 +202,7 @@ export default function AdminSeatsMatrixBulkGenerateModal({
               <label className="text-xs font-semibold text-slate-300">
                 Seat Prefix (Optional)
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 placeholder="e.g. S-, A-, CAB-"
                 value={prefix}

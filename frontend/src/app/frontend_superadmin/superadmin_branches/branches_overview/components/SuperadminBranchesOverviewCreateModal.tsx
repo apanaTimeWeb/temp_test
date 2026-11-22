@@ -207,7 +207,7 @@ export default function SuperadminBranchesOverviewCreateModal({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="p-3 rounded-xl border border-indigo-500/20 bg-card/40">
               <label className="block text-xs font-semibold text-slate-300 mb-1">Branch Name *</label>
-              <input
+              <input maxLength={100}
                 type="text"
                 required
                 placeholder="e.g. Connaught Place Premier Hub"
@@ -218,7 +218,7 @@ export default function SuperadminBranchesOverviewCreateModal({
             </div>
             <div className="p-3 rounded-xl border border-indigo-500/20 bg-card/40">
               <label className="block text-xs font-semibold text-slate-300 mb-1">Unique Branch Code *</label>
-              <input
+              <input maxLength={30}
                 type="text"
                 required
                 placeholder="e.g. BR-DEL-01"
@@ -237,7 +237,7 @@ export default function SuperadminBranchesOverviewCreateModal({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">City *</label>
-                <input
+                <input maxLength={100}
                   type="text"
                   required
                   placeholder="e.g. New Delhi"
@@ -248,7 +248,7 @@ export default function SuperadminBranchesOverviewCreateModal({
               </div>
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">State</label>
-                <input
+                <input maxLength={100}
                   type="text"
                   placeholder="e.g. Delhi NCR"
                   value={state}
@@ -258,7 +258,7 @@ export default function SuperadminBranchesOverviewCreateModal({
               </div>
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">PIN Code</label>
-                <input
+                <input maxLength={30}
                   type="text"
                   placeholder="e.g. 110001"
                   value={pinCode}
@@ -269,7 +269,7 @@ export default function SuperadminBranchesOverviewCreateModal({
             </div>
             <div>
               <label className="block text-[11px] font-semibold text-slate-400 mb-1">Premises / Street Address</label>
-              <input
+              <input maxLength={250}
                 type="text"
                 placeholder="Plot/Floor, Road or Landmark..."
                 value={address}
@@ -290,7 +290,7 @@ export default function SuperadminBranchesOverviewCreateModal({
               </div>
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">Branch Help Desk Email</label>
-                <input
+                <input maxLength={254}
                   type="email"
                   placeholder="branch@library.org"
                   value={email}
@@ -310,7 +310,7 @@ export default function SuperadminBranchesOverviewCreateModal({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">Manager Name *</label>
-                <input
+                <input maxLength={100}
                   type="text"
                   required
                   placeholder="e.g. Rohan Sharma"
@@ -321,7 +321,7 @@ export default function SuperadminBranchesOverviewCreateModal({
               </div>
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">Manager Email</label>
-                <input
+                <input maxLength={254}
                   type="email"
                   placeholder="rohan@library.org"
                   value={managerEmail}
@@ -362,7 +362,7 @@ export default function SuperadminBranchesOverviewCreateModal({
                 <Clock size={13} className="text-indigo-400" />
                 <span>Working Hours</span>
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 value={workingHours}
                 onChange={(e) => setWorkingHours(e.target.value)}
@@ -374,7 +374,7 @@ export default function SuperadminBranchesOverviewCreateModal({
                 <Calendar size={13} className="text-amber-400" />
                 <span>Weekly Holidays</span>
               </label>
-              <input
+              <input maxLength={30}
                 type="text"
                 value={weeklyHolidays}
                 onChange={(e) => setWeeklyHolidays(e.target.value)}

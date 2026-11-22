@@ -179,7 +179,7 @@ export default function AdminBlacklistRecordsTable({ records, columns, onRowClic
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="relative flex-1 min-w-[240px] max-w-md">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400" />
-          <input
+          <input maxLength={100}
             type="text"
             value={search}
             onChange={(e) => {

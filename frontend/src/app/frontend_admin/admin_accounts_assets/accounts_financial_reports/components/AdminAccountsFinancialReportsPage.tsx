@@ -177,7 +177,7 @@ export function AdminAccountsFinancialReportsPage() {
           </div>
           <div className="flex items-center gap-2">
             <label htmlFor="custom-report-start" className="sr-only">Start Date</label>
-            <input
+            <input maxLength={30}
               id="custom-report-start"
               type="date"
               aria-label="Report start date"
@@ -187,7 +187,7 @@ export function AdminAccountsFinancialReportsPage() {
             />
             <span className="text-xs text-muted-foreground">to</span>
             <label htmlFor="custom-report-end" className="sr-only">End Date</label>
-            <input
+            <input maxLength={30}
               id="custom-report-end"
               type="date"
               aria-label="Report end date"

@@ -85,7 +85,7 @@ export function SuperadminCommunicationNoticesModals({
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="notice-title">
                   {tCopy('COPY.TITLE')} <span className="text-rose-400">*</span>
                 </label>
-                <input
+                <input maxLength={30}
                   id="notice-title"
                   className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-400 transition-all shadow-inner"
                   placeholder={tCopy('COPY.NOTICE_TITLE')}
@@ -126,7 +126,7 @@ export function SuperadminCommunicationNoticesModals({
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="notice-valid-till">
                   {tCopy('COPY.VALID_TILL')} <span className="text-rose-400">*</span>
                 </label>
-                <input
+                <input maxLength={30}
                   id="notice-valid-till"
                   type="date"
                   className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3.5 py-2.5 text-sm text-white focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-400 [color-scheme:dark] transition-all shadow-inner cursor-pointer"

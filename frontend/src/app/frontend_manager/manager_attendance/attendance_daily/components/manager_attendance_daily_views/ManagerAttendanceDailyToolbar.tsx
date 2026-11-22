@@ -90,7 +90,7 @@ export function ManagerAttendanceDailyToolbar({
 
           {/* Date Picker Input */}
           <div className="flex items-center gap-1.5 bg-muted p-1 rounded-xl border border-border">
-            <input
+            <input maxLength={30}
               id="rbg4-managerengagementattendancepage-103"
               type="date"
               className="px-2.5 py-1 bg-card border border-border rounded-lg text-xs font-semibold text-primary outline-none focus:border-primary cursor-pointer"
@@ -112,7 +112,7 @@ export function ManagerAttendanceDailyToolbar({
             {/* Search */}
             <div className="relative flex-1 min-w-[200px] max-w-sm">
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
-              <input
+              <input maxLength={30}
                 id="daily-att-search"
                 type="text"
                 placeholder="Search student name or smart ID..."

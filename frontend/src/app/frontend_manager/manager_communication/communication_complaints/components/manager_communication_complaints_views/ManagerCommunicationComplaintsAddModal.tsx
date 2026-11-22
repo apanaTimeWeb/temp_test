@@ -145,7 +145,7 @@ export default function ManagerCommunicationComplaintsAddModal({
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="font-semibold text-primary block mb-1">Student Identifier *</label>
-              <input
+              <input maxLength={100}
                 type="text"
                 required
                 className="mgr-input text-xs"
@@ -156,7 +156,7 @@ export default function ManagerCommunicationComplaintsAddModal({
             </div>
             <div>
               <label className="font-semibold text-primary block mb-1">Student WhatsApp Phone</label>
-              <input
+              <input maxLength={100}
                 type="text"
                 className="mgr-input text-xs font-mono"
                 placeholder="e.g. 9876543210"
@@ -175,7 +175,7 @@ export default function ManagerCommunicationComplaintsAddModal({
               </label>
               <span className="text-[10px] text-amber-200/80">e.g. Seat S-14 (Hall A)</span>
             </div>
-            <input
+            <input maxLength={100}
               type="text"
               required
               className="mgr-input text-xs font-semibold border-amber-500/30 focus:border-amber-400"
@@ -276,7 +276,7 @@ export default function ManagerCommunicationComplaintsAddModal({
 
           <div>
             <label className="font-semibold text-primary block mb-1">Issue Title / Summary *</label>
-            <input
+            <input maxLength={100}
               type="text"
               required
               className="mgr-input text-xs"

@@ -400,7 +400,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
               <label className="fin-section-label" htmlFor="manager-collect-fee-student-search">{tManagerUi('student')} <span className="fin-text-danger">*</span></label>
               <div className="relative">
                 <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 fin-icon-muted" />
-                <input
+                <input maxLength={30}
                   id="manager-collect-fee-student-search" className="fin-input fin-input--pl9 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                   placeholder={tManagerUi('search_by_name_or_smart_id')} value={search}
                   role="combobox" aria-autocomplete="list" aria-haspopup="listbox"
@@ -697,7 +697,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                     <span>Payment Date</span>
                     <span className="fin-text-danger">*</span>
                   </label>
-                  <input
+                  <input maxLength={30}
                     id="manager-collect-fee-payment-date"
                     type="date"
                     max={todayDateStr}
@@ -725,7 +725,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                   </div>
                   <div className="relative mt-1">
                     <IndianRupee size={14} className="absolute left-3 top-1/2 -translate-y-1/2 fin-icon-muted" />
-                    <input
+                    <input maxLength={30}
                       id="rbg4-managerfinancecollectfeepage-137"
                       type="number"
                       min="0.01"
@@ -802,7 +802,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                     <span>{tManagerUi('transaction_id')} <span className="fin-text-danger">*</span></span>
                     <span className="text-[10px] text-secondary">Mandatory for {mode.toUpperCase()}</span>
                   </label>
-                  <input
+                  <input maxLength={30}
                     id="rbg4-managerfinancecollectfeepage-155"
                     className={`fin-input w-full mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                       isTxnIdMissing && (formState.isSubmitted || txnId !== '') ? 'border-danger bg-red-500/5' : ''
@@ -834,7 +834,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                 </label>
                 <div className="relative mt-1">
                   <UserCheck size={14} className="absolute left-3 top-1/2 -translate-y-1/2 fin-icon-muted" />
-                  <input
+                  <input maxLength={30}
                     id="rbg4-managerfinancecollectfeepage-collected-by" type="text" className="fin-input fin-input--pl8"
                     placeholder="Collector Name" value={collectedBy} onChange={(e) => setCollectedBy(e.target.value)}
                   />

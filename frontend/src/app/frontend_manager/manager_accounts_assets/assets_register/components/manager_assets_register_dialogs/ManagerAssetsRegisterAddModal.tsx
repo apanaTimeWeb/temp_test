@@ -286,7 +286,7 @@ export function ManagerAssetsRegisterAddModal({
             <label htmlFor="asset-name" className="text-xs font-semibold text-secondary block mb-1">
               Asset Name / Model Description *
             </label>
-            <input
+            <input maxLength={30}
               id="asset-name"
               type="text"
               className={`mgr-input w-full text-xs ${errors.name ? 'border-danger' : ''}`}
@@ -311,7 +311,7 @@ export function ManagerAssetsRegisterAddModal({
               </label>
               <div className="relative">
                 <IndianRupee size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
-                <input
+                <input maxLength={30}
                   id="asset-value"
                   type="number"
                   step="0.01"
@@ -334,7 +334,7 @@ export function ManagerAssetsRegisterAddModal({
               <label htmlFor="asset-date" className="text-xs font-semibold text-secondary block mb-1">
                 Purchase Date *
               </label>
-              <input
+              <input maxLength={30}
                 id="asset-date"
                 type="date"
                 className={`mgr-input w-full text-xs ${errors.purchaseDate ? 'border-danger' : ''}`}
@@ -355,7 +355,7 @@ export function ManagerAssetsRegisterAddModal({
             <label htmlFor="asset-location" className="text-xs font-semibold text-secondary block mb-1">
               Installation Location *
             </label>
-            <input
+            <input maxLength={30}
               id="asset-location"
               type="text"
               className={`mgr-input w-full text-xs ${errors.location ? 'border-danger' : ''}`}

@@ -77,7 +77,7 @@ export const SuperadminIntegrationsOverviewWebhookCreateModal: React.FC<
             <label className="block font-medium text-slate-300 mb-1">
               Webhook Target URL (HTTPS only)
             </label>
-            <input
+            <input maxLength={100}
               type="url"
               required
               value={newUrl}
@@ -91,7 +91,7 @@ export const SuperadminIntegrationsOverviewWebhookCreateModal: React.FC<
             <label className="block font-medium text-slate-300 mb-1">
               Description / Consumer Name
             </label>
-            <input
+            <input maxLength={100}
               type="text"
               required
               value={newDesc}

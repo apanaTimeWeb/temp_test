@@ -205,7 +205,7 @@ export default function ManagerFinanceSecurityDepositsRefundModal({
                     className="w-24 text-xs font-bold rounded border border-border bg-surface px-2 py-1 text-right"
                   />
                 </div>
-                <input
+                <input maxLength={250}
                   type="text"
                   value={damageReason}
                   onChange={(e) => setDamageReason(e.target.value)}
@@ -241,7 +241,7 @@ export default function ManagerFinanceSecurityDepositsRefundModal({
           {refundMode === 'upi' && (
             <div>
               <label className="text-xs font-semibold text-primary block mb-1">UPI Transaction Reference</label>
-              <input
+              <input maxLength={100}
                 type="text"
                 className="mgr-input text-xs font-mono"
                 placeholder="e.g. UPI/2026/987123"

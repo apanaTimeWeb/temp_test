@@ -201,7 +201,7 @@ export function ManagerCommunicationComplaintsToolbar({
             size={15}
             className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none z-10"
           />
-          <input
+          <input maxLength={100}
             type="search"
             placeholder="Search complaint, student name, seat, or issue..."
             className="mgr-input mgr-input-with-icon h-10 !pl-10 text-xs sm:text-sm w-full rounded-xl bg-surface/60 border border-border focus:border-primary"

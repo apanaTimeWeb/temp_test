@@ -391,7 +391,7 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
       <div className="flex flex-wrap items-center gap-2.5 p-3 rounded-xl bg-surface border border-border">
         <div className="relative w-full sm:w-64">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
-          <input
+          <input maxLength={30}
             type="text"
             placeholder="Search student, smart ID, plan..."
             className="mgr-input !pl-10 !pr-9 text-xs w-full"

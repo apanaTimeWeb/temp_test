@@ -250,7 +250,7 @@ export function AdminFinanceReferralsRedeemModal({
                     <label className="text-[11px] font-semibold text-text-secondary block mb-1">
                       Transaction UTR / Ref No *
                     </label>
-                    <input
+                    <input maxLength={100}
                       type="text"
                       required
                       value={utrNumber}
@@ -263,7 +263,7 @@ export function AdminFinanceReferralsRedeemModal({
                     <label className="text-[11px] font-semibold text-text-secondary block mb-1">
                       Student UPI ID / Phone
                     </label>
-                    <input
+                    <input maxLength={100}
                       type="text"
                       value={studentUpi}
                       onChange={(e) => setStudentUpi(e.target.value)}
@@ -292,7 +292,7 @@ export function AdminFinanceReferralsRedeemModal({
             </div>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted font-bold text-sm">₹</span>
-              <input
+              <input maxLength={30}
                 id="redeem-amount"
                 type="number"
                 min="1"
@@ -314,7 +314,7 @@ export function AdminFinanceReferralsRedeemModal({
             <label htmlFor="redeem-notes" className="text-xs font-bold uppercase tracking-wider text-text-secondary">
               Accounts Reference / Notes
             </label>
-            <input
+            <input maxLength={250}
               id="redeem-notes"
               type="text"
               value={notes}

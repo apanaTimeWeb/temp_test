@@ -35,7 +35,7 @@ export default function SuperadminBillingCreateInvoiceAddressSection({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label className="block font-semibold text-slate-300 mb-1">Legal / Registered Entity Name</label>
-          <input
+          <input maxLength={100}
             type="text"
             placeholder="e.g. Apex Knowledge Systems Pvt Ltd"
             value={legalName}
@@ -60,7 +60,7 @@ export default function SuperadminBillingCreateInvoiceAddressSection({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label className="block font-semibold text-slate-300 mb-1">Billing Street Address</label>
-          <input
+          <input maxLength={250}
             type="text"
             placeholder="e.g. Plot 15, Knowledge Park"
             value={billingAddress}
@@ -70,7 +70,7 @@ export default function SuperadminBillingCreateInvoiceAddressSection({
         </div>
         <div>
           <label className="block font-semibold text-slate-300 mb-1">City, State & PIN</label>
-          <input
+          <input maxLength={100}
             type="text"
             placeholder="e.g. Lucknow, Uttar Pradesh - 226001"
             value={cityStatePin}
@@ -84,7 +84,7 @@ export default function SuperadminBillingCreateInvoiceAddressSection({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label className="block font-semibold text-slate-300 mb-1">Billing Contact Email</label>
-          <input
+          <input maxLength={254}
             type="email"
             placeholder="e.g. accounts@library.org"
             value={email}

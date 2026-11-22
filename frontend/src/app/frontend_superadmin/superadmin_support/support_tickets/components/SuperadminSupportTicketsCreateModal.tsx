@@ -153,7 +153,7 @@ export default function SuperadminSupportTicketsCreateModal({
                   <span>Library / Tenant Name</span>
                   <span className="text-rose-400">*</span>
                 </label>
-                <input
+                <input maxLength={100}
                   type="text"
                   placeholder="e.g. Apex Central Library"
                   value={tenant}
@@ -170,7 +170,7 @@ export default function SuperadminSupportTicketsCreateModal({
                   <User size={13} className="text-indigo-400" />
                   <span>Contact Person (Optional)</span>
                 </label>
-                <input
+                <input maxLength={100}
                   type="text"
                   placeholder="e.g. Anil Kumar (Admin)"
                   value={contact}
@@ -200,7 +200,7 @@ export default function SuperadminSupportTicketsCreateModal({
                   <Mail size={13} className="text-indigo-400" />
                   <span>Email Address</span>
                 </label>
-                <input
+                <input maxLength={254}
                   type="email"
                   placeholder="owner@library.com"
                   value={email}
@@ -254,7 +254,7 @@ export default function SuperadminSupportTicketsCreateModal({
                 <span>Ticket Subject</span>
                 <span className="text-rose-400">*</span>
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 placeholder="e.g. Biometric QR scanner not connecting after power outage"
                 value={subject}

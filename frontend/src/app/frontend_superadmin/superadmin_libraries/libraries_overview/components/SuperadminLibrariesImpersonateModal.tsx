@@ -90,7 +90,7 @@ export default function SuperadminLibrariesImpersonateModal({
 
           <div>
             <label className="block text-slate-400 mb-1 font-medium">Support Reason (Mandatory for SOC-2 Compliance)</label>
-            <input
+            <input maxLength={250}
               type="text"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
@@ -101,7 +101,7 @@ export default function SuperadminLibrariesImpersonateModal({
 
           <div>
             <label className="block text-slate-400 mb-1 font-medium">Linked Support Ticket Reference</label>
-            <input
+            <input maxLength={100}
               type="text"
               value={ticketRef}
               onChange={(e) => setTicketRef(e.target.value)}

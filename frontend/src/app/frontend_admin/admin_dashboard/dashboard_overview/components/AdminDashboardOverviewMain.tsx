@@ -214,7 +214,7 @@ export default function AdminDashboardOverviewMain() {
             <div className="flex items-center gap-2 flex-wrap text-xs bg-slate-900/80 p-1.5 rounded-xl border border-indigo-500/30">
               <label className="flex items-center gap-1.5 text-slate-300">
                 <span className="text-xs font-semibold">From:</span>
-                <input
+                <input maxLength={100}
                   type="date"
                   value={customStartDate}
                   onChange={(e) => setCustomStartDate(e.target.value)}
@@ -223,7 +223,7 @@ export default function AdminDashboardOverviewMain() {
               </label>
               <label className="flex items-center gap-1.5 text-slate-300">
                 <span className="text-xs font-semibold">To:</span>
-                <input
+                <input maxLength={100}
                   type="date"
                   value={customEndDate}
                   onChange={(e) => setCustomEndDate(e.target.value)}

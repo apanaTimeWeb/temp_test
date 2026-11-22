@@ -137,7 +137,7 @@ export function ManagerMembersIdCardBulkDispatchModal({
             <label htmlFor="id-card-custom-note" className="text-xs font-semibold text-secondary block mb-1">
               Instructions note appended to ID card message:
             </label>
-            <input
+            <input maxLength={250}
               id="id-card-custom-note"
               type="text"
               aria-label="Instructions note appended to ID card message"

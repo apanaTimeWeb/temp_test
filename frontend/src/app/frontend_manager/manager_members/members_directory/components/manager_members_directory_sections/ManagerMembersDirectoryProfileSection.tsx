@@ -170,7 +170,7 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
         <label className="sr-only" htmlFor="manager-members-profile-search">{tManagerUi('member_id_or_name')}</label>
         <div className="relative flex-1 min-w-0">
           <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none z-10" />
-          <input
+          <input maxLength={30}
             id="manager-members-profile-search"
             type="search"
             className="mgr-input !pl-10 text-xs sm:text-sm w-full"

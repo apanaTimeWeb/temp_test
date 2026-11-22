@@ -186,7 +186,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
             <label htmlFor="admin-plan-name" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
               {t('PLAN_NAME')} <span className="text-rose-400">*</span>
             </label>
-            <input
+            <input maxLength={30}
               id="admin-plan-name"
               required
               className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
@@ -263,7 +263,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
               <label htmlFor="admin-plan-price" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
                 {t('PRICE')} (₹ Base/Month) <span className="text-rose-400">*</span>
               </label>
-              <input
+              <input maxLength={30}
                 id="admin-plan-price"
                 required
                 min="0"
@@ -280,7 +280,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
               <label htmlFor="admin-plan-duration-days" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
                 {t('VALIDITY_DAYS')} <span className="text-rose-400">*</span>
               </label>
-              <input
+              <input maxLength={30}
                 id="admin-plan-duration-days"
                 min="1"
                 required
@@ -321,7 +321,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
             <label htmlFor="admin-plan-duration" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
               {t('DURATION')} Label <span className="text-rose-400">*</span>
             </label>
-            <input
+            <input maxLength={30}
               id="admin-plan-duration"
               required
               className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
@@ -344,7 +344,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-xs">
               <div>
                 <label className="text-[10px] text-slate-400 block mb-1">Morning (6A-12P)</label>
-                <input
+                <input maxLength={100}
                   type="number"
                   placeholder="₹800"
                   className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
@@ -354,7 +354,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
               </div>
               <div>
                 <label className="text-[10px] text-slate-400 block mb-1">Afternoon (12P-5P)</label>
-                <input
+                <input maxLength={100}
                   type="number"
                   placeholder="₹700"
                   className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
@@ -364,7 +364,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
               </div>
               <div>
                 <label className="text-[10px] text-slate-400 block mb-1">Evening (5P-10P)</label>
-                <input
+                <input maxLength={100}
                   type="number"
                   placeholder="₹900"
                   className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
@@ -374,7 +374,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
               </div>
               <div>
                 <label className="text-[10px] text-slate-400 block mb-1">Night (10P-6A)</label>
-                <input
+                <input maxLength={100}
                   type="number"
                   placeholder="₹1000"
                   className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
@@ -384,7 +384,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
               </div>
               <div>
                 <label className="text-[10px] text-slate-400 block mb-1">Full Day (24/7)</label>
-                <input
+                <input maxLength={100}
                   type="number"
                   placeholder="₹2000"
                   className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
@@ -396,7 +396,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
             <div className="mt-3 flex items-center gap-2 text-xs border-t border-slate-800/80 pt-2.5">
               <Percent size={13} className="text-amber-400" />
               <span className="text-slate-300">Multi-Shift Discount (% off for 2+ shifts):</span>
-              <input
+              <input maxLength={100}
                 type="number"
                 max="50"
                 min="0"

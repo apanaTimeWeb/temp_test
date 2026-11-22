@@ -265,7 +265,7 @@ export function ManagerSeatsMatrixClient() {
           {/* Universal Student / Seat Search */}
           <div className="mgr-input-icon-wrap relative flex-1 min-w-0 sm:min-w-[240px]">
             <Search size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
-            <input
+            <input maxLength={100}
               type="search"
               aria-label={tManagerUi('search_by_seat_branch_or_student')}
               placeholder={tManagerUi('search_by_seat_branch_or_student')}

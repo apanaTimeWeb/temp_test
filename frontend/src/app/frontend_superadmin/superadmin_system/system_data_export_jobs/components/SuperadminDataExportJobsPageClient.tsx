@@ -204,7 +204,7 @@ export default function SuperadminDataExportJobsPageClient() {
             </div>
             <div className="space-y-1.5">
               <label htmlFor="export-date-from" className="text-xs font-medium text-secondary uppercase tracking-wide">{tCopy("COPY.FROM_DATE")}</label>
-              <input
+              <input maxLength={30}
                 id="export-date-from"
                 type="date"
                 value={dateFrom}
@@ -214,7 +214,7 @@ export default function SuperadminDataExportJobsPageClient() {
             </div>
             <div className="space-y-1.5">
               <label htmlFor="export-date-to" className="text-xs font-medium text-secondary uppercase tracking-wide">{tCopy("COPY.TO_DATE")}</label>
-              <input
+              <input maxLength={30}
                 id="export-date-to"
                 type="date"
                 value={dateTo}

@@ -35,7 +35,7 @@ export default function SuperadminBillingOverviewSemanticTable<T extends object>
   const { sort, setSort, page, setPage, filterText, setFilterText, sortedRows, pageCount, visibleRows } = useSuperadminBillingOverviewSemanticTableState({ rowData, paginationPageSize , paginationEnabled: pagination});
   const columns = (columnDefs ?? []).filter((column) => !column.hide);
   return <div className={`overflow-x-auto ${className}`} role="region" aria-label={tCopy('COPY.TABLE_ARIA_LABEL')} tabIndex={0}>
-    <div className="flex justify-end border-b border-border p-3"><label className="flex items-center gap-2 text-sm text-secondary"><span>{tCopy('COPY.TABLE_FILTER_ROWS')}</span><input type="search" value={filterText} onChange={(event) => { setFilterText(event.currentTarget.value); setPage(0); }} className="min-w-40 rounded-md border border-border bg-input px-3 py-2 text-primary"  data-testid="superadmin-billing-billing-semantic-table-field-1"/></label></div>
+    <div className="flex justify-end border-b border-border p-3"><label className="flex items-center gap-2 text-sm text-secondary"><span>{tCopy('COPY.TABLE_FILTER_ROWS')}</span><input maxLength={100} type="search" value={filterText} onChange={(event) => { setFilterText(event.currentTarget.value); setPage(0); }} className="min-w-40 rounded-md border border-border bg-input px-3 py-2 text-primary"  data-testid="superadmin-billing-billing-semantic-table-field-1"/></label></div>
     <table className="sa-semantic-table w-full border-collapse text-left text-sm">
       <thead className="bg-card text-secondary"><tr>{columns.map((column, index) => {
         const field = column.field ?? `column-${index}`;

@@ -352,7 +352,7 @@ export function AdminSeatsManagementPage() {
       <div className="flex min-w-0 flex-col gap-3 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-center">
         <div className="relative min-w-0 flex-1">
           <Search size={18} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" strokeWidth={2} />
-          <input
+          <input maxLength={100}
             type="text"
             aria-label={t('searchSeatsPlaceholder')}
             placeholder={t('searchSeatsPlaceholder')}

@@ -88,7 +88,7 @@ export default function SuperadminBackupConfigurationPageClient() {
             <div className="space-y-2">
               <label htmlFor="backup-time" className="text-sm font-medium text-secondary">{tCopy("COPY.BACKUP_TIME_24HR")}</label>
               <div className="flex items-center gap-3">
-                <input aria-label={tCopy("COPY.BACKUP_TIME_24HR")}
+                <input maxLength={30} aria-label={tCopy("COPY.BACKUP_TIME_24HR")}
                   id="backup-time"
                   type="time"
                   value={backupTime}
@@ -103,7 +103,7 @@ export default function SuperadminBackupConfigurationPageClient() {
             <div className="space-y-2">
               <label htmlFor="retention-days" className="text-sm font-medium text-secondary">{tCopy("COPY.RETENTION_PERIOD_DAYS")}</label>
               <div className="flex items-center gap-3">
-                <input aria-label={tCopy("COPY.RETENTION_PERIOD_DAYS")}
+                <input maxLength={30} aria-label={tCopy("COPY.RETENTION_PERIOD_DAYS")}
                   id="retention-days"
                   type="number"
                   step={1}

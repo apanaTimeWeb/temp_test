@@ -116,7 +116,7 @@ export default function ManagerFinanceCollectFeeDurationSelector({
         ) : (
           <div className="space-y-1 mt-1">
             <div className="flex gap-2 items-center">
-              <input
+              <input maxLength={30}
                 id="manager-collect-fee-custom-duration"
                 name="customDurationMonths"
                 type="number"

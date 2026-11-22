@@ -63,7 +63,7 @@ export function ManagerSeatsMatrixAddModal({
             <label htmlFor="new-seat-id" className="text-xs font-semibold text-secondary uppercase block mb-1">
               Seat Number / Code
             </label>
-            <input
+            <input maxLength={30}
               id="new-seat-id"
               type="text"
               required

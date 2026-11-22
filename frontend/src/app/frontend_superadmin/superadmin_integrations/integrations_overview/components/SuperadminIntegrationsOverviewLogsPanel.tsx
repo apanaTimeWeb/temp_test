@@ -78,7 +78,7 @@ export const SuperadminIntegrationsOverviewLogsPanel: React.FC<
 
         <div className="relative w-full sm:w-72">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-          <input
+          <input maxLength={100}
             type="text"
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(0); }}

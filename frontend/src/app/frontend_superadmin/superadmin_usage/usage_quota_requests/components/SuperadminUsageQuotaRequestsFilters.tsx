@@ -28,7 +28,7 @@ export function SuperadminUsageQuotaRequestsFilters() {
       {/* Search Input */}
       <div className="relative flex-1 max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
-        <input
+        <input maxLength={100}
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}

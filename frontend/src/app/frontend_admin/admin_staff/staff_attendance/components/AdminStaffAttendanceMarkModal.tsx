@@ -93,7 +93,7 @@ export function AdminStaffAttendanceMarkModal({
               <label className="block text-xs font-semibold text-text-secondary">
                 {t('FIELD_CLOCK_IN')}
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 value={clockIn}
                 onChange={(e) => setClockIn(e.target.value)}
@@ -105,7 +105,7 @@ export function AdminStaffAttendanceMarkModal({
               <label className="block text-xs font-semibold text-text-secondary">
                 {t('FIELD_CLOCK_OUT')}
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 value={clockOut}
                 onChange={(e) => setClockOut(e.target.value)}

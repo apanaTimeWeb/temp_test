@@ -51,7 +51,7 @@ export default function SuperadminSecurityUserSessionsSemanticTable<T extends ob
         </span>
         <div className="relative flex items-center w-full sm:w-64">
           <Search size={15} className="absolute left-3 text-indigo-400 pointer-events-none" aria-hidden="true" />
-          <input
+          <input maxLength={100}
             type="search"
             value={filterText}
             onChange={(event) => { setFilterText(event.currentTarget.value); setPage(0); }}

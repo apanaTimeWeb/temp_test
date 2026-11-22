@@ -725,13 +725,13 @@ export function AdminBlacklistFormDialog({ open, onOpenChange, onSubmit, isDemoM
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="admin-blacklist-name" className="admin-label">{t('NAME_LABEL')}</label>
-              <input id="admin-blacklist-name" {...register('name')} placeholder="Student Full Name" className="admin-input" aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'admin-blacklist-name-error' : undefined} required autoComplete="name" />
+              <input maxLength={30} id="admin-blacklist-name" {...register('name')} placeholder="Student Full Name" className="admin-input" aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'admin-blacklist-name-error' : undefined} required autoComplete="name" />
               {errors.name && <p id="admin-blacklist-name-error" className="admin-error" role="alert">{errors.name.message}</p>}
             </div>
             <div>
               <label htmlFor="admin-blacklist-phone" className="admin-label">{t('PHONE_LABEL')}</label>
-              <input
-                id="admin-blacklist-phone" maxLength={15} inputMode="tel"
+              <input maxLength={30}
+                id="admin-blacklist-phone"
                 {...register('phone', {
                   onChange: (e) => {
                     e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
@@ -811,7 +811,7 @@ export function AdminBlacklistFormDialog({ open, onOpenChange, onSubmit, isDemoM
               <label htmlFor="admin-blacklist-seat" className="admin-label">
                 {t('PREVIOUS_SEAT_LABEL')} <span className="text-caption font-normal text-text-secondary">(Optional)</span>
               </label>
-              <input id="admin-blacklist-seat" {...register('previousSeat')} placeholder="e.g. A-04 or Desk 12" className="admin-input" />
+              <input maxLength={30} id="admin-blacklist-seat" {...register('previousSeat')} placeholder="e.g. A-04 or Desk 12" className="admin-input" />
             </div>
           </div>
 
@@ -844,11 +844,11 @@ export function AdminBlacklistFormDialog({ open, onOpenChange, onSubmit, isDemoM
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="admin-blacklist-location" className="admin-label">Incident Hall / Location</label>
-              <input id="admin-blacklist-location" {...register('incidentLocation')} placeholder="e.g. Silent Study Hall A, 2nd Floor" className="admin-input" />
+              <input maxLength={30} id="admin-blacklist-location" {...register('incidentLocation')} placeholder="e.g. Silent Study Hall A, 2nd Floor" className="admin-input" />
             </div>
             <div>
               <label htmlFor="admin-blacklist-fir" className="admin-label">Police Complaint / FIR Ref (Optional)</label>
-              <input id="admin-blacklist-fir" {...register('firRefNo')} placeholder="e.g. FIR-2026-SEC-092" className="admin-input" />
+              <input maxLength={30} id="admin-blacklist-fir" {...register('firRefNo')} placeholder="e.g. FIR-2026-SEC-092" className="admin-input" />
             </div>
           </div>
 

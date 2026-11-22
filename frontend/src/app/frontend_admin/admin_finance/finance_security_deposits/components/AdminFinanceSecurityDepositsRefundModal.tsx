@@ -220,7 +220,7 @@ export function AdminFinanceSecurityDepositsRefundModal({
             <label className="text-xs font-semibold text-secondary block">
               Disbursement Transaction Ref / Notes
             </label>
-            <input
+            <input maxLength={100}
               type="text"
               value={refundRef}
               onChange={(e) => onRefundRefChange(e.target.value)}

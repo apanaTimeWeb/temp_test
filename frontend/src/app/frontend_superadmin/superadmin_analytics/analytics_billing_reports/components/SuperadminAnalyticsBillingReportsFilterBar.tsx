@@ -42,7 +42,7 @@ export function SuperadminAnalyticsBillingReportsFilterBar({
         {/* Search */}
         <div className="relative flex-1 min-w-0 max-w-lg">
           <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-          <input
+          <input maxLength={30}
             type="text"
             placeholder="Search by invoice number, library, transaction ID..."
             value={searchInput}

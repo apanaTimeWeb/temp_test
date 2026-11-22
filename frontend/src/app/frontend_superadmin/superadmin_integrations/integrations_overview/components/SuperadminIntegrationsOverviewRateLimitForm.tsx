@@ -141,7 +141,7 @@ export const SuperadminIntegrationsOverviewRateLimitForm: React.FC<
           </div>
 
           <div className="flex gap-2">
-            <input
+            <input maxLength={100}
               type="text"
               value={newGlobalIp}
               onChange={(e) => setNewGlobalIp(e.target.value)}

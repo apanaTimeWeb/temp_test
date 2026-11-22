@@ -66,7 +66,7 @@ export function AdminCommunicationWhatsappTemplatesEditModal({
             <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
               Template Title
             </label>
-            <input
+            <input maxLength={100}
               type="text"
               className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
               placeholder="e.g. Fee Due Notice, Seat Expiry Warning"
@@ -79,7 +79,7 @@ export function AdminCommunicationWhatsappTemplatesEditModal({
               <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
                 Category
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
                 placeholder="e.g. Finance, Announcements"
@@ -91,7 +91,7 @@ export function AdminCommunicationWhatsappTemplatesEditModal({
               <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
                 Trigger Event
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
                 placeholder="e.g. 3 days before expiry"

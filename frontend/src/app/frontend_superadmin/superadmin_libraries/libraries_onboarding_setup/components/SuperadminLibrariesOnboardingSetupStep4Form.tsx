@@ -40,20 +40,20 @@ export default function SuperadminLibrariesOnboardingSetupStep4Form({ onNext, in
             <label className="sa-wizard-field-label--sm" htmlFor={`setup-plan-${i}-name`}>
               {tCopy("COPY.PLAN_NAME")} <span className="sa-wizard-field-required">*</span>
             </label>
-            <input id={`setup-plan-${i}-name`} aria-invalid={!!errors.plans?.[i]?.name} aria-describedby={errors.plans?.[i]?.name ? `setup-plan-${i}-name-error` : undefined} {...register(`plans.${i}.name`)} placeholder={tCopy("COPY.E_G_MONTHLY")}
+            <input maxLength={30} id={`setup-plan-${i}-name`} aria-invalid={!!errors.plans?.[i]?.name} aria-describedby={errors.plans?.[i]?.name ? `setup-plan-${i}-name-error` : undefined} {...register(`plans.${i}.name`)} placeholder={tCopy("COPY.E_G_MONTHLY")}
               className={inputCls(!!(errors.plans?.[i]?.name))}  data-testid={`superadmin-setup-wizard-setup-wizard-step4-form-e-g-monthly-1-${String(field.id)}`}/>
             {errors.plans?.[i]?.name && <p id={`setup-plan-${i}-name-error`} className="sa-wizard-field-error">{translateValidationMessage(errors.plans[i]?.name?.message)}</p>}
           </div>
           <div className="space-y-1.5">
             <label className="sa-wizard-field-label--sm" htmlFor={`setup-plan-${i}-days`}>{tCopy("COPY.DAYS")}</label>
-            <input id={`setup-plan-${i}-days`} type="number" min={1} step={1} inputMode="numeric"
+            <input maxLength={30} id={`setup-plan-${i}-days`} type="number" min={1} step={1} inputMode="numeric"
               aria-invalid={!!errors.plans?.[i]?.days} aria-describedby={errors.plans?.[i]?.days ? `setup-plan-${i}-days-error` : undefined} {...register(`plans.${i}.days`, { valueAsNumber: true })}
               className={inputCls(!!errors.plans?.[i]?.days)}  data-testid={`superadmin-setup-wizard-setup-wizard-step4-form-field-2-${String(field.id)}`}/>
             {errors.plans?.[i]?.days && <p id={`setup-plan-${i}-days-error`} className="sa-wizard-field-error">{translateValidationMessage(errors.plans[i]?.days?.message)}</p>}
           </div>
           <div className="space-y-1.5">
             <label className="sa-wizard-field-label--sm" htmlFor={`setup-plan-${i}-price`}>{tCopy("COPY.PRICE")}</label>
-            <input id={`setup-plan-${i}-price`} type="number" min={0} step="0.01" inputMode="decimal"
+            <input maxLength={30} id={`setup-plan-${i}-price`} type="number" min={0} step="0.01" inputMode="decimal"
               aria-invalid={!!errors.plans?.[i]?.price} aria-describedby={errors.plans?.[i]?.price ? `setup-plan-${i}-price-error` : undefined} {...register(`plans.${i}.price`, { valueAsNumber: true })}
               placeholder="1000"
               className={inputCls(!!errors.plans?.[i]?.price)}  data-testid={`superadmin-setup-wizard-setup-wizard-step4-form-field-1000-3-${String(field.id)}`}/>

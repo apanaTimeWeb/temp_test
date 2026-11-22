@@ -48,7 +48,7 @@ export default function ManagerFinanceCollectFeeDiscountsSection({
       <div>
         <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-160">{couponCodeLabel}</label>
         <div className="flex gap-2 mt-1">
-          <input
+          <input maxLength={30}
             id="rbg4-managerfinancecollectfeepage-160"
             className="fin-input flex-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             placeholder={enterCouponCodePlaceholder}
@@ -83,7 +83,7 @@ export default function ManagerFinanceCollectFeeDiscountsSection({
             {overrideLabel}
           </label>
         </div>
-        <input
+        <input maxLength={30}
           id="manager-collect-fee-late-fee"
           type="number" min="0"
           className="fin-input w-full mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"

@@ -188,7 +188,7 @@ export default function SuperadminSubscriptionsOverviewActionModal({
               <span className="text-[10px] text-slate-400">Current: {renewalDate}</span>
             </div>
             <div className="flex items-center gap-2">
-              <input
+              <input maxLength={100}
                 type="date"
                 value={renewalDate}
                 onChange={(e) => setRenewalDate(e.target.value)}

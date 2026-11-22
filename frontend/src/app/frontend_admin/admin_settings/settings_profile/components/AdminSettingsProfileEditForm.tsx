@@ -71,7 +71,7 @@ export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsPro
               <span className="text-danger-text" aria-hidden="true">*</span>
             </div>
             <div className="relative">
-              <input
+              <input maxLength={30}
                 id="admin-profile-edit-name"
                 type="text"
                 autoComplete="name"
@@ -141,7 +141,7 @@ export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsPro
             </span>
           </div>
           <div className="relative">
-            <input
+            <input maxLength={30}
               id="admin-profile-edit-email"
               type="email"
               autoComplete="email"

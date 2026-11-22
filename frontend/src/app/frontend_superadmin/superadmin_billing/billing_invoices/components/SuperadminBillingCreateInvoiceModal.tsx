@@ -162,7 +162,7 @@ export default function SuperadminBillingCreateInvoiceModal({
               <label className="block font-semibold uppercase tracking-wider text-slate-300 mb-1">
                 Invoice Number (Sequential)
               </label>
-              <input
+              <input maxLength={30}
                 type="text"
                 required
                 value={invoiceId}
@@ -196,7 +196,7 @@ export default function SuperadminBillingCreateInvoiceModal({
               <label className="block font-semibold text-indigo-300 mb-1">
                 Custom Library Name *
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 required
                 placeholder="e.g. Apex Knowledge Lounge"

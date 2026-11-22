@@ -62,7 +62,7 @@ export default function ManagerFinanceFinesPaymentsTimeHorizonBar({
           <div className="flex items-center gap-2 flex-wrap text-xs bg-muted p-1.5 rounded-lg border border-border">
             <label className="flex items-center gap-1 text-secondary">
               <span>From:</span>
-              <input
+              <input maxLength={100}
                 type="date"
                 value={customStartDate}
                 onChange={(e) => onCustomStartDateChange(e.target.value)}
@@ -71,7 +71,7 @@ export default function ManagerFinanceFinesPaymentsTimeHorizonBar({
             </label>
             <label className="flex items-center gap-1 text-secondary">
               <span>To:</span>
-              <input
+              <input maxLength={100}
                 type="date"
                 value={customEndDate}
                 onChange={(e) => onCustomEndDateChange(e.target.value)}

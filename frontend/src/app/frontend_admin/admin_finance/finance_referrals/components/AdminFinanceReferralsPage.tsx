@@ -413,7 +413,7 @@ export function AdminFinanceReferralsPage() {
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative w-full sm:w-72">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
-            <input
+            <input maxLength={100}
               type="text"
               placeholder="Search referrer or student name..."
               value={search}

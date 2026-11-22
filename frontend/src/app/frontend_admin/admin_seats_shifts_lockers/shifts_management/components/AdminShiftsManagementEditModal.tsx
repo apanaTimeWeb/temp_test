@@ -113,7 +113,7 @@ export function AdminShiftsManagementEditModal({
             <label className="text-xs font-semibold text-slate-300">
               Shift Title / Slot Name
             </label>
-            <input
+            <input maxLength={100}
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -130,7 +130,7 @@ export function AdminShiftsManagementEditModal({
                 <Sun size={13} className="text-amber-400" />
                 <span>Start Time</span>
               </label>
-              <input
+              <input maxLength={100}
                 type="time"
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
@@ -143,7 +143,7 @@ export function AdminShiftsManagementEditModal({
                 <Moon size={13} className="text-indigo-400" />
                 <span>End Time</span>
               </label>
-              <input
+              <input maxLength={100}
                 type="time"
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}

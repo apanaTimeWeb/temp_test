@@ -65,7 +65,7 @@ export function SuperadminSettingsGeneralSubscriptionGraceCard() {
               {trialDays} Days
             </span>
           </div>
-          <input
+          <input maxLength={30}
             id="settings-sub-trial-days"
             type="number"
             min={0}
@@ -95,7 +95,7 @@ export function SuperadminSettingsGeneralSubscriptionGraceCard() {
               {graceDays} Days
             </span>
           </div>
-          <input
+          <input maxLength={30}
             id="settings-sub-grace-days"
             type="number"
             min={0}
@@ -125,7 +125,7 @@ export function SuperadminSettingsGeneralSubscriptionGraceCard() {
               {reminderDays} Days
             </span>
           </div>
-          <input
+          <input maxLength={30}
             id="settings-sub-reminder-days"
             type="number"
             min={1}

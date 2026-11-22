@@ -41,7 +41,7 @@ export function AdminNavigationSidebarSearch({
     <div className="admin-sidebar-search">
       <div className="admin-sidebar-search-wrap">
         <Search size={14} className="admin-sidebar-search-icon" aria-hidden="true" />
-        <input
+        <input maxLength={100}
           ref={searchInputRef}
           type="text"
           value={searchQuery}

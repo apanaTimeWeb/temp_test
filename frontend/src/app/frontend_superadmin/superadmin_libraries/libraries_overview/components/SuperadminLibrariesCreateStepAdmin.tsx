@@ -60,7 +60,7 @@ export default function SuperadminLibrariesCreateStepAdmin({
           <label className="block text-xs font-semibold text-slate-300 mb-1">
             Admin Full Name <span className="text-rose-400">*</span>
           </label>
-          <input
+          <input maxLength={100}
             type="text"
             required
             placeholder="e.g. Rajesh Sharma"
@@ -75,7 +75,7 @@ export default function SuperadminLibrariesCreateStepAdmin({
             <Mail size={11} className="text-purple-400" />
             <span>Admin Email (Login Identity)</span> <span className="text-rose-400">*</span>
           </label>
-          <input
+          <input maxLength={254}
             type="email"
             required
             placeholder="admin@apexlibrary.in"
@@ -107,7 +107,7 @@ export default function SuperadminLibrariesCreateStepAdmin({
           <label className="block text-xs font-semibold text-slate-300 mb-1">
             Unique Login ID <span className="text-rose-400">*</span>
           </label>
-          <input
+          <input maxLength={30}
             type="text"
             required
             placeholder="e.g. rajesh_apex"

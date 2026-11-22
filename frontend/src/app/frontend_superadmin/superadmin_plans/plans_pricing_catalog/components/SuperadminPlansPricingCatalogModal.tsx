@@ -221,7 +221,7 @@ export default function SuperadminPlansPricingCatalogModal({
               <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1" htmlFor="subscription-plan-price">
                 {t('COPY.PRICE_MO')} (₹)
               </label>
-              <input
+              <input maxLength={30}
                 id="subscription-plan-price"
                 type="number"
                 min={0.01}
@@ -239,7 +239,7 @@ export default function SuperadminPlansPricingCatalogModal({
               <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1" htmlFor="subscription-plan-price-half">
                 {t('COPY.PRICE_HALF_YEARLY')} (₹)
               </label>
-              <input
+              <input maxLength={30}
                 id="subscription-plan-price-half"
                 type="number"
                 min={0}
@@ -253,7 +253,7 @@ export default function SuperadminPlansPricingCatalogModal({
               <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1" htmlFor="subscription-plan-price-annual">
                 {t('COPY.PRICE_ANNUAL')} (₹)
               </label>
-              <input
+              <input maxLength={30}
                 id="subscription-plan-price-annual"
                 type="number"
                 min={0}

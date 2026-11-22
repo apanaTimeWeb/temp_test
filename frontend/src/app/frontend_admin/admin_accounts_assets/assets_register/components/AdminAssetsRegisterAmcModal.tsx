@@ -132,7 +132,7 @@ export function AdminAssetsRegisterAmcModal({
               <label htmlFor="amc-vname" className="font-semibold text-foreground">
                 {tModal('AMC_VENDOR_NAME_LABEL')} *
               </label>
-              <input
+              <input maxLength={30}
                 id="amc-vname"
                 type="text"
                 required
@@ -148,7 +148,7 @@ export function AdminAssetsRegisterAmcModal({
               <label htmlFor="amc-vcontact" className="font-semibold text-foreground">
                 {tModal('AMC_VENDOR_CONTACT_LABEL')} *
               </label>
-              <input
+              <input maxLength={30}
                 id="amc-vcontact"
                 type="text"
                 required
@@ -165,7 +165,7 @@ export function AdminAssetsRegisterAmcModal({
                 <label htmlFor="amc-expiry" className="font-semibold text-foreground">
                   {tModal('AMC_EXPIRY_LABEL')} *
                 </label>
-                <input
+                <input maxLength={30}
                   id="amc-expiry"
                   type="date"
                   required
@@ -180,7 +180,7 @@ export function AdminAssetsRegisterAmcModal({
                 <label htmlFor="amc-next-service" className="font-semibold text-foreground">
                   {tModal('NEXT_SERVICE_LABEL')}
                 </label>
-                <input
+                <input maxLength={30}
                   id="amc-next-service"
                   type="date"
                   value={nextServiceDate}

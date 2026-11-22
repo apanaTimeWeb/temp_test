@@ -85,7 +85,7 @@ export default function SuperadminSubscriptionsOverviewNewModal({
             <label className="block font-semibold uppercase tracking-wider text-slate-300 mb-1">
               Library / Organization Name *
             </label>
-            <input
+            <input maxLength={100}
               type="text"
               required
               placeholder="e.g. Apex Central Library"
@@ -99,7 +99,7 @@ export default function SuperadminSubscriptionsOverviewNewModal({
             <label className="block font-semibold uppercase tracking-wider text-slate-300 mb-1">
               Admin Billing Email *
             </label>
-            <input
+            <input maxLength={254}
               type="email"
               required
               placeholder="e.g. billing@apexlib.org"
@@ -168,7 +168,7 @@ export default function SuperadminSubscriptionsOverviewNewModal({
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block font-semibold text-slate-300 mb-1">Coupon / Promo Code</label>
-              <input
+              <input maxLength={30}
                 type="text"
                 placeholder="e.g. LAUNCH50"
                 value={couponCode}

@@ -155,7 +155,7 @@ export default function SuperadminUsersDirectoryModal({ showModal, editUser, onC
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="superadmin-user-full-name" className="text-xs font-semibold text-slate-300 block mb-1">{t("COPY.FULL_NAME")}</label>
-                <input
+                <input maxLength={30}
                   id="superadmin-user-full-name"
                   autoComplete="name"
                   className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3.5 py-2 text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
@@ -172,7 +172,7 @@ export default function SuperadminUsersDirectoryModal({ showModal, editUser, onC
               </div>
               <div>
                 <label htmlFor="superadmin-user-username" className="text-xs font-semibold text-slate-300 block mb-1">{t("COPY.USERNAME")}</label>
-                <input
+                <input maxLength={30}
                   id="superadmin-user-username"
                   autoComplete="username"
                   className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3.5 py-2 text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
@@ -186,7 +186,7 @@ export default function SuperadminUsersDirectoryModal({ showModal, editUser, onC
             </div>
             <div>
               <label htmlFor="superadmin-user-email" className="text-xs font-semibold text-slate-300 block mb-1">{t("COPY.EMAIL_ADDRESS")}</label>
-              <input
+              <input maxLength={30}
                 id="superadmin-user-email"
                 type="email"
                 autoComplete="email"
@@ -215,7 +215,7 @@ export default function SuperadminUsersDirectoryModal({ showModal, editUser, onC
               </div>
               <div>
                 <label htmlFor="superadmin-user-branch" className="text-xs font-semibold text-slate-300 block mb-1">{t("COPY.ASSIGNED_TENANT_BRANCH")}</label>
-                <input
+                <input maxLength={30}
                   id="superadmin-user-branch"
                   className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3.5 py-2 text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   aria-invalid={Boolean(errors.branch)}

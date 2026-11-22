@@ -87,7 +87,7 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-[#0c102b]/85 border border-indigo-500/20 shadow-xl backdrop-blur-md">
         <div className="relative flex-1">
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
+          <input maxLength={250}
             type="text"
             placeholder="Search delivery logs by recipient, library, or failure reason..."
             value={search}

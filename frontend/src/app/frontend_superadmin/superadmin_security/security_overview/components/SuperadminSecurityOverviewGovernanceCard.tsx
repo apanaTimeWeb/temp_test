@@ -192,7 +192,7 @@ export const SuperadminSecurityOverviewGovernanceCard: React.FC = () => {
             <label className="block text-slate-400 mb-1 text-[11px]">
               Mandatory Business Reason (Logged to Immutable Audit Trail)
             </label>
-            <input
+            <input maxLength={250}
               type="text"
               required
               value={mandatoryReason}

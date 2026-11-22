@@ -250,7 +250,7 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
       <div className="flex flex-wrap items-center gap-2.5 p-3 rounded-xl bg-surface border border-border">
         <div className="relative w-full sm:w-72">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
-          <input
+          <input maxLength={30}
             id="security-deposits-search-input"
             name="searchQuery"
             type="search"

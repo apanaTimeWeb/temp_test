@@ -177,7 +177,7 @@ export function ManagerSeatsHistoryAuditModal({
             </label>
             <div className="relative">
               <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
-              <input
+              <input maxLength={30}
                 id="audit-student-search"
                 data-testid="manager-audit-student-search"
                 type="text"

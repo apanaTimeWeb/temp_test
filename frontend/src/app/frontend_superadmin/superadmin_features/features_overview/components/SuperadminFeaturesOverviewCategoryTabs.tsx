@@ -30,7 +30,7 @@ export default function SuperadminFeaturesOverviewCategoryTabs({
         {/* Search Bar */}
         <div className="relative max-w-md w-full">
           <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
+          <input maxLength={100}
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}

@@ -330,7 +330,7 @@ export function AdminShiftsManagementAddModal({
             <label htmlFor="shift-name-input" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
               Shift Title <span className="text-rose-400">*</span>
             </label>
-            <input
+            <input maxLength={30}
               id="shift-name-input"
               type="text"
               required
@@ -349,7 +349,7 @@ export function AdminShiftsManagementAddModal({
                   <Clock size={12} className="text-cyan-400" />
                   Start Time
                 </label>
-                <input
+                <input maxLength={30}
                   id="shift-start-time"
                   type="time"
                   required
@@ -368,7 +368,7 @@ export function AdminShiftsManagementAddModal({
                     {durationHours}h slot
                   </span>
                 </label>
-                <input
+                <input maxLength={30}
                   id="shift-end-time"
                   type="time"
                   required
@@ -438,7 +438,7 @@ export function AdminShiftsManagementAddModal({
                 <span>Desk Capacity</span>
                 <span className="text-[10px] text-slate-400 font-mono">Max: {branchMeta.deskCount}</span>
               </label>
-              <input
+              <input maxLength={30}
                 id="shift-capacity"
                 type="number"
                 min="1"
@@ -454,7 +454,7 @@ export function AdminShiftsManagementAddModal({
                 <IndianRupee size={12} className="text-emerald-400" />
                 Base Monthly Fee (₹)
               </label>
-              <input
+              <input maxLength={30}
                 id="shift-monthly-price"
                 type="number"
                 min="0"

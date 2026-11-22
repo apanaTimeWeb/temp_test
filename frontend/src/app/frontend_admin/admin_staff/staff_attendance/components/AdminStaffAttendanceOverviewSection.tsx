@@ -517,7 +517,7 @@ export function AdminStaffAttendanceOverviewSection({ model }: Props) {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="relative flex-1">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400" />
-          <input
+          <input maxLength={100}
             type="text"
             value={filters.searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}

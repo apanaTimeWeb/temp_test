@@ -162,7 +162,7 @@ export default function SuperadminSystemHealthOverviewServicesTable() {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2 border-t border-border/40">
             <div className="relative flex-1 sm:max-w-xs">
               <Search size={14} className="text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-              <input
+              <input maxLength={100}
                 type="search"
                 value={search}
                 onChange={(e) => {

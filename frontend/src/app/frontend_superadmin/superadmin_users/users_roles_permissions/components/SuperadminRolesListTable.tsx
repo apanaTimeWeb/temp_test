@@ -61,7 +61,7 @@ export default function SuperadminRolesListTable({
       {/* Search & Category Filter Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 shadow-md">
         <div className="relative flex-1 min-w-[240px]">
-          <input
+          <input maxLength={250}
             type="search"
             placeholder="Search roles by name or description..."
             value={searchQuery}

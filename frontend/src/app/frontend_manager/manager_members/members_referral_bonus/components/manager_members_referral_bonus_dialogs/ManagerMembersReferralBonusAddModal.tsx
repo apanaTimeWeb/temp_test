@@ -155,7 +155,7 @@ export function ManagerMembersReferralBonusAddModal({
               <label className="font-semibold text-primary block mb-1">Bonus Amount (₹)</label>
               <div className="mgr-input-icon-wrap relative">
                 <IndianRupee size={15} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-success pointer-events-none" />
-                <input
+                <input maxLength={100}
                   type="number"
                   min="50"
                   step="50"

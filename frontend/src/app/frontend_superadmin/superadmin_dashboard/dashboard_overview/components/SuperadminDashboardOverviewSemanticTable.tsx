@@ -47,7 +47,7 @@ export default function SuperadminDashboardOverviewSemanticTable<T extends objec
         <label className="relative flex items-center text-sm text-secondary">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none z-10" />
           <span className="sr-only">{tCopy('COPY.TABLE_FILTER_ROWS')}</span>
-          <input
+          <input maxLength={100}
             type="search"
             value={filterText}
             onChange={(event) => { setFilterText(event.currentTarget.value); setPage(0); }}

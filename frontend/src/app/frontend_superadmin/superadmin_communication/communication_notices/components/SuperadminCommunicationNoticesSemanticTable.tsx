@@ -50,7 +50,7 @@ export default function SuperadminCommunicationNoticesSemanticTable<T extends ob
           <span>{tCopy('COPY.TABLE_FILTER_ROWS')}</span>
           <div className="relative">
             <Search size={14} className="text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <input
+            <input maxLength={100}
               type="search"
               value={filterText}
               onChange={(event) => {

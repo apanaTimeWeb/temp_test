@@ -70,7 +70,7 @@ export default function ManagerFinanceRenewalsTimeHorizonBar({
           <div className="flex items-center gap-2 flex-wrap text-xs bg-muted p-1.5 rounded-lg border border-border">
             <label className="flex items-center gap-1 text-secondary" htmlFor="manager-renewals-start-date">
               <span>From:</span>
-              <input
+              <input maxLength={30}
                 id="manager-renewals-start-date"
                 type="date"
                 value={customStartDate}
@@ -82,7 +82,7 @@ export default function ManagerFinanceRenewalsTimeHorizonBar({
             </label>
             <label className="flex items-center gap-1 text-secondary" htmlFor="manager-renewals-end-date">
               <span>To:</span>
-              <input
+              <input maxLength={30}
                 id="manager-renewals-end-date"
                 type="date"
                 value={customEndDate}

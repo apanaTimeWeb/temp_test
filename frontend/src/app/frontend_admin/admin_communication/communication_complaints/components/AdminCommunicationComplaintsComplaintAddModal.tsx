@@ -46,7 +46,7 @@ export default function AdminCommunicationComplaintAddModal({ form, onClose, onS
         <form className="flex flex-col gap-3.5" onSubmit={form.handleSubmit(onSubmit)} noValidate>
           <div>
             <label className="mb-1.5 block text-badge font-semibold uppercase tracking-[0.07em] text-text-secondary" htmlFor="admin-communication-complaint-student">{t('COMPLAINT_STUDENT_OPTIONAL')}</label>
-            <input id="admin-communication-complaint-student" className="min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-body text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50" placeholder={t('COMPLAINT_STUDENT_SEARCH_PLACEHOLDER')} {...form.register('student')} />
+            <input maxLength={30} id="admin-communication-complaint-student" className="min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-body text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50" placeholder={t('COMPLAINT_STUDENT_SEARCH_PLACEHOLDER')} {...form.register('student')} />
           </div>
           <label className="flex min-h-11 items-center gap-2.5 text-body text-text-primary" htmlFor="admin-communication-complaint-anonymous">
             <input id="admin-communication-complaint-anonymous" type="checkbox" {...form.register('anonymous')} />
@@ -54,7 +54,7 @@ export default function AdminCommunicationComplaintAddModal({ form, onClose, onS
           </label>
           <div>
             <label className="mb-1.5 block text-badge font-semibold uppercase tracking-[0.07em] text-danger-text" htmlFor="admin-communication-complaint-title">{t('FORM_LABEL_TITLE')} <span className="text-danger-text">{t('FORM_REQUIRED')}</span></label>
-            <input id="admin-communication-complaint-title" className="min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-body text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50" placeholder={t('COMPLAINT_TITLE_PLACEHOLDER')} aria-invalid={Boolean(titleError)} aria-describedby={titleError ? 'admin-communication-complaint-title-error' : undefined} {...form.register('title')} />
+            <input maxLength={30} id="admin-communication-complaint-title" className="min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-body text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50" placeholder={t('COMPLAINT_TITLE_PLACEHOLDER')} aria-invalid={Boolean(titleError)} aria-describedby={titleError ? 'admin-communication-complaint-title-error' : undefined} {...form.register('title')} />
             {titleError && <p id="admin-communication-complaint-title-error" className="text-sm text-danger-text" role="alert">{titleError.message}</p>}
           </div>
           <div>

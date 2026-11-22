@@ -61,7 +61,7 @@ export function ManagerMembersEnquiriesFollowUpFormPanel({
       <form onSubmit={(event) => event.preventDefault()} noValidate className="crm-form-stack">
         <div className="crm-field">
           <label htmlFor="crm-followup-date" className="crm-label crm-label--required">{dateLabel}</label>
-          <input
+          <input maxLength={30}
             id="crm-followup-date"
             type="date"
             min={minimumDate}

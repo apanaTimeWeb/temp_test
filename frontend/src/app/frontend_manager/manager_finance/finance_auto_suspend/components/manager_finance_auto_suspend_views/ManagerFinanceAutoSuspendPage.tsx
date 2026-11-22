@@ -325,7 +325,7 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
           <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-0">
             <div className="relative w-full sm:w-72">
               <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
-              <input
+              <input maxLength={30}
                 type="text"
                 placeholder="Search student, smart ID, or seat..."
                 className="mgr-input !pl-10 !pr-9 text-xs w-full"

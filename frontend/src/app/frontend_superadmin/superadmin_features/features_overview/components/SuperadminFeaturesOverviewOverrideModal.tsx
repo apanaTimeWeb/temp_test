@@ -200,7 +200,7 @@ export default function SuperadminFeaturesOverviewOverrideModal({
             <label className="block text-xs font-bold text-slate-300 mb-1.5">
               Optional Expiry Date (Temporary Exception)
             </label>
-            <input
+            <input maxLength={100}
               type="date"
               value={expiresAt}
               onChange={(e) => setExpiresAt(e.target.value)}

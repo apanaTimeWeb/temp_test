@@ -129,7 +129,7 @@ export function ManagerAccountsExpensesToolbar({
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         {/* Search Input with Guaranteed Non-Overlapping Icon & Clear Button */}
         <div className="relative flex-1 flex items-center">
-          <input
+          <input maxLength={100}
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}

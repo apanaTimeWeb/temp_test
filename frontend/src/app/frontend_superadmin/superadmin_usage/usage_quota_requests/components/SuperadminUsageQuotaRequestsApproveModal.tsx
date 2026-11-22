@@ -120,7 +120,7 @@ export function SuperadminUsageQuotaRequestsApproveModal({
               <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Approved Capacity Limit ({request.unit})
               </label>
-              <input
+              <input maxLength={100}
                 type="number"
                 min={1}
                 {...register('approvedLimit', { valueAsNumber: true })}
@@ -135,7 +135,7 @@ export function SuperadminUsageQuotaRequestsApproveModal({
               <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Monthly Addon Surcharge (₹ INR)
               </label>
-              <input
+              <input maxLength={100}
                 type="number"
                 min={0}
                 {...register('addonFeeMonthlyInr', { valueAsNumber: true })}

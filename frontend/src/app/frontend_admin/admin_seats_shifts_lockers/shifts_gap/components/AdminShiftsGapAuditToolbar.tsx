@@ -25,7 +25,7 @@ export function AdminShiftsGapAuditToolbar({
     <div className="flex flex-wrap items-center gap-3">
       <div className="relative flex-1 min-w-[220px] max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-secondary pointer-events-none" />
-        <input
+        <input maxLength={30}
           type="text"
           placeholder="Search student, smart ID, seat, branch..."
           value={searchQuery}

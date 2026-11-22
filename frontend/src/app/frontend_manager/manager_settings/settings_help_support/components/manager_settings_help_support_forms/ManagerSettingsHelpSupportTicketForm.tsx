@@ -172,7 +172,7 @@ export function ManagerSettingsHelpSupportTicketForm({ onCancel }: ManagerSettin
           </div>
 
           <div className="relative">
-            <input
+            <input maxLength={30}
               id="manager-ticket-subject"
               type="text"
               required

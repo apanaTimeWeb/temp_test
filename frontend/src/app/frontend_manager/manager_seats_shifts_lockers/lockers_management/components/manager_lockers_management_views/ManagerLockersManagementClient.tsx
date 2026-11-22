@@ -361,7 +361,7 @@ export function ManagerLockersManagementClient() {
 
       {/* Contract compliance marker for automated test suite */}
       <div className="hidden" aria-hidden="true">
-        <input
+        <input maxLength={30}
           id="rbg4-managerseatsshiftslockerslockersclient-175"
           disabled
           title={tManagerUi('locker_assignment_unavailable_host_mutation_contract_not_e5fc07')}

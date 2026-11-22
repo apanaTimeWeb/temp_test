@@ -39,7 +39,7 @@ export function ManagerMembersEnquiriesToolbar({
         {/* Search Input */}
         <div className="relative flex-1 min-w-0 w-full sm:min-w-[200px]">
           <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none z-10" />
-          <input
+          <input maxLength={100}
             type="text"
             className="w-full !pl-10 pr-8 py-2 bg-[#060818] border border-indigo-500/25 rounded-xl text-sm text-slate-100 placeholder:text-slate-400 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/30 transition-all"
             style={{ paddingLeft: '2.5rem' }}

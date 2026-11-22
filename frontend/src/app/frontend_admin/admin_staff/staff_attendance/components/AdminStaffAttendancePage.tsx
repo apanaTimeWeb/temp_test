@@ -97,7 +97,7 @@ export function AdminStaffAttendancePage() {
             </div>
 
             {dateMode === 'custom' && (
-              <input
+              <input maxLength={100}
                 type="date"
                 value={model.filters.selectedDate}
                 onChange={(e) => handleDateModeChange('custom', e.target.value)}

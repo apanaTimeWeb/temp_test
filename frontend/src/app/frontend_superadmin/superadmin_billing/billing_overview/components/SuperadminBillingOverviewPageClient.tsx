@@ -247,7 +247,7 @@ export default function SuperadminBillingOverviewPageClient({ initialTab }: Supe
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-4 rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 shadow-md flex-wrap">
             <div className="relative flex-1 min-w-[200px]">
               <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
-              <input
+              <input maxLength={100}
                 type="search"
                 placeholder="Search collection ledger, tenant, GSTIN..."
                 value={searchQuery}
@@ -336,7 +336,7 @@ export default function SuperadminBillingOverviewPageClient({ initialTab }: Supe
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block font-semibold text-slate-300 mb-1">Platform Legal Business Name</label>
-                <input
+                <input maxLength={100}
                   type="text"
                   required
                   value={legalName}
@@ -360,7 +360,7 @@ export default function SuperadminBillingOverviewPageClient({ initialTab }: Supe
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
               <div>
                 <label className="block font-semibold text-slate-300 mb-1">Services SAC Code</label>
-                <input
+                <input maxLength={30}
                   type="text"
                   required
                   value={sacCode}

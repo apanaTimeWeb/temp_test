@@ -133,7 +133,7 @@ export function ManagerLockersManagementVacateModal({
             <label className="ss-label" htmlFor="clearance-remarks">
               {tManagerUi('clearance_remarks')}
             </label>
-            <input
+            <input maxLength={250}
               id="clearance-remarks"
               className="ss-input"
               placeholder={tManagerUi('clearance_remarks_placeholder')}

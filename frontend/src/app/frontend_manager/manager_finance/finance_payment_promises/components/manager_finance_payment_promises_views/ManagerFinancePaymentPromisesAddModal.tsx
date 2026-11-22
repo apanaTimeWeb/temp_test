@@ -176,7 +176,7 @@ export function ManagerFinancePaymentPromisesAddModal({
               </label>
               <div className="relative">
                 <IndianRupee size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-                <input
+                <input maxLength={30}
                   id="add-promised-amount"
                   name="promisedAmount"
                   type="number"
@@ -202,7 +202,7 @@ export function ManagerFinancePaymentPromisesAddModal({
               <label htmlFor="add-expected-date" className="text-xs font-semibold text-primary block mb-1">
                 Expected Date *
               </label>
-              <input
+              <input maxLength={30}
                 id="add-expected-date"
                 name="expectedDate"
                 type="date"

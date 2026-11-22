@@ -374,7 +374,7 @@ export function AdminAccountsDailySettlementPage() {
             {/* Search Input */}
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground pointer-events-none" />
-              <input
+              <input maxLength={100}
                 type="text"
                 placeholder={t('FILTERS.SEARCH_PLACEHOLDER')}
                 value={searchQuery}

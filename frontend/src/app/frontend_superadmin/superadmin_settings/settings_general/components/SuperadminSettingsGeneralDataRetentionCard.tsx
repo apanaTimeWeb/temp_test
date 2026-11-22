@@ -74,7 +74,7 @@ export function SuperadminSettingsGeneralDataRetentionCard() {
               {memberLogsDays} Days
             </span>
           </div>
-          <input
+          <input maxLength={30}
             id="settings-retention-member-logs"
             type="number"
             min={7}
@@ -104,7 +104,7 @@ export function SuperadminSettingsGeneralDataRetentionCard() {
               {auditLogsYears} Years
             </span>
           </div>
-          <input
+          <input maxLength={30}
             id="settings-retention-audit-logs"
             type="number"
             min={1}
@@ -134,7 +134,7 @@ export function SuperadminSettingsGeneralDataRetentionCard() {
               {punchLogsDays} Days
             </span>
           </div>
-          <input
+          <input maxLength={30}
             id="settings-retention-punch-logs"
             type="number"
             min={30}
@@ -164,7 +164,7 @@ export function SuperadminSettingsGeneralDataRetentionCard() {
               {trashPurgeDays} Days
             </span>
           </div>
-          <input
+          <input maxLength={30}
             id="settings-retention-trash"
             type="number"
             min={1}

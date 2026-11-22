@@ -375,7 +375,7 @@ export default function ManagerAttendanceQrScannerPage({
               </label>
               <div className="relative">
                 <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-                <input
+                <input maxLength={30}
                   id="manual-scan-input"
                   type="text"
                   placeholder="e.g. LIB-001, Rahul Sharma, 9876543210..."
@@ -509,7 +509,7 @@ export default function ManagerAttendanceQrScannerPage({
 
             {/* Kiosk Input (Hidden or Fast Scanner Barcode Input) */}
             <div className="w-full max-w-sm space-y-2">
-              <input
+              <input maxLength={30}
                 id="kiosk-barcode-input"
                 type="text"
                 placeholder="Scan Card / Enter Smart ID..."
@@ -659,7 +659,7 @@ export default function ManagerAttendanceQrScannerPage({
                   Enter Manager PIN to unlock tablet and exit kiosk mode (Default: 1234).
                 </p>
 
-                <input
+                <input maxLength={30}
                   id="manager-kiosk-unlock-pin"
                   type="password"
                   placeholder="Enter PIN (1234)"

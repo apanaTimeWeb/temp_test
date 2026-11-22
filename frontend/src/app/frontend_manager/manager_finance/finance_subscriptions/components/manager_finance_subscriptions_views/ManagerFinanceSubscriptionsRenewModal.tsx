@@ -243,7 +243,7 @@ export default function ManagerFinanceSubscriptionsRenewModal({
               <label className="text-xs font-semibold text-primary block mb-1">
                 Txn / Receipt Ref
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 value={referenceNo}
                 onChange={(e) => setReferenceNo(e.target.value)}

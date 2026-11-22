@@ -92,7 +92,7 @@ export const SuperadminIntegrationsOverviewApiGuardSimulatorModal: React.FC<ApiG
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="text-slate-400 text-[11px] font-bold block mb-1">Target Tenant:</label>
-                <input type="text" value={tenantName} onChange={(e) => setTenantName(e.target.value)} className="w-full px-3 py-1.5 rounded-xl border border-indigo-500/25 bg-slate-900 text-slate-200 text-xs focus:ring-1 focus:ring-teal-500" />
+                <input maxLength={100} type="text" value={tenantName} onChange={(e) => setTenantName(e.target.value)} className="w-full px-3 py-1.5 rounded-xl border border-indigo-500/25 bg-slate-900 text-slate-200 text-xs focus:ring-1 focus:ring-teal-500" />
               </div>
               <div>
                 <label className="text-slate-400 text-[11px] font-bold block mb-1">Simulation Scenario:</label>

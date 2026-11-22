@@ -59,7 +59,7 @@ export default function SuperadminBranchesOverviewTransferManagerModal({
         <form onSubmit={handleSubmit} className="space-y-3.5">
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1">New Manager Name *</label>
-            <input
+            <input maxLength={100}
               type="text"
               placeholder="e.g. Ramesh Kumar"
               value={name}
@@ -70,7 +70,7 @@ export default function SuperadminBranchesOverviewTransferManagerModal({
 
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1">New Manager Email *</label>
-            <input
+            <input maxLength={254}
               type="email"
               placeholder="ramesh@libraryos.io"
               value={email}

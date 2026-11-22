@@ -257,7 +257,7 @@ export default function PublicAuthResetPasswordPage() {
                     <span className="sr-only">{t('COMMON.required')}</span>
                   </label>
                   <div className="relative">
-                    <input
+                    <input maxLength={30}
                       id="auth-reset-password"
                       data-testid="auth-reset-password-input"
                       required
@@ -298,7 +298,7 @@ export default function PublicAuthResetPasswordPage() {
                     <span className="sr-only">{t('COMMON.required')}</span>
                   </label>
                   <div className="relative">
-                    <input
+                    <input maxLength={30}
                       id="auth-reset-confirm"
                       data-testid="auth-reset-confirm-password-input"
                       required

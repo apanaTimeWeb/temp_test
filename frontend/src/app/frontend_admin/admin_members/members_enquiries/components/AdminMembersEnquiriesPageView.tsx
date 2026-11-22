@@ -160,7 +160,7 @@ export default function AdminEnquiriesPageView() {
               </div>
               {timeRange === 'custom' && (
                 <div className="flex items-center gap-1.5 text-xs">
-                  <input
+                  <input maxLength={100}
                     type="date"
                     value={customStartDate}
                     onChange={(e) => setCustomStartDate(e.target.value)}
@@ -168,7 +168,7 @@ export default function AdminEnquiriesPageView() {
                     className="rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-1 text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-400"
                   />
                   <span className="text-slate-500">to</span>
-                  <input
+                  <input maxLength={100}
                     type="date"
                     value={customEndDate}
                     onChange={(e) => setCustomEndDate(e.target.value)}
@@ -248,7 +248,7 @@ export default function AdminEnquiriesPageView() {
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-800/80 bg-slate-900/50 backdrop-blur-xl p-3 shadow-lg">
           <div className="relative min-w-0 flex-1 max-w-sm">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" strokeWidth={2} />
-            <input
+            <input maxLength={100}
               type="text"
               aria-label={t('SEARCH_ARIA')}
               disabled={!isDemoMode}

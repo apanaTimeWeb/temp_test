@@ -126,7 +126,7 @@ export function ManagerAccountsSeatGapReportTimeHorizonBar({
             <label className="flex items-center gap-1.5 text-secondary">
               <Calendar size={13} className="text-primary" />
               <span>From:</span>
-              <input
+              <input maxLength={100}
                 type="date"
                 value={customStartDate}
                 onChange={(e) => onCustomStartDateChange(e.target.value)}
@@ -135,7 +135,7 @@ export function ManagerAccountsSeatGapReportTimeHorizonBar({
             </label>
             <label className="flex items-center gap-1.5 text-secondary">
               <span>To:</span>
-              <input
+              <input maxLength={100}
                 type="date"
                 value={customEndDate}
                 onChange={(e) => onCustomEndDateChange(e.target.value)}

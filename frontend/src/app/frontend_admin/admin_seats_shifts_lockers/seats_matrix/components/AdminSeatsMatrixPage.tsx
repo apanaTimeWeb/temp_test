@@ -791,7 +791,7 @@ export function AdminSeatMatrixSeatMatrixPage() {
             {/* Search Input */}
             <div className="relative flex-1 min-w-[200px] max-w-sm">
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
-              <input
+              <input maxLength={100}
                 type="text"
                 placeholder="Search seat (S-01), student, phone, plan..."
                 value={searchQuery}
@@ -1052,7 +1052,7 @@ export function AdminSeatMatrixSeatMatrixPage() {
                   <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-seat-student">
                     Student Full Name <span className="text-rose-400">*</span>
                   </label>
-                  <input
+                  <input maxLength={30}
                     id="admin-seat-student"
                     type="text"
                     required
@@ -1081,7 +1081,7 @@ export function AdminSeatMatrixSeatMatrixPage() {
                     <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-seat-smartid">
                       Smart ID / Card
                     </label>
-                    <input
+                    <input maxLength={30}
                       id="admin-seat-smartid"
                       type="text"
                       value={assignSmartId}
@@ -1134,7 +1134,7 @@ export function AdminSeatMatrixSeatMatrixPage() {
                     <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-seat-locker">
                       Locker (Optional)
                     </label>
-                    <input
+                    <input maxLength={30}
                       id="admin-seat-locker"
                       type="text"
                       value={assignLocker}
@@ -1148,7 +1148,7 @@ export function AdminSeatMatrixSeatMatrixPage() {
                     <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-seat-expiry">
                       Valid Until Date
                     </label>
-                    <input
+                    <input maxLength={30}
                       id="admin-seat-expiry"
                       type="date"
                       value={assignExpiry}

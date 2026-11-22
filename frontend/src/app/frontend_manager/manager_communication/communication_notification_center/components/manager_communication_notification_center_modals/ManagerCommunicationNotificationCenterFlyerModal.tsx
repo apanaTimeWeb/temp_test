@@ -309,7 +309,7 @@ export function ManagerCommunicationNotificationCenterFlyerModal({
                   <div className="space-y-2.5 mt-2.5 p-3 rounded-xl bg-surface/50 border border-border text-xs">
                     <div>
                       <label className="font-semibold block mb-1">Notice Title</label>
-                      <input
+                      <input maxLength={100}
                         type="text"
                         value={noticeTitle}
                         onChange={(e) => setNoticeTitle(e.target.value)}
@@ -318,7 +318,7 @@ export function ManagerCommunicationNotificationCenterFlyerModal({
                     </div>
                     <div>
                       <label className="font-semibold block mb-1">Notice Category Badge</label>
-                      <input
+                      <input maxLength={100}
                         type="text"
                         value={noticeCategory}
                         onChange={(e) => setNoticeCategory(e.target.value)}
@@ -327,7 +327,7 @@ export function ManagerCommunicationNotificationCenterFlyerModal({
                     </div>
                     <div>
                       <label className="font-semibold block mb-1">Effective Dates / अवधि</label>
-                      <input
+                      <input maxLength={100}
                         type="text"
                         value={effectiveDates}
                         onChange={(e) => setEffectiveDates(e.target.value)}
@@ -336,7 +336,7 @@ export function ManagerCommunicationNotificationCenterFlyerModal({
                     </div>
                     <div>
                       <label className="font-semibold block mb-1">Reopen Time / पुनः संचालन</label>
-                      <input
+                      <input maxLength={100}
                         type="text"
                         value={reopenTime}
                         onChange={(e) => setReopenTime(e.target.value)}

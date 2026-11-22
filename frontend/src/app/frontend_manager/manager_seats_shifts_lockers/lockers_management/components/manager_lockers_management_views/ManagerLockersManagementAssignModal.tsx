@@ -162,7 +162,7 @@ export function ManagerLockersManagementAssignModal({
                 size={15}
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none"
               />
-              <input
+              <input maxLength={100}
                 type="text"
                 value={selectedStudent ? selectedStudent.name : searchTerm}
                 onChange={(e) => {
@@ -300,7 +300,7 @@ export function ManagerLockersManagementAssignModal({
               </label>
               <div className="relative">
                 <Key size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-secondary" />
-                <input
+                <input maxLength={30}
                   id="assign-key-number"
                   data-testid="manager-assign-key-number-input"
                   type="text"
@@ -318,7 +318,7 @@ export function ManagerLockersManagementAssignModal({
               <label htmlFor="assign-expiry-date" className="text-[11px] font-bold text-secondary uppercase tracking-wider block">
                 Linked Plan Expiry Date
               </label>
-              <input
+              <input maxLength={30}
                 id="assign-expiry-date"
                 data-testid="manager-assign-expiry-date-input"
                 type="date"

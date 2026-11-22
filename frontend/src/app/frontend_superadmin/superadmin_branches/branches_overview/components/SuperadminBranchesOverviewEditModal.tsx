@@ -139,7 +139,7 @@ export default function SuperadminBranchesOverviewEditModal({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="p-3 rounded-xl border border-indigo-500/20 bg-card/40">
               <label className="block text-xs font-semibold text-slate-300 mb-1">Branch Name *</label>
-              <input
+              <input maxLength={100}
                 type="text"
                 required
                 value={name}
@@ -149,7 +149,7 @@ export default function SuperadminBranchesOverviewEditModal({
             </div>
             <div className="p-3 rounded-xl border border-indigo-500/20 bg-card/40">
               <label className="block text-xs font-semibold text-slate-300 mb-1">Branch Code (Fixed System Identifier)</label>
-              <input
+              <input maxLength={30}
                 type="text"
                 disabled
                 value={branch.code}
@@ -166,7 +166,7 @@ export default function SuperadminBranchesOverviewEditModal({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">City *</label>
-                <input
+                <input maxLength={100}
                   type="text"
                   required
                   value={city}
@@ -176,7 +176,7 @@ export default function SuperadminBranchesOverviewEditModal({
               </div>
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">State</label>
-                <input
+                <input maxLength={100}
                   type="text"
                   value={state}
                   onChange={(e) => setState(e.target.value)}
@@ -185,7 +185,7 @@ export default function SuperadminBranchesOverviewEditModal({
               </div>
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">PIN Code</label>
-                <input
+                <input maxLength={30}
                   type="text"
                   value={pinCode}
                   onChange={(e) => setPinCode(e.target.value)}
@@ -195,7 +195,7 @@ export default function SuperadminBranchesOverviewEditModal({
             </div>
             <div>
               <label className="block text-[11px] font-semibold text-slate-400 mb-1">Premises Address</label>
-              <input
+              <input maxLength={250}
                 type="text"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
@@ -214,7 +214,7 @@ export default function SuperadminBranchesOverviewEditModal({
               </div>
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">Branch Help Desk Email</label>
-                <input
+                <input maxLength={254}
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -233,7 +233,7 @@ export default function SuperadminBranchesOverviewEditModal({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">Manager Name *</label>
-                <input
+                <input maxLength={100}
                   type="text"
                   required
                   value={managerName}
@@ -243,7 +243,7 @@ export default function SuperadminBranchesOverviewEditModal({
               </div>
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">Manager Email</label>
-                <input
+                <input maxLength={254}
                   type="email"
                   value={managerEmail}
                   onChange={(e) => setManagerEmail(e.target.value)}
@@ -282,7 +282,7 @@ export default function SuperadminBranchesOverviewEditModal({
                 <Clock size={13} className="text-indigo-400" />
                 <span>Working Hours</span>
               </label>
-              <input
+              <input maxLength={100}
                 type="text"
                 value={workingHours}
                 onChange={(e) => setWorkingHours(e.target.value)}
@@ -294,7 +294,7 @@ export default function SuperadminBranchesOverviewEditModal({
                 <Calendar size={13} className="text-amber-400" />
                 <span>Weekly Holidays</span>
               </label>
-              <input
+              <input maxLength={30}
                 type="text"
                 value={weeklyHolidays}
                 onChange={(e) => setWeeklyHolidays(e.target.value)}

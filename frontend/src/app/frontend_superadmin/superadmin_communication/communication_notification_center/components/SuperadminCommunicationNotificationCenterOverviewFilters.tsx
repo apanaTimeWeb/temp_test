@@ -40,7 +40,7 @@ export function SuperadminCommunicationNotificationCenterOverviewFilters({
         {/* Search Box */}
         <div className="relative flex-1">
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
+          <input maxLength={100}
             type="text"
             placeholder="Search by title, recipient, library name or message content..."
             value={searchQuery}

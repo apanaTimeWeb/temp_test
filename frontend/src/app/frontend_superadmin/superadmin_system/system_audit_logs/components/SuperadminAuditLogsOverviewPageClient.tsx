@@ -182,7 +182,7 @@ export default function SuperadminAuditLogsOverviewPageClient() {
       <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0c0f2b] via-[#090b20] to-[#060818] shadow-2xl overflow-hidden backdrop-blur-xl">
         <div className="sa-actions-bar flex flex-wrap items-center justify-between gap-4 p-4 sm:p-5 border-b border-indigo-500/20 bg-indigo-950/25">
           <div className="flex flex-wrap items-center gap-3">
-            <input
+            <input maxLength={100}
               aria-label={t("COPY.SEARCH_AUDIT_SAMPLE_BY_TARGET_OR_USER")}
               type="search"
               placeholder={t("COPY.SEARCH_SAMPLE_BY_TARGET_OR_USER")}

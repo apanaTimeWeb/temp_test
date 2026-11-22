@@ -58,7 +58,7 @@ export default function ManagerFinanceRenewalsFilterBar({
         <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-[260px]">
         <div className="relative w-full sm:w-56">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
-          <input
+          <input maxLength={30}
             id="manager-renewals-search-input"
             type="text"
             aria-label="Search student, smart ID, or plan"

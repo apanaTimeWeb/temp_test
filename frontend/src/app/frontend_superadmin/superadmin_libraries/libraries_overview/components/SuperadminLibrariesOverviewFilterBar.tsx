@@ -38,7 +38,7 @@ export default function SuperadminLibrariesOverviewFilterBar({
       {/* Search Input */}
       <div className="relative flex-1 min-w-[220px] w-full sm:w-auto">
         <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none z-10" />
-        <input
+        <input maxLength={30}
           type="search"
           placeholder="Search by library name, owner, city, code..."
           value={searchQuery}

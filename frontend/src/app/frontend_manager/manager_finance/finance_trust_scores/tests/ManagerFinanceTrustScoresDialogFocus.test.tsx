@@ -10,7 +10,7 @@ function TestDialogComponent({ onClose, active = true }: { onClose: () => void; 
   return (
     <div ref={dialogRef} tabIndex={-1} role="dialog" aria-modal="true">
       <button type="button" data-testid="first-btn">First</button>
-      <input type="text" data-testid="text-input" />
+      <input maxLength={30} type="text" data-testid="text-input" />
       <button type="button" data-testid="last-btn">Last</button>
     </div>
   );

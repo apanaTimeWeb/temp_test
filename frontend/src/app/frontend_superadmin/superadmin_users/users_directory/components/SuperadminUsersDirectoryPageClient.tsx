@@ -497,7 +497,7 @@ export default function SuperadminUsersDirectoryPageClient() {
           {/* Free Text Search */}
           <div className="relative flex-1 min-w-[220px]">
             <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
-            <input
+            <input maxLength={100}
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}

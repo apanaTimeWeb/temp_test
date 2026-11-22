@@ -47,7 +47,7 @@ export default function SuperadminSecurityMfaAccountsTable({
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <div className="relative flex-1 sm:w-56">
             <Search size={14} className="absolute left-3 top-2.5 text-slate-400" />
-            <input
+            <input maxLength={100}
               type="search"
               value={accountSearch}
               onChange={(e) => { setAccountSearch(e.target.value); setPage(0); }}

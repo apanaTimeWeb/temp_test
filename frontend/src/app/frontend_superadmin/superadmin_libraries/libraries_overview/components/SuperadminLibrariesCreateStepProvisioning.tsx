@@ -76,7 +76,7 @@ export default function SuperadminLibrariesCreateStepProvisioning({
               One-Time Admin Onboarding & MFA Invitation Link:
             </label>
             <div className="flex items-center gap-2">
-              <input
+              <input maxLength={100}
                 type="text"
                 readOnly
                 value={provisioningResult.invitationUrl}

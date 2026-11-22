@@ -65,7 +65,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 border border-indigo-500/20 bg-gradient-to-b from-[#0f143a]/75 to-[#090c24]/90 rounded-2xl shadow-xl backdrop-blur-xl">
           <div className="flex flex-col gap-1.5">
             <label htmlFor="security-max-failed-attempts" className="text-xs font-semibold text-slate-200">Max Failed Attempts (Before Lockout)</label>
-            <input
+            <input maxLength={30}
               id="security-max-failed-attempts"
               type="number"
               min={3}
@@ -81,7 +81,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
           </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor="security-lock-duration" className="text-xs font-semibold text-slate-200">Account Lockout Duration (Minutes)</label>
-            <input
+            <input maxLength={30}
               id="security-lock-duration"
               type="number"
               min={5}
@@ -136,7 +136,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
                 <Timer size={14} className="text-sky-400" />
                 <span>Inactive Session Timeout (Minutes)</span>
               </label>
-              <input
+              <input maxLength={30}
                 id="security-session-timeout"
                 type="number"
                 min={5}
@@ -155,7 +155,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
                 <KeyRound size={14} className="text-sky-400" />
                 <span>Password Reset Link Expiry (Minutes)</span>
               </label>
-              <input
+              <input maxLength={30}
                 id="security-reset-token-expiry"
                 type="number"
                 min={5}

@@ -226,7 +226,7 @@ export default function AdminProfileActiveBranchesPanel() {
         <div className="p-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 bg-slate-950/40">
           <div className="relative flex-1 min-w-[240px] max-w-md">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-            <input
+            <input maxLength={100}
               type="text"
               value={search}
               onChange={(e) => {
@@ -489,7 +489,7 @@ export default function AdminProfileActiveBranchesPanel() {
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
                   Branch Name *
                 </label>
-                <input
+                <input maxLength={100}
                   type="text"
                   required
                   value={editFormData.name}
@@ -503,7 +503,7 @@ export default function AdminProfileActiveBranchesPanel() {
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
                   Branch Code *
                 </label>
-                <input
+                <input maxLength={30}
                   type="text"
                   required
                   value={editFormData.code}
@@ -517,7 +517,7 @@ export default function AdminProfileActiveBranchesPanel() {
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
                   Assigned Manager
                 </label>
-                <input
+                <input maxLength={100}
                   type="text"
                   value={editFormData.manager}
                   onChange={(e) => setEditFormData({ ...editFormData, manager: e.target.value })}
@@ -543,7 +543,7 @@ export default function AdminProfileActiveBranchesPanel() {
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
                   Operational Timings
                 </label>
-                <input
+                <input maxLength={100}
                   type="text"
                   value={editFormData.timing}
                   onChange={(e) => setEditFormData({ ...editFormData, timing: e.target.value })}

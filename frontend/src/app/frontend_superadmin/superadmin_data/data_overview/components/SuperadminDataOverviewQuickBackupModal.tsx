@@ -82,7 +82,7 @@ export function SuperadminDataOverviewQuickBackupModal({
         <form onSubmit={handleSubmit(handleFormSubmit)} className="p-5 space-y-4 text-xs">
           <div>
             <label className="block font-semibold text-foreground mb-1">Snapshot Identifier</label>
-            <input
+            <input maxLength={100}
               type="text"
               {...register('snapshotName')}
               className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-border text-foreground focus:outline-none focus:border-pink-500 font-mono text-xs"

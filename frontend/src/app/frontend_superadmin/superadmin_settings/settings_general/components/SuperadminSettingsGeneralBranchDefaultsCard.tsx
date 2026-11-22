@@ -33,7 +33,7 @@ export const SuperadminSettingsGeneralBranchDefaultsCard: FC = () => {
             <Users size={13} className="text-amber-400" />
             Default Branch Capacity (Patrons)
           </label>
-          <input
+          <input maxLength={30}
             id="settings-branch-capacity"
             type="number"
             min={10}
@@ -53,7 +53,7 @@ export const SuperadminSettingsGeneralBranchDefaultsCard: FC = () => {
             <Clock size={13} className="text-amber-400" />
             Standard Opening Time (24h)
           </label>
-          <input
+          <input maxLength={30}
             id="settings-opening-time"
             type="time"
             className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
@@ -68,7 +68,7 @@ export const SuperadminSettingsGeneralBranchDefaultsCard: FC = () => {
             <Clock size={13} className="text-amber-400" />
             Standard Closing Time (24h)
           </label>
-          <input
+          <input maxLength={30}
             id="settings-closing-time"
             type="time"
             className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
@@ -101,7 +101,7 @@ export const SuperadminSettingsGeneralBranchDefaultsCard: FC = () => {
           <label htmlFor="settings-checkin-grace" className="text-xs font-bold uppercase tracking-wider text-slate-300">
             Check-In Grace Window (Minutes)
           </label>
-          <input
+          <input maxLength={30}
             id="settings-checkin-grace"
             type="number"
             min={0}

@@ -38,7 +38,7 @@ export default function SuperadminLibrariesOnboardingSetupStep2Form({ onNext, in
         <div key={field.id} className="sa-wizard-row sa-wizard-row--shifts">
           <div className="space-y-1.5">
             <label className="sa-wizard-field-label--sm" htmlFor={`setup-shift-${i}-name`}>{tCopy("COPY.SHIFT_NAME")}</label>
-            <input id={`setup-shift-${i}-name`} aria-invalid={!!errors.shifts?.[i]?.name} aria-describedby={errors.shifts?.[i]?.name ? `setup-shift-${i}-name-error` : undefined} {...register(`shifts.${i}.name`)} placeholder={tCopy("COPY.E_G_MORNING")}
+            <input maxLength={30} id={`setup-shift-${i}-name`} aria-invalid={!!errors.shifts?.[i]?.name} aria-describedby={errors.shifts?.[i]?.name ? `setup-shift-${i}-name-error` : undefined} {...register(`shifts.${i}.name`)} placeholder={tCopy("COPY.E_G_MORNING")}
               className={inputCls(!!(errors.shifts?.[i]?.name))}  data-testid={`superadmin-setup-wizard-setup-wizard-step2-form-e-g-morning-1-${String(field.id)}`}/>
             {errors.shifts?.[i]?.name && (
               <p id={`setup-shift-${i}-name-error`} className="sa-wizard-field-error">{translateValidationMessage(errors.shifts[i].name?.message)}</p>
@@ -46,13 +46,13 @@ export default function SuperadminLibrariesOnboardingSetupStep2Form({ onNext, in
           </div>
           <div className="space-y-1.5">
             <label className="sa-wizard-field-label--sm" htmlFor={`setup-shift-${i}-start`}>{tCopy("COPY.START")}</label>
-            <input id={`setup-shift-${i}-start`} type="time" aria-invalid={!!errors.shifts?.[i]?.start} aria-describedby={errors.shifts?.[i]?.start ? `setup-shift-${i}-start-error` : undefined} {...register(`shifts.${i}.start`)}
+            <input maxLength={30} id={`setup-shift-${i}-start`} type="time" aria-invalid={!!errors.shifts?.[i]?.start} aria-describedby={errors.shifts?.[i]?.start ? `setup-shift-${i}-start-error` : undefined} {...register(`shifts.${i}.start`)}
               className={`${inputCls(!!errors.shifts?.[i]?.start)} [color-scheme:dark]`}  data-testid={`superadmin-setup-wizard-setup-wizard-step2-form-field-2-${String(field.id)}`}/>
             {errors.shifts?.[i]?.start && <p id={`setup-shift-${i}-start-error`} className="sa-wizard-field-error">{translateValidationMessage(errors.shifts[i]?.start?.message)}</p>}
           </div>
           <div className="space-y-1.5">
             <label className="sa-wizard-field-label--sm" htmlFor={`setup-shift-${i}-end`}>{tCopy("COPY.END")}</label>
-            <input id={`setup-shift-${i}-end`} type="time" {...register(`shifts.${i}.end`)}
+            <input maxLength={30} id={`setup-shift-${i}-end`} type="time" {...register(`shifts.${i}.end`)}
               className={`${inputCls(!!errors.shifts?.[i]?.end)} [color-scheme:dark]`} aria-invalid={!!errors.shifts?.[i]?.end} aria-describedby={errors.shifts?.[i]?.end ? `setup-shift-${i}-end-error` : undefined}  data-testid={`superadmin-setup-wizard-setup-wizard-step2-form-field-3-${String(field.id)}`}/>
             {errors.shifts?.[i]?.end && <p id={`setup-shift-${i}-end-error`} className="sa-wizard-field-error">{translateValidationMessage(errors.shifts[i]?.end?.message)}</p>}
           </div>

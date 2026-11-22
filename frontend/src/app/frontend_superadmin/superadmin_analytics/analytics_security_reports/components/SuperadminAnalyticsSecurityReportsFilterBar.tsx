@@ -53,7 +53,7 @@ export function SuperadminAnalyticsSecurityReportsFilterBar({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="relative flex-1 max-w-md">
           <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-          <input
+          <input maxLength={100}
             type="text"
             value={searchInput}
             onChange={(e) => onSearchChange(e.target.value)}

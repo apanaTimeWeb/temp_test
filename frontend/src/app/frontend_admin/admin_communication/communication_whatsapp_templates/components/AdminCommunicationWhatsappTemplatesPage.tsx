@@ -348,7 +348,7 @@ export function AdminCommunicationWhatsappTemplatesPage() {
           {/* Search Bar */}
           <div className="relative min-w-[240px]">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
+            <input maxLength={100}
               type="text"
               placeholder="Search templates or triggers..."
               value={searchQuery}

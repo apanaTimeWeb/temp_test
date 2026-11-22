@@ -170,7 +170,7 @@ export function AdminStaffPayrollKpiOverview({ model }: Props) {
         {/* Search */}
         <div className="relative w-full sm:w-64">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
-          <input
+          <input maxLength={100}
             type="text"
             placeholder={t('SEARCH_PLACEHOLDER')}
             value={filters.searchQuery}
