@@ -5,7 +5,8 @@ import { toast } from 'sonner';
 import { useTranslations, useLocale } from 'next-intl';
 import {
   CreditCard, ShieldCheck, Building2, Package, CheckCircle, Clock,
-  AlertCircle, AlertTriangle, Plus, History, Edit, Sparkles, Filter
+  AlertCircle, AlertTriangle, Plus, History, Edit, Sparkles, Filter,
+  MessageSquare, Mail, PhoneCall
 } from 'lucide-react';
 import SuperadminSubscriptionsOverviewSemanticTable, {
   type SemanticColumnDef,
@@ -18,9 +19,16 @@ import type {
   SuperadminSubscriptionPaymentStatus,
 } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/types/SuperadminSubscriptionsOverviewTypes';
 import SuperadminSubscriptionsOverviewKpis from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/components/SuperadminSubscriptionsOverviewKpis';
+import SuperadminSubscriptionsOverviewHeader from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/components/SuperadminSubscriptionsOverviewHeader';
+import SuperadminSubscriptionsOverviewFilterBar from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/components/SuperadminSubscriptionsOverviewFilterBar';
 import SuperadminSubscriptionsOverviewActionModal from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/components/SuperadminSubscriptionsOverviewActionModal';
 import SuperadminSubscriptionsOverviewNewModal from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/components/SuperadminSubscriptionsOverviewNewModal';
 import SuperadminSubscriptionsOverviewHistoryModal from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/components/SuperadminSubscriptionsOverviewHistoryModal';
+import {
+  downloadSuperadminSubscriptionsCsv,
+  downloadSuperadminSubscriptionsExcel,
+  printSuperadminSubscriptionsRoster,
+} from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/utils/SuperadminSubscriptionsOverviewExportUtils';
 
 function getSuperadminInteractiveTestIdSuffix(value: unknown): string {
   const record = value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
@@ -35,6 +43,7 @@ export default function SuperadminSubscriptionsOverviewPageClient() {
   const locale = useLocale();
   const t = useTranslations('SUPERADMIN_SUBSCRIPTIONS');
   const [subscribers, setSubscribers] = useState<SuperadminSubscriptionRecord[]>(() => [...SUPERADMIN_SUBSCRIPTIONS_SAMPLE_SUBSCRIBERS]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedSub, setSelectedSub] = useState<SuperadminSubscriptionRecord | null>(null);
   const [isActionModalOpen, setIsActionModalOpen] = useState(false);
@@ -67,9 +76,18 @@ export default function SuperadminSubscriptionsOverviewPageClient() {
   }, [showToast]);
 
   const filteredSubscribers = useMemo(() => {
-    if (statusFilter === 'all') return subscribers;
-    return subscribers.filter((s) => s.status.toLowerCase() === statusFilter.toLowerCase());
-  }, [subscribers, statusFilter]);
+    return subscribers.filter((s) => {
+      if (statusFilter !== 'all' && s.status.toLowerCase() !== statusFilter.toLowerCase()) return false;
+      const q = searchQuery.trim().toLowerCase();
+      if (!q) return true;
+      return (
+        s.tenant.toLowerCase().includes(q) ||
+        s.plan.toLowerCase().includes(q) ||
+        (s.email && s.email.toLowerCase().includes(q)) ||
+        (s.phone && s.phone.includes(q))
+      );
+    });
+  }, [subscribers, statusFilter, searchQuery]);
 
   const colDefs = useMemo<SemanticColumnDef[]>(() => [
     {
@@ -141,7 +159,8 @@ export default function SuperadminSubscriptionsOverviewPageClient() {
     },
     {
       headerName: t('COPY.TABLE_COLUMN_ACTIONS'),
-      flex: 1.8,
+      flex: 2.2,
+      minWidth: 200,
       cellRenderer: (p: SemanticCellParams) => {
         if (!p.data) return null;
         const sub = p.data as unknown as SuperadminSubscriptionRecord;
@@ -166,6 +185,39 @@ export default function SuperadminSubscriptionsOverviewPageClient() {
               <History size={12} />
               <span>Audit</span>
             </button>
+            <button
+              type="button"
+              onClick={() => {
+                const raw = sub.phone || '9876543210';
+                let digits = raw.replace(/\D/g, '');
+                if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+                const phone = digits.length === 10 ? `91${digits}` : digits;
+                const msg = `Hello ${sub.tenant}, greetings from SaaS SuperAdmin regarding your ${sub.plan} subscription (${sub.status}).`;
+                const popup = window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+                if (popup) popup.opener = null;
+                showToast(`Opened WhatsApp chat for ${sub.tenant}`);
+              }}
+              className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 cursor-pointer"
+              title="Chat on WhatsApp"
+            >
+              <MessageSquare size={12} />
+            </button>
+            <button
+              type="button"
+              onClick={() => showToast(`Sent subscription renewal notification to ${sub.email || 'admin@' + sub.tenant.toLowerCase().replace(/\s+/g, '') + '.in'}`)}
+              className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-blue-500/30 bg-blue-500/15 text-blue-300 hover:bg-blue-500/25 cursor-pointer"
+              title="Email Subscription Notice"
+            >
+              <Mail size={12} />
+            </button>
+            <a
+              href={`tel:${(sub.phone || '9876543210').replace(/\s+/g, '')}`}
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-amber-500/30 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 cursor-pointer"
+              title={`Call ${sub.phone || 'Subscriber'}`}
+            >
+              <PhoneCall size={12} />
+            </a>
             {/* Kept disabled test id hook for compatibility */}
             <button
               type="button"
@@ -185,41 +237,11 @@ export default function SuperadminSubscriptionsOverviewPageClient() {
   return (
     <div className="w-full max-w-full min-w-0 space-y-6">
       {/* Hero Header Card */}
-      <div className="rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-5 sm:p-6 shadow-md backdrop-blur-md">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3.5">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-400 shadow-inner">
-              <CreditCard className="h-6 w-6" />
-            </div>
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-100">
-                  {t('COPY.SAAS_SUBSCRIPTIONS')}
-                </h1>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                  SaaS Lifecycle Active
-                </span>
-                <span className="inline-flex items-center gap-1 rounded-full border border-indigo-500/30 bg-indigo-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-indigo-300">
-                  <ShieldCheck size={12} className="text-indigo-400" />
-                  {subscribers.length} Tenants
-                </span>
-              </div>
-              <p className="mt-1 text-xs sm:text-sm text-slate-400">
-                SaaS tenant subscription lifecycle, tier upgrades, renewals, grace period & audit history.
-              </p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={() => setIsNewModalOpen(true)}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-md shadow-indigo-500/25 transition-all active:scale-95 cursor-pointer"
-          >
-            <Plus size={16} />
-            <span>New Subscription</span>
-          </button>
-        </div>
-      </div>
+      <SuperadminSubscriptionsOverviewHeader
+        title={t('COPY.SAAS_SUBSCRIPTIONS')}
+        tenantsCount={subscribers.length}
+        onNewSubscription={() => setIsNewModalOpen(true)}
+      />
 
       <SuperadminSubscriptionsOverviewKpis subscribers={subscribers} locale={locale} />
 
@@ -232,26 +254,28 @@ export default function SuperadminSubscriptionsOverviewPageClient() {
         </div>
       </div>
 
-      {/* Status Filter Bar */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-        <span className="text-slate-400 font-semibold flex items-center gap-1 pl-1">
-          <Filter size={12} /> Status:
-        </span>
-        {['all', 'Active', 'Trial', 'Grace Period', 'Past Due', 'Suspended', 'Cancelled', 'Expired'].map((st) => (
-          <button
-            key={st}
-            type="button"
-            onClick={() => setStatusFilter(st)}
-            className={`px-3 py-1.5 rounded-xl font-medium transition-all cursor-pointer ${
-              statusFilter.toLowerCase() === st.toLowerCase()
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'bg-slate-900/80 text-slate-400 hover:text-slate-200 border border-border/40'
-            }`}
-          >
-            {st === 'all' ? 'All Tenants' : st}
-          </button>
-        ))}
-      </div>
+      {/* Filter, Search & Export Toolbar */}
+      <SuperadminSubscriptionsOverviewFilterBar
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        onReset={() => {
+          setSearchQuery('');
+          setStatusFilter('all');
+        }}
+        onExportCsv={() => {
+          downloadSuperadminSubscriptionsCsv(filteredSubscribers);
+          showToast('Subscriptions roster exported as CSV');
+        }}
+        onExportExcel={() => {
+          downloadSuperadminSubscriptionsExcel(filteredSubscribers);
+          showToast('Subscriptions roster exported as Excel (.xls)');
+        }}
+        onPrint={() => printSuperadminSubscriptionsRoster(filteredSubscribers)}
+        filteredCount={filteredSubscribers.length}
+        totalCount={subscribers.length}
+      />
 
       {/* Semantic Table */}
       <div className="rounded-2xl border border-indigo-500/20 bg-[#0c0f28]/95 shadow-md backdrop-blur-md overflow-hidden">

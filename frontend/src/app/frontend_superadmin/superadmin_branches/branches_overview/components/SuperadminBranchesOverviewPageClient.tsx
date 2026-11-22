@@ -88,6 +88,43 @@ export default function SuperadminBranchesOverviewPageClient() {
     setSuspendTarget(branch);
   };
 
+  const handleDuplicate = (b: SuperadminBranchRecord) => {
+    const newCode = `BR-CLONE-${Math.floor(100 + Math.random() * 900)}`;
+    const result = createBranch({
+      code: newCode,
+      name: `${b.name} (Copy)`,
+      libraryId: b.libraryId,
+      libraryName: b.libraryName,
+      city: b.city,
+      state: b.state,
+      address: b.address,
+      pinCode: b.pinCode,
+      phone: b.phone,
+      email: b.email,
+      managerName: b.managerName,
+      managerEmail: b.managerEmail,
+      managerPhone: b.managerPhone,
+      adminName: b.adminName,
+      adminEmail: b.adminEmail,
+      openingDate: new Date().toISOString().split('T')[0],
+      workingHours: b.workingHours,
+      weeklyHolidays: b.weeklyHolidays,
+      capacity: b.capacity,
+      activeMembers: 0,
+      physicalBooks: b.physicalBooks,
+      outstandingBooks: 0,
+      memberDues: 0,
+      cashBalance: 0,
+      plan: b.plan,
+      allowedModules: { ...b.allowedModules },
+    });
+    if (result.success) {
+      showToast(`Branch configuration duplicated as ${newCode}`);
+    } else {
+      showToast(result.error || 'Failed to duplicate branch');
+    }
+  };
+
   return (
     <div className="w-full max-w-full min-w-0 space-y-6 pb-12">
       {/* Toast Notification */}
@@ -127,6 +164,9 @@ export default function SuperadminBranchesOverviewPageClient() {
           setSelectedLibraryId('all');
           setStatusFilter('all');
         }}
+        onExportCsv={handleExportCsv}
+        onExportExcel={handleExportExcel}
+        onPrint={handlePrint}
         filteredCount={filteredBranches.length}
         totalCount={branches.length}
       />
@@ -167,6 +207,7 @@ export default function SuperadminBranchesOverviewPageClient() {
             onTransferManager={(b) => setTransferTarget(b)}
             onViewActivity={(b) => setActivityTarget(b)}
             onViewReports={(b) => setReportsTarget(b)}
+            onDuplicate={handleDuplicate}
           />
         )}
       />

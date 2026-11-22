@@ -6,14 +6,21 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
   CheckCircle, Download, AlertCircle, Search, X, RotateCcw,
-  Plus, ShieldAlert, Eye, Receipt, CreditCard, BarChart3, Zap, RotateCcw as RefundIcon
+  Plus, ShieldAlert, Eye, Receipt, CreditCard, BarChart3, Zap, RotateCcw as RefundIcon,
+  MessageSquare, Mail, FileSpreadsheet, Printer
 } from 'lucide-react';
 import type { SemanticColumnDef as ColDef, SemanticCellParams as ICellRendererParams } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingInvoicesSemanticTable';
 import SuperadminBillingInvoicesSemanticTable from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingInvoicesSemanticTable';
 import { SuperadminBillingDownloadSampleInvoicePdf } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/utils/SuperadminBillingInvoicesSamplePdf';
+import {
+  downloadSuperadminInvoicesCsv,
+  downloadSuperadminInvoicesExcel,
+  printSuperadminInvoicesRoster,
+} from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/utils/SuperadminBillingInvoicesExportUtils';
 import type { SuperadminBillingInvoiceSample } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/types/SuperadminBillingInvoicesTypes';
 import { SUPERADMIN_BILLING_SAMPLE_INVOICES } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/mocks/fixtures/SuperadminBillingInvoicesSampleMockFixtures';
 import SuperadminBillingInvoicesKpiCards from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingInvoicesKpiCards';
+import SuperadminBillingInvoicesFilterBar from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingInvoicesFilterBar';
 import SuperadminBillingCreateInvoiceModal from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingCreateInvoiceModal';
 import SuperadminBillingInvoiceDetailModal from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingInvoiceDetailModal';
 import SuperadminPaymentFailureRulesModal from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminPaymentFailureRulesModal';
@@ -133,15 +140,43 @@ export default function SuperadminBillingInvoicesPageClient({ initialFilter }: {
     { headerName: tCopy('COPY.TABLE_COLUMN_METHOD'), field: 'method', flex: 0.9, cellClass: () => 'sa-cell-muted font-mono text-xs' },
     {
       headerName: tCopy('COPY.TABLE_COLUMN_ACTION'),
-      flex: 1.8,
-      minWidth: 200,
+      flex: 2.2,
+      minWidth: 260,
       cellRenderer: (params: ICellRendererParams<SuperadminBillingInvoiceSample>) => {
         if (!params.data) return null;
         const inv = params.data;
         return (
           <div className="flex items-center gap-1.5 flex-wrap">
-            <button type="button" onClick={() => handleOpenDetail(inv)} className="inline-flex items-center gap-1 rounded-lg border border-indigo-500/30 bg-indigo-500/15 px-2.5 py-1 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/25 cursor-pointer">
-              <Eye size={12} /> <span>Tax Invoice</span>
+            <button type="button" onClick={() => handleOpenDetail(inv)} className="inline-flex items-center gap-1 rounded-lg border border-indigo-500/30 bg-indigo-500/15 px-2 py-1 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/25 cursor-pointer" title="View Detailed Tax Invoice">
+              <Eye size={12} /> <span>View</span>
+            </button>
+            <button type="button" onClick={() => SuperadminBillingDownloadSampleInvoicePdf(inv)} className="inline-flex items-center justify-center h-7 w-7 rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 cursor-pointer" title="Download Official Tax Invoice PDF">
+              <Download size={12} />
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                const raw = inv.phone || '9876543210';
+                let digits = raw.replace(/\D/g, '');
+                if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+                const phone = digits.length === 10 ? `91${digits}` : digits;
+                const msg = `Hello ${inv.tenant}, your Smart Library tax invoice ${inv.id} for ₹${inv.amount.toLocaleString('en-IN')} (Due: ${inv.dueDate}) is ready for download.`;
+                const popup = window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+                if (popup) popup.opener = null;
+                showToast(`Opened WhatsApp invoice share for ${inv.tenant}`);
+              }}
+              className="inline-flex items-center justify-center h-7 w-7 rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 cursor-pointer"
+              title="Share Invoice on WhatsApp"
+            >
+              <MessageSquare size={12} />
+            </button>
+            <button
+              type="button"
+              onClick={() => showToast(`Dispatched invoice ${inv.id} via email to ${inv.email || 'accounts@' + inv.tenant.toLowerCase().replace(/\s+/g, '') + '.in'}`)}
+              className="inline-flex items-center justify-center h-7 w-7 rounded-lg border border-blue-500/30 bg-blue-500/15 text-blue-300 hover:bg-blue-500/25 cursor-pointer"
+              title="Email Invoice"
+            >
+              <Mail size={12} />
             </button>
             <button type="button" onClick={() => setCreditNoteInvoice(inv)} className="inline-flex items-center gap-1 rounded-lg border border-amber-500/30 bg-amber-500/15 px-2 py-1 text-xs font-semibold text-amber-300 hover:bg-amber-500/25 cursor-pointer" title="Issue Credit Note / Refund">
               <RefundIcon size={11} /> <span>Credit Note</span>
@@ -216,30 +251,30 @@ export default function SuperadminBillingInvoicesPageClient({ initialFilter }: {
       {activeTab === 'invoices' && (
         <div className="space-y-6">
           <SuperadminBillingInvoicesKpiCards />
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-3.5 rounded-2xl border border-indigo-500/20 bg-[#080b22]/90 flex-wrap">
-            <div className="relative flex-1 min-w-[200px]">
-              <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
-              <input type="search" placeholder="Search invoice ID, tenant..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full pl-9 pr-8 py-1.5 text-xs rounded-xl border border-indigo-500/30 bg-[#060818] text-slate-100 focus:outline-none" />
-              {searchQuery && <button type="button" onClick={() => setSearchQuery('')} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400"><X size={12} /></button>}
-            </div>
-            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="rounded-xl border border-indigo-500/30 bg-[#060818] px-3 py-1.5 text-xs text-slate-200 focus:outline-none cursor-pointer">
-              <option value="all">All Payment Statuses</option>
-              <option value="Paid">Paid</option>
-              <option value="Overdue">Overdue</option>
-              <option value="Pending">Pending</option>
-              <option value="Partially Paid">Partially Paid</option>
-              <option value="Failed">Failed</option>
-            </select>
-            <select value={methodFilter} onChange={(e) => setMethodFilter(e.target.value)} className="rounded-xl border border-indigo-500/30 bg-[#060818] px-3 py-1.5 text-xs text-slate-200 focus:outline-none cursor-pointer">
-              <option value="all">All Payment Methods</option>
-              <option value="UPI">UPI</option>
-              <option value="Card">Card</option>
-              <option value="NetBanking">Net Banking</option>
-            </select>
-            {(searchQuery || statusFilter !== 'all' || methodFilter !== 'all') && (
-              <button type="button" onClick={() => { setSearchQuery(''); setStatusFilter('all'); setMethodFilter('all'); }} className="p-1.5 rounded-lg text-slate-400 hover:text-white"><RotateCcw size={12} /></button>
-            )}
-          </div>
+          <SuperadminBillingInvoicesFilterBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
+            methodFilter={methodFilter}
+            setMethodFilter={setMethodFilter}
+            onReset={() => {
+              setSearchQuery('');
+              setStatusFilter('all');
+              setMethodFilter('all');
+            }}
+            onExportCsv={() => {
+              downloadSuperadminInvoicesCsv(filteredInvoices);
+              showToast('Invoices statement exported as CSV');
+            }}
+            onExportExcel={() => {
+              downloadSuperadminInvoicesExcel(filteredInvoices);
+              showToast('Invoices statement exported as Excel (.xls)');
+            }}
+            onPrint={() => printSuperadminInvoicesRoster(filteredInvoices)}
+            filteredCount={filteredInvoices.length}
+            totalCount={invoices.length}
+          />
           <SuperadminBillingInvoicesSemanticTable rowData={filteredInvoices} columnDefs={colDefs} pagination paginationPageSize={10} />
         </div>
       )}

@@ -1,6 +1,6 @@
 'use client';
 // RESPONSIBILITY: Provide search, multi-tenant library filter, and status filter for branches.
-import { Search, X, RotateCcw } from 'lucide-react';
+import { Search, X, RotateCcw, Download, FileSpreadsheet, Printer } from 'lucide-react';
 import type { SuperadminLibraryOption, BranchOperatingStatus } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
 
 interface SuperadminBranchesOverviewFilterBarProps {
@@ -12,6 +12,9 @@ interface SuperadminBranchesOverviewFilterBarProps {
   setStatusFilter: (v: 'all' | BranchOperatingStatus) => void;
   availableLibraries: SuperadminLibraryOption[];
   onReset: () => void;
+  onExportCsv?: () => void;
+  onExportExcel?: () => void;
+  onPrint?: () => void;
   filteredCount: number;
   totalCount: number;
 }
@@ -25,6 +28,9 @@ export default function SuperadminBranchesOverviewFilterBar({
   setStatusFilter,
   availableLibraries,
   onReset,
+  onExportCsv,
+  onExportExcel,
+  onPrint,
   filteredCount,
   totalCount,
 }: SuperadminBranchesOverviewFilterBarProps) {
@@ -89,6 +95,43 @@ export default function SuperadminBranchesOverviewFilterBar({
           <span>Reset</span>
         </button>
       )}
+
+      {/* Export & Print Tools */}
+      <div className="flex items-center gap-1.5 flex-wrap">
+        {onExportCsv && (
+          <button
+            type="button"
+            onClick={onExportCsv}
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs font-semibold cursor-pointer transition-all"
+            title="Export filtered branches to CSV"
+          >
+            <Download size={13} />
+            <span>CSV</span>
+          </button>
+        )}
+        {onExportExcel && (
+          <button
+            type="button"
+            onClick={onExportExcel}
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 text-xs font-semibold cursor-pointer transition-all"
+            title="Export filtered branches to Excel (XLSX)"
+          >
+            <FileSpreadsheet size={13} />
+            <span>Excel</span>
+          </button>
+        )}
+        {onPrint && (
+          <button
+            type="button"
+            onClick={onPrint}
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-border/60 bg-slate-800/60 text-slate-300 hover:bg-slate-700 text-xs font-semibold cursor-pointer transition-all"
+            title="Print-friendly branch directory"
+          >
+            <Printer size={13} />
+            <span>Print</span>
+          </button>
+        )}
+      </div>
 
       {/* Item count */}
       <span className="ml-auto text-xs text-slate-300 font-semibold px-2.5 py-1.5 rounded-lg bg-surface border border-border">

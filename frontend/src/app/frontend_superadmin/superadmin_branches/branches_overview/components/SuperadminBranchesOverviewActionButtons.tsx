@@ -1,6 +1,6 @@
 'use client';
 // RESPONSIBILITY: Render single-line horizontal action buttons for each branch row.
-import { Eye, Edit2, ShieldAlert, CheckCircle2, XCircle, RotateCcw, UserCheck, Clock, BarChart2 } from 'lucide-react';
+import { Eye, Edit2, ShieldAlert, CheckCircle2, XCircle, RotateCcw, UserCheck, Clock, BarChart2, MessageSquare, Mail, PhoneCall, Copy } from 'lucide-react';
 import type { SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
 
 interface SuperadminBranchesOverviewActionButtonsProps {
@@ -14,6 +14,7 @@ interface SuperadminBranchesOverviewActionButtonsProps {
   onTransferManager: (b: SuperadminBranchRecord) => void;
   onViewActivity: (b: SuperadminBranchRecord) => void;
   onViewReports: (b: SuperadminBranchRecord) => void;
+  onDuplicate?: (b: SuperadminBranchRecord) => void;
 }
 
 export default function SuperadminBranchesOverviewActionButtons({
@@ -27,6 +28,7 @@ export default function SuperadminBranchesOverviewActionButtons({
   onTransferManager,
   onViewActivity,
   onViewReports,
+  onDuplicate,
 }: SuperadminBranchesOverviewActionButtonsProps) {
   const isClosed = branch.status === 'closed';
   const isActive = branch.status === 'active';
@@ -133,6 +135,57 @@ export default function SuperadminBranchesOverviewActionButtons({
       >
         <BarChart2 size={14} />
       </button>
+
+      {/* 9. WhatsApp Branch Manager */}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          const raw = branch.managerPhone || branch.phone || '9876543210';
+          let digits = raw.replace(/\D/g, '');
+          if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+          const phone = digits.length === 10 ? `91${digits}` : digits;
+          const msg = `Hello ${branch.managerName || 'Branch Manager'}, greetings from SuperAdmin regarding branch ${branch.name} (${branch.code}).`;
+          const popup = window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+          if (popup) popup.opener = null;
+        }}
+        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+        title={`Chat on WhatsApp with ${branch.managerName || 'Manager'}`}
+      >
+        <MessageSquare size={14} />
+      </button>
+
+      {/* 10. Email Branch Manager */}
+      <a
+        href={`mailto:${branch.managerEmail || branch.email}?subject=${encodeURIComponent(`Notice for Branch: ${branch.name} (${branch.code})`)}`}
+        onClick={(e) => e.stopPropagation()}
+        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-blue-500/30 bg-blue-500/15 text-blue-300 hover:text-white hover:bg-blue-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+        title={`Email ${branch.managerEmail || branch.email}`}
+      >
+        <Mail size={14} />
+      </a>
+
+      {/* 11. Phone Call */}
+      <a
+        href={`tel:${(branch.managerPhone || branch.phone).replace(/\s+/g, '')}`}
+        onClick={(e) => e.stopPropagation()}
+        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-amber-500/30 bg-amber-500/15 text-amber-300 hover:text-white hover:bg-amber-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+        title={`Call ${branch.managerPhone || branch.phone}`}
+      >
+        <PhoneCall size={14} />
+      </a>
+
+      {/* 12. Duplicate Branch Configuration */}
+      {onDuplicate && (
+        <button
+          type="button"
+          onClick={() => onDuplicate(branch)}
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+          title="Duplicate / Clone Branch Configuration"
+        >
+          <Copy size={14} />
+        </button>
+      )}
     </div>
   );
 }

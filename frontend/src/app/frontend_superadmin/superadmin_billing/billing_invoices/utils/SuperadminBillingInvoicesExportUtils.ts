@@ -170,3 +170,40 @@ export function printSuperadminInvoicesRoster(
     printWindow.print();
   }, 500);
 }
+
+/**
+ * Downloads invoices as standard CSV with UTF-8 BOM.
+ */
+export function downloadSuperadminInvoicesCsv(
+  invoices: SuperadminBillingInvoiceSample[],
+  filename = 'superadmin_invoices_statement.csv'
+): void {
+  const headers = ['Invoice ID', 'Tenant', 'Date', 'Due Date', 'Amount (INR)', 'Status', 'Method', 'Gateway', 'GSTIN', 'Email', 'Phone'];
+  const escapeCell = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+
+  const rows = invoices.map((inv) => [
+    escapeCell(inv.id),
+    escapeCell(inv.tenant),
+    escapeCell(inv.date),
+    escapeCell(inv.dueDate),
+    inv.amount,
+    escapeCell(inv.status),
+    escapeCell(inv.method),
+    escapeCell(inv.gateway || 'Razorpay'),
+    escapeCell(inv.gst),
+    escapeCell(inv.email || ''),
+    escapeCell(inv.phone || ''),
+  ].join(','));
+
+  const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\r\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.hidden = true;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
