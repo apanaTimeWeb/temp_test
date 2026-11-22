@@ -53,7 +53,7 @@ export default function SuperadminPlansPricingCatalogHeaderKpis({
                 </span>
               </div>
               <p className="mt-1 text-xs sm:text-sm text-slate-400">
-                Configure SaaS subscription tiers, branch entitlements, user quotas, storage & features.
+                Configure SaaS subscription tiers, branch entitlements, user quotas & features.
               </p>
             </div>
           </div>

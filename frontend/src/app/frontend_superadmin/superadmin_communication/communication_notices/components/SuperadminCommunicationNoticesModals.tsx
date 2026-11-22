@@ -218,9 +218,25 @@ export function SuperadminCommunicationNoticesModals({
               <Send size={20} />
               <p className="text-base font-bold text-white">{tCopy('COPY.BROADCAST_VIA_WHATSAPP')}</p>
             </div>
+            <div className="rounded-xl border border-sky-500/30 bg-sky-500/10 p-2.5 text-[11px] text-sky-300">
+              <strong>Cost Protection Notice:</strong> Server API broadcast triggers third-party paid gateway SMS/WhatsApp. For routine announcements, use Free WhatsApp Web (Zero API Cost).
+            </div>
             <p className="text-xs text-slate-400 leading-relaxed" id="notice-broadcast-unavailable">
               {tCopy('COPY.NOTICE_BROADCAST_UNAVAILABLE_NO_CHANGE')}
             </p>
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  const msg = `📢 *Notice: ${broadcastItem.title}*\n\n${broadcastItem.message}\n\nValid Till: ${broadcastItem.validTill || 'Further notice'}`;
+                  const popup = window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+                  if (popup) popup.opener = null;
+                }}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/15 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/25 transition-all cursor-pointer"
+              >
+                <span>Share via WhatsApp Web (Free)</span>
+              </button>
+            </div>
             <div className="flex justify-end gap-3 pt-3 border-t border-sky-500/20">
               <button
                 type="button"

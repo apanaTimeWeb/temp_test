@@ -1,6 +1,6 @@
 'use client';
 
-import { Package, Building2, Users, Edit3, Shield, Database, MessageSquare, Check, Sparkles } from 'lucide-react';
+import { Package, Building2, Users, Edit3, Shield, MessageSquare, Check, Sparkles } from 'lucide-react';
 import { formatSuperadminSubscriptionsMajorPreviewCurrency } from '@/app/frontend_superadmin/superadmin_plans/plans_pricing_catalog/utils/SuperadminPlansPricingCatalogFormatters';
 import type { SuperadminSubscriptionPlan } from '@/app/frontend_superadmin/superadmin_plans/plans_pricing_catalog/types/SuperadminPlansPricingCatalogTypes';
 
@@ -117,13 +117,6 @@ export default function SuperadminPlansPricingCatalogTierCards({
                     <span>Admin / Staff:</span>
                   </span>
                   <span className="font-semibold text-slate-100">{p.adminUsers ?? 1} Admin · {p.staffUsers ?? 3} Staff</span>
-                </div>
-                <div className="flex items-center justify-between text-slate-300">
-                  <span className="flex items-center gap-1.5 text-slate-400">
-                    <Database className="h-3.5 w-3.5 text-emerald-400" />
-                    <span>Storage / Backup:</span>
-                  </span>
-                  <span className="font-semibold text-slate-100">{p.storage ?? '5 GB'} · {p.backupPolicy ?? 'Daily'}</span>
                 </div>
                 <div className="flex items-center justify-between text-slate-300">
                   <span className="flex items-center gap-1.5 text-slate-400">

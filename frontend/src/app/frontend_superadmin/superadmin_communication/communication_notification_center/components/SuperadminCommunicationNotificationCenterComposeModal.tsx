@@ -148,6 +148,13 @@ export function SuperadminCommunicationNotificationCenterComposeModal() {
             channelsError={errors.channels?.message}
           />
 
+          {(selectedChannels.includes('SMS') || selectedChannels.includes('WHATSAPP')) && (
+            <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-2.5 text-2xs text-amber-300 flex items-center gap-2">
+              <span className="font-bold">Provider Cost Protection:</span>
+              <span>Paid server API gateway credits will be consumed for {selectedChannels.filter(c => c === 'SMS' || c === 'WHATSAPP').join(' & ')} delivery. Ensure high-priority requirement before dispatching.</span>
+            </div>
+          )}
+
           {/* Subject / Title */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-slate-200">Notification Title / Email Subject</label>

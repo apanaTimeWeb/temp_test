@@ -2,13 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { PlusCircle, X, Check, Calculator, Building2 } from 'lucide-react';
+import { PlusCircle, X, Check, Building2 } from 'lucide-react';
 import type { SuperadminBillingInvoiceSample } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/types/SuperadminBillingInvoicesTypes';
 import { useModalScrollLock } from '@/lib/useModalScrollLock';
 import {
   CANONICAL_LIBRARY_TENANTS,
   type LibraryTenantOption,
 } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/constants/SuperadminBillingCanonicalTenants';
+import SuperadminBillingCreateInvoiceAddressSection from './SuperadminBillingCreateInvoiceAddressSection';
+import SuperadminBillingCreateInvoiceTaxSection from './SuperadminBillingCreateInvoiceTaxSection';
 
 export { CANONICAL_LIBRARY_TENANTS, type LibraryTenantOption };
 
@@ -50,7 +52,6 @@ export default function SuperadminBillingCreateInvoiceModal({
 
   useModalScrollLock(Boolean(isOpen && mounted));
 
-  // Sync sequence id when nextInvoiceSequence changes
   useEffect(() => {
     setInvoiceId(`INV-2026-${String(nextInvoiceSequence).padStart(4, '0')}`);
   }, [nextInvoiceSequence]);
@@ -156,7 +157,6 @@ export default function SuperadminBillingCreateInvoiceModal({
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-          {/* Invoice ID & Tenant / Library Dropdown */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block font-semibold uppercase tracking-wider text-slate-300 mb-1">
@@ -191,7 +191,6 @@ export default function SuperadminBillingCreateInvoiceModal({
             </div>
           </div>
 
-          {/* Custom Tenant Name Input (if custom selected) */}
           {selectedLibraryOption === '__custom__' && (
             <div className="p-3 rounded-xl border border-indigo-500/20 bg-indigo-950/20">
               <label className="block font-semibold text-indigo-300 mb-1">
@@ -209,138 +208,31 @@ export default function SuperadminBillingCreateInvoiceModal({
             </div>
           )}
 
-          {/* Legal Business Name & GSTIN */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className="block font-semibold text-slate-300 mb-1">Legal / Registered Entity Name</label>
-              <input
-                type="text"
-                placeholder="e.g. Apex Knowledge Systems Pvt Ltd"
-                value={legalName}
-                onChange={(e) => setLegalName(e.target.value)}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100 focus:border-indigo-500"
-              />
-            </div>
-            <div>
-              <label className="block font-semibold text-slate-300 mb-1">GSTIN (15-Digit Format)</label>
-              <input
-                type="text"
-                placeholder="e.g. 27AABCT3518Q1ZV"
-                maxLength={15}
-                value={gst}
-                onChange={(e) => setGst(e.target.value.toUpperCase())}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100 uppercase font-mono focus:border-indigo-500"
-              />
-            </div>
-          </div>
+          <SuperadminBillingCreateInvoiceAddressSection
+            legalName={legalName}
+            setLegalName={setLegalName}
+            gst={gst}
+            setGst={setGst}
+            billingAddress={billingAddress}
+            setBillingAddress={setBillingAddress}
+            cityStatePin={cityStatePin}
+            setCityStatePin={setCityStatePin}
+            email={email}
+            setEmail={setEmail}
+            phone={phone}
+            setPhone={setPhone}
+          />
 
-          {/* Billing Address */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className="block font-semibold text-slate-300 mb-1">Billing Street Address</label>
-              <input
-                type="text"
-                placeholder="e.g. Plot 15, Knowledge Park"
-                value={billingAddress}
-                onChange={(e) => setBillingAddress(e.target.value)}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100 focus:border-indigo-500"
-              />
-            </div>
-            <div>
-              <label className="block font-semibold text-slate-300 mb-1">City, State & PIN</label>
-              <input
-                type="text"
-                placeholder="e.g. Lucknow, Uttar Pradesh - 226001"
-                value={cityStatePin}
-                onChange={(e) => setCityStatePin(e.target.value)}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100 focus:border-indigo-500"
-              />
-            </div>
-          </div>
+          <SuperadminBillingCreateInvoiceTaxSection
+            taxType={taxType}
+            setTaxType={setTaxType}
+            subtotal={subtotal}
+            setSubtotal={setSubtotal}
+            discount={discount}
+            setDiscount={setDiscount}
+            totalAmount={totalAmount}
+          />
 
-          {/* Email & Phone */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className="block font-semibold text-slate-300 mb-1">Billing Contact Email</label>
-              <input
-                type="email"
-                placeholder="e.g. accounts@library.org"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100 focus:border-indigo-500"
-              />
-            </div>
-            <div>
-              <label className="block font-semibold text-slate-300 mb-1">Billing Contact Phone</label>
-              <input
-                type="tel"
-                placeholder="e.g. +91 98765 43210"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100 focus:border-indigo-500"
-              />
-            </div>
-          </div>
-
-          {/* Tax Calculation & Subtotal */}
-          <div className="p-3 rounded-xl border border-indigo-500/20 bg-slate-900/50 space-y-2">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <span className="font-bold text-slate-200 flex items-center gap-1.5">
-                <Calculator size={13} className="text-indigo-400" /> GST Tax Calculation
-              </span>
-              <div className="flex items-center gap-3">
-                <label className="flex items-center gap-1 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="taxType"
-                    checked={taxType === 'intra'}
-                    onChange={() => setTaxType('intra')}
-                    className="text-indigo-600"
-                  />
-                  <span className="text-slate-300">Intra-State (CGST 9% + SGST 9%)</span>
-                </label>
-                <label className="flex items-center gap-1 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="taxType"
-                    checked={taxType === 'inter'}
-                    onChange={() => setTaxType('inter')}
-                    className="text-indigo-600"
-                  />
-                  <span className="text-slate-300">Inter-State (IGST 18%)</span>
-                </label>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3 pt-2">
-              <div>
-                <label className="block font-semibold text-slate-300 mb-1">Base Price (₹)</label>
-                <input
-                  type="number"
-                  min={1}
-                  value={subtotal}
-                  onChange={(e) => setSubtotal(Number(e.target.value))}
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900 px-3 py-1.5 text-slate-100 font-mono"
-                />
-              </div>
-              <div>
-                <label className="block font-semibold text-slate-300 mb-1">Discount (₹)</label>
-                <input
-                  type="number"
-                  min={0}
-                  value={discount}
-                  onChange={(e) => setDiscount(Number(e.target.value))}
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900 px-3 py-1.5 text-slate-100 font-mono"
-                />
-              </div>
-              <div className="text-right flex flex-col justify-end">
-                <span className="text-[11px] text-slate-400">Total with 18% GST:</span>
-                <span className="text-base font-black text-emerald-400 font-mono">₹{totalAmount.toLocaleString('en-IN')}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Payment Method, Status & Cadence */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label className="block font-semibold text-slate-300 mb-1">Payment Method</label>
