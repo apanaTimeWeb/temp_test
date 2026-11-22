@@ -10,6 +10,7 @@ import {
   Database,
   CreditCard,
   Sliders,
+  Landmark,
 } from 'lucide-react';
 
 export const SUPERADMIN_SETTINGS_TABS = [

@@ -129,10 +129,8 @@ export const SUPERADMIN_16_MODULES: SuperadminNavigationItem[] = [
     colorText: '#fbbf24',
     description: 'Invoices, payment collection, GST settings, refunds, outstanding bills',
     subItems: [
-      { id: 'bill_invoices', label: 'Invoices & Billing', href: `${SUPERADMIN_NAVIGATION_ROUTES.billing_invoices}?tab=invoices` },
+      { id: 'bill_invoices', label: 'Tax Invoices & Billing', href: `${SUPERADMIN_NAVIGATION_ROUTES.billing_invoices}?tab=invoices` },
       { id: 'bill_transactions', label: 'Transactions & Ledger', href: `${SUPERADMIN_NAVIGATION_ROUTES.billing_invoices}?tab=transactions` },
-      { id: 'bill_tax_gst', label: 'GST & Tax Configuration', href: `${SUPERADMIN_NAVIGATION_ROUTES.billing_invoices}?tab=tax_gst` },
-      { id: 'bill_gateways', label: 'Payment Gateway Setup', href: `${SUPERADMIN_NAVIGATION_ROUTES.billing_invoices}?tab=gateways` },
       { id: 'bill_reports', label: 'Outstanding & Revenue', href: `${SUPERADMIN_NAVIGATION_ROUTES.billing_invoices}?tab=reports` },
     ],
   },
@@ -236,7 +234,13 @@ export const SUPERADMIN_16_MODULES: SuperadminNavigationItem[] = [
     colorBg: 'rgba(167,139,250,0.15)',
     colorText: '#a78bfa',
     description: 'Payment gateways, SMS, WhatsApp, webhooks, APIs',
-    subItems: [],
+    subItems: [
+      { id: 'int_gateways', label: 'Payment Gateways & Providers', href: `${SUPERADMIN_NAVIGATION_ROUTES.integrations_overview}?tab=gateways` },
+      { id: 'int_webhooks', label: 'Webhook Subscriptions', href: `${SUPERADMIN_NAVIGATION_ROUTES.integrations_overview}?tab=webhooks` },
+      { id: 'int_api_keys', label: 'API Keys & Rate Limits', href: `${SUPERADMIN_NAVIGATION_ROUTES.integrations_overview}?tab=api-keys` },
+      { id: 'int_logs', label: 'Integration Logs & Events', href: `${SUPERADMIN_NAVIGATION_ROUTES.integrations_overview}?tab=logs` },
+      { id: 'int_entitlements', label: 'Plan Entitlements', href: `${SUPERADMIN_NAVIGATION_ROUTES.integrations_overview}?tab=entitlements` },
+    ],
   },
   {
     id: 'data',
@@ -287,6 +291,7 @@ export const SUPERADMIN_16_MODULES: SuperadminNavigationItem[] = [
     description: 'Platform rules, defaults, permissions, branding aur configuration',
     subItems: [
       { id: 'set_rules', label: 'Platform Rules & Defaults', href: SUPERADMIN_NAVIGATION_ROUTES.settings_general },
+      { id: 'set_tax_gst', label: 'GST & Legal Tax Configuration', href: `${SUPERADMIN_NAVIGATION_ROUTES.settings_general}?section=gst_tax` },
       { id: 'set_branding', label: 'Platform Branding & White-label', href: SUPERADMIN_NAVIGATION_ROUTES.settings_branding },
       { id: 'set_library_defaults', label: 'Library Configuration Defaults', href: SUPERADMIN_NAVIGATION_ROUTES.settings_library_configuration },
     ],

@@ -12,6 +12,7 @@
  * - maintenance.message
  */
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -32,14 +33,23 @@ import { SuperadminSettingsGeneralUploadRestrictionsCard } from '@/app/frontend_
 import { SuperadminSettingsGeneralMaintenanceModeCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralMaintenanceModeCard';
 import { SuperadminSettingsGeneralDataRetentionCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralDataRetentionCard';
 import { SuperadminSettingsGeneralSubscriptionGraceCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralSubscriptionGraceCard';
+import { SuperadminSettingsGeneralGstTaxCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralGstTaxCard';
 import { SuperadminSettingsGeneralResetConfirmModal } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralResetConfirmModal';
 import { SuperadminSettingsGeneralExportModal } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralExportModal';
 
 export default function SuperadminSettingsGeneralPageClient() {
   const activeRouteName = 'General';
+  const searchParams = useSearchParams();
   const { activeSection, setActiveSection } = useSuperadminSettingsGeneralStore();
   const [isResetOpen, setIsResetOpen] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
+
+  useEffect(() => {
+    const sec = searchParams?.get('section') || searchParams?.get('tab');
+    if (sec === 'gst_tax' || sec === 'platform_regional') {
+      setActiveSection('platform_regional');
+    }
+  }, [searchParams, setActiveSection]);
 
   const { data: serverSettings, isPending: isDataLoading } = useSuperadminSettingsGeneralData();
   const { updateSettings, resetSettings } = useSuperadminSettingsGeneralMutation();
@@ -184,6 +194,7 @@ export default function SuperadminSettingsGeneralPageClient() {
           {/* Form Content Cards */}
           <div className="flex flex-col gap-6">
             {showSection('platform_regional') && <SuperadminSettingsGeneralPlatformRegionalCard />}
+            {showSection('platform_regional') && <SuperadminSettingsGeneralGstTaxCard />}
             {showSection('branch_defaults') && <SuperadminSettingsGeneralBranchDefaultsCard />}
             {showSection('security_policies') && <SuperadminSettingsGeneralSecurityPoliciesCard />}
             {showSection('upload_restrictions') && <SuperadminSettingsGeneralUploadRestrictionsCard />}

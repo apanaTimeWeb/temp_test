@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
   CheckCircle, Download, AlertCircle, Search, X, RotateCcw,
-  Plus, ShieldAlert, Eye, Receipt, CreditCard, Building2, KeyRound, BarChart3, Zap, RotateCcw as RefundIcon
+  Plus, ShieldAlert, Eye, Receipt, CreditCard, BarChart3, Zap, RotateCcw as RefundIcon
 } from 'lucide-react';
 import type { SemanticColumnDef as ColDef, SemanticCellParams as ICellRendererParams } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingInvoicesSemanticTable';
 import SuperadminBillingInvoicesSemanticTable from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingInvoicesSemanticTable';
@@ -19,11 +19,9 @@ import SuperadminBillingInvoiceDetailModal from '@/app/frontend_superadmin/super
 import SuperadminPaymentFailureRulesModal from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminPaymentFailureRulesModal';
 import SuperadminBillingCreditNoteModal from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingCreditNoteModal';
 import SuperadminBillingTransactionsLedger from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingTransactionsLedger';
-import SuperadminBillingGstTaxConfigPanel from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingGstTaxConfigPanel';
-import SuperadminBillingGatewayConfigPanel from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingGatewayConfigPanel';
 import SuperadminBillingOutstandingRevenueReports from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingOutstandingRevenueReports';
 
-type BillingTab = 'invoices' | 'transactions' | 'tax_gst' | 'gateways' | 'reports';
+type BillingTab = 'invoices' | 'transactions' | 'reports';
 
 export default function SuperadminBillingInvoicesPageClient({ initialFilter }: { initialFilter?: string } = {}) {
   const tCopy = useTranslations('SUPERADMIN_BILLING');
@@ -135,21 +133,18 @@ export default function SuperadminBillingInvoicesPageClient({ initialFilter }: {
     { headerName: tCopy('COPY.TABLE_COLUMN_METHOD'), field: 'method', flex: 0.9, cellClass: () => 'sa-cell-muted font-mono text-xs' },
     {
       headerName: tCopy('COPY.TABLE_COLUMN_ACTION'),
-      flex: 2.2,
-      minWidth: 260,
+      flex: 1.8,
+      minWidth: 200,
       cellRenderer: (params: ICellRendererParams<SuperadminBillingInvoiceSample>) => {
         if (!params.data) return null;
         const inv = params.data;
         return (
           <div className="flex items-center gap-1.5 flex-wrap">
-            <button type="button" onClick={() => handleOpenDetail(inv)} className="inline-flex items-center gap-1 rounded-lg border border-indigo-500/30 bg-indigo-500/15 px-2 py-1 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/25 cursor-pointer">
-              <Eye size={11} /> <span>Tax Invoice</span>
-            </button>
-            <button type="button" onClick={() => SuperadminBillingDownloadSampleInvoicePdf(inv)} className="inline-flex items-center gap-1 rounded-lg border border-indigo-500/30 bg-indigo-500/10 px-2 py-1 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 cursor-pointer">
-              <Download size={11} /> <span>PDF</span>
+            <button type="button" onClick={() => handleOpenDetail(inv)} className="inline-flex items-center gap-1 rounded-lg border border-indigo-500/30 bg-indigo-500/15 px-2.5 py-1 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/25 cursor-pointer">
+              <Eye size={12} /> <span>Tax Invoice</span>
             </button>
             <button type="button" onClick={() => setCreditNoteInvoice(inv)} className="inline-flex items-center gap-1 rounded-lg border border-amber-500/30 bg-amber-500/15 px-2 py-1 text-xs font-semibold text-amber-300 hover:bg-amber-500/25 cursor-pointer" title="Issue Credit Note / Refund">
-              <RefundIcon size={11} /> <span>CN / Refund</span>
+              <RefundIcon size={11} /> <span>Credit Note</span>
             </button>
           </div>
         );
@@ -197,8 +192,6 @@ export default function SuperadminBillingInvoicesPageClient({ initialFilter }: {
           {[
             { id: 'invoices', label: 'Tax Invoices & Billing', icon: Receipt },
             { id: 'transactions', label: 'Transactions & Ledger', icon: CreditCard },
-            { id: 'tax_gst', label: 'GST & Tax Configuration', icon: Building2 },
-            { id: 'gateways', label: 'Payment Gateways', icon: KeyRound },
             { id: 'reports', label: 'Outstanding & Revenue', icon: BarChart3 },
           ].map((tab) => {
             const Icon = tab.icon;
@@ -252,8 +245,6 @@ export default function SuperadminBillingInvoicesPageClient({ initialFilter }: {
       )}
 
       {activeTab === 'transactions' && <SuperadminBillingTransactionsLedger />}
-      {activeTab === 'tax_gst' && <SuperadminBillingGstTaxConfigPanel />}
-      {activeTab === 'gateways' && <SuperadminBillingGatewayConfigPanel />}
       {activeTab === 'reports' && <SuperadminBillingOutstandingRevenueReports />}
 
       <SuperadminBillingCreateInvoiceModal isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} onCreate={handleCreateInvoice} nextInvoiceSequence={invoices.length + 1} />
