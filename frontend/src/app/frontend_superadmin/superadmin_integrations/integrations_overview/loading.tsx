@@ -1,7 +1,16 @@
-// src/app/frontend_superadmin/superadmin_integrations/integrations_overview/loading.tsx
-// RESPONSIBILITY: Next.js App Router route-level loading skeleton.
-import { SuperadminIntegrationsOverviewListSkeleton } from './components/SuperadminIntegrationsOverviewListSkeleton';
+'use client';
 
-export default function Loading() {
-  return <SuperadminIntegrationsOverviewListSkeleton />;
+// RESPONSIBILITY: Render the route loading state for superadmin_integrations/integrations_overview; it does not fetch or mutate business data.
+// FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
+import { SuperadminPageLoader } from '@/app/frontend_superadmin/components/SuperadminLoader';
+
+export default function ModuleLoading() {
+  return (
+    <SuperadminPageLoader
+      size="md"
+      icon="webhook"
+      variant="contra"
+      label="Loading Integrations Overview..."
+    />
+  );
 }

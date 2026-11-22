@@ -1,11 +1,20 @@
-// RESPONSIBILITY: Render the route loading state for security threats; it does not fetch or mutate business data.
-// FLOW: App Router pending state -> superadmin_security/security_threats/loading.tsx -> loading UI -> route content when ready.
+'use client';
+
+// RESPONSIBILITY: Render the route loading state for superadmin_security/security_threats; it does not fetch or mutate business data.
+// FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
+import { SuperadminPageLoader } from '@/app/frontend_superadmin/components/SuperadminLoader';
+import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
 import SuperadminSecurityThreatsListSkeleton from './components/SuperadminSecurityThreatsListSkeleton';
 
-/**
- * Performs the module loading operation within security threats; inputs and outputs follow the declared TypeScript contract.
- */
 export default function ModuleLoading() {
-  return <SuperadminSecurityThreatsListSkeleton />;
+  const t = useTranslations('SUPERADMIN_SECURITY');
+  return (
+    <SuperadminPageLoader
+      size="md"
+      icon="shield-alert"
+      variant="contra"
+      label={t('COPY.LOADING_MODULE')}
+    />
+  );
 }

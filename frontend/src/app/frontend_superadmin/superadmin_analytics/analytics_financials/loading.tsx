@@ -1,11 +1,20 @@
-// RESPONSIBILITY: Render the route loading state for analytics financials; it does not fetch or mutate business data.
-// FLOW: App Router pending state -> superadmin_analytics/analytics_financials/loading.tsx -> loading UI -> route content when ready.
+'use client';
+
+// RESPONSIBILITY: Render the route loading state for superadmin_analytics/analytics_financials; it does not fetch or mutate business data.
+// FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
+import { SuperadminPageLoader } from '@/app/frontend_superadmin/components/SuperadminLoader';
+import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
 import SuperadminAnalyticsFinancialsListSkeleton from './components/SuperadminAnalyticsFinancialsListSkeleton';
 
-/**
- * Performs the module loading operation within analytics financials; inputs and outputs follow the declared TypeScript contract.
- */
 export default function ModuleLoading() {
-  return <SuperadminAnalyticsFinancialsListSkeleton />;
+  const t = useTranslations('SUPERADMIN_REPORTS');
+  return (
+    <SuperadminPageLoader
+      size="md"
+      icon="chart-bar"
+      variant="contra"
+      label={t('COPY.LOADING_MODULE')}
+    />
+  );
 }

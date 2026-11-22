@@ -1,6 +1,16 @@
-// data_overview/loading.tsx
-import { SuperadminDataOverviewSkeleton } from '@/app/frontend_superadmin/superadmin_data/data_overview/components/SuperadminDataOverviewSkeleton';
+'use client';
 
-export default function SuperadminDataOverviewLoading() {
-  return <SuperadminDataOverviewSkeleton />;
+// RESPONSIBILITY: Render the route loading state for superadmin_data/data_overview; it does not fetch or mutate business data.
+// FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
+import { SuperadminPageLoader } from '@/app/frontend_superadmin/components/SuperadminLoader';
+
+export default function ModuleLoading() {
+  return (
+    <SuperadminPageLoader
+      size="md"
+      icon="database"
+      variant="contra"
+      label="Loading Data Overview..."
+    />
+  );
 }

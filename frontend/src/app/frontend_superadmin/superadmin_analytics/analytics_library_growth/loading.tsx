@@ -1,11 +1,20 @@
-// RESPONSIBILITY: Render the route loading state for analytics library growth; it does not fetch or mutate business data.
-// FLOW: App Router pending state -> superadmin_analytics/analytics_library_growth/loading.tsx -> loading UI -> route content when ready.
+'use client';
+
+// RESPONSIBILITY: Render the route loading state for superadmin_analytics/analytics_library_growth; it does not fetch or mutate business data.
+// FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
+import { SuperadminPageLoader } from '@/app/frontend_superadmin/components/SuperadminLoader';
+import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
 import SuperadminAnalyticsLibraryGrowthListSkeleton from './components/SuperadminAnalyticsLibraryGrowthListSkeleton';
 
-/**
- * Performs the module loading operation within analytics library growth; inputs and outputs follow the declared TypeScript contract.
- */
 export default function ModuleLoading() {
-  return <SuperadminAnalyticsLibraryGrowthListSkeleton />;
+  const t = useTranslations('SUPERADMIN_REPORTS');
+  return (
+    <SuperadminPageLoader
+      size="md"
+      icon="trending-up"
+      variant="contra"
+      label={t('COPY.LOADING_MODULE')}
+    />
+  );
 }

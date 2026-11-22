@@ -1,15 +1,16 @@
-// loading.tsx
-export default function SuperadminUsageQuotaRequestsLoading() {
+'use client';
+
+// RESPONSIBILITY: Render the route loading state for superadmin_usage/usage_quota_requests; it does not fetch or mutate business data.
+// FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
+import { SuperadminPageLoader } from '@/app/frontend_superadmin/components/SuperadminLoader';
+
+export default function ModuleLoading() {
   return (
-    <div className="space-y-6 animate-pulse">
-      <div className="h-20 rounded-xl border border-slate-800 bg-slate-900/60" />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-24 rounded-xl border border-slate-800 bg-slate-900/60" />
-        ))}
-      </div>
-      <div className="h-14 rounded-xl border border-slate-800 bg-slate-900/60" />
-      <div className="h-96 rounded-xl border border-slate-800 bg-slate-900/60" />
-    </div>
+    <SuperadminPageLoader
+      size="md"
+      icon="gauge"
+      variant="contra"
+      label="Loading Quota Requests..."
+    />
   );
 }

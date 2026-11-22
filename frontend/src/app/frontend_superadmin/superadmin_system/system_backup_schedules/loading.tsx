@@ -1,11 +1,20 @@
-// RESPONSIBILITY: Render the route loading state for system backup schedules; it does not fetch or mutate business data.
-// FLOW: App Router pending state -> superadmin_system/system_backup_schedules/loading.tsx -> loading UI -> route content when ready.
+'use client';
+
+// RESPONSIBILITY: Render the route loading state for superadmin_system/system_backup_schedules; it does not fetch or mutate business data.
+// FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
+import { SuperadminPageLoader } from '@/app/frontend_superadmin/components/SuperadminLoader';
+import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
 import SuperadminBackupSchedulesListSkeleton from './components/SuperadminBackupSchedulesListSkeleton';
 
-/**
- * Performs the module loading operation within backup schedules; inputs and outputs follow the declared TypeScript contract.
- */
 export default function ModuleLoading() {
-  return <SuperadminBackupSchedulesListSkeleton />;
+  const t = useTranslations('SUPERADMIN_BACKUP');
+  return (
+    <SuperadminPageLoader
+      size="md"
+      icon="calendar-check"
+      variant="contra"
+      label={t('COPY.LOADING_MODULE')}
+    />
+  );
 }

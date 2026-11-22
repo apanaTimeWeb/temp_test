@@ -1,11 +1,20 @@
-// RESPONSIBILITY: Render the route loading state for billing overview; it does not fetch or mutate business data.
-// FLOW: App Router pending state -> superadmin_billing/billing_overview/loading.tsx -> loading UI -> route content when ready.
+'use client';
+
+// RESPONSIBILITY: Render the route loading state for superadmin_billing/billing_overview; it does not fetch or mutate business data.
+// FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
+import { SuperadminPageLoader } from '@/app/frontend_superadmin/components/SuperadminLoader';
+import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
 import SuperadminBillingOverviewListSkeleton from './components/SuperadminBillingOverviewListSkeleton';
 
-/**
- * Performs the module loading operation within billing overview; inputs and outputs follow the declared TypeScript contract.
- */
 export default function ModuleLoading() {
-  return <SuperadminBillingOverviewListSkeleton />;
+  const t = useTranslations('SUPERADMIN_BILLING');
+  return (
+    <SuperadminPageLoader
+      size="md"
+      icon="credit-card"
+      variant="contra"
+      label={t('COPY.LOADING_MODULE')}
+    />
+  );
 }

@@ -1,11 +1,20 @@
-// RESPONSIBILITY: Render the route loading state for system backup history; it does not fetch or mutate business data.
-// FLOW: App Router pending state -> superadmin_system/system_backup_history/loading.tsx -> loading UI -> route content when ready.
+'use client';
+
+// RESPONSIBILITY: Render the route loading state for superadmin_system/system_backup_history; it does not fetch or mutate business data.
+// FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
+import { SuperadminPageLoader } from '@/app/frontend_superadmin/components/SuperadminLoader';
+import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
 import SuperadminBackupHistoryListSkeleton from './components/SuperadminBackupHistoryListSkeleton';
 
-/**
- * Performs the module loading operation within backup history; inputs and outputs follow the declared TypeScript contract.
- */
 export default function ModuleLoading() {
-  return <SuperadminBackupHistoryListSkeleton />;
+  const t = useTranslations('SUPERADMIN_BACKUP');
+  return (
+    <SuperadminPageLoader
+      size="md"
+      icon="history"
+      variant="contra"
+      label={t('COPY.LOADING_MODULE')}
+    />
+  );
 }

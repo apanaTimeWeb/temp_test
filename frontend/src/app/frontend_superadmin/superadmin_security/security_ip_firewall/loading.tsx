@@ -1,11 +1,20 @@
-// RESPONSIBILITY: Render the route loading state for security ip firewall; it does not fetch or mutate business data.
-// FLOW: App Router pending state -> superadmin_security/security_ip_firewall/loading.tsx -> loading UI -> route content when ready.
+'use client';
+
+// RESPONSIBILITY: Render the route loading state for superadmin_security/security_ip_firewall; it does not fetch or mutate business data.
+// FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
+import { SuperadminPageLoader } from '@/app/frontend_superadmin/components/SuperadminLoader';
+import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
 import SuperadminSecurityIpFirewallListSkeleton from './components/SuperadminSecurityIpFirewallListSkeleton';
 
-/**
- * Performs the module loading operation within security ip firewall; inputs and outputs follow the declared TypeScript contract.
- */
 export default function ModuleLoading() {
-  return <SuperadminSecurityIpFirewallListSkeleton />;
+  const t = useTranslations('SUPERADMIN_SECURITY');
+  return (
+    <SuperadminPageLoader
+      size="md"
+      icon="shield-alert"
+      variant="contra"
+      label={t('COPY.LOADING_MODULE')}
+    />
+  );
 }

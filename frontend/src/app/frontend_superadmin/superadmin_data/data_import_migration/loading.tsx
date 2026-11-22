@@ -1,6 +1,16 @@
-// frontend/src/app/frontend_superadmin/superadmin_data/data_import_migration/loading.tsx
-import { SuperadminDataImportMigrationSkeleton } from './components/SuperadminDataImportMigrationSkeleton';
+'use client';
 
-export default function Loading() {
-  return <SuperadminDataImportMigrationSkeleton />;
+// RESPONSIBILITY: Render the route loading state for superadmin_data/data_import_migration; it does not fetch or mutate business data.
+// FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
+import { SuperadminPageLoader } from '@/app/frontend_superadmin/components/SuperadminLoader';
+
+export default function ModuleLoading() {
+  return (
+    <SuperadminPageLoader
+      size="md"
+      icon="refresh-cw"
+      variant="contra"
+      label="Loading Import & Migration..."
+    />
+  );
 }

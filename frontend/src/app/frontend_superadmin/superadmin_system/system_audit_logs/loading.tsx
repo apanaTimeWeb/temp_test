@@ -1,11 +1,20 @@
-// RESPONSIBILITY: Render the route loading state for system audit logs; it does not fetch or mutate business data.
-// FLOW: App Router pending state -> superadmin_system/system_audit_logs/loading.tsx -> loading UI -> route content when ready.
+'use client';
+
+// RESPONSIBILITY: Render the route loading state for superadmin_system/system_audit_logs; it does not fetch or mutate business data.
+// FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
+import { SuperadminPageLoader } from '@/app/frontend_superadmin/components/SuperadminLoader';
+import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
 import SuperadminAuditLogsListSkeleton from './components/SuperadminAuditLogsListSkeleton';
 
-/**
- * Performs the module loading operation within audit logs; inputs and outputs follow the declared TypeScript contract.
- */
 export default function ModuleLoading() {
-  return <SuperadminAuditLogsListSkeleton />;
+  const t = useTranslations('SUPERADMIN_AUDIT_LOGS');
+  return (
+    <SuperadminPageLoader
+      size="md"
+      icon="file-text"
+      variant="contra"
+      label={t('COPY.LOADING_MODULE')}
+    />
+  );
 }

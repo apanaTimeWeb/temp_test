@@ -1,15 +1,16 @@
 'use client';
-// RESPONSIBILITY: Loading skeleton boundary for superadmin usage overview.
-export default function SuperadminUsageOverviewLoading() {
+
+// RESPONSIBILITY: Render the route loading state for superadmin_usage/usage_overview; it does not fetch or mutate business data.
+// FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
+import { SuperadminPageLoader } from '@/app/frontend_superadmin/components/SuperadminLoader';
+
+export default function ModuleLoading() {
   return (
-    <div className="w-full space-y-6 animate-pulse p-2" role="status" aria-busy="true">
-      <div className="h-16 w-full rounded-2xl bg-card/60 border border-border/60" />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-28 rounded-2xl bg-card/60 border border-border/60" />
-        ))}
-      </div>
-      <div className="h-96 w-full rounded-2xl bg-card/60 border border-border/60" />
-    </div>
+    <SuperadminPageLoader
+      size="md"
+      icon="pie-chart"
+      variant="contra"
+      label="Loading Usage Overview..."
+    />
   );
 }
