@@ -8,6 +8,7 @@ import { SuperadminCommunicationNotificationCenterOverview } from '@/app/fronten
 import { SuperadminCommunicationNotificationCenterTemplatesView } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/components/SuperadminCommunicationNotificationCenterTemplatesView';
 import { SuperadminCommunicationNotificationCenterLogsTable } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/components/SuperadminCommunicationNotificationCenterLogsTable';
 import { SuperadminCommunicationNotificationCenterUsageView } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/components/SuperadminCommunicationNotificationCenterUsageView';
+import { SuperadminCommunicationTenantWalletView } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/components/SuperadminCommunicationTenantWalletView';
 import { SuperadminCommunicationNotificationCenterComposeModal } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/components/SuperadminCommunicationNotificationCenterComposeModal';
 import { SuperadminCommunicationNotificationCenterDetailModal } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/components/SuperadminCommunicationNotificationCenterDetailModal';
 import { SuperadminCommunicationNotificationCenterTemplateModal } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/components/SuperadminCommunicationNotificationCenterTemplateModal';
@@ -36,6 +37,7 @@ export default function SuperadminCommunicationNotificationCenterMain() {
       {activeTab === 'templates' && <SuperadminCommunicationNotificationCenterTemplatesView />}
       {activeTab === 'logs' && <SuperadminCommunicationNotificationCenterLogsTable />}
       {activeTab === 'usage' && <SuperadminCommunicationNotificationCenterUsageView />}
+      {activeTab === 'wallet' && <SuperadminCommunicationTenantWalletView />}
 
       {/* Interactive Modals */}
       <SuperadminCommunicationNotificationCenterComposeModal />

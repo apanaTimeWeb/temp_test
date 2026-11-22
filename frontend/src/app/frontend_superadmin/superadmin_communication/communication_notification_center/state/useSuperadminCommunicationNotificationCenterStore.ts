@@ -11,7 +11,7 @@ import type {
   NotificationTemplate,
 } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/types/SuperadminCommunicationNotificationCenterNotificationTypes';
 
-export type NotificationCenterTab = 'overview' | 'templates' | 'logs' | 'usage';
+export type NotificationCenterTab = 'overview' | 'templates' | 'logs' | 'usage' | 'wallet';
 
 interface SuperadminCommunicationNotificationCenterState {
   // Navigation / Tabs

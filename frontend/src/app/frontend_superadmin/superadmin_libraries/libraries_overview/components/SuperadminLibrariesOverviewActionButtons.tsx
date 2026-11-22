@@ -3,7 +3,7 @@
 import type { SuperadminLibrariesLibrary } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
 import {
   Edit2, Eye, ShieldAlert, CheckCircle, MessageSquare,
-  Mail, PhoneCall, Building2, Sliders, KeyRound,
+  Mail, PhoneCall, Building2, Sliders, KeyRound, UserCheck,
 } from 'lucide-react';
 
 interface SuperadminLibrariesOverviewActionButtonsProps {
@@ -15,6 +15,7 @@ interface SuperadminLibrariesOverviewActionButtonsProps {
   onManageBranches: (lib: SuperadminLibrariesLibrary) => void;
   onConfigureModules: (lib: SuperadminLibrariesLibrary) => void;
   onToggleAdminPanel: (id: string) => void;
+  onImpersonate?: (lib: SuperadminLibrariesLibrary) => void;
   showToast: (msg: string) => void;
 }
 
@@ -27,6 +28,7 @@ export default function SuperadminLibrariesOverviewActionButtons({
   onManageBranches,
   onConfigureModules,
   onToggleAdminPanel,
+  onImpersonate,
   showToast,
 }: SuperadminLibrariesOverviewActionButtonsProps) {
   const isActive = library.status === 'Active';
@@ -154,6 +156,18 @@ export default function SuperadminLibrariesOverviewActionButtons({
       >
         <KeyRound size={14} strokeWidth={2} />
       </button>
+
+      {/* 10. Login as Library Admin (Impersonate) */}
+      {onImpersonate && (
+        <button
+          type="button"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-indigo-400/30 bg-indigo-500/20 text-indigo-300 hover:text-white hover:bg-indigo-600/40 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+          onClick={(e) => { e.stopPropagation(); onImpersonate(library); }}
+          title="Login as Library Admin (Impersonate)"
+        >
+          <UserCheck size={14} strokeWidth={2} />
+        </button>
+      )}
     </div>
   );
 }

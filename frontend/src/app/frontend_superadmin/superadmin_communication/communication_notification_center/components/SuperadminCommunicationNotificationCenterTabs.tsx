@@ -8,6 +8,7 @@ import {
   FileText,
   History,
   BarChart3,
+  Wallet,
 } from 'lucide-react';
 import {
   useSuperadminCommunicationNotificationCenterStore,
@@ -69,6 +70,7 @@ export function SuperadminCommunicationNotificationCenterTabs() {
       badgeClass: 'bg-rose-500/20 text-rose-300 border border-rose-500/40',
     },
     { id: 'usage', label: 'Usage Analytics', icon: BarChart3 },
+    { id: 'wallet', label: 'Prepaid WhatsApp Wallet', icon: Wallet, badge: 'Escrow' },
   ];
 
   return (

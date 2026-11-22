@@ -11,6 +11,7 @@ import SuperadminLibrariesBranchManagerModal from '@/app/frontend_superadmin/sup
 import SuperadminLibrariesManagerModulesModal from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesManagerModulesModal';
 import SuperadminLibrariesOverviewHeader from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewHeader';
 import SuperadminLibrariesCreateAccountModal from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesCreateAccountModal';
+import SuperadminLibrariesImpersonateModal from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesImpersonateModal';
 import SuperadminLibrariesOverviewActionButtons from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewActionButtons';
 import SuperadminLibrariesOverviewStatsCards from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewStatsCards';
 import SuperadminLibrariesOverviewFilterBar from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewFilterBar';
@@ -49,6 +50,7 @@ export default function SuperadminLibrariesOverviewPageClient() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [branchModalLib, setBranchModalLib] = useState<SuperadminLibrariesLibrary | null>(null);
   const [modulesModalLib, setModulesModalLib] = useState<SuperadminLibrariesLibrary | null>(null);
+  const [impersonateLib, setImpersonateLib] = useState<SuperadminLibrariesLibrary | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const searchParams = useSearchParams();
 
@@ -221,6 +223,7 @@ export default function SuperadminLibrariesOverviewPageClient() {
             onManageBranches={(lib) => setBranchModalLib(lib)}
             onConfigureModules={(lib) => setModulesModalLib(lib)}
             onToggleAdminPanel={(id) => void handleToggleAdminPanel(id)}
+            onImpersonate={(lib) => setImpersonateLib(lib)}
             showToast={showToast}
           />
         );
@@ -251,6 +254,7 @@ export default function SuperadminLibrariesOverviewPageClient() {
       {selected && <SuperadminLibrariesOverviewPanel lib={selected} mode={panelMode} onClose={() => setSelected(null)} onSave={handleSave} onSuspend={handleSuspend} />}
       {branchModalLib && <SuperadminLibrariesBranchManagerModal lib={branchModalLib} onClose={() => setBranchModalLib(null)} onToggleAdminPanel={handleToggleAdminPanel} onAddBranch={handleAddBranch} />}
       {modulesModalLib && <SuperadminLibrariesManagerModulesModal lib={modulesModalLib} onClose={() => setModulesModalLib(null)} onSaveModules={handleSaveModules} />}
+      {impersonateLib && <SuperadminLibrariesImpersonateModal library={impersonateLib} onClose={() => setImpersonateLib(null)} />}
     </div>
   );
 }
