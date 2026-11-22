@@ -76,7 +76,7 @@ export function SuperadminDataBackupOperationsScheduleModal({
       aria-labelledby="schedule-modal-title"
       data-testid="data_backup-create-schedule-modal"
     >
-      <div className="w-full max-w-lg rounded-xl border border-border bg-card shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-xl border border-border bg-card shadow-xl animate-in fade-in zoom-in-95 duration-200">
         <div className="flex items-center justify-between p-4 border-b border-border bg-neutral-900/40">
           <div className="flex items-center gap-2 text-foreground font-bold text-sm">
             <span className="p-1.5 rounded-lg bg-pink-500/10 text-pink-400">

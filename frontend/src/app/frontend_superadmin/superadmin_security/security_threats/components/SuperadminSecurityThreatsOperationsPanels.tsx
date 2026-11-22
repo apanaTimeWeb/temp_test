@@ -53,7 +53,7 @@ export default function SuperadminSecurityThreatsOperationsPanels({ failedLogins
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2.5 shrink-0 self-end md:self-center">
+            <div className="flex flex-wrap items-center gap-2.5 shrink-0 self-start sm:self-auto md:self-center">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/20 px-3 py-1 text-xs font-semibold text-rose-300 shadow-xs">
                 <AlertTriangle size={12} className="text-rose-400" />
                 <span>{tCopy(`COPY.${f.reason}`)}</span>

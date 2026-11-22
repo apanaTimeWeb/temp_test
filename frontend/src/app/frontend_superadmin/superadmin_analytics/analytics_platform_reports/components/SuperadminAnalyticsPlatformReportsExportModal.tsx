@@ -69,7 +69,7 @@ export function SuperadminAnalyticsPlatformReportsExportModal({
       aria-modal="true"
       aria-labelledby="export-platform-title"
     >
-      <div className="w-full max-w-lg p-6 rounded-3xl border border-indigo-500/30 bg-[#0a0d24]/95 text-white shadow-2xl shadow-indigo-950/60 backdrop-blur-xl space-y-5 animate-in fade-in-50 zoom-in-95">
+      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 rounded-3xl border border-indigo-500/30 bg-[#0a0d24]/95 text-white shadow-2xl shadow-indigo-950/60 backdrop-blur-xl space-y-5 animate-in fade-in-50 zoom-in-95">
         <div className="flex items-center justify-between border-b border-indigo-500/20 pb-3">
           <div>
             <h2 id="export-platform-title" className="text-base font-bold text-white tracking-tight">

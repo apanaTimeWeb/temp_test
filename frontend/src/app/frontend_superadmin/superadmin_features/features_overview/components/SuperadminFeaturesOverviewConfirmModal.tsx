@@ -26,7 +26,7 @@ export default function SuperadminFeaturesOverviewConfirmModal({
         if (e.target === e.currentTarget) onCancel();
       }}
     >
-      <div className="w-full max-w-md rounded-3xl border border-indigo-500/30 bg-[#0a0d24] text-white shadow-2xl shadow-indigo-950/80 overflow-hidden p-6 space-y-4 animate-in zoom-in-95 duration-150">
+      <div className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-3xl border border-indigo-500/30 bg-[#0a0d24] text-white shadow-2xl shadow-indigo-950/80 p-6 space-y-4 animate-in zoom-in-95 duration-150">
         <div className="flex items-start gap-3.5">
           <span
             className={`p-3 rounded-2xl shrink-0 ${

@@ -51,7 +51,7 @@ export default function SuperadminUsersDirectoryContent({ activeTab, users, user
             </a>
           </div>
           
-          <div className="border border-border/80 rounded-2xl overflow-hidden bg-slate-900/40">
+          <div className="border border-border/80 rounded-2xl overflow-x-auto bg-slate-900/40">
             <table className="w-full text-left text-sm">
               <thead className="bg-slate-900/80 text-slate-300">
                 <tr>

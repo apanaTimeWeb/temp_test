@@ -42,7 +42,7 @@ export default function SuperadminLibrariesImpersonateModal({
       aria-labelledby="impersonate-modal-title"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
     >
-      <div className="relative w-full max-w-lg rounded-2xl border border-indigo-500/30 bg-gradient-to-b from-[#0c0f2f] to-[#07091c] p-6 shadow-2xl text-slate-200">
+      <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-indigo-500/30 bg-gradient-to-b from-[#0c0f2f] to-[#07091c] p-6 shadow-2xl text-slate-200">
         <button
           type="button"
           onClick={onClose}

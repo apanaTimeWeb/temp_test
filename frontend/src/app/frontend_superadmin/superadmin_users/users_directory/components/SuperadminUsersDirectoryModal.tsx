@@ -122,7 +122,7 @@ export default function SuperadminUsersDirectoryModal({ showModal, editUser, onC
     >
       <div
         ref={dialogRef}
-        className="w-full max-w-xl rounded-2xl border border-indigo-500/25 bg-slate-900/95 p-6 shadow-2xl shadow-black/40 backdrop-blur-md"
+        className="w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl border border-indigo-500/25 bg-slate-900/95 p-6 shadow-2xl shadow-black/40 backdrop-blur-md"
         role="dialog"
         aria-modal="true"
         aria-labelledby="superadmin-user-modal-title"
