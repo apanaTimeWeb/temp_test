@@ -128,7 +128,13 @@ export const SUPERADMIN_16_MODULES: SuperadminNavigationItem[] = [
     colorBg: 'rgba(251,191,36,0.15)',
     colorText: '#fbbf24',
     description: 'Invoices, payment collection, GST settings, refunds, outstanding bills',
-    subItems: [],
+    subItems: [
+      { id: 'bill_invoices', label: 'Invoices & Billing', href: `${SUPERADMIN_NAVIGATION_ROUTES.billing_invoices}?tab=invoices` },
+      { id: 'bill_transactions', label: 'Transactions & Ledger', href: `${SUPERADMIN_NAVIGATION_ROUTES.billing_invoices}?tab=transactions` },
+      { id: 'bill_tax_gst', label: 'GST & Tax Configuration', href: `${SUPERADMIN_NAVIGATION_ROUTES.billing_invoices}?tab=tax_gst` },
+      { id: 'bill_gateways', label: 'Payment Gateway Setup', href: `${SUPERADMIN_NAVIGATION_ROUTES.billing_invoices}?tab=gateways` },
+      { id: 'bill_reports', label: 'Outstanding & Revenue', href: `${SUPERADMIN_NAVIGATION_ROUTES.billing_invoices}?tab=reports` },
+    ],
   },
   {
     id: 'features',
