@@ -197,7 +197,7 @@ export function AdminCommunicationNoticeModal({
                 <label htmlFor="admin-communication-notice-message" className="uppercase tracking-[0.07em] text-sm font-semibold mb-1 block text-text-primary">
                   {t('NOTICE_MESSAGE_LABEL')} <span className="text-danger-text">*</span>
                 </label>
-                <textarea
+                <textarea maxLength={1000}
                   id="admin-communication-notice-message"
                   className="min-h-24 resize-y border-border bg-input text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 py-2 px-3 border rounded w-full"
                   rows={5}

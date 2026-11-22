@@ -109,7 +109,7 @@ export function AdminCommunicationWhatsappTemplatesEditModal({
                 {formBody.length} / {ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS} chars
               </span>
             </div>
-            <textarea
+            <textarea maxLength={1000}
               rows={6}
               className="w-full rounded-xl border border-slate-700 bg-slate-950/70 p-3 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none font-sans leading-relaxed resize-none"
               placeholder="Write your template message. Use tokens like {name}, {seat}, {duedate}..."

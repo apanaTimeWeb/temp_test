@@ -333,7 +333,7 @@ export function ManagerAssetsMaintenanceAddModal({
             <label htmlFor="maintenance-issue" className="text-xs font-semibold text-secondary block mb-1">
               Issue Description / Service Scope *
             </label>
-            <textarea
+            <textarea maxLength={1000}
               id="maintenance-issue"
               rows={2}
               placeholder="Describe breakdown or routine servicing requirement..."

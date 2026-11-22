@@ -202,7 +202,7 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
             <label htmlFor="renewals-template" className="text-xs font-semibold text-secondary block mb-1">
               Message Template Preview:
             </label>
-            <textarea
+            <textarea maxLength={1000}
               id="renewals-template"
               rows={3}
               value={selectedTemplate}

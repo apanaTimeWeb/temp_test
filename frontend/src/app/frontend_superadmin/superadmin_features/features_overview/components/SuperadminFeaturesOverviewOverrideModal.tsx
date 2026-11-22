@@ -186,7 +186,7 @@ export default function SuperadminFeaturesOverviewOverrideModal({
             <label className="block text-xs font-bold text-slate-300 mb-1.5">
               Audit Justification / Reason *
             </label>
-            <textarea
+            <textarea maxLength={1000}
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="e.g., Granted 30-day trial for marketing campaign or compliance block..."

@@ -280,7 +280,7 @@ export default function SuperadminBranchesOverviewCreateModal({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">Branch Help Desk Phone</label>
-                <input
+                <input maxLength={15}
                   type="tel"
                   placeholder="+91 "
                   value={phone}
@@ -331,7 +331,7 @@ export default function SuperadminBranchesOverviewCreateModal({
               </div>
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">Manager Mobile</label>
-                <input
+                <input maxLength={15}
                   type="tel"
                   placeholder="+91 "
                   value={managerPhone}

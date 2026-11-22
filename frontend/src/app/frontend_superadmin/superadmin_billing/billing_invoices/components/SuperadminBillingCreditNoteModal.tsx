@@ -96,7 +96,7 @@ export default function SuperadminBillingCreditNoteModal({
 
           <div>
             <label className="block text-slate-400 mb-1 font-medium">Audit Notes & Explanation</label>
-            <textarea
+            <textarea maxLength={1000}
               rows={2}
               placeholder="Provide internal compliance justification..."
               value={notes}

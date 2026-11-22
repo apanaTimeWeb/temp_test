@@ -224,9 +224,7 @@ export default function SuperadminSubscriptionsOverviewActionModal({
             </div>
             <div>
               <label className="block font-semibold text-slate-300 mb-1">Custom Price (₹/mo)</label>
-              <input
-                type="number"
-                value={customPrice}
+              <input type="number" min={0} value={customPrice}
                 onChange={(e) => setCustomPrice(Number(e.target.value))}
                 className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-slate-100 font-mono"
               />

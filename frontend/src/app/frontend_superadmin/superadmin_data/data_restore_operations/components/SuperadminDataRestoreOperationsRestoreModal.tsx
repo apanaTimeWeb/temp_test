@@ -138,7 +138,7 @@ export function SuperadminDataRestoreOperationsRestoreModal({
               <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Disaster Recovery Justification / Audit Reason *
               </label>
-              <textarea
+              <textarea maxLength={1000}
                 {...register('reason')}
                 rows={2}
                 placeholder="Explain the necessity for this restore (e.g. database corruption recovery or audited rollback)..."

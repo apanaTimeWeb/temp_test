@@ -1103,7 +1103,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
 
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">Reason for Escalation *</label>
-                <textarea
+                <textarea maxLength={1000}
                   rows={3}
                   placeholder="Describe why standard Tier-1 resolution is blocked..."
                   value={escalateReason}
@@ -1155,7 +1155,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
             <div className="space-y-3">
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">Resolution Summary *</label>
-                <textarea
+                <textarea maxLength={1000}
                   rows={3}
                   placeholder="Describe the fix or actions taken to resolve the tenant issue..."
                   value={resolutionNotes}
@@ -1218,7 +1218,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
             <div className="space-y-3">
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">Reason for Reopening *</label>
-                <textarea
+                <textarea maxLength={1000}
                   rows={3}
                   placeholder="Specify why the issue recurred or remains unresolved..."
                   value={reopenReason}
@@ -1302,7 +1302,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
 
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">Mandatory Justification *</label>
-                <textarea
+                <textarea maxLength={1000}
                   rows={3}
                   placeholder="e.g. Diagnosing corrupted student seat assignment ledger for Ticket #TKT-991"
                   value={accessJustification}

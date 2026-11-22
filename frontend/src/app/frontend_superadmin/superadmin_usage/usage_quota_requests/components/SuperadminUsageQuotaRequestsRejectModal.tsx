@@ -105,7 +105,7 @@ export function SuperadminUsageQuotaRequestsRejectModal({
             <label className="block text-xs font-semibold text-slate-300 mb-1">
               Reason for Denial <span className="text-rose-400">*</span>
             </label>
-            <textarea
+            <textarea maxLength={1000}
               rows={3}
               {...register('rejectionReason')}
               placeholder="e.g. Please upgrade to Enterprise Plan instead of standalone branch addon..."

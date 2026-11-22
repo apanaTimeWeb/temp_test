@@ -135,7 +135,7 @@ export default function ManagerMembersEnquiriesAddPage(_routeQuery: ManagerMembe
             </div>
             <div className="crm-field">
               <label htmlFor="enq-notes" className="crm-label font-semibold block mb-1">{tManagerUi('notes')} <span className="text-secondary font-normal">({tManagerUi('optional')})</span></label>
-              <textarea id="enq-notes" rows={2} className="mgr-input w-full resize-none" {...register('notes')} />
+              <textarea maxLength={1000} id="enq-notes" rows={2} className="mgr-input w-full resize-none" {...register('notes')} />
             </div>
           </div>
           <div className="flex items-center justify-end gap-2 pt-3 border-t border-border shrink-0">

@@ -74,8 +74,7 @@ export const SuperadminSettingsGeneralPlatformRegionalCard: FC = () => {
             Platform Support Hotline
           </label>
           <input
-            id="settings-support-phone"
-            type="text"
+            id="settings-support-phone" type="tel" maxLength={15} inputMode="tel"
             className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             placeholder="+91 98765 43210"
             {...register('generalConfig.supportPhone')}

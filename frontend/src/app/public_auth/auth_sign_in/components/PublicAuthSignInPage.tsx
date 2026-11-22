@@ -481,7 +481,7 @@ export default function PublicAuthSignInPage() {
                 <input
                   id="login-email"
                   data-testid="auth-login-email-input"
-                  type="text"
+                  type="email"
                   required
                   autoComplete="username"
                   placeholder="Enter your email"

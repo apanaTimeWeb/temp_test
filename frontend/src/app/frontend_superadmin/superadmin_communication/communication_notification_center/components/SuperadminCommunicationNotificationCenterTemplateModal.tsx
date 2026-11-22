@@ -186,7 +186,7 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
             </div>
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-200">Email HTML / Plaintext Body</label>
-              <textarea
+              <textarea maxLength={1000}
                 rows={5}
                 value={emailBody}
                 onChange={(e) => setEmailBody(e.target.value)}
@@ -204,7 +204,7 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
             </div>
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-200">SMS Body (GSM 7-bit)</label>
-              <textarea
+              <textarea maxLength={1000}
                 rows={4}
                 value={smsBody}
                 onChange={(e) => setSmsBody(e.target.value)}
@@ -224,7 +224,7 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
             </div>
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-200">WhatsApp Template Message</label>
-              <textarea
+              <textarea maxLength={1000}
                 rows={5}
                 value={whatsappBody}
                 onChange={(e) => setWhatsappBody(e.target.value)}

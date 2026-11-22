@@ -144,7 +144,7 @@ export function ManagerMembersEnquiriesBulkWhatsAppModal({
             </div>
           </div>
 
-          <textarea
+          <textarea maxLength={1000}
             id="bulk-whatsapp-template-input"
             rows={3}
             value={template}

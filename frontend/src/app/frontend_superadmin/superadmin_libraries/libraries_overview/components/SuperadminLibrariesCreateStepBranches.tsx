@@ -173,7 +173,7 @@ export default function SuperadminLibrariesCreateStepBranches({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Contact Number</label>
-              <input
+              <input maxLength={15}
                 type="tel"
                 placeholder="+91 98765 11111"
                 value={currentBranch.contactNumber}

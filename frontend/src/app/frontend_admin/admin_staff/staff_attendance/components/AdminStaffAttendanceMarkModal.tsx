@@ -119,7 +119,7 @@ export function AdminStaffAttendanceMarkModal({
             <label className="block text-xs font-semibold text-text-secondary">
               {t('FIELD_REASON')}
             </label>
-            <textarea
+            <textarea maxLength={1000}
               rows={2}
               value={reason}
               onChange={(e) => setReason(e.target.value)}

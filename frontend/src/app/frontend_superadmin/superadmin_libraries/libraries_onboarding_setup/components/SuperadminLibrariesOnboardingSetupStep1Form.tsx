@@ -43,7 +43,7 @@ export default function SuperadminLibrariesOnboardingSetupStep1Form({ onNext, in
         <label className="sa-wizard-field-label" htmlFor="superadmin-superadminsetupwizardstep1form-26-textarea">
           {tCopy("COPY.ADDRESS")} <span className="sa-wizard-field-required">*</span>
         </label>
-        <textarea id="superadmin-superadminsetupwizardstep1form-26-textarea" {...register('address')} rows={3} aria-invalid={Boolean(errors.address)} aria-describedby={errors.address ? 'step1-address-error' : undefined} placeholder={tCopy("COPY.FULL_ADDRESS")}
+        <textarea maxLength={1000} id="superadmin-superadminsetupwizardstep1form-26-textarea" {...register('address')} rows={3} aria-invalid={Boolean(errors.address)} aria-describedby={errors.address ? 'step1-address-error' : undefined} placeholder={tCopy("COPY.FULL_ADDRESS")}
           className={`${inputCls(!!errors.address)} resize-none`}  data-testid="superadmin-setup-wizard-setup-wizard-step1-form-superadmin-superadminsetupwizardstep1form-26-textarea-2"/>
         {errors.address && <p id="step1-address-error" role="alert" className="sa-wizard-field-error">{translateValidationMessage(errors.address.message)}</p>}
       </div>

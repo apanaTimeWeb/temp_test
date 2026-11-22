@@ -134,7 +134,7 @@ export default function ManagerFinanceAutoSuspendWhatsAppModal({
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-secondary pointer-events-none">
               +91
             </span>
-            <input
+            <input maxLength={15}
               id="wa-student-phone"
               type="tel"
               value={phone}
@@ -156,7 +156,7 @@ export default function ManagerFinanceAutoSuspendWhatsAppModal({
               {message.length} chars
             </span>
           </div>
-          <textarea
+          <textarea maxLength={1000}
             id="wa-student-message"
             rows={6}
             value={message}

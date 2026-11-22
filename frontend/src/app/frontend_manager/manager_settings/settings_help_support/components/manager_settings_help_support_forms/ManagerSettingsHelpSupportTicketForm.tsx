@@ -213,7 +213,7 @@ export function ManagerSettingsHelpSupportTicketForm({ onCancel }: ManagerSettin
           </div>
 
           <div className="relative">
-            <textarea
+            <textarea maxLength={1000}
               id="manager-ticket-description"
               rows={6}
               required

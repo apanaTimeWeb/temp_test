@@ -99,7 +99,7 @@ export function SuperadminSettingsGeneralMaintenanceModeCard() {
           <label htmlFor="settings-maintenance-message" className="text-xs font-bold uppercase tracking-wider text-slate-300">
             Broadcast Maintenance Message <span className="text-rose-400">*</span>
           </label>
-          <textarea
+          <textarea maxLength={1000}
             id="settings-maintenance-message"
             rows={3}
             {...register('maintenance.message')}

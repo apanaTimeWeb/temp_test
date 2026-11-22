@@ -264,7 +264,7 @@ export default function ManagerFinancePaymentPromisesEditModal({
               <label htmlFor="edit-remarks" className="text-xs font-semibold text-primary block mb-1">
                 Remarks & Student Reason <span className="font-normal text-xs text-secondary">(Optional)</span>
               </label>
-              <textarea
+              <textarea maxLength={1000}
                 id="edit-remarks"
                 name="remarks"
                 rows={2}

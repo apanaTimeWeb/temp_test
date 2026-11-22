@@ -103,7 +103,7 @@ export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsPro
               <span className="text-danger-text" aria-hidden="true">*</span>
             </div>
             <div className="relative">
-              <input
+              <input maxLength={15}
                 id="admin-profile-edit-phone"
                 type="tel"
                 autoComplete="tel"
@@ -174,7 +174,7 @@ export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsPro
             </div>
             <span className="text-xs text-text-tertiary">Optional</span>
           </div>
-          <textarea
+          <textarea maxLength={1000}
             id="admin-profile-edit-bio"
             rows={4}
             className={`w-full rounded-xl border bg-surface p-4 text-sm font-medium text-text-primary placeholder:text-text-tertiary transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${

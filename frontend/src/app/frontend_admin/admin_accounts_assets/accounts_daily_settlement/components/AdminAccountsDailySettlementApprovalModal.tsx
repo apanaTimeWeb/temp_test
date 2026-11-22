@@ -159,7 +159,7 @@ export function AdminAccountsDailySettlementApprovalModal({
             <label htmlFor="admin-notes" className="block text-xs font-semibold text-foreground">
               {t('ADMIN_NOTES_LABEL')}
             </label>
-            <textarea
+            <textarea maxLength={1000}
               id="admin-notes"
               rows={2}
               value={adminNotes}

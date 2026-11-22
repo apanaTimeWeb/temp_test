@@ -348,6 +348,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
                   type="number"
                   placeholder="₹800"
                   className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                  min="0"
                   {...register('morningRate')}
                 />
               </div>
@@ -357,6 +358,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
                   type="number"
                   placeholder="₹700"
                   className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                  min="0"
                   {...register('afternoonRate')}
                 />
               </div>
@@ -366,6 +368,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
                   type="number"
                   placeholder="₹900"
                   className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                  min="0"
                   {...register('eveningRate')}
                 />
               </div>
@@ -375,6 +378,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
                   type="number"
                   placeholder="₹1000"
                   className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                  min="0"
                   {...register('nightRate')}
                 />
               </div>
@@ -384,6 +388,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
                   type="number"
                   placeholder="₹2000"
                   className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                  min="0"
                   {...register('fullDayRate')}
                 />
               </div>
@@ -432,7 +437,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
               })}
             </div>
 
-            <textarea
+            <textarea maxLength={1000}
               id="admin-plan-features"
               className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none leading-relaxed"
               aria-invalid={Boolean(errors.features)}

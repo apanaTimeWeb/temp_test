@@ -101,7 +101,7 @@ export default function SuperadminLibrariesOverviewPanelEditForm({
           <label htmlFor="superadmin-libraries-phone" className="block text-xs font-semibold text-slate-300 mb-1.5">
             {t('COPY.PHONE')}
           </label>
-          <input
+          <input maxLength={15}
             id="superadmin-libraries-phone"
             type="tel"
             autoComplete="tel"

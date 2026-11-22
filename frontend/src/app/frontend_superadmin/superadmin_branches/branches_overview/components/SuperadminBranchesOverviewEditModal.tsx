@@ -205,7 +205,7 @@ export default function SuperadminBranchesOverviewEditModal({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">Branch Help Desk Phone</label>
-                <input
+                <input maxLength={15}
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -252,7 +252,7 @@ export default function SuperadminBranchesOverviewEditModal({
               </div>
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">Manager Mobile</label>
-                <input
+                <input maxLength={15}
                   type="tel"
                   value={managerPhone}
                   onChange={(e) => setManagerPhone(e.target.value)}

@@ -192,7 +192,7 @@ export function AdminLockersMatrixDetailModal({
                   <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">
                     Contact Phone
                   </label>
-                  <input
+                  <input maxLength={15}
                     type="tel"
                     placeholder="9876543210"
                     value={phone}

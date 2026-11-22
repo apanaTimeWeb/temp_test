@@ -170,7 +170,7 @@ export function SuperadminCommunicationNotificationCenterComposeModal() {
           {/* Message Body */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-slate-200">Message Body</label>
-            <textarea
+            <textarea maxLength={1000}
               rows={4}
               {...register('message')}
               className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 leading-relaxed font-mono shadow-inner"
@@ -192,7 +192,9 @@ export function SuperadminCommunicationNotificationCenterComposeModal() {
                 className="px-3 py-2 rounded-xl bg-slate-900/90 border border-indigo-500/30 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400"
               />
               <input
-                type="text"
+                type="tel"
+                maxLength={15}
+                inputMode="tel"
                 {...register('testRecipient.phone')}
                 placeholder="Test phone (+919800000000)"
                 className="px-3 py-2 rounded-xl bg-slate-900/90 border border-indigo-500/30 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400"

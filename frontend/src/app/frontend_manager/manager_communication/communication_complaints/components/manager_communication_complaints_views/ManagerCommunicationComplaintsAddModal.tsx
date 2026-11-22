@@ -288,7 +288,7 @@ export default function ManagerCommunicationComplaintsAddModal({
 
           <div>
             <label className="font-semibold text-primary block mb-1">Detailed Description *</label>
-            <textarea
+            <textarea maxLength={1000}
               required
               rows={3}
               className="mgr-input text-xs resize-none"

@@ -185,7 +185,7 @@ export default function SuperadminSupportTicketsCreateModal({
                   <Phone size={13} className="text-indigo-400" />
                   <span>Phone / WhatsApp</span>
                 </label>
-                <input
+                <input maxLength={15}
                   type="tel"
                   placeholder="+91 98765 43210"
                   value={phone}
@@ -270,7 +270,7 @@ export default function SuperadminSupportTicketsCreateModal({
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                 Issue Details & Steps to Reproduce <span className="text-rose-400">*</span>
               </label>
-              <textarea
+              <textarea maxLength={1000}
                 rows={4}
                 placeholder="Describe the issue, device model, affected students/seats, and error messages..."
                 value={desc}

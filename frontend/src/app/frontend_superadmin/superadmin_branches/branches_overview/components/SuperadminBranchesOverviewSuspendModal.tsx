@@ -66,7 +66,7 @@ export default function SuperadminBranchesOverviewSuspendModal({
             <label className="block text-xs font-semibold text-slate-300 mb-1.5">
               Reason for Suspension *
             </label>
-            <textarea
+            <textarea maxLength={1000}
               required
               rows={3}
               value={reason}

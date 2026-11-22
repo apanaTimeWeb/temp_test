@@ -195,7 +195,7 @@ export default function SuperadminBranchesOverviewCloseSafetyModal({
             <label className="block text-slate-300 font-semibold">
               Mandatory Archival Reason / Closure Justification:
             </label>
-            <textarea
+            <textarea maxLength={1000}
               value={closingNotes}
               onChange={(e) => setClosingNotes(e.target.value)}
               placeholder="e.g. Lease expired, operations merged into central hub, management decision..."

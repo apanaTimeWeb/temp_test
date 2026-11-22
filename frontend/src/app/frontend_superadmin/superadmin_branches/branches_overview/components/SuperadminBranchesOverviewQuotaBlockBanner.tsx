@@ -78,7 +78,7 @@ export default function SuperadminBranchesOverviewQuotaBlockBanner({
           <label className="block text-2xs font-semibold text-slate-300 uppercase tracking-wider">
             Business Justification for 4th Branch
           </label>
-          <textarea
+          <textarea maxLength={1000}
             rows={2}
             value={requestNote}
             onChange={(e) => setRequestNote(e.target.value)}

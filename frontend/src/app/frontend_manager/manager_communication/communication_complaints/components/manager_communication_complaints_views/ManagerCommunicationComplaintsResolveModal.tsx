@@ -145,7 +145,7 @@ export function ManagerCommunicationComplaintsResolveModal({
             <span>Action Taken / Resolution Note *</span>
             <span className="text-[10px] text-secondary">Included in student WhatsApp</span>
           </label>
-          <textarea
+          <textarea maxLength={1000}
             rows={2}
             value={resolutionNote}
             onChange={(e) => setResolutionNote(e.target.value)}

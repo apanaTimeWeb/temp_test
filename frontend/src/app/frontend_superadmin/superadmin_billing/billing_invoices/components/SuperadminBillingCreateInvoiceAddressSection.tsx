@@ -94,7 +94,7 @@ export default function SuperadminBillingCreateInvoiceAddressSection({
         </div>
         <div>
           <label className="block font-semibold text-slate-300 mb-1">Billing Contact Phone</label>
-          <input
+          <input maxLength={15}
             type="tel"
             placeholder="e.g. +91 98765 43210"
             value={phone}

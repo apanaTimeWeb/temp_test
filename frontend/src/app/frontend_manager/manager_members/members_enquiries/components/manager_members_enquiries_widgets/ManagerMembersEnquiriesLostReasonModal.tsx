@@ -161,7 +161,7 @@ export function ManagerMembersEnquiriesLostReasonModal({
             >
               Manager Remarks / Additional Details (Optional)
             </label>
-            <textarea
+            <textarea maxLength={1000}
               id="lost-reason-notes"
               rows={2}
               value={notes}

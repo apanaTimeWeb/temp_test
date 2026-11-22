@@ -345,7 +345,7 @@ export function ManagerCommunicationNotificationCenterFlyerModal({
                     </div>
                     <div>
                       <label className="font-semibold block mb-1">Main Notice Description</label>
-                      <textarea
+                      <textarea maxLength={1000}
                         rows={3}
                         value={noticeBody}
                         onChange={(e) => setNoticeBody(e.target.value)}

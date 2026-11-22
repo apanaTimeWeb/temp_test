@@ -155,7 +155,7 @@ export default function SuperadminUsersBulkWhatsAppModal({
                 Variables: <code className="text-indigo-400">{"{name}"}</code>, <code className="text-indigo-400">{"{role}"}</code>, <code className="text-indigo-400">{"{branch}"}</code>
               </span>
             </div>
-            <textarea
+            <textarea maxLength={1000}
               id="superadmin-whatsapp-msg-editor"
               rows={4}
               value={template}

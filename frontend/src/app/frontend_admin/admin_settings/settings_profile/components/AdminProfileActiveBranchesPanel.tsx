@@ -530,7 +530,7 @@ export default function AdminProfileActiveBranchesPanel() {
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
                   Contact Phone Number
                 </label>
-                <input
+                <input maxLength={15}
                   type="tel"
                   value={editFormData.phone}
                   onChange={(e) => setEditFormData({ ...editFormData, phone: e.target.value })}
@@ -571,7 +571,7 @@ export default function AdminProfileActiveBranchesPanel() {
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
                   Branch Address *
                 </label>
-                <textarea
+                <textarea maxLength={1000}
                   rows={2}
                   required
                   value={editFormData.address}

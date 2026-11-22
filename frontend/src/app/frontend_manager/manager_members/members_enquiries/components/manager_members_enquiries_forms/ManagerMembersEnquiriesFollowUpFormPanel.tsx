@@ -74,7 +74,7 @@ export function ManagerMembersEnquiriesFollowUpFormPanel({
         </div>
         <div className="crm-field">
           <label htmlFor="crm-followup-remark" className="crm-label crm-label--required">{remarkLabel}</label>
-          <textarea
+          <textarea maxLength={1000}
             id="crm-followup-remark"
             rows={3}
             className={`crm-textarea${remarkError ? ' crm-textarea--error' : ''}`}

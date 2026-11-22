@@ -153,7 +153,7 @@ export default function AdminMembersEnquiriesBulkWhatsAppModal({
                 Tip: Use <code className="text-primary font-bold">{'{name}'}</code> to personalize
               </span>
             </div>
-            <textarea
+            <textarea maxLength={1000}
               id="enquiry-whatsapp-template"
               rows={3}
               value={template}

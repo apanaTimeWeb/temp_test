@@ -175,7 +175,7 @@ export function ManagerMembersDirectoryBulkWhatsAppModal({
             <label htmlFor="members-msg-template" className="text-xs font-semibold text-secondary block mb-1">
               Message Template (supports <code className="text-primary">{'{name}'}</code>, <code className="text-primary">{'{id}'}</code>, <code className="text-primary">{'{expiry}'}</code>, <code className="text-primary">{'{seat}'}</code>):
             </label>
-            <textarea
+            <textarea maxLength={1000}
               id="members-msg-template"
               rows={3}
               value={messageTemplate}

@@ -341,6 +341,7 @@ export default function PublicAuthRegistrationPage() {
                     type="tel"
                     autoComplete="tel"
                     placeholder="+91 98765 43210"
+                    maxLength={15}
                     disabled={isBusy}
                     {...register('phone')}
                     aria-invalid={Boolean(errors.phone)}

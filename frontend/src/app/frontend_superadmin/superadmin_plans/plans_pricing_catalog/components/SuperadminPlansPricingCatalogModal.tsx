@@ -242,6 +242,7 @@ export default function SuperadminPlansPricingCatalogModal({
               <input
                 id="subscription-plan-price-half"
                 type="number"
+                min={0}
                 step="0.01"
                 className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-xs text-slate-100 focus:border-indigo-500"
                 {...register('priceHalfYearly', { valueAsNumber: true })}
@@ -255,6 +256,7 @@ export default function SuperadminPlansPricingCatalogModal({
               <input
                 id="subscription-plan-price-annual"
                 type="number"
+                min={0}
                 step="0.01"
                 className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-xs text-slate-100 focus:border-indigo-500"
                 {...register('priceAnnual', { valueAsNumber: true })}

@@ -152,6 +152,7 @@ export function SuperadminDataBackupOperationsScheduleModal({
               <label className="block font-semibold text-foreground mb-1">Retention Window (Days)</label>
               <input
                 type="number"
+                min={1}
                 {...register('retentionDays', { valueAsNumber: true })}
                 className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-border text-foreground focus:outline-none focus:border-pink-500 text-xs"
               />

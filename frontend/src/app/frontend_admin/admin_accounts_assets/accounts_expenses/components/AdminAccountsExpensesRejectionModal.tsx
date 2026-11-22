@@ -63,7 +63,7 @@ export function AdminAccountsExpensesRejectionModal({
             <label htmlFor="rejection-reason" className="block text-xs font-semibold text-foreground">
               {t('REJECTION_REASON')}
             </label>
-            <textarea
+            <textarea maxLength={1000}
               id="rejection-reason"
               rows={3}
               value={reason}

@@ -156,7 +156,7 @@ export default function SuperadminSubscriptionsBulkWhatsAppModal({
                 Variables: <code className="text-indigo-400">{"{tenant}"}</code>, <code className="text-indigo-400">{"{plan}"}</code>, <code className="text-indigo-400">{"{status}"}</code>, <code className="text-indigo-400">{"{mrr}"}</code>
               </span>
             </div>
-            <textarea
+            <textarea maxLength={1000}
               id="superadmin-subscribers-msg-editor"
               rows={4}
               value={template}

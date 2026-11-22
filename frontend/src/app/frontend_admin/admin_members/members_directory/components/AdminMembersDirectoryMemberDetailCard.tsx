@@ -1366,7 +1366,7 @@ export function AdminMembersDirectoryMemberDetailCard({
 
               <div>
                 <label className="block text-text-secondary font-medium mb-1">Administrative Justification / Approval Notes</label>
-                <textarea
+                <textarea maxLength={1000}
                   rows={2}
                   value={waiverReason}
                   onChange={(e) => setWaiverReason(e.target.value)}

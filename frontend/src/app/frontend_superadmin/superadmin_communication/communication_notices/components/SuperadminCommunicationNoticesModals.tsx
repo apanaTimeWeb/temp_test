@@ -105,7 +105,7 @@ export function SuperadminCommunicationNoticesModals({
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="notice-message">
                   {tCopy('COPY.MESSAGE')} <span className="text-rose-400">*</span>
                 </label>
-                <textarea
+                <textarea maxLength={1000}
                   id="notice-message"
                   className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-400 resize-none transition-all shadow-inner"
                   rows={4}

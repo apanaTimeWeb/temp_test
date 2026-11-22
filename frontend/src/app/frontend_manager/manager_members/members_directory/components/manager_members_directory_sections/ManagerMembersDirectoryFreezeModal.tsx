@@ -265,7 +265,7 @@ export function ManagerMembersDirectoryFreezeModal({
             <label htmlFor="freeze-notes" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
               Manager Remarks (Optional)
             </label>
-            <textarea
+            <textarea maxLength={1000}
               id="freeze-notes"
               rows={2}
               value={notes}

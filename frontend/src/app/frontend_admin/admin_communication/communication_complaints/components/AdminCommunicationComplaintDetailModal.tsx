@@ -302,7 +302,7 @@ ${viewItem.resolvedNote ? `Resolution: ${viewItem.resolvedNote}` : 'Our facility
               <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
                 Resolution Notes / Remedial Action Taken
               </label>
-              <textarea
+              <textarea maxLength={1000}
                 value={resolveNote}
                 onChange={(e) => onChangeResolveNote(e.target.value)}
                 placeholder="e.g. AC technician replaced condenser capacitor. Room temperature restored to 22°C."

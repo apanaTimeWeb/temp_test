@@ -195,7 +195,7 @@ export function AdminAssetsRegisterAmcModal({
               <label htmlFor="amc-notes" className="font-semibold text-foreground">
                 {tModal('NOTES_LABEL')}
               </label>
-              <textarea
+              <textarea maxLength={1000}
                 id="amc-notes"
                 rows={2}
                 value={notes}

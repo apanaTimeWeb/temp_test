@@ -120,7 +120,7 @@ export default function SuperadminLibrariesCreateStepOrganization({
             <Phone size={11} className="text-indigo-400" />
             <span>Main Contact Number</span> <span className="text-rose-400">*</span>
           </label>
-          <input
+          <input maxLength={15}
             type="tel"
             required
             placeholder="+91 98765 43210"
@@ -152,7 +152,7 @@ export default function SuperadminLibrariesCreateStepOrganization({
           <MapPin size={11} className="text-indigo-400" />
           <span>Registered Office Address</span> <span className="text-rose-400">*</span>
         </label>
-        <textarea
+        <textarea maxLength={1000}
           rows={2}
           required
           placeholder="Building, street, landmark, commercial area..."

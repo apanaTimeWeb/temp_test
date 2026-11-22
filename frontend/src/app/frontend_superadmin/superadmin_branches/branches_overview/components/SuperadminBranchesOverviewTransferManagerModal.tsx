@@ -81,7 +81,7 @@ export default function SuperadminBranchesOverviewTransferManagerModal({
 
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1">Contact Phone</label>
-            <input
+            <input maxLength={15}
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
@@ -91,7 +91,7 @@ export default function SuperadminBranchesOverviewTransferManagerModal({
 
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1">Transfer Reason / Audit Note *</label>
-            <textarea
+            <textarea maxLength={1000}
               rows={2}
               placeholder="e.g. Relocation, role rotation, or new staff appointment..."
               value={reason}

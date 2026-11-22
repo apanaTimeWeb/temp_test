@@ -93,7 +93,7 @@ export default function SuperadminLibrariesCreateStepAdmin({
             <Phone size={11} className="text-purple-400" />
             <span>Mobile Number (Verification)</span> <span className="text-rose-400">*</span>
           </label>
-          <input
+          <input maxLength={15}
             type="tel"
             required
             placeholder="+91 98765 43210"

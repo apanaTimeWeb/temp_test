@@ -228,7 +228,7 @@ export function ManagerFinancePaymentPromisesAddModal({
             <label htmlFor="add-remarks" className="text-xs font-semibold text-primary block mb-1">
               Reason / Remarks <span className="font-normal text-xs text-secondary">(Optional)</span>
             </label>
-            <textarea
+            <textarea maxLength={1000}
               id="add-remarks"
               name="remarks"
               rows={2}

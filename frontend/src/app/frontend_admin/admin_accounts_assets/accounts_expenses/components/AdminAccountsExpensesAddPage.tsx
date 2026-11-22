@@ -162,7 +162,7 @@ export default function AdminAccountsExpensesAddPage({ onSaveExpense, onCancel }
         </div>
         <div>
           <label className="block text-sm font-medium text-text-secondary" htmlFor="expense-notes">{t('NOTES')}</label>
-          <textarea id="expense-notes" rows={2} className="mt-1 min-h-20 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('notes')} />
+          <textarea maxLength={1000} id="expense-notes" rows={2} className="mt-1 min-h-20 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('notes')} />
         </div>
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
           <button type="button" className="min-h-11 rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={requestCancel}>{t('CANCEL')}</button>

@@ -157,6 +157,7 @@ export default function SuperadminSubscriptionsOverviewNewModal({
               <label className="block font-semibold text-slate-300 mb-1">Monthly Price (₹)</label>
               <input
                 type="number"
+                min={0}
                 value={customPrice}
                 onChange={(e) => setCustomPrice(Number(e.target.value))}
                 className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100"

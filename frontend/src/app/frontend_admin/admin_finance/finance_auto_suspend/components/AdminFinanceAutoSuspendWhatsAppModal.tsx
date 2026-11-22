@@ -128,7 +128,7 @@ export function AdminFinanceAutoSuspendWhatsAppModal({
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-secondary">
               +91
             </span>
-            <input
+            <input maxLength={15}
               id="admin-wa-phone-input"
               type="tel"
               value={phone}
@@ -150,7 +150,7 @@ export function AdminFinanceAutoSuspendWhatsAppModal({
               Editable preview
             </span>
           </div>
-          <textarea
+          <textarea maxLength={1000}
             id="admin-wa-message-textarea"
             rows={7}
             value={message}

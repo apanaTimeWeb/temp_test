@@ -244,7 +244,7 @@ export function ManagerMembersDirectoryGraduateAlumniModal({
             <label htmlFor="alumni-testimonial" className="block text-xs font-semibold text-secondary mb-1">
               Testimonial / Success Quote (Optional)
             </label>
-            <textarea
+            <textarea maxLength={1000}
               id="alumni-testimonial"
               rows={2}
               placeholder="e.g. The silent AC library and high-speed wifi were essential to my daily consistency."

@@ -244,7 +244,7 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
             <label htmlFor="discrepancy-notes" className="block text-xs font-semibold text-foreground">
               {t('NOTES_LABEL')}
             </label>
-            <textarea
+            <textarea maxLength={1000}
               id="discrepancy-notes"
               rows={3}
               value={notes}

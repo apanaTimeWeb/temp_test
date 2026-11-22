@@ -251,7 +251,7 @@ export function AdminEnquiriesAddPage() {
                 <label htmlFor="enq-notes" className="text-body font-medium text-text-primary">
                   {t('NOTES')} <span className="text-caption font-normal text-text-secondary">({t('OPTIONAL')})</span>
                 </label>
-                <textarea
+                <textarea maxLength={1000}
                   id="enq-notes"
                   rows={3}
                   placeholder={t('NOTES_PLACEHOLDER')}

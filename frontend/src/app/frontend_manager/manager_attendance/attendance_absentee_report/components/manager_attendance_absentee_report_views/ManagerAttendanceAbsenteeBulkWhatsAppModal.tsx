@@ -173,7 +173,7 @@ export function ManagerAttendanceAbsenteeBulkWhatsAppModal({
             <label htmlFor="absentee-template" className="text-xs font-semibold text-secondary block mb-1">
               Message Template:
             </label>
-            <textarea
+            <textarea maxLength={1000}
               id="absentee-template"
               rows={3}
               value={selectedTemplate}

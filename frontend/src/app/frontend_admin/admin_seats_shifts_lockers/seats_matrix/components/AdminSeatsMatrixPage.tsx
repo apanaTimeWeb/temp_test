@@ -1069,8 +1069,7 @@ export function AdminSeatMatrixSeatMatrixPage() {
                       Mobile Number
                     </label>
                     <input
-                      id="admin-seat-phone"
-                      type="text"
+                      id="admin-seat-phone" type="tel" maxLength={15} inputMode="tel"
                       value={assignPhone}
                       onChange={(e) => setAssignPhone(e.target.value)}
                       placeholder="9876543210"

@@ -620,7 +620,7 @@ export default function AdminMembersBlacklistMain() {
                   <label htmlFor="admin-blacklist-pardon-reason" className="text-xs font-semibold text-slate-300 uppercase tracking-wider block mb-1">
                     Pardon Justification & Undertaking Note
                   </label>
-                  <textarea
+                  <textarea maxLength={1000}
                     id="admin-blacklist-pardon-reason"
                     rows={3}
                     value={pardonReason}
@@ -731,7 +731,7 @@ export function AdminBlacklistFormDialog({ open, onOpenChange, onSubmit, isDemoM
             <div>
               <label htmlFor="admin-blacklist-phone" className="admin-label">{t('PHONE_LABEL')}</label>
               <input
-                id="admin-blacklist-phone"
+                id="admin-blacklist-phone" maxLength={15} inputMode="tel"
                 {...register('phone', {
                   onChange: (e) => {
                     e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
@@ -854,7 +854,7 @@ export function AdminBlacklistFormDialog({ open, onOpenChange, onSubmit, isDemoM
 
           <div>
             <label htmlFor="admin-blacklist-reason" className="admin-label">{t('REASON_LABEL')}</label>
-            <textarea id="admin-blacklist-reason" {...register('reason')} placeholder="Describe the violation, evidence, or eyewitness reports..." className="admin-textarea" aria-invalid={Boolean(errors.reason)} aria-describedby={errors.reason ? 'admin-blacklist-reason-error' : undefined} rows={3} required />
+            <textarea maxLength={1000} id="admin-blacklist-reason" {...register('reason')} placeholder="Describe the violation, evidence, or eyewitness reports..." className="admin-textarea" aria-invalid={Boolean(errors.reason)} aria-describedby={errors.reason ? 'admin-blacklist-reason-error' : undefined} rows={3} required />
             {errors.reason && <p id="admin-blacklist-reason-error" className="admin-error" role="alert">{errors.reason.message}</p>}
           </div>
 

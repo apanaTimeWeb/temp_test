@@ -139,7 +139,7 @@ export default function SuperadminRoleCreateModal({
 
           <div>
             <label className="block font-semibold text-slate-300 mb-1">Role Description / Purpose</label>
-            <textarea
+            <textarea maxLength={1000}
               rows={2}
               placeholder="e.g. Assigned to morning supervisors handling seat check-ins and member admissions..."
               value={description}

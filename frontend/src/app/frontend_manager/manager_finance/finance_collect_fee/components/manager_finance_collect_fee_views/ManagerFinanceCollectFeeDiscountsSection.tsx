@@ -85,7 +85,7 @@ export default function ManagerFinanceCollectFeeDiscountsSection({
         </div>
         <input
           id="manager-collect-fee-late-fee"
-          type="number"
+          type="number" min="0"
           className="fin-input w-full mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           value={lateFee}
           onChange={(e) => onLateFeeChange(e.target.value)}
@@ -94,7 +94,7 @@ export default function ManagerFinanceCollectFeeDiscountsSection({
       </div>
       <div>
         <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-178">{remarkOptionalLabel}</label>
-        <textarea
+        <textarea maxLength={1000}
           id="rbg4-managerfinancecollectfeepage-178"
           className="fin-textarea mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           rows={2}

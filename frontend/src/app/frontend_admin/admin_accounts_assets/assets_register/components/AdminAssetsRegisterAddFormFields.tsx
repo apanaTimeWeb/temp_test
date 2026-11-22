@@ -281,7 +281,7 @@ export function AdminAssetsRegisterAddFormFields({
         <label htmlFor="modal-asset-notes" className="font-semibold text-foreground">
           {tModal('NOTES_LABEL')}
         </label>
-        <textarea
+        <textarea maxLength={1000}
           id="modal-asset-notes"
           rows={2}
           value={notes}
