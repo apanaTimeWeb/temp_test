@@ -134,15 +134,6 @@ export function ManagerMembersEnquiriesMobileCards({
         return (
           <article className="crm-mobile-enquiry-card bg-[#0c0f28]/95 border border-indigo-500/25 rounded-2xl p-4 shadow-md transition-all hover:border-indigo-400" key={`mobile-${enq.id}`}>
             <div className="flex items-center gap-2.5 pb-2">
-              {onToggleSelectOne && (
-                <input
-                  type="checkbox"
-                  checked={selectedIds.includes(enq.id)}
-                  onChange={() => onToggleSelectOne(enq.id)}
-                  aria-label={`Select ${enq.name}`}
-                  className="rounded border-indigo-500/40 bg-[#07091c] text-indigo-500 focus:ring-indigo-400 h-4 w-4 cursor-pointer"
-                />
-              )}
               <button type="button" className="crm-mobile-enquiry-main flex-1 text-left cursor-pointer" onClick={() => onOpenDetails(enq.id)}>
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <div className="flex items-center gap-2">

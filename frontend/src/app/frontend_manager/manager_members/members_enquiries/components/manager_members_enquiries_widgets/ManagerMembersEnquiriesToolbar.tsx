@@ -1,7 +1,7 @@
 'use client';
 import { MANAGER_CRM_STATUS_OPTIONS } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
 import type { ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
-import { Download,Filter,Search,Users,X } from 'lucide-react';
+import { Download,Filter,MessageSquare,Search,Users,X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 interface ManagerMembersEnquiriesToolbarProps {
@@ -15,6 +15,7 @@ interface ManagerMembersEnquiriesToolbarProps {
   hasActiveFilters: boolean;
   onResetFilters: () => void;
   onExportCsv: () => void;
+  onOpenBulkWhatsApp?: () => void;
 }
 
 export function ManagerMembersEnquiriesToolbar({
@@ -28,6 +29,7 @@ export function ManagerMembersEnquiriesToolbar({
   hasActiveFilters,
   onResetFilters,
   onExportCsv,
+  onOpenBulkWhatsApp,
 }: ManagerMembersEnquiriesToolbarProps) {
   const tManagerUi = useTranslations('manager.manager_enquiries.ui');
 
@@ -102,16 +104,30 @@ export function ManagerMembersEnquiriesToolbar({
         </div>
       </div>
 
-      {/* Export CSV Button */}
-      <button
-        type="button"
-        onClick={onExportCsv}
-        className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-bold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 motion-safe:transition-all shadow-sm shrink-0 cursor-pointer w-full md:w-auto"
-        title="Export CRM Enquiries as CSV"
-      >
-        <Download size={14} className="text-indigo-400" />
-        <span>Export CSV</span>
-      </button>
+      {/* Action Buttons: Bulk WhatsApp & Export CSV */}
+      <div className="flex items-center gap-2 w-full md:w-auto">
+        {onOpenBulkWhatsApp && (
+          <button
+            type="button"
+            onClick={onOpenBulkWhatsApp}
+            disabled={filteredCount === 0}
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-xs font-bold text-emerald-300 hover:text-white hover:bg-emerald-600/30 hover:border-emerald-400 motion-safe:transition-all shadow-sm shrink-0 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed w-full sm:w-auto"
+            title="Send Bulk WhatsApp to Filtered Enquiries"
+          >
+            <MessageSquare size={14} className="text-emerald-400" />
+            <span>Bulk WhatsApp ({filteredCount})</span>
+          </button>
+        )}
+        <button
+          type="button"
+          onClick={onExportCsv}
+          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-bold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 motion-safe:transition-all shadow-sm shrink-0 cursor-pointer w-full md:w-auto"
+          title="Export CRM Enquiries as CSV"
+        >
+          <Download size={14} className="text-indigo-400" />
+          <span>Export CSV</span>
+        </button>
+      </div>
     </div>
   );
 }

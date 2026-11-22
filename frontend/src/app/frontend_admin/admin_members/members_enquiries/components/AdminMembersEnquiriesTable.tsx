@@ -105,17 +105,6 @@ export default function AdminEnquiriesTable({
             <table className="w-full border-collapse text-left text-sm">
               <thead>
                 <tr className="bg-slate-900/80 uppercase text-[11px] font-semibold text-slate-400 border-b border-slate-800/80 tracking-wider h-12">
-                  <th scope="col" className="w-10 px-4">
-                    {onToggleSelectAll && (
-                      <input
-                        type="checkbox"
-                        aria-label="Select all enquiries on this page"
-                        checked={pageRows.length > 0 && pageRows.every((r) => selectedIds.includes(r.id))}
-                        onChange={onToggleSelectAll}
-                        className="rounded border-slate-700 bg-slate-900 text-indigo-500 focus:ring-indigo-400"
-                      />
-                    )}
-                  </th>
                   <th scope="col" className="px-3">#</th>
                   {sortHeader(t('NAME'), 'name')}
                   {sortHeader(t('PHONE'), 'phone')}
@@ -133,20 +122,9 @@ export default function AdminEnquiriesTable({
                   return (
                     <tr
                       key={enquiry.id}
-                      className={`hover:bg-indigo-500/5 transition-colors h-14 ${isSelected ? 'bg-indigo-950/30' : ''}`}
+                      className="hover:bg-indigo-500/5 transition-colors h-14"
                       data-testid={`admin_enquiries-AdminEnquiriesTable-row-${enquiry.id}`}
                     >
-                      <td className="w-10 px-4">
-                        {onToggleSelectOne && (
-                          <input
-                            type="checkbox"
-                            aria-label={`Select ${enquiry.name}`}
-                            checked={isSelected}
-                            onChange={() => onToggleSelectOne(enquiry.id)}
-                            className="rounded border-slate-700 bg-slate-900 text-indigo-500 focus:ring-indigo-400"
-                          />
-                        )}
-                      </td>
                       <td className="w-12 text-xs font-mono text-slate-500">{safePage * pageSize + index + 1}</td>
                       <td>
                         <button type="button" className="min-w-48 min-h-11 rounded text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 flex items-center" onClick={() => onSelectEnquiry(enquiry)} aria-label={t('VIEW_DETAILS_FOR', { name: enquiry.name })}>
@@ -187,20 +165,9 @@ export default function AdminEnquiriesTable({
             {pageRows.map((enquiry) => (
               <article key={enquiry.id} className="rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl p-4 shadow-lg shadow-black/20">
                 <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-2">
-                    {onToggleSelectOne && (
-                      <input
-                        type="checkbox"
-                        aria-label={`Select ${enquiry.name}`}
-                        checked={selectedIds.includes(enquiry.id)}
-                        onChange={() => onToggleSelectOne(enquiry.id)}
-                        className="rounded border-slate-700 bg-slate-900 text-indigo-500 focus:ring-indigo-400 mt-1"
-                      />
-                    )}
-                    <div>
-                      <h2 className="font-semibold text-white">{enquiry.name}</h2>
-                      <p className="mt-1 font-mono text-xs text-slate-400">{maskPhone(enquiry.phone)}</p>
-                    </div>
+                  <div>
+                    <h2 className="font-semibold text-white">{enquiry.name}</h2>
+                    <p className="mt-1 font-mono text-xs text-slate-400">{maskPhone(enquiry.phone)}</p>
                   </div>
                   {renderStatusBadge(enquiry.status)}
                 </div>

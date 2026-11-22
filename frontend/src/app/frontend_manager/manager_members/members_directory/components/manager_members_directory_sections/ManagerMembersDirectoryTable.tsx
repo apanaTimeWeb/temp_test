@@ -31,6 +31,7 @@ interface ManagerMembersDirectoryTableProps {
   hasActiveFilters: boolean;
   onResetFilters: () => void;
   onExportCsv?: () => void;
+  onOpenBulkWhatsApp?: () => void;
   sortField: MemberSortField | null;
   sortDirection: 'asc' | 'desc';
   onToggleSort: (field: MemberSortField) => void;
@@ -65,6 +66,7 @@ export function ManagerMembersDirectoryTable({
   hasActiveFilters,
   onResetFilters,
   onExportCsv,
+  onOpenBulkWhatsApp,
   sortField,
   sortDirection,
   onToggleSort,
@@ -151,6 +153,8 @@ export function ManagerMembersDirectoryTable({
         hasActiveFilters={hasActiveFilters}
         onResetFilters={onResetFilters}
         onExportCsv={onExportCsv}
+        filteredCount={totalRows}
+        onOpenBulkWhatsApp={onOpenBulkWhatsApp}
       />
 
       <div className="flex-1 w-full max-w-full min-w-0 overflow-x-auto">
@@ -161,24 +165,6 @@ export function ManagerMembersDirectoryTable({
             <table className="mgr-table w-full min-w-[720px]">
               <thead>
                 <tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-                  <th scope="col" className="w-10 px-3 py-3 align-middle text-left">
-                    {onToggleSelectAll && (
-                      <input
-                        type="checkbox"
-                        ref={(el) => {
-                          if (el) {
-                            const all = paginatedMembers.length > 0 && paginatedMembers.every((m) => selectedIds.includes(m.id));
-                            const some = paginatedMembers.some((m) => selectedIds.includes(m.id));
-                            el.indeterminate = some && !all;
-                          }
-                        }}
-                        checked={paginatedMembers.length > 0 && paginatedMembers.every((m) => selectedIds.includes(m.id))}
-                        onChange={onToggleSelectAll}
-                        aria-label="Select all members on this page"
-                        className="rounded border-border text-primary focus:ring-primary h-4 w-4 cursor-pointer"
-                      />
-                    )}
-                  </th>
                   {renderSortableHeader('id', tManagerUi('member_id_7a88b2'))}
                   {renderSortableHeader('name', tManagerUi('name'))}
                   {renderSortableHeader('phone', tManagerUi('phone'))}
@@ -198,22 +184,9 @@ export function ManagerMembersDirectoryTable({
                     <tr
                       key={member.id}
                       onClick={() => onSelectMemberProfile(member.id)}
-                      className={`border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface h-12 cursor-pointer transition-colors group${
-                        isChecked ? ' bg-primary-subtle text-foreground' : ''
-                      }`}
+                      className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface h-12 cursor-pointer transition-colors group"
                       title={`Click to view profile of ${member.name} (${member.id})`}
                     >
-                      <td className="w-10 px-3 py-3 align-middle" onClick={(e) => e.stopPropagation()}>
-                        {onToggleSelectOne && (
-                          <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => onToggleSelectOne(member.id)}
-                            aria-label={`Select ${member.name}`}
-                            className="rounded border-border text-primary focus:ring-primary h-4 w-4 cursor-pointer"
-                          />
-                        )}
-                      </td>
                       <td className="px-3 py-3 align-middle">
                         <span className="font-mono text-primary font-semibold group-hover:underline">{member.id}</span>
                       </td>

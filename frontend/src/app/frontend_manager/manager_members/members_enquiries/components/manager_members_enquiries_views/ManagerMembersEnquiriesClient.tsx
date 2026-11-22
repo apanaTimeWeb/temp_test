@@ -146,26 +146,7 @@ export function ManagerMembersEnquiriesClient() {
         view={view}
         onViewChange={setView}
         onAddEnquiry={() => router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADD)}
-        selectedCount={selectedIds.length}
         onOpenBulkWhatsApp={() => setBulkWhatsAppModalOpen(true)}
-      />
-
-      {/* ── Bulk Actions Floating Toolbar (When items selected) ── */}
-      <ManagerMembersEnquiriesBulkToolbar
-        selectedCount={selectedIds.length}
-        totalFilteredCount={filtered.length}
-        onSelectAllFiltered={selectAllFiltered}
-        onSelectByStatus={selectByStatus}
-        onClearSelection={clearSelection}
-        onOpenBulkWhatsApp={() => setBulkWhatsAppModalOpen(true)}
-        onBulkDelete={() => {
-          const count = selectedIds.length;
-          deleteSelected();
-          toast.success(`${count} lead(s) deleted successfully`);
-        }}
-        visitedCount={stats.visited}
-        newCount={stats.newLeads}
-        interestedCount={stats.interested}
       />
 
       {/* ── Main Global Time Horizon Filter Bar ── */}
@@ -201,6 +182,7 @@ export function ManagerMembersEnquiriesClient() {
           clearSelection();
         }}
         onExportCsv={handleExportCsv}
+        onOpenBulkWhatsApp={() => setBulkWhatsAppModalOpen(true)}
       />
 
       {/* ── Views: Kanban Board or Table ── */}
@@ -242,9 +224,6 @@ export function ManagerMembersEnquiriesClient() {
       ) : (
         <ManagerMembersEnquiriesTable
           filtered={filtered}
-          selectedIds={selectedIds}
-          onToggleSelectOne={toggleSelectOne}
-          onToggleSelectAll={toggleSelectAll}
           onQuickWhatsApp={(enq) => {
             const url = getManagerEnquiriesDemoPassWhatsAppUrl(enq);
             const w = window.open(url, '_blank', 'noopener,noreferrer');

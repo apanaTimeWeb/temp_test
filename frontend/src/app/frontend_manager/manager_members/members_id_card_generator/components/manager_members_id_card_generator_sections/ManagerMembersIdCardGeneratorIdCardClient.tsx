@@ -117,7 +117,10 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
   const effectivePage = Math.min(page, totalPages - 1);
   const paginatedStudents = useMemo(() => filtered.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize), [filtered, effectivePage, pageSize]);
   const selected = useMemo(() => students.find((student) => student.smartId === selectedId), [students, selectedId]);
-  const bulkStudents = useMemo(() => students.filter((s) => bulkSelectedIds.includes(s.smartId)), [students, bulkSelectedIds]);
+  const bulkStudents = useMemo(
+    () => (bulkSelectedIds.length > 0 ? students.filter((s) => bulkSelectedIds.includes(s.smartId)) : filtered),
+    [students, bulkSelectedIds, filtered]
+  );
 
   const toggleSelectOne = (smartId: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -184,16 +187,16 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
             <div className="mgr-card-header flex flex-wrap items-center justify-between gap-2">
               <h2 className="mgr-section-title"><IdCard size={18} strokeWidth={2} /> {tManagerUi('select_student')}</h2>
               <div className="flex flex-wrap items-center gap-2">
-                {bulkSelectedIds.length > 0 && (
+                {filtered.length > 0 && (
                   <button
                     type="button"
                     onClick={() => setIsBulkModalOpen(true)}
                     data-testid="manager-id-card-bulk-whatsapp-btn"
                     className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
-                    title="Send selected ID cards via WhatsApp"
+                    title="Send ID cards via WhatsApp to all filtered students"
                   >
                     <MessageSquare size={13} />
-                    <span>Bulk WhatsApp ({bulkSelectedIds.length})</span>
+                    <span>Bulk WhatsApp ({filtered.length})</span>
                   </button>
                 )}
                 {selected && <span className="mgr-badge mgr-badge--success"><CheckCircle2 size={18} strokeWidth={2} /> {selected.name}</span>}
@@ -206,15 +209,6 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                   <label className="sr-only" htmlFor="manager-id-card-search">{tManagerUi('search_students')}</label>
                   <input id="manager-id-card-search" className="mgr-input mgr-input-with-icon text-xs py-1.5" placeholder={tManagerUi('search_name_smart_id_phone')} value={search} onChange={(event) => setSearch(event.target.value)} />
                 </div>
-                {filtered.length > 0 && (
-                  <button
-                    type="button"
-                    onClick={toggleSelectAll}
-                    className="px-2.5 py-1.5 text-xs font-semibold rounded-lg border border-border bg-surface hover:bg-surface-hover text-secondary whitespace-nowrap transition-colors"
-                  >
-                    {bulkSelectedIds.length === filtered.length ? 'Deselect All' : `Select All (${filtered.length})`}
-                  </button>
-                )}
               </div>
 
               {/* Multi-Dimensional Filter Bar: Shift & Status */}
@@ -262,26 +256,17 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                     <div
                       key={student.smartId}
                       onClick={() => selectStudent(student.smartId)}
-                      className={`mgr-idcard-student-row flex items-center gap-2 cursor-pointer${student.smartId === selectedId ? ' mgr-idcard-student-row--active' : ''}${isChecked ? ' bg-primary-subtle' : ''}`}
+                      className={`mgr-idcard-student-row flex items-center gap-2 cursor-pointer${student.smartId === selectedId ? ' mgr-idcard-student-row--active' : ''}`}
                       role="button"
                       tabIndex={0}
                       aria-pressed={student.smartId === selectedId}
                       onKeyDown={(e) => {
-                        if ((e.target as HTMLElement).tagName === 'INPUT') return;
                         if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault();
                           selectStudent(student.smartId);
                         }
                       }}
                     >
-                      <input
-                        type="checkbox"
-                        checked={isChecked}
-                        onChange={(e) => toggleSelectOne(student.smartId, e as unknown as React.MouseEvent)}
-                        onClick={(e) => e.stopPropagation()}
-                        className="rounded border-border text-primary focus:ring-primary h-4 w-4 shrink-0"
-                        aria-label={`Select ${student.name} for bulk ID card dispatch`}
-                      />
                       <div className="mgr-avatar-sm shrink-0">{initials}</div>
                       <div className="mgr-idcard-student-info flex-1 min-w-0">
                         <p className="mgr-cell-name truncate">{student.name}</p>

@@ -236,9 +236,7 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
                 setProfileSearch(memberId);
                 setActiveTab('Member Profile');
               }}
-              selectedIds={selectedIds}
-              onToggleSelectOne={toggleSelectOne}
-              onToggleSelectAll={toggleSelectAll}
+              onOpenBulkWhatsApp={() => setIsModalOpen(true)}
               onQuickWhatsApp={quickWhatsApp}
               page={page}
               pageSize={pageSize}
@@ -266,18 +264,10 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
         <ManagerMembersDirectorySupportingSections activeTab={activeTab} />
       </div>
 
-      <ManagerMembersDirectoryBulkToolbar
-        selectedCount={selectedIds.length}
-        totalFilteredCount={sortedMembers.length}
-        onClearSelection={clearSelection}
-        onSelectAllFiltered={selectAllFiltered}
-        onOpenBulkWhatsApp={() => setIsModalOpen(true)}
-      />
-
       <ManagerMembersDirectoryBulkWhatsAppModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        members={selectedMembers}
+        members={selectedMembers.length > 0 ? selectedMembers : sortedMembers}
         onComplete={() => {
           setIsModalOpen(false);
           clearSelection();

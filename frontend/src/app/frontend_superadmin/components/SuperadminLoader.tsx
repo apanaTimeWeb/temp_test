@@ -332,9 +332,6 @@ export function SuperadminPageLoader({
 }: SuperadminPageLoaderProps) {
   return (
     <div
-      role="status"
-      aria-busy="true"
-      aria-label={label}
       className={`min-h-[60vh] flex flex-col items-center justify-center w-full gap-4 p-8 ${className}`.trim()}
     >
       <SuperadminLoader label={label} {...props} />

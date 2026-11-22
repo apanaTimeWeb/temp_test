@@ -297,17 +297,6 @@ export function ManagerMembersEnquiriesTable({
         <table className="crm-table w-full text-left border-collapse">
           <thead>
             <tr className="border-b border-indigo-500/25 bg-[#07091c] text-indigo-300 text-xs uppercase font-bold tracking-wider">
-              <th className="p-3.5 w-10 text-center">
-                {onToggleSelectAll && (
-                  <input
-                    type="checkbox"
-                    checked={isAllSelected}
-                    onChange={onToggleSelectAll}
-                    aria-label="Select all enquiries"
-                    className="rounded border-indigo-500/40 bg-[#07091c] text-indigo-500 focus:ring-indigo-400 h-4 w-4 cursor-pointer"
-                  />
-                )}
-              </th>
               <th className="p-3.5 w-14 text-xs font-bold uppercase tracking-wider text-slate-300 whitespace-nowrap">
                 Sr. No.
               </th>
@@ -332,23 +321,8 @@ export function ManagerMembersEnquiriesTable({
                   tabIndex={0}
                   role="link"
                   aria-label={`${tManagerUi('view_details')}: ${enq.name}`}
-                  className={`border-b border-indigo-500/15 last:border-0 h-14 cursor-pointer motion-safe:transition-colors ${
-                    isSelected
-                      ? 'bg-indigo-500/20 text-white'
-                      : 'hover:bg-indigo-500/10 even:bg-[#080a20]/60 odd:bg-transparent text-slate-200'
-                  }`}
+                  className="border-b border-indigo-500/15 last:border-0 h-14 cursor-pointer motion-safe:transition-colors hover:bg-indigo-500/10 even:bg-[#080a20]/60 odd:bg-transparent text-slate-200"
                 >
-                  <td className="p-3.5 w-10 text-center" onClick={(e) => e.stopPropagation()}>
-                    {onToggleSelectOne && (
-                      <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={() => onToggleSelectOne(enq.id)}
-                        aria-label={`Select ${enq.name}`}
-                        className="rounded border-indigo-500/40 bg-[#07091c] text-indigo-500 focus:ring-indigo-400 h-4 w-4 cursor-pointer"
-                      />
-                    )}
-                  </td>
                   <td className="p-3.5 text-slate-400 font-semibold text-xs">
                     {effectivePage * pageSize + idx + 1}
                   </td>

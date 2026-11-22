@@ -4,7 +4,7 @@ import {
 MANAGER_MEMBERSHIP_TYPE_OPTIONS,
 MANAGER_MEMBERS_GENDER_OPTIONS,
 } from '@/app/frontend_manager/manager_members/members_directory/constants/ManagerMembersDirectoryConstants';
-import { Download,RotateCcw,Search,X } from 'lucide-react';
+import { Download,MessageSquare,RotateCcw,Search,X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 export interface ManagerMembersDirectoryFilterBarProps {
@@ -21,6 +21,8 @@ export interface ManagerMembersDirectoryFilterBarProps {
   hasActiveFilters: boolean;
   onResetFilters: () => void;
   onExportCsv?: () => void;
+  filteredCount?: number;
+  onOpenBulkWhatsApp?: () => void;
 }
 
 export function ManagerMembersDirectoryFilterBar({
@@ -37,6 +39,8 @@ export function ManagerMembersDirectoryFilterBar({
   hasActiveFilters,
   onResetFilters,
   onExportCsv,
+  filteredCount,
+  onOpenBulkWhatsApp,
 }: ManagerMembersDirectoryFilterBarProps) {
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
 
@@ -137,6 +141,19 @@ export function ManagerMembersDirectoryFilterBar({
           >
             <RotateCcw size={13} />
             <span>Reset</span>
+          </button>
+        )}
+
+        {onOpenBulkWhatsApp && (
+          <button
+            type="button"
+            onClick={onOpenBulkWhatsApp}
+            disabled={(filteredCount ?? 0) === 0}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-3.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 hover:border-emerald-400 motion-safe:transition-all shadow-sm active:scale-95 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+            title="Send Bulk WhatsApp to Filtered Members"
+          >
+            <MessageSquare size={14} className="text-emerald-400" />
+            <span>Bulk WhatsApp ({filteredCount ?? 0})</span>
           </button>
         )}
 

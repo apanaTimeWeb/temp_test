@@ -40,11 +40,6 @@ export function ManagerMembersEnquiriesHeaderBanner({
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               Active Enquiries
             </span>
-            {selectedCount > 0 && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 animate-in fade-in">
-                ✓ {selectedCount} Selected
-              </span>
-            )}
           </div>
 
           <div className="flex items-baseline gap-3 flex-wrap">
@@ -63,16 +58,16 @@ export function ManagerMembersEnquiriesHeaderBanner({
 
         {/* Right: Actions */}
         <div className="flex items-center flex-wrap gap-2.5 sm:self-start lg:self-center">
-          {/* Quick Bulk WhatsApp CTA if selected */}
-          {selectedCount > 0 && onOpenBulkWhatsApp && (
+          {/* Quick Bulk WhatsApp CTA */}
+          {filteredCount > 0 && onOpenBulkWhatsApp && (
             <button
               type="button"
               onClick={onOpenBulkWhatsApp}
               className="inline-flex items-center gap-1.5 min-h-11 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-950/50 transition-all hover:scale-[1.02] cursor-pointer"
-              title="Dispatch WhatsApp Queue to selected leads"
+              title="Dispatch WhatsApp Queue to filtered leads"
             >
               <MessageCircle size={15} />
-              <span>Bulk WhatsApp ({selectedCount})</span>
+              <span>Bulk WhatsApp ({filteredCount})</span>
             </button>
           )}
 

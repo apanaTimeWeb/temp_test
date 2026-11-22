@@ -105,9 +105,7 @@ export default function AdminEnquiriesPageView() {
     toast.success(`Exported ${timeFiltered.length} enquiries to Excel (.xls)`);
   };
 
-  const whatsappRecipients = useMemo(() => {
-    return selectedIds.length > 0 ? timeFiltered.filter((e) => selectedIds.includes(e.id)) : timeFiltered;
-  }, [selectedIds, timeFiltered]);
+  const whatsappRecipients = timeFiltered;
 
   if (!isFrontendDemoModeEnabled()) {
     return (
@@ -299,32 +297,13 @@ export default function AdminEnquiriesPageView() {
             </button>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            {selectedIds.length > 0 && (
-              <>
-                <button
-                  type="button"
-                  onClick={handleDeleteSelected}
-                  className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-400 hover:bg-rose-500/20 transition-colors"
-                  title="Delete selected enquiries"
-                >
-                  <Trash2 size={13} className="text-rose-400" /> Delete Selected ({selectedIds.length})
-                </button>
-                <button
-                  type="button"
-                  onClick={clearSelection}
-                  className="inline-flex h-9 items-center gap-1 rounded-xl border border-slate-800 bg-slate-900 px-2.5 py-1.5 text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-                >
-                  <XCircle size={13} className="text-slate-400" /> Clear ({selectedIds.length})
-                </button>
-              </>
-            )}
             <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-003" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-medium text-amber-300 hover:text-amber-200 hover:bg-amber-500/20 transition-colors" type="button" onClick={() => setIsImportModalOpen(true)} title={t('IMPORT_TITLE')}><Upload size={14} strokeWidth={2} className="text-amber-400"/> {t('IMPORT')}</button>
             <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-004" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-medium text-cyan-300 hover:text-white hover:bg-cyan-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled={!isDemoMode || timeFiltered.length === 0} title={isDemoMode ? t('EXPORT_DEMO_TITLE') : t('EXPORT_LIVE_TITLE')} onClick={downloadCsv}><Download size={14} strokeWidth={2} className="text-cyan-400"/> {t('CSV')}</button>
             <button className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-medium text-emerald-300 hover:text-white hover:bg-emerald-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled={!isDemoMode || timeFiltered.length === 0} title="Export Excel spreadsheet (.xls)" onClick={downloadExcel}><FileSpreadsheet size={14} strokeWidth={2} className="text-emerald-400"/> Excel</button>
             <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-005" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 px-3 py-1.5 text-xs font-medium text-sky-300 hover:text-white hover:bg-sky-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" onClick={() => printAdminEnquiriesRoster(timeFiltered)}><Printer size={14} strokeWidth={2} className="text-sky-400"/> {t('PRINT')}</button>
-            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-006" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-all disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled={timeFiltered.length === 0} title={t('WHATSAPP_TITLE')} onClick={() => setIsBulkWhatsAppOpen(true)}>
-              <MessageSquare size={14} strokeWidth={2} className="text-emerald-400"/> {t('WHATSAPP')}
-              {selectedIds.length > 0 && <span className="rounded-full bg-emerald-500 text-black px-1.5 py-0.2 text-[10px] font-bold">{selectedIds.length}</span>}
+            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-006" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 px-3 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-all disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled={timeFiltered.length === 0} title={t('WHATSAPP_TITLE')} onClick={() => setIsBulkWhatsAppOpen(true)}>
+              <MessageSquare size={14} strokeWidth={2} className="text-emerald-400"/>
+              <span>Bulk WhatsApp ({timeFiltered.length})</span>
             </button>
             <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-007" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-sky-400 hover:text-sky-300 hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled title={t('SMS_TITLE')}><Smartphone size={14} strokeWidth={2} className="text-sky-400"/> {t('SMS')}</button>
             <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-008" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-indigo-400 hover:text-indigo-300 hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled title={t('EMAIL_TITLE')}><Mail size={14} strokeWidth={2} className="text-indigo-400"/> {t('EMAIL')}</button>
@@ -378,9 +357,6 @@ export default function AdminEnquiriesPageView() {
           isDemoMode ? (
             <AdminEnquiriesTable
               enquiries={timeFiltered}
-              selectedIds={selectedIds}
-              onToggleSelectOne={toggleSelectOne}
-              onToggleSelectAll={toggleSelectAll}
               onSelectEnquiry={(enquiry) => setSelectedEnquiryModal(enquiry)}
             />
           ) : (
