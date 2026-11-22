@@ -79,16 +79,7 @@ export function createManagerAbsenteeReportAbsenteeColumns(
               </button>
             )}
 
-            {cleanPhone && (
-              <a
-                href={`tel:${cleanPhone}`}
-                className="p-1.5 rounded-lg text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/15 transition-colors cursor-pointer"
-                title={`Call parent (+91 ${cleanPhone})`}
-                aria-label={`Call parent (+91 ${cleanPhone})`}
-              >
-                <Phone size={14} />
-              </a>
-            )}
+            
 
             {item.notified ? (
               <span className="eng-badge eng-badge--neutral text-[10px]">{labels.samplePreviouslyNotified}</span>

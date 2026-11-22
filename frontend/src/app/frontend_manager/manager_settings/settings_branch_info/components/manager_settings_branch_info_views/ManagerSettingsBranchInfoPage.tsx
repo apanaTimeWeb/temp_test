@@ -621,13 +621,6 @@ export default function ManagerSettingsBranchInfoPage() {
                     <span className="font-mono font-bold text-white text-xs truncate block">{branchData.phone}</span>
                   </div>
                 </div>
-                <a
-                  href={`tel:${branchData.phone.replace(/\D/g, '')}`}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 text-[11px] font-semibold transition-all shrink-0 cursor-pointer"
-                >
-                  <span>Call</span>
-                  <ArrowUpRight size={11} />
-                </a>
               </div>
 
               {/* Branch Desk Email (Indigo) */}
@@ -661,13 +654,6 @@ export default function ManagerSettingsBranchInfoPage() {
                     <span className="font-mono font-bold text-white text-xs truncate block">{branchData.supportPhone}</span>
                   </div>
                 </div>
-                <a
-                  href={`tel:${branchData.supportPhone.replace(/\D/g, '')}`}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-[11px] font-semibold transition-all shrink-0 cursor-pointer"
-                >
-                  <span>Help</span>
-                  <ArrowUpRight size={11} />
-                </a>
               </div>
 
               {/* Student Support Email Helpdesk (Teal / Emerald) */}

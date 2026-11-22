@@ -182,15 +182,7 @@ export function ManagerAttendanceAbsenteeDetailsModal({
             </span>
             <div className="flex items-center justify-between gap-2">
               <span className="font-semibold font-mono text-primary">{absentee.parentPhone || '—'}</span>
-              {cleanPhone && (
-                <a
-                  href={`tel:${cleanPhone}`}
-                  className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 transition-colors cursor-pointer"
-                  title="Direct Call"
-                >
-                  <Phone size={10} /> Call
-                </a>
-              )}
+              
             </div>
           </div>
 
@@ -295,14 +287,7 @@ export function ManagerAttendanceAbsenteeDetailsModal({
             >
               <Printer size={14} /> Print Notice
             </button>
-            {cleanPhone && (
-              <a
-                href={`tel:${cleanPhone}`}
-                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-colors cursor-pointer shadow-xs"
-              >
-                <Phone size={14} /> Call Parent
-              </a>
-            )}
+            
           </div>
 
           <div className="flex items-center gap-2 justify-end">

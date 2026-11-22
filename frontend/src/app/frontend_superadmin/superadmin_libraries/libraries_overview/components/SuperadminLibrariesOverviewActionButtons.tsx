@@ -1,10 +1,7 @@
 'use client';
 /** Responsibility: Renders horizontal non-wrapping action controls for a library row with tooltips and test-ids. */
 import type { SuperadminLibrariesLibrary } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
-import {
-  Edit2, Eye, ShieldAlert, CheckCircle, MessageSquare,
-  Mail, PhoneCall, Building2, Sliders, KeyRound, UserCheck, Copy,
-} from 'lucide-react';
+import { Edit2, Eye, ShieldAlert, CheckCircle, MessageSquare, Mail, Building2, Sliders, KeyRound, UserCheck, Copy} from 'lucide-react';
 
 interface SuperadminLibrariesOverviewActionButtonsProps {
   library: SuperadminLibrariesLibrary;
@@ -112,18 +109,7 @@ export default function SuperadminLibrariesOverviewActionButtons({
         </a>
       )}
 
-      {/* 6. Call */}
-      {library.phone && library.phone !== 'Not supplied' && (
-        <a
-          href={`tel:${library.phone.replace(/\D/g, '')}`}
-          onClick={(e) => e.stopPropagation()}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-teal-500/30 bg-teal-500/15 text-teal-300 hover:text-white hover:bg-teal-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
-          aria-label={`Call ${library.owner}`}
-          title="Call Facility Owner"
-        >
-          <PhoneCall size={14} strokeWidth={2} />
-        </a>
-      )}
+      
 
       {/* 7. Manage Branches */}
       <button

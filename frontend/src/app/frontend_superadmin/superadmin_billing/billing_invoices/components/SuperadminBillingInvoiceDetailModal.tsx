@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Printer, Download, Mail, MessageSquare, X, CheckCircle, AlertCircle, Building2, ShieldCheck } from 'lucide-react';
 import type { SuperadminBillingInvoiceSample } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/types/SuperadminBillingInvoicesTypes';
+import { generateSuperadminInvoicePrintHtml } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/utils/SuperadminBillingInvoicePrintHtml';
 import { SuperadminBillingDownloadSampleInvoicePdf } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/utils/SuperadminBillingInvoicesSamplePdf';
 import { useModalScrollLock } from '@/lib/useModalScrollLock';
 
@@ -44,132 +45,38 @@ export default function SuperadminBillingInvoiceDetailModal({
       window.print();
       return;
     }
-    const html = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Tax Invoice - #${invoice.id}</title>
-          <style>
-            @page { size: portrait; margin: 12mm 10mm; }
-            * { box-sizing: border-box; }
-            body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a; margin: 0; padding: 15px; font-size: 9pt; line-height: 1.4; }
-            .header { display: flex; justify-content: space-between; border-bottom: 2px solid #312e81; padding-bottom: 12px; margin-bottom: 12px; }
-            .company-name { font-size: 16px; font-weight: 800; color: #312e81; }
-            .muted { color: #64748b; font-size: 8.5pt; }
-            .grid-2 { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 16px; }
-            .box { flex: 1; padding: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; }
-            .box-title { font-size: 8pt; font-weight: 700; text-transform: uppercase; color: #475569; margin-bottom: 4px; }
-            table { width: 100%; border-collapse: collapse; font-size: 8.5pt; margin-bottom: 14px; }
-            th { background: #f1f5f9; color: #0f172a; padding: 6px 8px; border: 1px solid #cbd5e1; text-align: left; font-size: 8pt; text-transform: uppercase; }
-            td { padding: 6px 8px; border: 1px solid #e2e8f0; }
-            .text-right { text-align: right; }
-            .text-center { text-align: center; }
-            .totals-table { width: 280px; margin-left: auto; border-collapse: collapse; }
-            .totals-table td { padding: 4px 8px; border: none; }
-            .totals-table tr.grand-total td { font-size: 11pt; font-weight: 800; border-top: 2px solid #312e81; color: #312e81; }
-            .footer { margin-top: 24px; border-top: 1px solid #e2e8f0; padding-top: 8px; font-size: 8pt; color: #94a3b8; display: flex; justify-content: space-between; }
-            .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 8pt; text-transform: uppercase; }
-            .badge-paid { background: #dcfce7; color: #15803d; }
-            .badge-due { background: #fee2e2; color: #b91c1c; }
-          </style>
-        </head>
-        <body>
-          <div class="header">
-            <div>
-              <div class="company-name">SMART LIBRARY SAAS PLATFORM</div>
-              <div class="muted">Cloud Library ERP & Management Solutions</div>
-              <div class="muted">GSTIN: 07AAACS9988D1Z2 · SAC: 998313 (IT SaaS Provisioning)</div>
-            </div>
-            <div class="text-right">
-              <div style="font-size: 14px; font-weight: 800; color: #0f172a;">TAX INVOICE #${invoice.id}</div>
-              <div class="muted">Date: <strong>${invoice.date}</strong></div>
-              <div class="muted">Due Date: <strong>${invoice.dueDate || 'Upon Receipt'}</strong></div>
-              <div style="margin-top: 4px;"><span class="badge ${isPaid ? 'badge-paid' : 'badge-due'}">${invoice.status}</span></div>
-            </div>
-          </div>
-
-          <div class="grid-2">
-            <div class="box">
-              <div class="box-title">Billed To (Customer)</div>
-              <div style="font-weight: 700; font-size: 10pt;">${invoice.tenant}</div>
-              ${invoice.legalName ? `<div>${invoice.legalName}</div>` : ''}
-              <div class="muted">${invoice.billingAddress || 'Central Premises'}</div>
-              <div class="muted">${invoice.cityStatePin || 'India'}</div>
-            </div>
-            <div class="box">
-              <div class="box-title">Tax & Payment Profile</div>
-              <div><strong>GSTIN:</strong> ${invoice.gst || 'URP / Not Registered'}</div>
-              <div><strong>Contact:</strong> ${invoice.contact || 'Account Admin'}</div>
-              <div class="muted"><strong>Email:</strong> ${invoice.email || 'billing@customer.com'}</div>
-              <div class="muted"><strong>Payment Mode:</strong> ${invoice.method || 'Online'} (${invoice.gateway || 'Razorpay'})</div>
-            </div>
-          </div>
-
-          <table>
-            <thead>
-              <tr>
-                <th>Item & Description</th>
-                <th class="text-center" style="width: 14%;">SAC Code</th>
-                <th class="text-center" style="width: 10%;">Qty</th>
-                <th class="text-right" style="width: 18%;">Rate</th>
-                <th class="text-right" style="width: 20%;">Taxable Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${(invoice.items || [{ description: invoice.planName || 'Platform SaaS Subscription', quantity: 1, rate: subtotal, amount: subtotal, sacCode: '998313' }]).map((item) => `
-                <tr>
-                  <td><strong>${item.description}</strong></td>
-                  <td class="text-center">${item.sacCode || '998313'}</td>
-                  <td class="text-center">${item.quantity}</td>
-                  <td class="text-right">₹${item.rate.toLocaleString('en-IN')}</td>
-                  <td class="text-right"><strong>₹${item.amount.toLocaleString('en-IN')}</strong></td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-
-          <table class="totals-table">
-            <tr>
-              <td>Subtotal:</td>
-              <td class="text-right">₹${subtotal.toLocaleString('en-IN')}</td>
-            </tr>
-            ${isIntraState ? `
-              <tr>
-                <td>CGST (9%):</td>
-                <td class="text-right">₹${(invoice.cgst ?? Math.round(totalTax / 2)).toLocaleString('en-IN')}</td>
-              </tr>
-              <tr>
-                <td>SGST (9%):</td>
-                <td class="text-right">₹${(invoice.sgst ?? Math.round(totalTax / 2)).toLocaleString('en-IN')}</td>
-              </tr>
-            ` : `
-              <tr>
-                <td>IGST (18%):</td>
-                <td class="text-right">₹${(invoice.igst ?? totalTax).toLocaleString('en-IN')}</td>
-              </tr>
-            `}
-            <tr class="grand-total">
-              <td>Total Amount:</td>
-              <td class="text-right">₹${invoice.amount.toLocaleString('en-IN')}</td>
-            </tr>
-          </table>
-
-          <div class="footer">
-            <span>Computer Generated Invoice · Valid without Physical Signature</span>
-            <span>Page 1 of 1</span>
-          </div>
-          <script>
-            window.onload = function() { window.print(); }
-          </script>
-        </body>
-      </html>
-    `;
+    const html = generateSuperadminInvoicePrintHtml(invoice);
     printWindow.document.write(html);
     printWindow.document.close();
   };
 
   const handleDownload = () => {
     SuperadminBillingDownloadSampleInvoicePdf(invoice);
+  };
+
+  const handleDefaultEmail = () => {
+    if (onSendEmail) {
+      onSendEmail(invoice);
+      return;
+    }
+    const email = invoice.email || 'billing@customer.com';
+    const subject = `Smart Library SaaS Tax Invoice #${invoice.id} - ${invoice.tenant}`;
+    const body = `Dear ${invoice.tenant},\n\nPlease find your official SaaS subscription tax invoice #${invoice.id} for ₹${invoice.amount.toLocaleString('en-IN')}.\nDue Date: ${invoice.dueDate || 'Upon Receipt'}\nStatus: ${invoice.status}\n\nThank you for partnering with Smart Library!\nSaaS Finance & Treasury Team`;
+    window.location.href = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
+  const handleDefaultWhatsApp = () => {
+    if (onSendWhatsApp) {
+      onSendWhatsApp(invoice);
+      return;
+    }
+    const raw = invoice.phone || '9876543210';
+    let digits = raw.replace(/\D/g, '');
+    if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+    const phone = digits.length === 10 ? `91${digits}` : digits;
+    const msg = `Hello ${invoice.tenant}, your Smart Library tax invoice ${invoice.id} for ₹${invoice.amount.toLocaleString('en-IN')} (Due: ${invoice.dueDate || 'Upon Receipt'}) is ready.`;
+    const popup = window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+    if (popup) popup.opener = null;
   };
 
   const modalContent = (
@@ -199,6 +106,12 @@ export default function SuperadminBillingInvoiceDetailModal({
           >
             <X size={18} />
           </button>
+        </div>
+
+        {/* Cost Protection / Auto-Dispatch Notice */}
+        <div className="flex items-center gap-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 px-3.5 py-2 text-xs text-indigo-300">
+          <ShieldCheck className="h-4 w-4 shrink-0 text-indigo-400" />
+          <span><strong>System Auto-Dispatch:</strong> 1x SaaS subscription tax invoice sent via server API upon billing cycle. Re-shares below use Free WhatsApp Web / Email Client (Zero API Cost).</span>
         </div>
 
         {/* Invoice Summary Card */}
@@ -321,26 +234,24 @@ export default function SuperadminBillingInvoiceDetailModal({
         {/* Action Controls */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-indigo-500/20">
           <div className="flex items-center gap-2">
-            {onSendEmail && (
-              <button
-                type="button"
-                onClick={() => onSendEmail(invoice)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:bg-purple-500/25 text-xs font-semibold cursor-pointer active:scale-95 transition-all"
-              >
-                <Mail size={13} />
-                <span>Email Customer</span>
-              </button>
-            )}
-            {onSendWhatsApp && (
-              <button
-                type="button"
-                onClick={() => onSendWhatsApp(invoice)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 text-xs font-semibold cursor-pointer active:scale-95 transition-all"
-              >
-                <MessageSquare size={13} />
-                <span>WhatsApp</span>
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={handleDefaultEmail}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:bg-purple-500/25 text-xs font-semibold cursor-pointer active:scale-95 transition-all"
+              title="Send invoice via default email client (Zero API Cost)"
+            >
+              <Mail size={13} />
+              <span>Email Customer (Free Client)</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleDefaultWhatsApp}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 text-xs font-semibold cursor-pointer active:scale-95 transition-all"
+              title="Share or resend invoice via WhatsApp Web (Zero API Cost)"
+            >
+              <MessageSquare size={13} />
+              <span>WhatsApp (Free Web)</span>
+            </button>
           </div>
 
           <div className="flex items-center gap-2">

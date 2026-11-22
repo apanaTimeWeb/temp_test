@@ -5,7 +5,7 @@ import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manag
 import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
 import { displayValue } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDisplayValue';
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
-import { ArrowDown,ArrowUp,ArrowUpDown,Eye,IndianRupee,MessageCircle,PhoneCall,ShieldCheck } from 'lucide-react';
+import { ArrowDown,ArrowUp,ArrowUpDown,Eye,IndianRupee,MessageCircle,ShieldCheck } from 'lucide-react';
 import { useLocale,useTranslations } from 'next-intl';
 import { useState } from 'react';
 import ManagerMembersDirectoryFilterBar from './ManagerMembersDirectoryFilterBar';
@@ -264,17 +264,7 @@ export function ManagerMembersDirectoryTable({
                             <span className="hidden lg:inline text-xs font-semibold ml-1">Fee</span>
                           </button>
 
-                          {/* Call Button (Amber) */}
-                          <a
-                            href={`tel:${member.phone.replace(/\D/g, '')}`}
-                            onClick={(e) => e.stopPropagation()}
-                            className="inline-flex items-center justify-center min-h-8 min-w-8 px-2.5 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/35 hover:text-amber-200 transition-all cursor-pointer shadow-sm shadow-amber-950/50"
-                            title={`Call ${member.name}`}
-                            aria-label={`Call ${member.name}`}
-                          >
-                            <PhoneCall size={13} />
-                            <span className="hidden xl:inline text-xs font-semibold ml-1">Call</span>
-                          </a>
+                          
 
                           {/* WhatsApp Button (Emerald) */}
                           {onQuickWhatsApp && (

@@ -1,6 +1,6 @@
 'use client';
 // RESPONSIBILITY: Render single-line horizontal action buttons for each branch row.
-import { Eye, Edit2, ShieldAlert, CheckCircle2, XCircle, RotateCcw, UserCheck, Clock, BarChart2, MessageSquare, Mail, PhoneCall, Copy } from 'lucide-react';
+import { Eye, Edit2, ShieldAlert, CheckCircle2, XCircle, RotateCcw, UserCheck, Clock, BarChart2, MessageSquare, Mail, Copy } from 'lucide-react';
 import type { SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
 
 interface SuperadminBranchesOverviewActionButtonsProps {
@@ -165,15 +165,7 @@ export default function SuperadminBranchesOverviewActionButtons({
         <Mail size={14} />
       </a>
 
-      {/* 11. Phone Call */}
-      <a
-        href={`tel:${(branch.managerPhone || branch.phone).replace(/\s+/g, '')}`}
-        onClick={(e) => e.stopPropagation()}
-        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-amber-500/30 bg-amber-500/15 text-amber-300 hover:text-white hover:bg-amber-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
-        title={`Call ${branch.managerPhone || branch.phone}`}
-      >
-        <PhoneCall size={14} />
-      </a>
+      
 
       {/* 12. Duplicate Branch Configuration */}
       {onDuplicate && (

@@ -1,7 +1,7 @@
 'use client';
 
 import type { ManagerDashboardOverviewOperationalAlertsProps } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewComponentTypes';
-import { ArrowRight,PhoneCall,ShieldAlert,UserX,Wrench } from 'lucide-react';
+import { ArrowRight,ShieldAlert,Users,UserX,Wrench } from 'lucide-react';
 import Link from 'next/link';
 
 export function ManagerDashboardOverviewOperationalAlerts({
@@ -108,7 +108,7 @@ export function ManagerDashboardOverviewOperationalAlerts({
             <div className="flex items-start justify-between gap-2.5">
               <div className="flex items-start gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-info-bg text-info flex items-center justify-center shrink-0 mt-0.5 border border-border">
-                  <PhoneCall size={15} />
+                  <Users size={15} />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">

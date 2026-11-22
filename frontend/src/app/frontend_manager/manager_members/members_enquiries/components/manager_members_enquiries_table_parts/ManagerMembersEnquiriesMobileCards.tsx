@@ -2,23 +2,7 @@
 
 import type { ManagerMembersEnquiriesEnquiry,ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
 import { formatManagerEnquiriesDisplayDate,maskManagerEnquiriesPhone } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
-import {
-Calendar,
-CheckCircle,
-CheckCircle2,
-Clock,
-Eye,
-Flame,
-MapPin,
-MessageCircle,
-Moon,
-PhoneCall,
-Sun,
-Sunset,
-User,
-UserPlus,
-XCircle,
-} from 'lucide-react';
+import { Calendar, CheckCircle, CheckCircle2, Clock, Eye, Flame, MapPin, MessageCircle, Moon, Sun, Sunset, User, UserPlus, XCircle} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { MouseEvent } from 'react';
 
@@ -211,16 +195,7 @@ export function ManagerMembersEnquiriesMobileCards({
                 <MessageCircle size={15} />
               </button>
 
-              {/* Call Button (Amber) */}
-              <a
-                href={`tel:${cleanDigits}`}
-                onClick={(e) => e.stopPropagation()}
-                className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/35 hover:text-amber-200 transition-all cursor-pointer shadow-sm shadow-amber-950/50"
-                aria-label={`Call ${enq.name}`}
-                title={`Call ${enq.name}`}
-              >
-                <PhoneCall size={14} />
-              </a>
+              
 
               {/* View Button (Cyan) */}
               <button

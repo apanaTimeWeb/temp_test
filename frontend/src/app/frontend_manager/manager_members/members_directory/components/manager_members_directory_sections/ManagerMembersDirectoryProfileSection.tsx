@@ -5,20 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import {
-AlertTriangle,
-ArrowLeft,
-Award,CheckCircle,Clock,ExternalLink,FileText,GraduationCap,
-IndianRupee,
-Mail,MapPin,
-MessageCircle,
-PauseCircle,
-Pencil,Phone,
-PhoneCall,
-PlayCircle,
-Search,ShieldCheck,Users,
-X
-} from 'lucide-react';
+import { AlertTriangle, ArrowLeft, Award,CheckCircle,Clock,ExternalLink,FileText,GraduationCap, IndianRupee, Mail,MapPin, MessageCircle, PauseCircle, Pencil,Phone, PlayCircle, Search,ShieldCheck,Users, X } from 'lucide-react';
 
 import { ManagerMembersDirectoryDocLightbox } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryDocLightbox';
 import { ManagerMembersDirectoryEditModal } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryEditModal';
@@ -283,15 +270,7 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
                   </button>
                 )}
 
-                {/* Call Button (Amber) */}
-                <a
-                  href={`tel:${member.phone.replace(/\D/g, '')}`}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/35 hover:text-amber-200 shadow-sm shadow-amber-950/50 transition-all cursor-pointer"
-                  title={`Call ${member.name}`}
-                >
-                  <PhoneCall size={13} />
-                  <span>Call</span>
-                </a>
+                
 
                 {/* WhatsApp Button (Emerald) */}
                 <button

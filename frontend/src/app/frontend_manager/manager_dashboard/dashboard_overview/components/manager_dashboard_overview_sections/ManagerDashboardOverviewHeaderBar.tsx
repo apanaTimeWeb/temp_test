@@ -2,7 +2,7 @@
 
 import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { MANAGER_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/config/manager_dashboard_overview.url_config';
-import { CalendarRange,Clock,IndianRupee,PhoneCall,QrCode,RotateCw,TrendingUp,UserPlus,Users } from 'lucide-react';
+import { CalendarRange,Clock,IndianRupee,Plus,QrCode,RotateCw,TrendingUp,UserPlus,Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 
@@ -104,7 +104,7 @@ export function ManagerDashboardOverviewHeaderBar({
             href="/frontend_manager/manager_members/members_enquiries?view=add"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-500/15 text-sky-300 border border-sky-500/30 hover:bg-sky-500/25 text-xs font-semibold transition-all cursor-pointer"
           >
-            <PhoneCall size={13} />
+            <Plus size={13} />
             <span>+ New Enquiry</span>
           </Link>
           <Link

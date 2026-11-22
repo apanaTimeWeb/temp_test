@@ -1,16 +1,6 @@
 'use client';
 
-import {
-Armchair,
-ArrowDown,
-ArrowUp,
-ArrowUpDown,
-CheckCircle,
-Eye,
-MessageSquare,
-PhoneCall,
-RefreshCw,
-} from 'lucide-react';
+import { Armchair, ArrowDown, ArrowUp, ArrowUpDown, CheckCircle, Eye, MessageSquare, RefreshCw} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 import { ManagerCommunicationComplaintsPagination } from './ManagerCommunicationComplaintsPagination';
@@ -232,18 +222,7 @@ export function ManagerCommunicationComplaintsTable({
                       </button>
                     )}
 
-                    {/* Call Student Action */}
-                    {complaint.phone && (
-                      <a
-                        href={`tel:${complaint.phone.replace(/[^0-9+]/g, '')}`}
-                        onClick={(e) => e.stopPropagation()}
-                        className="p-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors cursor-pointer inline-flex items-center justify-center"
-                        title={`Call student (${complaint.phone})`}
-                        aria-label={`Call student (${complaint.phone})`}
-                      >
-                        <PhoneCall size={13} />
-                      </a>
-                    )}
+                    
 
                     {/* WhatsApp Student Direct Action */}
                     <button

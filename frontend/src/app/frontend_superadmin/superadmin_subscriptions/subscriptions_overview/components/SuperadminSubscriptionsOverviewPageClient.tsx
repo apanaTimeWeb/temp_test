@@ -3,7 +3,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { toast } from 'sonner';
 import { useTranslations, useLocale } from 'next-intl';
-import { ShieldCheck, Building2, Package, CheckCircle, Clock, AlertTriangle, History, Edit, MessageSquare, Mail, PhoneCall } from 'lucide-react';
+import { ShieldCheck, Building2, Package, CheckCircle, Clock, AlertTriangle, History, Edit, MessageSquare, Mail} from 'lucide-react';
 import SuperadminSubscriptionsOverviewSemanticTable, {
   type SemanticColumnDef,
   type SemanticCellParams,
@@ -201,14 +201,7 @@ export default function SuperadminSubscriptionsOverviewPageClient() {
             >
               <Mail size={12} />
             </button>
-            <a
-              href={`tel:${(sub.phone || '9876543210').replace(/\s+/g, '')}`}
-              onClick={(e) => e.stopPropagation()}
-              className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-amber-500/30 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 cursor-pointer"
-              title={`Call ${sub.phone || 'Subscriber'}`}
-            >
-              <PhoneCall size={12} />
-            </a>
+            
             {/* Kept disabled test id hook for compatibility */}
             <button
               type="button"

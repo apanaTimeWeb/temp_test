@@ -14,10 +14,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { toast } from 'sonner';
 import { SUPERADMIN_SUBSCRIPTIONS_SAMPLE_SUBSCRIBERS } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/mocks/fixtures/SuperadminSubscriptionsActiveSubscribersMockFixtures';
 import type { SuperadminSubscriptionRecord } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/types/SuperadminSubscriptionsActiveSubscribersTypes';
-import {
-  Users, Package, Building2, Clock, AlertCircle, CheckCircle, TrendingUp, ShieldCheck,
-  Search, X, RotateCcw, Download, FileSpreadsheet, Printer, MessageSquare, Mail, PhoneCall
-} from 'lucide-react';
+import { Users, Package, Building2, Clock, AlertCircle, CheckCircle, TrendingUp, ShieldCheck, Search, X, RotateCcw, Download, FileSpreadsheet, Printer, MessageSquare, Mail} from 'lucide-react';
 import { formatSuperadminSubscriptionsMajorPreviewCurrency } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/utils/SuperadminSubscriptionsActiveSubscribersFormatters';
 import {
   downloadSuperadminSubscriptionsCsv,
@@ -212,17 +209,7 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
               </a>
             )}
 
-            {/* Quick Call */}
-            {sub.phone && (
-              <a
-                href={`tel:${sub.phone.replace(/\D/g, '')}`}
-                className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-teal-500/30 bg-teal-500/15 text-teal-300 hover:text-white hover:bg-teal-600/30 transition-all shadow-xs cursor-pointer"
-                title={`Call ${sub.tenant}`}
-                aria-label={`Call ${sub.tenant}`}
-              >
-                <PhoneCall size={13} className="text-teal-400" />
-              </a>
-            )}
+            
           </div>
         );
       },

@@ -4,11 +4,7 @@ import { toast } from 'sonner';
 /** Data-Flow: canonical route -> SuperadminSupportTicketsOverviewPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
 import SuperadminSupportTicketsOverviewSemanticTable, { type SemanticColumnDef, type SemanticCellParams } from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsOverviewSemanticTable';
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import {
-  MessageSquare, AlertTriangle, Paperclip, Tag, FileText,
-  Search, X, RotateCcw, FileSpreadsheet, Printer, Mail, PhoneCall, Download,
-  Ticket, User, Clock, Eye
-} from 'lucide-react';
+import { MessageSquare, AlertTriangle, Paperclip, Tag, FileText, Search, X, RotateCcw, FileSpreadsheet, Printer, Mail, Download, Ticket, User, Clock, Eye } from 'lucide-react';
 import { SUPERADMIN_SUPPORT_TICKETS_FIXTURES } from '@/app/frontend_superadmin/superadmin_support/support_tickets/mocks/fixtures/SuperadminSupportTicketsOverviewMockFixtures';
 import type { SuperadminSupportTicket, SuperadminSupportTicketsFilter } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
 import { SUPERADMIN_SUPPORT_TICKETS_FILTERS, SUPERADMIN_SUPPORT_TICKETS_SAMPLE_AVERAGE_RESPONSE, SUPERADMIN_SUPPORT_TICKET_TYPES } from '@/app/frontend_superadmin/superadmin_support/support_tickets/constants/SuperadminSupportTicketsOverviewConstants';
@@ -310,18 +306,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
               </a>
             )}
 
-            {/* Quick Call */}
-            {tkt.phone && (
-              <a
-                href={`tel:${tkt.phone.replace(/\D/g, '')}`}
-                onClick={(e) => e.stopPropagation()}
-                className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-teal-500/35 bg-teal-500/15 text-teal-300 hover:text-white hover:bg-teal-600/30 hover:border-teal-400 transition-all duration-150 shadow-xs cursor-pointer shrink-0 active:scale-[0.97]"
-                title={`Call ${tkt.tenant}`}
-                aria-label={`Call for ticket ${tkt.id}`}
-              >
-                <PhoneCall size={11} className="text-teal-400" />
-              </a>
-            )}
+            
           </div>
         );
       },

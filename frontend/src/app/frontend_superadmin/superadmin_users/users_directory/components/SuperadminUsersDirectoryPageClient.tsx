@@ -18,11 +18,7 @@ import {
   downloadSuperadminUsersExcel,
   printSuperadminUsersRoster,
 } from '@/app/frontend_superadmin/superadmin_users/users_directory/utils/SuperadminUsersDirectoryExportUtils';
-import {
-  ShieldCheck, ShieldAlert, Download, CheckCircle, AlertTriangle, Pencil,
-  Ban, KeyRound, Users, TrendingUp, Check, Search, X, Filter, RotateCcw,
-  FileSpreadsheet, Printer, MessageSquare, PhoneCall, Mail, UserPlus
-} from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Download, CheckCircle, AlertTriangle, Pencil, Ban, KeyRound, Users, TrendingUp, Check, Search, X, Filter, RotateCcw, FileSpreadsheet, Printer, MessageSquare, Mail, UserPlus } from 'lucide-react';
 import type { SemanticColumnDef as ColDef } from '@/app/frontend_superadmin/superadmin_users/users_directory/components/SuperadminUsersDirectorySemanticTable';
 import { useTranslations } from 'next-intl';
 import { SUPERADMIN_USERS_OVERVIEW_PAGE_CLIENT_COLUMNS } from '@/app/frontend_superadmin/superadmin_users/users_directory/constants/SuperadminUsersDirectoryStaticConstants';
@@ -237,16 +233,7 @@ export default function SuperadminUsersDirectoryPageClient() {
                     <Mail size={12} className="text-purple-400" />
                   </a>
                 )}
-                {phone && (
-                  <a
-                    href={`tel:${phone.replace(/\D/g, '')}`}
-                    className="p-1 rounded-md border border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 transition-colors"
-                    title={`Call ${user.name}`}
-                    aria-label={`Call ${user.name}`}
-                  >
-                    <PhoneCall size={12} className="text-amber-400" />
-                  </a>
-                )}
+                
                 {user && (
                   <button
                     type="button"

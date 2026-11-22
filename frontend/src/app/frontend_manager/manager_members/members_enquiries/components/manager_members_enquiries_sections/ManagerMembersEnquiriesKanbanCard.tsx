@@ -3,7 +3,7 @@ import { useLocale,useTranslations } from 'next-intl';
 
 import type { ManagerMembersEnquiriesKanbanCardProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
 import { formatManagerEnquiriesDisplayDate,getManagerEnquiriesDemoPassWhatsAppUrl,maskManagerEnquiriesPhone } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
-import { CalendarDays,CheckCircle,Clock,MessageCircle,Moon,PhoneCall,Sun,Sunset,User } from 'lucide-react';
+import { CalendarDays,CheckCircle,Clock,MessageCircle,Moon,Sun,Sunset,User } from 'lucide-react';
 
 export function ManagerMembersEnquiriesKanbanCard({ enq, colClass, onClick }: ManagerMembersEnquiriesKanbanCardProps) {
   const tManagerUi = useTranslations('manager.manager_enquiries.ui');
@@ -56,15 +56,7 @@ export function ManagerMembersEnquiriesKanbanCard({ enq, colClass, onClick }: Ma
       <div className="crm-card-name-block flex items-start justify-between gap-2 mb-2">
         <div className="flex-1 min-w-0">
           <p className="crm-card-name font-bold text-sm text-slate-100 truncate">{enq.name}</p>
-          <a
-            href={`tel:${cleanDigits}`}
-            onClick={(e) => e.stopPropagation()}
-            className="crm-card-phone inline-flex items-center gap-1.5 text-xs text-amber-400 hover:text-amber-300 font-mono mt-0.5"
-            title={`Call ${enq.name}`}
-          >
-            <PhoneCall size={11} className="text-amber-400" />
-            {maskManagerEnquiriesPhone(enq.phone)}
-          </a>
+          <span className="crm-card-phone inline-flex items-center gap-1.5 text-xs text-slate-400 font-mono mt-0.5">{maskManagerEnquiriesPhone(enq.phone)}</span>
         </div>
         <button
           type="button"

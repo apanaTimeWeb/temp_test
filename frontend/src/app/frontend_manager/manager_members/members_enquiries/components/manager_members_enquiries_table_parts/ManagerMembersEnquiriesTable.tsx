@@ -390,16 +390,7 @@ export function ManagerMembersEnquiriesTable({
                         <MessageCircle size={15} />
                       </button>
 
-                      {/* 2. Direct Phone Call Button (Vibrant Amber / Gold) */}
-                      <a
-                        href={`tel:${cleanDigits}`}
-                        onClick={(e) => e.stopPropagation()}
-                        className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/35 hover:text-amber-200 hover:border-amber-400 hover:scale-105 active:scale-95 shadow-sm shadow-amber-950/50 transition-all cursor-pointer"
-                        aria-label={`Call ${enq.name}`}
-                        title={`Call ${enq.name} (${enq.phone})`}
-                      >
-                        <PhoneCall size={14} />
-                      </a>
+                      
 
                       {/* 3. View Details Button (Vibrant Sky Blue / Cyan) */}
                       <button
