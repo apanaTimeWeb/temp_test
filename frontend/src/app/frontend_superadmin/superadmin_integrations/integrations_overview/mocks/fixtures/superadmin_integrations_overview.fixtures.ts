@@ -73,7 +73,7 @@ export const MOCK_INTEGRATION_GATEWAYS: IntegrationGatewayItem[] = [
   },
   {
     id: 'gw_twilio',
-    name: 'Twilio Global SMS & Voice Gateway',
+    name: 'Twilio Global SMS Gateway',
     category: 'messaging',
     providerKey: 'twilio',
     status: 'test_mode',
@@ -81,7 +81,7 @@ export const MOCK_INTEGRATION_GATEWAYS: IntegrationGatewayItem[] = [
     lastPing: '30 mins ago',
     isEnabled: true,
     credentialsMasked: { accountSid: 'AC98a7••••••••••••', authToken: '••••••••••••••••', fromNumber: '+12025550143' },
-    notes: 'International SMS fallback and voice OTP verification.',
+    notes: 'International SMS fallback and SMS OTP verification.',
   },
   // 3. Email / SMTP
   {
@@ -203,7 +203,7 @@ export const MOCK_WEBHOOK_RETRIES: WebhookRetryItem[] = [
     id: 'retry_002',
     webhookId: 'wh_billing_events',
     eventName: 'payment.success',
-    targetUrl: 'https://hooks.slack.com/services/T00/B00/X00',
+    targetUrl: 'https://api.webhook-gateway.com/services/T00/B00/X00',
     statusCode: 500,
     errorMessage: 'Internal Server Error (500): Server error processing payment payload',
     attemptsCount: 2,

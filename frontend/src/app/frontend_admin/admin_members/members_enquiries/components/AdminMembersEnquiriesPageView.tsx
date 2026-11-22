@@ -7,7 +7,7 @@ import AdminEnquiriesTable from '@/app/frontend_admin/admin_members/members_enqu
 import { ADMIN_ENQUIRIES_ENQUIRY_DOT_CLASSES,ADMIN_ENQUIRIES_ENQUIRY_KANBAN_COLUMNS,ADMIN_ENQUIRIES_ENQUIRY_STATUS_FILTERS,ADMIN_ENQUIRIES_URLS } from '@/app/frontend_admin/admin_members/members_enquiries/config/admin_members_enquiries.url_config';
 import useEnquiriesPage from '@/app/frontend_admin/admin_members/members_enquiries/hooks/useAdminMembersEnquiriesPage';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import { Calendar,Download,FileSpreadsheet,LayoutGrid,List,Mail,MessageSquare,MoreHorizontal,Phone,PhoneCall,Printer,Search,Send,Target,Trash2,TrendingUp,Upload,UserCheck,Users,XCircle } from 'lucide-react';
+import { Smartphone, Calendar,Download,FileSpreadsheet,LayoutGrid,List,Mail,MessageSquare,MoreHorizontal,Phone,PhoneCall,Printer,Search,Send,Target,Trash2,TrendingUp,Upload,UserCheck,Users,XCircle  } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo,useState } from 'react';
 import { toast } from 'sonner';
@@ -326,7 +326,7 @@ export default function AdminEnquiriesPageView() {
               <MessageSquare size={14} strokeWidth={2} className="text-emerald-400"/> {t('WHATSAPP')}
               {selectedIds.length > 0 && <span className="rounded-full bg-emerald-500 text-black px-1.5 py-0.2 text-[10px] font-bold">{selectedIds.length}</span>}
             </button>
-            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-007" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-sky-400 hover:text-sky-300 hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled title={t('TELEGRAM_TITLE')}><Send size={14} strokeWidth={2} className="text-sky-400"/> {t('TELEGRAM')}</button>
+            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-007" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-sky-400 hover:text-sky-300 hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled title={t('SMS_TITLE')}><Smartphone size={14} strokeWidth={2} className="text-sky-400"/> {t('SMS')}</button>
             <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-008" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-indigo-400 hover:text-indigo-300 hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled title={t('EMAIL_TITLE')}><Mail size={14} strokeWidth={2} className="text-indigo-400"/> {t('EMAIL')}</button>
           </div>
         </div>

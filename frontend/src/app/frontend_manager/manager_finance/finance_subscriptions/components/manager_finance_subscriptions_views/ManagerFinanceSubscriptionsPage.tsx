@@ -5,7 +5,7 @@ import { useManagerSubscriptionsFormatting } from '@/app/frontend_manager/manage
 import { useManagerSubscriptionsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_subscriptions/hooks/useManagerFinanceSubscriptionsUrlFilters';
 import type { ManagerFinanceSubscriptionsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_subscriptions/types/ManagerFinanceSubscriptionsComponentTypes';
 import { sanitizeManagerSubscriptionsCsvCell } from '@/app/frontend_manager/manager_finance/finance_subscriptions/utils/ManagerFinanceSubscriptionsCsv';
-import { AlertTriangle,CheckCircle,Clock,CreditCard,Download,Mail,MessageSquare,Printer,RefreshCw,Search,Send,Upload,Users,X } from 'lucide-react';
+import { AlertTriangle,CheckCircle,Clock,CreditCard,Download,Mail,MessageSquare,Printer,RefreshCw,Search,Smartphone,Upload,Users,X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect,useMemo,useState } from 'react';
 import ManagerFinanceSubscriptionsDetailModal from './ManagerFinanceSubscriptionsDetailModal';
@@ -112,8 +112,8 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
     setActionFeedback('WhatsApp subscription reminder broadcast opened.');
   };
 
-  const handleTelegram = () => {
-    setActionFeedback('Telegram update dispatched to subscriptions channel.');
+  const handleSms = () => {
+    setActionFeedback('SMS subscription renewal notice dispatched to members.');
   };
 
   const handleEmail = () => {
@@ -266,10 +266,10 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
             <button
               type="button"
               className="p-2 rounded-xl border border-border bg-card hover:bg-sky-500/10 text-[#229ED9] transition-colors cursor-pointer shadow-xs"
-              onClick={handleTelegram}
-              title="Send Telegram Broadcast"
+              onClick={handleSms}
+              title="Dispatch SMS Notice"
             >
-              <Send size={14} />
+              <Smartphone size={14} />
             </button>
             <button
               type="button"

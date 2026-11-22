@@ -3,7 +3,7 @@
 import type { SuperadminLibrariesLibrary } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
 import {
   Edit2, Eye, ShieldAlert, CheckCircle, MessageSquare,
-  Mail, PhoneCall, Building2, Sliders, KeyRound, UserCheck,
+  Mail, PhoneCall, Building2, Sliders, KeyRound, UserCheck, Copy,
 } from 'lucide-react';
 
 interface SuperadminLibrariesOverviewActionButtonsProps {
@@ -16,6 +16,7 @@ interface SuperadminLibrariesOverviewActionButtonsProps {
   onConfigureModules: (lib: SuperadminLibrariesLibrary) => void;
   onToggleAdminPanel: (id: string) => void;
   onImpersonate?: (lib: SuperadminLibrariesLibrary) => void;
+  onDuplicate?: (lib: SuperadminLibrariesLibrary) => void;
   showToast: (msg: string) => void;
 }
 
@@ -29,6 +30,7 @@ export default function SuperadminLibrariesOverviewActionButtons({
   onConfigureModules,
   onToggleAdminPanel,
   onImpersonate,
+  onDuplicate,
   showToast,
 }: SuperadminLibrariesOverviewActionButtonsProps) {
   const isActive = library.status === 'Active';
@@ -166,6 +168,18 @@ export default function SuperadminLibrariesOverviewActionButtons({
           title="Login as Library Admin (Impersonate)"
         >
           <UserCheck size={14} strokeWidth={2} />
+        </button>
+      )}
+
+      {/* 11. Duplicate Library Configuration */}
+      {onDuplicate && (
+        <button
+          type="button"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+          onClick={(e) => { e.stopPropagation(); onDuplicate(library); }}
+          title="Duplicate Library Configuration"
+        >
+          <Copy size={14} strokeWidth={2} />
         </button>
       )}
     </div>

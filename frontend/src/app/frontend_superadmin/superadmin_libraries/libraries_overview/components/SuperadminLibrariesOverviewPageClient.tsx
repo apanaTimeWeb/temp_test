@@ -115,6 +115,29 @@ export default function SuperadminLibrariesOverviewPageClient() {
     } catch { showToast(SUPERADMIN_LIBRARIES_TOASTS.STATUS_ERROR, true); }
   }, [libraries, showToast, toggleStatus]);
 
+  const handleDuplicateLibrary = useCallback((lib: SuperadminLibrariesLibrary) => {
+    const cloneId = `LIB-${Math.floor(1000 + Math.random() * 9000)}`;
+    const cloned: SuperadminLibrariesLibrary = {
+      ...lib,
+      id: cloneId,
+      name: `${lib.name} (Clone)`,
+      joinedAt: new Date().toISOString().split('T')[0],
+      students: 0,
+      revenue: 0,
+    };
+    handleLibraryCreated(cloned, {
+      tenantId: cloneId,
+      libraryCode: cloneId,
+      adminEmail: `admin@${cloneId.toLowerCase()}.libraryos.com`,
+      invitationUrl: `https://app.libraryos.com/invite?token=tok_${cloneId}`,
+      invitationToken: `tok_${cloneId}`,
+      provisionedAt: new Date().toISOString(),
+      branchesCreatedCount: lib.branches || 1,
+      status: 'provisioned',
+    });
+    showToast(`Library configuration cloned as ${cloned.name} (${cloneId})`);
+  }, [handleLibraryCreated, showToast]);
+
   const totalRevenue = libraries.reduce((sum, l) => sum + l.revenue, 0);
   const activeCount = libraries.filter((l) => l.status === 'Active').length;
   const totalStudents = libraries.reduce((sum, l) => sum + (l.students || 0), 0);
@@ -224,12 +247,13 @@ export default function SuperadminLibrariesOverviewPageClient() {
             onConfigureModules={(lib) => setModulesModalLib(lib)}
             onToggleAdminPanel={(id) => void handleToggleAdminPanel(id)}
             onImpersonate={(lib) => setImpersonateLib(lib)}
+            onDuplicate={handleDuplicateLibrary}
             showToast={showToast}
           />
         );
       },
     },
-  ], [handleSuspend, handleToggleAdminPanel, locale, showToast, t]);
+  ], [handleDuplicateLibrary, handleSuspend, handleToggleAdminPanel, locale, showToast, t]);
 
   if (loading) return <div className="rounded-2xl border border-border bg-card p-8 text-center text-secondary">{t('COPY.LOADING_SAMPLE_LIBRARY_RECORDS')}</div>;
 

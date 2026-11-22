@@ -96,7 +96,7 @@ export const SuperadminIntegrationsOverviewWebhookCreateModal: React.FC<
               required
               value={newDesc}
               onChange={(e) => setNewDesc(e.target.value)}
-              placeholder="e.g. ERP integration or Slack notification bot"
+              placeholder="e.g. ERP integration or Webhook notification service"
               className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 shadow-inner"
             />
           </div>
