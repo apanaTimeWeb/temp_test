@@ -42,14 +42,24 @@ export function ManagerCommunicationWhatsappLogsFilterBar({
     <div className="mgr-card p-4 border border-border bg-card space-y-3">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
         <div className="relative lg:col-span-2">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400" />
           <input maxLength={100}
-            type="text"
-            className="mgr-input pl-9 pr-3 py-2 text-xs w-full rounded-xl bg-surface/50 border border-border focus:border-primary"
+            type="search"
+            className="mgr-input pl-9 pr-8 py-2 text-xs w-full rounded-xl bg-surface/50 border border-border focus:border-primary"
             placeholder="Search student or phone..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+          {search && (
+            <button
+              type="button"
+              onClick={() => setSearch('')}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
+              title="Clear search"
+            >
+              <X size={12} />
+            </button>
+          )}
         </div>
 
         <div>
@@ -103,7 +113,7 @@ export function ManagerCommunicationWhatsappLogsFilterBar({
               onClick={onResetFilters}
               className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 border border-rose-500/20 transition-all cursor-pointer w-full justify-center"
             >
-              <RotateCw size={13} />
+              <RotateCcw size={13} />
               <span>Clear</span>
             </button>
           )}

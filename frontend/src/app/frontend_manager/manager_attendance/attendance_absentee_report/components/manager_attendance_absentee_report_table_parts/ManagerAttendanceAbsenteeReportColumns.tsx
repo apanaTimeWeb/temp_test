@@ -79,7 +79,16 @@ export function createManagerAbsenteeReportAbsenteeColumns(
               </button>
             )}
 
-            
+            {item.parentEmail && (
+              <a
+                href={`mailto:${encodeURIComponent(item.parentEmail)}?subject=${encodeURIComponent(`Library Attendance Notice - ${item.name}`)}&body=${encodeURIComponent(`Dear Parent,\n\nThis is an attendance notice regarding ${item.name} (${item.smartId}) who has been absent for ${item.daysAbsent} consecutive days.\n\nPlease contact library management if you have any questions.\n\nThank you,\nLibrary Administration`)}`}
+                className="p-1.5 rounded-lg text-blue-400 hover:text-blue-300 hover:bg-blue-500/15 transition-colors cursor-pointer inline-flex items-center"
+                title={`Send email notice to ${item.name}'s parent`}
+                aria-label={`Send email notice to ${item.name}'s parent`}
+              >
+                <Mail size={14} />
+              </a>
+            )}
 
             {item.notified ? (
               <span className="eng-badge eng-badge--neutral text-[10px]">{labels.samplePreviouslyNotified}</span>

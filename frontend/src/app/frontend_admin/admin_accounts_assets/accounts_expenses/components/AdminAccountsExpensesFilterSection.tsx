@@ -6,7 +6,7 @@ import type {
 AdminAccountsExpensesCategoryFilter,
 AdminAccountsExpensesFilterSectionProps
 } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/types/AdminAccountsExpensesComponentTypes';
-import { CheckCircle2,Clock,FileSpreadsheet,Search,TrendingUp,XCircle } from 'lucide-react';
+import { CheckCircle2, Clock, FileSpreadsheet, RotateCcw, Search, XCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 const CATEGORY_TRANSLATION_KEY = {
@@ -227,7 +227,7 @@ export function AdminAccountsExpensesFilterSection({
                 if (onCustomEndDateChange) onCustomEndDateChange('');
               }}
             >
-              <TrendingUp size={18} strokeWidth={2} aria-hidden="true" /> {t('RESET')}
+              <RotateCcw size={14} className="text-rose-400" aria-hidden="true" /> {t('RESET')}
             </button>
           </div>
         </div>
