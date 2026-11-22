@@ -4,27 +4,7 @@ import { ADMIN_COMMUNICATION_COMPLAINT_STATUS } from '@/app/frontend_admin/admin
 import type { CStatus,Complaint } from '@/app/frontend_admin/admin_communication/communication_complaints/types/AdminCommunicationComplaintsComponentTypes';
 import AdminCommunicationEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
-import {
-ArrowDown,
-ArrowUp,
-ArrowUpDown,
-Building2,
-CheckCircle2,
-Clock,
-Eye,
-KeyRound,
-MessageCircle,
-PhoneCall,
-RefreshCw,
-SearchX,
-ShieldAlert,
-Snowflake,
-Tag,
-Volume2,
-Wifi,
-Zap,
-type LucideIcon
-} from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, Building2, CheckCircle2, Clock, Eye, KeyRound, MessageCircle, RefreshCw, SearchX, ShieldAlert, Snowflake, Tag, Volume2, Wifi, Zap, type LucideIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo,useState } from 'react';
 
@@ -407,18 +387,6 @@ export function AdminCommunicationComplaintsTable({
                           aria-label={`Send WhatsApp update to ${c.student}`}
                         >
                           <MessageCircle size={14} />
-                        </a>
-                      )}
-
-                      {/* Direct Phone Call to Complainant */}
-                      {c.studentPhone && (
-                        <a
-                          href={`tel:${c.studentPhone.replace(/\s+/g, '')}`}
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-400 hover:bg-sky-500/25 hover:border-sky-500/50 transition-all shadow-xs"
-                          title={`Call ${c.student} (${c.studentPhone})`}
-                          aria-label={`Call ${c.student}`}
-                        >
-                          <PhoneCall size={14} />
                         </a>
                       )}
 

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 // RESPONSIBILITY: AdminEnquiriesTable component owned by admin_enquiries; responsibility folder: admin_enquiries_table.
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 
@@ -6,7 +6,7 @@ import { ADMIN_ENQUIRIES_ENQUIRY_STATUS_BADGE } from '@/app/frontend_admin/admin
 import type { Enquiry,EnquiryStatus } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
 import type { AdminEnquiriesEnquirySortDirection,AdminEnquiriesEnquirySortField,AdminEnquiriesTableProps } from '@/app/frontend_admin/admin_members/members_enquiries/types/AdminMembersEnquiriesComponentTypes';
 import { formatAdminEnquiriesDate,maskPhone } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
-import { ArrowDown,ArrowUp,Clock,Eye,MessageSquare,PhoneCall } from 'lucide-react';
+import { ArrowDown,ArrowUp,Clock,Eye,MessageSquare} from 'lucide-react';
 import { useLocale,useTranslations } from 'next-intl';
 import { useEffect,useMemo } from 'react';
 
@@ -165,14 +165,6 @@ export default function AdminEnquiriesTable({
                           <button type="button" className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-slate-700/60 bg-slate-800/50 text-slate-300 hover:text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 transition-colors" aria-label={t('VIEW_DETAILS_FOR', { name: enquiry.name })} onClick={() => onSelectEnquiry(enquiry)}>
                             <Eye aria-hidden="true" size={16} strokeWidth={2} />
                           </button>
-                          <a
-                            href={`tel:${enquiry.phone.replace(/[^0-9+]/g, '')}`}
-                            className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 transition-colors"
-                            title={`Call ${enquiry.name}`}
-                            aria-label={`Call ${enquiry.name}`}
-                          >
-                            <PhoneCall aria-hidden="true" size={15} strokeWidth={2} />
-                          </a>
                           <button
                             type="button"
                             className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 transition-colors"
@@ -222,14 +214,6 @@ export default function AdminEnquiriesTable({
                   <button type="button" className="inline-flex min-h-9 flex-1 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400" onClick={() => onSelectEnquiry(enquiry)}>
                     <Eye aria-hidden="true" size={14} strokeWidth={2} /> {t('VIEW_DETAILS')}
                   </button>
-                  <a
-                    href={`tel:${enquiry.phone.replace(/[^0-9+]/g, '')}`}
-                    className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-400 hover:bg-amber-500/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
-                    title={`Call ${enquiry.name}`}
-                    aria-label={`Call ${enquiry.name}`}
-                  >
-                    <PhoneCall aria-hidden="true" size={14} strokeWidth={2} /> Call
-                  </a>
                   <button
                     type="button"
                     className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"

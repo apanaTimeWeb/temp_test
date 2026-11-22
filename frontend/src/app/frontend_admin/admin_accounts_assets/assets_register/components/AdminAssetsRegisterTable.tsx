@@ -9,23 +9,7 @@ getDaysUntilExpiry,
 isExpiringSoon,
 } from '@/app/frontend_admin/admin_accounts_assets/assets_register/utils/AdminAssetsRegisterFormatters';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
-import {
-AlertTriangle,
-ArrowDown,
-ArrowUp,
-ArrowUpDown,
-Building2,
-CalendarDays,
-CheckCircle2,
-Clock,
-Cpu,
-Eye,
-MapPin,
-Phone,
-ShieldCheck,
-Tag,
-Wrench,
-} from 'lucide-react';
+import { AlertTriangle, ArrowDown, ArrowUp, ArrowUpDown, Building2, CalendarDays, CheckCircle2, Clock, Cpu, Eye, MapPin, ShieldCheck, Tag, Wrench} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo,useState } from 'react';
 
@@ -254,14 +238,7 @@ export function AdminAssetsRegisterTable({
                   {/* Vendor & Contact */}
                   <td className="px-4 py-3.5 whitespace-nowrap min-w-[160px]">
                     <p className="font-bold text-foreground text-xs">{asset.vendorName}</p>
-                    <a
-                      href={`tel:${asset.vendorContact}`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="mt-1 inline-flex items-center gap-1 text-[11px] text-primary hover:underline font-mono transition-colors"
-                    >
-                      <Phone className="h-3 w-3 shrink-0" />
-                      <span>{asset.vendorContact}</span>
-                    </a>
+                    <span className="mt-1 block text-[11px] font-mono text-muted-foreground">{asset.vendorContact}</span>
                   </td>
 
                   {/* Status */}

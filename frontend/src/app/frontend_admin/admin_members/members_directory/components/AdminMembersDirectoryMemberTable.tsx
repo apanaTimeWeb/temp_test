@@ -7,7 +7,7 @@ import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/memb
 import type { AdminMembersMemberTableProps } from '@/app/frontend_admin/admin_members/members_directory/types/AdminMembersDirectoryComponentTypes';
 import { downloadAdminMembersDemoCsv,downloadAdminMembersDemoExcel,formatAdminMembersDate,printAdminMembersRoster } from '@/app/frontend_admin/admin_members/members_directory/utils/AdminMembersDirectoryExportUtils';
 import { displayValue } from '@/lib/display_value';
-import { ArrowDown,ArrowUp,ArrowUpDown,ChevronLeft,ChevronRight,Clock,DownloadCloud,Eye,FileSpreadsheet,Filter,IndianRupee,Mail,MessageSquare,PhoneCall,Printer,RotateCcw,Search,X } from 'lucide-react';
+import { ArrowDown,ArrowUp,ArrowUpDown,ChevronLeft,ChevronRight,Clock,DownloadCloud,Eye,FileSpreadsheet,Filter,IndianRupee,Mail,MessageSquare,Printer,RotateCcw,Search,X } from 'lucide-react';
 import { useLocale,useTranslations } from 'next-intl';
 import { useMemo,useState } from 'react';
 import { toast } from 'sonner';
@@ -398,16 +398,7 @@ export default function AdminMembersMemberTable({
                       </td>
                       <td className="px-4 py-3">
                         <div className="relative flex justify-end gap-1.5">
-                          {member.phone && (
-                            <a
-                              href={`tel:${member.phone.replace(/\D/g, '')}`}
-                              className="min-h-9 min-w-9 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:text-amber-300 hover:bg-amber-500/20 inline-flex items-center justify-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
-                              title={`Call ${member.name}`}
-                              aria-label={`Call ${member.name}`}
-                            >
-                              <PhoneCall size={15} strokeWidth={2} className="text-amber-400" aria-hidden="true" />
-                            </a>
-                          )}
+                          
                           {member.email && (
                             <a
                               href={`mailto:${member.email}?subject=${encodeURIComponent('Smart Library Notice')}&body=${encodeURIComponent(`Dear ${member.name},\n\n`)}`}

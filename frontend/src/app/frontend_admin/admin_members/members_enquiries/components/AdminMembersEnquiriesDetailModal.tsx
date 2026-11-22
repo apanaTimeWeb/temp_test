@@ -4,22 +4,7 @@
 import { ADMIN_ENQUIRIES_ENQUIRY_STATUS_BADGE } from '@/app/frontend_admin/admin_members/members_enquiries/config/admin_members_enquiries.url_config';
 import type { Enquiry,FollowUp } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
 import { formatAdminEnquiriesDate,getInitials,maskPhone } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
-import {
-AlertCircle,
-Building2,
-CalendarDays,
-CheckCircle2,
-Clock,
-ExternalLink,
-FileText,
-MessageSquare,
-Phone,
-PhoneCall,
-ShieldCheck,
-Tag,
-UserCheck,
-X,
-} from 'lucide-react';
+import { AlertCircle, Building2, CalendarDays, CheckCircle2, Clock, ExternalLink, FileText, MessageSquare, Phone, ShieldCheck, Tag, UserCheck, X} from 'lucide-react';
 import { useLocale,useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 
@@ -116,14 +101,7 @@ export default function AdminMembersEnquiriesDetailModal({
           </div>
 
           <div className="flex items-center gap-2">
-            <a
-              href={`tel:+${waPhone}`}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-sky-500/30 bg-sky-500/15 px-3 py-1.5 text-xs font-semibold text-sky-400 hover:bg-sky-500/25 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
-              title="Call prospect directly"
-            >
-              <PhoneCall size={14} />
-              <span className="hidden sm:inline">Call</span>
-            </a>
+            
             <a
               href={whatsappUrl}
               target="_blank"

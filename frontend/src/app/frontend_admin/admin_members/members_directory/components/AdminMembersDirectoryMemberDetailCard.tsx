@@ -3,38 +3,7 @@
 
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import { formatAdminMembersDate } from '@/app/frontend_admin/admin_members/members_directory/utils/AdminMembersDirectoryExportUtils';
-import {
-Activity,
-AlertTriangle,
-Armchair,
-Award,
-Building2,
-CalendarCheck,
-Camera,
-Check,
-CheckCircle,
-Clock,
-Copy,
-CreditCard,
-Download,
-ExternalLink,
-Eye,
-FileText,
-GraduationCap,
-IndianRupee,
-Layers,
-Lock,
-Mail,
-MessageSquare,
-PauseCircle,
-PhoneCall,
-Printer,
-Receipt,
-RotateCcw,
-ShieldCheck,
-UserRound,
-X
-} from 'lucide-react';
+import { Activity, AlertTriangle, Armchair, Award, Building2, CalendarCheck, Camera, Check, CheckCircle, Clock, Copy, CreditCard, Download, ExternalLink, Eye, FileText, GraduationCap, IndianRupee, Layers, Lock, Mail, MessageSquare, PauseCircle, Printer, Receipt, RotateCcw, ShieldCheck, UserRound, X } from 'lucide-react';
 import { useLocale,useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -318,14 +287,6 @@ export function AdminMembersDirectoryMemberDetailCard({
 
         {/* Quick Utility Actions */}
         <div className="flex flex-wrap items-center gap-2">
-          <a
-            href={`tel:${member.phone.replace(/\D/g, '')}`}
-            className="inline-flex min-h-9 items-center gap-1.5 rounded-xl border border-amber-500/40 bg-amber-500/15 px-3 py-1.5 text-xs font-semibold text-amber-400 hover:bg-amber-500/25 transition-all shadow-xs"
-            title={`Call ${member.name}`}
-          >
-            <PhoneCall size={14} className="text-amber-400" />
-            <span>Call</span>
-          </a>
           <button
             type="button"
             onClick={handleDirectWhatsApp}

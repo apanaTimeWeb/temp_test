@@ -205,7 +205,7 @@ export function AdminFinancePaymentInvoiceModal({ payment, isOpen, onClose }: Ad
               title="Send invoice via default email client (Zero API Cost)"
             >
               <Mail className="h-3.5 w-3.5" />
-              Email (Free Client)
+              Email Receipt (Free Client)
             </button>
             <button
               type="button"

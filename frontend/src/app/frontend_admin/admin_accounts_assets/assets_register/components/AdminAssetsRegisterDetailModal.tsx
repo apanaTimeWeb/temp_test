@@ -299,13 +299,7 @@ export function AdminAssetsRegisterDetailModal({
                 </div>
                 <div>
                   <span className="text-muted-foreground">Direct Support Contact:</span>
-                  <a
-                    href={`tel:${asset.vendorContact}`}
-                    className="font-mono font-bold text-indigo-400 hover:underline flex items-center gap-1 mt-0.5"
-                  >
-                    <Phone className="h-3 w-3" />
-                    {asset.vendorContact}
-                  </a>
+                  <p className="font-mono font-bold text-foreground text-sm mt-0.5">{asset.vendorContact}</p>
                 </div>
               </div>
             </div>

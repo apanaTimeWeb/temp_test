@@ -9,7 +9,7 @@ import type { AdminCommunicationWhatsappLog } from '@/app/frontend_admin/admin_c
 import { filterAdminCommunicationWhatsappLogs } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/utils/AdminCommunicationWhatsappLogsFilterUtils';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
-import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid';
+import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import {
   CheckCircle2,
@@ -27,14 +27,14 @@ export function AdminCommunicationWhatsappLogsPage() {
   const isDemoMode = isFrontendDemoModeEnabled();
   const { selectedBranch, isAllBranches } = useAdminBranch();
 
-  const [typeFilter, setTypeFilter] = useAdminApplicationInfrastructureUrlQueryState('typeFilter', 'All');
-  const [statusFilter, setStatusFilter] = useAdminApplicationInfrastructureUrlQueryState('statusFilter', 'All');
+  const [typeFilter, setTypeFilter] = useAdminApplicationInfrastructureUrlQueryState<string>('typeFilter', 'All');
+  const [statusFilter, setStatusFilter] = useAdminApplicationInfrastructureUrlQueryState<string>('statusFilter', 'All');
   const [dispatchModeFilter, setDispatchModeFilter] = useState<string>('All');
-  const [search, setSearch] = useAdminApplicationInfrastructureUrlQueryState('search', '');
+  const [search, setSearch] = useAdminApplicationInfrastructureUrlQueryState<string>('search', '');
   const [searchInput, setSearchInput] = useState(search);
-  const [dateFrom, setDateFrom] = useAdminApplicationInfrastructureUrlQueryState('dateFrom', '');
-  const [dateTo, setDateTo] = useAdminApplicationInfrastructureUrlQueryState('dateTo', '');
-  const [urlTablePage, setUrlTablePage] = useAdminApplicationInfrastructureUrlQueryState('tablePage', '0');
+  const [dateFrom, setDateFrom] = useAdminApplicationInfrastructureUrlQueryState<string>('dateFrom', '');
+  const [dateTo, setDateTo] = useAdminApplicationInfrastructureUrlQueryState<string>('dateTo', '');
+  const [urlTablePage, setUrlTablePage] = useAdminApplicationInfrastructureUrlQueryState<string>('tablePage', '0');
 
   const [toast, setToast] = useState<string>('');
   const [viewLog, setViewLog] = useState<AdminCommunicationWhatsappLog | null>(null);
