@@ -6,6 +6,7 @@ export interface AdminCommunicationWhatsappLogFilters {
   search: string;
   dateFrom: string;
   dateTo: string;
+  dispatchMode?: 'All' | 'auto_api_single' | 'manual_free_web';
 }
 
 /** Applies demo-table filters to the module-owned sample records without mutating the source array. */
@@ -19,6 +20,7 @@ export function filterAdminCommunicationWhatsappLogs(
   return records.filter((record) => {
     if (filters.type !== 'All' && record.type !== filters.type) return false;
     if (filters.status !== 'All' && record.status !== filters.status) return false;
+    if (filters.dispatchMode && filters.dispatchMode !== 'All' && record.dispatchMode !== filters.dispatchMode) return false;
     if (query && !record.student.toLocaleLowerCase().includes(query) && !record.phone.includes(filters.search.trim())) return false;
 
     const recordDate = record.dateTime.slice(0, 10);

@@ -6,6 +6,7 @@ export interface AdminCommunicationWhatsappTemplate {
   body: string;
   category?: string;
   triggerEvent?: string;
+  dispatchMode?: 'auto_api_single' | 'manual_free_web';
 }
 
 export type AdminCommunicationWhatsappTemplateId = 'welcome' | 'fee_reminder' | 'renewal' | 'receipt' | 'notice' | 'absentee' | 'ptp';

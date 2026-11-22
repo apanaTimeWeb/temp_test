@@ -1,5 +1,6 @@
 'use client';
 
+import { applyNoticePreset,type NoticePresetType } from '@/app/frontend_admin/admin_communication/communication_notices/components/AdminCommunicationNoticePresets';
 import type { AdminCommunicationNoticeFormValues } from '@/app/frontend_admin/admin_communication/communication_notices/schemas/AdminCommunicationNoticesSchema';
 import type { Notice } from '@/app/frontend_admin/admin_communication/communication_notices/types/AdminCommunicationNoticesComponentTypes';
 import type { AdminBranchItem } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBranchConstants';
@@ -8,7 +9,7 @@ import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogConte
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import { AlertTriangle,Building2,Mail,MessageSquare,Radio,Send,Sparkles,X } from 'lucide-react';
+import { AlertTriangle,Building2,Mail,MessageSquare,Radio,Send,ShieldAlert,Sparkles,X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { UseFormReturn } from 'react-hook-form';
 
@@ -43,54 +44,8 @@ export function AdminCommunicationNoticeModal({
 
   if (!showAdd) return null;
 
-  const applyPreset = (preset: 'WEATHER' | 'HOLIDAY' | 'POWER' | 'SECURITY') => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const nextWeek = new Date();
-    nextWeek.setDate(nextWeek.getDate() + 7);
-    const formatDate = (d: Date) => d.toISOString().slice(0, 10);
-
-    if (preset === 'WEATHER') {
-      noticeForm.setValue('title', 'Urgent: All Library Branches Closed Today Due to Heavy Rainfall', { shouldDirty: true });
-      noticeForm.setValue('message', 'Dear Students, Due to continuous heavy rainfall, severe waterlogging, and safety guidelines from municipal authorities, all Smart Library branch halls will remain CLOSED today. Digital portal and e-resources remain 24x7 active. Next operational advisory by 8:00 PM.', { shouldDirty: true });
-      noticeForm.setValue('validTill', formatDate(tomorrow), { shouldDirty: true });
-      noticeForm.setValue('targetBranch', 'All Branches', { shouldDirty: true });
-      noticeForm.setValue('sendWhatsApp', true, { shouldDirty: true });
-      noticeForm.setValue('sendEmail', true, { shouldDirty: true });
-      noticeForm.setValue('sendSms', true, { shouldDirty: true });
-      noticeForm.setValue('priority', 'EMERGENCY', { shouldDirty: true });
-      noticeForm.setValue('isEmergency', true, { shouldDirty: true });
-    } else if (preset === 'HOLIDAY') {
-      noticeForm.setValue('title', 'Notice: Library Network Closed for Scheduled Holiday', { shouldDirty: true });
-      noticeForm.setValue('message', 'Dear Students, Please be advised that all library study halls across the network will remain closed tomorrow in observance of the public holiday. Study shifts and reserved desks will resume standard schedule from 6:00 AM on the following day.', { shouldDirty: true });
-      noticeForm.setValue('validTill', formatDate(tomorrow), { shouldDirty: true });
-      noticeForm.setValue('targetBranch', 'All Branches', { shouldDirty: true });
-      noticeForm.setValue('sendWhatsApp', true, { shouldDirty: true });
-      noticeForm.setValue('sendEmail', true, { shouldDirty: true });
-      noticeForm.setValue('sendSms', true, { shouldDirty: true });
-      noticeForm.setValue('priority', 'EMERGENCY', { shouldDirty: true });
-      noticeForm.setValue('isEmergency', true, { shouldDirty: true });
-    } else if (preset === 'POWER') {
-      noticeForm.setValue('title', 'Notice: Essential Power Grid & Generator Maintenance', { shouldDirty: true });
-      noticeForm.setValue('message', 'Notice: Essential electrical line maintenance and backup generator testing scheduled today between 2:00 PM and 5:00 PM. Reading desk lamps and emergency lighting will remain operational. Silent study continues uninterrupted.', { shouldDirty: true });
-      noticeForm.setValue('validTill', formatDate(tomorrow), { shouldDirty: true });
-      noticeForm.setValue('targetBranch', 'All Branches', { shouldDirty: true });
-      noticeForm.setValue('sendWhatsApp', true, { shouldDirty: true });
-      noticeForm.setValue('sendEmail', true, { shouldDirty: true });
-      noticeForm.setValue('sendSms', false, { shouldDirty: true });
-      noticeForm.setValue('priority', 'URGENT', { shouldDirty: true });
-      noticeForm.setValue('isEmergency', true, { shouldDirty: true });
-    } else if (preset === 'SECURITY') {
-      noticeForm.setValue('title', 'Security Advisory: Mandatory ID Badge & Biometric Inspection', { shouldDirty: true });
-      noticeForm.setValue('message', 'Security Alert: Surprise administrative inspection in progress. Carrying digital Smart ID card and barcode pass is strictly mandatory for biometric turnstile entry. Non-registered individuals will be barred.', { shouldDirty: true });
-      noticeForm.setValue('validTill', formatDate(nextWeek), { shouldDirty: true });
-      noticeForm.setValue('targetBranch', 'All Branches', { shouldDirty: true });
-      noticeForm.setValue('sendWhatsApp', true, { shouldDirty: true });
-      noticeForm.setValue('sendEmail', true, { shouldDirty: true });
-      noticeForm.setValue('sendSms', true, { shouldDirty: true });
-      noticeForm.setValue('priority', 'EMERGENCY', { shouldDirty: true });
-      noticeForm.setValue('isEmergency', true, { shouldDirty: true });
-    }
+  const handleApplyPreset = (preset: NoticePresetType) => {
+    applyNoticePreset(preset, noticeForm);
   };
 
   const isEmergency = isEmergencyMode || noticeForm.watch('isEmergency');
@@ -161,7 +116,7 @@ export function AdminCommunicationNoticeModal({
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 <button
                   type="button"
-                  onClick={() => applyPreset('WEATHER')}
+                  onClick={() => handleApplyPreset('WEATHER')}
                   className="rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/25 p-2 text-left transition-colors"
                 >
                   <span className="text-xs font-bold text-rose-300 block truncate">🌧️ Rain Closure</span>
@@ -169,7 +124,7 @@ export function AdminCommunicationNoticeModal({
                 </button>
                 <button
                   type="button"
-                  onClick={() => applyPreset('HOLIDAY')}
+                  onClick={() => handleApplyPreset('HOLIDAY')}
                   className="rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/25 p-2 text-left transition-colors"
                 >
                   <span className="text-xs font-bold text-amber-300 block truncate">🎉 Holiday Off</span>
@@ -177,7 +132,7 @@ export function AdminCommunicationNoticeModal({
                 </button>
                 <button
                   type="button"
-                  onClick={() => applyPreset('POWER')}
+                  onClick={() => handleApplyPreset('POWER')}
                   className="rounded-lg border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/25 p-2 text-left transition-colors"
                 >
                   <span className="text-xs font-bold text-sky-300 block truncate">⚡ Power Work</span>
@@ -185,7 +140,7 @@ export function AdminCommunicationNoticeModal({
                 </button>
                 <button
                   type="button"
-                  onClick={() => applyPreset('SECURITY')}
+                  onClick={() => handleApplyPreset('SECURITY')}
                   className="rounded-lg border border-purple-500/30 bg-purple-500/10 hover:bg-purple-500/25 p-2 text-left transition-colors"
                 >
                   <span className="text-xs font-bold text-purple-300 block truncate">🛑 ID Checking</span>
@@ -277,7 +232,7 @@ export function AdminCommunicationNoticeModal({
                 )}
               </div>
 
-              {/* Multi-Channel Broadcast Dispatch */}
+              {/* Multi-Channel Broadcast Dispatch with Cost Protection */}
               <div className="rounded-xl border border-border bg-card/60 p-4 space-y-3">
                 <div className="flex items-center gap-2">
                   <Radio className="h-4 w-4 text-primary" />
@@ -285,9 +240,6 @@ export function AdminCommunicationNoticeModal({
                     Multi-Channel Broadcast Dispatch
                   </span>
                 </div>
-                <p className="text-xs text-text-secondary">
-                  Optionally broadcast this notice directly to enrolled students through external channels upon saving:
-                </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
                   <label className="flex items-center gap-2.5 rounded-lg border border-border bg-card p-2.5 cursor-pointer hover:bg-card-hover transition-colors">
                     <input
@@ -326,12 +278,16 @@ export function AdminCommunicationNoticeModal({
                     </div>
                   </label>
                 </div>
+                <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 px-3 py-2 text-[11px] text-amber-300 flex items-start gap-1.5">
+                  <ShieldAlert size={14} className="shrink-0 text-amber-400 mt-0.5" />
+                  <span><strong>Cost Protection Notice:</strong> SMS Flash Alert consumes paid Server API credits. WhatsApp Web and Push Broadcast are recommended for routine notices to keep operational billing minimal.</span>
+                </div>
               </div>
 
               <p className="rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text" role="status">
                 {t('NOTICE_PERSISTENCE_BLOCKED')}
               </p>
-              <div className="flex-wrap border-border pt-3 mt-6 flex justify-end gap-3">
+              <div className="flex-wrap border-border pt-3 mt-4 flex justify-end gap-3">
                 <button
                   type="button"
                   data-testid="admin_communication-page-control-006"
@@ -358,4 +314,3 @@ export function AdminCommunicationNoticeModal({
   );
 }
 export default AdminCommunicationNoticeModal;
-

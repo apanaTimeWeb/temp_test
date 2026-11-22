@@ -17,6 +17,7 @@ export interface AdminCommunicationWhatsappLog {
   error: string;
   message: string;
   branch?: string;
+  dispatchMode?: 'auto_api_single' | 'manual_free_web';
 }
 
 export interface AdminCommunicationComplaintAddModalProps {

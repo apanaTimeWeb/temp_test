@@ -1,30 +1,23 @@
 'use client';
 
+import AdminCommunicationWhatsappTemplatesCard from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/components/AdminCommunicationWhatsappTemplatesCard';
+import AdminCommunicationWhatsappTemplatesEditModal from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/components/AdminCommunicationWhatsappTemplatesEditModal';
+import AdminCommunicationWhatsappTemplatesTestModal from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/components/AdminCommunicationWhatsappTemplatesTestModal';
 import {
-ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS,
-ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_VARIABLES,
+  ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_VARIABLES,
 } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/config/admin_communication_whatsapp_templates_whatsapp_template_constants';
 import useAdminCommunicationWhatsappTemplateState from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/hooks/useAdminCommunicationWhatsappTemplatesWhatsappTemplateState';
+import type { AdminCommunicationWhatsappTemplate } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/types/AdminCommunicationWhatsappTemplatesWhatsappTemplateTypes';
 import { isAdminCommunicationPhoneNumberValid } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/utils/AdminCommunicationWhatsappTemplatesWhatsappPhoneUtils';
 import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
-import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
-import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
-import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
-import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import {
-CheckCheck,
-CheckCircle2,
-Clock,
-Copy,
-Edit2,
-FileText,
-Layers,
-MessageSquare,
-Plus,
-Search,
-Send,
-ShieldCheck,
-X,
+  CheckCircle2,
+  FileText,
+  Layers,
+  MessageSquare,
+  Plus,
+  Search,
+  ShieldCheck,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo,useState } from 'react';
@@ -50,7 +43,7 @@ export function AdminCommunicationWhatsappTemplatesPage() {
 
   // Create / Edit Template State
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editingTemplate, setEditingTemplate] = useState<any | null>(null);
+  const [editingTemplate, setEditingTemplate] = useState<AdminCommunicationWhatsappTemplate | null>(null);
   const [formTitle, setFormTitle] = useState('');
   const [formCategory, setFormCategory] = useState('');
   const [formTrigger, setFormTrigger] = useState('');
@@ -65,13 +58,24 @@ export function AdminCommunicationWhatsappTemplatesPage() {
     }, 3000);
   };
 
-  const getTemplateLabel = (tmpl: any) => {
+  const getTemplateLabel = (tmpl: AdminCommunicationWhatsappTemplate) => {
     try {
       const translated = t(tmpl.labelKey);
       return translated && !translated.startsWith('ADMIN_COMMUNICATION') ? translated : tmpl.labelKey;
     } catch {
       return tmpl.labelKey;
     }
+  };
+
+  const formatPreview = (rawBody: string) => {
+    return rawBody
+      .replace(/{name}/g, 'Rahul Sharma')
+      .replace(/{amount}/g, '1,000')
+      .replace(/{duedate}/g, '25-Apr-2026')
+      .replace(/{planname}/g, 'Full Day Dedicated')
+      .replace(/{libraryname}/g, ADMIN_BRAND_CONFIG.displayName || 'Smart Library')
+      .replace(/{phone}/g, '+91 98765 43210')
+      .replace(/{seat}/g, 'S-08');
   };
 
   const handleTest = () => {
@@ -112,7 +116,7 @@ export function AdminCommunicationWhatsappTemplatesPage() {
     setShowEditModal(true);
   };
 
-  const openEditTemplate = (tmpl: any) => {
+  const openEditTemplate = (tmpl: AdminCommunicationWhatsappTemplate) => {
     setEditingTemplate(tmpl);
     setFormTitle(getTemplateLabel(tmpl));
     setFormCategory(tmpl.category || 'General');
@@ -143,29 +147,19 @@ export function AdminCommunicationWhatsappTemplatesPage() {
       showToast(`Template "${formTitle}" updated successfully`);
     } else {
       const newId = `custom_${Date.now()}`;
-      const newTmpl = {
+      const newTmpl: AdminCommunicationWhatsappTemplate = {
         id: newId as any,
         labelKey: formTitle as any,
         icon: '💬',
         category: formCategory.trim() || 'General',
         triggerEvent: formTrigger.trim(),
+        dispatchMode: 'manual_free_web',
         body: formBody.trim(),
       };
       setTemplates((prev) => [newTmpl, ...prev]);
       showToast(`Template "${formTitle}" created successfully`);
     }
     setShowEditModal(false);
-  };
-
-  const formatPreview = (rawBody: string) => {
-    return rawBody
-      .replace(/{name}/g, 'Rahul Sharma')
-      .replace(/{amount}/g, '1,000')
-      .replace(/{duedate}/g, '25-Apr-2026')
-      .replace(/{planname}/g, 'Full Day Dedicated')
-      .replace(/{libraryname}/g, ADMIN_BRAND_CONFIG.displayName || 'Smart Library')
-      .replace(/{phone}/g, '+91 98765 43210')
-      .replace(/{seat}/g, 'S-08');
   };
 
   // Extract unique categories
@@ -211,186 +205,29 @@ export function AdminCommunicationWhatsappTemplatesPage() {
       </p>
 
       {/* Test Message Modal */}
-      {showTest && (
-        <Dialog open onOpenChange={setShowTest}>
-          <DialogContent className="relative w-full max-w-sm rounded-2xl border border-slate-800 bg-slate-900 p-6 text-white shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <DialogTitle className="text-base font-bold text-white flex items-center gap-2">
-                <Send size={16} className="text-emerald-400" />
-                {t('WHATSAPP_TEST_DIALOG_TITLE')}
-              </DialogTitle>
-              <button
-                type="button"
-                data-testid="admin_communication-page-control-001"
-                onClick={() => setShowTest(false)}
-                className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white"
-                aria-label={t('WHATSAPP_TEMPLATE_CLOSE_DIALOG')}
-              >
-                <X size={16} />
-              </button>
-            </div>
-            <DialogDescription className="text-xs text-slate-400">
-              {t('WHATSAPP_TEST_DIALOG_DESCRIPTION')}
-            </DialogDescription>
-            <div>
-              <label
-                className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1"
-                htmlFor="admin-communication-test-phone"
-              >
-                {t('WHATSAPP_PHONE_LABEL')}
-              </label>
-              <input
-                id="admin-communication-test-phone"
-                className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none font-mono"
-                type="tel"
-                autoComplete="tel"
-                maxLength={10}
-                placeholder="10-digit mobile number"
-                value={testPhone}
-                onChange={(e) => setTestPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-              />
-            </div>
-            <div className="flex items-center justify-end gap-2 border-t border-slate-800 pt-3">
-              <button
-                data-testid="admin_communication-page-control-002"
-                type="button"
-                onClick={() => setShowTest(false)}
-                className="rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white"
-              >
-                {t('WHATSAPP_BUTTON_CANCEL')}
-              </button>
-              <button
-                data-testid="admin_communication-page-control-003"
-                type="button"
-                onClick={handleTest}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-500 disabled:opacity-40"
-                disabled={!testPhone.trim()}
-              >
-                <Send size={13} />
-                {t('WHATSAPP_TEST_VALIDATE_ONLY')}
-              </button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
+      <AdminCommunicationWhatsappTemplatesTestModal
+        showTest={showTest}
+        setShowTest={setShowTest}
+        testPhone={testPhone}
+        setTestPhone={setTestPhone}
+        onSendTest={handleTest}
+      />
 
       {/* Create / Edit Template Modal */}
-      {showEditModal && (
-        <Dialog open onOpenChange={setShowEditModal}>
-          <DialogContent className="relative w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 text-white shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <DialogTitle className="text-base font-bold text-white flex items-center gap-2">
-                <MessageSquare size={16} className="text-emerald-400" />
-                <span>{editingTemplate ? 'Edit WhatsApp Template' : 'Create WhatsApp Template'}</span>
-              </DialogTitle>
-              <button
-                type="button"
-                onClick={() => setShowEditModal(false)}
-                className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white"
-                aria-label="Close"
-              >
-                <X size={16} />
-              </button>
-            </div>
-            <DialogDescription className="text-xs text-slate-400">
-              Customize WhatsApp communication template text and dynamic replacement variables.
-            </DialogDescription>
-            <div className="space-y-3.5">
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
-                  Template Title
-                </label>
-                <input
-                  type="text"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
-                  placeholder="e.g. Fee Due Notice, Seat Expiry Warning"
-                  value={formTitle}
-                  onChange={(e) => setFormTitle(e.target.value)}
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
-                    Category
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
-                    placeholder="e.g. Finance, Announcements"
-                    value={formCategory}
-                    onChange={(e) => setFormCategory(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
-                    Trigger Event
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
-                    placeholder="e.g. 3 days before expiry"
-                    value={formTrigger}
-                    onChange={(e) => setFormTrigger(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
-                    Template Body
-                  </label>
-                  <span className="text-[11px] font-mono text-slate-400">
-                    {formBody.length} / {ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS} chars
-                  </span>
-                </div>
-                <textarea
-                  rows={6}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950/70 p-3 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none font-sans leading-relaxed resize-none"
-                  placeholder="Write your template message. Use tokens like {name}, {seat}, {duedate}..."
-                  value={formBody}
-                  onChange={(e) => setFormBody(e.target.value)}
-                />
-              </div>
-              {/* Available Variables Token Pills */}
-              <div>
-                <span className="block text-[11px] font-medium text-slate-400 mb-1.5">
-                  Click token to insert:
-                </span>
-                <div className="flex flex-wrap gap-1.5">
-                  {ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_VARIABLES.map((token) => (
-                    <button
-                      key={token}
-                      type="button"
-                      onClick={() => setFormBody((prev) => `${prev} ${token}`)}
-                      className="rounded-lg border border-slate-700 bg-slate-800/80 px-2 py-0.5 text-[11px] font-mono text-indigo-300 hover:bg-indigo-500/20 hover:border-indigo-500/40 transition-colors"
-                      title={`Insert ${token}`}
-                    >
-                      {token}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center justify-end gap-2 border-t border-slate-800 pt-3">
-              <button
-                type="button"
-                onClick={() => setShowEditModal(false)}
-                className="rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleSaveTemplate}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-500"
-              >
-                <CheckCircle2 size={13} />
-                <span>{editingTemplate ? 'Save Changes' : 'Create Template'}</span>
-              </button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
+      <AdminCommunicationWhatsappTemplatesEditModal
+        showEditModal={showEditModal}
+        setShowEditModal={setShowEditModal}
+        editingTemplate={editingTemplate}
+        formTitle={formTitle}
+        setFormTitle={setFormTitle}
+        formCategory={formCategory}
+        setFormCategory={setFormCategory}
+        formTrigger={formTrigger}
+        setFormTrigger={setFormTrigger}
+        formBody={formBody}
+        setFormBody={setFormBody}
+        onSaveTemplate={handleSaveTemplate}
+      />
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -405,10 +242,6 @@ export function AdminCommunicationWhatsappTemplatesPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400">
-            <ShieldCheck size={14} />
-            <span>Official Admin Templates</span>
-          </span>
           <button
             type="button"
             data-testid="admin_communication-add-template-btn"
@@ -421,11 +254,16 @@ export function AdminCommunicationWhatsappTemplatesPage() {
         </div>
       </div>
 
+      {/* Cost Protection Banner */}
+      <div className="flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2 text-xs font-medium text-emerald-300">
+        <ShieldCheck className="h-4 w-4 text-emerald-400 shrink-0" />
+        <span><strong>Cost Protection Active:</strong> System API triggers 1x on critical events (Welcome/Admission). Follow-ups & announcements use Free WhatsApp Web (Zero API Cost).</span>
+      </div>
+
       {/* KPI Summary Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {/* Templates - Indigo */}
         <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 p-5 shadow-lg shadow-indigo-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-500/40">
-          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-indigo-500/10 blur-2xl transition-all duration-500 group-hover:bg-indigo-500/20" />
           <div className="relative flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">System Templates</span>
             <div className="p-2.5 rounded-xl border shrink-0 bg-indigo-500/15 border-indigo-500/30 text-indigo-400">
@@ -442,7 +280,6 @@ export function AdminCommunicationWhatsappTemplatesPage() {
 
         {/* Template Categories - Emerald */}
         <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 p-5 shadow-lg shadow-emerald-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-500/40">
-          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-emerald-500/10 blur-2xl transition-all duration-500 group-hover:bg-emerald-500/20" />
           <div className="relative flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Template Categories</span>
             <div className="p-2.5 rounded-xl border shrink-0 bg-emerald-500/15 border-emerald-500/30 text-emerald-400">
@@ -459,7 +296,6 @@ export function AdminCommunicationWhatsappTemplatesPage() {
 
         {/* Dynamic Variables - Purple */}
         <div className="group relative overflow-hidden rounded-2xl border border-purple-500/25 bg-gradient-to-br from-[#180c28]/95 via-[#180c28]/90 to-[#221238]/80 p-5 shadow-lg shadow-purple-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-purple-500/40">
-          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-purple-500/10 blur-2xl transition-all duration-500 group-hover:bg-purple-500/20" />
           <div className="relative flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Dynamic Tokens</span>
             <div className="p-2.5 rounded-xl border shrink-0 bg-purple-500/15 border-purple-500/30 text-purple-400">
@@ -525,125 +361,17 @@ export function AdminCommunicationWhatsappTemplatesPage() {
 
       {/* Main Templates Directory Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {filteredTemplates.map((template) => {
-          const isSelected = activeId === template.id;
-          const templatePreview = formatPreview(template.body);
-
-          return (
-            <div
-              key={template.id}
-              data-testid={`admin_communication-template-${template.id}`}
-              className={`group flex flex-col justify-between rounded-2xl border transition-all duration-200 overflow-hidden ${
-                isSelected
-                  ? 'border-emerald-500/50 bg-gradient-to-b from-slate-900/90 to-slate-900/70 shadow-xl shadow-emerald-950/20 ring-1 ring-emerald-500/30'
-                  : 'border-slate-800/80 bg-slate-900/60 hover:border-slate-700 hover:bg-slate-900/80 shadow-md'
-              }`}
-            >
-              {/* Card Header */}
-              <div className="p-4 border-b border-slate-800/60 space-y-2.5">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-2.5">
-                    <span className="text-xl p-2 rounded-xl bg-slate-800/70 border border-slate-700/60 shrink-0">
-                      {template.icon}
-                    </span>
-                    <div>
-                      <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-                        <span>{t(template.labelKey)}</span>
-                        <ShieldCheck size={14} className="text-emerald-400 shrink-0" />
-                      </h3>
-                      {template.category && (
-                        <span className="text-[10px] font-semibold text-emerald-400/90 uppercase tracking-wider">
-                          {template.category}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full shrink-0">
-                    Approved
-                  </span>
-                </div>
-
-                {template.triggerEvent && (
-                  <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
-                    <Clock size={12} className="text-slate-500 shrink-0" />
-                    <span className="truncate">Trigger: {template.triggerEvent}</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Live WhatsApp Bubble Preview */}
-              <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
-                <div className="rounded-2xl border border-slate-800 bg-[#0b141a] p-3.5 shadow-inner">
-                  {/* WhatsApp Bubble Header */}
-                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800/70 text-[10px] text-slate-400">
-                    <span className="font-semibold text-emerald-400 flex items-center gap-1">
-                      <ShieldCheck size={12} />
-                      {ADMIN_BRAND_CONFIG.displayName || 'Smart Library'}
-                    </span>
-                    <span className="font-mono text-slate-500">Official Account</span>
-                  </div>
-
-                  {/* Message Content */}
-                  <div className="max-h-60 overflow-y-auto pr-1 text-[11.5px] leading-relaxed text-slate-200">
-                    <p className="whitespace-pre-wrap font-sans break-words">{templatePreview}</p>
-                    <div className="mt-2 flex items-center justify-end gap-1 text-[9px] text-emerald-300/80">
-                      <span>10:42 AM</span>
-                      <CheckCheck size={13} className="text-cyan-400" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Tokens & Char count */}
-                <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1">
-                  <span className="font-mono text-slate-400">
-                    {template.body.length} / {ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS} chars
-                  </span>
-                  <div className="flex items-center gap-1">
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-800 border border-slate-700 font-mono text-indigo-300">
-                      7 Tokens
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card Action Footer */}
-              <div className="p-3 bg-slate-950/40 border-t border-slate-800/60 flex items-center justify-between gap-2">
-                <button
-                  type="button"
-                  onClick={() => copyTemplateToClipboard(template.body, t(template.labelKey))}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800/80 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-all cursor-pointer"
-                  title="Copy raw template"
-                  aria-label="Copy template"
-                >
-                  <Copy size={13} />
-                  <span>Copy Template</span>
-                </button>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    data-testid={`admin_communication-edit-template-${template.id}`}
-                    onClick={() => openEditTemplate(template)}
-                    className="inline-flex items-center gap-1 rounded-xl border border-slate-700 bg-slate-800/80 px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-all cursor-pointer"
-                    title="Edit Template"
-                  >
-                    <Edit2 size={12} />
-                    <span>Edit</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => openTestForTemplate(template.id)}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-emerald-500 transition-all cursor-pointer"
-                  >
-                    <Send size={12} />
-                    <span>Test Dispatch</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+        {filteredTemplates.map((template) => (
+          <AdminCommunicationWhatsappTemplatesCard
+            key={template.id}
+            template={template}
+            isSelected={activeId === template.id}
+            onCopy={copyTemplateToClipboard}
+            onEdit={openEditTemplate}
+            onTest={openTestForTemplate}
+            formatPreview={formatPreview}
+          />
+        ))}
       </div>
     </div>
   );

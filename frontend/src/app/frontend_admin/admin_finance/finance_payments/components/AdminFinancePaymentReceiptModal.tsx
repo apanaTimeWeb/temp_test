@@ -3,7 +3,7 @@
 import type { AdminFinancePayment } from '@/app/frontend_admin/admin_finance/finance_payments/types/AdminFinancePaymentsComponentTypes';
 import { formatAdminFinanceApiAmount,formatDate } from '@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinancePaymentsFormat';
 import { buildWhatsAppLink,downloadPaymentReceiptPdf } from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
-import { Building2,Calendar,CheckCircle2,CreditCard,Download,FileCheck,Hash,Mail,Printer,Share2,User,X } from 'lucide-react';
+import { Building2,Calendar,CheckCircle2,CreditCard,Download,FileCheck,Hash,Mail,Printer,Share2,ShieldCheck,User,X } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface AdminFinancePaymentReceiptModalProps {
@@ -145,7 +145,7 @@ export function AdminFinancePaymentReceiptModal({ payment, isOpen, onClose }: Ad
         </div>
 
         {/* Receipt Body */}
-        <div className="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
+        <div className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
           {/* Status Badge */}
           <div className="flex items-center justify-between rounded-xl bg-emerald-500/10 border border-emerald-500/20 px-4 py-3">
             <div className="flex items-center gap-2.5">
@@ -156,6 +156,12 @@ export function AdminFinancePaymentReceiptModal({ payment, isOpen, onClose }: Ad
               </div>
             </div>
             <span className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 tabular-nums">{formattedAmount}</span>
+          </div>
+
+          {/* Cost Protection / Auto-Alert Status */}
+          <div className="flex items-center gap-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 px-3.5 py-2 text-xs text-emerald-700 dark:text-emerald-300">
+            <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+            <span><strong>System Auto-Alert:</strong> Sent 1x via Server API upon transaction. Re-shares below use Free WhatsApp Web / Email Client (Zero API Cost).</span>
           </div>
 
           {/* Student Info Card */}
@@ -230,19 +236,19 @@ export function AdminFinancePaymentReceiptModal({ payment, isOpen, onClose }: Ad
               type="button"
               onClick={handleEmailReceipt}
               className="inline-flex items-center gap-1.5 rounded-lg border border-sky-500/30 bg-sky-500/10 px-3.5 py-2 text-xs font-semibold text-sky-600 dark:text-sky-400 hover:bg-sky-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500"
-              title="Email Receipt to Student"
+              title="Send receipt via default email client (Zero API Cost)"
             >
               <Mail className="h-3.5 w-3.5" />
-              Email Receipt
+              Email (Free Client)
             </button>
             <button
               type="button"
               onClick={handleShareWhatsApp}
               className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              title="Share Receipt on WhatsApp"
+              title="Share or resend receipt via WhatsApp Web (Zero API Cost)"
             >
               <Share2 className="h-3.5 w-3.5" />
-              Share WhatsApp
+              Share WhatsApp (Free Web)
             </button>
             <button
               type="button"

@@ -8,6 +8,7 @@ export const ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_FIXTURES: AdminCommunicationW
     icon: '👋',
     category: 'Onboarding',
     triggerEvent: 'New student admission / seat allocation',
+    dispatchMode: 'auto_api_single',
     body: `*Welcome to {libraryname}!* 🎉
 
 Dear *{name}*,
@@ -34,6 +35,7 @@ Wishing you productive study hours and great success! 📚
     icon: '📢',
     category: 'Announcements',
     triggerEvent: 'Campus schedule / facility update',
+    dispatchMode: 'manual_free_web',
     body: `*Official Notice | {libraryname}* 📢
 
 Dear *{name}*,

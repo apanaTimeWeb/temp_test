@@ -14,6 +14,7 @@ ExternalLink,
 FileText,
 MessageSquare,
 Phone,
+PhoneCall,
 ShieldCheck,
 Tag,
 UserCheck,
@@ -115,6 +116,14 @@ export default function AdminMembersEnquiriesDetailModal({
           </div>
 
           <div className="flex items-center gap-2">
+            <a
+              href={`tel:+${waPhone}`}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-sky-500/30 bg-sky-500/15 px-3 py-1.5 text-xs font-semibold text-sky-400 hover:bg-sky-500/25 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+              title="Call prospect directly"
+            >
+              <PhoneCall size={14} />
+              <span className="hidden sm:inline">Call</span>
+            </a>
             <a
               href={whatsappUrl}
               target="_blank"
