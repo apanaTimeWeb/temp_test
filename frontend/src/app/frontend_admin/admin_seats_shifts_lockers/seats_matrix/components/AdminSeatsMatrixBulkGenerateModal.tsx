@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Bulk Generate / Add Seats modal for Admin Seats Matrix.
 
 import type { AdminSeatMatrixSeatMatrixViewModel } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/types/AdminSeatsMatrixTypes';
-import { Armchair,Building2,Layers,Plus,Sparkles,X } from 'lucide-react';
+import { Armchair,Building2,Layers,Plus,X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -262,7 +262,7 @@ export default function AdminSeatsMatrixBulkGenerateModal({
           <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4 space-y-2">
             <div className="flex items-center justify-between text-xs">
               <span className="font-semibold text-indigo-300 flex items-center gap-1.5">
-                <Sparkles size={13} className="text-indigo-400" />
+                <Layers size={13} className="text-indigo-400" />
                 <span>Batch Generation Summary</span>
               </span>
               <span className="font-bold text-white bg-indigo-500/20 border border-indigo-500/30 px-2.5 py-0.5 rounded-full">

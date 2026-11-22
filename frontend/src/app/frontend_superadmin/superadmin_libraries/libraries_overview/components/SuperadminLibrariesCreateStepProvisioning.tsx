@@ -1,17 +1,7 @@
 'use client';
 /** Responsibility: Step D of Library Creation Wizard; executes multi-tenant workspace provisioning, generates secure admin invitation link, and records audit trail. */
 import { useState } from 'react';
-import {
-  CheckCircle2,
-  Copy,
-  Check,
-  ShieldCheck,
-  Building,
-  KeyRound,
-  ExternalLink,
-  Layers,
-  Sparkles,
-} from 'lucide-react';
+import {CheckCircle2, Copy, Check, ShieldCheck, Building, KeyRound, ExternalLink, Layers} from 'lucide-react';
 import type {
   LibraryOrganizationDetails,
   LibraryMainAdminAccount,
@@ -164,7 +154,7 @@ export default function SuperadminLibrariesCreateStepProvisioning({
       {/* Multi-Tenant Automated Pipeline Notice */}
       <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-950/20 space-y-2">
         <div className="flex items-center gap-2 text-amber-300 font-bold text-xs">
-          <Sparkles size={15} />
+          <CheckCircle2 size={15} className="text-emerald-400" />
           <span>Automated Workspace Provisioning Workflow</span>
         </div>
         <p className="text-xs text-slate-300 leading-relaxed">

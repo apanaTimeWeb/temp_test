@@ -9,7 +9,7 @@ import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogConte
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import { AlertTriangle,Building2,Mail,MessageSquare,Radio,Send,ShieldAlert,Sparkles,X } from 'lucide-react';
+import { AlertTriangle,Building2,Mail,MessageSquare,Radio,Send,ShieldAlert,X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { UseFormReturn } from 'react-hook-form';
 
@@ -108,7 +108,7 @@ export function AdminCommunicationNoticeModal({
             <div className="rounded-xl border border-rose-500/30 bg-rose-950/20 p-3.5 space-y-2">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-rose-300 flex items-center gap-1.5">
-                  <Sparkles size={13} className="text-rose-400" />
+                  <AlertTriangle size={13} className="text-rose-400" />
                   Quick Broadcast Presets (1-क्लिक टेम्पलेट्स)
                 </span>
                 <span className="text-[11px] text-slate-400">Click to autofill notice</span>

@@ -1,6 +1,6 @@
 'use client';
 
-import { Package, Building2, Users, Edit3, Shield, MessageSquare, Check, Sparkles } from 'lucide-react';
+import { Package, Building2, Users, Edit3, Shield, MessageSquare, Check } from 'lucide-react';
 import { formatSuperadminSubscriptionsMajorPreviewCurrency } from '@/app/frontend_superadmin/superadmin_plans/plans_pricing_catalog/utils/SuperadminPlansPricingCatalogFormatters';
 import type { SuperadminSubscriptionPlan } from '@/app/frontend_superadmin/superadmin_plans/plans_pricing_catalog/types/SuperadminPlansPricingCatalogTypes';
 
@@ -56,7 +56,7 @@ export default function SuperadminPlansPricingCatalogTierCards({
           >
             {isPop && (
               <span className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-indigo-600 to-indigo-500 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
-                <Sparkles size={11} />
+                <Check size={11} />
                 {t('COPY.MOST_POPULAR')}
               </span>
             )}

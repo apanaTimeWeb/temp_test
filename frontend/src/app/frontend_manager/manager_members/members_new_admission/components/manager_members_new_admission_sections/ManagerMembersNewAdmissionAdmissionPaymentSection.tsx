@@ -3,7 +3,7 @@
 import { MANAGER_ADMISSION_PAYMENT_MODE_OPTIONS } from '@/app/frontend_manager/manager_members/members_new_admission/config/manager_members_new_admission_options';
 import type { ManagerMembersNewAdmissionAdmissionPaymentSectionProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
 import { SearchableCombobox } from '@/components/ui/combobox/SearchableCombobox';
-import { AlertCircle,Calendar,IndianRupee,Info,MessageSquare,ShieldCheck,Sparkles,Tag } from 'lucide-react';
+import { AlertCircle,Calendar,IndianRupee,Info,MessageSquare,ShieldCheck,Tag } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
@@ -54,7 +54,7 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
           <h2 id="manager-students-admission-payment" className="mgr-section-title">{tManagerUi('fee_payment')}</h2>
           {effectiveMonthlyRate > 0 && (
             <p className="text-xs text-primary font-medium flex items-center gap-1 mt-0.5">
-              <Sparkles size={13} />
+              <IndianRupee size={13} />
               <span>Dynamic Plan Rates calculated from Shift Base: <strong>₹{effectiveMonthlyRate} / mo</strong></span>
             </p>
           )}
@@ -468,7 +468,7 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
               </div>
 
               <div className="flex items-center gap-2 text-xs text-amber-300/90 pt-1">
-                <Sparkles size={14} className="text-amber-400 shrink-0" />
+                <Tag size={14} className="text-amber-400 shrink-0" />
                 <span>
                   <strong>Auto-Creates Payment Promise:</strong> Saving admission will automatically record this ₹{balanceDue.toLocaleString('en-IN')} promise into Finance › Payment Promises with automatic due date alerts.
                 </span>

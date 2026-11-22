@@ -4,7 +4,7 @@ import {
 MANAGER_GROUP_SEAT_CLUSTERS,
 autoAllocateAdjacentSeats,
 } from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionAdjacentSeats';
-import { Armchair,CheckCircle2,LayoutList,Plus,SlidersHorizontal,Sparkles,Users,Users2,X } from 'lucide-react';
+import { Armchair,CheckCircle2,LayoutList,Plus,SlidersHorizontal,Users,Users2,X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { ManagerMembersGroupAdmissionCardView } from './ManagerMembersGroupAdmissionCardView';
@@ -270,7 +270,7 @@ export function ManagerMembersGroupAdmissionManualModal({
               className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shrink-0"
               title="Allocate contiguous adjacent seats for all students in this batch"
             >
-              <Sparkles size={14} />
+              <Users size={14} />
               <span>1-Click Auto Assign Adjacent Seats</span>
             </button>
           </div>

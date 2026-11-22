@@ -2,7 +2,7 @@
 /** Responsibility: Superadmin Security Password Policy Panels; full interactive management of password complexity, expiration, history, modern hashing algorithms (Argon2id/bcrypt), and strength evaluation. */
 import { useState } from 'react';
 import { useSuperadminSecurityPasswordPolicyValidationMessage } from '@/app/frontend_superadmin/superadmin_security/security_password_policy/hooks/useSuperadminSecurityPasswordPolicyValidationMessage';
-import { KeyRound, Calendar, ShieldCheck, Cpu, History, CheckCircle2, Sparkles } from 'lucide-react';
+import { KeyRound, Calendar, ShieldCheck, Cpu, History, CheckCircle2 } from 'lucide-react';
 import type { SuperadminSecurityPolicyPanelsProps } from '@/app/frontend_superadmin/superadmin_security/security_password_policy/types/SuperadminSecurityPasswordPolicyPolicyPanelsComponentTypes';
 import SuperadminSecurityPasswordStrengthEvaluator from '@/app/frontend_superadmin/superadmin_security/security_password_policy/components/SuperadminSecurityPasswordStrengthEvaluator';
 
@@ -34,7 +34,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
           </p>
         </div>
         <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-xs font-semibold text-indigo-300 shrink-0">
-          <Sparkles size={13} />
+          <ShieldCheck size={13} />
           NIST 800-63B Compliant
         </span>
       </div>

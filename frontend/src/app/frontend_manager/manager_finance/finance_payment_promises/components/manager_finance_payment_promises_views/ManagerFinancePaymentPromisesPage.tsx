@@ -5,7 +5,7 @@ import { useManagerFinancePaymentPromisesConfirm } from '@/app/frontend_manager/
 import { MANAGER_FINANCE_PAYMENT_PROMISE_SAMPLE_FIXTURES,type ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
 import type { ManagerFinancePaymentPromisesRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_payment_promises/types/ManagerFinancePaymentPromisesComponentTypes';
 import { sanitizeManagerPaymentPromisesCsvCell } from '@/app/frontend_manager/manager_finance/finance_payment_promises/utils/ManagerFinancePaymentPromisesCsv';
-import { BellRing,Download,Plus,Printer,Search,X } from 'lucide-react';
+import { BellRing,Download,MessageSquare,Plus,Printer,Search,X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useMemo,useState } from 'react';
@@ -229,6 +229,28 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
     setTimeout(() => setFeedbackToast(null), 4000);
   };
 
+  const handleBulkWhatsAppDue = () => {
+    if (dueTodayPromises.length === 0) return;
+    dueTodayPromises.forEach((promise, i) => {
+      setTimeout(() => {
+        const rawPhone = promise.phone || '9876543210';
+        let digits = rawPhone.replace(/\D/g, '');
+        if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+        const targetPhone = digits.length === 10 ? `91${digits}` : digits;
+        const majorAmount = promise.promisedAmount >= 1000 ? Math.round(promise.promisedAmount / 100) : promise.promisedAmount;
+        const msg = encodeURIComponent(
+          `Hello ${promise.studentName}, gentle reminder from Library regarding your committed fee payment of ₹${majorAmount.toLocaleString('en-IN')} due on ${promise.expectedDate}. Please clear dues to maintain seat access. Thank you!`
+        );
+        if (i === 0) {
+          const popup = window.open(`https://wa.me/${targetPhone}?text=${msg}`, '_blank', 'noopener,noreferrer');
+          if (popup) popup.opener = null;
+        }
+      }, i * 300);
+    });
+    setFeedbackToast(`Dispatched WhatsApp fee payment reminders to ${dueTodayPromises.length} students due today`);
+    setTimeout(() => setFeedbackToast(null), 4000);
+  };
+
   const handleCallPromise = (promise: ManagerFinancePaymentPromisesPaymentPromiseSample) => {
     const rawPhone = promise.phone || '9876543210';
     const cleanPhone = rawPhone.replace(/\D/g, '');
@@ -304,7 +326,16 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2 shrink-0 flex-wrap">
+            <button
+              type="button"
+              onClick={handleBulkWhatsAppDue}
+              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+              title="Send WhatsApp payment reminder to all students due today"
+            >
+              <MessageSquare size={13} />
+              <span>Bulk WhatsApp ({dueTodayPromises.length})</span>
+            </button>
             <button
               type="button"
               data-testid="manager-finance-filter-due-today-btn"

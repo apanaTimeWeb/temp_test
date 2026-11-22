@@ -3,7 +3,7 @@
 
 import { ADMIN_PROFILE_DEMO_ACCOUNT,ADMIN_PROFILE_DEMO_LOGIN_HISTORY,ADMIN_PROFILE_DEMO_SESSIONS,ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION } from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
 import type { AdminSettingsProfileReadOnlyPanelsProps } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
-import { Armchair,ArrowDown,ArrowUp,ArrowUpDown,Building2,Camera,CheckCircle2,Clock,Crown,FileText,Layers,LogOut,Mail,MessageSquare,MonitorSmartphone,Phone,Shield,ShieldCheck,Sparkles,Users,Zap } from 'lucide-react';
+import { Armchair,ArrowDown,ArrowUp,ArrowUpDown,Building2,Camera,CheckCircle2,Clock,Crown,FileText,Layers,LogOut,Mail,MessageSquare,MonitorSmartphone,Phone,Shield,ShieldCheck,Users,Zap } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo,useState } from 'react';
 import { toast } from 'sonner';
@@ -364,7 +364,7 @@ export default function AdminSettingsProfileReadOnlyPanels({ view }: AdminSettin
           {/* Included Features List */}
           <div className="relative mt-6 pt-5 border-t border-border">
             <h3 className="text-xs font-bold uppercase tracking-wider text-text-secondary mb-3 flex items-center gap-2">
-              <Sparkles size={14} className="text-amber-500" />
+              <CheckCircle2 size={14} className="text-amber-500" />
               Included Platform Capabilities
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">

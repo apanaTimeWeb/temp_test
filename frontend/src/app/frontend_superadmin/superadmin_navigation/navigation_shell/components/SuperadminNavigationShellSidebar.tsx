@@ -72,26 +72,26 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
             href={SUPERADMIN_NAVIGATION_ROUTES.dashboard_overview}
             className="flex items-center gap-3 w-full no-underline group"
           >
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-indigo-600 p-[1.5px] shadow-[0_0_18px_rgba(245,158,11,0.35)] transition-transform duration-300 group-hover:scale-105 shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 via-purple-600 to-cyan-500 p-[1.5px] shadow-[0_0_18px_rgba(99,102,241,0.4)] transition-transform duration-300 group-hover:scale-105 shrink-0">
               <div className="w-full h-full rounded-[10px] bg-neutral-950/90 flex items-center justify-center">
                 <BookOpen
                   size={18}
-                  strokeWidth={2.4}
-                  className="text-amber-400 drop-shadow-[0_0_6px_rgba(245,158,11,0.5)]"
+                  strokeWidth={2.2}
+                  className="text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]"
                 />
               </div>
             </div>
             <div className="flex flex-col min-w-0 justify-center">
-              <div className="flex items-center gap-1 leading-none">
-                <span className="text-[15px] font-black tracking-tight text-white group-hover:text-amber-300 transition-colors">
+              <div className="flex items-center leading-none">
+                <span className="text-[16px] font-extrabold tracking-tight text-white">
                   Library
                 </span>
-                <span className="text-[15px] font-black tracking-tight bg-gradient-to-r from-amber-400 via-orange-400 to-pink-500 bg-clip-text text-transparent">
+                <span className="text-[16px] bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent font-black ml-0.5">
                   OS
                 </span>
               </div>
               <div className="mt-1 flex items-center gap-1.5">
-                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-widest bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-widest bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
                   Super Admin
                 </span>
               </div>
@@ -104,7 +104,7 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
           <button
             type="button"
             onClick={toggleAll}
-            className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-semibold text-amber-400 hover:text-amber-300 hover:bg-amber-400/10 border border-amber-400/20 transition-all cursor-pointer"
+            className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-semibold text-indigo-400 hover:text-indigo-300 hover:bg-indigo-400/10 border border-indigo-400/20 transition-all cursor-pointer"
             title={allExpanded ? 'Collapse all sub-modules' : 'Expand all sub-modules'}
             aria-label={allExpanded ? 'Collapse all sub-modules' : 'Expand all sub-modules'}
           >

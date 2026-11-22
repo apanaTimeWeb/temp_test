@@ -3,7 +3,7 @@
 import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { LEGEND_ITEMS } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/constants/ManagerSeatsMatrixConstants';
 import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
-import { Armchair,Clock,Info,Sparkles } from 'lucide-react';
+import { Armchair,Clock,Info } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 interface ManagerSeatsMatrixGridViewProps {
@@ -119,7 +119,7 @@ export function ManagerSeatsMatrixGridView({
         <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3 text-xs">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
             <span className="text-[11px] font-bold uppercase tracking-wider text-secondary flex items-center gap-1.5 shrink-0">
-              <Sparkles size={13} className="text-primary" /> 4 Daily Shifts (M/A/E/N):
+              <Clock size={13} className="text-primary" /> 4 Daily Shifts (M/A/E/N):
             </span>
             <div className="flex flex-wrap items-center gap-2 font-medium">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface border border-border">

@@ -1,6 +1,6 @@
 'use client';
 /** Responsibility: Step A of Library Creation Wizard; captures organization identity, unique code, contact details, and location. */
-import { Building2, Sparkles, Globe, MapPin, Phone, Mail, Clock, ShieldCheck } from 'lucide-react';
+import { Building2, CheckCircle2, Globe, MapPin, Phone, Mail, Clock, ShieldCheck } from 'lucide-react';
 import type { LibraryOrganizationDetails } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesCreateAccountTypes';
 
 interface StepOrganizationProps {
@@ -58,7 +58,7 @@ export default function SuperadminLibrariesCreateStepOrganization({
               onClick={generateUniqueCode}
               className="text-[11px] font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 cursor-pointer"
             >
-              <Sparkles size={11} />
+              <CheckCircle2 size={11} className="text-emerald-400" />
               <span>Auto-Generate</span>
             </button>
           </div>

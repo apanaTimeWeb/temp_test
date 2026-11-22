@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckCircle2, Coins, Handshake, Megaphone, Receipt, RotateCcw, Save, Send, Sparkles, UserX, ShieldCheck } from 'lucide-react';
+import { CheckCircle2, Coins, Handshake, Megaphone, Receipt, RotateCcw, Save, Send, UserX, ShieldCheck } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React, { useRef, useState } from 'react';
 import { toast } from 'sonner';

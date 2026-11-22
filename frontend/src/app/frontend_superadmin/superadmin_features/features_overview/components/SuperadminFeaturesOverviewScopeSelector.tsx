@@ -1,6 +1,6 @@
 // RESPONSIBILITY: Tenant & Branch scope selector with governance context banner and quick bulk controls.
 import React from 'react';
-import { Building2, GitBranch, Shield, Sparkles, CheckCheck, Ban, RotateCcw } from 'lucide-react';
+import { Building2, GitBranch, Shield, CheckCheck, Ban, RotateCcw } from 'lucide-react';
 import type { MockTenantOption } from '@/app/frontend_superadmin/superadmin_features/features_overview/mocks/fixtures/superadmin_features_overview.fixtures';
 
 interface ScopeSelectorProps {
@@ -86,7 +86,7 @@ export default function SuperadminFeaturesOverviewScopeSelector({
           ) : (
             <div className="flex flex-wrap items-center gap-2">
               <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold shadow-xs">
-                <Sparkles size={14} /> Scope: {selectedTenant?.name} [{selectedTenant?.planTier} Tier]
+                <Shield size={14} /> Scope: {selectedTenant?.name} [{selectedTenant?.planTier} Tier]
                 {selectedBranch ? ` • Branch: ${selectedBranch.name}` : ' • All Branches'}
               </span>
 

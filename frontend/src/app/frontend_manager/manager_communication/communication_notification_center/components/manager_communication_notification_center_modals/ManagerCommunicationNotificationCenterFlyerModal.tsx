@@ -5,7 +5,7 @@ Check,
 Copy,
 FileText,
 Printer,
-Sparkles,
+Tag,
 X
 } from 'lucide-react';
 import { useState } from 'react';
@@ -358,7 +358,7 @@ export function ManagerCommunicationNotificationCenterFlyerModal({
 
               {/* Operations Callout */}
               <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300/90 flex items-start gap-2">
-                <Sparkles size={15} className="text-amber-400 shrink-0 mt-0.5" />
+                <Tag size={15} className="text-amber-400 shrink-0 mt-0.5" />
                 <p className="text-[11px] leading-relaxed">
                   <strong>Noticeboard Tip:</strong> Word में टाइप करने की आवश्यकता नहीं है। &apos;Print A4 Flyer&apos; दबाकर सीधे प्रिंटर से निकालें और लाइब्रेरी के मुख्य द्वार अथवा नोटिस बोर्ड पर लगाएं।
                 </p>

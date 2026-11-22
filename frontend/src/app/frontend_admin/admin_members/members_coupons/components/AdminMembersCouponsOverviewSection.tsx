@@ -9,7 +9,7 @@ import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import { format,parseISO } from 'date-fns';
 import { enIN,hi } from 'date-fns/locale';
-import { Download,FileSpreadsheet,Plus,Printer,Search,Sparkles,Tag } from 'lucide-react';
+import { Download,FileSpreadsheet,Plus,Printer,Search,Tag } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo,useState } from 'react';
 import { toast } from 'sonner';
@@ -289,7 +289,7 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
             className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs font-semibold text-purple-300 hover:text-white hover:bg-purple-500/20 transition-all disabled:cursor-not-allowed disabled:opacity-40"
             title="Generate & Print Coupon Flyers"
           >
-            <Sparkles size={14} className="text-purple-400" />
+            <Tag size={14} className="text-purple-400" />
             <span>Coupon Flyers</span>
           </button>
           <button

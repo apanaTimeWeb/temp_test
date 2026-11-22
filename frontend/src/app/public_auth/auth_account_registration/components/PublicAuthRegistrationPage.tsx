@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { BookOpen, Eye, EyeOff, Sparkles, User, Building, Mail, Phone, Lock, CheckCircle2 } from 'lucide-react';
+import { BookOpen, Eye, EyeOff, User, Building, Mail, Phone, Lock, CheckCircle2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { PublicAuthRegistrationApiError, getPublicAuthRegistrationApiErrorMessage } from '@/app/public_auth/auth_account_registration/api/PublicAuthRegistrationApi';
 import { PUBLIC_AUTH_REGISTRATION_URLS } from '@/app/public_auth/auth_account_registration/config/public_auth_registration_url_config';
@@ -203,7 +203,7 @@ export default function PublicAuthRegistrationPage() {
             </span>
           </div>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-xs font-semibold text-indigo-300">
-            <Sparkles size={12} className="text-cyan-400" />
+            <CheckCircle2 size={12} className="text-cyan-400" />
             Empowering Modern Indian Study Libraries
           </span>
         </div>

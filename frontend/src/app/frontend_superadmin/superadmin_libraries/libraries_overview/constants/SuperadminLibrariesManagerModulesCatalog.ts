@@ -1,7 +1,7 @@
 // RESPONSIBILITY: Define the catalog of feature modules that can be delegated or enabled for branch managers.
 import {
   QrCode, Armchair, Key, CreditCard, Calculator, MessageSquare,
-  FileText, Users, LifeBuoy, Sparkles
+  FileText, Users, LifeBuoy, Layers
 } from 'lucide-react';
 import type { ElementType } from 'react';
 
@@ -83,7 +83,7 @@ export const SUPERADMIN_MANAGER_MODULES_CATALOG: SuperadminManagerModuleDefiniti
     key: 'id_card',
     name: 'ID Card Generator with Barcode',
     description: '1-click customizable student identification card rendering and printing.',
-    icon: Sparkles,
+    icon: Layers,
     category: 'CRM',
     defaultOn: true,
   },

@@ -10,7 +10,7 @@ export default function ModuleLoading() {
   return (
     <SuperadminPageLoader
       size="md"
-      icon="sparkles"
+      icon="layers"
       variant="contra"
       label="Loading Feature Flags Overview..."
     />

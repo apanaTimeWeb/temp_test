@@ -14,7 +14,7 @@ ExternalLink,
 IndianRupee,
 Receipt,
 ShieldCheck,
-Sparkles,
+Gift,
 User,
 X
 } from 'lucide-react';
@@ -223,7 +223,7 @@ export function ManagerMembersReferralBonusApplyRenewalModal({
 
             <div className="flex items-center justify-between text-xs text-emerald-400 font-semibold">
               <span className="flex items-center gap-1.5">
-                <Sparkles size={13} className="text-emerald-400" />
+                <Gift size={13} className="text-emerald-400" />
                 <span>Referral Bonus Deduction</span>
               </span>
               <span className="font-mono">-₹{discountAmount.toLocaleString('en-IN')}</span>

@@ -4,19 +4,7 @@ import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { MANAGER_ACCOUNTING_SAMPLE_ASSETS } from '@/app/frontend_manager/manager_accounts_assets/assets_register/mocks/manager_assets_register_fixtures/ManagerAssetsRegisterAssetSampleFixtures';
 import { SearchableCombobox,type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-AlertTriangle,
-Building2,
-Calendar,
-CheckCircle2,
-ClipboardList,
-Clock,
-IndianRupee,
-ShieldAlert,
-Sparkles,
-Wrench,
-X,
-} from 'lucide-react';
+import {AlertTriangle, Building2, Calendar, CheckCircle2, ClipboardList, Clock, IndianRupee, ShieldAlert, Wrench, X} from 'lucide-react';
 import { useEffect,useMemo,useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -491,7 +479,7 @@ export function ManagerAssetsMaintenanceAddModal({
               }}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-xs font-semibold border hover:opacity-95 transition-all cursor-pointer disabled:opacity-50"
             >
-              {isSubmitting ? <ButtonLoader icon="wrench" /> : <Sparkles size={14} />}
+              {isSubmitting ? <ButtonLoader icon="wrench" /> : <Wrench size={14} />}
               <span>{isSubmitting ? 'Logging...' : 'Log Maintenance Order'}</span>
             </button>
           </div>

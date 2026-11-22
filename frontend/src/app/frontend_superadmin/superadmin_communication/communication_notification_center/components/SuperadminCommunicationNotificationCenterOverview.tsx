@@ -3,20 +3,7 @@
 // FLOW: SuperadminCommunicationNotificationCenterMain -> Overview -> list & actions.
 
 import { useMemo, useState } from 'react';
-import {
-  AlertTriangle,
-  CheckCircle2,
-  Clock,
-  Globe,
-  HelpCircle,
-  Mail,
-  MessageSquare,
-  PhoneCall,
-  RefreshCw,
-  Send,
-  ShieldAlert,
-  Sparkles,
-} from 'lucide-react';
+import { AlertTriangle, Building2, CheckCircle2, Clock, Globe, HelpCircle, Mail, MessageSquare, PhoneCall, RefreshCw, Send, ShieldAlert, Megaphone } from 'lucide-react';
 import { useSuperadminCommunicationNotificationCenterStore } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/state/useSuperadminCommunicationNotificationCenterStore';
 import {
   useSuperadminNotificationsQuery,
@@ -157,12 +144,12 @@ export function SuperadminCommunicationNotificationCenterOverview() {
                       {n.category === 'MAINTENANCE_ALERT' && <Clock className="w-4 h-4 text-amber-400" />}
                       {n.category === 'SYSTEM_OUTAGE_NOTIFICATION' && <AlertTriangle className="w-4 h-4 text-rose-400" />}
                       {n.category === 'SECURITY_ALERT' && <ShieldAlert className="w-4 h-4 text-purple-400" />}
-                      {n.category === 'WELCOME_MESSAGE' && <Sparkles className="w-4 h-4 text-emerald-400" />}
+                      {n.category === 'WELCOME_MESSAGE' && <Send className="w-4 h-4 text-emerald-400" />}
                       {n.category === 'SUBSCRIPTION_EXPIRY_REMINDER' && <Clock className="w-4 h-4 text-amber-400" />}
                       {n.category === 'PAYMENT_REMINDER' && <Clock className="w-4 h-4 text-blue-400" />}
                       {n.category === 'FAILED_PAYMENT_NOTIFICATION' && <AlertTriangle className="w-4 h-4 text-rose-400" />}
                       {n.category === 'BRANCH_CREATION_CONFIRMATION' && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
-                      {n.category === 'PRODUCT_ANNOUNCEMENT' && <Sparkles className="w-4 h-4 text-purple-400" />}
+                      {n.category === 'PRODUCT_ANNOUNCEMENT' && <Megaphone className="w-4 h-4 text-purple-400" />}
                       {!['ADMIN_INVITATION', 'MAINTENANCE_ALERT', 'SYSTEM_OUTAGE_NOTIFICATION', 'SECURITY_ALERT', 'WELCOME_MESSAGE', 'SUBSCRIPTION_EXPIRY_REMINDER', 'PAYMENT_REMINDER', 'FAILED_PAYMENT_NOTIFICATION', 'BRANCH_CREATION_CONFIRMATION', 'PRODUCT_ANNOUNCEMENT'].includes(n.category) && (
                         <HelpCircle className="w-4 h-4 text-slate-400" />
                       )}
@@ -182,7 +169,7 @@ export function SuperadminCommunicationNotificationCenterOverview() {
                           </span>
                         ) : (
                           <span className="text-2xs px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 flex items-center gap-1 font-semibold">
-                            <Sparkles className="w-3 h-3" /> {n.targetAccount?.name ?? 'Account-Specific'}
+                            <Building2 className="w-3 h-3" /> {n.targetAccount?.name ?? 'Account-Specific'}
                           </span>
                         )}
                       </div>

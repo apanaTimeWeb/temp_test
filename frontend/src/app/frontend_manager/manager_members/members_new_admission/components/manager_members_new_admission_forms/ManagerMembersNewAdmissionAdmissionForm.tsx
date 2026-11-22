@@ -14,7 +14,7 @@ import { useManagerMembersNewAdmissionConfirm } from '@/app/frontend_manager/man
 import { useManagerMembersNewAdmissionUnsavedChangesGuard } from '@/app/frontend_manager/manager_members/members_new_admission/hooks/useManagerMembersNewAdmissionUnsavedChangesGuard';
 import type { DynamicPlanOption } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
 import { calculateAdmissionFee,getLibraryPricingConfig,type LibraryPricingConfig } from '@/lib/pricing/libraryPricingEngine';
-import { ArrowLeft,Sparkles,X } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, X } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect,useMemo,useState } from 'react';
@@ -305,7 +305,7 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
             {conversionOrigin && (
               <div className="mt-3 p-3.5 rounded-xl bg-indigo-500/15 border border-indigo-500/35 flex items-center justify-between text-xs text-indigo-300">
                 <div className="flex items-center gap-2">
-                  <Sparkles size={16} className="text-indigo-400 shrink-0" />
+                  <ShieldCheck size={16} className="text-indigo-400 shrink-0" />
                   <span>
                     Converted from Enquiry <strong>#{conversionOrigin.enquiryId}</strong>: Information pre-filled for <strong>{conversionOrigin.name}</strong>.
                   </span>

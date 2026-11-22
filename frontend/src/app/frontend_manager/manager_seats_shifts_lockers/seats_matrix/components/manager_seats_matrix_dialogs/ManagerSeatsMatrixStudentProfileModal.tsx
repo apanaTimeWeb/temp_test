@@ -1,19 +1,6 @@
 'use client';
 
-import {
-Armchair,
-Calendar,
-CheckCircle2,
-Clock,
-ExternalLink,
-GraduationCap,
-MessageCircle,
-Phone,
-ShieldCheck,
-Sparkles,
-X,
-ZoomIn,
-} from 'lucide-react';
+import {Armchair, Calendar, CheckCircle2, Clock, ExternalLink, GraduationCap, MessageCircle, Phone, ShieldCheck, X, ZoomIn} from 'lucide-react';
 import { useEffect,useState } from 'react';
 import { MANAGER_SEATS_MATRIX_ROUTES } from '../../config/manager_seats_matrix.url_config';
 import { REGISTERED_STUDENT_CANDIDATES } from '../../constants/ManagerSeatsMatrixConstants';
@@ -253,7 +240,7 @@ export function ManagerSeatsMatrixStudentProfileModal({
                     {maskedPhone}
                   </p>
                   <p className="text-[11px] text-emerald-400 flex items-center gap-1 mt-0.5">
-                    <Sparkles size={11} /> Auto Reminders Enabled
+                    <CheckCircle2 size={11} /> Auto Reminders Enabled
                   </p>
                 </div>
               </div>

@@ -2,7 +2,7 @@
 
 import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import type { MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS } from '@/app/frontend_manager/manager_finance/finance_subscriptions/hooks/ManagerFinanceSubscriptionsDemoRepository';
-import { Calendar,RefreshCw,Sparkles,User,X } from 'lucide-react';
+import { Calendar,RefreshCw,User,X } from 'lucide-react';
 import React,{ useEffect,useState } from 'react';
 
 export type SubscriptionRecord = (typeof MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS)[0];
@@ -212,7 +212,7 @@ export default function ManagerFinanceSubscriptionsRenewModal({
             </div>
             <div>
               <span className="text-secondary flex items-center gap-1">
-                <Sparkles size={12} className="text-emerald-500" /> New Expiry Date
+                <Calendar size={12} className="text-emerald-500" /> New Expiry Date
               </span>
               <span className="font-bold text-emerald-600 dark:text-emerald-400 mt-0.5 block">
                 {formatDate(newEndDate)}

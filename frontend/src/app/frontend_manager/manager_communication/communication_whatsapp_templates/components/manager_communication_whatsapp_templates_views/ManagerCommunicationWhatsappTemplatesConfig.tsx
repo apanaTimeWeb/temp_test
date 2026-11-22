@@ -1,5 +1,5 @@
 import React from 'react';
-import { Coins, Handshake, Megaphone, Receipt, RotateCcw, Sparkles, UserX } from 'lucide-react';
+import { Coins, Handshake, Megaphone, Receipt, RotateCcw, UserX } from 'lucide-react';
 import type { TemplateMeta } from './ManagerCommunicationWhatsappTemplatesSidebar';
 
 export const VARIABLE_CHIP_CONFIGS: Record<string, { bg: string; text: string; border: string; hover: string; title: string }> = {
@@ -14,7 +14,7 @@ export const VARIABLE_CHIP_CONFIGS: Record<string, { bg: string; text: string; b
 
 export const TEMPLATE_CONFIGS: Record<string, TemplateMeta> = {
   welcome: {
-    icon: <Sparkles size={16} />,
+    icon: <Megaphone size={16} />,
     conditionTag: 'Auto-API (1x)',
     conditionDesc: 'Auto-sent 1x via Server API on student admission',
     badge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25',

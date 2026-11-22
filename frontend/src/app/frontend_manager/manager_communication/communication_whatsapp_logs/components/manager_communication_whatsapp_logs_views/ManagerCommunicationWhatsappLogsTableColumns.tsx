@@ -1,6 +1,6 @@
 'use client';
 
-import { Clock, Eye, Server, MessageCircle, AlertCircle, CheckCheck, Send, Coins, Megaphone, Receipt, RotateCcw, Sparkles } from 'lucide-react';
+import { Clock, Eye, Server, MessageCircle, AlertCircle, CheckCheck, Send, Coins, Megaphone, Receipt, RotateCcw } from 'lucide-react';
 import type { NativeCellParams } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_table_parts/ManagerCommunicationWhatsappLogsNativeTable';
 import type { WaLog } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/hooks/ManagerCommunicationWhatsappLogsDemoRepository';
 import { maskManagerWhatsappLogsPhone } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/utils/ManagerCommunicationWhatsappLogsUtilities';

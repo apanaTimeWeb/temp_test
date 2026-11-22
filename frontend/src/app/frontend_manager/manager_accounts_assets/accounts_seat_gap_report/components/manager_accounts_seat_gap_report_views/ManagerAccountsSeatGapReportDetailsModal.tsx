@@ -1,19 +1,7 @@
 'use client';
 
 import type { GapRow } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/hooks/ManagerAccountsSeatGapReportDemoRepository';
-import {
-AlertTriangle,
-Calendar,
-CheckCircle2,
-Clock,
-IndianRupee,
-Layers,
-Printer,
-Sparkles,
-Target,
-Wrench,
-X,
-} from 'lucide-react';
+import {AlertTriangle, Calendar, CheckCircle2, Clock, IndianRupee, Layers, Printer, Target, Wrench, X} from 'lucide-react';
 import { useEffect } from 'react';
 
 interface ManagerAccountsSeatGapReportDetailsModalProps {
@@ -156,7 +144,7 @@ export function ManagerAccountsSeatGapReportDetailsModal({
         {/* Recommendation Box */}
         <div className="p-3 rounded-xl bg-primary-subtle/40 border border-primary/20 space-y-1">
           <span className="text-xs font-semibold text-primary flex items-center gap-1.5">
-            <Sparkles size={13} /> Allocation Recommendation
+            <CheckCircle2 size={13} /> Allocation Recommendation
           </span>
           <p className="text-[11px] text-secondary leading-relaxed">
             Prioritize this seat for upcoming member admissions or temporary trial passes to recover estimated daily revenue of ₹50.00/day.

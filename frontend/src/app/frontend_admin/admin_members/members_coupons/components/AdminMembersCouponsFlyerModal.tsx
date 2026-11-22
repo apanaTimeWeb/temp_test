@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Printable Coupon Flyers & Vouchers modal for marketing campaigns.
 
 import type { AdminCouponsCoupon } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
-import { Building2,Calendar,Check,Copy,Printer,Scissors,Sparkles,Tag,X } from 'lucide-react';
+import { Building2,Calendar,Check,Copy,Printer,Scissors,Tag,X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -116,7 +116,7 @@ export default function AdminMembersCouponsFlyerModal({
         <div className="flex items-center justify-between border-b border-slate-800/80 bg-slate-900/90 px-6 py-4.5">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-purple-500/30 bg-purple-500/10 text-purple-400">
-              <Sparkles size={20} />
+              <Tag size={20} />
             </div>
             <div>
               <h2 className="text-base sm:text-lg font-bold text-white tracking-tight">Promotional Coupon Flyers & Handout Cards</h2>
@@ -182,7 +182,7 @@ export default function AdminMembersCouponsFlyerModal({
                   <div>
                     <div className="flex items-center justify-between gap-2 border-b border-slate-800/80 pb-3 mb-3">
                       <span className="text-[11px] font-bold tracking-wider text-purple-400 uppercase flex items-center gap-1">
-                        <Sparkles size={11} className="text-purple-400" /> Smart Library
+                        <Tag size={11} className="text-purple-400" /> Smart Library
                       </span>
                       <span className="inline-flex items-center gap-1 rounded-full border border-purple-500/30 bg-purple-500/10 px-2 py-0.5 text-[10px] font-semibold text-purple-300">
                         <Building2 size={10} />

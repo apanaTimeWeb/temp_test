@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { BookOpen, Eye, EyeOff, ShieldCheck, Sparkles, CheckCircle2 } from 'lucide-react';
+import { BookOpen, Eye, EyeOff, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { PublicAuthPasswordResetApiError, getPublicAuthPasswordResetApiErrorMessage } from '@/app/public_auth/auth_password_reset/api/PublicAuthPasswordResetApi';
 import { PUBLIC_AUTH_PASSWORD_RESET_URLS } from '@/app/public_auth/auth_password_reset/config/public_auth_password_reset_url_config';

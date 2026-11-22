@@ -1,6 +1,6 @@
 'use client';
 // RESPONSIBILITY: Hero header and navigation controls for Role & Permission Management (Module 04).
-import { ShieldCheck, Plus, Users, KeyRound, Sparkles, Layers } from 'lucide-react';
+import { ShieldCheck, Plus, Users, KeyRound, Layers } from 'lucide-react';
 
 interface SuperadminRolesOverviewHeaderProps {
   activeTab: 'roles_matrix' | 'user_security';
@@ -36,7 +36,7 @@ export default function SuperadminRolesOverviewHeader({
               10 System & Branch Roles
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/15 text-purple-300 border border-purple-500/30 shadow-xs">
-              <Sparkles size={12} className="text-purple-400" /> Multi-Tenant Scoped
+              <ShieldCheck size={12} className="text-purple-400" /> Multi-Tenant Scoped
             </span>
           </div>
 

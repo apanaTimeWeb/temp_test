@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Database, Server, Cpu, HardDrive, RefreshCw, Sliders, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Database, Server, Cpu, HardDrive, RefreshCw, Sliders, CheckCircle2 } from 'lucide-react';
 import { SUPERADMIN_SYSTEM_HEALTH_DATABASE_FIXTURE, SUPERADMIN_SYSTEM_HEALTH_INFRA_FIXTURE } from '@/app/frontend_superadmin/superadmin_system/system_health_overview/mocks/fixtures/SuperadminSystemHealthOverviewMockFixtures';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
@@ -128,7 +128,7 @@ export default function SuperadminSystemHealthOverviewInfrastructure() {
               disabled={optimizingDb}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
             >
-              <Sparkles size={12} className={optimizingDb ? 'animate-spin' : ''} />
+              <RefreshCw size={12} className={optimizingDb ? 'animate-spin' : ''} />
               <span>{optimizingDb ? 'Optimizing...' : 'Optimize Pool'}</span>
             </button>
           </div>

@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Search input and multi-dimensional filter bar for notification overview with Cyber-Luxury styling.
 // FLOW: Overview -> OverviewFilters -> update filter state.
 
-import { Filter, Globe, RotateCcw, Search, Sparkles } from 'lucide-react';
+import { Filter, Globe, RotateCcw, Search } from 'lucide-react';
 import type {
   NotificationChannel,
   NotificationDeliveryStatus,
@@ -84,7 +84,7 @@ export function SuperadminCommunicationNotificationCenterOverviewFilters({
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+            <Filter className="w-3.5 h-3.5 text-purple-400" />
             <span>Account-Specific</span>
           </button>
         </div>

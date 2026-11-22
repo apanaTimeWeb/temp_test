@@ -21,7 +21,7 @@ Printer,
 RotateCcw,
 Send,
 Smartphone,
-Sparkles,
+Tag,
 User
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -395,7 +395,7 @@ export function ManagerCommunicationNotificationCenterNotificationDraftForm() {
           {/* Clickable Quick Templates (Auto-fills Message Box) */}
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-[11px] font-semibold text-secondary flex items-center gap-1">
-              <Sparkles size={11} className="text-amber-400" />
+              <Tag size={11} className="text-amber-400" />
               <span>Quick templates:</span>
             </span>
             {QUICK_TEMPLATES.map((tmpl) => (

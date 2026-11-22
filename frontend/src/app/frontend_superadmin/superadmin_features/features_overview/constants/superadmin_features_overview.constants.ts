@@ -118,7 +118,7 @@ export const ALL_16_LIBRARY_MODULES: ModuleDefinition[] = [
     name: 'Advanced Analytics',
     description: 'Seat occupancy heatmaps, member churn predictions, revenue trends, and optimal shift allocation models.',
     category: 'developer',
-    iconName: 'Sparkles',
+    iconName: 'Zap',
     minPlanTier: 'Professional',
     apiEndpoints: ['/api/v1/library/analytics/heatmaps', '/api/v1/library/analytics/forecasting'],
   },

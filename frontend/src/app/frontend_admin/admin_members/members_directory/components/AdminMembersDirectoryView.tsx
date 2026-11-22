@@ -259,7 +259,7 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
                 disabled={branchFilteredMembers.length === 0}
                 className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-3.5 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/25 transition-all disabled:opacity-40 shadow-sm shadow-emerald-500/10"
               >
-                <MessageSquare size={14} className="text-emerald-400" /> Bulk WhatsApp
+                <MessageSquare size={14} className="text-emerald-400" /> Bulk WhatsApp ({branchFilteredMembers.length})
               </button>
               <button
                 type="button"

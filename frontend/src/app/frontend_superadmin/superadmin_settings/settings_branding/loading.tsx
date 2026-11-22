@@ -12,7 +12,7 @@ export default function ModuleLoading() {
   return (
     <SuperadminPageLoader
       size="md"
-      icon="sparkles"
+      icon="palette"
       variant="contra"
       label={t('COPY.LOADING_MODULE')}
     />

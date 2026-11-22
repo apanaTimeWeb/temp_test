@@ -4,7 +4,7 @@
  * Data-Flow: Parent form state -> SuperadminSettingsBrandingLivePreviewCards -> dynamic CSS variable consumption.
  */
 import type { FC } from 'react';
-import { CreditCard, ShieldCheck, Sparkles, Lock, CheckCircle2 } from 'lucide-react';
+import { CreditCard, ShieldCheck, Lock, CheckCircle2 } from 'lucide-react';
 
 interface SuperadminSettingsBrandingLivePreviewCardsProps {
   libraryName: string;
@@ -188,7 +188,7 @@ export const SuperadminSettingsBrandingLivePreviewCards: FC<SuperadminSettingsBr
                 |||||| | |||| || |||||
               </div>
               <span className="text-[10px] font-bold text-indigo-300 uppercase tracking-widest flex items-center gap-1">
-                <Sparkles size={11} className="text-amber-400" />
+                <CheckCircle2 size={11} className="text-amber-400" />
                 VERIFIED PASS
               </span>
             </div>

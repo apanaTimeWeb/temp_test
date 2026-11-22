@@ -27,7 +27,7 @@ import {
   TrendingUp,
   Database,
   Key,
-  Sparkles,
+  Tag,
   Wrench,
   Download,
   Plus,
@@ -373,7 +373,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
       case 'Account access issue':
       case 'Account': return <Key size={13} className="text-amber-400" />;
       case 'Data correction request': return <Database size={13} className="text-rose-400" />;
-      case 'Feature request': return <Sparkles size={13} className="text-teal-400" />;
+      case 'Feature request': return <Tag size={13} className="text-teal-400" />;
       case 'Bug report':
       case 'Bug': return <Bug size={13} className="text-rose-400" />;
       case 'Security complaint': return <ShieldAlert size={13} className="text-red-400" />;

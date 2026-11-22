@@ -8,7 +8,7 @@ import {
   AlertTriangle,
   Globe,
   RefreshCw,
-  Sparkles,
+  Building2,
 } from 'lucide-react';
 import { useSuperadminCommunicationNotificationCenterStore } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/state/useSuperadminCommunicationNotificationCenterStore';
 import { useRetryNotificationMutation } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/hooks/useSuperadminCommunicationNotificationCenterQueries';
@@ -120,7 +120,7 @@ export function SuperadminCommunicationNotificationCenterDetailModal() {
               </span>
             ) : (
               <span className="text-purple-300 font-semibold flex items-center gap-1.5 mt-1">
-                <Sparkles className="w-3.5 h-3.5 text-purple-400" /> {selectedNotification.targetAccount?.name ?? 'Specific Account'}
+                <Building2 className="w-3.5 h-3.5 text-purple-400" /> {selectedNotification.targetAccount?.name ?? 'Specific Account'}
               </span>
             )}
           </div>

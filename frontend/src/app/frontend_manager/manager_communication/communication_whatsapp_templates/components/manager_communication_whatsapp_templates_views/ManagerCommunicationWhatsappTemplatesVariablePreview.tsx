@@ -1,23 +1,6 @@
 'use client';
 
-import {
-AlertCircle,
-AlertTriangle,
-Armchair,
-BookOpen,
-Calendar,
-Check,
-CheckCheck,
-CheckCircle2,
-Copy,
-Eye,
-IndianRupee,
-MapPin,
-RotateCcw,
-SlidersHorizontal,
-User,
-Wand2
-} from 'lucide-react';
+import {AlertCircle, AlertTriangle, Armchair, BookOpen, Calendar, Check, CheckCheck, CheckCircle2, Copy, Eye, IndianRupee, MapPin, RotateCcw, SlidersHorizontal, User} from 'lucide-react';
 import React,{ useMemo,useState } from 'react';
 import { toast } from 'sonner';
 
@@ -436,7 +419,7 @@ export const ManagerCommunicationWhatsappTemplatesVariablePreview: React.FC<
               onClick={handleFixAliases}
               className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 text-xs font-semibold cursor-pointer shrink-0 transition-colors"
             >
-              <Wand2 size={13} />
+              <CheckCheck size={13} />
               <span>Auto-Fix All Aliases</span>
             </button>
           )}

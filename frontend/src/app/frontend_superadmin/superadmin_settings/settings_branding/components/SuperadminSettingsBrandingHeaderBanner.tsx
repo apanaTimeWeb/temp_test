@@ -1,6 +1,6 @@
 'use client';
 import type { FC } from 'react';
-import { Palette, Sparkles } from 'lucide-react';
+import { Palette } from 'lucide-react';
 
 interface SuperadminSettingsBrandingHeaderBannerProps {
   title: string;
@@ -16,7 +16,7 @@ export const SuperadminSettingsBrandingHeaderBanner: FC<SuperadminSettingsBrandi
     <div className="pointer-events-none absolute -right-10 -bottom-10 h-36 w-36 rounded-full bg-purple-500/15 blur-3xl" />
     <div className="space-y-1.5 relative">
       <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/30 text-xs font-semibold text-purple-300">
-        <Sparkles size={12} className="text-purple-400" />
+        <Palette size={12} className="text-purple-400" />
         <span>Interactive White-Label Engine</span>
       </div>
       <h1 className="text-xl sm:text-2xl font-bold text-slate-100 flex items-center gap-3 tracking-tight">

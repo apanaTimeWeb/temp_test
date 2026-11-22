@@ -3,7 +3,7 @@
 import { ManagerMembersEnquiriesBulkWhatsAppItem } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesBulkWhatsAppItem';
 import { MANAGER_CRM_DEFAULT_WHATSAPP_TEMPLATES } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
 import type { ManagerMembersEnquiriesEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
-import { CheckCircle,Info,MessageCircle,RotateCcw,Sparkles,Users,X } from 'lucide-react';
+import { CheckCircle,Info,MessageCircle,RotateCcw,Users,X } from 'lucide-react';
 import { useEffect,useMemo,useState } from 'react';
 
 export interface ManagerMembersEnquiriesBulkWhatsAppModalProps {
@@ -126,7 +126,7 @@ export function ManagerMembersEnquiriesBulkWhatsAppModal({
               htmlFor="bulk-whatsapp-template-input"
               className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5"
             >
-              <Sparkles size={13} className="text-primary" />
+              <MessageCircle size={13} className="text-primary" />
               <span>Message Template (Use {'{name}'} for dynamic lead name)</span>
             </label>
             <div className="flex items-center gap-1.5 text-xs">

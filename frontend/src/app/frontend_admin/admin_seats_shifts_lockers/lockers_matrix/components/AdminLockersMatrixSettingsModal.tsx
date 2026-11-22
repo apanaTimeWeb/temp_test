@@ -1,7 +1,7 @@
 'use client';
 // RESPONSIBILITY: Locker monthly rent, refundable caution deposit, and key replacement policy configuration modal.
 
-import { AlertCircle,IndianRupee,KeyRound,Save,ShieldCheck,Sparkles,X } from 'lucide-react';
+import { AlertCircle,IndianRupee,KeyRound,Save,ShieldCheck,X } from 'lucide-react';
 import { useEffect,useState } from 'react';
 import { toast } from 'sonner';
 
@@ -202,7 +202,7 @@ export function AdminLockersMatrixSettingsModal({
           {/* Policy Summary Card */}
           <div className="rounded-xl border border-indigo-500/30 bg-indigo-500/5 p-4 space-y-2">
             <span className="text-xs font-semibold text-indigo-300 flex items-center gap-1.5">
-              <Sparkles size={13} /> Admission Receipt Formula
+              <KeyRound size={13} /> Admission Receipt Formula
             </span>
             <div className="text-xs text-slate-300 flex items-center justify-between border-t border-indigo-500/20 pt-2">
               <span>First Allotment Due (Rent + Security Deposit):</span>

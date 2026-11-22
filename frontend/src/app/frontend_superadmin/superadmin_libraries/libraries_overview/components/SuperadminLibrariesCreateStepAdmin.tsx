@@ -1,6 +1,6 @@
 'use client';
 /** Responsibility: Step B of Library Creation Wizard; provisions the main library admin account with zero-knowledge invitation tokens and mandatory MFA. */
-import { UserCheck, ShieldCheck, Mail, Phone, Lock, Sparkles, KeyRound } from 'lucide-react';
+import { CheckCircle2, UserCheck, ShieldCheck, Mail, Phone, Lock, KeyRound } from 'lucide-react';
 import type { LibraryMainAdminAccount } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesCreateAccountTypes';
 
 interface StepAdminProps {
@@ -48,7 +48,7 @@ export default function SuperadminLibrariesCreateStepAdmin({
             onClick={handleAutoFillFromOwner}
             className="text-[11px] font-bold text-purple-400 hover:text-purple-300 flex items-center gap-1 cursor-pointer"
           >
-            <Sparkles size={11} />
+            <CheckCircle2 size={11} className="text-emerald-400" />
             <span>Copy From Owner Details</span>
           </button>
         )}

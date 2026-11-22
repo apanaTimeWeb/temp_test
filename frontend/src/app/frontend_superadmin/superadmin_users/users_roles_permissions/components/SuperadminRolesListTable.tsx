@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Semantic accessible table listing all roles with single-line horizontal actions.
 import { useState, useMemo } from 'react';
 import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
-import { Shield, Copy, Trash2, Edit3, Lock, Users, Sparkles } from 'lucide-react';
+import { Shield, Copy, Trash2, Edit3, Lock, Users } from 'lucide-react';
 import type { RoleDefinition } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/types/SuperadminRolesPermissionsManagementTypes';
 
 interface SuperadminRolesListTableProps {
@@ -128,7 +128,7 @@ export default function SuperadminRolesListTable({
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                            <Sparkles size={10} /> Custom
+                            <Shield size={10} /> Custom
                           </span>
                         )}
                       </div>

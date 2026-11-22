@@ -3,7 +3,7 @@
 import { MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIG,MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/hooks/ManagerFinanceAutoSuspendDemoRepository';
 import type { ManagerFinanceAutoSuspendRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendComponentTypes';
 import type { ManagerFinanceAutoSuspendConfig as Config,ManagerFinanceAutoSuspendSuspendedStudent as SuspendedStudent } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendTypes';
-import { Ban,Download,Printer,QrCode,RotateCcw,Search,Settings,ShieldAlert,UserCheck,X } from 'lucide-react';
+import { Ban,Download,MessageSquare,Printer,QrCode,RotateCcw,Search,Settings,ShieldAlert,UserCheck,X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo,useState } from 'react';
 import { toast } from 'sonner';
@@ -32,6 +32,26 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
   const handleWhatsAppSentSuccess = (studentId: number) => {
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     setRemindedStudents((prev) => ({ ...prev, [studentId]: timeStr }));
+  };
+
+  const handleBulkWhatsAppSuspended = () => {
+    if (filtered.length === 0) return;
+    filtered.forEach((student, i) => {
+      setTimeout(() => {
+        const rawPhone = student.phone || '9876543210';
+        let clean = rawPhone.replace(/\D/g, '');
+        if (clean.length === 11 && clean.startsWith('0')) clean = clean.slice(1);
+        const targetPhone = clean.length === 10 ? `91${clean}` : clean;
+        const msg = encodeURIComponent(
+          `Namaste ${student.studentName} (ID: ${student.smartId}),\n\nOfficial notice from Library Administration: Your library seat ${student.seat} (${student.shift} Shift) is suspended due to overdue fee payment (${student.daysOverdue} days overdue).\n\nPlease clear pending dues to restore your seat access immediately.\n— Library Management`
+        );
+        if (i === 0) {
+          const popup = window.open(`https://wa.me/${targetPhone}?text=${msg}`, '_blank', 'noopener,noreferrer');
+          if (popup) popup.opener = null;
+        }
+      }, i * 300);
+    });
+    toast.success(`Dispatched WhatsApp suspension notices to ${filtered.length} suspended students`);
   };
 
   const handlePrint = () => {
@@ -379,10 +399,22 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
             )}
           </div>
 
-          <div className="text-xs text-secondary font-medium shrink-0 flex items-center gap-1.5">
-            <span>Showing</span>
-            <span className="font-bold text-primary">{filtered.length}</span>
-            <span>of {suspended.length} students</span>
+          <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
+            <button
+              type="button"
+              onClick={handleBulkWhatsAppSuspended}
+              disabled={filtered.length === 0}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              title="Send WhatsApp suspension notices to all filtered students"
+            >
+              <MessageSquare size={13} />
+              <span>Bulk WhatsApp ({filtered.length})</span>
+            </button>
+            <div className="text-xs text-secondary font-medium flex items-center gap-1.5">
+              <span>Showing</span>
+              <span className="font-bold text-primary">{filtered.length}</span>
+              <span>of {suspended.length} students</span>
+            </div>
           </div>
         </div>
 

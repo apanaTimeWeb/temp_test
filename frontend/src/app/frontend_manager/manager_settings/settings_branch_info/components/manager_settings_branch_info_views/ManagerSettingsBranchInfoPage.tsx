@@ -37,7 +37,7 @@ QrCode,
 Radio,
 Share2,
 ShieldCheck,
-Sparkles,
+CheckCircle2,
 Sun,
 User,
 Wifi,
@@ -221,7 +221,7 @@ export default function ManagerSettingsBranchInfoPage() {
 
                 {/* Facility Type (Purple) */}
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-purple-500/10 text-purple-300 font-medium border border-purple-500/25">
-                  <Sparkles size={11} className="text-purple-400" />
+                  <CheckCircle2 size={11} className="text-purple-400" />
                   {branchData.libraryType || 'Private Study Hub'}
                 </span>
 
@@ -592,7 +592,7 @@ export default function ManagerSettingsBranchInfoPage() {
 
             {/* Operational Impact Notice */}
             <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[10px] text-emerald-300/90 flex items-center gap-1.5 relative z-10">
-              <Sparkles size={11} className="text-emerald-400 shrink-0" />
+              <CheckCircle2 size={11} className="text-emerald-400 shrink-0" />
               <span>{t('wifi_operations_hint', 'Eliminates repeated Wi-Fi queries to branch manager.')}</span>
             </div>
           </div>

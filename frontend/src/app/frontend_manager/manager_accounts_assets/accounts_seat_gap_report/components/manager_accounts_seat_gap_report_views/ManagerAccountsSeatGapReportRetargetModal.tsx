@@ -10,7 +10,7 @@ Gift,
 Megaphone,
 Percent,
 Send,
-Sparkles,
+Tag,
 Target,
 X
 } from 'lucide-react';
@@ -315,7 +315,7 @@ export function ManagerAccountsSeatGapReportRetargetModal({
                   id: 'trial',
                   label: '2-Day Trial',
                   desc: 'Free trial pass',
-                  icon: Sparkles,
+                  icon: Tag,
                 },
                 {
                   id: 'percent',

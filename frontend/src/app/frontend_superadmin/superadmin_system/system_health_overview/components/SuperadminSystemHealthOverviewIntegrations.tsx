@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { AlertTriangle, Clock, Globe, RefreshCw, CheckCircle2, Play, Sparkles, Send } from 'lucide-react';
+import { AlertTriangle, Clock, Globe, RefreshCw, CheckCircle2, Play, Send } from 'lucide-react';
 import { SUPERADMIN_SYSTEM_HEALTH_CRON_JOBS, SUPERADMIN_SYSTEM_HEALTH_INTEGRATIONS } from '@/app/frontend_superadmin/superadmin_system/system_health_overview/mocks/fixtures/SuperadminSystemHealthOverviewMockFixtures';
 import { SUPERADMIN_SYSTEM_HEALTH_INTEGRATION_ICONS } from '@/app/frontend_superadmin/superadmin_system/system_health_overview/constants/SuperadminSystemHealthOverviewConstants';
 import { useTranslations } from 'next-intl';

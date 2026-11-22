@@ -7,22 +7,7 @@ formatWifiQrPayload,
 generateQrMatrix,
 generateQrSvgPath,
 } from '@/app/frontend_manager/manager_settings/settings_branch_info/utils/ManagerSettingsBranchInfoWifiQr';
-import {
-Check,
-Copy,
-Download,
-Edit3,
-Eye,
-EyeOff,
-Info,
-Printer,
-Radio,
-ShieldCheck,
-Smartphone,
-Sparkles,
-Wifi,
-X
-} from 'lucide-react';
+import {Check, Copy, Download, Edit3, Eye, EyeOff, Info, Printer, Radio, ShieldCheck, Smartphone, Wifi, X} from 'lucide-react';
 import React,{ useMemo,useRef,useState } from 'react';
 import { toast } from 'sonner';
 
@@ -242,7 +227,7 @@ export function ManagerSettingsBranchInfoWifiModal({
             {/* ── LEFT COLUMN (6 cols): Live Desk Standee Card Preview ── */}
             <div className="lg:col-span-6 flex flex-col items-center">
               <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400/90 mb-2 flex items-center gap-1.5 self-start">
-                <Sparkles size={12} />
+                <Wifi size={12} />
                 <span>Front Desk Acrylic Standee Preview</span>
               </span>
 

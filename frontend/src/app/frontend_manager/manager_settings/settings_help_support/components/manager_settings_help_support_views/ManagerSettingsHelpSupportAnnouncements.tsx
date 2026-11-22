@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertCircle,Calendar,Layers,Megaphone,Sparkles,Wrench } from 'lucide-react';
+import { AlertCircle,Calendar,Layers,Megaphone,Wrench } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { formatManagerHelpSupportCalendarDate } from '../../utils/ManagerSettingsHelpSupportDateFormatting';
 
@@ -27,7 +27,7 @@ export function ManagerSettingsHelpSupportAnnouncements({
   const getAnnouncementBadgeInfo = (ann: AnnouncementItem) => {
     if (ann.id === 'late-fees' || ann.tagKey.includes('new_feature')) {
       return {
-        icon: <Sparkles size={12} className="shrink-0 text-emerald-400" />,
+        icon: <Megaphone size={12} className="shrink-0 text-emerald-400" />,
         badgeClass: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
         cardBorder: 'border-l-4 border-l-emerald-500',
       };

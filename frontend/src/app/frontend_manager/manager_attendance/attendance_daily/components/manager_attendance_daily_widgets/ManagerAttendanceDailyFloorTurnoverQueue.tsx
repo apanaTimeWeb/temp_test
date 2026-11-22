@@ -5,7 +5,7 @@ Armchair,
 ArrowRightLeft,
 CheckCircle2,
 ShieldAlert,
-Sparkles
+Activity
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -113,7 +113,7 @@ export function ManagerAttendanceDailyFloorTurnoverQueue() {
         </div>
         <div className="flex items-center gap-3 rounded-lg border border-border bg-card p-3 shadow-sm">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-success-subtle text-success-text">
-            <Sparkles className="h-5 w-5" />
+            <Activity className="h-5 w-5" />
           </div>
           <div>
             <p className="text-xs text-text-secondary">{t('stat_recovered_fines')}</p>

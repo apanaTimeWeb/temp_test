@@ -1,6 +1,6 @@
 'use client';
 /** Responsibility: Superadmin Libraries Overview Header; renders the hero banner with the primary Create New Library Account CTA and roster export tools. */
-import { Building2, Sparkles, Download, FileSpreadsheet, Printer, ShieldCheck } from 'lucide-react';
+import { Building2, Download, FileSpreadsheet, Printer, ShieldCheck } from 'lucide-react';
 
 interface SuperadminLibrariesOverviewHeaderProps {
   onCreateNew: () => void;
@@ -80,7 +80,7 @@ export default function SuperadminLibrariesOverviewHeader({
             id="superadmin-create-library-btn"
             className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-500 text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-emerald-950/60 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
           >
-            <Sparkles size={16} className="text-emerald-200" />
+            <Building2 size={16} className="text-emerald-200" />
             <span>Create New Library Account</span>
             <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[10px] font-bold bg-white/20 text-white">
               SuperAdmin Only

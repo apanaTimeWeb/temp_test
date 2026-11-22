@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowLeft, BookOpen, Send, KeyRound, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, BookOpen, Send, KeyRound, CheckCircle2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { PublicAuthPasswordRecoveryApiError, getPublicAuthPasswordRecoveryApiErrorMessage } from '@/app/public_auth/auth_password_recovery/api/PublicAuthPasswordRecoveryApi';
 import { PUBLIC_AUTH_PASSWORD_RECOVERY_URLS } from '@/app/public_auth/auth_password_recovery/config/public_auth_password_recovery_url_config';
