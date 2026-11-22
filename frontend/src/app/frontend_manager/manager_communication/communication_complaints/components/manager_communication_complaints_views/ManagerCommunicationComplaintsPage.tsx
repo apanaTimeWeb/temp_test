@@ -215,6 +215,35 @@ export default function ManagerCommunicationComplaintsPage({
     toast.success('Complaints list exported to CSV successfully');
   };
 
+  
+  const handleExportExcel = () => {
+    const headers = ['ID', 'Title', 'Student', 'Phone', 'Description', 'Location/Seat', 'Status', 'Date', 'Resolved By'];
+    const rows = sortedComplaints.map((c) => [
+      c.id,
+      c.title,
+      c.student || 'Anonymous',
+      c.phone || '—',
+      c.description,
+      c.seatTag || 'General Area',
+      c.status,
+      c.date,
+      c.resolvedBy || '—',
+    ]);
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head>
+      <body><table><thead><tr>${headers.map((h) => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((cell) => `<td>${String(cell ?? '')}</td>`).join('')}</tr>`).join('')}</tbody></table></body></html>
+    `.trim();
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `complaints_${new Date().toISOString().slice(0, 10)}.xls`;
+    anchor.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success('Complaints list exported to Excel successfully');
+  };
+
   const handlePrint = () => {
     window.print();
   };
@@ -369,6 +398,8 @@ export default function ManagerCommunicationComplaintsPage({
           setPage(0);
         }}
         onExportCsv={handleExportCsv}
+        onExportExcel={handleExportExcel}
+        onPrint={handlePrint}
         onResetPage={() => setPage(0)}
       />
 

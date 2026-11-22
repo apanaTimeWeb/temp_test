@@ -175,10 +175,6 @@ export default function AdminEnquiriesTable({
                           </a>
                           <button
                             type="button"
-                            style={{ display: 'none' }}
-                          </button>
-                          <button
-                            type="button"
                             className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 transition-colors"
                             title="Chat on WhatsApp"
                             aria-label={`Chat with ${enquiry.name} on WhatsApp`}
@@ -226,6 +222,14 @@ export default function AdminEnquiriesTable({
                   <button type="button" className="inline-flex min-h-9 flex-1 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400" onClick={() => onSelectEnquiry(enquiry)}>
                     <Eye aria-hidden="true" size={14} strokeWidth={2} /> {t('VIEW_DETAILS')}
                   </button>
+                  <a
+                    href={`tel:${enquiry.phone.replace(/[^0-9+]/g, '')}`}
+                    className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-400 hover:bg-amber-500/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                    title={`Call ${enquiry.name}`}
+                    aria-label={`Call ${enquiry.name}`}
+                  >
+                    <PhoneCall aria-hidden="true" size={14} strokeWidth={2} /> Call
+                  </a>
                   <button
                     type="button"
                     className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"

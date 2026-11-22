@@ -18,6 +18,7 @@ Eye,
 FileSpreadsheet,
 Mail,
 MessageSquare,
+PhoneCall,
 Printer,
 Search,
 UserCheck,
@@ -558,6 +559,16 @@ export default function AdminStaffDirectoryViewSIDEBARNAVIGATIONSection({ model 
                         <td className="px-4 py-3">{getAdminStaffDirectoryLastActiveLabel(manager.lastActive, t)}</td>
                         <td className="px-4 py-3"><span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${ADMIN_STAFF_DIRECTORY_STATUS_BADGE_CLASSES[manager.status]}`}>{({ Active: t('STATUS_ACTIVE'), Suspended: t('STATUS_SUSPENDED'), Deactivated: t('STATUS_DEACTIVATED') } as const)[manager.status]}</span></td>
                           <td className="px-4 py-3"><div className="flex justify-end items-center gap-1.5">
+                            {/* Call Staff */}
+                            <a
+                              href={`tel:${manager.phone.replace(/[^0-9+]/g, '')}`}
+                              className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:border-amber-500/50 hover:text-white transition-all shadow-xs"
+                              title={`Call ${manager.name}`}
+                              aria-label={`Call ${manager.name}`}
+                            >
+                              <PhoneCall size={14} />
+                            </a>
+
                             {/* WhatsApp Staff */}
                             <a
                               href={`https://wa.me/91${manager.phone.replace(/\D/g, '').slice(-10)}?text=${encodeURIComponent(`Hello ${manager.name}, this is regarding Library Administration.`)}`}

@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertCircle,CheckCircle2,Clock,Download,Layers,Search,X } from 'lucide-react';
+import { AlertCircle,CheckCircle2,Clock,Download,FileSpreadsheet,Layers,Printer,Search,X } from 'lucide-react';
 import { MANAGER_COMMUNICATION_COMPLAINT_TABS } from '../../constants/ManagerCommunicationComplaintsComplaintConstants';
 import type {
 ManagerCommunicationComplaintsComplaint,
@@ -18,6 +18,8 @@ interface ManagerCommunicationComplaintsToolbarProps {
   hasActiveFilters: boolean;
   onResetFilters: () => void;
   onExportCsv: () => void;
+  onExportExcel?: () => void;
+  onPrint?: () => void;
   onResetPage: () => void;
 }
 
@@ -32,6 +34,8 @@ export function ManagerCommunicationComplaintsToolbar({
   hasActiveFilters,
   onResetFilters,
   onExportCsv,
+  onExportExcel,
+  onPrint,
   onResetPage,
 }: ManagerCommunicationComplaintsToolbarProps) {
   const TAB_CONFIG: Record<
@@ -153,8 +157,19 @@ export function ManagerCommunicationComplaintsToolbar({
           })}
         </div>
 
-        {/* Action Controls: Export CSV */}
+        {/* Action Controls: Export CSV, Excel & Print */}
         <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+          {onPrint && (
+            <button
+              type="button"
+              onClick={onPrint}
+              className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold h-10 px-3.5 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer"
+              title="Print Complaints"
+            >
+              <Printer size={13} />
+              <span>Print</span>
+            </button>
+          )}
           <button
             type="button"
             onClick={onExportCsv}
@@ -162,8 +177,19 @@ export function ManagerCommunicationComplaintsToolbar({
             title="Export Complaints CSV"
           >
             <Download size={13} />
-            <span>Export CSV</span>
+            <span>CSV</span>
           </button>
+          {onExportExcel && (
+            <button
+              type="button"
+              onClick={onExportExcel}
+              className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold h-10 px-3.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors cursor-pointer"
+              title="Export Complaints Excel"
+            >
+              <FileSpreadsheet size={13} />
+              <span>Excel</span>
+            </button>
+          )}
         </div>
       </div>
 

@@ -8,10 +8,12 @@ ArrowUpDown,
 CheckCircle,
 Eye,
 MessageSquare,
+PhoneCall,
 RefreshCw,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React from 'react';
+import { ManagerCommunicationComplaintsPagination } from './ManagerCommunicationComplaintsPagination';
 import type {
 ManagerCommunicationComplaintsComplaint,
 ManagerCommunicationComplaintsComplaintStatus,
@@ -230,6 +232,19 @@ export function ManagerCommunicationComplaintsTable({
                       </button>
                     )}
 
+                    {/* Call Student Action */}
+                    {complaint.phone && (
+                      <a
+                        href={`tel:${complaint.phone.replace(/[^0-9+]/g, '')}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="p-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors cursor-pointer inline-flex items-center justify-center"
+                        title={`Call student (${complaint.phone})`}
+                        aria-label={`Call student (${complaint.phone})`}
+                      >
+                        <PhoneCall size={13} />
+                      </a>
+                    )}
+
                     {/* WhatsApp Student Direct Action */}
                     <button
                       type="button"
@@ -259,50 +274,16 @@ export function ManagerCommunicationComplaintsTable({
         </tbody>
       </table>
 
-      {/* Pagination Footer */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-3 py-3 border-t border-border text-xs text-secondary">
-        <div>
-          Showing {totalRows === 0 ? 0 : startItem}–{endItem} of {totalRows} complaints
-        </div>
-        <div className="flex items-center gap-2">
-          <span>Rows per page:</span>
-          <select
-            value={pageSize}
-            onChange={(e) => {
-              setPageSize(Number(e.target.value));
-              setPage(0);
-            }}
-            className="mgr-select text-xs py-1 px-2"
-          >
-            {[5, 10, 20, 50].map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
-          <div className="flex items-center gap-1 ml-2">
-            <button
-              type="button"
-              disabled={effectivePage <= 0}
-              onClick={() => setPage((p) => Math.max(0, p - 1))}
-              className="px-2 py-1 rounded border border-border disabled:opacity-40 hover:bg-surface-hover cursor-pointer"
-            >
-              Previous
-            </button>
-            <span className="px-2 font-mono">
-              {effectivePage + 1} / {Math.max(1, pageCount)}
-            </span>
-            <button
-              type="button"
-              disabled={effectivePage + 1 >= pageCount}
-              onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
-              className="px-2 py-1 rounded border border-border disabled:opacity-40 hover:bg-surface-hover cursor-pointer"
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+      <ManagerCommunicationComplaintsPagination
+        totalRows={totalRows}
+        startItem={startItem}
+        endItem={endItem}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
+        effectivePage={effectivePage}
+        pageCount={pageCount}
+        setPage={setPage}
+      />
+     </div>
   );
 }
