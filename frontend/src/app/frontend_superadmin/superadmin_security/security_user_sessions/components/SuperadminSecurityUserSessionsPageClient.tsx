@@ -183,11 +183,10 @@ export default function SuperadminSecurityUserSessionsPageClient() {
         const isActive = params.value === 'Active';
         return (
           <span
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${
-              isActive
-                ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
-                : 'border-rose-500/30 bg-rose-500/10 text-rose-400'
-            }`}
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${isActive
+              ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+              : 'border-rose-500/30 bg-rose-500/10 text-rose-400'
+              }`}
           >
             <span className={`h-1.5 w-1.5 rounded-full ${isActive ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'}`} />
             {isActive ? t('COPY.STATUS_ACTIVE') : t('COPY.STATUS_REVOKED')}

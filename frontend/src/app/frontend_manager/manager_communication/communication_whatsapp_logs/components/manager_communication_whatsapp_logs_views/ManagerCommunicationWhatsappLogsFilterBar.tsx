@@ -1,6 +1,6 @@
 'use client';
 
-import { Filter, RotateCw, Search, X } from 'lucide-react';
+import { Filter, RotateCcw, Search, X } from 'lucide-react';
 import type { WaLog } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/hooks/ManagerCommunicationWhatsappLogsDemoRepository';
 
 interface ManagerCommunicationWhatsappLogsFilterBarProps {

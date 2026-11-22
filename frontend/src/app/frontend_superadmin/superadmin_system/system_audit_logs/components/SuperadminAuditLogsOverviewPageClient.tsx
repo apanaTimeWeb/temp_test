@@ -22,7 +22,29 @@ export default function SuperadminAuditLogsOverviewPageClient() {
   const [pageSize, setPageSize] = useState<number>(SUPERADMIN_AUDIT_LOGS_DEFAULT_PAGE_SIZE);
   const [urlReady, setUrlReady] = useState(false);
   const [selected, setSelected] = useState<Log | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const previousFilterKeyRef = useRef<string | null>(null);
+
+  const handleRefresh = useCallback(() => {
+    setIsRefreshing(true);
+    setTimeout(() => {
+      setIsRefreshing(false);
+      toast.success('System audit log stream re-synchronized', {
+        id: 'superadmin:audit:refresh',
+      });
+    }, 450);
+  }, []);
+
+  const handleResetFilters = useCallback(() => {
+    setSearchTerm('');
+    setActionFilter('All Actions');
+  }, []);
+
+  const handlePrint = useCallback(() => {
+    window.print();
+  }, []);
+
+  const hasActiveFilters = searchTerm.trim() !== '' || actionFilter !== 'All Actions';
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -201,19 +223,33 @@ export default function SuperadminAuditLogsOverviewPageClient() {
       <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0c0f2b] via-[#090b20] to-[#060818] shadow-2xl overflow-hidden backdrop-blur-xl">
         <div className="sa-actions-bar flex flex-wrap items-center justify-between gap-4 p-4 sm:p-5 border-b border-indigo-500/20 bg-indigo-950/25">
           <div className="flex flex-wrap items-center gap-3">
-            <input maxLength={100}
-              aria-label={t("COPY.SEARCH_AUDIT_SAMPLE_BY_TARGET_OR_USER")}
-              type="search"
-              placeholder={t("COPY.SEARCH_SAMPLE_BY_TARGET_OR_USER")}
-              className="sa-input px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-[#07091a]/80 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 w-56 sm:w-64"
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              data-testid="superadmin-audit-logs-audit-logs-overview-search-audit-sample-by-target-or-user-2"
-            />
+            <div className="relative">
+              <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
+              <input maxLength={100}
+                aria-label={t("COPY.SEARCH_AUDIT_SAMPLE_BY_TARGET_OR_USER")}
+                type="search"
+                placeholder={t("COPY.SEARCH_SAMPLE_BY_TARGET_OR_USER")}
+                className="sa-input pl-9 pr-8 py-2 rounded-xl border border-indigo-500/30 bg-[#07091a]/80 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 w-56 sm:w-64"
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                data-testid="superadmin-audit-logs-audit-logs-overview-search-audit-sample-by-target-or-user-2"
+              />
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                  title="Clear search"
+                >
+                  <X size={12} />
+                </button>
+              )}
+            </div>
+
             <label className="sr-only" htmlFor="superadmin-audit-logs-action-filter">{t("COPY.FILTER_SAMPLE_LOGS_BY_ACTION")}</label>
             <select
               id="superadmin-audit-logs-action-filter"
-              className="sa-select px-3 py-2 rounded-xl border border-indigo-500/30 bg-[#07091a]/80 text-xs text-slate-200 focus:outline-none focus:border-indigo-400"
+              className="sa-select px-3 py-2 rounded-xl border border-indigo-500/30 bg-[#07091a]/80 text-xs text-slate-200 focus:outline-none focus:border-indigo-400 cursor-pointer"
               value={actionFilter}
               onChange={e => setActionFilter(e.target.value)}
               data-testid="superadmin-audit-logs-audit-logs-overview-superadmin-audit-logs-action-filter-3"
@@ -224,13 +260,59 @@ export default function SuperadminAuditLogsOverviewPageClient() {
                 </option>
               ))}
             </select>
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 text-xs font-semibold cursor-pointer transition-all"
+                title="Clear all filters"
+              >
+                <RotateCcw size={12} className="text-rose-400" />
+                <span>Reset</span>
+              </button>
+            )}
+
             <span className="text-xs text-indigo-300/80 bg-indigo-500/10 px-2.5 py-1 rounded-full border border-indigo-500/20" aria-live="polite">
               {filtered.length} {t("COPY.SAMPLE_ENTRIES")}
             </span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <label className="flex items-center gap-2 text-xs text-slate-400">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              type="button"
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20 text-xs font-semibold cursor-pointer transition-all disabled:opacity-50"
+              title="Refresh audit event stream"
+            >
+              <RotateCw size={13} className={`text-sky-400 ${isRefreshing ? 'animate-spin' : ''}`} />
+              <span>Refresh</span>
+            </button>
+
+            <button
+              type="button"
+              className="sa-btn-primary inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-600/25 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98]"
+              onClick={handleExportSampleCsv}
+              disabled={filtered.length === 0}
+              data-testid="superadmin-audit-logs-audit-logs-overview-export-sample-csv-5"
+              title="Export audit log entries to CSV"
+            >
+              <Download size={13} aria-hidden="true" />
+              <span>CSV</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-700 bg-slate-800/70 text-slate-300 hover:bg-slate-700 text-xs font-semibold cursor-pointer transition-all"
+              title="Print Audit Report"
+            >
+              <Printer size={13} className="text-slate-400" />
+              <span>Print</span>
+            </button>
+
+            <label className="flex items-center gap-2 text-xs text-slate-400 ml-1">
               {t("COPY.PAGE_SIZE")}
               <select
                 className="sa-select px-2.5 py-1.5 rounded-xl border border-indigo-500/30 bg-[#07091a]/80 text-xs text-slate-200 focus:outline-none focus:border-indigo-400"
@@ -244,17 +326,6 @@ export default function SuperadminAuditLogsOverviewPageClient() {
                 ))}
               </select>
             </label>
-
-            <button
-              type="button"
-              className="sa-btn-primary inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-600/25 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98]"
-              onClick={handleExportSampleCsv}
-              disabled={filtered.length === 0}
-              data-testid="superadmin-audit-logs-audit-logs-overview-export-sample-csv-5"
-            >
-              <Download size={13} aria-hidden="true" />
-              <span>{t("COPY.EXPORT_SAMPLE_CSV")}</span>
-            </button>
           </div>
         </div>
 

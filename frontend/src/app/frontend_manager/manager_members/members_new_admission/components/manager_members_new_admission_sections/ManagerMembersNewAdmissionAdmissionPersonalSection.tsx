@@ -94,7 +94,7 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             </label>
             <div className="mgr-input-icon-wrap">
               <Phone size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input maxLength={30}
+              <input
                 id="admission-phone" {...register('phone', {
                   onChange: (e) => {
                     const clean = e.target.value.replace(/\D/g, '').slice(0, 10);
@@ -206,7 +206,7 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             </label>
             <div className="mgr-input-icon-wrap">
               <ShieldAlert size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input maxLength={30}
+              <input
                 id="admission-parent-phone" {...register('parentPhone', {
                   onChange: (e) => {
                     const clean = e.target.value.replace(/\D/g, '').slice(0, 10);

@@ -730,7 +730,7 @@ export function AdminBlacklistFormDialog({ open, onOpenChange, onSubmit, isDemoM
             </div>
             <div>
               <label htmlFor="admin-blacklist-phone" className="admin-label">{t('PHONE_LABEL')}</label>
-              <input maxLength={30}
+              <input
                 id="admin-blacklist-phone"
                 {...register('phone', {
                   onChange: (e) => {
