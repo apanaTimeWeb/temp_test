@@ -45,5 +45,5 @@ export function FormatCompactCurrency(amountMinor: number, currencyCode: string,
   const currencyDivisor = currencySubunits(currencyCode);
   if (!currencyDivisor) return '—';
   if (!Number.isSafeInteger(amountMinor) || !/^[A-Z]{3}$/.test(currencyCode)) return '—';
-  try { return new Intl.NumberFormat(locale, { style: 'currency', currency: currencyCode, notation: 'compact', maximumFractionDigits: 1 }).format(amountMinor / (currencyDivisor)); } catch { return '—'; }
+  try { return new Intl.NumberFormat(locale, { style: 'currency', currency: currencyCode, notation: 'compact', minimumFractionDigits: 0, maximumFractionDigits: 1 }).format(amountMinor / (currencyDivisor)); } catch { return '—'; }
 }

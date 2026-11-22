@@ -154,7 +154,7 @@ export default function SuperadminDashboardOverviewKpiCard({
       </div>
 
       <div className="relative z-10 mt-3 sm:mt-4">
-        <p className="sa-kpi-value text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+        <p suppressHydrationWarning className="sa-kpi-value text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
           {displayValue || '—'}
         </p>
 
@@ -174,7 +174,7 @@ export default function SuperadminDashboardOverviewKpiCard({
           )}
 
           {(subtitle || (subtitleAmountMinor !== undefined && subtitleCurrencyCode)) && (
-            <span className="text-xs font-medium text-slate-400">{displaySubtitle}</span>
+            <span suppressHydrationWarning className="text-xs font-medium text-slate-400">{displaySubtitle}</span>
           )}
         </div>
 
