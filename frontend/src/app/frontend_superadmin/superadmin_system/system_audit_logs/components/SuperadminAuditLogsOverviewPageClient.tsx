@@ -1,45 +1,18 @@
 'use client';
 /** Responsibility: renders the superadmin_audit overview route UI; the module Main remains a thin composition boundary. */
-/** Data-Flow: canonical route -> SuperadminAuditLogsOverviewPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
 import SuperadminAuditLogsOverviewSemanticTable, { type SemanticColumnDef, type SemanticCellParams } from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/components/SuperadminAuditLogsOverviewSemanticTable';
 import { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import Link from 'next/link';
-import {
-  Eye,
-  Download,
-  ShieldCheck,
-  ScrollText,
-  Users,
-  AlertCircle,
-  PlusCircle,
-  Trash2,
-  ArrowUpRight,
-} from 'lucide-react';
+import { Download, ShieldCheck, ScrollText, AlertCircle, ArrowUpRight } from 'lucide-react';
 import { buildSuperadminAuditLogsSampleCsv } from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/utils/SuperadminAuditLogsOverviewExportUtilities';
 import SuperadminAuditLogsOverviewActionBadge from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/components/SuperadminAuditLogsOverviewActionBadge';
 import SuperadminAuditLogsOverviewDetailDrawer from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/components/SuperadminAuditLogsOverviewDetailDrawer';
+import SuperadminAuditLogsOverviewKpiCards from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/components/SuperadminAuditLogsOverviewKpiCards';
 import { SUPERADMIN_AUDIT_LOG_SAMPLE_FIXTURES } from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/mocks/fixtures/SuperadminAuditLogsOverviewAuditLogSampleMockFixtures';
 import { useTranslations } from 'next-intl';
 import { SUPERADMIN_AUDIT_LOGS_OVERVIEW_PAGE_CLIENT_ACTION_OPTIONS, SUPERADMIN_AUDIT_LOGS_PAGE_SIZE_OPTIONS, SUPERADMIN_AUDIT_LOGS_DEFAULT_PAGE_SIZE } from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/constants/SuperadminAuditLogsOverviewStaticConstants';
 import type { Log } from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/types/SuperadminAuditLogsOverviewPageClientComponentTypes';
 
-
-
-/** Derives a stable, non-index row identity for repeated interactive table controls. */
-function getSuperadminInteractiveTestIdSuffix(value: unknown): string {
-  const record = value && typeof value === 'object' ? value as Record<string, unknown> : {};
-  for (const field of ['id', 'uuid', 'recordId', 'userId', 'assetId', 'libraryId', 'planId', 'subscriptionId', 'transactionId', 'invoiceId', 'refundId', 'requestId', 'ruleId', 'messageId', 'noticeId', 'complaintId', 'entryId', 'backupId', 'enquiryId', 'studentId', 'memberId', 'branchId', 'scheduleId', 'logId', 'smartId', 'receiptNumber', 'ticketId', 'lockerId', 'seatNo', 'code', 'slug', 'key', 'name']) {
-    const candidate = record[field];
-    if (typeof candidate === 'string' || typeof candidate === 'number') return String(candidate);
-  }
-  return 'missing-domain-id';
-}
-
-/**
- * Renders the `superadmin_audit` view owned by `SuperadminAuditLogsOverviewPageClient`.
- * Owns local UI state for `actionFilter`, `searchTerm`, `pageIndex`, `pageSize`, `urlReady`, `selected` and related form/selection state.
- * Effect lifecycle boundaries are `[]`, `[actionFilter, pageIndex, pageSize, urlReady]`, `[actionFilter, searchTerm, urlReady]`; listeners/timers/focus are cleaned up by their owning effects.
- */
 export default function SuperadminAuditLogsOverviewPageClient() {
   const t = useTranslations('SUPERADMIN_AUDIT_LOGS');
   const [actionFilter, setActionFilter] = useState('All Actions');
@@ -50,15 +23,11 @@ export default function SuperadminAuditLogsOverviewPageClient() {
   const [selected, setSelected] = useState<Log | null>(null);
   const previousFilterKeyRef = useRef<string | null>(null);
 
-
-  
-
-  // Effect contract: keep local filter state synchronized with browser back/forward navigation and remove the listener on cleanup; dependency set [] (intentional mount-only effect) is the deliberate re-run boundary.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const initialAction = params.get('action') ?? 'All Actions';
     setActionFilter(SUPERADMIN_AUDIT_LOGS_OVERVIEW_PAGE_CLIENT_ACTION_OPTIONS.includes(initialAction) ? initialAction : 'All Actions');
-    setSearchTerm(''); // Free-text search can contain identifiers; keep it local and out of the URL.
+    setSearchTerm('');
     const parsedPage = Number.parseInt(params.get('page') ?? '1', 10);
     const parsedPageSize = Number.parseInt(params.get('pageSize') ?? String(SUPERADMIN_AUDIT_LOGS_DEFAULT_PAGE_SIZE), 10);
     setPageIndex(Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage - 1 : 0);
@@ -78,13 +47,12 @@ export default function SuperadminAuditLogsOverviewPageClient() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Effect contract: serialize the current filter or view state into the URL only after initial URL hydration; dependency set [actionFilter, pageIndex, pageSize, urlReady] is the deliberate re-run boundary.
   useEffect(() => {
     if (!urlReady) return;
     const url = new URL(window.location.href);
     if (actionFilter === 'All Actions') url.searchParams.delete('action');
     else url.searchParams.set('action', actionFilter);
-    url.searchParams.delete('search'); // Remove legacy free-text search values from the URL.
+    url.searchParams.delete('search');
     if (pageIndex > 0) url.searchParams.set('page', String(pageIndex + 1));
     else url.searchParams.delete('page');
     if (pageSize !== SUPERADMIN_AUDIT_LOGS_DEFAULT_PAGE_SIZE) url.searchParams.set('pageSize', String(pageSize));
@@ -92,7 +60,6 @@ export default function SuperadminAuditLogsOverviewPageClient() {
     window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
   }, [actionFilter, pageIndex, pageSize, urlReady]);
 
-  // Effect contract: synchronize the effect-owned state or browser subscription with its explicit reactive dependencies; dependency set [actionFilter, searchTerm, urlReady] is the deliberate re-run boundary.
   useEffect(() => {
     if (!urlReady) return;
     const filterKey = `${actionFilter}\u0000${searchTerm}`;
@@ -106,12 +73,11 @@ export default function SuperadminAuditLogsOverviewPageClient() {
     }
   }, [actionFilter, searchTerm, urlReady]);
 
-
   const filtered = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLocaleLowerCase();
     return SUPERADMIN_AUDIT_LOG_SAMPLE_FIXTURES.filter((log) => {
       const matchesAction = actionFilter === 'All Actions' || log.action === actionFilter;
-      const searchable = `${log.id} ${log.time} ${log.user} ${log.entity} ${log.target} ${log.action} ${log.ip}`.toLocaleLowerCase();
+      const searchable = `${log.id} ${log.time} ${log.user} ${log.entity} ${log.target} ${log.action} ${log.ip} ${log.reason ?? ''} ${log.requestId ?? ''}`.toLocaleLowerCase();
       return matchesAction && (!normalizedSearch || searchable.includes(normalizedSearch));
     });
   }, [actionFilter, searchTerm]);
@@ -154,7 +120,6 @@ export default function SuperadminAuditLogsOverviewPageClient() {
     { headerName: t("COPY.TABLE_COLUMN_IP_ADDRESS"), field: 'ip', flex: 0.9, minWidth: 120,
       cellClass: () => 'font-mono text-xs text-indigo-300/80' },
   ], [t]);
-
 
   const stats = useMemo(() => {
     const total = SUPERADMIN_AUDIT_LOG_SAMPLE_FIXTURES.length;
@@ -200,7 +165,7 @@ export default function SuperadminAuditLogsOverviewPageClient() {
           <div className="flex flex-wrap items-center gap-2.5">
             <Link
               href="/superadmin/superadmin_security/security_overview"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 hover:border-indigo-500/50 text-xs font-semibold shadow-xs transition-all cursor-pointer active:scale-[0.98]"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs font-semibold shadow-xs transition-all cursor-pointer active:scale-[0.98]"
             >
               <ShieldCheck size={14} />
               <span>Security Center</span>
@@ -210,52 +175,8 @@ export default function SuperadminAuditLogsOverviewPageClient() {
         </div>
       </div>
 
-      {/* KPI Metrics Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0e1338]/90 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-indigo-500/40 transition-all">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Audit Logs</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-400 shadow-inner">
-              <ScrollText size={18} />
-            </div>
-          </div>
-          <div className="text-3xl font-extrabold text-slate-100 tabular-nums">{stats.total}</div>
-          <div className="text-[11px] text-slate-400 mt-1">Immutable WORM storage</div>
-        </div>
-
-        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-b from-[#06201a]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-emerald-500/40 transition-all">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Created Records</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shadow-inner">
-              <PlusCircle size={18} />
-            </div>
-          </div>
-          <div className="text-3xl font-extrabold text-emerald-400 tabular-nums">{stats.createdCount}</div>
-          <div className="text-[11px] text-slate-400 mt-1">Entity inserts & onboardings</div>
-        </div>
-
-        <div className="rounded-2xl border border-rose-500/20 bg-gradient-to-b from-[#220a14]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-rose-500/40 transition-all">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Deleted Records</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-rose-500/30 bg-rose-500/15 text-rose-400 shadow-inner">
-              <Trash2 size={18} />
-            </div>
-          </div>
-          <div className="text-3xl font-extrabold text-rose-400 tabular-nums">{stats.deletedCount}</div>
-          <div className="text-[11px] text-slate-400 mt-1">Permanent removals & expiries</div>
-        </div>
-
-        <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-b from-[#1b0d2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-purple-500/40 transition-all">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Distinct Actors</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-400 shadow-inner">
-              <Users size={18} />
-            </div>
-          </div>
-          <div className="text-3xl font-extrabold text-purple-400 tabular-nums">{stats.uniqueActors}</div>
-          <div className="text-[11px] text-slate-400 mt-1">Audited administrators</div>
-        </div>
-      </div>
+      {/* KPI Metrics Grid Component */}
+      <SuperadminAuditLogsOverviewKpiCards stats={stats} />
 
       {/* Main Audit Logs Table Container */}
       <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0c0f2b] via-[#090b20] to-[#060818] shadow-2xl overflow-hidden backdrop-blur-xl">

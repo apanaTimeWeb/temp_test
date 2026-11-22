@@ -15,6 +15,11 @@ export interface SuperadminAuditLogSampleEntry {
   action: SuperadminAuditLogAction;
   ip: string;
   detail: string;
+  requestId?: string;
+  device?: string;
+  reason?: string;
+  beforeValue?: string;
+  afterValue?: string;
   [key: string]: unknown;
 }
 
