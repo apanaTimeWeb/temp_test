@@ -58,8 +58,8 @@ export function SuperadminDataBackupOperationsSchedulesTable({
         <div className="p-8 text-center text-xs text-muted-foreground">
           No schedules match your search query.
         </div>
-      ): (
-        <>
+      ) : (
+        <div className="space-y-4">
           <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
@@ -164,7 +164,7 @@ export function SuperadminDataBackupOperationsSchedulesTable({
           onPageSizeChange={setPageSize}
           itemLabel="schedules"
         />
-        </>
+        </div>
       )}
     </div>
   );
