@@ -1,6 +1,13 @@
 'use client';
 
-/** Responsibility: renders the Active Subscribers route UI; the module Main remains a thin composition boundary. */
+/** Responsibility: renders the Active Subscribers route UI; the module Main remains a thin composition boundary.
+ * Tenant subscription plan quotas:
+ * - branches: number of branches allocated
+ * - members: total student/member capacity
+ * - price: plan subscription price
+ * - storage: document/backup storage quota
+ * - name, plan, mrr, status, tenant
+ */
 import SuperadminSubscriptionsActiveSubscribersSemanticTable, { type SemanticColumnDef, type SemanticCellParams } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/components/SuperadminSubscriptionsActiveSubscribersSemanticTable';
 import SuperadminSubscriptionsActiveSubscribersKpis from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/components/SuperadminSubscriptionsActiveSubscribersKpis';
 import SuperadminSubscriptionsActiveSubscribersFilterToolbar from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/components/SuperadminSubscriptionsActiveSubscribersFilterToolbar';
@@ -20,8 +27,8 @@ import { useTranslations, useLocale } from 'next-intl';
 
 /** Derives a stable, non-index row identity for repeated interactive table controls. */
 function getSuperadminInteractiveTestIdSuffix(value: unknown): string {
-  const record = value && typeof value === 'object' ? value as Record<string, unknown> : {};
-  for (const field of ['id', 'uuid', 'recordId', 'userId', 'assetId', 'libraryId', 'planId', 'subscriptionId', 'transactionId', 'invoiceId', 'refundId', 'requestId', 'ruleId', 'messageId', 'noticeId', 'complaintId', 'entryId', 'backupId', 'enquiryId', 'studentId', 'memberId', 'branchId', 'scheduleId', 'logId', 'smartId', 'receiptNumber', 'ticketId', 'lockerId', 'seatNo', 'code', 'slug', 'key', 'name']) {
+  const record = value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
+  for (const field of ['id', 'uuid', 'recordId', 'userId', 'subscriberId', 'key', 'name']) {
     const candidate = record[field];
     if (typeof candidate === 'string' || typeof candidate === 'number') return String(candidate);
   }
@@ -32,6 +39,7 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
   const locale = useLocale();
   const t = useTranslations('SUPERADMIN_SUBSCRIPTIONS');
 
+  const [activeTab] = useState("Active Subscribers");
   const [subs] = useState<SuperadminSubscriptionRecord[]>(SUPERADMIN_SUBSCRIPTIONS_SAMPLE_SUBSCRIBERS);
   const [searchQuery, setSearchQuery] = useState('');
   const [planFilter, setPlanFilter] = useState('all');
@@ -39,28 +47,23 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
   const [cycleFilter, setCycleFilter] = useState('all');
 
   const showToast = useCallback((msg: string) => {
-    toast.message(msg, { id: 'superadmin:subscriptions:feedback' });
+    toast.message(msg, { id: 'superadmin:superadmin_subscriptions:ActiveSubscribers:feedback' });
   }, []);
 
-  const filteredSubs = useMemo(() => {
-    return subs.filter((sub) => {
-      if (planFilter !== 'all' && sub.plan.toLowerCase() !== planFilter.toLowerCase()) return false;
-      if (statusFilter !== 'all' && sub.status.toLowerCase() !== statusFilter.toLowerCase()) return false;
-      if (cycleFilter !== 'all' && sub.cycle.toLowerCase() !== cycleFilter.toLowerCase()) return false;
-      const q = searchQuery.trim().toLowerCase();
-      if (q) {
-        const matchesTenant = sub.tenant.toLowerCase().includes(q);
-        const matchesPlan = sub.plan.toLowerCase().includes(q);
-        const matchesStatus = sub.status.toLowerCase().includes(q);
-        const matchesContact = sub.billingContact ? sub.billingContact.toLowerCase().includes(q) : false;
-        const matchesPhone = sub.phone ? sub.phone.toLowerCase().includes(q) : false;
-        if (!matchesTenant && !matchesPlan && !matchesStatus && !matchesContact && !matchesPhone) return false;
-      }
-      return true;
-    });
-  }, [subs, searchQuery, planFilter, statusFilter, cycleFilter]);
+  const handleExportCsv = () => {
+    downloadSuperadminSubscriptionsCsv(filteredSubs);
+    showToast('Subscribers roster exported as CSV');
+  };
 
-  const hasActiveFilters = Boolean(searchQuery || planFilter !== 'all' || statusFilter !== 'all' || cycleFilter !== 'all');
+  const handleExportExcel = () => {
+    downloadSuperadminSubscriptionsExcel(filteredSubs);
+    showToast('Subscribers roster exported as Excel (.xls)');
+  };
+
+  const handlePrintRoster = () => {
+    printSuperadminSubscriptionsRoster(filteredSubs);
+  };
+
   const resetFilters = () => {
     setSearchQuery('');
     setPlanFilter('all');
@@ -68,36 +71,38 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
     setCycleFilter('all');
   };
 
-  const handleExportCsv = useCallback(() => {
-    downloadSuperadminSubscriptionsCsv(filteredSubs, 'superadmin_subscriptions_export.csv');
-    showToast(`Exported ${filteredSubs.length} subscription record(s) to CSV`);
-  }, [filteredSubs, showToast]);
+  const hasActiveFilters = searchQuery !== '' || planFilter !== 'all' || statusFilter !== 'all' || cycleFilter !== 'all';
 
-  const handleExportExcel = useCallback(() => {
-    downloadSuperadminSubscriptionsExcel(filteredSubs, 'superadmin_subscriptions_export.xls');
-    showToast(`Exported ${filteredSubs.length} subscription record(s) to Excel (.xls)`);
-  }, [filteredSubs, showToast]);
+  const filteredSubs = useMemo(() => {
+    return subs.filter((sub) => {
+      const q = searchQuery.toLowerCase().trim();
+      const matchesSearch = !q ||
+        sub.tenant.toLowerCase().includes(q) ||
+        (sub.email ? sub.email.toLowerCase().includes(q) : false) ||
+        (sub.plan && sub.plan.toLowerCase().includes(q)) ||
+        (sub.phone && sub.phone.includes(q));
 
-  const handlePrintRoster = useCallback(() => {
-    printSuperadminSubscriptionsRoster(filteredSubs, 'Active Subscribers Directory');
-    showToast(`Prepared ${filteredSubs.length} subscriber record(s) for printing`);
-  }, [filteredSubs, showToast]);
+      const matchesPlan = planFilter === 'all' || sub.plan.toLowerCase() === planFilter.toLowerCase();
+      const matchesStatus = statusFilter === 'all' || sub.status.toLowerCase() === statusFilter.toLowerCase();
+      const matchesCycle = cycleFilter === 'all' || (sub.cycle && sub.cycle.toLowerCase() === cycleFilter.toLowerCase());
 
-  const colDefs = useMemo<SemanticColumnDef[]>(() => [
+      return matchesSearch && matchesPlan && matchesStatus && matchesCycle;
+    });
+  }, [subs, searchQuery, planFilter, statusFilter, cycleFilter]);
+
+  const colDefs: SemanticColumnDef[] = useMemo(() => [
     {
       headerName: t('COPY.TABLE_COLUMN_TENANT'),
       field: 'tenant',
       flex: 1.4,
-      cellRenderer: (params: SemanticCellParams) => (
-        <div className="flex items-center gap-2">
-          <Building2 size={15} className="text-indigo-400 shrink-0" />
+      cellRenderer: (p: SemanticCellParams) => (
+        <div className="flex items-center gap-2.5 py-1">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-400">
+            <Building2 size={15} />
+          </div>
           <div className="min-w-0">
-            <span className="font-bold text-slate-100 truncate block">{String(params.value ?? '')}</span>
-            {Boolean(params.data?.billingContact) && (
-              <span className="text-[11px] text-slate-400 truncate block">
-                {String(params.data.billingContact)} {params.data.phone ? `(${String(params.data.phone)})` : ''}
-              </span>
-            )}
+            <p className="font-semibold text-slate-100 text-xs truncate">{String(p.value ?? '')}</p>
+            <p className="text-[11px] text-slate-400 truncate font-mono">{String(p.data?.email ?? '')}</p>
           </div>
         </div>
       ),
@@ -105,94 +110,82 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
     {
       headerName: t('COPY.TABLE_COLUMN_PLAN'),
       field: 'plan',
-      flex: 1.1,
-      cellRenderer: (params: SemanticCellParams) => (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-xs font-semibold text-indigo-300">
-          <Package size={12} />
-          <span>{String(params.value ?? '')}</span>
+      flex: 1,
+      cellRenderer: (p: SemanticCellParams) => (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+          <Package size={11} className="text-indigo-400" />
+          {String(p.value ?? '')}
+        </span>
+      ),
+    },
+    {
+      headerName: t('COPY.TABLE_COLUMN_MRR'),
+      field: 'mrr',
+      flex: 0.8,
+      cellRenderer: (p: SemanticCellParams) => (
+        <span className="font-mono text-xs font-bold text-emerald-400">
+          {formatSuperadminSubscriptionsMajorPreviewCurrency(Number(p.value ?? 0), 'INR', locale)}
         </span>
       ),
     },
     {
       headerName: t('COPY.TABLE_COLUMN_STATUS'),
       field: 'status',
-      flex: 1,
-      cellRenderer: (params: SemanticCellParams) => {
-        const val = String(params.value ?? '');
+      flex: 0.8,
+      cellRenderer: (p: SemanticCellParams) => {
+        const val = String(p.value ?? '');
         const isPaid = val === 'Paid';
-        const isOverdue = val === 'Overdue';
-        const cls = isPaid ? 'border-emerald-500/30 bg-emerald-500/15 text-emerald-400' : isOverdue ? 'border-rose-500/30 bg-rose-500/15 text-rose-400' : 'border-amber-500/30 bg-amber-500/15 text-amber-400';
+        const isDue = val === 'Due Soon';
         return (
-          <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold border ${cls}`}>
-            <span className={`h-1.5 w-1.5 rounded-full ${isPaid ? 'bg-emerald-400' : isOverdue ? 'bg-rose-400' : 'bg-amber-400'}`} />
-            <span>{val}</span>
+          <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${
+            isPaid ? 'border-emerald-500/30 bg-emerald-500/15 text-emerald-400' :
+            isDue ? 'border-amber-500/30 bg-amber-500/15 text-amber-400' :
+            'border-rose-500/30 bg-rose-500/15 text-rose-400'
+          }`}>
+            <span className={`h-1.5 w-1.5 rounded-full ${isPaid ? 'bg-emerald-400' : isDue ? 'bg-amber-400' : 'bg-rose-400'}`} />
+            {val}
           </span>
         );
       },
     },
     {
-      headerName: t('COPY.TABLE_COLUMN_CYCLE'),
-      field: 'cycle',
+      headerName: t('COPY.TABLE_COLUMN_NEXT_RENEWAL'),
+      field: 'renewalDate',
       flex: 0.9,
-      cellClass: () => 'text-slate-300 font-medium text-xs',
-    },
-    {
-      headerName: t('COPY.TABLE_COLUMN_MRR'),
-      field: 'mrr',
-      flex: 1,
-      cellRenderer: (params: SemanticCellParams) => (
-        <span className="font-mono text-xs font-bold text-emerald-400">
-          {formatSuperadminSubscriptionsMajorPreviewCurrency(Number(params.value ?? 0), 'INR', locale)}
+      cellRenderer: (p: SemanticCellParams) => (
+        <span className="font-mono text-xs text-slate-300">
+          {String(p.value ?? '')}
         </span>
       ),
     },
     {
-      headerName: t('COPY.TABLE_COLUMN_RENEWAL'),
-      field: 'renewal',
-      flex: 1,
-      cellClass: () => 'text-slate-400 font-mono text-xs',
-    },
-    {
-      headerName: t('COPY.TABLE_COLUMN_ACTIONS'),
-      flex: 1.5,
-      minWidth: 160,
-      cellRenderer: (params: SemanticCellParams) => {
-        const testIdSuffix = getSuperadminInteractiveTestIdSuffix(params.data);
-        const sub = params.data as unknown as SuperadminSubscriptionRecord;
+      headerName: t('COPY.TABLE_COLUMN_ACTION'),
+      field: 'action',
+      flex: 0.8,
+      cellRenderer: (p: SemanticCellParams) => {
+        const sub = p.data as unknown as SuperadminSubscriptionRecord | undefined;
         if (!sub) return null;
+        const testIdSuffix = getSuperadminInteractiveTestIdSuffix(sub);
         const rawPhone = sub.phone || '9876543210';
-        const digits = rawPhone.replace(/\D/g, '');
-        const waPhone = digits.length === 10 ? `91${digits}` : digits;
-        const waMsg = `Hello ${sub.billingContact || sub.tenant}, greeting from Smart Library SuperAdmin regarding your ${sub.plan} plan subscription.`;
+        let digits = rawPhone.replace(/\D/g, '');
+        if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+        const normalizedPhone = digits.length === 10 ? `91${digits}` : digits;
 
         return (
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <button
-              type="button"
-              disabled
-              title={t("COPY.UNAVAILABLE_PAYMENT_STATUS_IS_SERVER_OWNED_AND_NO_STATUS_MUTATION_API_CONTRACT_IS_SUPPLIED")}
-              className="inline-flex items-center gap-1 rounded-xl border border-indigo-500/20 bg-indigo-500/5 px-2.5 py-1 text-xs font-semibold text-slate-400 opacity-60 cursor-not-allowed"
-              data-testid={`superadmin-subscriptions-subscriptions-overview-unavailable-payment-status-is-server-owned-and-no-status-mutation-api-contract-is-supplied-1-${testIdSuffix}`}
-            >
-              {t("COPY.CHANGE_UNAVAILABLE")}
-            </button>
-
-            {/* Quick WhatsApp (Free Web) */}
-            <button
-              type="button"
-              onClick={() => {
-                const popup = window.open(`https://wa.me/${waPhone}?text=${encodeURIComponent(waMsg)}`, '_blank', 'noopener,noreferrer');
-                if (popup) popup.opener = null;
-                showToast(`Opened WhatsApp chat for ${sub.tenant} (Zero API Cost)`);
-              }}
+          <div className="flex items-center gap-1.5 py-1">
+            <a
+              href={`https://wa.me/${normalizedPhone}?text=${encodeURIComponent(`Hello ${sub.tenant}, this is Smart Library SaaS regarding your ${sub.plan} subscription.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => showToast(`Opening WhatsApp Web for ${sub.tenant} (Zero API Cost)`)}
               className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs cursor-pointer"
-              title={`WhatsApp message to ${sub.tenant} (Free Web)`}
+              title={`WhatsApp ${sub.tenant} (Free Web)`}
               aria-label={`WhatsApp ${sub.tenant}`}
+              data-testid={`superadmin-subscriptions-active-subscribers-whatsapp-${testIdSuffix}`}
             >
               <MessageSquare size={13} className="text-emerald-400" />
-            </button>
+            </a>
 
-            {/* Quick Email (Free Client) */}
             {sub.email && (
               <a
                 href={`mailto:${sub.email}?subject=${encodeURIComponent(`Smart Library SaaS Subscription Notice - ${sub.tenant}`)}&body=${encodeURIComponent(`Dear ${sub.billingContact || sub.tenant},\n\n`)}`}
@@ -267,12 +260,14 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
       />
 
       {/* Semantic Subscribers Table */}
-      <SuperadminSubscriptionsActiveSubscribersSemanticTable
-        rowData={filteredSubs as unknown as readonly Record<string, unknown>[]}
-        columnDefs={colDefs}
-        pagination={true}
-        paginationPageSize={10}
-      />
+      {activeTab === 'Active Subscribers' && (
+        <SuperadminSubscriptionsActiveSubscribersSemanticTable
+          rowData={filteredSubs as unknown as readonly Record<string, unknown>[]}
+          columnDefs={colDefs}
+          pagination={true}
+          paginationPageSize={10}
+        />
+      )}
     </div>
   );
 }
