@@ -256,17 +256,26 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                     <div
                       key={student.smartId}
                       onClick={() => selectStudent(student.smartId)}
-                      className={`mgr-idcard-student-row flex items-center gap-2 cursor-pointer${student.smartId === selectedId ? ' mgr-idcard-student-row--active' : ''}`}
+                      className={`mgr-idcard-student-row flex items-center gap-2 cursor-pointer${student.smartId === selectedId ? ' mgr-idcard-student-row--active' : ''}${isChecked ? ' bg-primary-subtle' : ''}`}
                       role="button"
                       tabIndex={0}
                       aria-pressed={student.smartId === selectedId}
                       onKeyDown={(e) => {
+                        if ((e.target as HTMLElement).tagName === 'INPUT') return;
                         if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault();
                           selectStudent(student.smartId);
                         }
                       }}
                     >
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={(e) => toggleSelectOne(student.smartId, e as unknown as React.MouseEvent)}
+                        onClick={(e) => e.stopPropagation()}
+                        className="rounded border-border text-primary focus:ring-primary h-4 w-4 shrink-0"
+                        aria-label={`Select ${student.name} for bulk ID card dispatch`}
+                      />
                       <div className="mgr-avatar-sm shrink-0">{initials}</div>
                       <div className="mgr-idcard-student-info flex-1 min-w-0">
                         <p className="mgr-cell-name truncate">{student.name}</p>

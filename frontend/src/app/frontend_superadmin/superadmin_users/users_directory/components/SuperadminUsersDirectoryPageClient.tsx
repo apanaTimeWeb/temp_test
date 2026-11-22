@@ -385,11 +385,12 @@ export default function SuperadminUsersDirectoryPageClient() {
           <button
             type="button"
             onClick={() => setShowBulkWhatsApp(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm shadow-emerald-950/40"
+            disabled={filteredUsers.length === 0}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm shadow-emerald-950/40 disabled:opacity-40 disabled:cursor-not-allowed"
             title="Broadcast WhatsApp message to users"
           >
             <MessageSquare size={14} className="text-emerald-400" />
-            <span>Broadcast WhatsApp</span>
+            <span>Bulk WhatsApp ({filteredUsers.length})</span>
           </button>
 
           {/* CSV Export */}
