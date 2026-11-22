@@ -92,6 +92,10 @@ export default function ManagerFinanceCollectFeePostPaymentModal({
           <p className="text-xs text-secondary font-medium">
             Receipt voucher issued and recorded in financial ledgers.
           </p>
+          <div className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span>System API: Auto-dispatched 1x Receipt SMS & WhatsApp to student</span>
+          </div>
         </div>
 
         {/* Voucher Snapshot Card */}
@@ -152,10 +156,11 @@ export default function ManagerFinanceCollectFeePostPaymentModal({
             type="button"
             onClick={handleSendWhatsApp}
             data-testid="manager-finance-post-payment-whatsapp"
+            title="Share or resend receipt via WhatsApp Web (100% Free • Zero API Cost)"
             className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
           >
             <MessageSquare size={16} />
-            <span>Send WhatsApp Receipt</span>
+            <span>Share via WhatsApp (Free Web)</span>
           </button>
 
           <button

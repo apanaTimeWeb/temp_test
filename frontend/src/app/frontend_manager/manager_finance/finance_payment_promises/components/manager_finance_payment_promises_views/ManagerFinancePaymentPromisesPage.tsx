@@ -214,6 +214,27 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
     setTimeout(() => setFeedbackToast(null), 4000);
   };
 
+  const handleWhatsAppPromise = (promise: ManagerFinancePaymentPromisesPaymentPromiseSample) => {
+    const rawPhone = promise.phone || '9876543210';
+    let digits = rawPhone.replace(/\D/g, '');
+    if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+    const targetPhone = digits.length === 10 ? `91${digits}` : digits;
+    const majorAmount = promise.promisedAmount >= 1000 ? Math.round(promise.promisedAmount / 100) : promise.promisedAmount;
+    const msg = encodeURIComponent(
+      `Hello ${promise.studentName}, gentle reminder from Library regarding your committed fee payment of ₹${majorAmount.toLocaleString('en-IN')} due on ${promise.expectedDate}. Please clear dues to maintain seat access. Thank you!`
+    );
+    const popup = window.open(`https://wa.me/${targetPhone}?text=${msg}`, '_blank', 'noopener,noreferrer');
+    if (popup) popup.opener = null;
+    setFeedbackToast(`WhatsApp reminder opened for ${promise.studentName}`);
+    setTimeout(() => setFeedbackToast(null), 4000);
+  };
+
+  const handleCallPromise = (promise: ManagerFinancePaymentPromisesPaymentPromiseSample) => {
+    const rawPhone = promise.phone || '9876543210';
+    const cleanPhone = rawPhone.replace(/\D/g, '');
+    window.location.href = `tel:${cleanPhone}`;
+  };
+
   const handleAddNewPromise = (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => {
     setPromisesList([p, ...promisesList]);
     setFeedbackToast(`Payment commitment recorded for ${p.studentName} (${formatCurrency(p.promisedAmount)}) due on ${p.expectedDate}!`);
@@ -368,7 +389,9 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
       <ManagerFinancePaymentPromisesTable
         filtered={filtered} paginated={paginated} formatCurrency={formatCurrency} formatDate={formatDate}
         sortField={sortField} sortDirection={sortDirection} onToggleSort={toggleSort}
-        onMarkPaid={handleMarkPaid} onCollectAmount={handleCollectThisAmount} onOpenEdit={handleOpenEdit} onOpenView={handleOpenView}
+        onMarkPaid={handleMarkPaid} onCollectAmount={handleCollectThisAmount}
+        onWhatsAppPromise={handleWhatsAppPromise}
+        onCallPromise={handleCallPromise} onOpenEdit={handleOpenEdit} onOpenView={handleOpenView}
         startItem={startItem} endItem={endItem} totalRows={totalRows}
         effectivePage={effectivePage} pageCount={pageCount}
         onPrevPage={() => setPage(effectivePage - 1)} onNextPage={() => setPage(effectivePage + 1)}

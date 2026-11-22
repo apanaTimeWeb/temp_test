@@ -3,7 +3,8 @@
 import { ManagerFinancePaymentPromisesEmptyState } from '@/app/frontend_manager/manager_finance/finance_payment_promises/components/manager_finance_payment_promises_empty_states/ManagerFinancePaymentPromisesEmptyState';
 import { MANAGER_FINANCE_PAYMENT_PROMISE_STATUS_BADGE } from '@/app/frontend_manager/manager_finance/finance_payment_promises/constants/ManagerFinancePaymentPromisesPaymentPromiseConstants';
 import type { ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
-import { ArrowDown,ArrowUp,ArrowUpDown,CheckCircle,Edit3,Eye,IndianRupee } from 'lucide-react';
+import { ManagerFinancePaymentPromisesPagination } from './ManagerFinancePaymentPromisesPagination';
+import { ArrowDown,ArrowUp,ArrowUpDown,CheckCircle,Edit3,Eye,IndianRupee,MessageCircle,PhoneCall } from 'lucide-react';
 
 export type PromiseSortField = 'studentName' | 'promisedAmount' | 'expectedDate' | 'daysUntilDue' | 'status' | 'timesChanged';
 
@@ -17,6 +18,8 @@ export interface ManagerFinancePaymentPromisesTableProps {
   onToggleSort: (field: PromiseSortField) => void;
   onMarkPaid: (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => void;
   onCollectAmount?: (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => void;
+  onWhatsAppPromise?: (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => void;
+  onCallPromise?: (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => void;
   onOpenEdit: (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => void;
   onOpenView: (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => void;
   startItem: number;
@@ -52,6 +55,8 @@ export default function ManagerFinancePaymentPromisesTable({
   onToggleSort,
   onMarkPaid,
   onCollectAmount,
+  onWhatsAppPromise,
+  onCallPromise,
   onOpenEdit,
   onOpenView,
   startItem,
@@ -258,34 +263,15 @@ export default function ManagerFinancePaymentPromisesTable({
         </table>
       </div>
 
-      {filtered.length > 0 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-xs sm:text-sm text-secondary">
-          <span>
-            Showing {startItem}–{endItem} of {totalRows} promises
-          </span>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              disabled={effectivePage === 0}
-              onClick={onPrevPage}
-              className="px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
-            >
-              Previous
-            </button>
-            <span className="text-xs px-1">
-              Page {effectivePage + 1} of {pageCount}
-            </span>
-            <button
-              type="button"
-              disabled={effectivePage >= pageCount - 1}
-              onClick={onNextPage}
-              className="px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      )}
+      <ManagerFinancePaymentPromisesPagination
+        startItem={startItem}
+        endItem={endItem}
+        totalRows={totalRows}
+        effectivePage={effectivePage}
+        pageCount={pageCount}
+        onPrevPage={onPrevPage}
+        onNextPage={onNextPage}
+      />
     </div>
   );
 }

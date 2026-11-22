@@ -4,9 +4,11 @@ import ManagerFinanceRenewalsNativeTable from '@/app/frontend_manager/manager_fi
 import { MANAGER_FINANCE_SAMPLE_RENEWALS } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/ManagerFinanceRenewalsDemoRepository';
 import { useManagerRenewalsFormatting } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/ManagerFinanceRenewalsFormattingHook';
 import { useManagerFinanceRenewalsConfirm } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsConfirm';
+import { useManagerFinanceRenewalsActions } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsActions';
 import { useManagerRenewalsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsUrlFilters';
 import type { FilterType,ManagerFinanceRenewalsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
 import { exportManagerRenewalsCsv } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsCsv';
+import { handleRenewalsExport, handleRenewalsPrint, handleRenewalsFileImport } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsActionHelpers';
 import { CheckCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo,useRef,useState } from 'react';
@@ -107,41 +109,14 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
     setIsBulkWhatsAppOpen(true);
   };
 
-  const handleAutoReleaseSeats = async () => {
-    const count = pastGraceList.length;
-    if (count === 0) return;
-    const ok = await confirm(
-      `Release ${count} seats overdue by > 3 days? These seats will become vacant immediately for new admissions.`,
-      tManagerUi('cancel') || 'Cancel',
-      `Release ${count} Seats`
-    );
-    if (!ok) return;
-    setRenewalsList((prev) =>
-      prev.map((item) => (item.daysLeft < -3 ? { ...item, isSeatReleased: true } : item))
-    );
-    setFeedbackMsg(`Successfully released ${count} seats past 3-day grace period.`);
-  };
-
-  const handleReleaseSingleSeat = async (id: number | string, studentName: string) => {
-    const ok = await confirm(
-      `Release seat for ${studentName} (overdue > 3 days)? This will mark their seat as vacant.`,
-      tManagerUi('cancel') || 'Cancel',
-      'Release Seat'
-    );
-    if (!ok) return;
-    setRenewalsList((prev) =>
-      prev.map((item) => (String(item.id) === String(id) ? { ...item, isSeatReleased: true } : item))
-    );
-    setFeedbackMsg(`Seat for ${studentName} successfully vacated and released.`);
-  };
-
-  const handleEmailAll = () => {
-    setFeedbackMsg(`Email renewal reminders dispatched to all ${searchedRenewals.length} displayed students.`);
-  };
-
-  const handleRemindAll = () => {
-    setFeedbackMsg(`SMS renewal alerts dispatched to all ${searchedRenewals.length} displayed members.`);
-  };
+  const { handleAutoReleaseSeats, handleReleaseSingleSeat, handleRenewStudent } = useManagerFinanceRenewalsActions({
+    renewalsList,
+    setRenewalsList,
+    pastGraceList,
+    confirm,
+    setFeedbackMsg,
+    tManagerUi,
+  });
 
   const handleImportClick = () => {
     fileInputRef.current?.click();
@@ -155,30 +130,21 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
     }
   };
 
-  const handleRenewStudent = async (id: number | string, studentName: string) => {
-    const confirmed = await confirm(
-      `Confirm subscription renewal: Extend subscription for ${studentName} by 30 days?`,
-      tManagerUi('cancel') || 'Cancel',
-      'Renew (+30 Days)'
+  const handleEmailAll = () => {
+    setFeedbackMsg(`Email renewal reminders dispatched to all ${searchedRenewals.length} displayed students.`);
+  };
+
+  const handleRemindAll = async () => {
+    const ok = await confirm(
+      `Dispatch Server SMS to ${searchedRenewals.length} members? Note: Bulk SMS consumes paid Server API credits. We recommend Bulk WhatsApp (Free) to avoid third-party API costs.`,
+      'Use Free WhatsApp Instead',
+      'Proceed with Server SMS'
     );
-    if (!confirmed) return;
-    setRenewalsList((prev) =>
-      prev.map((item) => {
-        if (String(item.id) === String(id)) {
-          const currentExpiry = new Date(item.expiryDate);
-          const newExpiry = new Date(currentExpiry.getTime() + 30 * 24 * 60 * 60 * 1000);
-          return {
-            ...item,
-            expiryDate: newExpiry.toISOString().split('T')[0],
-            daysLeft: 30,
-            due: 0,
-            lastPaymentDate: new Date().toISOString().split('T')[0],
-          };
-        }
-        return item;
-      })
-    );
-    setFeedbackMsg(`Subscription renewed successfully for ${studentName} (+30 days added).`);
+    if (!ok) {
+      handleWhatsAppAll();
+      return;
+    }
+    setFeedbackMsg(`SMS renewal alerts dispatched to ${searchedRenewals.length} members via Server API.`);
   };
 
   const handleRemindStudent = (studentName: string) => {

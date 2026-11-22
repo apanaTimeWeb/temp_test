@@ -93,6 +93,10 @@ export function ManagerMembersNewAdmissionSuccessBanner({
               <p className="text-xs text-muted-foreground mt-0.5">
                 Smart ID: <strong className="text-foreground font-mono">{student.smartId}</strong> • Seat: <strong className="text-foreground">{student.seat || 'General'}</strong> • Shift: <strong className="text-foreground">{student.shift}</strong> • Plan: <strong className="text-foreground">{student.plan}</strong>
               </p>
+              <div className="flex items-center gap-1.5 mt-1.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>System API: Auto-dispatched 1x Welcome SMS & Digital ID Link to +91 {cleanPhone}</span>
+              </div>
             </div>
           </div>
 
@@ -103,10 +107,10 @@ export function ManagerMembersNewAdmissionSuccessBanner({
               onClick={() => setShowWhatsAppConfirm(true)}
               aria-label="Send Welcome and ID Card via WhatsApp to student"
               className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
-              title="Send Welcome & ID Card via WhatsApp"
+              title="Resend ID Card via WhatsApp Web (Free • Zero API Cost)"
             >
               <MessageSquare size={15} />
-              <span>Send ID Card via WhatsApp</span>
+              <span>Resend via WhatsApp (Free)</span>
             </button>
 
             {/* BUG-21: Avoid passing PII (phone, name) in query parameters */}
@@ -175,7 +179,7 @@ export function ManagerMembersNewAdmissionSuccessBanner({
               </div>
             </div>
             <p className="text-xs text-secondary leading-relaxed">
-              Are you sure you want to send the digital admission slip and ID card to{' '}
+              Are you sure you want to resend the digital admission slip and ID card (Free WhatsApp Web) to{' '}
               <strong className="text-foreground">{student.fullName}</strong> at{' '}
               <strong className="text-foreground font-mono">+91 {cleanPhone}</strong>?
             </p>
