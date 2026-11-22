@@ -1,5 +1,7 @@
 'use client';
 
+import { useState, useMemo } from 'react';
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 import { UserX, CheckCircle2, Send } from 'lucide-react';
 
 export interface LockedAccount {
@@ -23,6 +25,12 @@ export default function SuperadminSecurityLoginSecurityLockedAccountsTable({
   onUnlockAccount,
   onSendRecoveryLink,
 }: SuperadminSecurityLoginSecurityLockedAccountsTableProps) {
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedAccounts = useMemo(() => {
+    return lockedAccounts.slice(page * pageSize, (page + 1) * pageSize);
+  }, [lockedAccounts, page, pageSize]);
   return (
     <div className="p-5 sm:p-6 border border-rose-500/30 bg-gradient-to-b from-[#180d1e]/85 to-[#0e0714]/90 rounded-2xl shadow-2xl backdrop-blur-xl space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-indigo-500/20 pb-3">
@@ -49,8 +57,9 @@ export default function SuperadminSecurityLoginSecurityLockedAccountsTable({
           <CheckCircle2 size={24} className="mx-auto mb-2 text-emerald-400" />
           No accounts currently locked out. All administrator logins operating normally.
         </div>
-      ) : (
-        <div className="overflow-x-auto">
+      ): (
+        <>
+          <div className="overflow-x-auto">
           <table className="w-full text-left text-xs text-slate-300">
             <thead className="bg-[#0a0d26]/80 text-slate-300 font-semibold uppercase tracking-wider border-b border-indigo-500/20">
               <tr>
@@ -64,7 +73,7 @@ export default function SuperadminSecurityLoginSecurityLockedAccountsTable({
               </tr>
             </thead>
             <tbody className="divide-y divide-indigo-500/10 font-mono">
-              {lockedAccounts.map((acc) => (
+              {paginatedAccounts.map((acc) => (
                 <tr key={acc.id} className="hover:bg-indigo-950/20 transition-colors">
                   <td className="py-3 px-3 font-sans font-bold text-slate-100">{acc.email}</td>
                   <td className="py-3 px-3 font-sans">
@@ -100,6 +109,15 @@ export default function SuperadminSecurityLoginSecurityLockedAccountsTable({
             </tbody>
           </table>
         </div>
+        <SuperadminTablePagination
+          page={page}
+          pageSize={pageSize}
+          totalItems={lockedAccounts.length}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+          itemLabel="locked accounts"
+        />
+        </>
       )}
     </div>
   );

@@ -2,6 +2,8 @@
 
 import {
 AlertTriangle,
+ChevronLeft,
+ChevronRight,
 CheckCircle2,
 Globe,
 History,
@@ -20,11 +22,22 @@ export function ManagerSettingsSecurityLoginHistoryPanel({
   history,
 }: ManagerSettingsSecurityLoginHistoryPanelProps) {
   const [filter, setFilter] = useState<'all' | 'success' | 'failed'>('all');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   const filteredHistory = useMemo(() => {
     if (filter === 'all') return history;
     return history.filter((item) => item.status === filter);
   }, [history, filter]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredHistory.length / pageSize));
+  const effectivePage = Math.min(Math.max(0, page), totalPages - 1);
+  const startItem = filteredHistory.length === 0 ? 0 : effectivePage * pageSize + 1;
+  const endItem = Math.min((effectivePage + 1) * pageSize, filteredHistory.length);
+
+  const paginatedHistory = useMemo(() => {
+    return filteredHistory.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  }, [filteredHistory, effectivePage, pageSize]);
 
   const counts = useMemo(() => {
     const success = history.filter((h) => h.status === 'success').length;
@@ -50,7 +63,7 @@ export function ManagerSettingsSecurityLoginHistoryPanel({
         <div className="flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 p-1 self-start sm:self-auto">
           <button
             type="button"
-            onClick={() => setFilter('all')}
+            onClick={() => { setFilter('all'); setPage(0); }}
             className={`rounded-md px-2.5 py-1 text-xs font-semibold transition-colors cursor-pointer ${
               filter === 'all'
                 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
@@ -61,7 +74,7 @@ export function ManagerSettingsSecurityLoginHistoryPanel({
           </button>
           <button
             type="button"
-            onClick={() => setFilter('success')}
+            onClick={() => { setFilter('success'); setPage(0); }}
             className={`rounded-md px-2.5 py-1 text-xs font-semibold transition-colors cursor-pointer ${
               filter === 'success'
                 ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
@@ -72,7 +85,7 @@ export function ManagerSettingsSecurityLoginHistoryPanel({
           </button>
           <button
             type="button"
-            onClick={() => setFilter('failed')}
+            onClick={() => { setFilter('failed'); setPage(0); }}
             className={`rounded-md px-2.5 py-1 text-xs font-semibold transition-colors cursor-pointer ${
               filter === 'failed'
                 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
@@ -107,7 +120,7 @@ export function ManagerSettingsSecurityLoginHistoryPanel({
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
-                {filteredHistory.map((item) => (
+                {paginatedHistory.map((item) => (
                   <tr key={item.id} className="hover:bg-white/5 transition-colors">
                     <td className="whitespace-nowrap px-4 py-3 font-medium text-slate-200">
                       {item.timestamp}
@@ -167,7 +180,7 @@ export function ManagerSettingsSecurityLoginHistoryPanel({
 
           {/* Mobile Card View */}
           <div className="md:hidden space-y-2">
-            {filteredHistory.map((item) => (
+            {paginatedHistory.map((item) => (
               <div
                 key={item.id}
                 className="rounded-xl border border-white/10 bg-[#0c0d24] p-3 space-y-2 text-xs"
@@ -205,6 +218,60 @@ export function ManagerSettingsSecurityLoginHistoryPanel({
                 )}
               </div>
             ))}
+          </div>
+
+          {/* Pagination Bar */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 rounded-xl border border-white/10 bg-[#0c0d24] text-xs text-slate-400">
+            <div className="flex items-center gap-3">
+              <span>
+                {filteredHistory.length === 0
+                  ? 'Showing 0 records'
+                  : `Showing ${startItem}–${endItem} of ${filteredHistory.length} records`}
+              </span>
+              <div className="flex items-center gap-1.5 ml-2">
+                <span className="text-[11px] text-slate-500">Rows:</span>
+                <select
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setPage(0);
+                  }}
+                  className="rounded-lg border border-white/10 bg-slate-900 px-2 py-1 text-xs text-slate-300 focus:outline-none cursor-pointer"
+                >
+                  {[5, 10, 20, 50].map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer"
+                disabled={effectivePage <= 0}
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+              >
+                <ChevronLeft size={14} />
+                <span>Previous</span>
+              </button>
+
+              <span className="text-xs text-slate-400 px-1 font-mono">
+                Page {effectivePage + 1} of {totalPages}
+              </span>
+
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer"
+                disabled={effectivePage >= totalPages - 1}
+                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+              >
+                <span>Next</span>
+                <ChevronRight size={14} />
+              </button>
+            </div>
           </div>
         </>
       )}

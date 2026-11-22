@@ -1,3 +1,4 @@
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 'use client';
 
 import React, { useState, useMemo } from 'react';
@@ -14,6 +15,8 @@ export default function SuperadminBillingTransactionsLedger() {
   const [searchQuery, setSearchQuery] = useState('');
   const [methodFilter, setMethodFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
   const [selectedTxn, setSelectedTxn] = useState<SuperadminPaymentTransaction | null>(null);
 
   const filtered = useMemo(() => {
@@ -24,6 +27,10 @@ export default function SuperadminBillingTransactionsLedger() {
       return !q || t.id.toLowerCase().includes(q) || t.invoiceId.toLowerCase().includes(q) || t.tenant.toLowerCase().includes(q) || t.utr.toLowerCase().includes(q);
     });
   }, [transactions, searchQuery, methodFilter, statusFilter]);
+
+  const paginatedTransactions = useMemo(() => {
+    return filtered.slice(page * pageSize, (page + 1) * pageSize);
+  }, [filtered, page, pageSize]);
 
   const handleRetry = (txnId: string) => {
     toast.promise(
@@ -85,13 +92,13 @@ export default function SuperadminBillingTransactionsLedger() {
             type="search"
             placeholder="Search by Transaction ID, Invoice ID, Tenant, UTR..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
             className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-indigo-500/20 bg-[#060818] text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400"
           />
         </div>
         <select
           value={methodFilter}
-          onChange={(e) => setMethodFilter(e.target.value)}
+          onChange={(e) => { setMethodFilter(e.target.value); setPage(0); }}
           className="px-3 py-1.5 rounded-lg border border-indigo-500/20 bg-[#060818] text-xs text-slate-300 focus:outline-none"
         >
           <option value="all">All Methods</option>
@@ -101,7 +108,7 @@ export default function SuperadminBillingTransactionsLedger() {
         </select>
         <select
           value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
+          onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
           className="px-3 py-1.5 rounded-lg border border-indigo-500/20 bg-[#060818] text-xs text-slate-300 focus:outline-none"
         >
           <option value="all">All Statuses</option>
@@ -112,7 +119,7 @@ export default function SuperadminBillingTransactionsLedger() {
         {(searchQuery || methodFilter !== 'all' || statusFilter !== 'all') && (
           <button
             type="button"
-            onClick={() => { setSearchQuery(''); setMethodFilter('all'); setStatusFilter('all'); }}
+            onClick={() => { setSearchQuery(''); setMethodFilter('all'); setStatusFilter('all'); setPage(0); }}
             className="p-1.5 rounded-lg text-slate-400 hover:text-white"
             title="Reset filters"
           >
@@ -140,7 +147,7 @@ export default function SuperadminBillingTransactionsLedger() {
               </tr>
             </thead>
             <tbody className="divide-y divide-indigo-500/10 text-slate-300">
-              {filtered.map((t) => (
+              {paginatedTransactions.map((t) => (
                 <tr key={t.id} className="hover:bg-indigo-500/10 transition-colors">
                   <td className="p-3.5 font-mono font-bold text-indigo-300">
                     {t.id}
@@ -201,6 +208,14 @@ export default function SuperadminBillingTransactionsLedger() {
             </tbody>
           </table>
         </div>
+        <SuperadminTablePagination
+          page={page}
+          pageSize={pageSize}
+          totalItems={filtered.length}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+          itemLabel="transactions"
+        />
       </div>
     </div>
   );

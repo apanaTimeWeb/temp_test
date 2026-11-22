@@ -1,3 +1,4 @@
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 // frontend/src/app/frontend_superadmin/superadmin_data/data_import_migration/components/SuperadminDataImportMigrationHistoryTable.tsx
 'use client';
 
@@ -40,6 +41,12 @@ export function SuperadminDataImportMigrationHistoryTable({
   onRollbackBatch,
   isRollingBack,
 }: HistoryTableProps) {
+  const [page, setPage] = React.useState(0);
+  const [pageSize, setPageSize] = React.useState(10);
+
+  const paginatedBatches = React.useMemo(() => {
+    return batches.slice(page * pageSize, (page + 1) * pageSize);
+  }, [batches, page, pageSize]);
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
       <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -54,7 +61,7 @@ export function SuperadminDataImportMigrationHistoryTable({
 
         <select
           value={filterStatus}
-          onChange={(e) => onFilterStatusChange(e.target.value)}
+          onChange={(e) => { onFilterStatusChange(e.target.value); setPage(0); }}
           className="px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-amber-500"
         >
           <option value="ALL">All Batch Statuses</option>
@@ -79,7 +86,7 @@ export function SuperadminDataImportMigrationHistoryTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
-            {batches.map((batch) => (
+            {paginatedBatches.map((batch) => (
               <tr
                 key={batch.id}
                 className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors"
@@ -190,6 +197,14 @@ export function SuperadminDataImportMigrationHistoryTable({
           </tbody>
         </table>
       </div>
+      <SuperadminTablePagination
+        page={page}
+        pageSize={pageSize}
+        totalItems={batches.length}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+        itemLabel="migration batches"
+      />
     </div>
   );
 }

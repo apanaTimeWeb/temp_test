@@ -102,7 +102,7 @@ export default function SuperadminBranchesOverviewSemanticTable({
                 return (
                   <tr
                     key={branch.id}
-                    onClick={() => onView(branch)}
+                    onClick={() => onView?.(branch)}
                     className="hover:bg-indigo-950/30 transition-colors cursor-pointer"
                   >
                     {/* Branch Name & Code */}

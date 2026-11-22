@@ -1,3 +1,4 @@
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 // frontend/src/app/frontend_superadmin/superadmin_data/data_restore_operations/components/SuperadminDataRestoreOperationsSnapshotsTable.tsx
 'use client';
 
@@ -44,6 +45,12 @@ export function SuperadminDataRestoreOperationsSnapshotsTable({
   onSelectRestore,
 }: SnapshotsTableProps) {
   const [copiedHash, setCopiedHash] = React.useState<string | null>(null);
+  const [page, setPage] = React.useState(0);
+  const [pageSize, setPageSize] = React.useState(10);
+
+  const paginatedSnapshots = React.useMemo(() => {
+    return snapshots.slice(page * pageSize, (page + 1) * pageSize);
+  }, [snapshots, page, pageSize]);
 
   const handleCopyHash = (hash: string) => {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -73,7 +80,7 @@ export function SuperadminDataRestoreOperationsSnapshotsTable({
               <button
                 key={scope}
                 type="button"
-                onClick={() => onScopeFilterChange(scope)}
+                onClick={() => { onScopeFilterChange(scope); setPage(0); }}
                 className={`px-3 py-1.5 rounded-md transition-colors ${
                   scopeFilter === scope
                     ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs font-semibold'
@@ -97,7 +104,7 @@ export function SuperadminDataRestoreOperationsSnapshotsTable({
             <input
               type="text"
               value={searchQuery}
-              onChange={(e) => onSearchQueryChange(e.target.value)}
+              onChange={(e) => { onSearchQueryChange(e.target.value); setPage(0); }}
               placeholder="Search snapshots or tenants..."
               className="pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
             />
@@ -120,7 +127,7 @@ export function SuperadminDataRestoreOperationsSnapshotsTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
-            {snapshots.map((s) => (
+            {paginatedSnapshots.map((s) => (
               <tr
                 key={s.id}
                 className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors"
@@ -209,6 +216,14 @@ export function SuperadminDataRestoreOperationsSnapshotsTable({
           </tbody>
         </table>
       </div>
+      <SuperadminTablePagination
+        page={page}
+        pageSize={pageSize}
+        totalItems={snapshots.length}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+        itemLabel="snapshots"
+      />
     </div>
   );
 }

@@ -1,5 +1,7 @@
 'use client';
 // RESPONSIBILITY: Accessible semantic table for Admin, Manager and Staff account security and live session controls.
+import { useState, useMemo } from 'react';
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 import { Lock, Unlock, KeyRound, ShieldAlert, Laptop, Clock, ShieldCheck } from 'lucide-react';
 import type { UserSecurityAccount } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/types/SuperadminRolesPermissionsManagementTypes';
 
@@ -16,6 +18,12 @@ export default function SuperadminUserSecurityAccountsTable({
   onToggleLock,
   onTriggerPasswordReset,
 }: SuperadminUserSecurityAccountsTableProps) {
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedUsers = useMemo(() => {
+    return users.slice(page * pageSize, (page + 1) * pageSize);
+  }, [users, page, pageSize]);
   return (
     <div className="rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 shadow-md overflow-hidden">
       <div className="p-4 border-b border-indigo-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -46,7 +54,7 @@ export default function SuperadminUserSecurityAccountsTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-indigo-500/10 text-slate-200">
-            {users.map((user) => (
+            {paginatedUsers.map((user) => (
               <tr key={user.id} className="hover:bg-indigo-500/5 transition-colors">
                 {/* User Identity */}
                 <td className="py-3 px-4">
@@ -161,6 +169,14 @@ export default function SuperadminUserSecurityAccountsTable({
           </tbody>
         </table>
       </div>
+      <SuperadminTablePagination
+        page={page}
+        pageSize={pageSize}
+        totalItems={users.length}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+        itemLabel="accounts"
+      />
     </div>
   );
 }

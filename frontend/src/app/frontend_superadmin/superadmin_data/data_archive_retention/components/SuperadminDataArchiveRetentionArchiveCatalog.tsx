@@ -6,7 +6,8 @@
  * @description Cold Storage Data Archive Catalog & Legal Hold Overrides (Feature 7).
  */
 
-import React from 'react';
+import React, { useState, useMemo } from 'react';
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 import {
   Archive,
   RotateCcw,
@@ -47,6 +48,12 @@ export function SuperadminDataArchiveRetentionArchiveCatalog({
   onToggleLegalHold,
   isTogglingHold,
 }: ArchiveCatalogProps) {
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedRecords = useMemo(() => {
+    return records.slice(page * pageSize, (page + 1) * pageSize);
+  }, [records, page, pageSize]);
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
       <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -63,7 +70,7 @@ export function SuperadminDataArchiveRetentionArchiveCatalog({
           {/* Entity Filter */}
           <select
             value={filterEntityType}
-            onChange={(e) => onFilterEntityTypeChange(e.target.value)}
+            onChange={(e) => { onFilterEntityTypeChange(e.target.value); setPage(0); }}
             className="px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500"
           >
             <option value="ALL">All Archived Types</option>
@@ -75,7 +82,7 @@ export function SuperadminDataArchiveRetentionArchiveCatalog({
           {/* Storage Tier Filter */}
           <select
             value={filterTier}
-            onChange={(e) => onFilterTierChange(e.target.value)}
+            onChange={(e) => { onFilterTierChange(e.target.value); setPage(0); }}
             className="px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500"
           >
             <option value="ALL">All Storage Tiers</option>
@@ -100,7 +107,7 @@ export function SuperadminDataArchiveRetentionArchiveCatalog({
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
-            {records.map((item) => (
+            {paginatedRecords.map((item) => (
               <tr
                 key={item.id}
                 className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors"
@@ -193,6 +200,14 @@ export function SuperadminDataArchiveRetentionArchiveCatalog({
           </tbody>
         </table>
       </div>
+      <SuperadminTablePagination
+        page={page}
+        pageSize={pageSize}
+        totalItems={records.length}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+        itemLabel="archive records"
+      />
     </div>
   );
 }

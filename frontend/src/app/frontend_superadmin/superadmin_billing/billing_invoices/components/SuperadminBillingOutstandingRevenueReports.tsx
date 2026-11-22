@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 'use client';
 
 import React, { useState } from 'react';
@@ -25,6 +27,12 @@ const SAMPLE_OVERDUE_RECORDS: OverdueTenantRecord[] = [
 
 export default function SuperadminBillingOutstandingRevenueReports() {
   const [records, setRecords] = useState<OverdueTenantRecord[]>(SAMPLE_OVERDUE_RECORDS);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedRecords = useMemo(() => {
+    return records.slice(page * pageSize, (page + 1) * pageSize);
+  }, [records, page, pageSize]);
 
   const handleSendReminder = (tenant: string, phone: string) => {
     toast.success(`Dunning notice dispatched to ${tenant} via WhatsApp & Email (${phone}).`);
@@ -131,7 +139,7 @@ export default function SuperadminBillingOutstandingRevenueReports() {
               </tr>
             </thead>
             <tbody className="divide-y divide-indigo-500/10 text-slate-300">
-              {records.map((r) => (
+              {paginatedRecords.map((r) => (
                 <tr key={r.id} className="hover:bg-indigo-500/10 transition-colors">
                   <td className="p-3.5 font-bold text-slate-100">{r.tenant}</td>
                   <td className="p-3.5 font-mono text-indigo-300">{r.invoiceId}</td>
@@ -172,6 +180,14 @@ export default function SuperadminBillingOutstandingRevenueReports() {
             </tbody>
           </table>
         </div>
+        <SuperadminTablePagination
+          page={page}
+          pageSize={pageSize}
+          totalItems={records.length}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+          itemLabel="delinquent accounts"
+        />
       </div>
     </div>
   );

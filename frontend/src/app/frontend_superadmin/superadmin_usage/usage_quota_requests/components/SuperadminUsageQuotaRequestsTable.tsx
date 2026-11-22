@@ -1,6 +1,7 @@
 // components/SuperadminUsageQuotaRequestsTable.tsx
 // RESPONSIBILITY: Display interactive table of quota expansion requests with 1-click review action buttons.
-import React from 'react';
+import React, { useState, useMemo } from 'react';
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 import {
   Building2,
   HardDrive,
@@ -53,6 +54,12 @@ export function SuperadminUsageQuotaRequestsTable({
   onApprove,
   onReject,
 }: SuperadminUsageQuotaRequestsTableProps) {
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedRequests = useMemo(() => {
+    return requests.slice(page * pageSize, (page + 1) * pageSize);
+  }, [requests, page, pageSize]);
   return (
     <div className="rounded-2xl border border-indigo-500/25 bg-[#0a0d24]/90 overflow-hidden shadow-2xl backdrop-blur-xl">
       <div className="overflow-x-auto">
@@ -69,7 +76,7 @@ export function SuperadminUsageQuotaRequestsTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-indigo-500/15">
-            {requests.map((req) => {
+            {paginatedRequests.map((req) => {
               const resConfig = QUOTA_RESOURCE_TYPE_LABELS[req.resourceType];
               const statusConfig = QUOTA_STATUS_BADGES[req.status];
               const isPending = req.status === 'PENDING';
@@ -174,6 +181,14 @@ export function SuperadminUsageQuotaRequestsTable({
           </tbody>
         </table>
       </div>
+      <SuperadminTablePagination
+        page={page}
+        pageSize={pageSize}
+        totalItems={requests.length}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+        itemLabel="quota requests"
+      />
     </div>
   );
 }

@@ -2,7 +2,8 @@
 // RESPONSIBILITY: Renders the table of active automated backup schedules with search, status toggles, and frequency indicators. No direct API calls.
 'use client';
 
-import React from 'react';
+import React, { useState, useMemo } from 'react';
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 import { CalendarClock, CheckCircle2, PauseCircle, Search } from 'lucide-react';
 import type { SuperadminBackupSchedule } from '@/app/frontend_superadmin/superadmin_data/data_backup_operations/types/superadmin_data_backup_operations.types';
 import {
@@ -25,6 +26,12 @@ export function SuperadminDataBackupOperationsSchedulesTable({
   onSearchChange,
   onToggleStatus,
 }: SuperadminDataBackupOperationsSchedulesTableProps) {
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedSchedules = useMemo(() => {
+    return schedules.slice(page * pageSize, (page + 1) * pageSize);
+  }, [schedules, page, pageSize]);
   return (
     <div className="rounded-xl border border-border bg-card shadow-xs overflow-hidden" data-testid="data_backup-schedules-table-container">
       {/* ── Table Toolbar ── */}
@@ -39,7 +46,7 @@ export function SuperadminDataBackupOperationsSchedulesTable({
           <input
             type="text"
             value={searchFilter}
-            onChange={(e) => onSearchChange(e.target.value)}
+            onChange={(e) => { onSearchChange(e.target.value); setPage(0); }}
             placeholder="Search schedules..."
             className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-neutral-900 border border-border text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-pink-500"
           />
@@ -51,8 +58,9 @@ export function SuperadminDataBackupOperationsSchedulesTable({
         <div className="p-8 text-center text-xs text-muted-foreground">
           No schedules match your search query.
         </div>
-      ) : (
-        <div className="overflow-x-auto">
+      ): (
+        <>
+          <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
               <tr className="border-b border-border bg-neutral-900/50 text-muted-foreground uppercase tracking-wider font-semibold">
@@ -66,7 +74,7 @@ export function SuperadminDataBackupOperationsSchedulesTable({
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {schedules.map((schedule) => (
+              {paginatedSchedules.map((schedule) => (
                 <tr key={schedule.id} className="hover:bg-muted/30 transition-colors">
                   <td className="py-3.5 px-4">
                     <div className="font-semibold text-foreground">{schedule.name}</div>
@@ -148,6 +156,15 @@ export function SuperadminDataBackupOperationsSchedulesTable({
             </tbody>
           </table>
         </div>
+        <SuperadminTablePagination
+          page={page}
+          pageSize={pageSize}
+          totalItems={schedules.length}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+          itemLabel="schedules"
+        />
+        </>
       )}
     </div>
   );

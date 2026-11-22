@@ -1,6 +1,8 @@
 'use client';
 /** Responsibility: Superadmin Security Operations Panels; keep this view focused on its named module UI responsibility and delegate domain/state logic to module-owned hooks. */
 /** Data-Flow: leaf-owned props or hook state -> SuperadminSecurityIpFirewallOperationsPanels formatting/filtering -> accessible feature presentation; persistence stays at the leaf API boundary. */
+import { useState, useMemo } from 'react';
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 import { Ban, Trash2, Globe, Shield, Calendar, ShieldAlert } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { SuperadminSecurityOperationsPanelsProps } from '@/app/frontend_superadmin/superadmin_security/security_ip_firewall/types/SuperadminSecurityIpFirewallOperationsPanelsComponentTypes';
@@ -15,6 +17,12 @@ export default function SuperadminSecurityIpFirewallOperationsPanels({
   setNewIp,
   ipRules,
 }: SuperadminSecurityOperationsPanelsProps) {
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedIpRules = useMemo(() => {
+    return ipRules.slice(page * pageSize, (page + 1) * pageSize);
+  }, [ipRules, page, pageSize]);
   const tCopy = useTranslations('SUPERADMIN_SECURITY');
 
   return (
@@ -69,7 +77,7 @@ export default function SuperadminSecurityIpFirewallOperationsPanels({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-indigo-500/10">
-                  {ipRules.map((rule) => {
+                  {paginatedIpRules.map((rule) => {
                     const isBlocked = rule.type === 'BLOCKED';
                     return (
                       <tr key={rule.id} className="transition-colors hover:bg-indigo-950/20">
@@ -117,6 +125,14 @@ export default function SuperadminSecurityIpFirewallOperationsPanels({
                 </tbody>
               </table>
             </div>
+            <SuperadminTablePagination
+              page={page}
+              pageSize={pageSize}
+              totalItems={ipRules.length}
+              onPageChange={setPage}
+              onPageSizeChange={setPageSize}
+              itemLabel="IP rules"
+            />
           </div>
         </div>
       )}

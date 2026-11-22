@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 import { ShieldAlert, Search, CheckCircle2, Clock } from 'lucide-react';
 import { toast } from 'sonner';
 import type { MfaEnrollmentAccount } from '@/app/frontend_superadmin/superadmin_security/security_mfa/types/SuperadminSecurityMfaPolicyPanelsComponentTypes';
@@ -23,6 +24,13 @@ export default function SuperadminSecurityMfaAccountsTable({
     return matchesRole && matchesSearch;
   });
 
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedAccounts = useMemo(() => {
+    return filteredAccounts.slice(page * pageSize, (page + 1) * pageSize);
+  }, [filteredAccounts, page, pageSize]);
+
   return (
     <div className="p-5 sm:p-6 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md space-y-4">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-border/80 pb-4">
@@ -42,14 +50,14 @@ export default function SuperadminSecurityMfaAccountsTable({
             <input
               type="search"
               value={accountSearch}
-              onChange={(e) => setAccountSearch(e.target.value)}
+              onChange={(e) => { setAccountSearch(e.target.value); setPage(0); }}
               placeholder="Search admin name/email..."
               className="w-full pl-9 pr-3 py-1.5 text-xs rounded-xl bg-card border border-border/80 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-500"
             />
           </div>
           <select
             value={roleFilter}
-            onChange={(e) => setRoleFilter(e.target.value as 'All' | 'SuperAdmin' | 'Admin')}
+            onChange={(e) => { setRoleFilter(e.target.value as 'All' | 'SuperAdmin' | 'Admin'); setPage(0); }}
             className="px-2.5 py-1.5 text-xs rounded-xl bg-card border border-border/80 text-slate-200 focus:outline-none focus:border-indigo-500"
           >
             <option value="All">All Roles</option>
@@ -73,7 +81,7 @@ export default function SuperadminSecurityMfaAccountsTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-border/60 font-mono">
-            {filteredAccounts.map((acc) => {
+            {paginatedAccounts.map((acc) => {
               const isSuper = acc.role === 'SuperAdmin';
               const isEnforced = acc.status === 'Enforced';
               return (
@@ -125,6 +133,14 @@ export default function SuperadminSecurityMfaAccountsTable({
           </tbody>
         </table>
       </div>
+      <SuperadminTablePagination
+        page={page}
+        pageSize={pageSize}
+        totalItems={filteredAccounts.length}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+        itemLabel="accounts"
+      />
     </div>
   );
 }

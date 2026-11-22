@@ -1,5 +1,6 @@
 // RESPONSIBILITY: Render 10-column data table displaying all 12 resource quotas per registered library account.
-import React from 'react';
+import React, { useState, useMemo } from 'react';
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 import { Eye, AlertCircle, Building2, HardDrive, MessageSquare, Database } from 'lucide-react';
 import type { LibraryUsageRecord } from '../types/SuperadminUsageOverviewTypes';
 import { calculateUsagePercent, getQuotaColorClasses } from '../utils/SuperadminUsageOverviewFormatters';
@@ -14,6 +15,12 @@ export function SuperadminUsageOverviewTable({
   libraries,
   onSelectLibrary,
 }: SuperadminUsageOverviewTableProps) {
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedLibraries = useMemo(() => {
+    return libraries.slice(page * pageSize, (page + 1) * pageSize);
+  }, [libraries, page, pageSize]);
   return (
     <div className="rounded-2xl border border-indigo-500/25 bg-[#0a0d24]/90 overflow-hidden shadow-2xl backdrop-blur-xl">
       <div className="overflow-x-auto scrollbar-thin">
@@ -28,7 +35,7 @@ export function SuperadminUsageOverviewTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-indigo-500/15">
-            {libraries.map((lib) => {
+            {paginatedLibraries.map((lib) => {
               const branchPct = calculateUsagePercent(lib.branchUsage.current, lib.branchUsage.limit);
               const branchColor = getQuotaColorClasses(lib.branchUsage.status);
               const memberPct = calculateUsagePercent(lib.memberUsage.current, lib.memberUsage.limit);
@@ -162,6 +169,14 @@ export function SuperadminUsageOverviewTable({
           </tbody>
         </table>
       </div>
+      <SuperadminTablePagination
+        page={page}
+        pageSize={pageSize}
+        totalItems={libraries.length}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+        itemLabel="libraries"
+      />
     </div>
   );
 }

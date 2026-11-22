@@ -1,5 +1,7 @@
 'use client';
 // RESPONSIBILITY: Semantic accessible table listing all roles with single-line horizontal actions.
+import { useState, useMemo } from 'react';
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 import { Shield, Copy, Trash2, Edit3, Lock, Users, Sparkles } from 'lucide-react';
 import type { RoleDefinition } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/types/SuperadminRolesPermissionsManagementTypes';
 
@@ -24,6 +26,12 @@ export default function SuperadminRolesListTable({
   onDuplicateRole,
   onDeleteRole,
 }: SuperadminRolesListTableProps) {
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedRoles = useMemo(() => {
+    return roles.slice(page * pageSize, (page + 1) * pageSize);
+  }, [roles, page, pageSize]);
   const getCategoryBadge = (category: RoleDefinition['roleCategory']) => {
     switch (category) {
       case 'internal_platform':
@@ -57,7 +65,7 @@ export default function SuperadminRolesListTable({
             type="search"
             placeholder="Search roles by name or description..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
             className="w-full rounded-xl border border-indigo-500/25 bg-input px-3.5 py-2.5 text-xs text-white placeholder:text-slate-400 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none"
           />
         </div>
@@ -72,7 +80,7 @@ export default function SuperadminRolesListTable({
             <button
               key={cat.id}
               type="button"
-              onClick={() => setCategoryFilter(cat.id)}
+              onClick={() => { setCategoryFilter(cat.id); setPage(0); }}
               className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 categoryFilter === cat.id
                   ? 'bg-indigo-600 text-white shadow-xs font-bold'
@@ -108,7 +116,7 @@ export default function SuperadminRolesListTable({
                   </td>
                 </tr>
               ) : (
-                roles.map((role) => (
+                paginatedRoles.map((role) => (
                   <tr key={role.id} className="hover:bg-indigo-500/5 transition-colors">
                     {/* Role Name */}
                     <td className="py-3 px-4">
@@ -197,6 +205,14 @@ export default function SuperadminRolesListTable({
             </tbody>
           </table>
         </div>
+        <SuperadminTablePagination
+          page={page}
+          pageSize={pageSize}
+          totalItems={roles.length}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+          itemLabel="roles"
+        />
       </div>
     </div>
   );

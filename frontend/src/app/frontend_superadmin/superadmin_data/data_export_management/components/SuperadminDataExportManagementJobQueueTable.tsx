@@ -1,3 +1,4 @@
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 // frontend/src/app/frontend_superadmin/superadmin_data/data_export_management/components/SuperadminDataExportManagementJobQueueTable.tsx
 'use client';
 
@@ -44,6 +45,12 @@ export function SuperadminDataExportManagementJobQueueTable({
   onCancelJob,
 }: JobQueueTableProps) {
   const [copiedHash, setCopiedHash] = React.useState<string | null>(null);
+  const [page, setPage] = React.useState(0);
+  const [pageSize, setPageSize] = React.useState(10);
+
+  const paginatedJobs = React.useMemo(() => {
+    return jobs.slice(page * pageSize, (page + 1) * pageSize);
+  }, [jobs, page, pageSize]);
 
   const handleCopyHash = (hash: string) => {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -72,7 +79,7 @@ export function SuperadminDataExportManagementJobQueueTable({
               <button
                 key={s}
                 type="button"
-                onClick={() => onFilterScopeChange(s)}
+                onClick={() => { onFilterScopeChange(s); setPage(0); }}
                 className={`px-3 py-1.5 rounded-md transition-colors ${
                   filterScope === s
                     ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs font-semibold'
@@ -87,7 +94,7 @@ export function SuperadminDataExportManagementJobQueueTable({
           {/* Status Filter */}
           <select
             value={filterStatus}
-            onChange={(e) => onFilterStatusChange(e.target.value)}
+            onChange={(e) => { onFilterStatusChange(e.target.value); setPage(0); }}
             className="px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
           >
             <option value="ALL">All Statuses</option>
@@ -113,7 +120,7 @@ export function SuperadminDataExportManagementJobQueueTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
-            {jobs.map((job) => (
+            {paginatedJobs.map((job) => (
               <tr
                 key={job.id}
                 className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors"
@@ -245,6 +252,14 @@ export function SuperadminDataExportManagementJobQueueTable({
           </tbody>
         </table>
       </div>
+      <SuperadminTablePagination
+        page={page}
+        pageSize={pageSize}
+        totalItems={jobs.length}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+        itemLabel="export jobs"
+      />
     </div>
   );
 }

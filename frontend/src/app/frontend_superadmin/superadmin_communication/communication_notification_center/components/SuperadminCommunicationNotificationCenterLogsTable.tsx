@@ -1,3 +1,4 @@
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 'use client';
 // RESPONSIBILITY: Delivery tracking table with delivery status, failure reasons, and 1-click retry with Cyber-Luxury styling.
 // FLOW: SuperadminCommunicationNotificationCenterMain -> LogsTable -> Detail drawer / Retry mutation.
@@ -35,6 +36,8 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [channelFilter, setChannelFilter] = useState('ALL');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   const filteredLogs = useMemo(() => {
     if (!notifications) return [];
@@ -52,6 +55,10 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
       return true;
     });
   }, [notifications, statusFilter, channelFilter, search]);
+
+  const paginatedLogs = useMemo(() => {
+    return filteredLogs.slice(page * pageSize, (page + 1) * pageSize);
+  }, [filteredLogs, page, pageSize]);
 
   const handleRetry = async (record: NotificationRecord, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -83,7 +90,7 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
             type="text"
             placeholder="Search delivery logs by recipient, library, or failure reason..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); setPage(0); }}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 transition-all shadow-inner"
           />
         </div>
@@ -91,7 +98,7 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
         <div className="flex items-center gap-2.5">
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
             className="px-3 py-2 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs text-slate-200 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 cursor-pointer shadow-inner"
           >
             <option value="ALL" className="bg-slate-900 text-slate-100">All Statuses</option>
@@ -104,7 +111,7 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
 
           <select
             value={channelFilter}
-            onChange={(e) => setChannelFilter(e.target.value)}
+            onChange={(e) => { setChannelFilter(e.target.value); setPage(0); }}
             className="px-3 py-2 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs text-slate-200 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 cursor-pointer shadow-inner"
           >
             <option value="ALL" className="bg-slate-900 text-slate-100">All Channels</option>
@@ -130,7 +137,7 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
             </tr>
           </thead>
           <tbody className="divide-y divide-indigo-500/15">
-            {filteredLogs.map((log) => {
+            {paginatedLogs.map((log) => {
               const statusCfg = NOTIFICATION_STATUS_CONFIG[log.status] ?? NOTIFICATION_STATUS_CONFIG.PENDING;
               const isFailed = log.status === 'FAILED' || log.status === 'BOUNCED';
               const isRetrying = retryingId === log.id;
@@ -242,6 +249,14 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
             })}
           </tbody>
         </table>
+        <SuperadminTablePagination
+          page={page}
+          pageSize={pageSize}
+          totalItems={filteredLogs.length}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+          itemLabel="notifications"
+        />
       </div>
     </div>
   );

@@ -64,18 +64,18 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
       aria-hidden={mobileNavigationHidden || undefined}
       inert={mobileNavigationHidden ? true : undefined}
     >
-      {/* ─── Fixed Header: Brand & Compact Collapse Action ─── */}
+      {/* ─── Fixed Header: Brand & Scope Bar ─── */}
       <div className="shrink-0 border-b border-white/[0.08] bg-black/40 backdrop-blur-xl z-10">
-        {/* Brand Logo Row with Compact Collapse Button */}
-        <div className="h-16 px-3.5 flex items-center justify-between">
+        {/* Brand Logo Row */}
+        <div className="h-16 px-4 flex items-center">
           <Link
             href={SUPERADMIN_NAVIGATION_ROUTES.dashboard_overview}
-            className="flex items-center gap-2.5 no-underline group min-w-0"
+            className="flex items-center gap-3 w-full no-underline group"
           >
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-indigo-600 p-[1.5px] shadow-[0_0_14px_rgba(245,158,11,0.3)] transition-transform duration-300 group-hover:scale-105 shrink-0">
-              <div className="w-full h-full rounded-[9px] bg-neutral-950/90 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-indigo-600 p-[1.5px] shadow-[0_0_18px_rgba(245,158,11,0.35)] transition-transform duration-300 group-hover:scale-105 shrink-0">
+              <div className="w-full h-full rounded-[10px] bg-neutral-950/90 flex items-center justify-center">
                 <BookOpen
-                  size={16}
+                  size={18}
                   strokeWidth={2.4}
                   className="text-amber-400 drop-shadow-[0_0_6px_rgba(245,158,11,0.5)]"
                 />
@@ -83,38 +83,40 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
             </div>
             <div className="flex flex-col min-w-0 justify-center">
               <div className="flex items-center gap-1 leading-none">
-                <span className="text-[14px] font-black tracking-tight text-white group-hover:text-amber-300 transition-colors">
+                <span className="text-[15px] font-black tracking-tight text-white group-hover:text-amber-300 transition-colors">
                   Library
                 </span>
-                <span className="text-[14px] font-black tracking-tight bg-gradient-to-r from-amber-400 via-orange-400 to-pink-500 bg-clip-text text-transparent">
+                <span className="text-[15px] font-black tracking-tight bg-gradient-to-r from-amber-400 via-orange-400 to-pink-500 bg-clip-text text-transparent">
                   OS
                 </span>
               </div>
               <div className="mt-1 flex items-center gap-1.5">
-                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-extrabold uppercase tracking-widest bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-widest bg-amber-500/15 text-amber-300 border border-amber-500/30">
                   Super Admin
                 </span>
               </div>
             </div>
           </Link>
+        </div>
 
-          {/* Compact Collapse / Expand Button */}
+        {/* Compact Expand/Collapse Action Row (where it was originally) */}
+        <div className="px-3.5 py-1.5 flex items-center justify-end bg-white/[0.02] border-t border-white/[0.04]">
           <button
             type="button"
             onClick={toggleAll}
-            className="flex items-center gap-1 px-1.5 py-1 rounded text-[9px] font-semibold text-neutral-400 hover:text-amber-300 hover:bg-white/[0.06] border border-white/[0.08] hover:border-amber-400/20 transition-all cursor-pointer shrink-0"
+            className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-semibold text-amber-400 hover:text-amber-300 hover:bg-amber-400/10 border border-amber-400/20 transition-all cursor-pointer"
             title={allExpanded ? 'Collapse all sub-modules' : 'Expand all sub-modules'}
             aria-label={allExpanded ? 'Collapse all sub-modules' : 'Expand all sub-modules'}
           >
             {allExpanded ? (
               <>
-                <ChevronsDownUp size={11} />
+                <ChevronsDownUp size={10} />
                 <span>Collapse</span>
               </>
             ) : (
               <>
-                <ChevronsUpDown size={11} />
-                <span>Expand</span>
+                <ChevronsUpDown size={10} />
+                <span>Expand All</span>
               </>
             )}
           </button>

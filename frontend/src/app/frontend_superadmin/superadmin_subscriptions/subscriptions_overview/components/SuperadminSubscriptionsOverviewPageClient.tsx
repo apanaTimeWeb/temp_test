@@ -3,26 +3,18 @@
 import { useState, useMemo, useCallback } from 'react';
 import { toast } from 'sonner';
 import { useTranslations, useLocale } from 'next-intl';
-import {
-  ShieldCheck, Building2, Package, CheckCircle, Clock,
-  AlertTriangle, History, Edit, MessageSquare, Mail, PhoneCall
-} from 'lucide-react';
+import { ShieldCheck, Building2, Package, CheckCircle, Clock, AlertTriangle, History, Edit, MessageSquare, Mail, PhoneCall } from 'lucide-react';
 import SuperadminSubscriptionsOverviewSemanticTable, {
   type SemanticColumnDef,
   type SemanticCellParams,
 } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/components/SuperadminSubscriptionsOverviewSemanticTable';
 import { SUPERADMIN_SUBSCRIPTIONS_SAMPLE_SUBSCRIBERS } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/mocks/fixtures/SuperadminSubscriptionsOverviewMockFixtures';
 import { formatSuperadminSubscriptionsMajorPreviewCurrency } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/utils/SuperadminSubscriptionsOverviewFormatters';
-import type {
-  SuperadminSubscriptionRecord,
-  SuperadminSubscriptionPaymentStatus,
-} from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/types/SuperadminSubscriptionsOverviewTypes';
+import type { SuperadminSubscriptionRecord, SuperadminSubscriptionPaymentStatus } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/types/SuperadminSubscriptionsOverviewTypes';
 import SuperadminSubscriptionsOverviewKpis from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/components/SuperadminSubscriptionsOverviewKpis';
 import SuperadminSubscriptionsOverviewHeader from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/components/SuperadminSubscriptionsOverviewHeader';
 import SuperadminSubscriptionsOverviewFilterBar from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/components/SuperadminSubscriptionsOverviewFilterBar';
-import SuperadminSubscriptionsOverviewActionModal from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/components/SuperadminSubscriptionsOverviewActionModal';
-import SuperadminSubscriptionsOverviewNewModal from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/components/SuperadminSubscriptionsOverviewNewModal';
-import SuperadminSubscriptionsOverviewHistoryModal from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/components/SuperadminSubscriptionsOverviewHistoryModal';
+import SuperadminSubscriptionsOverviewModals from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/components/SuperadminSubscriptionsOverviewModals';
 import {
   downloadSuperadminSubscriptionsCsv,
   downloadSuperadminSubscriptionsExcel,
@@ -288,23 +280,16 @@ export default function SuperadminSubscriptionsOverviewPageClient() {
       </div>
 
       {/* Action Modals */}
-      <SuperadminSubscriptionsOverviewActionModal
-        subscription={selectedSub}
-        isOpen={isActionModalOpen}
-        onClose={() => setIsActionModalOpen(false)}
-        onSave={handleSaveAction}
-      />
-
-      <SuperadminSubscriptionsOverviewNewModal
-        isOpen={isNewModalOpen}
-        onClose={() => setIsNewModalOpen(false)}
-        onCreate={handleCreateSubscription}
-      />
-
-      <SuperadminSubscriptionsOverviewHistoryModal
-        subscription={selectedSub}
-        isOpen={isHistoryModalOpen}
-        onClose={() => setIsHistoryModalOpen(false)}
+      <SuperadminSubscriptionsOverviewModals
+        selectedSub={selectedSub}
+        isActionModalOpen={isActionModalOpen}
+        onCloseActionModal={() => setIsActionModalOpen(false)}
+        onSaveAction={handleSaveAction}
+        isNewModalOpen={isNewModalOpen}
+        onCloseNewModal={() => setIsNewModalOpen(false)}
+        onCreateSubscription={handleCreateSubscription}
+        isHistoryModalOpen={isHistoryModalOpen}
+        onCloseHistoryModal={() => setIsHistoryModalOpen(false)}
       />
     </div>
   );

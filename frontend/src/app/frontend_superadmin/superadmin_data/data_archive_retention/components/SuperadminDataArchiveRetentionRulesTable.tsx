@@ -1,3 +1,4 @@
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 // frontend/src/app/frontend_superadmin/superadmin_data/data_archive_retention/components/SuperadminDataArchiveRetentionRulesTable.tsx
 'use client';
 
@@ -24,6 +25,12 @@ export function SuperadminDataArchiveRetentionRulesTable({
   rules,
   onEditRule,
 }: RulesTableProps) {
+  const [page, setPage] = React.useState(0);
+  const [pageSize, setPageSize] = React.useState(10);
+
+  const paginatedRules = React.useMemo(() => {
+    return rules.slice(page * pageSize, (page + 1) * pageSize);
+  }, [rules, page, pageSize]);
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
       <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
@@ -51,7 +58,7 @@ export function SuperadminDataArchiveRetentionRulesTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
-            {rules.map((rule) => (
+            {paginatedRules.map((rule) => (
               <tr
                 key={rule.id}
                 className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors"
@@ -140,6 +147,14 @@ export function SuperadminDataArchiveRetentionRulesTable({
           </tbody>
         </table>
       </div>
+      <SuperadminTablePagination
+        page={page}
+        pageSize={pageSize}
+        totalItems={rules.length}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+        itemLabel="retention rules"
+      />
     </div>
   );
 }

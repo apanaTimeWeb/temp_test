@@ -1,3 +1,4 @@
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 // components/SuperadminIntegrationsOverviewLogsPanel.tsx
 // RESPONSIBILITY: Render searchable live integration logs and inspect HTTP request/response payloads.
 // DATA FLOW: Logs array -> SuperadminIntegrationsOverviewLogsPanel -> Inspector Modal.
@@ -24,6 +25,8 @@ export const SuperadminIntegrationsOverviewLogsPanel: React.FC<
   const [filterProvider, setFilterProvider] = useState<string>('all');
   const [search, setSearch] = useState<string>('');
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   const handleCopy = (text: string, section: string) => {
     navigator.clipboard.writeText(text);
@@ -49,6 +52,10 @@ export const SuperadminIntegrationsOverviewLogsPanel: React.FC<
     });
   }, [logs, filterProvider, search]);
 
+  const paginatedLogs = useMemo(() => {
+    return filteredLogs.slice(page * pageSize, (page + 1) * pageSize);
+  }, [filteredLogs, page, pageSize]);
+
   return (
     <div className="space-y-4" data-testid="superadmin-integration-logs-panel">
       {/* Search & Provider Filter */}
@@ -57,7 +64,7 @@ export const SuperadminIntegrationsOverviewLogsPanel: React.FC<
           <Filter size={15} className="text-slate-400" />
           <select
             value={filterProvider}
-            onChange={(e) => setFilterProvider(e.target.value)}
+            onChange={(e) => { setFilterProvider(e.target.value); setPage(0); }}
             className="rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-1.5 text-xs text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 shadow-inner"
           >
             <option value="all" className="bg-slate-900 text-slate-100">All Providers</option>
@@ -74,7 +81,7 @@ export const SuperadminIntegrationsOverviewLogsPanel: React.FC<
           <input
             type="text"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); setPage(0); }}
             placeholder="Search endpoint, request ID..."
             className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 pl-9 pr-3 py-1.5 text-xs text-slate-100 placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 shadow-inner"
           />
@@ -104,7 +111,7 @@ export const SuperadminIntegrationsOverviewLogsPanel: React.FC<
                   </td>
                 </tr>
               ) : (
-                filteredLogs.map((log) => {
+                paginatedLogs.map((log) => {
                   const statusInfo = formatStatusCodeBadge(log.statusCode);
                   const latencyInfo = formatLatency(log.latencyMs);
                   return (
@@ -157,6 +164,14 @@ export const SuperadminIntegrationsOverviewLogsPanel: React.FC<
             </tbody>
           </table>
         </div>
+        <SuperadminTablePagination
+          page={page}
+          pageSize={pageSize}
+          totalItems={filteredLogs.length}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+          itemLabel="integration logs"
+        />
       </div>
 
       {/* Payload Inspector Modal */}
