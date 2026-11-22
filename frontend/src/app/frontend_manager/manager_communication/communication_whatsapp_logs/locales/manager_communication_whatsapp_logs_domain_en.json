@@ -201,7 +201,9 @@
         "invalid_resource_title": "Resource not found",
         "invalid_resource_description": "This view does not accept a resource ID. Open a supported view without an ID.",
         "previous_page": "Previous page",
-        "next_page": "Next page"
+        "next_page": "Next page",
+        "all_statuses": "All Statuses",
+        "total_messages": "Total Messages"
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",

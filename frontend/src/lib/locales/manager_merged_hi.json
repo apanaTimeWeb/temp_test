@@ -354,7 +354,8 @@
         "invalid_resource_description": "इस लिंक में मान्य रिकॉर्ड पहचानकर्ता नहीं है। सुविधा सूची पर लौटें और रिकॉर्ड फिर से खोलें।",
         "previous_page": "पिछला पृष्ठ",
         "next_page": "अगला पृष्ठ",
-        "confirm_leave_with_unsaved_changes": "आपके पास बिना सहेजे परिवर्तन हैं। क्या आप इस पृष्ठ को छोड़ना चाहते हैं?"
+        "confirm_leave_with_unsaved_changes": "आपके पास बिना सहेजे परिवर्तन हैं। क्या आप इस पृष्ठ को छोड़ना चाहते हैं?",
+        "no_matching_expenses_found": "कोई मेल खाने वाला खर्च नहीं मिला।"
       },
       "errors": {
         "GENERIC_TITLE": "कुछ गलत हुआ",
@@ -1062,7 +1063,9 @@
         "preview_add_holiday_draft": "छुट्टी का ड्राफ़्ट देखें",
         "holiday_draft_preview_only": "यह केवल ड्राफ़्ट पूर्वावलोकन है; होस्ट अनुबंध के बिना सहेजना उपलब्ध नहीं है।",
         "previous_month": "पिछला महीना",
-        "next_month": "अगला महीना"
+        "next_month": "अगला महीना",
+        "night": "रात",
+        "full_day": "पूरा दिन"
       },
       "errors": {
         "GENERIC_TITLE": "कुछ गलत हुआ",
@@ -2304,7 +2307,9 @@
         "invalid_resource_title": "संसाधन नहीं मिला",
         "invalid_resource_description": "यह दृश्य संसाधन ID स्वीकार नहीं करता। बिना ID के समर्थित दृश्य खोलें।",
         "previous_page": "पिछला पृष्ठ",
-        "next_page": "अगला पृष्ठ"
+        "next_page": "अगला पृष्ठ",
+        "all_statuses": "सभी स्थितियाँ",
+        "total_messages": "कुल संदेश"
       },
       "errors": {
         "GENERIC_TITLE": "कुछ गलत हुआ",

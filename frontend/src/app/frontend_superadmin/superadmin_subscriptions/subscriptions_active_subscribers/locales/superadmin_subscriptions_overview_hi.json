@@ -84,7 +84,10 @@
       "MODULE_ROUTE_LOADING": "फ़ीचर लोड हो रहा है…",
       "CONFIRM_DIALOG_TITLE": "कार्रवाई की पुष्टि करें",
       "CONFIRM_DIALOG_CANCEL": "रद्द करें",
-      "CONFIRM_DIALOG_CONTINUE": "जारी रखें"
+      "CONFIRM_DIALOG_CONTINUE": "जारी रखें",
+      "TABLE_COLUMN_ACTION": "कार्रवाइयां",
+      "TABLE_COLUMN_MRR": "एमआरआर",
+      "TABLE_COLUMN_NEXT_RENEWAL": "अगला नवीनीकरण"
     }
   }
 }

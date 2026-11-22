@@ -84,7 +84,10 @@
       "MODULE_ROUTE_LOADING": "Loading feature…",
       "CONFIRM_DIALOG_TITLE": "Confirm action",
       "CONFIRM_DIALOG_CANCEL": "Cancel",
-      "CONFIRM_DIALOG_CONTINUE": "Continue"
+      "CONFIRM_DIALOG_CONTINUE": "Continue",
+      "TABLE_COLUMN_ACTION": "Actions",
+      "TABLE_COLUMN_MRR": "MRR",
+      "TABLE_COLUMN_NEXT_RENEWAL": "Next Renewal"
     }
   }
 }

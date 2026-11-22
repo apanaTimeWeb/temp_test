@@ -201,7 +201,9 @@
         "invalid_resource_title": "संसाधन नहीं मिला",
         "invalid_resource_description": "यह दृश्य संसाधन ID स्वीकार नहीं करता। बिना ID के समर्थित दृश्य खोलें।",
         "previous_page": "पिछला पृष्ठ",
-        "next_page": "अगला पृष्ठ"
+        "next_page": "अगला पृष्ठ",
+        "all_statuses": "सभी स्थितियाँ",
+        "total_messages": "कुल संदेश"
       },
       "errors": {
         "GENERIC_TITLE": "कुछ गलत हुआ",

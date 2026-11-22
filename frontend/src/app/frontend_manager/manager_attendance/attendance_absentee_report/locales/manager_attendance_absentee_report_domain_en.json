@@ -120,7 +120,9 @@
         "preview_add_holiday_draft": "Preview holiday draft",
         "holiday_draft_preview_only": "Draft preview only; saving is unavailable without the host mutation contract.",
         "previous_month": "Previous month",
-        "next_month": "Next month"
+        "next_month": "Next month",
+        "night": "Night",
+        "full_day": "Full Day"
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",

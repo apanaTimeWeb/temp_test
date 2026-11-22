@@ -2304,7 +2304,10 @@
       "WORKFLOW_NAVIGATION": "Workflow navigation",
       "WORKFLOW_MEMBER_SUBSCRIPTIONS": "Member Subscriptions",
       "WORKFLOW_MEMBER_AUTO_SUSPEND_POLICY": "Member Auto Suspend Policy",
-      "WORKFLOW_MEMBER_RENEWALS": "Member Renewals"
+      "WORKFLOW_MEMBER_RENEWALS": "Member Renewals",
+      "TABLE_COLUMN_ACTION": "Actions",
+      "TABLE_COLUMN_MRR": "MRR",
+      "TABLE_COLUMN_NEXT_RENEWAL": "Next Renewal"
     }
   },
   "SUPERADMIN_SECURITY": {

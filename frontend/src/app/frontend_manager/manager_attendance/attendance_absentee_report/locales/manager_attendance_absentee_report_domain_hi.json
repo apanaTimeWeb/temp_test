@@ -120,7 +120,9 @@
         "preview_add_holiday_draft": "छुट्टी का ड्राफ़्ट देखें",
         "holiday_draft_preview_only": "यह केवल ड्राफ़्ट पूर्वावलोकन है; होस्ट अनुबंध के बिना सहेजना उपलब्ध नहीं है।",
         "previous_month": "पिछला महीना",
-        "next_month": "अगला महीना"
+        "next_month": "अगला महीना",
+        "night": "रात",
+        "full_day": "पूरा दिन"
       },
       "errors": {
         "GENERIC_TITLE": "कुछ गलत हुआ",

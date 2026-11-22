@@ -89,7 +89,10 @@
       "WORKFLOW_MEMBER_SUBSCRIPTIONS": "सदस्य सदस्यताएँ",
       "WORKFLOW_MEMBER_AUTO_SUSPEND_POLICY": "सदस्य स्वचालित निलंबन नीति",
       "WORKFLOW_MEMBER_RENEWALS": "सदस्य नवीनीकरण",
-      "MODULE_ROUTE_LOADING": "फ़ीचर लोड हो रहा है…"
+      "MODULE_ROUTE_LOADING": "फ़ीचर लोड हो रहा है…",
+      "TABLE_COLUMN_ACTION": "कार्रवाइयां",
+      "TABLE_COLUMN_MRR": "एमआरआर",
+      "TABLE_COLUMN_NEXT_RENEWAL": "अगला नवीनीकरण"
     }
   },
   "SUPERADMIN_FINANCE": {
