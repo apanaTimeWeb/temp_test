@@ -1,6 +1,6 @@
 'use client';
-// RESPONSIBILITY: Main orchestrator for Branch Management (Module 03) adhering to WEB_FRONTEND_ARCHITECTURE_AND_DEVELOPMENT_RULES_V1 (< 300 lines).
-import { useState, useEffect, useMemo } from 'react';
+// RESPONSIBILITY: Main orchestrator for Branch Management (Module 04) adhering to WEB_FRONTEND_ARCHITECTURE_AND_DEVELOPMENT_RULES_V1 (< 300 lines).
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSuperadminBranchesOverview } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/hooks/useSuperadminBranchesOverview';
 import SuperadminBranchesOverviewHeader from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewHeader';
@@ -56,17 +56,16 @@ export default function SuperadminBranchesOverviewPageClient() {
   const [reportsTarget, setReportsTarget] = useState<SuperadminBranchRecord | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Check URL query param ?action=create or ?tab=lifecycle
   useEffect(() => {
     if (searchParams?.get('action') === 'create') {
       setIsCreateOpen(true);
     }
   }, [searchParams]);
 
-  const showToast = (msg: string) => {
+  const showToast = useCallback((msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 4000);
-  };
+  }, []);
 
   const existingCodes = useMemo(() => branches.map((b) => b.code), [branches]);
 
@@ -84,38 +83,17 @@ export default function SuperadminBranchesOverviewPageClient() {
     printSuperadminBranchesRoster(filteredBranches);
   };
 
-  const handleSuspend = (branch: SuperadminBranchRecord) => {
-    setSuspendTarget(branch);
-  };
-
   const handleDuplicate = (b: SuperadminBranchRecord) => {
     const newCode = `BR-CLONE-${Math.floor(100 + Math.random() * 900)}`;
     const result = createBranch({
+      ...b,
       code: newCode,
       name: `${b.name} (Copy)`,
-      libraryId: b.libraryId,
-      libraryName: b.libraryName,
-      city: b.city,
-      state: b.state,
-      address: b.address,
-      pinCode: b.pinCode,
-      phone: b.phone,
-      email: b.email,
-      managerName: b.managerName,
-      managerEmail: b.managerEmail,
-      managerPhone: b.managerPhone,
-      adminName: b.adminName,
-      adminEmail: b.adminEmail,
       openingDate: new Date().toISOString().split('T')[0],
-      workingHours: b.workingHours,
-      weeklyHolidays: b.weeklyHolidays,
-      capacity: b.capacity,
       activeMembers: 0,
-      physicalBooks: b.physicalBooks,
       outstandingBooks: 0,
       memberDues: 0,
       cashBalance: 0,
-      plan: b.plan,
       allowedModules: { ...b.allowedModules },
     });
     if (result.success) {
@@ -132,9 +110,9 @@ export default function SuperadminBranchesOverviewPageClient() {
         <div
           role="status"
           aria-live="polite"
-          className="fixed top-5 right-5 z-50 rounded-xl border border-emerald-500/50 bg-emerald-950/90 text-emerald-200 px-4 py-3 shadow-xl flex items-center gap-2 backdrop-blur-md animate-fade-in"
+          className="fixed top-5 right-5 z-40 rounded-xl border border-success-border bg-success-bg text-success px-4 py-3 shadow-card flex items-center gap-2 backdrop-blur-md animate-fade-in"
         >
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+          <span className="w-2 h-2 rounded-full bg-success motion-safe:animate-ping" />
           <span className="text-sm font-semibold">{toastMessage}</span>
         </div>
       )}
@@ -180,7 +158,7 @@ export default function SuperadminBranchesOverviewPageClient() {
           activateBranch(id);
           showToast('Branch operational status updated to Active.');
         }}
-        onSuspend={handleSuspend}
+        onSuspend={(b) => setSuspendTarget(b)}
         onCloseSafety={(b) => setSafetyCloseTarget(b)}
         onRestore={(id) => {
           restoreBranch(id);
@@ -198,7 +176,7 @@ export default function SuperadminBranchesOverviewPageClient() {
               activateBranch(id);
               showToast('Branch activated.');
             }}
-            onSuspend={handleSuspend}
+            onSuspend={(b) => setSuspendTarget(b)}
             onCloseSafety={(b) => setSafetyCloseTarget(b)}
             onRestore={(id) => {
               restoreBranch(id);

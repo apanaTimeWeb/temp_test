@@ -1,6 +1,6 @@
 'use client';
 // RESPONSIBILITY: Render single-line horizontal action buttons for each branch row.
-import { Eye, Edit2, ShieldAlert, CheckCircle2, XCircle, RotateCcw, UserCheck, Clock, BarChart2, MessageSquare, Mail, Copy } from 'lucide-react';
+import { Eye, Edit2, ShieldAlert, CheckCircle2, XCircle, RotateCcw, UserCheck, Clock, BarChart2, Copy } from 'lucide-react';
 import type { SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
 
 interface SuperadminBranchesOverviewActionButtonsProps {
@@ -39,7 +39,7 @@ export default function SuperadminBranchesOverviewActionButtons({
       <button
         type="button"
         onClick={() => onView(branch)}
-        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-primary-subtle text-primary hover:text-foreground hover:bg-primary-subtle transition-colors shadow-xs motion-safe:active:scale-95 cursor-pointer shrink-0"
         title="View Full Branch Profile"
       >
         <Eye size={14} />
@@ -50,7 +50,7 @@ export default function SuperadminBranchesOverviewActionButtons({
         <button
           type="button"
           onClick={() => onEdit(branch)}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-success-border bg-success-bg text-success hover:bg-success-bg transition-colors shadow-xs motion-safe:active:scale-95 cursor-pointer shrink-0"
           title="Edit Branch Address & Details"
         >
           <Edit2 size={14} />
@@ -63,7 +63,7 @@ export default function SuperadminBranchesOverviewActionButtons({
           <button
             type="button"
             onClick={() => onSuspend(branch)}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-rose-500/30 bg-rose-500/15 text-rose-300 hover:text-white hover:bg-rose-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-danger-border bg-danger-bg text-danger hover:bg-danger-bg transition-colors shadow-xs motion-safe:active:scale-95 cursor-pointer shrink-0"
             title="Temporarily Suspend Branch (Siblings Unaffected)"
           >
             <ShieldAlert size={14} />
@@ -72,7 +72,7 @@ export default function SuperadminBranchesOverviewActionButtons({
           <button
             type="button"
             onClick={() => onActivate(branch.id)}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-success-border bg-success-bg text-success hover:bg-success-bg transition-colors shadow-xs motion-safe:active:scale-95 cursor-pointer shrink-0"
             title="Activate Branch"
           >
             <CheckCircle2 size={14} />
@@ -85,7 +85,7 @@ export default function SuperadminBranchesOverviewActionButtons({
         <button
           type="button"
           onClick={() => onCloseSafety(branch)}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-amber-500/30 bg-amber-500/15 text-amber-300 hover:text-white hover:bg-amber-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-warning-border bg-warning-bg text-warning hover:bg-warning-bg transition-colors shadow-xs motion-safe:active:scale-95 cursor-pointer shrink-0"
           title="Safe Close Branch (Pre-flight checks required)"
         >
           <XCircle size={14} />
@@ -97,83 +97,52 @@ export default function SuperadminBranchesOverviewActionButtons({
         <button
           type="button"
           onClick={() => onRestore(branch.id)}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-cyan-500/30 bg-cyan-500/15 text-cyan-300 hover:text-white hover:bg-cyan-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
-          title="Restore Archived Branch per Policy"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-info-border bg-info-bg text-info hover:bg-info-bg transition-colors shadow-xs motion-safe:active:scale-95 cursor-pointer shrink-0"
+          title="Restore Closed Branch"
         >
           <RotateCcw size={14} />
         </button>
       )}
 
-      {/* 6. Transfer Manager */}
+      {/* 6. Reassign Branch Manager */}
       {!isClosed && (
         <button
           type="button"
           onClick={() => onTransferManager(branch)}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/15 text-sky-300 hover:text-white hover:bg-sky-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
-          title="Transfer Branch Manager (Audit Logged)"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-info-border bg-info-bg text-info hover:bg-info-bg transition-colors shadow-xs motion-safe:active:scale-95 cursor-pointer shrink-0"
+          title="Transfer Manager Assignment"
         >
           <UserCheck size={14} />
         </button>
       )}
 
-      {/* 7. View Branch Audit Logs */}
+      {/* 7. Branch Activity Logs */}
       <button
         type="button"
         onClick={() => onViewActivity(branch)}
-        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
-        title="View Branch Audit Trail & Logs"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-purple-border bg-purple-bg text-purple hover:bg-purple-bg transition-colors shadow-xs motion-safe:active:scale-95 cursor-pointer shrink-0"
+        title="View Branch Audit Trail"
       >
         <Clock size={14} />
       </button>
 
-      {/* 8. View Branch Analytics Reports */}
+      {/* 8. Analytics & Occupancy */}
       <button
         type="button"
         onClick={() => onViewReports(branch)}
-        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-teal-500/30 bg-teal-500/15 text-teal-300 hover:text-white hover:bg-teal-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
-        title="View Branch-Level Analytics & Financial Reports"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-info-border bg-info-bg text-info hover:bg-info-bg transition-colors shadow-xs motion-safe:active:scale-95 cursor-pointer shrink-0"
+        title="Branch Performance Reports"
       >
         <BarChart2 size={14} />
       </button>
 
-      {/* 9. WhatsApp Branch Manager */}
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          const raw = branch.managerPhone || branch.phone || '9876543210';
-          let digits = raw.replace(/\D/g, '');
-          if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
-          const phone = digits.length === 10 ? `91${digits}` : digits;
-          const msg = `Hello ${branch.managerName || 'Branch Manager'}, greetings from SuperAdmin regarding branch ${branch.name} (${branch.code}).`;
-          const popup = window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
-          if (popup) popup.opener = null;
-        }}
-        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
-        title={`Chat on WhatsApp with ${branch.managerName || 'Manager'}`}
-      >
-        <MessageSquare size={14} />
-      </button>
-
-      {/* 10. Email Branch Manager */}
-      <a
-        href={`mailto:${branch.managerEmail || branch.email}?subject=${encodeURIComponent(`Notice for Branch: ${branch.name} (${branch.code})`)}`}
-        onClick={(e) => e.stopPropagation()}
-        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-blue-500/30 bg-blue-500/15 text-blue-300 hover:text-white hover:bg-blue-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
-        title={`Email ${branch.managerEmail || branch.email}`}
-      >
-        <Mail size={14} />
-      </a>
-
-      
-
-      {/* 12. Duplicate Branch Configuration */}
+      {/* 9. Duplicate Branch Template */}
       {onDuplicate && (
         <button
           type="button"
           onClick={() => onDuplicate(branch)}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
-          title="Duplicate / Clone Branch Configuration"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-surface text-secondary hover:text-foreground hover:bg-surface-elevated transition-colors shadow-xs motion-safe:active:scale-95 cursor-pointer shrink-0"
+          title="Clone Branch Configuration"
         >
           <Copy size={14} />
         </button>

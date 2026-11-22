@@ -11,11 +11,11 @@ export default function SuperadminDashboardOverviewTopKpis({ cards }: Superadmin
   return (
     <section aria-label="12 Platform Overview Key Performance Indicators" className="mb-6">
       <div className="flex items-center justify-between mb-3 px-1">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+        <h2 className="text-sm font-bold uppercase tracking-wider text-primary flex items-center gap-2">
           <span>Platform Key Metrics (12 Essential KPIs)</span>
-          <span className="text-[11px] font-medium text-slate-400 lowercase">(click any card to view detailed list)</span>
+          <span className="text-[11px] font-medium text-secondary lowercase">(click any card to view detailed list)</span>
         </h2>
-        <span className="text-xs text-indigo-400 font-semibold hidden sm:inline-block">
+        <span className="text-xs text-primary font-semibold hidden sm:inline-block">
           Auto-synchronized
         </span>
       </div>

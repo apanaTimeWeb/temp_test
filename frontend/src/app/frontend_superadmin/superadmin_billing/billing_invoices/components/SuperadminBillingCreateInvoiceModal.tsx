@@ -89,9 +89,15 @@ export default function SuperadminBillingCreateInvoiceModal({
   const igst = taxType === 'inter' ? Math.round(taxableAmount * 0.18) : 0;
   const totalAmount = taxableAmount + cgst + sgst + igst;
 
+  const [formError, setFormError] = useState<string | null>(null);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!tenant.trim()) return;
+    setFormError(null);
+    if (!tenant.trim()) {
+      setFormError('Tenant name is required.');
+      return;
+    }
 
     const newInvoice: SuperadminBillingInvoiceSample = {
       id: invoiceId.trim(),
@@ -134,32 +140,38 @@ export default function SuperadminBillingCreateInvoiceModal({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 overflow-y-auto"
+      className="fixed inset-0 z-40 flex items-center justify-center bg-overlay-backdrop backdrop-blur-sm p-4 overflow-y-auto"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-xl max-h-[92vh] overflow-y-auto rounded-2xl border border-indigo-500/30 bg-[#0c0f28] p-5 sm:p-6 shadow-2xl space-y-4"
+        className="w-full max-w-xl max-h-[92vh] overflow-y-auto rounded-2xl border border-border bg-overlay p-5 sm:p-6 shadow-dialog space-y-4"
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between pb-3 border-b border-indigo-500/20">
+        <div className="flex items-center justify-between pb-3 border-b border-border">
           <div className="flex items-center gap-2">
-            <PlusCircle size={20} className="text-indigo-400" />
+            <PlusCircle size={20} className="text-primary" />
             <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-100">Create Platform Tax Invoice</h2>
-              <p className="text-[11px] text-slate-400">Generate GST-compliant SaaS invoice with automated tax calculations</p>
+              <h2 className="text-base sm:text-lg font-bold text-primary">Create Platform Tax Invoice</h2>
+              <p className="text-[11px] text-secondary">Generate GST-compliant SaaS invoice with automated tax calculations</p>
             </div>
           </div>
-          <button type="button" onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer">
+          <button type="button" onClick={onClose} className="text-secondary hover:text-primary p-1 rounded-lg hover:bg-surface-hover motion-safe:transition-colors cursor-pointer">
             <X size={18} />
           </button>
         </div>
 
+        {formError && (
+          <div className="rounded-xl border border-border bg-danger-bg p-3 text-xs text-danger" role="alert">
+            {formError}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold uppercase tracking-wider text-slate-300 mb-1">
+              <label className="block font-semibold uppercase tracking-wider text-secondary mb-1">
                 Invoice Number (Sequential)
               </label>
               <input maxLength={30}
@@ -167,19 +179,19 @@ export default function SuperadminBillingCreateInvoiceModal({
                 required
                 value={invoiceId}
                 onChange={(e) => setInvoiceId(e.target.value)}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100 focus:border-indigo-500 font-mono"
+                className="w-full rounded-xl border border-border bg-input px-3 py-2 text-primary focus:border-primary focus:outline-none font-mono"
               />
             </div>
             <div>
-              <label className="block font-semibold uppercase tracking-wider text-slate-300 mb-1 flex items-center gap-1">
-                <Building2 size={12} className="text-indigo-400" />
+              <label className="block font-semibold uppercase tracking-wider text-secondary mb-1 flex items-center gap-1">
+                <Building2 size={12} className="text-primary" />
                 <span>Tenant / Library *</span>
               </label>
               <select
                 value={selectedLibraryOption}
                 onChange={(e) => handleLibraryChange(e.target.value)}
                 data-testid="superadmin-billing-create-invoice-tenant-select"
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3 py-2 text-slate-100 focus:border-indigo-500 cursor-pointer"
+                className="w-full rounded-xl border border-border bg-input px-3 py-2 text-primary focus:border-primary focus:outline-none cursor-pointer"
               >
                 {CANONICAL_LIBRARY_TENANTS.map((lib) => (
                   <option key={lib.name} value={lib.name}>
@@ -192,8 +204,8 @@ export default function SuperadminBillingCreateInvoiceModal({
           </div>
 
           {selectedLibraryOption === '__custom__' && (
-            <div className="p-3 rounded-xl border border-indigo-500/20 bg-indigo-950/20">
-              <label className="block font-semibold text-indigo-300 mb-1">
+            <div className="p-3 rounded-xl border border-border bg-card">
+              <label className="block font-semibold text-primary mb-1">
                 Custom Library Name *
               </label>
               <input maxLength={100}
@@ -203,7 +215,7 @@ export default function SuperadminBillingCreateInvoiceModal({
                 value={tenant}
                 onChange={(e) => setTenant(e.target.value)}
                 data-testid="superadmin-billing-create-invoice-custom-tenant-input"
-                className="w-full rounded-xl border border-indigo-500/35 bg-slate-900/80 px-3 py-2 text-slate-100 focus:border-indigo-500"
+                className="w-full rounded-xl border border-border bg-input px-3 py-2 text-primary focus:border-primary focus:outline-none"
               />
             </div>
           )}
@@ -235,11 +247,11 @@ export default function SuperadminBillingCreateInvoiceModal({
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block font-semibold text-slate-300 mb-1">Payment Method</label>
+              <label className="block font-semibold text-secondary mb-1">Payment Method</label>
               <select
                 value={method}
                 onChange={(e) => setMethod(e.target.value)}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3 py-2 text-slate-100 cursor-pointer"
+                className="w-full rounded-xl border border-border bg-input px-3 py-2 text-primary cursor-pointer"
               >
                 <option value="UPI">UPI (GooglePay / PhonePe)</option>
                 <option value="Card">Credit / Debit Card</option>
@@ -248,11 +260,11 @@ export default function SuperadminBillingCreateInvoiceModal({
               </select>
             </div>
             <div>
-              <label className="block font-semibold text-slate-300 mb-1">Invoice Status</label>
+              <label className="block font-semibold text-secondary mb-1">Invoice Status</label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as 'Paid' | 'Pending' | 'Overdue')}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3 py-2 text-slate-100 cursor-pointer"
+                className="w-full rounded-xl border border-border bg-input px-3 py-2 text-primary cursor-pointer"
               >
                 <option value="Paid">Paid</option>
                 <option value="Pending">Pending Verification</option>
@@ -260,11 +272,11 @@ export default function SuperadminBillingCreateInvoiceModal({
               </select>
             </div>
             <div>
-              <label className="block font-semibold text-slate-300 mb-1">Billing Cadence</label>
+              <label className="block font-semibold text-secondary mb-1">Billing Cadence</label>
               <select
                 value={billingCycle}
                 onChange={(e) => setBillingCycle(e.target.value as 'Monthly' | 'Annual')}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3 py-2 text-slate-100 cursor-pointer"
+                className="w-full rounded-xl border border-border bg-input px-3 py-2 text-primary cursor-pointer"
               >
                 <option value="Monthly">Monthly</option>
                 <option value="Annual">Annual Pre-paid</option>
@@ -272,17 +284,17 @@ export default function SuperadminBillingCreateInvoiceModal({
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-indigo-500/20">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-border/80 bg-card/80 px-4 py-2 font-semibold text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
+              className="rounded-xl border border-border bg-input px-4 py-2 font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 px-5 py-2 font-semibold text-white shadow-md active:scale-95 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-2 font-semibold text-on-primary shadow-card hover:bg-primary-hover motion-safe:active:scale-95 motion-safe:transition-all cursor-pointer"
             >
               <Check size={14} />
               <span>Generate Tax Invoice</span>

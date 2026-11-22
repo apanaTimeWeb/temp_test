@@ -82,29 +82,29 @@ export default function SuperadminDashboardOverviewMain() {
   return (
     <main className="w-full max-w-full min-w-0 pb-12">
       {/* ─── Hero / Header Banner ─── */}
-      <div className="w-full max-w-full min-w-0 rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#1a1f4e] to-indigo-900/60 p-5 sm:p-6 shadow-lg transition-all mb-6">
+      <div className="w-full max-w-full min-w-0 rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card motion-safe:transition-all mb-6">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           {/* Left: Titles & Meta Chips */}
           <div className="space-y-2">
             <div className="flex items-center gap-2 flex-wrap text-xs">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-success-bg text-success border border-border">
+                <span className="w-1.5 h-1.5 rounded-full bg-success motion-safe:animate-pulse" />
                 Live Telemetry
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
-                <ShieldCheck size={11} className="text-indigo-400" />
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-info-bg text-info border border-border">
+                <ShieldCheck size={11} className="text-info" />
                 Super Admin Scope
               </span>
             </div>
 
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
-                <LayoutDashboard className="text-indigo-400 shrink-0" size={28} />
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary flex items-center gap-2.5">
+                <LayoutDashboard className="text-primary shrink-0" size={28} />
                 {t('COPY.PLATFORM_OVERVIEW')}
               </h1>
             </div>
 
-            <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-secondary max-w-2xl leading-relaxed">
               Global management console monitoring multi-tenant infrastructure, active subscriptions, revenue metrics, and system security health.
             </p>
           </div>
@@ -115,26 +115,26 @@ export default function SuperadminDashboardOverviewMain() {
               type="button"
               onClick={handleRefresh}
               title="Refresh telemetry metrics"
-              className="inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 transition-all shadow-sm active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-xl border border-border bg-input text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all shadow-card motion-safe:active:scale-95 cursor-pointer"
             >
-              <RefreshCw size={14} className={`text-indigo-400 ${refreshing ? 'animate-spin' : ''}`} />
+              <RefreshCw size={14} className={`text-primary ${refreshing ? 'motion-safe:animate-spin' : ''}`} />
               <span>Refresh</span>
             </button>
 
             <Link
               href={SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.MODULE_URLS.AUDIT_LOGS}
-              className="inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 transition-all shadow-sm active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-xl border border-border bg-input text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all shadow-card motion-safe:active:scale-95 cursor-pointer"
               data-testid="superadmin-dashboard-dashboard_overview-link-1"
             >
-              <Activity size={14} className="text-indigo-400" />
+              <Activity size={14} className="text-primary" />
               <span>{t('COPY.VIEW_AUDIT_LOGS')}</span>
             </Link>
 
             <Link
               href={SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.MODULE_URLS.LIBRARIES_ONBOARDING}
-              className="inline-flex items-center gap-1.5 min-h-10 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-xs font-bold shadow-md shadow-emerald-950/50 transition-all hover:scale-[1.02] cursor-pointer"
+              className="inline-flex items-center gap-1.5 min-h-10 px-4 rounded-xl bg-primary hover:bg-primary-hover text-on-primary text-xs font-bold shadow-card motion-safe:transition-all motion-safe:hover:scale-[1.02] cursor-pointer"
             >
-              <Building2 size={15} className="text-white" />
+              <Building2 size={15} className="text-on-primary" />
               <span>Onboard Tenant</span>
             </Link>
           </div>
@@ -145,18 +145,18 @@ export default function SuperadminDashboardOverviewMain() {
       {!available && (
         <div
           data-testid="dashboard-overview-api-unavailable"
-          className="mb-6 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs sm:text-sm text-amber-200 flex items-center justify-between gap-3 shadow-xs"
+          className="mb-6 rounded-xl border border-border bg-warning-bg p-4 text-xs sm:text-sm text-warning flex items-center justify-between gap-3 shadow-card"
           role="status"
           aria-live="polite"
         >
           <div className="flex items-center gap-2.5 min-w-0">
-            <AlertCircle size={17} className="text-amber-400 shrink-0" />
+            <AlertCircle size={17} className="text-warning shrink-0" />
             <div className="min-w-0">
-              <span className="font-bold text-amber-300 mr-2">{t('COPY.DASHBOARD_READ_CONTRACT_UNAVAILABLE_TITLE')}:</span>
-              <span className="text-amber-200/90">{t('COPY.DASHBOARD_READ_CONTRACT_UNAVAILABLE_MESSAGE')}</span>
+              <span className="font-bold text-warning mr-2">{t('COPY.DASHBOARD_READ_CONTRACT_UNAVAILABLE_TITLE')}:</span>
+              <span className="text-warning opacity-90">{t('COPY.DASHBOARD_READ_CONTRACT_UNAVAILABLE_MESSAGE')}</span>
             </div>
           </div>
-          <span className="shrink-0 px-2 py-0.5 rounded-md text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+          <span className="shrink-0 px-2 py-0.5 rounded-md text-[11px] font-bold bg-warning-bg text-warning border border-border">
             Preview Mode
           </span>
         </div>

@@ -15,40 +15,24 @@ const TABS = [
     label: 'Platform Reports',
     href: SUPERADMIN_NAVIGATION_ROUTES.analytics_platform_reports,
     icon: Building2,
-    activeColor: 'text-sky-300',
-    border: 'border-sky-500/50',
-    bg: 'bg-sky-500/15',
-    glow: 'shadow-sky-500/20',
   },
   {
     key: 'billing_reports',
     label: 'Billing Reports',
     href: SUPERADMIN_NAVIGATION_ROUTES.analytics_billing_reports,
     icon: Receipt,
-    activeColor: 'text-amber-300',
-    border: 'border-amber-500/50',
-    bg: 'bg-amber-500/15',
-    glow: 'shadow-amber-500/20',
   },
   {
     key: 'usage_reports',
     label: 'Usage Reports',
     href: SUPERADMIN_NAVIGATION_ROUTES.analytics_usage_reports,
     icon: Gauge,
-    activeColor: 'text-emerald-300',
-    border: 'border-emerald-500/50',
-    bg: 'bg-emerald-500/15',
-    glow: 'shadow-emerald-500/20',
   },
   {
     key: 'security_reports',
     label: 'Security Reports',
     href: SUPERADMIN_NAVIGATION_ROUTES.analytics_security_reports,
     icon: ShieldCheck,
-    activeColor: 'text-rose-300',
-    border: 'border-rose-500/50',
-    bg: 'bg-rose-500/15',
-    glow: 'shadow-rose-500/20',
   },
 ] as const;
 
@@ -57,14 +41,13 @@ export default function SuperadminAnalyticsLayout({ children }: { children: Reac
 
   return (
     <div className="w-full max-w-full min-w-0 p-0 space-y-6">
-      {/* ── Sub-navigation Tab Bar ── */}
+      {/* ── Sub-navigation Tab Bar (Pattern A Canonical Top Tab Bar) ── */}
       <nav
         aria-label="Reports and Analytics Navigation"
-        className="relative overflow-hidden rounded-2xl bg-[#0a0d24]/90 border border-indigo-500/25 p-1.5 sm:p-2 shadow-xl backdrop-blur-md"
+        className="flex items-center gap-2 border-b border-border pb-px mb-6 overflow-x-auto"
         data-testid="superadmin_analytics-secondary-navigation"
       >
-        <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-sky-500/10 blur-xl" />
-        <ul className="flex min-w-max items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none relative z-10" role="list">
+        <ul className="flex min-w-max items-center gap-2" role="list">
           {TABS.map((tab) => {
             const active =
               pathname === tab.href ||
@@ -76,14 +59,14 @@ export default function SuperadminAnalyticsLayout({ children }: { children: Reac
                 <Link
                   href={tab.href}
                   aria-current={active ? 'page' : undefined}
-                  className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs sm:text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 cursor-pointer ${
+                  className={`inline-flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer whitespace-nowrap ${
                     active
-                      ? `${tab.border} ${tab.bg} ${tab.activeColor} ${tab.glow} border shadow-md font-bold`
-                      : 'border border-transparent text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                      ? 'border-b-2 border-primary text-primary font-semibold relative'
+                      : 'border-b-2 border-transparent text-secondary hover:text-primary font-medium'
                   }`}
                   data-testid={`superadmin_analytics-secondary-link-${tab.key}`}
                 >
-                  <Icon size={16} className={active ? tab.activeColor : 'text-slate-400'} />
+                  <Icon size={16} className={active ? 'text-primary' : 'text-secondary'} />
                   <span>{tab.label}</span>
                 </Link>
               </li>

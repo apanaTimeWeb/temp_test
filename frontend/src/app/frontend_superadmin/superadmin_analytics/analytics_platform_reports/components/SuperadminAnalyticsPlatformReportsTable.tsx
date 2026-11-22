@@ -24,21 +24,21 @@ export function SuperadminAnalyticsPlatformReportsTable({ records, onSelectRecor
   }
 
   return (
-    <div className="rounded-2xl border border-indigo-500/25 bg-[#0a0d24]/90 overflow-hidden shadow-xl backdrop-blur-md">
-      <div className="p-4 border-b border-indigo-500/20 flex items-center justify-between">
-        <h3 className="text-sm font-bold text-white">
+    <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-card">
+      <div className="p-4 border-b border-border flex items-center justify-between">
+        <h3 className="text-sm font-bold text-primary">
           Platform Directory Audit Records ({records.length})
         </h3>
-        <span className="text-xs text-slate-400">
+        <span className="text-xs text-secondary">
           Page {currentPage} of {totalPages}
         </span>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs" role="table">
-          <thead className="bg-slate-950/80 text-slate-400 uppercase text-[10px] tracking-wider border-b border-indigo-500/20">
+          <thead className="bg-primary-subtle text-secondary uppercase text-[10px] tracking-wider border-b border-border">
             <tr>
-              <th className="py-3 px-4">Code / ID</th>
+              <th className="py-3 px-4 sticky start-0 z-10 bg-primary-subtle border-e border-border">Code / ID</th>
               <th className="py-3 px-4">Library Name</th>
               <th className="py-3 px-4 text-center">Branches</th>
               <th className="py-3 px-4">Location</th>
@@ -50,38 +50,39 @@ export function SuperadminAnalyticsPlatformReportsTable({ records, onSelectRecor
               <th className="py-3 px-4 text-right">Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-indigo-500/10">
+          <tbody className="divide-y divide-border">
             {pagedRecords.map((r) => {
               const statusCfg = PLATFORM_STATUS_COLORS[r.status] ?? { bg: 'bg-muted', text: 'text-foreground' };
               const payCfg = PLATFORM_PAYMENT_STATUS_COLORS[r.paymentStatus] ?? { bg: 'bg-muted', text: 'text-foreground' };
+              const maskedEmail = r.adminEmail ? r.adminEmail.replace(/^(.{2})(.*)(?=@)/, '$1***') : '—';
 
               return (
-                <tr key={r.id} className="hover:bg-indigo-500/10 transition-colors">
-                  <td className="py-3 px-4 font-mono text-[11px] text-sky-400 font-semibold">{r.libraryCode}</td>
-                  <td className="py-3 px-4 font-semibold text-white">{r.libraryName}</td>
-                  <td className="py-3 px-4 text-center font-bold text-slate-200">{r.branchCount}</td>
-                  <td className="py-3 px-4 text-slate-400">{r.city}, {r.state}</td>
+                <tr key={r.id} className="hover:bg-surface-hover motion-safe:transition-colors">
+                  <td className="py-3 px-4 font-mono text-[11px] text-primary font-semibold sticky start-0 z-10 bg-card border-e border-border">{r.libraryCode}</td>
+                  <td className="py-3 px-4 font-semibold text-primary">{r.libraryName}</td>
+                  <td className="py-3 px-4 text-center font-bold text-primary">{r.branchCount}</td>
+                  <td className="py-3 px-4 text-secondary">{r.city || '—'}, {r.state || '—'}</td>
                   <td className="py-3 px-4">
-                    <p className="font-medium text-white">{r.adminName}</p>
-                    <p className="text-[10px] text-slate-400 truncate max-w-[140px]">{r.adminEmail}</p>
+                    <p className="font-medium text-primary">{r.adminName}</p>
+                    <p className="text-[10px] text-secondary truncate max-w-[140px] font-mono">{maskedEmail}</p>
                   </td>
-                  <td className="py-3 px-4 text-slate-300">{r.plan}</td>
+                  <td className="py-3 px-4 text-secondary">{r.plan}</td>
                   <td className="py-3 px-4 text-center">
-                    <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold border shadow-xs ${statusCfg.bg} ${statusCfg.text}`}>
+                    <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${statusCfg.bg} ${statusCfg.text}`}>
                       {r.status}
                     </span>
                   </td>
                   <td className="py-3 px-4 text-center">
-                    <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold border shadow-xs ${payCfg.bg} ${payCfg.text}`}>
+                    <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${payCfg.bg} ${payCfg.text}`}>
                       {r.paymentStatus}
                     </span>
                   </td>
-                  <td className="py-3 px-4 text-slate-400 whitespace-nowrap">{r.createdDate}</td>
+                  <td className="py-3 px-4 text-secondary whitespace-nowrap">{r.createdDate}</td>
                   <td className="py-3 px-4 text-right">
                     <button
                       type="button"
                       onClick={() => onSelectRecord(r)}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:bg-indigo-500/25 transition-all cursor-pointer active:scale-95 shadow-sm"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold border border-border bg-input text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all cursor-pointer motion-safe:active:scale-95 shadow-card"
                       aria-label={`View details for ${r.libraryName}`}
                     >
                       <Eye size={12} />
