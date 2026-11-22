@@ -2,13 +2,13 @@
 // RESPONSIBILITY: Render the navigation navigation route navigation UI for navigation. It does not own backend persistence or cross-feature business logic.
 
 // RESPONSIBILITY: Render the navigation navigation route navigation UI for navigation. It does not own backend persistence or cross-feature business logic.
-import { useCallback, useState } from 'react';
-import { usePathname } from 'next/navigation';
-import ManagerNavigationSidebar from '@/app/frontend_manager/manager_navigation/navigation/components/ManagerNavigationNavigationSidebar';
 import ManagerNavigationHeader from '@/app/frontend_manager/manager_navigation/navigation/components/ManagerNavigationNavigationHeader';
 import '@/app/frontend_manager/manager_navigation/navigation/components/ManagerNavigationNavigationManager_navigation.css';
+import ManagerNavigationSidebar from '@/app/frontend_manager/manager_navigation/navigation/components/ManagerNavigationNavigationSidebar';
 import { MANAGER_NAVIGATION_NAVIGATION_ROUTES } from '@/app/frontend_manager/manager_navigation/navigation/config/manager_navigation_navigation.url_config';
 import type { ManagerNavigationRouteProps } from '@/app/frontend_manager/manager_navigation/navigation/types/ManagerNavigationNavigationComponentTypes';
+import { usePathname } from 'next/navigation';
+import { useCallback,useState } from 'react';
 export type { ManagerNavigationRouteProps };
 
 

@@ -1,8 +1,8 @@
-import { apiFetch } from '@/lib/api';
 import { MANAGER_COMMUNICATION_COMPLAINTS_URL } from '@/app/frontend_manager/manager_communication/communication_complaints/config/manager_communication_complaints.url_config';
+import { MANAGER_COMPLAINTS_API_FIXTURES } from '@/app/frontend_manager/manager_communication/communication_complaints/mocks/manager_communication_complaints_fixtures/ManagerCommunicationComplaintsApiFixtures';
 import { managerComplaintsComplaintResponseListSchema } from '@/app/frontend_manager/manager_communication/communication_complaints/schemas/ManagerCommunicationComplaintsSchema';
 import type { ManagerCommunicationComplaintsComplaint } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
-import { MANAGER_COMPLAINTS_API_FIXTURES } from '@/app/frontend_manager/manager_communication/communication_complaints/mocks/manager_communication_complaints_fixtures/ManagerCommunicationComplaintsApiFixtures';
+import { apiFetch } from '@/lib/api';
 
 function toValidatedCalendarDate(value: string): string {
   if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;

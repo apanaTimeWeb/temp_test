@@ -1,14 +1,14 @@
 'use client';
 
+import {
+MANAGER_GROUP_SEAT_CLUSTERS,
+autoAllocateAdjacentSeats,
+} from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionAdjacentSeats';
+import { Armchair,CheckCircle2,LayoutList,Plus,SlidersHorizontal,Sparkles,Users,Users2,X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { Users2, X, Plus, CheckCircle2, LayoutList, SlidersHorizontal, Users, Armchair, Sparkles } from 'lucide-react';
 import { ManagerMembersGroupAdmissionCardView } from './ManagerMembersGroupAdmissionCardView';
 import { ManagerMembersGroupAdmissionTableView } from './ManagerMembersGroupAdmissionTableView';
-import {
-  MANAGER_GROUP_SEAT_CLUSTERS,
-  autoAllocateAdjacentSeats,
-} from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionAdjacentSeats';
 
 export interface GroupStudentEntry {
   id: string;

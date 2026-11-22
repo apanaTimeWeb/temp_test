@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { ManagerDashboardOverviewDataSchema } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/schemas/ManagerDashboardOverviewSchema';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerDashboardOverviewDataSchema', () => {
   it('accepts an explicit empty dashboard response with all required collections present', () => {

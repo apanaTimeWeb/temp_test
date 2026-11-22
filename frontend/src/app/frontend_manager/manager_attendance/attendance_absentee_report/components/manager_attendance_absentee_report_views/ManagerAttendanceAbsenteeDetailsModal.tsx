@@ -1,18 +1,18 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
 import {
-  X,
-  Phone,
-  Mail,
-  Calendar,
-  AlertTriangle,
-  ShieldCheck,
-  MessageSquare,
-  Printer,
-  CheckCircle2,
-  FileText,
+AlertTriangle,
+Calendar,
+CheckCircle2,
+FileText,
+Mail,
+MessageSquare,
+Phone,
+Printer,
+ShieldCheck,
+X,
 } from 'lucide-react';
+import { useEffect,useState } from 'react';
 import type { ManagerAttendanceAbsenteeReportSampleAbsentee } from '../../hooks/ManagerAttendanceAbsenteeReportDemoRepository';
 
 export interface ManagerAttendanceAbsenteeDetailsModalProps {

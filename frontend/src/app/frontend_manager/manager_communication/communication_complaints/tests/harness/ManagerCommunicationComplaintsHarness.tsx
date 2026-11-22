@@ -1,18 +1,18 @@
 "use client";
 
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
+import { useEffect,useState } from 'react';
 import { ManagerCommunicationComplaintsMain } from '../../components/ManagerCommunicationComplaintsMain';
 import messagesEn from '../../locales/manager_communication_complaints_domain_en.json';
 import messagesHi from '../../locales/manager_communication_complaints_domain_hi.json';
 import {
-  startManagerCommunicationComplaintsWorker,
-  stopManagerCommunicationComplaintsWorker,
-  HARNESS_SCENARIO_OPTIONS,
-  MANAGER_COMMUNICATION_COMPLAINTS_SCENARIO_PROBE_URL,
-  type ManagerCommunicationComplaintsHarnessScenario,
+HARNESS_SCENARIO_OPTIONS,
+MANAGER_COMMUNICATION_COMPLAINTS_SCENARIO_PROBE_URL,
+startManagerCommunicationComplaintsWorker,
+stopManagerCommunicationComplaintsWorker,
+type ManagerCommunicationComplaintsHarnessScenario,
 } from './bootstrap';
 
 type ManagerCommunicationComplaintsHarnessProps = {

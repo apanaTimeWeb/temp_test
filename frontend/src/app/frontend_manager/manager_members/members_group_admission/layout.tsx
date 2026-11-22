@@ -1,5 +1,5 @@
-import type { Metadata } from 'next';
 import '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_styles/ManagerMembersGroupAdmissionManager_group_admission.css';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Group Admission | Library OS',

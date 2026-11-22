@@ -1,8 +1,8 @@
 'use client';
 // RESPONSIBILITY: Render the chart visualization for components using supplied feature data. It does not own backend persistence or cross-feature business logic.
 // RESPONSIBILITY: Render the chart visualization for components using supplied feature data. It does not own backend persistence or cross-feature business logic.
+import type { ManagerDashboardReportsChartDataRow,ManagerDashboardReportsChartDataTableProps } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsComponentTypes';
 import { useTranslations } from 'next-intl';
-import type { ManagerDashboardReportsChartDataRow, ManagerDashboardReportsChartDataTableProps } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsComponentTypes';
 export type { ManagerDashboardReportsChartDataRow };
 
 

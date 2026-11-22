@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { Clock, X } from 'lucide-react';
+import { Clock,X } from 'lucide-react';
 
 export type ManagerDepositsTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
 

@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
-import { Gift, CheckCircle2, AlertCircle, IndianRupee } from 'lucide-react';
-import { toast } from 'sonner';
-import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import { MANAGER_REFERRAL_MEMBER_CANDIDATES } from '@/app/frontend_manager/manager_members/members_referral_bonus/mocks/manager_members_referral_bonus_fixtures/ManagerMembersReferralBonusFixtures';
 import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
+import { SearchableCombobox,type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
+import { AlertCircle,CheckCircle2,Gift,IndianRupee } from 'lucide-react';
+import { useEffect,useMemo,useState } from 'react';
+import { toast } from 'sonner';
 
 interface ManagerMembersReferralBonusAddModalProps {
   isOpen: boolean;

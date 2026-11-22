@@ -1,12 +1,12 @@
 'use client';
 /** DATA FLOW: Module-owned source data and caller filter inputs -> feature list result; no new API flow is introduced. */
 
-import { useEffect, useMemo, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useManagerAlumniDebounce } from '@/app/frontend_manager/manager_members/members_alumni/hooks/useManagerMembersAlumniDebounce';
 import { useManagerAlumni } from '@/app/frontend_manager/manager_members/members_alumni/hooks/useManagerMembersAlumni';
+import { useManagerAlumniDebounce } from '@/app/frontend_manager/manager_members/members_alumni/hooks/useManagerMembersAlumniDebounce';
+import { readManagerAlumniListUrlState,updateManagerAlumniListUrl,updateManagerAlumniSearchUrl } from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniListUrlState';
 import { normalizeManagerAlumniSeatFilter } from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniSeatFilter';
-import { readManagerAlumniListUrlState, updateManagerAlumniListUrl, updateManagerAlumniSearchUrl } from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniListUrlState';
+import { usePathname,useRouter,useSearchParams } from 'next/navigation';
+import { useEffect,useMemo,useState } from 'react';
 
 export function useManagerAlumniList() {
   const query = useManagerAlumni();

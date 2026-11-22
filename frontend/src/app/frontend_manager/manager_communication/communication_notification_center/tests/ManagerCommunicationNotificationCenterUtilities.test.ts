@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { maskManagerNotificationCenterPhone } from '@/app/frontend_manager/manager_communication/communication_notification_center/utils/ManagerCommunicationNotificationCenterUtilities';
+import { describe,expect,it } from 'vitest';
 
 describe('maskManagerNotificationCenterPhone', () => {
   it('masks raw phone values without exposing middle digits', () => {

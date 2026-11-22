@@ -1,9 +1,8 @@
 'use client';
 
-import React from 'react';
-import { Eye, RefreshCw, ArrowUpDown, ArrowUp, ArrowDown, TrendingUp } from 'lucide-react';
-import type { MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS } from '@/app/frontend_manager/manager_finance/finance_subscriptions/hooks/ManagerFinanceSubscriptionsDemoRepository';
 import { ManagerFinanceSubscriptionsEmptyState } from '@/app/frontend_manager/manager_finance/finance_subscriptions/components/manager_finance_subscriptions_empty_states/ManagerFinanceSubscriptionsEmptyState';
+import type { MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS } from '@/app/frontend_manager/manager_finance/finance_subscriptions/hooks/ManagerFinanceSubscriptionsDemoRepository';
+import { ArrowDown,ArrowUp,ArrowUpDown,Eye,RefreshCw,TrendingUp } from 'lucide-react';
 
 const STATUS_BADGE: Record<string, string> = {
   active: 'fin-badge fin-badge--success',

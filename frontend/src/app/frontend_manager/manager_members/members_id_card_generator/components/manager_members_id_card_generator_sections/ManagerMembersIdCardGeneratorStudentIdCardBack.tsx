@@ -1,8 +1,7 @@
 'use client';
 // RESPONSIBILITY: Render the back side of student ID card containing library rules, Wi-Fi credentials, emergency contacts, and authorized signature seal.
-import React from 'react';
-import { Wifi, Phone, ShieldCheck, FileText } from 'lucide-react';
 import type { IdCardData } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorComponentTypes';
+import { FileText,Phone,ShieldCheck,Wifi } from 'lucide-react';
 
 export interface ManagerMembersIdCardGeneratorStudentIdCardBackProps {
   data: IdCardData;

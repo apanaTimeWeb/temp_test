@@ -3,8 +3,8 @@
 // RESPONSIBILITY: Render the members group admission admission personal section section of the components feature. It does not own backend persistence or cross-feature business logic.
 import { useTranslations } from 'next-intl';
 
-import { Phone, User } from 'lucide-react';
 import type { ManagerMembersGroupAdmissionAdmissionPersonalSectionProps } from '@/app/frontend_manager/manager_members/members_group_admission/types/ManagerMembersGroupAdmissionComponentTypes';
+import { Phone,User } from 'lucide-react';
 export type { ManagerMembersGroupAdmissionAdmissionPersonalSectionProps };
 
 

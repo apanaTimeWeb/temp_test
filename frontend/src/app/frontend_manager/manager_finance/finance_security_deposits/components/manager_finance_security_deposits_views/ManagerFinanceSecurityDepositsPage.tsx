@@ -1,19 +1,19 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { useState, useMemo } from 'react';
-import { useManagerSecurityDepositsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/useManagerFinanceSecurityDepositsUrlFilters';
-import { useManagerSecurityDepositsFormatting } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsFormattingHook';
-import { Search, ArrowUpDown, ArrowUp, ArrowDown, X, Download, Printer } from 'lucide-react';
-import { MANAGER_FINANCE_SAMPLE_DEPOSITS } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
 import type { ManagerFinanceSecurityDepositsSampleDeposit } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
-import { sanitizeManagerSecurityDepositsCsvCell } from '@/app/frontend_manager/manager_finance/finance_security_deposits/utils/ManagerFinanceSecurityDepositsCsv';
+import { MANAGER_FINANCE_SAMPLE_DEPOSITS } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
+import { useManagerSecurityDepositsFormatting } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsFormattingHook';
+import { useManagerSecurityDepositsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/useManagerFinanceSecurityDepositsUrlFilters';
 import type { ManagerFinanceSecurityDepositsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_security_deposits/types/ManagerFinanceSecurityDepositsComponentTypes';
-import ManagerFinanceSecurityDepositsRefundModal from './ManagerFinanceSecurityDepositsRefundModal';
+import { sanitizeManagerSecurityDepositsCsvCell } from '@/app/frontend_manager/manager_finance/finance_security_deposits/utils/ManagerFinanceSecurityDepositsCsv';
+import { ArrowDown,ArrowUp,ArrowUpDown,Download,Printer,Search,X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
 import ManagerFinanceSecurityDepositsDeductionModal from './ManagerFinanceSecurityDepositsDeductionModal';
-import ManagerFinanceSecurityDepositsTable from './ManagerFinanceSecurityDepositsTable';
-import ManagerFinanceSecurityDepositsTimeHorizonBar, { type ManagerDepositsTimeHorizon } from './ManagerFinanceSecurityDepositsTimeHorizonBar';
 import ManagerFinanceSecurityDepositsKpis from './ManagerFinanceSecurityDepositsKpis';
+import ManagerFinanceSecurityDepositsRefundModal from './ManagerFinanceSecurityDepositsRefundModal';
+import ManagerFinanceSecurityDepositsTable from './ManagerFinanceSecurityDepositsTable';
+import ManagerFinanceSecurityDepositsTimeHorizonBar,{ type ManagerDepositsTimeHorizon } from './ManagerFinanceSecurityDepositsTimeHorizonBar';
 
 const URL_FILTERS = { status: { defaultValue: 'all', allowedValues: ['all', 'held', 'refunded', 'forfeited'] } as const };
 type DepositSortField = 'studentName' | 'depositAmount' | 'status' | 'collectedBy' | 'collectedDate' | 'deductionAmount' | 'refundedDate';

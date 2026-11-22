@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
-import { ShieldCheck, IndianRupee, AlertCircle, ArrowDownLeft } from 'lucide-react';
 import type { ManagerFinanceSecurityDepositsSampleDeposit } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
+import { AlertCircle,ArrowDownLeft,IndianRupee,ShieldCheck } from 'lucide-react';
 
 interface ManagerFinanceSecurityDepositsKpisProps {
   deposits: ManagerFinanceSecurityDepositsSampleDeposit[];

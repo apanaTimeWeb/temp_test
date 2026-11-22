@@ -1,7 +1,7 @@
 // RESPONSIBILITY: Render the settings help support help center section section of the components feature. It does not own backend persistence or cross-feature business logic.
 
+import { Book,Users,Video } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Book, Video, Users } from 'lucide-react';
 
 export function ManagerSettingsHelpSupportHelpCenterSection() {
   const tManagerUi = useTranslations('manager.manager_help_support.ui');

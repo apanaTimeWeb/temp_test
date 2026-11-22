@@ -1,26 +1,21 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
-import {
-  X,
-  Target,
-  Sparkles,
-  Send,
-  User,
-  Phone,
-  Calendar,
-  CheckCircle2,
-  Clock,
-  IndianRupee,
-  Copy,
-  Check,
-  Megaphone,
-  Percent,
-  Gift,
-  ArrowRight,
-} from 'lucide-react';
-import { toast } from 'sonner';
 import type { GapRow } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/hooks/ManagerAccountsSeatGapReportDemoRepository';
+import {
+Check,
+CheckCircle2,
+Clock,
+Copy,
+Gift,
+Megaphone,
+Percent,
+Send,
+Sparkles,
+Target,
+X
+} from 'lucide-react';
+import { useEffect,useMemo,useState } from 'react';
+import { toast } from 'sonner';
 
 export interface MatchingLead {
   id: string;

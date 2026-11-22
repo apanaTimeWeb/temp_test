@@ -1,5 +1,5 @@
-import type { Metadata } from 'next';
 import '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_styles/ManagerDashboardOverviewManager_dashboard.css';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Dashboard Overview | Library OS',

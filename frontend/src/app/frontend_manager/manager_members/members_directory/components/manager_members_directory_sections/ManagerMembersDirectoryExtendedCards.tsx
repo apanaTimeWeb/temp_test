@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
+import { Armchair,CalendarCheck,Clock,ExternalLink,GraduationCap,Layers,Lock,Pencil,User } from 'lucide-react';
 import Link from 'next/link';
-import { Armchair, Clock, Layers, Lock, User, GraduationCap, Pencil, CalendarCheck, ExternalLink, CheckCircle2 } from 'lucide-react';
 import type { ManagerMembersDirectoryRecord } from '../../types/ManagerMembersDirectoryTypes';
 
 interface ManagerMembersDirectoryExtendedCardsProps {

@@ -1,26 +1,26 @@
 'use client';
 // RESPONSIBILITY: Orchestrate the client-side view and local interactions for components. It does not own backend persistence or cross-feature business logic.
 
-import { useRef, useState, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, Search, UserPlus, Download, LayoutGrid, List, DoorClosed, AlertTriangle, KeyRound } from 'lucide-react';
+import { AlertTriangle,DoorClosed,Download,LayoutGrid,List,Plus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useRef,useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { ManagerLockersManagementNativeTable } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/components/manager_lockers_management_table_parts/ManagerLockersManagementNativeTable';
-import { managerSeatsLockerDraftSchema } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/schemas/ManagerLockersManagementDraftSchemas';
 import { useManagerLockersDialogFocus } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/hooks/ManagerLockersManagementDialogFocus';
+import { MANAGER_SEATS_SHIFTS_LOCKERS_SAMPLE_LOCKERS,type ManagerLockersManagementSampleLocker as Locker } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
+import { managerSeatsLockerDraftSchema } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/schemas/ManagerLockersManagementDraftSchemas';
 import { sanitizeManagerLockersCsvCell } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementCsv';
-import { MANAGER_SEATS_SHIFTS_LOCKERS_SAMPLE_LOCKERS, type ManagerLockersManagementSampleLocker as Locker } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
-import { getLockerColumns } from './ManagerLockersManagementColumns';
-import { ManagerLockersManagementVacateModal } from './ManagerLockersManagementVacateModal';
 import { ManagerLockersManagementAddModal } from './ManagerLockersManagementAddModal';
-import { ManagerLockersManagementToolbar } from './ManagerLockersManagementToolbar';
-import { ManagerLockersManagementGridView } from './ManagerLockersManagementGridView';
-import { ManagerLockersManagementStudentModal } from './ManagerLockersManagementStudentModal';
 import { ManagerLockersManagementAssignModal } from './ManagerLockersManagementAssignModal';
+import { getLockerColumns } from './ManagerLockersManagementColumns';
+import { ManagerLockersManagementGridView } from './ManagerLockersManagementGridView';
 import { ManagerLockersManagementLostKeyModal } from './ManagerLockersManagementLostKeyModal';
+import { ManagerLockersManagementStudentModal } from './ManagerLockersManagementStudentModal';
+import { ManagerLockersManagementToolbar } from './ManagerLockersManagementToolbar';
+import { ManagerLockersManagementVacateModal } from './ManagerLockersManagementVacateModal';
 
 export function ManagerLockersManagementClient() {
   const tManagerUi = useTranslations('manager.manager_lockers.ui');

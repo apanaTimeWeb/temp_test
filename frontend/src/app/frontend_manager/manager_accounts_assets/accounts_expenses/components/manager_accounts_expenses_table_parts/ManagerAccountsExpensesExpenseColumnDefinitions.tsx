@@ -1,9 +1,9 @@
 'use client';
 
-import type { NativeColumn, NativeCellParams } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_table_parts/ManagerAccountsExpensesNativeTable';
-import { Trash2, Eye } from 'lucide-react';
+import type { NativeCellParams,NativeColumn } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_table_parts/ManagerAccountsExpensesNativeTable';
 import type { ManagerAccountsExpensesExpenseSample } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/hooks/ManagerAccountsExpensesDemoRepository';
-import type { CurrencyFormatter, Labels, PaymentMode } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/types/ManagerAccountsExpensesComponentTypes';
+import type { CurrencyFormatter,Labels,PaymentMode } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/types/ManagerAccountsExpensesComponentTypes';
+import { Eye,Trash2 } from 'lucide-react';
 
 const MODE_BADGE: Record<PaymentMode, string> = {
   cash: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30',

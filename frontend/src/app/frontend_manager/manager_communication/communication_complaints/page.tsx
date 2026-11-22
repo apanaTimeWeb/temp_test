@@ -1,6 +1,6 @@
 import { ManagerCommunicationComplaintsMain } from '@/app/frontend_manager/manager_communication/communication_complaints/components/ManagerCommunicationComplaintsMain';
-import type { ManagerCommunicationComplaintsMainProps } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsMainTypes';
 import type { ManagerCommunicationComplaintsPageProps } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsComponentTypes';
+import type { ManagerCommunicationComplaintsMainProps } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsMainTypes';
 
 
 

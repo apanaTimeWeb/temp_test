@@ -1,9 +1,8 @@
-import React from 'react';
-import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent,render,screen,waitFor } from '@testing-library/react';
+import { beforeEach,describe,expect,it,vi } from 'vitest';
 import { ManagerAssetsMaintenanceAddModal } from '../components/ManagerAssetsMaintenanceAddModal';
 import { ManagerAssetsMaintenanceDetailsModal } from '../components/ManagerAssetsMaintenanceDetailsModal';
-import { ManagerAssetsMaintenanceTable, type MaintenanceLogItem } from '../components/ManagerAssetsMaintenanceTable';
+import { ManagerAssetsMaintenanceTable,type MaintenanceLogItem } from '../components/ManagerAssetsMaintenanceTable';
 
 vi.mock('sonner', () => ({
   toast: {

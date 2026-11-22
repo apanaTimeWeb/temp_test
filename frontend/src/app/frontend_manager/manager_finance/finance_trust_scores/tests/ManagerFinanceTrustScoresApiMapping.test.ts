@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { managerFinancePaymentApiSchema, managerFinanceRefundApiSchema } from '@/app/frontend_manager/manager_finance/finance_trust_scores/schemas/ManagerFinanceTrustScoresSchema';
-import { mapManagerTrustScoresPayment, mapManagerTrustScoresRefund } from '@/app/frontend_manager/manager_finance/finance_trust_scores/utils/ManagerFinanceTrustScoresApiMapping';
+import { managerFinancePaymentApiSchema,managerFinanceRefundApiSchema } from '@/app/frontend_manager/manager_finance/finance_trust_scores/schemas/ManagerFinanceTrustScoresSchema';
+import { mapManagerTrustScoresPayment,mapManagerTrustScoresRefund } from '@/app/frontend_manager/manager_finance/finance_trust_scores/utils/ManagerFinanceTrustScoresApiMapping';
+import { describe,expect,it } from 'vitest';
 
 describe('Manager Finance API mapping preserves missing contract data', () => {
   it('does not synthesize receipt IDs, cash mode, late-fee zero, or INR currency', () => {

@@ -1,6 +1,6 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync,readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe,expect,it } from 'vitest';
 
 const shellCssPath = [
   join(process.cwd(), 'src/app/frontend_manager/manager_navigation/navigation/components/ManagerNavigationNavigationManager_navigation.css'),

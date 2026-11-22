@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
-import React from 'react';
-import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent,render,screen,waitFor } from '@testing-library/react';
+import { beforeEach,describe,expect,it,vi } from 'vitest';
 import { ManagerSettingsSecurityMain } from '../components/ManagerSettingsSecurityMain';
 
 // Mock next/navigation

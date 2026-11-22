@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
-import { Clock, Users, AlertTriangle, ArrowRight, CheckCircle2 } from 'lucide-react';
 import type { ManagerDashboardOverviewLiveShiftBarProps } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewComponentTypes';
+import { AlertTriangle,ArrowRight,CheckCircle2,Clock,Users } from 'lucide-react';
+import Link from 'next/link';
 
 export function ManagerDashboardOverviewLiveShiftBar({
   currentShiftName = 'Afternoon Shift',

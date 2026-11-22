@@ -1,11 +1,10 @@
 'use client';
 
-import React from 'react';
-import { useTranslations } from 'next-intl';
-import { User, Armchair, Sparkles, Clock, Info } from 'lucide-react';
 import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
-import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
 import { LEGEND_ITEMS } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/constants/ManagerSeatsMatrixConstants';
+import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
+import { Armchair,Clock,Info,Sparkles } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface ManagerSeatsMatrixGridViewProps {
   visibleGridSeats: SeatData[];

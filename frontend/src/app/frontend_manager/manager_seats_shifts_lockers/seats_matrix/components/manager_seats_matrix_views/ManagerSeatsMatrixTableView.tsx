@@ -1,7 +1,7 @@
 'use client';
-import { useTranslations } from 'next-intl';
-import { ArrowUpDown, ArrowUp, ArrowDown, ShieldCheck } from 'lucide-react';
 import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
+import { ArrowDown,ArrowUp,ArrowUpDown,ShieldCheck } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export type SeatSortField = 'id' | 'wing' | 'shift' | 'status' | 'student' | 'studentGender';
 

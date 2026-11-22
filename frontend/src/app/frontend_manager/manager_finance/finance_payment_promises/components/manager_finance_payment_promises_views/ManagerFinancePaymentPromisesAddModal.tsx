@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { AlertCircle, CheckCircle, IndianRupee, Plus, X } from 'lucide-react';
-import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
-import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
-import type { ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
 import { useManagerPaymentPromisesDialogFocus } from '@/app/frontend_manager/manager_finance/finance_payment_promises/hooks/ManagerFinancePaymentPromisesDialogFocus';
+import type { ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
 import { managerFinancePaymentPromiseAddSchema } from '@/app/frontend_manager/manager_finance/finance_payment_promises/schemas/ManagerFinancePaymentPromisesSchema';
+import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
+import { SearchableCombobox,type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
+import { AlertCircle,CheckCircle,IndianRupee,Plus,X } from 'lucide-react';
+import React,{ useEffect,useMemo,useRef,useState } from 'react';
 
 export interface ManagerFinancePaymentPromisesAddModalProps {
   isOpen: boolean;

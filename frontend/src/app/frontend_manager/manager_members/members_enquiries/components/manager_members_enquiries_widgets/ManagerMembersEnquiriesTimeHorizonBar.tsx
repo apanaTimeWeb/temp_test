@@ -1,6 +1,6 @@
 'use client';
-import { Calendar, X } from 'lucide-react';
 import type { ManagerCrmTimeHorizon } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesEnquiries';
+import { Calendar,X } from 'lucide-react';
 
 interface ManagerMembersEnquiriesTimeHorizonBarProps {
   timeHorizon: ManagerCrmTimeHorizon;

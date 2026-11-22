@@ -1,27 +1,25 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import {
-  Receipt,
-  User,
-  Calendar,
-  Check,
-  CheckCircle2,
-  X,
-  ExternalLink,
-  IndianRupee,
-  Sparkles,
-  ArrowRight,
-  ShieldCheck,
-} from 'lucide-react';
-import { toast } from 'sonner';
 import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
 import {
-  parseBonusNumber,
-  parseReferrerInfo,
-  getReferralRenewalFinanceUrl,
-  applyReferralBonusToNextRenewal,
+applyReferralBonusToNextRenewal,
+getReferralRenewalFinanceUrl,
+parseBonusNumber,
+parseReferrerInfo,
 } from '@/app/frontend_manager/manager_members/members_referral_bonus/utils/ManagerMembersReferralBonusRenewalAdjustment';
+import {
+Calendar,
+Check,
+ExternalLink,
+IndianRupee,
+Receipt,
+ShieldCheck,
+Sparkles,
+User,
+X
+} from 'lucide-react';
+import { useEffect,useState } from 'react';
+import { toast } from 'sonner';
 
 export interface ManagerMembersReferralBonusApplyRenewalModalProps {
   isOpen: boolean;

@@ -1,30 +1,29 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
-import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
 import {
-  Sparkles,
-  Coins,
-  RotateCcw,
-  Receipt,
-  Megaphone,
-  UserX,
-  Handshake,
-  Send,
-  Save,
-  CheckCircle2,
-  X,
-  ChevronRight,
-  CheckCheck,
-  Smartphone,
+CheckCircle2,
+ChevronRight,
+Coins,
+Handshake,
+Megaphone,
+Receipt,
+RotateCcw,
+Save,
+Send,
+Smartphone,
+Sparkles,
+UserX,
+X
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import React,{ useRef,useState } from 'react';
+import { toast } from 'sonner';
 
-import {
-  MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_TEMPLATES,
-  type Template,
-} from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/hooks/ManagerCommunicationWhatsappTemplatesDemoRepository';
 import { MANAGER_COMMUNICATION_TEMPLATE_VARIABLES } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/constants/ManagerCommunicationWhatsappTemplatesConstants';
+import {
+MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_TEMPLATES,
+type Template,
+} from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/hooks/ManagerCommunicationWhatsappTemplatesDemoRepository';
 import { useManagerWhatsappTemplatesDialogFocus } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/hooks/ManagerCommunicationWhatsappTemplatesDialogFocus';
 import type { ManagerCommunicationWhatsappTemplatesRouteQueryProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/types/ManagerCommunicationWhatsappTemplatesComponentTypes';
 import { ManagerCommunicationWhatsappTemplatesVariablePreview } from './ManagerCommunicationWhatsappTemplatesVariablePreview';

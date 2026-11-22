@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { MessageCircle, X } from 'lucide-react';
+import { MessageCircle,X } from 'lucide-react';
 
 interface ManagerMembersDirectoryBulkToolbarProps {
   selectedCount: number;

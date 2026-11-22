@@ -1,6 +1,6 @@
 import { ManagerMembersAlumniMain } from '@/app/frontend_manager/manager_members/members_alumni/components/ManagerMembersAlumniMain';
-import type { ManagerMembersAlumniMainProps } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniMainTypes';
 import type { ManagerMembersAlumniPageProps } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniComponentTypes';
+import type { ManagerMembersAlumniMainProps } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniMainTypes';
 
 
 

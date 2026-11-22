@@ -1,6 +1,6 @@
 import { ManagerMembersNewAdmissionMain } from '@/app/frontend_manager/manager_members/members_new_admission/components/ManagerMembersNewAdmissionMain';
-import type { ManagerMembersNewAdmissionMainProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionMainTypes';
 import type { ManagerMembersNewAdmissionPageProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
+import type { ManagerMembersNewAdmissionMainProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionMainTypes';
 
 
 

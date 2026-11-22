@@ -2,9 +2,9 @@
 // RESPONSIBILITY: Render the attendance daily student row component within the components feature. It does not own backend persistence or cross-feature business logic.
 
 // RESPONSIBILITY: Render the attendance daily student row component within the components feature. It does not own backend persistence or cross-feature business logic.
-import { useTranslations } from 'next-intl';
-import { Bell, CheckCircle, Clock, AlertTriangle, Calendar } from 'lucide-react';
 import type { ManagerAttendanceDailyStudentRowProps } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
+import { AlertTriangle,Bell,Calendar,CheckCircle,Clock } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 /** Single illustrative attendance row. All changes remain local preview state. */
 export function ManagerAttendanceDailyStudentRow({ student, onStatusChange, onFieldChange, onSendAlert, onEvictOverstay, onViewHistory }: ManagerAttendanceDailyStudentRowProps) {

@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import { Search, X } from 'lucide-react';
+import { Search,X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import React from 'react';
 
 interface ManagerNavigationSidebarSearchProps {
   collapsed: boolean;

@@ -1,40 +1,38 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
 import {
-  Clock,
-  Eye,
-  CheckCheck,
-  Check,
-  AlertCircle,
-  Sparkles,
-  Coins,
-  RotateCcw,
-  Receipt,
-  Megaphone,
-  Search,
-  X,
-  Download,
-  Send,
-  Smartphone,
-  CheckCircle2,
-  Filter,
-  Printer,
-  RotateCw,
+AlertCircle,
+CheckCheck,
+Clock,
+Coins,
+Download,
+Eye,
+Filter,
+Megaphone,
+Printer,
+Receipt,
+RotateCcw,
+RotateCw,
+Search,
+Send,
+Smartphone,
+Sparkles,
+X
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect,useMemo,useState } from 'react';
+import { toast } from 'sonner';
 
-import { maskManagerWhatsappLogsPhone } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/utils/ManagerCommunicationWhatsappLogsUtilities';
-import {
-  MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_LOGS,
-  type WaLog,
-} from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/hooks/ManagerCommunicationWhatsappLogsDemoRepository';
-import ManagerCommunicationWhatsappLogsNativeTable, {
-  type NativeCellParams,
-} from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_table_parts/ManagerCommunicationWhatsappLogsNativeTable';
 import { ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_dialogs/ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog';
+import ManagerCommunicationWhatsappLogsNativeTable,{
+type NativeCellParams,
+} from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_table_parts/ManagerCommunicationWhatsappLogsNativeTable';
+import {
+MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_LOGS,
+type WaLog,
+} from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/hooks/ManagerCommunicationWhatsappLogsDemoRepository';
 import type { ManagerCommunicationWhatsappLogsRouteQueryProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/types/ManagerCommunicationWhatsappLogsComponentTypes';
+import { maskManagerWhatsappLogsPhone } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/utils/ManagerCommunicationWhatsappLogsUtilities';
 
 const LOGS = MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_LOGS;
 

@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { managerBranchInfoDraftSchema } from '@/app/frontend_manager/manager_settings/settings_branch_info/schemas/ManagerSettingsBranchInfoSchema';
+import { describe,expect,it } from 'vitest';
 
 const validDraft = {
   branchName: 'Example Branch',

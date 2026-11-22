@@ -1,25 +1,24 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
-import {
-  ShieldCheck,
-  ShieldAlert,
-  Smartphone,
-  Copy,
-  Check,
-  RefreshCw,
-  QrCode,
-  Lock,
-  AlertTriangle,
-} from 'lucide-react';
-import { toast } from 'sonner';
 import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
-import type { ManagerTwoFactorConfig } from '../types/ManagerSettingsSecurityTypes';
 import {
-  generateQrMatrix,
-  generateQrSvgPath,
+generateQrMatrix,
+generateQrSvgPath,
 } from '@/app/frontend_manager/manager_settings/settings_branch_info/utils/ManagerSettingsBranchInfoWifiQr';
+import {
+AlertTriangle,
+Check,
+Copy,
+Lock,
+RefreshCw,
+ShieldAlert,
+ShieldCheck,
+Smartphone
+} from 'lucide-react';
+import React,{ useMemo,useState } from 'react';
+import { toast } from 'sonner';
 import { INITIAL_BACKUP_CODES } from '../constants/ManagerSettingsSecurityConstants';
+import type { ManagerTwoFactorConfig } from '../types/ManagerSettingsSecurityTypes';
 
 interface ManagerSettingsSecurityTwoFactorPanelProps {
   twoFactor: ManagerTwoFactorConfig;

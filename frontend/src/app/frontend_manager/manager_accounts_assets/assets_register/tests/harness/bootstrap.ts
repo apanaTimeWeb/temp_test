@@ -2,10 +2,10 @@
  * Module-local MSW lifecycle for the assets_register standalone harness.
  * The __harness__ probe is test-only and is not a backend or feature API route.
  */
-import { delay, http, HttpResponse, type RequestHandler } from 'msw';
+import { delay,http,HttpResponse,type RequestHandler } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { MANAGER_ASSETS_REGISTER_SCENARIOS as MODULE_SCENARIOS, type AssetsRegisterScenario as HarnessScenario } from '../../mocks/scenarios/manager_assets_register.scenarios';
 import { MANAGER_ACCOUNTING_HANDLERS as MODULE_HANDLERS_SOURCE } from '../../mocks/manager_assets_register_handlers/ManagerAssetsRegisterHandlers';
+import { MANAGER_ASSETS_REGISTER_SCENARIOS as MODULE_SCENARIOS,type AssetsRegisterScenario as HarnessScenario } from '../../mocks/scenarios/manager_assets_register.scenarios';
 // This list contains only module-owned, source-backed business handlers; no API routes are inferred here.
 const MODULE_HANDLERS: RequestHandler[] = [...MODULE_HANDLERS_SOURCE];
 

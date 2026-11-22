@@ -1,6 +1,6 @@
 import { ManagerAttendanceAbsenteeReportMain } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/ManagerAttendanceAbsenteeReportMain';
-import type { ManagerAttendanceAbsenteeReportMainProps } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/types/ManagerAttendanceAbsenteeReportMainTypes';
 import type { ManagerAttendanceAbsenteeReportPageProps } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/types/ManagerAttendanceAbsenteeReportComponentTypes';
+import type { ManagerAttendanceAbsenteeReportMainProps } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/types/ManagerAttendanceAbsenteeReportMainTypes';
 
 
 

@@ -1,5 +1,5 @@
 /** Module-local component props and UI/state types extracted from component files. */
-import type { ErrorInfo, ReactNode } from 'react';
+import type { ErrorInfo,ReactNode } from 'react';
 
 export interface ManagerMembersReferralBonusErrorFallbackProps {
   onRetry: () => void;

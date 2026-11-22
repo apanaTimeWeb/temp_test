@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
-import { NextIntlClientProvider } from 'next-intl';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
-import messages from '@/app/frontend_manager/manager_members/members_referral_bonus/locales/manager_members_referral_bonus_domain_en.json';
 import { ManagerMembersReferralBonusReferralsClient } from '@/app/frontend_manager/manager_members/members_referral_bonus/components/manager_members_referral_bonus_views/ManagerMembersReferralBonusReferralsClient';
+import messages from '@/app/frontend_manager/manager_members/members_referral_bonus/locales/manager_members_referral_bonus_domain_en.json';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { NextIntlClientProvider } from 'next-intl';
+import { describe,expect,it } from 'vitest';
 
 function renderReferralScreen() {
   return render(

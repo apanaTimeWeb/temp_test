@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
-import { Undo2, Minus } from 'lucide-react';
-import type { ManagerFinanceSecurityDepositsSampleDeposit } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
 import { ManagerFinanceSecurityDepositsEmptyState } from '@/app/frontend_manager/manager_finance/finance_security_deposits/components/manager_finance_security_deposits_empty_states/ManagerFinanceSecurityDepositsEmptyState';
+import type { ManagerFinanceSecurityDepositsSampleDeposit } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
+import { Minus,Undo2 } from 'lucide-react';
+import React from 'react';
 
 const STATUS_BADGE: Record<string, string> = {
   held: 'fin-badge fin-badge--info',

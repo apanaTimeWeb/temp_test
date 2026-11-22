@@ -1,28 +1,26 @@
 // RESPONSIBILITY: Render the dashboard overview quick links component within the components feature. It does not own backend persistence or cross-feature business logic.
 
 // RESPONSIBILITY: Render the dashboard overview quick links component within the components feature. It does not own backend persistence or cross-feature business logic.
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import {
-  Compass,
-  Users,
-  PhoneCall,
-  CreditCard,
-  AlertCircle,
-  CalendarCheck,
-  QrCode,
-  ChevronRight,
-  type LucideIcon,
-} from 'lucide-react';
 import type {
-  ManagerDashboardOverviewQuickLink,
-  ManagerDashboardOverviewQuickLinkTitleKey,
-  ManagerDashboardOverviewQuickLinksProps,
+ManagerDashboardOverviewQuickLink,
+ManagerDashboardOverviewQuickLinkTitleKey,
+ManagerDashboardOverviewQuickLinksProps,
 } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewComponentTypes';
+import {
+AlertCircle,
+CalendarCheck,
+ChevronRight,
+Compass,
+CreditCard,
+PhoneCall,
+QrCode,
+Users,
+type LucideIcon,
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 export type {
-  ManagerDashboardOverviewQuickLinkTitleKey,
-  ManagerDashboardOverviewQuickLink,
-  ManagerDashboardOverviewQuickLinksProps,
+ManagerDashboardOverviewQuickLink,ManagerDashboardOverviewQuickLinkTitleKey,ManagerDashboardOverviewQuickLinksProps
 };
 
 const quickLinkIconMap: Record<string, { icon: LucideIcon; theme: string }> = {

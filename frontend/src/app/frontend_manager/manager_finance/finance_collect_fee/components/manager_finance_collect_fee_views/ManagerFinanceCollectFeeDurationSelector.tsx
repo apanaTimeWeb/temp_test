@@ -1,9 +1,8 @@
 'use client';
 
-import React from 'react';
-import type { ManagerFinanceCollectFeeDraft } from '@/app/frontend_manager/manager_finance/finance_collect_fee/schemas/ManagerFinanceCollectFeeDraftSchema';
 import { STANDARD_CYCLE_AMOUNTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/constants/ManagerFinanceCollectFeeConstants';
-import { Calendar, Clock } from 'lucide-react';
+import type { ManagerFinanceCollectFeeDraft } from '@/app/frontend_manager/manager_finance/finance_collect_fee/schemas/ManagerFinanceCollectFeeDraftSchema';
+import { Calendar,Clock } from 'lucide-react';
 
 export interface ManagerFinanceCollectFeeDurationSelectorProps {
   isCustomDuration: boolean;

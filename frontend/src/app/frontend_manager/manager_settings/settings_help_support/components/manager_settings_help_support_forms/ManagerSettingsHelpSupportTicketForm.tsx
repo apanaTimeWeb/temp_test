@@ -1,28 +1,28 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
-import {
-  Layers,
-  Flame,
-  PenLine,
-  AlignLeft,
-  Paperclip,
-  UploadCloud,
-  Send,
-  X,
-  AlertCircle,
-} from 'lucide-react';
 import { useManagerSettingsHelpSupportConfirm } from '@/app/frontend_manager/manager_settings/settings_help_support/hooks/useManagerSettingsHelpSupportConfirm';
 import { useManagerSettingsHelpSupportUnsavedChangesGuard } from '@/app/frontend_manager/manager_settings/settings_help_support/hooks/useManagerSettingsHelpSupportUnsavedChangesGuard';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  managerHelpSupportTicketDraftSchema,
-  type ManagerSettingsHelpSupportTicketDraft,
+managerHelpSupportTicketDraftSchema,
+type ManagerSettingsHelpSupportTicketDraft,
 } from '@/app/frontend_manager/manager_settings/settings_help_support/schemas/ManagerSettingsHelpSupportTicketDraftSchema';
 import type { ManagerSettingsHelpSupportTicketFormProps } from '@/app/frontend_manager/manager_settings/settings_help_support/types/ManagerSettingsHelpSupportComponentTypes';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+AlertCircle,
+AlignLeft,
+Flame,
+Layers,
+Paperclip,
+PenLine,
+Send,
+UploadCloud,
+X,
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 export function ManagerSettingsHelpSupportTicketForm({ onCancel }: ManagerSettingsHelpSupportTicketFormProps) {
   const tManagerUi = useTranslations('manager.manager_help_support.ui');

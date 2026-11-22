@@ -1,6 +1,6 @@
 import { ManagerFinanceRenewalsMain } from '@/app/frontend_manager/manager_finance/finance_renewals/components/ManagerFinanceRenewalsMain';
-import type { ManagerFinanceRenewalsMainProps } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsMainTypes';
 import type { ManagerFinanceRenewalsPageProps } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
+import type { ManagerFinanceRenewalsMainProps } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsMainTypes';
 
 
 

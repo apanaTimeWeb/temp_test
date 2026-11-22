@@ -1,8 +1,7 @@
-import React from 'react';
-import { describe, expect, it, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { ManagerAttendanceAbsenteeDetailsModal } from '../components/manager_attendance_absentee_report_views/ManagerAttendanceAbsenteeDetailsModal';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 import { createManagerAbsenteeReportAbsenteeColumns } from '../components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportColumns';
+import { ManagerAttendanceAbsenteeDetailsModal } from '../components/manager_attendance_absentee_report_views/ManagerAttendanceAbsenteeDetailsModal';
 import type { ManagerAttendanceAbsenteeReportSampleAbsentee } from '../mocks/manager_attendance_absentee_report_fixtures/ManagerAttendanceAbsenteeReportSampleFixtures';
 
 describe('ManagerAttendanceAbsenteeExcusedLeave', () => {

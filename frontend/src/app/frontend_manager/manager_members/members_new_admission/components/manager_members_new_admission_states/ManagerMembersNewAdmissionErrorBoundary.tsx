@@ -2,9 +2,9 @@
 // RESPONSIBILITY: Contain rendering failures within the components feature subtree. It does not own backend persistence or cross-feature business logic.
 
 // RESPONSIBILITY: Contain rendering failures within the components feature subtree. It does not own backend persistence or cross-feature business logic.
-import { Component, type ErrorInfo } from 'react';
 import { ManagerMembersNewAdmissionErrorFallback } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_error_boundary/ManagerMembersNewAdmissionErrorFallback';
-import type { ManagerMembersNewAdmissionErrorBoundaryProps, ManagerMembersNewAdmissionErrorBoundaryState } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
+import type { ManagerMembersNewAdmissionErrorBoundaryProps,ManagerMembersNewAdmissionErrorBoundaryState } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
+import { Component,type ErrorInfo } from 'react';
 
 
 

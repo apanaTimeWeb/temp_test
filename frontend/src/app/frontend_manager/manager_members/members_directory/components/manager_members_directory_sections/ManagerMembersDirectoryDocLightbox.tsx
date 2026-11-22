@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { X, FileText } from 'lucide-react';
+import { FileText,X } from 'lucide-react';
 
 export interface ManagerMembersDirectoryDocLightboxProps {
   isZoomed: boolean;

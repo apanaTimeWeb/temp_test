@@ -1,4 +1,4 @@
-import type { ManagerFinanceAutoSuspendPaymentStatus, ManagerFinanceAutoSuspendRefundStatus } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendTypes';
+import type { ManagerFinanceAutoSuspendPaymentStatus,ManagerFinanceAutoSuspendRefundStatus } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendTypes';
 
 /** Preserve only statuses explicitly understood by this frontend contract. Unknown values must never be presented as valid or pending. */
 export function normalizeManagerAutoSuspendPaymentStatus(status: string): ManagerFinanceAutoSuspendPaymentStatus {

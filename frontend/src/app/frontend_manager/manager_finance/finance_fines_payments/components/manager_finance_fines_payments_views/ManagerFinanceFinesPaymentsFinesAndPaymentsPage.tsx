@@ -1,34 +1,33 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import {
-  MANAGER_FINANCE_SAMPLE_PENDING_FINES,
-  MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY,
+MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY,
+MANAGER_FINANCE_SAMPLE_PENDING_FINES,
 } from '@/app/frontend_manager/manager_finance/finance_fines_payments/hooks/ManagerFinanceFinesPaymentsDemoRepository';
 import { useManagerFinesPaymentsFormatting } from '@/app/frontend_manager/manager_finance/finance_fines_payments/hooks/ManagerFinanceFinesPaymentsFormattingHook';
-import { useState, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
-import { MANAGER_FINANCE_FINES_PAYMENTS_ROUTES } from '@/app/frontend_manager/manager_finance/finance_fines_payments/config/manager_finance_fines_payments.url_config';
-import {
-  AlertCircle,
-  DollarSign,
-  CheckCircle,
-  RotateCcw,
-  Receipt,
-} from 'lucide-react';
 import type { ManagerFinanceFinesPaymentsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_fines_payments/types/ManagerFinanceFinesPaymentsComponentTypes';
+import {
+AlertCircle,
+CheckCircle,
+DollarSign,
+Receipt,
+RotateCcw,
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useMemo,useState } from 'react';
 import { toast } from 'sonner';
-import ManagerFinanceFinesPaymentsHeaderBanner from './ManagerFinanceFinesPaymentsHeaderBanner';
-import ManagerFinanceFinesPaymentsTimeHorizonBar, { type ManagerFinanceTimeHorizon } from './ManagerFinanceFinesPaymentsTimeHorizonBar';
+import { useManagerFinanceFinesPaymentsPageData } from '../../hooks/useManagerFinanceFinesPaymentsPageData';
 import ManagerFinanceFinesPaymentsDashboardTab from './ManagerFinanceFinesPaymentsDashboardTab';
-import ManagerFinanceFinesPaymentsTablesSection from './ManagerFinanceFinesPaymentsTablesSection';
+import ManagerFinanceFinesPaymentsHeaderBanner from './ManagerFinanceFinesPaymentsHeaderBanner';
 import ManagerFinanceFinesPaymentsReceiptModal from './ManagerFinanceFinesPaymentsReceiptModal';
 import {
-  buildPendingCols,
-  buildHistoryCols,
-  buildReceiptsCols,
+buildHistoryCols,
+buildPendingCols,
+buildReceiptsCols,
 } from './ManagerFinanceFinesPaymentsTableColumns';
-import { useManagerFinanceFinesPaymentsPageData } from '../../hooks/useManagerFinanceFinesPaymentsPageData';
+import ManagerFinanceFinesPaymentsTablesSection from './ManagerFinanceFinesPaymentsTablesSection';
+import ManagerFinanceFinesPaymentsTimeHorizonBar,{ type ManagerFinanceTimeHorizon } from './ManagerFinanceFinesPaymentsTimeHorizonBar';
 
 export type { ManagerFinanceTimeHorizon };
 

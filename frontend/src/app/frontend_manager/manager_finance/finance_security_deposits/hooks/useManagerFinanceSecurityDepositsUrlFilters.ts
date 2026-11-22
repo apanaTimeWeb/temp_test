@@ -1,8 +1,8 @@
 'use client';
 /** DATA FLOW: URL search parameters -> module-owned filter state -> feature view; no backend request is implied. */
 
-import { useCallback, useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname,useRouter,useSearchParams } from 'next/navigation';
+import { useCallback,useEffect,useState } from 'react';
 
 export type ManagerFinanceSecurityDepositsUrlFilterRule = {
   defaultValue: string;

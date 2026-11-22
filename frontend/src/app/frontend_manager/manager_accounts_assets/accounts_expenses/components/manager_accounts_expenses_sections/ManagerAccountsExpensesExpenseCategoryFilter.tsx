@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
-import { TrendingUp, Layers, Tag } from 'lucide-react';
 import type { ManagerAccountsExpensesExpenseCategoryFilterProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/types/ManagerAccountsExpensesComponentTypes';
+import { Tag,TrendingUp } from 'lucide-react';
 
 const CATEGORY_COLORS: Record<string, { bg: string; border: string; glow: string; text: string }> = {
   all: {

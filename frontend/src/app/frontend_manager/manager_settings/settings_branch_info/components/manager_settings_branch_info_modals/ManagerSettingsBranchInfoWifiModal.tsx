@@ -2,32 +2,29 @@
 // RESPONSIBILITY: Front Desk Student Wi-Fi QR Code Standee & Poster Modal.
 // Provides a scannable Wi-Fi QR code, instant printable desk standee, 1-click copy, and live Wi-Fi configuration.
 
-import React, { useState, useRef, useMemo } from 'react';
-import { toast } from 'sonner';
 import {
-  Wifi,
-  QrCode,
-  Printer,
-  Download,
-  Copy,
-  Check,
-  Eye,
-  EyeOff,
-  X,
-  Sparkles,
-  ShieldCheck,
-  Smartphone,
-  Radio,
-  Edit3,
-  RotateCcw,
-  Info,
-  CheckCircle2,
-} from 'lucide-react';
-import {
-  generateQrMatrix,
-  generateQrSvgPath,
-  formatWifiQrPayload,
+formatWifiQrPayload,
+generateQrMatrix,
+generateQrSvgPath,
 } from '@/app/frontend_manager/manager_settings/settings_branch_info/utils/ManagerSettingsBranchInfoWifiQr';
+import {
+Check,
+Copy,
+Download,
+Edit3,
+Eye,
+EyeOff,
+Info,
+Printer,
+Radio,
+ShieldCheck,
+Smartphone,
+Sparkles,
+Wifi,
+X
+} from 'lucide-react';
+import React,{ useMemo,useRef,useState } from 'react';
+import { toast } from 'sonner';
 
 export interface ManagerSettingsBranchInfoWifiModalProps {
   isOpen: boolean;

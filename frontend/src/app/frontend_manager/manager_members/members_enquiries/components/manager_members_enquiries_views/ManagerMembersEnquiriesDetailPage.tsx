@@ -1,28 +1,28 @@
 'use client';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale,useTranslations } from 'next-intl';
 
 import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
 
-import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useManagerMembersEnquiriesConfirm } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesConfirm';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, XCircle } from 'lucide-react';
-import { LibraryLoader, ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { ButtonLoader,LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { fetchManagerEnquiriesEnquiryById } from '@/app/frontend_manager/manager_members/members_enquiries/api/manager_members_enquiries.api';
 import { MANAGER_CRM_QUERY_KEYS } from '@/app/frontend_manager/manager_members/members_enquiries/api/manager_members_enquiries.query_keys';
-import { MANAGER_CRM_STATUS_OPTIONS } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
-import { managerCrmFollowUpDraftSchema, type ManagerMembersEnquiriesFollowUpFormData } from '@/app/frontend_manager/manager_members/members_enquiries/schemas/ManagerMembersEnquiriesSchema';
-import { getManagerEnquiriesLocalDateInputMinimum, getManagerEnquiriesDemoPassWhatsAppUrl, getManagerEnquiriesLocationWhatsAppUrl } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
 import { ManagerMembersEnquiriesFollowUpFormPanel } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_forms/ManagerMembersEnquiriesFollowUpFormPanel';
 import { ManagerMembersEnquiriesActivityTimeline } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_sections/ManagerMembersEnquiriesActivityTimeline';
 import { ManagerMembersEnquiriesEnquiryProfileCard } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_sections/ManagerMembersEnquiriesEnquiryProfileCard';
 import { ManagerMembersEnquiriesEnquiryActionsPanel } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesEnquiryActionsPanel';
 import { ManagerMembersEnquiriesLostReasonModal } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesLostReasonModal';
+import { MANAGER_CRM_STATUS_OPTIONS } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
+import { useManagerMembersEnquiriesConfirm } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesConfirm';
+import { managerCrmFollowUpDraftSchema,type ManagerMembersEnquiriesFollowUpFormData } from '@/app/frontend_manager/manager_members/members_enquiries/schemas/ManagerMembersEnquiriesSchema';
 import type { ManagerMembersEnquiriesDetailPageProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
 import type { ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
+import { getManagerEnquiriesDemoPassWhatsAppUrl,getManagerEnquiriesLocalDateInputMinimum,getManagerEnquiriesLocationWhatsAppUrl } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useQuery } from '@tanstack/react-query';
+import { ArrowLeft,XCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 export type { ManagerMembersEnquiriesDetailPageProps };
 
 

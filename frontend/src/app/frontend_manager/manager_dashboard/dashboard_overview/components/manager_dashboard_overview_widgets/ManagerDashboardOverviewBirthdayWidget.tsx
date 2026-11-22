@@ -1,6 +1,6 @@
 'use client';
+import { Cake,Check,MessageSquare,Phone,Sparkles } from 'lucide-react';
 import { useState } from 'react';
-import { Cake, MessageSquare, Sparkles, Check, Phone } from 'lucide-react';
 import { toast } from 'sonner';
 
 export interface BirthdayStudent {

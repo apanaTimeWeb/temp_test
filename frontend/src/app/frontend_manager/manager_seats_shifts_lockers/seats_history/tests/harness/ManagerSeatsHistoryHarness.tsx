@@ -1,18 +1,18 @@
 "use client";
 
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
+import { useEffect,useState } from 'react';
 import { ManagerSeatsHistoryMain } from '../../components/ManagerSeatsHistoryMain';
 import messagesEn from '../../locales/manager_seats_history_domain_en.json';
 import messagesHi from '../../locales/manager_seats_history_domain_hi.json';
 import {
-  startManagerSeatsHistoryWorker,
-  stopManagerSeatsHistoryWorker,
-  HARNESS_SCENARIO_OPTIONS,
-  MANAGER_SEATS_HISTORY_SCENARIO_PROBE_URL,
-  type ManagerSeatsHistoryHarnessScenario,
+HARNESS_SCENARIO_OPTIONS,
+MANAGER_SEATS_HISTORY_SCENARIO_PROBE_URL,
+startManagerSeatsHistoryWorker,
+stopManagerSeatsHistoryWorker,
+type ManagerSeatsHistoryHarnessScenario,
 } from './bootstrap';
 
 type ManagerSeatsHistoryHarnessProps = {

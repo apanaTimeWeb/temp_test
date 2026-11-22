@@ -1,8 +1,6 @@
-import { MANAGER_HELP_SUPPORT_SAMPLE_TICKETS } from '@/app/frontend_manager/manager_settings/settings_help_support/hooks/ManagerSettingsHelpSupportDemoRepository';
-import { MANAGER_HELP_SUPPORT_SAMPLE_DOCUMENTATION_ARTICLES, MANAGER_HELP_SUPPORT_SAMPLE_ANNOUNCEMENTS } from '@/app/frontend_manager/manager_settings/settings_help_support/hooks/ManagerSettingsHelpSupportDemoRepository';
-import { useEffect, useState } from 'react';
-import type { ManagerSettingsHelpSupportDocumentationCategory, ManagerSettingsHelpSupportTabName, ManagerSettingsHelpSupportTicketTab } from '@/app/frontend_manager/manager_settings/settings_help_support/types/ManagerSettingsHelpSupportTypes';
-import { MANAGER_SETTINGS_HELP_SUPPORT_SEARCH_DEBOUNCE_MS } from '@/app/frontend_manager/manager_settings/settings_help_support/constants/ManagerSettingsHelpSupportConstants';
+import { MANAGER_HELP_SUPPORT_SAMPLE_ANNOUNCEMENTS,MANAGER_HELP_SUPPORT_SAMPLE_DOCUMENTATION_ARTICLES,MANAGER_HELP_SUPPORT_SAMPLE_TICKETS } from '@/app/frontend_manager/manager_settings/settings_help_support/hooks/ManagerSettingsHelpSupportDemoRepository';
+import type { ManagerSettingsHelpSupportDocumentationCategory,ManagerSettingsHelpSupportTabName,ManagerSettingsHelpSupportTicketTab } from '@/app/frontend_manager/manager_settings/settings_help_support/types/ManagerSettingsHelpSupportTypes';
+import { useEffect,useState } from 'react';
 
 /** DATA FLOW: Feature-owned inputs/state -> hook result for its caller; no backend/API flow is inferred without source evidence. */
 

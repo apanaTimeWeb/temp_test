@@ -1,34 +1,32 @@
 'use client';
 
-import type { ManagerAssetsRegisterMainProps } from '@/app/frontend_manager/manager_accounts_assets/assets_register/types/ManagerAssetsRegisterMainTypes';
-import { useTranslations } from 'next-intl';
-import { useState, useMemo } from 'react';
 import {
-  Plus,
-  Download,
-  Printer,
-  Package,
-  CheckCircle2,
-  Wrench,
-  Archive,
-  IndianRupee,
-  Layers,
-  Trash2,
-} from 'lucide-react';
-import { toast } from 'sonner';
-import { useManagerAssetsCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterFormattingHook';
-import {
-  MANAGER_ACCOUNTING_SAMPLE_ASSETS,
-  type ManagerAssetsRegisterAsset,
+MANAGER_ACCOUNTING_SAMPLE_ASSETS,
+type ManagerAssetsRegisterAsset,
 } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
+import { useManagerAssetsCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterFormattingHook';
+import type { ManagerAssetsRegisterMainProps } from '@/app/frontend_manager/manager_accounts_assets/assets_register/types/ManagerAssetsRegisterMainTypes';
 import {
-  ManagerAssetsRegisterTable,
-  type AssetSortField,
-} from './ManagerAssetsRegisterTable';
-import { ManagerAssetsRegisterToolbar } from './ManagerAssetsRegisterToolbar';
+CheckCircle2,
+Download,
+IndianRupee,
+Package,
+Plus,
+Printer,
+Trash2,
+Wrench
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
 import { ManagerAssetsRegisterAddModal } from '../manager_assets_register_dialogs/ManagerAssetsRegisterAddModal';
 import { ManagerAssetsRegisterConfirmModal } from '../manager_assets_register_dialogs/ManagerAssetsRegisterConfirmModal';
 import { ManagerAssetsRegisterDetailsModal } from '../manager_assets_register_dialogs/ManagerAssetsRegisterDetailsModal';
+import {
+ManagerAssetsRegisterTable,
+type AssetSortField,
+} from './ManagerAssetsRegisterTable';
+import { ManagerAssetsRegisterToolbar } from './ManagerAssetsRegisterToolbar';
 
 export default function ManagerAssetsRegisterPage({
   view,

@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
-import { IndianRupee, Clock, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import type { ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
+import { AlertTriangle,CheckCircle2,Clock,IndianRupee } from 'lucide-react';
 
 interface ManagerFinancePaymentPromisesKpisProps {
   promises: ManagerFinancePaymentPromisesPaymentPromiseSample[];

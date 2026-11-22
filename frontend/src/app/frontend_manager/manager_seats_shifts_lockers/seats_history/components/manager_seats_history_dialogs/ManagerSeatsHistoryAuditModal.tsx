@@ -1,7 +1,7 @@
 'use client';
 // RESPONSIBILITY: Modal dialog for auditing seat occupancy history, especially for damage or theft incident investigations (e.g. past 1 month occupants of a specific seat).
-import React, { useState, useMemo } from 'react';
-import { ShieldAlert, Search, X, Calendar, User, Armchair, Clock, Copy, Check, Filter } from 'lucide-react';
+import { Calendar,Check,Clock,Copy,Filter,Search,ShieldAlert,User,X } from 'lucide-react';
+import { useMemo,useState } from 'react';
 import { toast } from 'sonner';
 import type { ManagerSeatsHistoryRow } from '../../types/ManagerSeatsHistoryTypes';
 

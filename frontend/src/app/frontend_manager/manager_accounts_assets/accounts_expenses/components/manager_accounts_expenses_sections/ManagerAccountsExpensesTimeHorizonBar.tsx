@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import { Calendar, Clock, X } from 'lucide-react';
 import type { ManagerExpensesTimeHorizon } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_views/ManagerAccountsExpensesPage';
+import { Calendar,X } from 'lucide-react';
+import React from 'react';
 
 interface ManagerAccountsExpensesTimeHorizonBarProps {
   timeHorizon: ManagerExpensesTimeHorizon;

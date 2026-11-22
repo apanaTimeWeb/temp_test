@@ -1,19 +1,19 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { useState, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
 import { useManagerPaymentPromisesFormatting } from '@/app/frontend_manager/manager_finance/finance_payment_promises/hooks/ManagerFinancePaymentPromisesFormattingHook';
 import { useManagerFinancePaymentPromisesConfirm } from '@/app/frontend_manager/manager_finance/finance_payment_promises/hooks/useManagerFinancePaymentPromisesConfirm';
-import { Search, Plus, X, Download, Printer, BellRing } from 'lucide-react';
-import { MANAGER_FINANCE_PAYMENT_PROMISE_SAMPLE_FIXTURES, type ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
-import { sanitizeManagerPaymentPromisesCsvCell } from '@/app/frontend_manager/manager_finance/finance_payment_promises/utils/ManagerFinancePaymentPromisesCsv';
+import { MANAGER_FINANCE_PAYMENT_PROMISE_SAMPLE_FIXTURES,type ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
 import type { ManagerFinancePaymentPromisesRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_payment_promises/types/ManagerFinancePaymentPromisesComponentTypes';
-import ManagerFinancePaymentPromisesEditModal from './ManagerFinancePaymentPromisesEditModal';
+import { sanitizeManagerPaymentPromisesCsvCell } from '@/app/frontend_manager/manager_finance/finance_payment_promises/utils/ManagerFinancePaymentPromisesCsv';
+import { BellRing,Download,Plus,Printer,Search,X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useMemo,useState } from 'react';
 import { ManagerFinancePaymentPromisesAddModal } from './ManagerFinancePaymentPromisesAddModal';
-import ManagerFinancePaymentPromisesTable, { type PromiseSortField } from './ManagerFinancePaymentPromisesTable';
-import ManagerFinancePaymentPromisesTimeHorizonBar, { type ManagerPromisesTimeHorizon } from './ManagerFinancePaymentPromisesTimeHorizonBar';
+import ManagerFinancePaymentPromisesEditModal from './ManagerFinancePaymentPromisesEditModal';
 import { ManagerFinancePaymentPromisesKpis } from './ManagerFinancePaymentPromisesKpis';
+import ManagerFinancePaymentPromisesTable,{ type PromiseSortField } from './ManagerFinancePaymentPromisesTable';
+import ManagerFinancePaymentPromisesTimeHorizonBar,{ type ManagerPromisesTimeHorizon } from './ManagerFinancePaymentPromisesTimeHorizonBar';
 
 export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFinancePaymentPromisesRouteQueryProps) {
   const router = useRouter();

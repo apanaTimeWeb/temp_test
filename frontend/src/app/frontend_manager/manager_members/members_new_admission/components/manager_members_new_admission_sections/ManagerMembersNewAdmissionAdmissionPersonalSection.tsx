@@ -1,16 +1,16 @@
 'use client';
 // RESPONSIBILITY: Render the members new admission admission personal section section of the components feature. It does not own backend persistence or cross-feature business logic.
-import { useTranslations } from 'next-intl';
-import { useState } from 'react';
-import { Calendar, Camera, GraduationCap, Mail, MapPin, Phone, ShieldAlert, User, Building, Activity, Accessibility } from 'lucide-react';
-import { SearchableCombobox } from '@/components/ui/combobox/SearchableCombobox';
 import {
-  MANAGER_ADMISSION_GENDER_OPTIONS,
-  MANAGER_ADMISSION_PREPARATION_OPTIONS,
-  MANAGER_ADMISSION_BLOOD_GROUP_OPTIONS,
-  MANAGER_ADMISSION_REFERRAL_OPTIONS,
+MANAGER_ADMISSION_BLOOD_GROUP_OPTIONS,
+MANAGER_ADMISSION_GENDER_OPTIONS,
+MANAGER_ADMISSION_PREPARATION_OPTIONS,
+MANAGER_ADMISSION_REFERRAL_OPTIONS,
 } from '@/app/frontend_manager/manager_members/members_new_admission/config/manager_members_new_admission_options';
 import type { ManagerMembersNewAdmissionAdmissionPersonalSectionProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
+import { SearchableCombobox } from '@/components/ui/combobox/SearchableCombobox';
+import { Accessibility,Activity,Building,Calendar,Camera,GraduationCap,Mail,MapPin,Phone,ShieldAlert,User } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 export type { ManagerMembersNewAdmissionAdmissionPersonalSectionProps };
 

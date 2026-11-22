@@ -2,13 +2,13 @@
 // RESPONSIBILITY: Render the members enquiries follow up form panel component within the components feature. It does not own backend persistence or cross-feature business logic.
 
 // RESPONSIBILITY: Render the members enquiries follow up form panel component within the components feature. It does not own backend persistence or cross-feature business logic.
-import { useEffect } from 'react';
-import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import { useManagerMembersEnquiriesConfirm } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesConfirm';
 import { useManagerMembersEnquiriesUnsavedChangesGuard } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesUnsavedChangesGuard';
-import { CalendarDays, Edit2, Plus } from 'lucide-react';
 import type { ManagerMembersEnquiriesFollowUpFormPanelProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
+import { CalendarDays,Edit2,Plus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 export type { ManagerMembersEnquiriesFollowUpFormPanelProps };
 
 

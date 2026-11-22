@@ -1,33 +1,33 @@
 'use client';
-import { useTranslations } from 'next-intl';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { ManagerFinanceCollectFeeEmptyState } from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_empty_states/ManagerFinanceCollectFeeEmptyState';
+import { ManagerFinanceCollectFeeReceiptPreview } from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_views/ManagerFinanceCollectFeeReceiptPreview';
+import {
+MANAGER_FINANCE_COLLECT_FEE_MODES,
+MANAGER_FINANCE_COLLECTION_TYPES,
+MANAGER_FINANCE_FEE_CATEGORIES,
+STANDARD_CYCLE_AMOUNTS,
+type ManagerFinanceCollectionType,
+} from '@/app/frontend_manager/manager_finance/finance_collect_fee/constants/ManagerFinanceCollectFeeConstants';
 import { useManagerCollectFeeFormatting } from '@/app/frontend_manager/manager_finance/finance_collect_fee/hooks/ManagerFinanceCollectFeeFormattingHook';
-import { useEffect, useState, useMemo, type KeyboardEvent } from 'react';
-import { useRouter } from 'next/navigation';
 import { useManagerFinanceCollectFeeConfirm } from '@/app/frontend_manager/manager_finance/finance_collect_fee/hooks/useManagerFinanceCollectFeeConfirm';
 import { useManagerFinanceCollectFeeUnsavedChangesGuard } from '@/app/frontend_manager/manager_finance/finance_collect_fee/hooks/useManagerFinanceCollectFeeUnsavedChangesGuard';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { managerFinanceCollectFeeDraftSchema, type ManagerFinanceCollectFeeDraft } from '@/app/frontend_manager/manager_finance/finance_collect_fee/schemas/ManagerFinanceCollectFeeDraftSchema';
-import { toast } from 'sonner';
-import { Search, IndianRupee, UserCheck, Calendar, Tag, AlertTriangle, AlertCircle, CheckCircle, Scale, PieChart, Archive, Plus, Layers } from 'lucide-react';
-import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
-import { ManagerFinanceCollectFeeReceiptPreview } from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_views/ManagerFinanceCollectFeeReceiptPreview';
-import ManagerFinanceCollectFeeDurationSelector from './ManagerFinanceCollectFeeDurationSelector';
-import ManagerFinanceCollectFeeDiscountsSection from './ManagerFinanceCollectFeeDiscountsSection';
-import ManagerFinanceCollectFeeStudentInfo from './ManagerFinanceCollectFeeStudentInfo';
-import ManagerFinanceCollectFeePostPaymentModal from './ManagerFinanceCollectFeePostPaymentModal';
 import { MANAGER_FINANCE_COLLECT_FEE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/mocks/manager_finance_collect_fee_fixtures/ManagerFinanceCollectFeeMocks';
+import { managerFinanceCollectFeeDraftSchema,type ManagerFinanceCollectFeeDraft } from '@/app/frontend_manager/manager_finance/finance_collect_fee/schemas/ManagerFinanceCollectFeeDraftSchema';
+import type { ManagerFinanceCollectFeeContractStatus,ManagerFinanceCollectFeeRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeComponentTypes';
 import type { ManagerFinanceCollectFeeMode } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
-import {
-  MANAGER_FINANCE_COLLECT_FEE_MODES,
-  MANAGER_FINANCE_FEE_CATEGORIES,
-  MANAGER_FINANCE_COLLECTION_TYPES,
-  STANDARD_CYCLE_AMOUNTS,
-  type ManagerFinanceCollectionType,
-} from '@/app/frontend_manager/manager_finance/finance_collect_fee/constants/ManagerFinanceCollectFeeConstants';
-import { calculateBillingCycleInfo, getAvailableBillingMonths } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
-import { ManagerFinanceCollectFeeEmptyState } from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_empty_states/ManagerFinanceCollectFeeEmptyState';
-import type { ManagerFinanceCollectFeeRouteQueryProps, ManagerFinanceCollectFeeContractStatus } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeComponentTypes';
+import { calculateBillingCycleInfo,getAvailableBillingMonths } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { AlertCircle,AlertTriangle,Archive,Calendar,CheckCircle,IndianRupee,Layers,PieChart,Scale,Search,UserCheck } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useEffect,useMemo,useState,type KeyboardEvent } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import ManagerFinanceCollectFeeDiscountsSection from './ManagerFinanceCollectFeeDiscountsSection';
+import ManagerFinanceCollectFeeDurationSelector from './ManagerFinanceCollectFeeDurationSelector';
+import ManagerFinanceCollectFeePostPaymentModal from './ManagerFinanceCollectFeePostPaymentModal';
+import ManagerFinanceCollectFeeStudentInfo from './ManagerFinanceCollectFeeStudentInfo';
 
 export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinanceCollectFeeRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_collect_fee.ui');

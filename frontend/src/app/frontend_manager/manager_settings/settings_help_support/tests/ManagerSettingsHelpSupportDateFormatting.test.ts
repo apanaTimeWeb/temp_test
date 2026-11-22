@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { formatManagerHelpSupportCalendarDate } from '@/app/frontend_manager/manager_settings/settings_help_support/utils/ManagerSettingsHelpSupportDateFormatting';
+import { describe,expect,it } from 'vitest';
 
 describe('formatManagerHelpSupportCalendarDate', () => {
   it('returns malformed or impossible calendar dates unchanged', () => {

@@ -1,8 +1,7 @@
-import React from 'react';
-import { describe, expect, it, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { ManagerAttendanceDailyStudentRow } from '../components/manager_attendance_daily_widgets/ManagerAttendanceDailyStudentRow';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 import { ManagerAttendanceDailyKpis } from '../components/manager_attendance_daily_views/ManagerAttendanceDailyKpis';
+import { ManagerAttendanceDailyStudentRow } from '../components/manager_attendance_daily_widgets/ManagerAttendanceDailyStudentRow';
 import type { Student } from '../types/ManagerAttendanceDailyComponentTypes';
 
 describe('ManagerAttendanceDailyOverstayAlert', () => {

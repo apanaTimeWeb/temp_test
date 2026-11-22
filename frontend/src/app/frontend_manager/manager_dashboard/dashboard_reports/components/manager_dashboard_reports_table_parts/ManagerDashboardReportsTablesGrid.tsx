@@ -1,19 +1,19 @@
 'use client';
 // RESPONSIBILITY: Render the dashboard reports tables grid component within the components feature. It does not own backend persistence or cross-feature business logic.
-import { useLocale, useTranslations } from 'next-intl';
-import { formatManagerReportsCalendarDate, formatManagerReportsMonth } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/utils/ManagerDashboardReportsDateFormatting';
-import { useMemo } from 'react';
+import type { NativeColumn } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_table_parts/ManagerDashboardReportsNativeTable';
 import { ManagerDashboardReportsTableCard } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_table_parts/ManagerDashboardReportsTableCard';
 import type {
-  ManagerDashboardReportsData,
-  ManagerDashboardReportsTableAbsenteeRow,
-  ManagerDashboardReportsConversionRow,
-  ManagerDashboardReportsSeatRow,
-  ManagerDashboardReportsLockerRow,
-  ManagerDashboardReportsMaintenanceRow,
-  ManagerDashboardReportsShiftProfitabilityRow,
+ManagerDashboardReportsConversionRow,
+ManagerDashboardReportsData,
+ManagerDashboardReportsLockerRow,
+ManagerDashboardReportsMaintenanceRow,
+ManagerDashboardReportsSeatRow,
+ManagerDashboardReportsShiftProfitabilityRow,
+ManagerDashboardReportsTableAbsenteeRow,
 } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
-import type { NativeColumn } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_table_parts/ManagerDashboardReportsNativeTable';
+import { formatManagerReportsCalendarDate,formatManagerReportsMonth } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/utils/ManagerDashboardReportsDateFormatting';
+import { useLocale,useTranslations } from 'next-intl';
+import { useMemo } from 'react';
 
 export function ManagerDashboardReportsTablesGrid({
   data,

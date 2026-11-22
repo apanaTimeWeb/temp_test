@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { managerSeatsShiftDraftSchema, managerSeatsSeatDraftSchema, managerSeatsMaintenanceDraftSchema, managerSeatsLockerDraftSchema, managerSeatsShiftMigrationDraftSchema } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/schemas/ManagerSeatsHistoryDraftSchemas';
+import { managerSeatsLockerDraftSchema,managerSeatsMaintenanceDraftSchema,managerSeatsSeatDraftSchema,managerSeatsShiftDraftSchema,managerSeatsShiftMigrationDraftSchema } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/schemas/ManagerSeatsHistoryDraftSchemas';
+import { describe,expect,it } from 'vitest';
 
 describe('seat/shift/locker editable preview schemas', () => {
   it('validates shift names, time ordering, and time format', () => {

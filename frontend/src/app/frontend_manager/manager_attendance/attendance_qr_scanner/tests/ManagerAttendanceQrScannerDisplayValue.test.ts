@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { displayValue } from '@/app/frontend_manager/manager_attendance/attendance_qr_scanner/utils/ManagerAttendanceQrScannerDisplayValue';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerAttendanceQrScannerDisplayValue', () => {
   it('uses an en dash for nullable, empty, and object values', () => {

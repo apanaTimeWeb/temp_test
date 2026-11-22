@@ -1,9 +1,9 @@
 'use client';
 // RESPONSIBILITY: Render the accounts expenses expense ledger component within the components feature. It does not own backend persistence or cross-feature business logic.
 // RESPONSIBILITY: Render the accounts expenses expense ledger component within the components feature. It does not own backend persistence or cross-feature business logic.
-import { useTranslations } from 'next-intl';
 import ManagerAccountsExpensesNativeTable from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_table_parts/ManagerAccountsExpensesNativeTable';
 import type { ManagerAccountsExpensesExpenseLedgerProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/types/ManagerAccountsExpensesComponentTypes';
+import { useTranslations } from 'next-intl';
 
 
 

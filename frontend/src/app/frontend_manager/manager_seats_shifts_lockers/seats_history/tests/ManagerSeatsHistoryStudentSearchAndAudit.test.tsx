@@ -1,6 +1,5 @@
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 import { ManagerSeatsHistoryAuditModal } from '../components/manager_seats_history_dialogs/ManagerSeatsHistoryAuditModal';
 import type { ManagerSeatsHistoryRow } from '../types/ManagerSeatsHistoryTypes';
 

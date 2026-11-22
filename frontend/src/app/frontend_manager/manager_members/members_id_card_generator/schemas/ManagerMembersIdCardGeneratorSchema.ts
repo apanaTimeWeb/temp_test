@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { MANAGER_STUDENT_STATUSES } from '@/app/frontend_manager/manager_members/members_id_card_generator/constants/ManagerMembersIdCardGeneratorConstants';
+import { z } from 'zod';
 
 export const ManagerStudentSchema = z.object({
   id: z.string().min(1),

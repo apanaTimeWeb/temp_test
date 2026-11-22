@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
 import { managerFinancePaymentApiSchema } from '@/app/frontend_manager/manager_finance/finance_collect_fee/schemas/ManagerFinanceCollectFeeSchema';
 import { mapManagerCollectFeePayment } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeApiMapping';
+import { describe,expect,it } from 'vitest';
 
 describe('Manager Finance payment mapping preserves missing contract data', () => {
   it('does not synthesize receipt IDs, cash mode, late-fee zero, or INR currency', () => {

@@ -1,18 +1,18 @@
 "use client";
 
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
+import { useEffect,useState } from 'react';
 import { ManagerMembersNewAdmissionMain } from '../../components/ManagerMembersNewAdmissionMain';
 import messagesEn from '../../locales/manager_members_new_admission_domain_en.json';
 import messagesHi from '../../locales/manager_members_new_admission_domain_hi.json';
 import {
-  startManagerMembersNewAdmissionWorker,
-  stopManagerMembersNewAdmissionWorker,
-  HARNESS_SCENARIO_OPTIONS,
-  MANAGER_MEMBERS_NEW_ADMISSION_SCENARIO_PROBE_URL,
-  type ManagerMembersNewAdmissionHarnessScenario,
+HARNESS_SCENARIO_OPTIONS,
+MANAGER_MEMBERS_NEW_ADMISSION_SCENARIO_PROBE_URL,
+startManagerMembersNewAdmissionWorker,
+stopManagerMembersNewAdmissionWorker,
+type ManagerMembersNewAdmissionHarnessScenario,
 } from './bootstrap';
 
 type ManagerMembersNewAdmissionHarnessProps = {

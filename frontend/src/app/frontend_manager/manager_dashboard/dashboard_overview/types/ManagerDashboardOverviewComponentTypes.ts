@@ -1,6 +1,6 @@
 /** Module-local component props and UI/state types extracted from component files. */
-import type { ManagerDashboardOverviewActionItem, ManagerDashboardOverviewKpiData, ManagerDashboardOverviewRecentAdmission, ManagerDashboardOverviewRecentEnquiry, ManagerDashboardOverviewSeatData } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewTypes';
-import type { ErrorInfo, ReactNode } from 'react';
+import type { ManagerDashboardOverviewActionItem,ManagerDashboardOverviewKpiData,ManagerDashboardOverviewRecentAdmission,ManagerDashboardOverviewRecentEnquiry,ManagerDashboardOverviewSeatData } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewTypes';
+import type { ErrorInfo,ReactNode } from 'react';
 
 export type ManagerDashboardOverviewEmptyStateProps = { children: ReactNode; className?: string; testId?: string };
 

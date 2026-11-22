@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { UserPlus, X, Search, Check, Key, ShieldCheck, User, DoorClosed, ChevronDown } from 'lucide-react';
-import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { Check,ChevronDown,DoorClosed,Key,Search,ShieldCheck,UserPlus,X } from 'lucide-react';
+import React,{ useEffect,useRef,useState } from 'react';
 import type { ManagerLockersManagementSampleLocker as Locker } from '../../mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
 
 const ALL_STUDENTS = [

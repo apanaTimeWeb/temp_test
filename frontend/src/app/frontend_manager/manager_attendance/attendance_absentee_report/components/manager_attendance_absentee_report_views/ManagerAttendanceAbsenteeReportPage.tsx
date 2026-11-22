@@ -1,32 +1,31 @@
 'use client';
 
-import type { ManagerAttendanceAbsenteeReportMainProps } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/types/ManagerAttendanceAbsenteeReportMainTypes';
-import { useLocale, useTranslations } from 'next-intl';
-import { toast } from 'sonner';
+import { createManagerAbsenteeReportAbsenteeColumns } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportColumns';
 import ManagerAttendanceAbsenteeReportNativeTable from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportNativeTable';
 import { useManagerAbsenteeReportDemoData } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/hooks/useManagerAttendanceAbsenteeReportDemoData';
-import { useState, useMemo } from 'react';
+import type { ManagerAttendanceAbsenteeReportMainProps } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/types/ManagerAttendanceAbsenteeReportMainTypes';
 import {
-  Send,
-  Search,
-  MessageSquare,
-  Printer,
-  Download,
-  RotateCcw,
-  X,
-  Users,
-  AlertTriangle,
-  Clock,
-  ShieldCheck,
-  FileCheck,
+AlertTriangle,
+Clock,
+Download,
+FileCheck,
+MessageSquare,
+Printer,
+RotateCcw,
+Search,
+ShieldCheck,
+Users,
+X
 } from 'lucide-react';
-import { createManagerAbsenteeReportAbsenteeColumns } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportColumns';
-import ManagerAttendanceAbsenteeTimeHorizonBar, {
-  type ManagerAbsenteeTimeHorizon,
-} from './ManagerAttendanceAbsenteeTimeHorizonBar';
+import { useLocale,useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
+import type { ManagerAttendanceAbsenteeReportSampleAbsentee } from '../../hooks/ManagerAttendanceAbsenteeReportDemoRepository';
 import { ManagerAttendanceAbsenteeBulkWhatsAppModal } from './ManagerAttendanceAbsenteeBulkWhatsAppModal';
 import { ManagerAttendanceAbsenteeDetailsModal } from './ManagerAttendanceAbsenteeDetailsModal';
-import type { ManagerAttendanceAbsenteeReportSampleAbsentee } from '../../hooks/ManagerAttendanceAbsenteeReportDemoRepository';
+import ManagerAttendanceAbsenteeTimeHorizonBar,{
+type ManagerAbsenteeTimeHorizon,
+} from './ManagerAttendanceAbsenteeTimeHorizonBar';
 
 const SHIFT_OPTIONS = [
   { id: 'All', label: 'All Shifts' },

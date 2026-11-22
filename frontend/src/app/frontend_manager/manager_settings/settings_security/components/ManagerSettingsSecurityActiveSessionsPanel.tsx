@@ -1,19 +1,19 @@
 'use client';
 
-import React, { useState } from 'react';
-import {
-  Monitor,
-  Smartphone,
-  Laptop,
-  Globe,
-  MapPin,
-  Clock,
-  LogOut,
-  CheckCircle2,
-  AlertTriangle,
-} from 'lucide-react';
-import { toast } from 'sonner';
 import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import {
+AlertTriangle,
+CheckCircle2,
+Clock,
+Globe,
+Laptop,
+LogOut,
+MapPin,
+Monitor,
+Smartphone,
+} from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 import type { ManagerActiveSession } from '../types/ManagerSettingsSecurityTypes';
 
 interface ManagerSettingsSecurityActiveSessionsPanelProps {

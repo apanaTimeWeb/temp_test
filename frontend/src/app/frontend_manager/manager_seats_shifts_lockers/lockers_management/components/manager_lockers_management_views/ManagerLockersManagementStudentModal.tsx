@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
+import { AlertTriangle,ArrowRight,Calendar,DoorClosed,Key,KeyRound,ShieldCheck,User,X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { User, Key, Calendar, ShieldCheck, DoorClosed, ArrowRight, X, AlertTriangle, KeyRound } from 'lucide-react';
 import type { ManagerLockersManagementSampleLocker as Locker } from '../../mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
 
 export interface ManagerLockersManagementStudentModalProps {

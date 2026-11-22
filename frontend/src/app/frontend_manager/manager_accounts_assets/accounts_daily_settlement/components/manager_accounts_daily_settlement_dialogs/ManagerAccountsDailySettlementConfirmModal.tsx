@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { AlertTriangle, CheckCircle2, X } from 'lucide-react';
+import { AlertTriangle,CheckCircle2,X } from 'lucide-react';
+import { useEffect,useRef } from 'react';
 
 export interface ManagerAccountsDailySettlementConfirmModalProps {
   isOpen: boolean;

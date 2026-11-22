@@ -1,7 +1,7 @@
 'use client';
-import { useState } from 'react';
-import { Zap } from 'lucide-react';
 import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
+import { Zap } from 'lucide-react';
+import { useState } from 'react';
 
 interface ManagerSeatsMatrixModalConfigTabProps {
   selectedSeat: SeatData;

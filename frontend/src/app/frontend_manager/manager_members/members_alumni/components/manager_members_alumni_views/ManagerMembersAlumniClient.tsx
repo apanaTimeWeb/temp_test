@@ -1,25 +1,25 @@
 'use client';
 // RESPONSIBILITY: Orchestrate the client-side view and local interactions for components. It does not own backend persistence or cross-feature business logic.
-import { useState, useMemo, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
-import {
-  Award,
-  Building2,
-  CheckCircle2,
-  Clock,
-  Download,
-  Plus,
-  Trash2,
-  Users,
-  X,
-} from 'lucide-react';
 import type { MembersAlumniRow } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniComponentTypes';
-import {
-  ManagerMembersAlumniTable,
-  type AlumniSortField,
-} from './ManagerMembersAlumniTable';
-import { ManagerMembersAlumniAddModal } from '../manager_members_alumni_dialogs/ManagerMembersAlumniAddModal';
 import { sanitizeManagerAlumniCsvCell } from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniCsv';
+import {
+Award,
+Building2,
+CheckCircle2,
+Clock,
+Download,
+Plus,
+Trash2,
+Users,
+X,
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect,useMemo,useState } from 'react';
+import { ManagerMembersAlumniAddModal } from '../manager_members_alumni_dialogs/ManagerMembersAlumniAddModal';
+import {
+ManagerMembersAlumniTable,
+type AlumniSortField,
+} from './ManagerMembersAlumniTable';
 
 const ALUMNI_RECORDS: MembersAlumniRow[] = [
   { id: 'ALM-001', name: 'Rahul Sharma', phone: '9876543210', leftDate: '2025-08-15', duration: '14 Months', exam: 'UPSC Civil Services', designation: 'AIR 142 (IAS)', testimonial: 'The silent 14-hr air-conditioned library environment was key to my consistency.', currentStatus: 'Cleared Exam', depositSettlementStatus: 'Refunded', depositAmount: 500 },

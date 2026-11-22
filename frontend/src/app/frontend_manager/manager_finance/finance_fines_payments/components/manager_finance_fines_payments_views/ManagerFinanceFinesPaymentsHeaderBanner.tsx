@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
-import { RefreshCw, Receipt, Download, Printer } from 'lucide-react';
 import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { Download,Printer,Receipt,RefreshCw } from 'lucide-react';
 
 export interface ManagerFinanceFinesPaymentsHeaderBannerProps {
   receiptsCount?: number;

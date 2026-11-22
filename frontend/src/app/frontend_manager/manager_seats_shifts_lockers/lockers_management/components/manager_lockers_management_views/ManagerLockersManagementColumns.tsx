@@ -1,16 +1,15 @@
 'use client';
 
-import React from 'react';
-import { format, parseISO, isValid } from 'date-fns';
-import { enUS, hi } from 'date-fns/locale';
-import { useLocale, useTranslations } from 'next-intl';
-import { UserPlus, Unlock, Wrench, KeyRound, Key } from 'lucide-react';
-import type {
-  ManagerLockersManagementNativeColumn as ColDef,
-  ManagerLockersManagementNativeCellParams as ICellRendererParams,
-} from '../manager_lockers_management_table_parts/ManagerLockersManagementNativeTable';
+import { format,isValid,parseISO } from 'date-fns';
+import { enUS,hi } from 'date-fns/locale';
+import { Key,KeyRound,Unlock,UserPlus } from 'lucide-react';
+import { useLocale,useTranslations } from 'next-intl';
 import type { ManagerLockersManagementSampleLocker as Locker } from '../../mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
 import type { LockerStatus } from '../../types/ManagerLockersManagementComponentTypes';
+import type {
+ManagerLockersManagementNativeColumn as ColDef,
+ManagerLockersManagementNativeCellParams as ICellRendererParams,
+} from '../manager_lockers_management_table_parts/ManagerLockersManagementNativeTable';
 
 const STATUS_CLASS: Record<LockerStatus, string> = {
   Free: 'ss-badge ss-badge--success',

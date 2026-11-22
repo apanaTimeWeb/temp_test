@@ -1,15 +1,15 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
 import {
-  History,
-  CheckCircle2,
-  XCircle,
-  Globe,
-  MapPin,
-  Laptop,
-  AlertTriangle,
+AlertTriangle,
+CheckCircle2,
+Globe,
+History,
+Laptop,
+MapPin,
+XCircle,
 } from 'lucide-react';
+import { useMemo,useState } from 'react';
 import type { ManagerLoginHistoryEntry } from '../types/ManagerSettingsSecurityTypes';
 
 interface ManagerSettingsSecurityLoginHistoryPanelProps {

@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
-import { RotateCcw, Send, UserX, Clock } from 'lucide-react';
 import type { NativeCellParams } from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_table_parts/ManagerFinanceRenewalsNativeTable';
+import { RotateCcw,Send,UserX } from 'lucide-react';
 
 export interface BuildRenewalColumnsParams {
   tManagerUi: (k: string, opts?: { count?: number }) => string;

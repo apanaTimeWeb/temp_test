@@ -1,7 +1,7 @@
 'use client';
-import { useTranslations } from 'next-intl';
-import { ShieldCheck, ShieldAlert, ShieldX, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { ManagerFinanceTrustScoresEmptyState } from '@/app/frontend_manager/manager_finance/finance_trust_scores/components/manager_finance_trust_scores_empty_states/ManagerFinanceTrustScoresEmptyState';
+import { ArrowDown,ArrowUp,ArrowUpDown,ShieldAlert,ShieldCheck,ShieldX } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 export interface ManagerTrustScoreStudent {
   rank: number;
   studentName: string;

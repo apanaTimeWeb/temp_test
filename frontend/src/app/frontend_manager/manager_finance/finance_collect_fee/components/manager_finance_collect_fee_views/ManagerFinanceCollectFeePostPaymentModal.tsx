@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { CheckCircle2, Printer, MessageSquare, ArrowRight, Check, FileText } from 'lucide-react';
+import { ArrowRight,CheckCircle2,MessageSquare,Printer } from 'lucide-react';
 import { toast } from 'sonner';
 
 export interface FeeReceiptLineItem {

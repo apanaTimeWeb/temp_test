@@ -4,8 +4,8 @@
 import { useTranslations } from 'next-intl';
 
 
-import { FileText, IndianRupee } from 'lucide-react';
 import type { ManagerMembersGroupAdmissionAdmissionPaymentSectionProps } from '@/app/frontend_manager/manager_members/members_group_admission/types/ManagerMembersGroupAdmissionComponentTypes';
+import { FileText,IndianRupee } from 'lucide-react';
 export type { ManagerMembersGroupAdmissionAdmissionPaymentSectionProps };
 
 

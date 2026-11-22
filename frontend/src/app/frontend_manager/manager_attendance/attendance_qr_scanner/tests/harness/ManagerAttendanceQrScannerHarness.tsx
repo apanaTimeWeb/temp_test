@@ -1,18 +1,18 @@
 "use client";
 
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
+import { useEffect,useState } from 'react';
 import { ManagerAttendanceQrScannerMain } from '../../components/ManagerAttendanceQrScannerMain';
 import messagesEn from '../../locales/manager_attendance_qr_scanner_domain_en.json';
 import messagesHi from '../../locales/manager_attendance_qr_scanner_domain_hi.json';
 import {
-  startManagerAttendanceQrScannerWorker,
-  stopManagerAttendanceQrScannerWorker,
-  HARNESS_SCENARIO_OPTIONS,
-  MANAGER_ATTENDANCE_QR_SCANNER_SCENARIO_PROBE_URL,
-  type ManagerAttendanceQrScannerHarnessScenario,
+HARNESS_SCENARIO_OPTIONS,
+MANAGER_ATTENDANCE_QR_SCANNER_SCENARIO_PROBE_URL,
+startManagerAttendanceQrScannerWorker,
+stopManagerAttendanceQrScannerWorker,
+type ManagerAttendanceQrScannerHarnessScenario,
 } from './bootstrap';
 
 type ManagerAttendanceQrScannerHarnessProps = {

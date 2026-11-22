@@ -1,6 +1,6 @@
 import { ManagerAccountsSeatGapReportMain } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/components/ManagerAccountsSeatGapReportMain';
-import type { ManagerAccountsSeatGapReportMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/types/ManagerAccountsSeatGapReportMainTypes';
 import type { ManagerAccountsSeatGapReportPageProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/types/ManagerAccountsSeatGapReportComponentTypes';
+import type { ManagerAccountsSeatGapReportMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/types/ManagerAccountsSeatGapReportMainTypes';
 
 
 

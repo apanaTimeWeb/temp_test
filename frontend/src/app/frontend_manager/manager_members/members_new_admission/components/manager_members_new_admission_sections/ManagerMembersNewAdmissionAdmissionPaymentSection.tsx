@@ -1,11 +1,11 @@
 'use client';
 // RESPONSIBILITY: Render the members new admission admission payment section with dynamic shift-based plan pricing.
-import { useTranslations } from 'next-intl';
-import { useMemo } from 'react';
-import { IndianRupee, MessageSquare, Tag, Sparkles, ShieldCheck, AlertCircle, Calendar, Info } from 'lucide-react';
-import { SearchableCombobox } from '@/components/ui/combobox/SearchableCombobox';
 import { MANAGER_ADMISSION_PAYMENT_MODE_OPTIONS } from '@/app/frontend_manager/manager_members/members_new_admission/config/manager_members_new_admission_options';
 import type { ManagerMembersNewAdmissionAdmissionPaymentSectionProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
+import { SearchableCombobox } from '@/components/ui/combobox/SearchableCombobox';
+import { AlertCircle,Calendar,IndianRupee,Info,MessageSquare,ShieldCheck,Sparkles,Tag } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo } from 'react';
 
 export type { ManagerMembersNewAdmissionAdmissionPaymentSectionProps };
 

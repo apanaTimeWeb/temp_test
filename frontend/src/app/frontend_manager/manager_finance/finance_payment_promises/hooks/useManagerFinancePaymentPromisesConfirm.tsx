@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useId, useRef, useState } from 'react';
 import { useManagerPaymentPromisesDialogFocus } from '@/app/frontend_manager/manager_finance/finance_payment_promises/hooks/ManagerFinancePaymentPromisesDialogFocus';
+import { useCallback,useId,useRef,useState } from 'react';
 
 export interface PaymentPromisesPendingConfirmation {
   message: string;

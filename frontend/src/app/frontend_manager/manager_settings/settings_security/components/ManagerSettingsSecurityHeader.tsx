@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
-import { ShieldCheck, ShieldAlert, KeyRound, MonitorSmartphone, Building2, User } from 'lucide-react';
-import type { ManagerProfileInfo, ManagerTwoFactorConfig, ManagerActiveSession } from '../types/ManagerSettingsSecurityTypes';
+import { Building2,KeyRound,MonitorSmartphone,ShieldAlert,ShieldCheck,User } from 'lucide-react';
+import type { ManagerActiveSession,ManagerProfileInfo,ManagerTwoFactorConfig } from '../types/ManagerSettingsSecurityTypes';
 
 interface ManagerSettingsSecurityHeaderProps {
   profile: ManagerProfileInfo;

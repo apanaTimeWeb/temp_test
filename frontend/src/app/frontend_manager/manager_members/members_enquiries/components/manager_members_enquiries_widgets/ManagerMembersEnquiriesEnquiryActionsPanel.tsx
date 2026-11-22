@@ -1,6 +1,6 @@
 'use client';
-import { CheckCircle, XCircle, MapPin, Ticket } from 'lucide-react';
 import type { ManagerMembersEnquiriesEnquiryActionsPanelProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
+import { CheckCircle,MapPin,Ticket,XCircle } from 'lucide-react';
 
 export function ManagerMembersEnquiriesEnquiryActionsPanel({
   status,

@@ -1,7 +1,7 @@
-import { toast } from 'sonner';
-import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
-import type { ManagerGraduateAlumniDetails } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryGraduateAlumniModal';
 import { settleAndRefundDepositInLedger } from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniDepositSettlement';
+import type { ManagerGraduateAlumniDetails } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryGraduateAlumniModal';
+import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
+import { toast } from 'sonner';
 
 export function graduateMemberToAlumni(
   targetMember: ManagerMembersDirectoryRecord,

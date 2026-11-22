@@ -1,5 +1,5 @@
-import type { z } from 'zod';
 import { managerComplaintsComplaintResponseSchema } from '@/app/frontend_manager/manager_communication/communication_complaints/schemas/ManagerCommunicationComplaintsSchema';
+import type { z } from 'zod';
 export const MANAGER_COMPLAINTS_API_FIXTURES = [
  {id:'test-complaint-001',subject:'AC Water Leakage',description:'Water is dripping from the AC unit directly onto desk workspace.',createdAt:'2026-10-14',status:'open',student:'Aman Verma',phone:'9876543210',seatTag:'Seat S-14 (Hall A)',priority:'Urgent'},
  {id:'test-complaint-002',subject:'Wi-Fi Signal Drop',description:'5GHz Wi-Fi disconnecting intermittently during study hours.',createdAt:'2026-10-15',status:'in_progress',student:'Pooja Sharma',phone:'9876543211',seatTag:'Discussion Room 2',priority:'Normal'},

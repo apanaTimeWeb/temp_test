@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync,readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { describe,expect,it } from 'vitest';
 
 const moduleRoot = [
   join(process.cwd(), 'src/app/frontend_manager/manager_seats_shifts_lockers/lockers_management'),

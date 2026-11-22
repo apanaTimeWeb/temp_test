@@ -1,26 +1,25 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { toast } from 'sonner';
 import {
-  GraduationCap,
-  Award,
-  Calendar,
-  Clock,
-  Armchair,
-  X,
-  Check,
-  ShieldCheck,
-  ShieldAlert,
-  ExternalLink,
-  AlertTriangle,
-} from 'lucide-react';
+checkMemberDepositSettlement,
+getDepositSettlementFinanceUrl,
+type MemberDepositSettlementInfo,
+} from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniDepositSettlement';
 import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 import {
-  checkMemberDepositSettlement,
-  getDepositSettlementFinanceUrl,
-  type MemberDepositSettlementInfo,
-} from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniDepositSettlement';
+Armchair,
+Award,
+Calendar,
+Check,
+Clock,
+ExternalLink,
+GraduationCap,
+ShieldAlert,
+ShieldCheck,
+X
+} from 'lucide-react';
+import { useEffect,useState } from 'react';
+import { toast } from 'sonner';
 
 export interface ManagerGraduateAlumniDetails {
   exam: string;

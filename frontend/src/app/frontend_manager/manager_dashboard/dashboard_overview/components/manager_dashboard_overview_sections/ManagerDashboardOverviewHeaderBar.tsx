@@ -1,10 +1,10 @@
 'use client';
 
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import { TrendingUp, RotateCw, Clock, CalendarRange, UserPlus, PhoneCall, IndianRupee, QrCode, Users } from 'lucide-react';
-import { MANAGER_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/config/manager_dashboard_overview.url_config';
 import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { MANAGER_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/config/manager_dashboard_overview.url_config';
+import { CalendarRange,Clock,IndianRupee,PhoneCall,QrCode,RotateCw,TrendingUp,UserPlus,Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 
 export type DashboardTimeRange = 'today' | 'this_week' | 'this_month' | 'custom';
 

@@ -1,9 +1,8 @@
 'use client';
 
-import React from 'react';
-import { Search, X } from 'lucide-react';
 import { MANAGER_FINANCE_RENEWAL_FILTERS } from '@/app/frontend_manager/manager_finance/finance_renewals/constants/ManagerFinanceRenewalsRenewalConstants';
 import type { FilterType } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
+import { Search,X } from 'lucide-react';
 
 export interface ManagerFinanceRenewalsFilterBarProps {
   filter: FilterType;

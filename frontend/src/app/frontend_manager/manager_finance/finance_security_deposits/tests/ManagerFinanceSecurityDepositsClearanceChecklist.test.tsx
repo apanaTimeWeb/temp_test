@@ -1,6 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import React from 'react';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 import ManagerFinanceSecurityDepositsRefundModal from '../components/manager_finance_security_deposits_views/ManagerFinanceSecurityDepositsRefundModal';
 
 describe('Module 17: Security Deposits - Exit Clearance Checklist', () => {

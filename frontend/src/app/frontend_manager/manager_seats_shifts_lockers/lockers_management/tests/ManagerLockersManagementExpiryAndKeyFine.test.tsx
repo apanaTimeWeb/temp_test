@@ -1,8 +1,7 @@
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import { ManagerLockersManagementLostKeyModal } from '../components/manager_lockers_management_views/ManagerLockersManagementLostKeyModal';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 import { ManagerLockersManagementAssignModal } from '../components/manager_lockers_management_views/ManagerLockersManagementAssignModal';
+import { ManagerLockersManagementLostKeyModal } from '../components/manager_lockers_management_views/ManagerLockersManagementLostKeyModal';
 import type { ManagerLockersManagementSampleLocker as Locker } from '../mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
 
 describe('Lockers Management - Plan Expiry and Lost Key Fine Direct Flow', () => {

@@ -1,9 +1,9 @@
-import { z } from 'zod';
-import { apiFetch } from '@/lib/api';
-import type { ManagerSeatsHistoryAllocationRow, ManagerSeatsHistoryRow, LockerData, SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryTypes';
 import { MANAGER_SEATS_HISTORY_API } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/config/manager_seats_history.url_config';
+import type { LockerData,ManagerSeatsHistoryAllocationRow,ManagerSeatsHistoryRow,SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryTypes';
+import { normalizeManagerLockerMatrixStatus,normalizeManagerSeatMatrixStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/utils/ManagerSeatsHistoryMatrixStatus';
 import { normalizeManagerSeatsAllocationStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/utils/ManagerSeatsHistoryStatusNormalization';
-import { normalizeManagerLockerMatrixStatus, normalizeManagerSeatMatrixStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/utils/ManagerSeatsHistoryMatrixStatus';
+import { apiFetch } from '@/lib/api';
+import { z } from 'zod';
 
 const recordSchema = z.record(z.string(), z.unknown());
 const recordArraySchema = z.array(recordSchema);
@@ -25,10 +25,10 @@ function statusLabel(value: unknown): string {
 }
 
 import {
-  MANAGER_SEATS_SHIFTS_LOCKERS_ALLOCATIONS_FIXTURE,
-  MANAGER_SEATS_SHIFTS_LOCKERS_HISTORY_FIXTURE,
-  MANAGER_SEATS_SHIFTS_LOCKERS_LOCKERS_FIXTURE,
-  MANAGER_SEATS_SHIFTS_LOCKERS_SEAT_MATRIX_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_ALLOCATIONS_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_HISTORY_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_LOCKERS_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_SEAT_MATRIX_FIXTURE,
 } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/mocks/manager_seats_history_fixtures/ManagerSeatsHistoryApiFixtures';
 
 async function fetchValidatedRecords(endpoint: string): Promise<Record<string, unknown>[]> {

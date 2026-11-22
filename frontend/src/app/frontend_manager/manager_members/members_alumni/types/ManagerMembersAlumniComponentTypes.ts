@@ -1,6 +1,6 @@
 /** Module-local component props and UI/state types extracted from component files. */
 import type { ManagerMembersAlumniSearchParams } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniMainTypes';
-import type { ErrorInfo, ReactNode } from 'react';
+import type { ErrorInfo,ReactNode } from 'react';
 
 export interface ManagerMembersAlumniErrorFallbackProps {
   onRetry: () => void;

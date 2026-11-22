@@ -1,9 +1,8 @@
 'use client';
 // RESPONSIBILITY: Tab field views for editing member profile attributes with multi-shift support and seat/locker dropdowns.
 
-import React from 'react';
-import { Check } from 'lucide-react';
 import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
+import { Check } from 'lucide-react';
 
 export type EditTab = 'personal' | 'seat_locker' | 'guardian_goal' | 'plan_status';
 

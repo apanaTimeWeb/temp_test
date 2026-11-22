@@ -2,10 +2,10 @@
  * Module-local MSW lifecycle for the attendance_absentee_report standalone harness.
  * The __harness__ probe is test-only and is not a backend or feature API route.
  */
-import { delay, http, HttpResponse, type RequestHandler } from 'msw';
+import { delay,http,HttpResponse,type RequestHandler } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { MANAGER_ATTENDANCE_ABSENTEE_REPORT_SCENARIOS as MODULE_SCENARIOS, type AttendanceAbsenteeReportScenario as HarnessScenario } from '../../mocks/scenarios/manager_attendance_absentee_report.scenarios';
 import { MANAGER_ENGAGEMENT_HANDLERS as MODULE_HANDLERS_SOURCE } from '../../mocks/manager_attendance_absentee_report_handlers/ManagerAttendanceAbsenteeReportHandlers';
+import { MANAGER_ATTENDANCE_ABSENTEE_REPORT_SCENARIOS as MODULE_SCENARIOS,type AttendanceAbsenteeReportScenario as HarnessScenario } from '../../mocks/scenarios/manager_attendance_absentee_report.scenarios';
 // This list contains only module-owned, source-backed business handlers; no API routes are inferred here.
 const MODULE_HANDLERS: RequestHandler[] = [...MODULE_HANDLERS_SOURCE];
 

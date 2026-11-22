@@ -1,7 +1,7 @@
 // RESPONSIBILITY: Render the members directory kpi section section of the components feature. It does not own backend persistence or cross-feature business logic.
+import type { ManagerMembersDirectoryKpiSectionProps,ManagerMembersDirectoryTab } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
+import { UserCheck,UserMinus,Users,UserX } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Users, UserCheck, UserX, UserMinus } from 'lucide-react';
-import type { ManagerMembersDirectoryKpiSectionProps, ManagerMembersDirectoryTab } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 
 export function ManagerMembersDirectoryKpiSection({
   totalMembers,

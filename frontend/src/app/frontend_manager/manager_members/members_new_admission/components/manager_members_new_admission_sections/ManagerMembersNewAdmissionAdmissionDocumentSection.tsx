@@ -1,10 +1,10 @@
 'use client';
 // RESPONSIBILITY: Render the student KYC and document upload section during admission. It does not own backend persistence or cross-feature business logic.
 
-import { useState } from 'react';
-import { FileText, Upload, CheckCircle2 } from 'lucide-react';
-import type { UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import type { ManagerMembersNewAdmissionAdmissionFormValues } from '@/app/frontend_manager/manager_members/members_new_admission/schemas/ManagerMembersNewAdmissionAdmissionSchema';
+import { CheckCircle2,FileText,Upload } from 'lucide-react';
+import { useState } from 'react';
+import type { UseFormSetValue,UseFormWatch } from 'react-hook-form';
 
 export interface ManagerMembersNewAdmissionAdmissionDocumentSectionProps {
   setValue?: UseFormSetValue<ManagerMembersNewAdmissionAdmissionFormValues>;

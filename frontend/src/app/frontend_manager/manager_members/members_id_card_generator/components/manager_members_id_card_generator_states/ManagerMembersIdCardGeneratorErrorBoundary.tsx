@@ -2,9 +2,9 @@
 // RESPONSIBILITY: Contain rendering failures within the components feature subtree. It does not own backend persistence or cross-feature business logic.
 
 // RESPONSIBILITY: Contain rendering failures within the components feature subtree. It does not own backend persistence or cross-feature business logic.
-import { Component, type ErrorInfo } from 'react';
 import { ManagerMembersIdCardGeneratorErrorFallback } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_error_boundary/ManagerMembersIdCardGeneratorErrorFallback';
-import type { ManagerMembersIdCardGeneratorErrorBoundaryProps, ManagerMembersIdCardGeneratorErrorBoundaryState } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorComponentTypes';
+import type { ManagerMembersIdCardGeneratorErrorBoundaryProps,ManagerMembersIdCardGeneratorErrorBoundaryState } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorComponentTypes';
+import { Component,type ErrorInfo } from 'react';
 
 
 

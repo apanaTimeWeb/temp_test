@@ -1,6 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent, act } from '@testing-library/react';
-import React from 'react';
+import { act,fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 import ManagerFinanceSubscriptionsUpgradeModal from '../components/manager_finance_subscriptions_views/ManagerFinanceSubscriptionsUpgradeModal';
 
 describe('Module 14: Subscriptions - Pro-Rata Plan Upgrade Calculator', () => {

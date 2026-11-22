@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { CheckCircle2, MessageSquare, Send, X, ShieldCheck } from 'lucide-react';
+import { CheckCircle2,MessageSquare,Send,ShieldCheck,X } from 'lucide-react';
+import { useEffect,useState } from 'react';
 import { toast } from 'sonner';
 import type { ManagerMembersDirectoryRecord } from '../../types/ManagerMembersDirectoryTypes';
 

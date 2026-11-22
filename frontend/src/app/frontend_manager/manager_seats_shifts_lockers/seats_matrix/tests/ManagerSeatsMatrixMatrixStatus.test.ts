@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { normalizeManagerLockerMatrixStatus, normalizeManagerSeatMatrixStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/utils/ManagerSeatsMatrixMatrixStatus';
+import { normalizeManagerLockerMatrixStatus,normalizeManagerSeatMatrixStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/utils/ManagerSeatsMatrixMatrixStatus';
+import { describe,expect,it } from 'vitest';
 
 describe('matrix status normalization', () => {
   it('recognizes explicit statuses and flags', () => {

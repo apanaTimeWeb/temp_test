@@ -1,26 +1,20 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
-import {
-  X,
-  Printer,
-  Copy,
-  Check,
-  CheckCircle2,
-  AlertTriangle,
-  RotateCcw,
-  IndianRupee,
-  Coins,
-  Receipt,
-  FileCheck,
-  ArrowRight,
-  ShieldCheck,
-  Send,
-  User,
-  Building,
-} from 'lucide-react';
-import { toast } from 'sonner';
 import type { Entry } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
+import {
+AlertTriangle,
+Check,
+CheckCircle2,
+Coins,
+Copy,
+Printer,
+Receipt,
+RotateCcw,
+Send,
+X
+} from 'lucide-react';
+import { useEffect,useMemo,useState } from 'react';
+import { toast } from 'sonner';
 
 export interface DenominationCounts {
   n500: number;

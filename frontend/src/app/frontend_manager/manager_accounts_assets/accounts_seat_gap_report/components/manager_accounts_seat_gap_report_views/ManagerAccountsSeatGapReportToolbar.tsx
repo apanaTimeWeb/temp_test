@@ -1,6 +1,6 @@
 'use client';
 
-import { Search, X, RotateCcw, Sunrise, Sun, Sunset, Moon, Clock, Layers } from 'lucide-react';
+import { Clock,Moon,RotateCcw,Search,Sun,Sunrise,X } from 'lucide-react';
 
 interface ManagerAccountsSeatGapReportToolbarProps {
   shiftFilter: string;

@@ -1,11 +1,11 @@
 'use client';
 
-import { useRef } from 'react';
-import { toast } from 'sonner';
-import { X, Smartphone, CheckCheck, Check, Clock, AlertCircle, Copy, Printer } from 'lucide-react';
-import { maskManagerWhatsappLogsPhone } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/utils/ManagerCommunicationWhatsappLogsUtilities';
 import { useManagerWhatsappLogsDialogFocus } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/hooks/ManagerCommunicationWhatsappLogsDialogFocus';
 import type { ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialogProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/types/ManagerCommunicationWhatsappLogsComponentTypes';
+import { maskManagerWhatsappLogsPhone } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/utils/ManagerCommunicationWhatsappLogsUtilities';
+import { AlertCircle,Check,CheckCheck,Clock,Copy,Printer,Smartphone,X } from 'lucide-react';
+import { useRef } from 'react';
+import { toast } from 'sonner';
 
 export function ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog({
   log,

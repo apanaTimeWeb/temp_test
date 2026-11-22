@@ -2,10 +2,10 @@
  * Module-local MSW lifecycle for the members_id_card_generator standalone harness.
  * The __harness__ probe is test-only and is not a backend or feature API route.
  */
-import { delay, http, HttpResponse, type RequestHandler } from 'msw';
+import { delay,http,HttpResponse,type RequestHandler } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { MANAGER_MEMBERS_ID_CARD_GENERATOR_SCENARIOS as MODULE_SCENARIOS, type MembersIdCardGeneratorScenario as HarnessScenario } from '../../mocks/scenarios/manager_members_id_card_generator.scenarios';
 import { managerStudentsHandlers as MODULE_HANDLERS_SOURCE } from '../../mocks/manager_members_id_card_generator_handlers/ManagerMembersIdCardGeneratorHandlers';
+import { MANAGER_MEMBERS_ID_CARD_GENERATOR_SCENARIOS as MODULE_SCENARIOS,type MembersIdCardGeneratorScenario as HarnessScenario } from '../../mocks/scenarios/manager_members_id_card_generator.scenarios';
 // This list contains only module-owned, source-backed business handlers; no API routes are inferred here.
 const MODULE_HANDLERS: RequestHandler[] = [...MODULE_HANDLERS_SOURCE];
 

@@ -1,12 +1,12 @@
 'use client';
 
-import React from 'react';
+import { Armchair,Calendar,CheckCircle2,Copy,MessageSquare,Printer,User,X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { X, MessageSquare, Printer, Copy, User, Calendar, CheckCircle2, Armchair } from 'lucide-react';
+import React from 'react';
 import { toast } from 'sonner';
 import type {
-  ManagerCommunicationComplaintsComplaint,
-  ManagerCommunicationComplaintsComplaintStatus,
+ManagerCommunicationComplaintsComplaint,
+ManagerCommunicationComplaintsComplaintStatus,
 } from '../../types/ManagerCommunicationComplaintsTypes';
 
 interface ManagerCommunicationComplaintsViewModalProps {

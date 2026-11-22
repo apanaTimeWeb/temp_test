@@ -1,27 +1,27 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { ShieldCheck } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect,useState } from 'react';
 
-import type {
-  ManagerSecurityTab,
-  ManagerTwoFactorConfig,
-  ManagerActiveSession,
-} from '../types/ManagerSettingsSecurityTypes';
 import {
-  INITIAL_MANAGER_PROFILE,
-  INITIAL_ACTIVE_SESSIONS,
-  INITIAL_LOGIN_HISTORY,
-  INITIAL_TWO_FACTOR_CONFIG,
+INITIAL_ACTIVE_SESSIONS,
+INITIAL_LOGIN_HISTORY,
+INITIAL_MANAGER_PROFILE,
+INITIAL_TWO_FACTOR_CONFIG,
 } from '../constants/ManagerSettingsSecurityConstants';
+import type {
+ManagerActiveSession,
+ManagerSecurityTab,
+ManagerTwoFactorConfig,
+} from '../types/ManagerSettingsSecurityTypes';
 
-import { ManagerSettingsSecurityHeader } from './ManagerSettingsSecurityHeader';
-import { ManagerSettingsSecurityTabs } from './ManagerSettingsSecurityTabs';
-import { ManagerSettingsSecurityPasswordForm } from './ManagerSettingsSecurityPasswordForm';
-import { ManagerSettingsSecurityTwoFactorPanel } from './ManagerSettingsSecurityTwoFactorPanel';
 import { ManagerSettingsSecurityActiveSessionsPanel } from './ManagerSettingsSecurityActiveSessionsPanel';
+import { ManagerSettingsSecurityHeader } from './ManagerSettingsSecurityHeader';
 import { ManagerSettingsSecurityLoginHistoryPanel } from './ManagerSettingsSecurityLoginHistoryPanel';
+import { ManagerSettingsSecurityPasswordForm } from './ManagerSettingsSecurityPasswordForm';
+import { ManagerSettingsSecurityTabs } from './ManagerSettingsSecurityTabs';
+import { ManagerSettingsSecurityTwoFactorPanel } from './ManagerSettingsSecurityTwoFactorPanel';
 
 interface ManagerSettingsSecurityMainProps {
   initialTab?: ManagerSecurityTab;

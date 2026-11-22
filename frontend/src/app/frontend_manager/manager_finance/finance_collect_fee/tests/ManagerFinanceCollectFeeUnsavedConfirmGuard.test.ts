@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { describe,expect,it } from 'vitest';
 
 const pageSource = readFileSync(join(__dirname, '../components/manager_finance_collect_fee_views/ManagerFinanceCollectFeePage.tsx'), 'utf8');
 const confirmSource = readFileSync(join(__dirname, '../hooks/useManagerFinanceCollectFeeConfirm.tsx'), 'utf8');

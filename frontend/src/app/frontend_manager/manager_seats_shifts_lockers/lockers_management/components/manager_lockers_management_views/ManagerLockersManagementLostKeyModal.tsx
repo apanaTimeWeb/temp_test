@@ -1,7 +1,7 @@
 'use client';
 // RESPONSIBILITY: Modal dialog for reporting lost locker keys and imposing fine/penalties, directly resolving situations where students leave seat but keep or lose the locker key.
-import React, { useState } from 'react';
-import { KeyRound, ShieldAlert, X, AlertTriangle, CheckCircle2, DollarSign } from 'lucide-react';
+import { AlertTriangle,KeyRound,X } from 'lucide-react';
+import React,{ useState } from 'react';
 import type { ManagerLockersManagementSampleLocker as Locker } from '../../mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
 
 export interface ManagerLockersManagementLostKeyModalProps {

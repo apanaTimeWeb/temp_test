@@ -1,5 +1,5 @@
-import type { Metadata } from 'next';
 import '@/app/frontend_manager/manager_members/members_alumni/components/manager_members_alumni_styles/ManagerMembersAlumniManager_alumni.css';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Alumni Directory | Library OS',

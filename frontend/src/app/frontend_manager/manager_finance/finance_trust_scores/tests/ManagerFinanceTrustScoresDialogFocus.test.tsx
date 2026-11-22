@@ -1,7 +1,7 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import React, { useRef } from 'react';
 import { useManagerTrustScoresDialogFocus } from '@/app/frontend_manager/manager_finance/finance_trust_scores/hooks/ManagerFinanceTrustScoresDialogFocus';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { useRef } from 'react';
+import { describe,expect,it,vi } from 'vitest';
 
 function TestDialogComponent({ onClose, active = true }: { onClose: () => void; active?: boolean }) {
   const dialogRef = useRef<HTMLDivElement>(null);

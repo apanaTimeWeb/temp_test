@@ -1,9 +1,8 @@
 'use client';
 
-import React from 'react';
-import { MessageCircle, RotateCcw, ArrowUpDown, ArrowUp, ArrowDown, QrCode } from 'lucide-react';
-import type { ManagerFinanceAutoSuspendSuspendedStudent as SuspendedStudent } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendTypes';
 import { ManagerFinanceAutoSuspendEmptyState } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/components/manager_finance_auto_suspend_empty_states/ManagerFinanceAutoSuspendEmptyState';
+import type { ManagerFinanceAutoSuspendSuspendedStudent as SuspendedStudent } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendTypes';
+import { ArrowDown,ArrowUp,ArrowUpDown,MessageCircle,QrCode,RotateCcw } from 'lucide-react';
 
 export type SuspendSortField = 'studentName' | 'seat' | 'shift' | 'daysOverdue' | 'suspendedSince';
 

@@ -1,7 +1,7 @@
 'use client';
 
+import { Download,Mail,MessageCircle,Printer,Smartphone,Upload } from 'lucide-react';
 import React from 'react';
-import { Upload, Download, Printer, MessageCircle, Mail, Smartphone } from 'lucide-react';
 
 export interface ManagerFinanceRenewalsHeaderProps {
   renewalsTitle: string;

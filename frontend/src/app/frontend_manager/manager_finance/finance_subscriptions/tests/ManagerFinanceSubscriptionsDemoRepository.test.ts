@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
 import { MANAGER_FINANCE_SAMPLE_RECEIPTS } from '@/app/frontend_manager/manager_finance/finance_subscriptions/hooks/ManagerFinanceSubscriptionsDemoRepository';
 import { MANAGER_FINANCE_SAMPLE_RECEIPTS as FIXTURE_SOURCE } from '@/app/frontend_manager/manager_finance/finance_subscriptions/mocks/manager_finance_subscriptions_fixtures/ManagerFinanceSubscriptionsComponentSampleFixtures';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerFinanceSubscriptionsDemoRepository', () => {
   it('returns a defensive sample snapshot rather than aliasing fixture objects', () => {

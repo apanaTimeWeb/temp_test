@@ -3,11 +3,11 @@
 // RESPONSIBILITY: Define or render the table structure for the components feature. It does not own backend persistence or cross-feature business logic.
 import { displayValue } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsDisplayValue';
 
-import { useMemo, useState } from 'react';
+import { useMemo,useState } from 'react';
 
-import { Inbox, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
-import type { ManagerFinanceRenewalsNativeTableProps, NativeCellParams, NativeColumn, ManagerFinanceRenewalsSortDirection } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
-export type { NativeCellParams, NativeColumn };
+import type { ManagerFinanceRenewalsNativeTableProps,ManagerFinanceRenewalsSortDirection,NativeCellParams,NativeColumn } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
+import { ArrowDown,ArrowUp,ArrowUpDown,Inbox } from 'lucide-react';
+export type { NativeCellParams,NativeColumn };
 
 
 

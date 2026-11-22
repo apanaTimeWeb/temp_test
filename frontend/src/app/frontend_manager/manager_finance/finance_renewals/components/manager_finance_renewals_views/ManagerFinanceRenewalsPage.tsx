@@ -1,22 +1,21 @@
 'use client';
 
-import { useState, useRef, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-import { MANAGER_FINANCE_SAMPLE_RENEWALS } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/ManagerFinanceRenewalsDemoRepository';
-import { useManagerRenewalsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsUrlFilters';
 import ManagerFinanceRenewalsNativeTable from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_table_parts/ManagerFinanceRenewalsNativeTable';
-import { exportManagerRenewalsCsv } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsCsv';
+import { MANAGER_FINANCE_SAMPLE_RENEWALS } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/ManagerFinanceRenewalsDemoRepository';
 import { useManagerRenewalsFormatting } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/ManagerFinanceRenewalsFormattingHook';
 import { useManagerFinanceRenewalsConfirm } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsConfirm';
+import { useManagerRenewalsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsUrlFilters';
+import type { FilterType,ManagerFinanceRenewalsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
+import { exportManagerRenewalsCsv } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsCsv';
 import { CheckCircle } from 'lucide-react';
-import { MANAGER_FINANCE_RENEWAL_FILTERS } from '@/app/frontend_manager/manager_finance/finance_renewals/constants/ManagerFinanceRenewalsRenewalConstants';
-import type { FilterType, ManagerFinanceRenewalsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
+import { useTranslations } from 'next-intl';
+import { useMemo,useRef,useState } from 'react';
 import ManagerFinanceRenewalsAlertBanner from './ManagerFinanceRenewalsAlertBanner';
-import ManagerFinanceRenewalsHeader from './ManagerFinanceRenewalsHeader';
-import ManagerFinanceRenewalsFilterBar from './ManagerFinanceRenewalsFilterBar';
-import ManagerFinanceRenewalsTimeHorizonBar, { type ManagerRenewalsTimeHorizon } from './ManagerFinanceRenewalsTimeHorizonBar';
-import { buildRenewalColumns } from './ManagerFinanceRenewalsTableColumns';
 import { ManagerFinanceRenewalsBulkWhatsAppModal } from './ManagerFinanceRenewalsBulkWhatsAppModal';
+import ManagerFinanceRenewalsFilterBar from './ManagerFinanceRenewalsFilterBar';
+import ManagerFinanceRenewalsHeader from './ManagerFinanceRenewalsHeader';
+import { buildRenewalColumns } from './ManagerFinanceRenewalsTableColumns';
+import ManagerFinanceRenewalsTimeHorizonBar,{ type ManagerRenewalsTimeHorizon } from './ManagerFinanceRenewalsTimeHorizonBar';
 
 const URL_FILTERS = { filter: { defaultValue: 'expiring_7', allowedValues: ['expired', 'expiring_7', 'expiring_15'] } } as const;
 

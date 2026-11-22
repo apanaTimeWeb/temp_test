@@ -1,11 +1,7 @@
-import { describe, expect, it } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { ManagerStudentSchema } from '@/app/frontend_manager/manager_members/members_id_card_generator/schemas/ManagerMembersIdCardGeneratorSchema';
-import {
-  MANAGER_STUDENT_STATUSES,
-  MANAGER_STUDENT_SHIFTS,
-} from '@/app/frontend_manager/manager_members/members_id_card_generator/constants/ManagerMembersIdCardGeneratorConstants';
+import { existsSync,readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { describe,expect,it } from 'vitest';
 
 const moduleRoot = [
   join(process.cwd(), 'src/app/frontend_manager/manager_members/members_id_card_generator'),

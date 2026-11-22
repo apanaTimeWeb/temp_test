@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback, useId, useRef, useState } from 'react';
 import { useManagerGroupAdmissionDialogFocus } from '@/app/frontend_manager/manager_members/members_group_admission/hooks/ManagerMembersGroupAdmissionDialogFocus';
 import type { PendingConfirmation } from '@/app/frontend_manager/manager_members/members_group_admission/types/ManagerMembersGroupAdmissionComponentTypes';
+import { useCallback,useId,useRef,useState } from 'react';
 
 
 

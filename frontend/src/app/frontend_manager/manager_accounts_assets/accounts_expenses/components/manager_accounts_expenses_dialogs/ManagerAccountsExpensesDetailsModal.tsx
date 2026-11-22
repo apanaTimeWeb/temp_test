@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
-import { X, Receipt, Printer, Calendar, Wallet, User, Tag, ShieldCheck } from 'lucide-react';
 import type { Expense } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/types/ManagerAccountsExpensesComponentTypes';
+import { Calendar,Printer,Receipt,ShieldCheck,Tag,User,Wallet,X } from 'lucide-react';
+import { useEffect } from 'react';
 
 export interface ManagerAccountsExpensesDetailsModalProps {
   isOpen: boolean;

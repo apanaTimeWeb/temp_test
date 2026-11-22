@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { maskManagerWhatsappLogsPhone } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/utils/ManagerCommunicationWhatsappLogsUtilities';
+import { describe,expect,it } from 'vitest';
 
 describe('maskManagerWhatsappLogsPhone', () => {
   it('masks raw phone values without exposing middle digits', () => {

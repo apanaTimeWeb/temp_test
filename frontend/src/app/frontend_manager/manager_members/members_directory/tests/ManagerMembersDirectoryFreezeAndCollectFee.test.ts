@@ -1,10 +1,10 @@
-import { describe, expect, it } from 'vitest';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import {
-  MANAGER_MEMBERS_LEAVE_REASONS,
+MANAGER_MEMBERS_LEAVE_REASONS,
 } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryFreezeModal';
 import { MANAGER_MEMBERS_STATUS_BADGES } from '@/app/frontend_manager/manager_members/members_directory/constants/ManagerMembersDirectoryConstants';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { describe,expect,it } from 'vitest';
 
 const readSource = (relativePath: string) =>
   readFileSync(join(__dirname, '..', relativePath), 'utf8');

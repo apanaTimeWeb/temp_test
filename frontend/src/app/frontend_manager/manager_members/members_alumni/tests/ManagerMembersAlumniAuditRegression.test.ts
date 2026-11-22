@@ -1,8 +1,8 @@
-import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { MembersAlumniRowSchema } from '../schemas/ManagerMembersAlumniSchema';
+import { describe,expect,it } from 'vitest';
 import { MANAGER_MEMBERS_ALUMNI_ROUTES } from '../config/manager_members_alumni.url_config';
+import { MembersAlumniRowSchema } from '../schemas/ManagerMembersAlumniSchema';
 
 describe('Manager Members Alumni Audit Regression Tests', () => {
   it('D3: validates alumni rows with dedicated MembersAlumniRowSchema', () => {

@@ -2,10 +2,10 @@
  * Module-local MSW lifecycle for the communication_complaints standalone harness.
  * The __harness__ probe is test-only and is not a backend or feature API route.
  */
-import { delay, http, HttpResponse, type RequestHandler } from 'msw';
+import { delay,http,HttpResponse,type RequestHandler } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { MANAGER_COMMUNICATION_COMPLAINTS_SCENARIOS as MODULE_SCENARIOS, type CommunicationComplaintsScenario as HarnessScenario } from '../../mocks/scenarios/manager_communication_complaints.scenarios';
 import { managerComplaintsHandlers as MODULE_HANDLERS_SOURCE } from '../../mocks/manager_communication_complaints_handlers/ManagerCommunicationComplaintsHandlers';
+import { MANAGER_COMMUNICATION_COMPLAINTS_SCENARIOS as MODULE_SCENARIOS,type CommunicationComplaintsScenario as HarnessScenario } from '../../mocks/scenarios/manager_communication_complaints.scenarios';
 // This list contains only module-owned, source-backed business handlers; no API routes are inferred here.
 const MODULE_HANDLERS: RequestHandler[] = [...MODULE_HANDLERS_SOURCE];
 

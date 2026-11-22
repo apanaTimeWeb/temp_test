@@ -1,35 +1,35 @@
 'use client';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale,useTranslations } from 'next-intl';
 
-import { useRouter } from 'next/navigation';
-import { useState, useMemo, type KeyboardEvent, type MouseEvent } from 'react';
-import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
-import {
-  Eye,
-  CheckCircle,
-  XCircle,
-  PhoneCall,
-  Plus,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  MessageCircle,
-  Sun,
-  Sunset,
-  Moon,
-  Clock,
-  UserPlus,
-  MapPin,
-  Flame,
-  CheckCircle2,
-  User,
-  Calendar,
-} from 'lucide-react';
-import { formatManagerEnquiriesDisplayDate, maskManagerEnquiriesPhone, getManagerEnquiriesDemoPassWhatsAppUrl } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
 import { ManagerMembersEnquiriesMobileCards } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_table_parts/ManagerMembersEnquiriesMobileCards';
 import { ManagerMembersEnquiriesLostReasonModal } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesLostReasonModal';
+import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
 import type { ManagerMembersEnquiriesTableProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
-import type { ManagerMembersEnquiriesEnquiry, ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
+import type { ManagerMembersEnquiriesEnquiry,ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
+import { formatManagerEnquiriesDisplayDate,getManagerEnquiriesDemoPassWhatsAppUrl,maskManagerEnquiriesPhone } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
+import {
+ArrowDown,
+ArrowUp,
+ArrowUpDown,
+Calendar,
+CheckCircle,
+CheckCircle2,
+Clock,
+Eye,
+Flame,
+MapPin,
+MessageCircle,
+Moon,
+PhoneCall,
+Plus,
+Sun,
+Sunset,
+User,
+UserPlus,
+XCircle,
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useMemo,useState,type KeyboardEvent,type MouseEvent } from 'react';
 
 export function ManagerMembersEnquiriesTable({
   filtered,

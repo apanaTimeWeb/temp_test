@@ -1,6 +1,6 @@
 import { ManagerAttendanceQrScannerMain } from '@/app/frontend_manager/manager_attendance/attendance_qr_scanner/components/ManagerAttendanceQrScannerMain';
-import type { ManagerAttendanceQrScannerMainProps } from '@/app/frontend_manager/manager_attendance/attendance_qr_scanner/types/ManagerAttendanceQrScannerMainTypes';
 import type { ManagerAttendanceQrScannerPageProps } from '@/app/frontend_manager/manager_attendance/attendance_qr_scanner/types/ManagerAttendanceQrScannerComponentTypes';
+import type { ManagerAttendanceQrScannerMainProps } from '@/app/frontend_manager/manager_attendance/attendance_qr_scanner/types/ManagerAttendanceQrScannerMainTypes';
 
 
 

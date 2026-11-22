@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
 import { Key } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import React from 'react';
 import type { ManagerLockersManagementSampleLocker as Locker } from '../../mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
 
 interface ManagerLockersManagementVacateModalProps {

@@ -2,10 +2,10 @@
  * Module-local MSW lifecycle for the settings_help_support standalone harness.
  * The __harness__ probe is test-only and is not a backend or feature API route.
  */
-import { delay, http, HttpResponse, type RequestHandler } from 'msw';
+import { delay,http,HttpResponse,type RequestHandler } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { MANAGER_SETTINGS_HELP_SUPPORT_SCENARIOS as MODULE_SCENARIOS, type SettingsHelpSupportScenario as HarnessScenario } from '../../mocks/scenarios/manager_settings_help_support.scenarios';
 import { MANAGER_HELP_SUPPORT_HANDLERS as MODULE_HANDLERS_SOURCE } from '../../mocks/manager_settings_help_support_handlers/ManagerSettingsHelpSupportHandlers';
+import { MANAGER_SETTINGS_HELP_SUPPORT_SCENARIOS as MODULE_SCENARIOS,type SettingsHelpSupportScenario as HarnessScenario } from '../../mocks/scenarios/manager_settings_help_support.scenarios';
 // This list contains only module-owned, source-backed business handlers; no API routes are inferred here.
 const MODULE_HANDLERS: RequestHandler[] = [...MODULE_HANDLERS_SOURCE];
 

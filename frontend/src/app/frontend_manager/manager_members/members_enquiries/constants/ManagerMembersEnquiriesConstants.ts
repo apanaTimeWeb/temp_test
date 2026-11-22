@@ -1,4 +1,4 @@
-import { MANAGER_CRM_STATUS_VALUES, type ManagerMembersEnquiriesEnquiryStatus, type ManagerMembersEnquiriesKanbanColumn } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
+import { MANAGER_CRM_STATUS_VALUES,type ManagerMembersEnquiriesEnquiryStatus,type ManagerMembersEnquiriesKanbanColumn } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
 
 // Keep UI options, schema validation, and domain status typing on one feature-owned source.
 export const MANAGER_CRM_STATUS_OPTIONS: readonly ManagerMembersEnquiriesEnquiryStatus[] = MANAGER_CRM_STATUS_VALUES;

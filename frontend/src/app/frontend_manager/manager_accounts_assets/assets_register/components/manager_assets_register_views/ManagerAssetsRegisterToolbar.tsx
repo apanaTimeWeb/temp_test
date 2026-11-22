@@ -1,7 +1,6 @@
 'use client';
 
-import { Search, X, RotateCcw, Package, CheckCircle2, Wrench, Archive, Filter } from 'lucide-react';
-import type { ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
+import { Archive,CheckCircle2,Package,RotateCcw,Search,Wrench,X } from 'lucide-react';
 
 interface ManagerAssetsRegisterToolbarProps {
   statusFilter: string;

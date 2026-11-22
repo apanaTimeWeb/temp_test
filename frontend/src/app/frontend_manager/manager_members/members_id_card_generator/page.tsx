@@ -1,8 +1,8 @@
-import { redirect } from 'next/navigation';
-import { MANAGER_MEMBERS_ID_CARD_GENERATOR_ROUTES } from '@/app/frontend_manager/manager_members/members_id_card_generator/config/manager_members_id_card_generator.url_config';
 import { ManagerMembersIdCardGeneratorMain } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/ManagerMembersIdCardGeneratorMain';
-import type { ManagerMembersIdCardGeneratorMainProps } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorMainTypes';
+import { MANAGER_MEMBERS_ID_CARD_GENERATOR_ROUTES } from '@/app/frontend_manager/manager_members/members_id_card_generator/config/manager_members_id_card_generator.url_config';
 import type { ManagerMembersIdCardGeneratorPageProps } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorComponentTypes';
+import type { ManagerMembersIdCardGeneratorMainProps } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorMainTypes';
+import { redirect } from 'next/navigation';
 
 
 

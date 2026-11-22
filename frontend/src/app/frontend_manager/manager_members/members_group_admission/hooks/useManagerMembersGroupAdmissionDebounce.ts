@@ -1,7 +1,7 @@
 'use client';
 /** DATA FLOW: Caller value -> debounced value returned to the feature component; no network flow is introduced. */
 
-import { useState, useEffect } from 'react';
+import { useEffect,useState } from 'react';
 
 // RESPONSIBILITY: Provides a debounced value for search inputs to prevent excessive re-renders/API calls.
 

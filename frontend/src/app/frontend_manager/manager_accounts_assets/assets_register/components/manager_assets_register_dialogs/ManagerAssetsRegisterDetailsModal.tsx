@@ -1,21 +1,20 @@
 'use client';
 
-import { useEffect } from 'react';
-import {
-  X,
-  Package,
-  Calendar,
-  MapPin,
-  IndianRupee,
-  ShieldCheck,
-  CheckCircle2,
-  Wrench,
-  Archive,
-  Printer,
-  QrCode,
-  Tag,
-} from 'lucide-react';
 import type { ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
+import {
+Archive,
+Calendar,
+CheckCircle2,
+IndianRupee,
+MapPin,
+Package,
+Printer,
+QrCode,
+Tag,
+Wrench,
+X
+} from 'lucide-react';
+import { useEffect } from 'react';
 
 interface ManagerAssetsRegisterDetailsModalProps {
   isOpen: boolean;

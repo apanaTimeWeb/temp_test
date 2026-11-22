@@ -1,6 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import React from 'react';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 import { buildPendingCols } from '../components/manager_finance_fines_payments_views/ManagerFinanceFinesPaymentsTableColumns';
 
 describe('Module 18: Fines & Penalties - Auto-Add Fine to Next Renewal Bill', () => {

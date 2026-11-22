@@ -3,9 +3,9 @@
 import { useTranslations } from 'next-intl';
 
 import { useManagerFinesPaymentsFormatting } from '@/app/frontend_manager/manager_finance/finance_fines_payments/hooks/ManagerFinanceFinesPaymentsFormattingHook';
-import { FileText, Printer, Copy } from 'lucide-react';
-import { toast } from 'sonner';
 import type { ManagerFinanceFinesPaymentsFineReceiptPanelProps } from '@/app/frontend_manager/manager_finance/finance_fines_payments/types/ManagerFinanceFinesPaymentsTypes';
+import { Copy,FileText,Printer } from 'lucide-react';
+import { toast } from 'sonner';
 
 export function ManagerFinanceFinesPaymentsFineReceiptPanel({ receipt, onCreateNew }: ManagerFinanceFinesPaymentsFineReceiptPanelProps) {
   const tManagerUi = useTranslations('manager.manager_fines_payments.ui');

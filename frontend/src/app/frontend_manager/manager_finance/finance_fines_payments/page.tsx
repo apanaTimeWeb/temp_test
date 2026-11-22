@@ -1,6 +1,6 @@
 import { ManagerFinanceFinesPaymentsMain } from '@/app/frontend_manager/manager_finance/finance_fines_payments/components/ManagerFinanceFinesPaymentsMain';
-import type { ManagerFinanceFinesPaymentsMainProps } from '@/app/frontend_manager/manager_finance/finance_fines_payments/types/ManagerFinanceFinesPaymentsMainTypes';
 import type { ManagerFinanceFinesPaymentsPageProps } from '@/app/frontend_manager/manager_finance/finance_fines_payments/types/ManagerFinanceFinesPaymentsComponentTypes';
+import type { ManagerFinanceFinesPaymentsMainProps } from '@/app/frontend_manager/manager_finance/finance_fines_payments/types/ManagerFinanceFinesPaymentsMainTypes';
 
 
 

@@ -1,5 +1,5 @@
 'use client';
-import { Coins, QrCode, TrendingDown, Scale } from 'lucide-react';
+import { Coins,QrCode,Scale,TrendingDown } from 'lucide-react';
 
 interface ManagerAccountsDailySettlementKpisProps {
   totalCash: number;

@@ -1,19 +1,14 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
 import {
-  X,
-  Printer,
-  Copy,
-  Download,
-  Sparkles,
-  Building2,
-  FileText,
-  Calendar,
-  ShieldCheck,
-  CheckCircle2,
-  Check,
+Check,
+Copy,
+FileText,
+Printer,
+Sparkles,
+X
 } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 export interface NoticeboardTemplate {

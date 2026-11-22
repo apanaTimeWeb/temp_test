@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import type { ManagerMembersDirectoryLeaveDetails,ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
+import { Check,Clock,PauseCircle,X } from 'lucide-react';
+import { useEffect,useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Calendar, PauseCircle, Clock, ShieldAlert, Check, Armchair, ArrowRight } from 'lucide-react';
-import type { ManagerMembersDirectoryRecord, ManagerMembersDirectoryLeaveDetails } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 
 export interface ManagerMembersDirectoryFreezeModalProps {
   isOpen: boolean;

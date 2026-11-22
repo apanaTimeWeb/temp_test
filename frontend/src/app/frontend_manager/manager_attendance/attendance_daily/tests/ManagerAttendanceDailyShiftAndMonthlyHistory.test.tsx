@@ -1,11 +1,10 @@
-import { describe, expect, it } from 'vitest';
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE } from '../hooks/ManagerAttendanceDailyDemoRepository';
-import { getStudentMonthlyAttendance } from '../utils/ManagerAttendanceDailyMonthlyHistoryUtils';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it } from 'vitest';
 import { ManagerAttendanceDailyMemberMonthlyHistoryModal } from '../components/manager_attendance_daily_views/ManagerAttendanceDailyMemberMonthlyHistoryModal';
 import { ManagerAttendanceDailyMonthlyRegister } from '../components/manager_attendance_daily_views/ManagerAttendanceDailyMonthlyRegister';
+import { MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE } from '../hooks/ManagerAttendanceDailyDemoRepository';
 import type { Student } from '../types/ManagerAttendanceDailyComponentTypes';
+import { getStudentMonthlyAttendance } from '../utils/ManagerAttendanceDailyMonthlyHistoryUtils';
 
 describe('ManagerAttendanceDailyShiftAndMonthlyHistory', () => {
   it('verifies all shift conditions have active enrolled members', () => {

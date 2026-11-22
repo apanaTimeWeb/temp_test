@@ -1,6 +1,6 @@
 import { ManagerMembersGroupAdmissionMain } from '@/app/frontend_manager/manager_members/members_group_admission/components/ManagerMembersGroupAdmissionMain';
-import type { ManagerMembersGroupAdmissionMainProps } from '@/app/frontend_manager/manager_members/members_group_admission/types/ManagerMembersGroupAdmissionMainTypes';
 import type { ManagerMembersGroupAdmissionPageProps } from '@/app/frontend_manager/manager_members/members_group_admission/types/ManagerMembersGroupAdmissionComponentTypes';
+import type { ManagerMembersGroupAdmissionMainProps } from '@/app/frontend_manager/manager_members/members_group_admission/types/ManagerMembersGroupAdmissionMainTypes';
 
 
 

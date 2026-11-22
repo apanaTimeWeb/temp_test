@@ -1,7 +1,7 @@
 'use client';
-import { CheckCircle2, Clock, Eye } from 'lucide-react';
 import type { Entry } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
-import type { NativeColumn, NativeCellParams } from './ManagerAccountsDailySettlementNativeTable';
+import { CheckCircle2,Clock,Eye } from 'lucide-react';
+import type { NativeCellParams,NativeColumn } from './ManagerAccountsDailySettlementNativeTable';
 
 interface CreateDailySettlementColumnsOptions {
   labels: {

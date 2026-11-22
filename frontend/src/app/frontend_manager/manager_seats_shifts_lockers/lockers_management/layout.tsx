@@ -1,5 +1,5 @@
-import type { Metadata } from 'next';
 import '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/components/manager_lockers_management_styles/ManagerLockersManagementManager_lockers.css';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Lockers Management | Library OS',

@@ -1,8 +1,8 @@
-import { apiFetch, type ApiResponse } from '@/lib/api';
-import { managerReportsSchema } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/schemas/ManagerDashboardReportsSchema';
 import { MANAGER_DASHBOARD_REPORTS_API } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/config/manager_dashboard_reports.url_config';
-import type { ManagerDashboardReportsData, ManagerDashboardReportsDateRange } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
-import { MANAGER_REPORTS_POPULATED_FIXTURE, getManagerReportsFixture } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/mocks/manager_dashboard_reports_fixtures/ManagerDashboardReportsFixtures';
+import { getManagerReportsFixture } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/mocks/manager_dashboard_reports_fixtures/ManagerDashboardReportsFixtures';
+import { managerReportsSchema } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/schemas/ManagerDashboardReportsSchema';
+import type { ManagerDashboardReportsData,ManagerDashboardReportsDateRange } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
+import { apiFetch,type ApiResponse } from '@/lib/api';
 
 function unwrapManagerApiResponse<T>(response: ApiResponse<T>, fallbackMessage: string): T {
   if (!response.success) {

@@ -1,6 +1,6 @@
 import { ManagerFinanceSubscriptionsMain } from '@/app/frontend_manager/manager_finance/finance_subscriptions/components/ManagerFinanceSubscriptionsMain';
-import type { ManagerFinanceSubscriptionsMainProps } from '@/app/frontend_manager/manager_finance/finance_subscriptions/types/ManagerFinanceSubscriptionsMainTypes';
 import type { ManagerFinanceSubscriptionsPageProps } from '@/app/frontend_manager/manager_finance/finance_subscriptions/types/ManagerFinanceSubscriptionsComponentTypes';
+import type { ManagerFinanceSubscriptionsMainProps } from '@/app/frontend_manager/manager_finance/finance_subscriptions/types/ManagerFinanceSubscriptionsMainTypes';
 
 
 

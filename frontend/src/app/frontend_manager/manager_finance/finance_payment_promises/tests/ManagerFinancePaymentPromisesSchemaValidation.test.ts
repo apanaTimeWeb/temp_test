@@ -1,8 +1,8 @@
-import { describe, it, expect } from 'vitest';
 import {
-  managerFinancePaymentPromiseAddSchema,
-  managerFinancePaymentPromiseEditSchema,
+managerFinancePaymentPromiseAddSchema,
+managerFinancePaymentPromiseEditSchema,
 } from '@/app/frontend_manager/manager_finance/finance_payment_promises/schemas/ManagerFinancePaymentPromisesSchema';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerFinancePaymentPromisesSchema validation', () => {
   describe('managerFinancePaymentPromiseAddSchema', () => {

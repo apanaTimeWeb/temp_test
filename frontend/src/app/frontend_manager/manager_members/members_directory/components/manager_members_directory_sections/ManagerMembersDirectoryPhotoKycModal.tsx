@@ -1,24 +1,23 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import {
-  X,
-  ShieldCheck,
-  Armchair,
-  Clock,
-  Phone,
-  MessageSquare,
-  MessageCircle,
-  FileText,
-  ExternalLink,
-  ZoomIn,
-  GraduationCap,
-  Calendar,
-  CheckCircle2,
-} from 'lucide-react';
+import { ManagerMembersDirectoryDocLightbox } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryDocLightbox';
 import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
-import { ManagerMembersDirectoryDocLightbox } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryDocLightbox';
+import {
+Armchair,
+Calendar,
+CheckCircle2,
+Clock,
+ExternalLink,
+FileText,
+GraduationCap,
+MessageCircle,
+Phone,
+ShieldCheck,
+X,
+ZoomIn
+} from 'lucide-react';
+import { useEffect,useState } from 'react';
 
 export interface ManagerMembersDirectoryPhotoKycModalProps {
   isOpen: boolean;

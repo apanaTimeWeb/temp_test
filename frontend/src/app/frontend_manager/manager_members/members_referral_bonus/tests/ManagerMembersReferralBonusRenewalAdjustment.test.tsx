@@ -1,15 +1,15 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { NextIntlClientProvider } from 'next-intl';
+import { ManagerMembersReferralBonusReferralsClient } from '@/app/frontend_manager/manager_members/members_referral_bonus/components/manager_members_referral_bonus_views/ManagerMembersReferralBonusReferralsClient';
 import messages from '@/app/frontend_manager/manager_members/members_referral_bonus/locales/manager_members_referral_bonus_domain_en.json';
 import {
-  parseBonusNumber,
-  parseReferrerInfo,
-  getReferralRenewalFinanceUrl,
-  applyReferralBonusToNextRenewal,
+applyReferralBonusToNextRenewal,
+getReferralRenewalFinanceUrl,
+parseBonusNumber,
+parseReferrerInfo,
 } from '@/app/frontend_manager/manager_members/members_referral_bonus/utils/ManagerMembersReferralBonusRenewalAdjustment';
-import { ManagerMembersReferralBonusReferralsClient } from '@/app/frontend_manager/manager_members/members_referral_bonus/components/manager_members_referral_bonus_views/ManagerMembersReferralBonusReferralsClient';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { NextIntlClientProvider } from 'next-intl';
+import { beforeEach,describe,expect,it,vi } from 'vitest';
 
 describe('ManagerMembersReferralBonusRenewalAdjustment', () => {
   beforeEach(() => {

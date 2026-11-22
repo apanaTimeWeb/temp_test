@@ -3,48 +3,48 @@
 // It applies semantic color coding (Gold, Emerald, Purple, Cyan, Rose) and high-density, sleek layout hierarchy.
 // Includes Student Wi-Fi Connect QR Code generation, printable front desk standee, and quick credential management.
 
-import { useState, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
+import { ManagerSettingsBranchInfoWifiModal } from '@/app/frontend_manager/manager_settings/settings_branch_info/components/manager_settings_branch_info_modals/ManagerSettingsBranchInfoWifiModal';
 import { useManagerBranchInfoForm } from '@/app/frontend_manager/manager_settings/settings_branch_info/hooks/useManagerSettingsBranchInfoForm';
 import {
-  Building2,
-  Building,
-  MapPin,
-  Phone,
-  Mail,
-  User,
-  Clock,
-  Hash,
-  ShieldCheck,
-  Calendar,
-  Armchair,
-  Layers,
-  PhoneCall,
-  LifeBuoy,
-  History,
-  Sparkles,
-  Copy,
-  Check,
-  CalendarCheck,
-  Share2,
-  ArrowUpRight,
-  Sun,
-  Moon,
-  Compass,
-  Wifi,
-  QrCode,
-  Printer,
-  Eye,
-  EyeOff,
-  Radio,
-} from 'lucide-react';
-import { ManagerSettingsBranchInfoWifiModal } from '@/app/frontend_manager/manager_settings/settings_branch_info/components/manager_settings_branch_info_modals/ManagerSettingsBranchInfoWifiModal';
-import {
-  generateQrMatrix,
-  generateQrSvgPath,
-  formatWifiQrPayload,
+formatWifiQrPayload,
+generateQrMatrix,
+generateQrSvgPath,
 } from '@/app/frontend_manager/manager_settings/settings_branch_info/utils/ManagerSettingsBranchInfoWifiQr';
+import {
+Armchair,
+ArrowUpRight,
+Building,
+Building2,
+Calendar,
+CalendarCheck,
+Check,
+Clock,
+Compass,
+Copy,
+Eye,
+EyeOff,
+Hash,
+History,
+Layers,
+LifeBuoy,
+Mail,
+MapPin,
+Moon,
+Phone,
+PhoneCall,
+Printer,
+QrCode,
+Radio,
+Share2,
+ShieldCheck,
+Sparkles,
+Sun,
+User,
+Wifi,
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
 
 export default function ManagerSettingsBranchInfoPage() {
   const tManagerUi = useTranslations('manager.manager_branch_info.ui');

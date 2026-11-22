@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import type { ManagerMembersDirectoryRecord } from '../types/ManagerMembersDirectoryTypes';
+import { useMemo,useState } from 'react';
 import type { ManagerMembersTimeHorizon } from '../components/manager_members_directory_sections/ManagerMembersDirectoryTimeHorizonBar';
+import type { ManagerMembersDirectoryRecord } from '../types/ManagerMembersDirectoryTypes';
 
 export function useManagerMembersDirectoryTimeFilter(
   filteredMembers: ManagerMembersDirectoryRecord[],

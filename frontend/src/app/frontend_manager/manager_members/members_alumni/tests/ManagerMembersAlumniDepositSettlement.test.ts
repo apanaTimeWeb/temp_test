@@ -1,9 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
-  checkMemberDepositSettlement,
-  getDepositSettlementFinanceUrl,
-  settleAndRefundDepositInLedger,
+checkMemberDepositSettlement,
+getDepositSettlementFinanceUrl,
+settleAndRefundDepositInLedger,
 } from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniDepositSettlement';
+import { beforeEach,describe,expect,it,vi } from 'vitest';
 
 describe('ManagerMembersAlumniDepositSettlement', () => {
   beforeEach(() => {

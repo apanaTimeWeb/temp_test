@@ -1,6 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import React from 'react';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 import ManagerFinanceCollectFeePostPaymentModal from '../components/manager_finance_collect_fee_views/ManagerFinanceCollectFeePostPaymentModal';
 
 // Mock next-intl

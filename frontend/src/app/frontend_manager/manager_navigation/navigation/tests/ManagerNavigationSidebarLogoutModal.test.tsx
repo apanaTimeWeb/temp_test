@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
-import { NextIntlClientProvider } from 'next-intl';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import messages from '@/app/frontend_manager/manager_navigation/navigation/locales/manager_navigation_navigation_domain_en.json';
 import { ManagerNavigationSidebarLogoutModal } from '@/app/frontend_manager/manager_navigation/navigation/components/ManagerNavigationSidebarLogoutModal';
+import messages from '@/app/frontend_manager/manager_navigation/navigation/locales/manager_navigation_navigation_domain_en.json';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { NextIntlClientProvider } from 'next-intl';
+import { describe,expect,it,vi } from 'vitest';
 
 describe('ManagerNavigationSidebarLogoutModal design and content parity contract', () => {
   it('renders centered modal matching admin structure with same size and content', () => {

@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
-import { X, AlertTriangle, XCircle, Check } from 'lucide-react';
 import type { ManagerMembersEnquiriesEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
+import { AlertTriangle,Check,X,XCircle } from 'lucide-react';
+import { useEffect,useState } from 'react';
+import { createPortal } from 'react-dom';
 
 export interface ManagerMembersEnquiriesLostReasonModalProps {
   isOpen: boolean;

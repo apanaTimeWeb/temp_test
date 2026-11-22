@@ -1,10 +1,8 @@
-import React from 'react';
-import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { beforeEach,describe,expect,it,vi } from 'vitest';
 import {
-  ManagerCommunicationWhatsappTemplatesVariablePreview,
-  analyzeVariables,
-  KNOWN_VARIABLE_ALIASES,
+analyzeVariables,
+ManagerCommunicationWhatsappTemplatesVariablePreview
 } from '../components/manager_communication_whatsapp_templates_views/ManagerCommunicationWhatsappTemplatesVariablePreview';
 
 // Mock sonner toast

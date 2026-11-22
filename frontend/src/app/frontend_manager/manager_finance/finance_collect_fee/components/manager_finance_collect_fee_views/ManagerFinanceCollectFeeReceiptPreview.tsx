@@ -2,12 +2,12 @@
 // RESPONSIBILITY: Render the finance collect fee receipt preview component within the components feature. It does not own backend persistence or cross-feature business logic.
 import { useTranslations } from 'next-intl';
 
-import { maskManagerCollectFeePhone } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
-import { useManagerCollectFeeFormatting } from '@/app/frontend_manager/manager_finance/finance_collect_fee/hooks/ManagerFinanceCollectFeeFormattingHook';
-import { AlertCircle, BookOpen, CheckCircle, X, MessageSquare } from 'lucide-react';
-import { toast } from 'sonner';
 import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { useManagerCollectFeeFormatting } from '@/app/frontend_manager/manager_finance/finance_collect_fee/hooks/ManagerFinanceCollectFeeFormattingHook';
 import type { ManagerFinanceCollectFeeReceiptPreviewProps } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
+import { maskManagerCollectFeePhone } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
+import { AlertCircle,BookOpen,CheckCircle,MessageSquare,X } from 'lucide-react';
+import { toast } from 'sonner';
 
 export function ManagerFinanceCollectFeeReceiptPreview({
   selectedStudent,

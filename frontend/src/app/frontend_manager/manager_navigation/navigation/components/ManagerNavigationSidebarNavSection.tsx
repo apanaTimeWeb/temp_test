@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
 import { ChevronDown } from 'lucide-react';
+import Link from 'next/link';
 import type { MANAGER_NAVIGATION_ITEMS } from '../constants/ManagerNavigationNavigationConstants';
 
 type NavigationLinkItem = Extract<(typeof MANAGER_NAVIGATION_ITEMS)[number], { kind: 'link' }>;

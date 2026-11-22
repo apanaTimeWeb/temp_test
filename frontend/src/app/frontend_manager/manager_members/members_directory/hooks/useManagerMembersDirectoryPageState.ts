@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
 import { getManagerMemberDirectoryDemoRecords } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryDemoRepository';
-import type { ManagerMembersDirectoryRecord, ManagerMembersDirectoryTab } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
-import { MANAGER_MEMBERS_DIRECTORY_SEARCH_DEBOUNCE_MS } from '@/app/frontend_manager/manager_members/members_directory/constants/ManagerMembersDirectoryConstants';
+import type { ManagerMembersDirectoryRecord,ManagerMembersDirectoryTab } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
+import { useEffect,useMemo,useState } from 'react';
 
 /** DATA FLOW: Feature-owned inputs/state -> hook result for its caller; no backend/API flow is inferred without source evidence. */
 

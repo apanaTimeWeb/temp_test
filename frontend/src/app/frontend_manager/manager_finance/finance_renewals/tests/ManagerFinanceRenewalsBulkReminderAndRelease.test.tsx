@@ -1,6 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import React from 'react';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 import ManagerFinanceRenewalsAlertBanner from '../components/manager_finance_renewals_views/ManagerFinanceRenewalsAlertBanner';
 
 describe('Module 15: Renewals - 1-Click WhatsApp Reminders & Seat Release Policy', () => {

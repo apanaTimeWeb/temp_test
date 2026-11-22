@@ -4,9 +4,9 @@ import { useTranslations } from 'next-intl';
 
 import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
 
-import { useRouter } from 'next/navigation';
-import { UserPlus, MapPin, Flame, CheckCircle2, XCircle, Plus, PhoneCall } from 'lucide-react';
 import { MANAGER_CRM_KANBAN_COLUMNS } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
+import { CheckCircle2,Flame,MapPin,PhoneCall,Plus,UserPlus,XCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 import { ManagerMembersEnquiriesKanbanCard } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_sections/ManagerMembersEnquiriesKanbanCard';
 import type { ManagerMembersEnquiriesKanbanProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';

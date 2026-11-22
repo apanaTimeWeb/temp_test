@@ -1,22 +1,22 @@
 'use client';
+import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
 import {
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  Calendar,
-  ChevronLeft,
-  ChevronRight,
-  CheckCircle2,
-  Clock,
-  Download,
-  Gift,
-  Receipt,
-  Search,
-  Trash2,
-  X,
+ArrowDown,
+ArrowUp,
+ArrowUpDown,
+Calendar,
+CheckCircle2,
+ChevronLeft,
+ChevronRight,
+Clock,
+Download,
+Gift,
+Receipt,
+Search,
+Trash2,
+X,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
 
 export type ReferralSortField = 'id' | 'referrer' | 'referred' | 'date' | 'bonus' | 'method' | 'status';
 

@@ -1,16 +1,16 @@
 'use client';
 // RESPONSIBILITY: Orchestrate client-side view and local interactions for referral bonus management.
-import { useState, useMemo, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
-import { CheckCircle2, Download, Plus, Trash2, X } from 'lucide-react';
-import { toast } from 'sonner';
+import { getInitialReferrals } from '@/app/frontend_manager/manager_members/members_referral_bonus/mocks/manager_members_referral_bonus_fixtures/ManagerMembersReferralBonusFixtures';
 import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
-import { ManagerMembersReferralBonusTable, type ReferralSortField } from './ManagerMembersReferralBonusTable';
+import { CheckCircle2,Download,Plus,Trash2,X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect,useMemo,useState } from 'react';
+import { toast } from 'sonner';
 import { ManagerMembersReferralBonusAddModal } from '../manager_members_referral_bonus_dialogs/ManagerMembersReferralBonusAddModal';
 import { ManagerMembersReferralBonusApplyRenewalModal } from '../manager_members_referral_bonus_dialogs/ManagerMembersReferralBonusApplyRenewalModal';
-import ManagerMembersReferralBonusTimeHorizonBar, { type ManagerReferralTimeHorizon } from './ManagerMembersReferralBonusTimeHorizonBar';
 import ManagerMembersReferralBonusKpis from './ManagerMembersReferralBonusKpis';
-import { getInitialReferrals } from '@/app/frontend_manager/manager_members/members_referral_bonus/mocks/manager_members_referral_bonus_fixtures/ManagerMembersReferralBonusFixtures';
+import { ManagerMembersReferralBonusTable,type ReferralSortField } from './ManagerMembersReferralBonusTable';
+import ManagerMembersReferralBonusTimeHorizonBar,{ type ManagerReferralTimeHorizon } from './ManagerMembersReferralBonusTimeHorizonBar';
 
 export function ManagerMembersReferralBonusReferralsClient() {
   const tManagerUi = useTranslations('manager.manager_referral_bonus.ui');

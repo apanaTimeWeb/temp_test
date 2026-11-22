@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { formatCurrency, formatDate, formatDateTime, toMinorUnits } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeFormatting';
+import { formatCurrency,formatDate,formatDateTime,toMinorUnits } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeFormatting';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerFinanceCollectFeeFormatting', () => {
   it('formats integer minor units using the supplied currency and locale', () => {

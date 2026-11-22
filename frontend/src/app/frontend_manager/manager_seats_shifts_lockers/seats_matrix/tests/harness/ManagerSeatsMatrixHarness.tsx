@@ -1,18 +1,18 @@
 "use client";
 
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
+import { useEffect,useState } from 'react';
 import { ManagerSeatsMatrixMain } from '../../components/ManagerSeatsMatrixMain';
 import messagesEn from '../../locales/manager_seats_matrix_domain_en.json';
 import messagesHi from '../../locales/manager_seats_matrix_domain_hi.json';
 import {
-  startManagerSeatsMatrixWorker,
-  stopManagerSeatsMatrixWorker,
-  HARNESS_SCENARIO_OPTIONS,
-  MANAGER_SEATS_MATRIX_SCENARIO_PROBE_URL,
-  type ManagerSeatsMatrixHarnessScenario,
+HARNESS_SCENARIO_OPTIONS,
+MANAGER_SEATS_MATRIX_SCENARIO_PROBE_URL,
+startManagerSeatsMatrixWorker,
+stopManagerSeatsMatrixWorker,
+type ManagerSeatsMatrixHarnessScenario,
 } from './bootstrap';
 
 type ManagerSeatsMatrixHarnessProps = {

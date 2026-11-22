@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { sanitizeManagerIdCardGeneratorCsvCell } from '@/app/frontend_manager/manager_members/members_id_card_generator/utils/ManagerMembersIdCardGeneratorCsv';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerMembersIdCardGeneratorCsv', () => {
   it('neutralizes spreadsheet formula prefixes, including leading whitespace/control characters', () => {

@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { ManagerMembersDirectoryDemoCreateSchema } from '@/app/frontend_manager/manager_members/members_directory/schemas/ManagerMembersDirectoryDemoSchema';
+import { describe,expect,it } from 'vitest';
 
 const validMember = {
   name: 'Sample Member', phone: '9000000000', email: '', address: '', dob: '', gender: 'Male' as const,

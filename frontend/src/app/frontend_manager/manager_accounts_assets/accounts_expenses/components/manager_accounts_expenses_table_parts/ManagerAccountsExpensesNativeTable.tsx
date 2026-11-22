@@ -3,10 +3,10 @@
 // RESPONSIBILITY: Define or render the table structure for the components feature. It does not own backend persistence or cross-feature business logic.
 import { displayValue } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/utils/ManagerAccountsExpensesDisplayValue';
 
-import { useMemo, useState } from 'react';
-import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
-import type { ManagerAccountsExpensesNativeTableProps, NativeCellParams, NativeColumn, ManagerAccountsExpensesSortDirection } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/types/ManagerAccountsExpensesComponentTypes';
-export type { NativeCellParams, NativeColumn };
+import type { ManagerAccountsExpensesNativeTableProps,ManagerAccountsExpensesSortDirection,NativeCellParams,NativeColumn } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/types/ManagerAccountsExpensesComponentTypes';
+import { ArrowDown,ArrowUp,ArrowUpDown } from 'lucide-react';
+import { useMemo,useState } from 'react';
+export type { NativeCellParams,NativeColumn };
 
 
 

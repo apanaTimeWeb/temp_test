@@ -1,7 +1,7 @@
-import type { z } from 'zod';
 import { managerFinancePaymentApiSchema } from '@/app/frontend_manager/manager_finance/finance_collect_fee/schemas/ManagerFinanceCollectFeeSchema';
 import type { ManagerFinanceCollectFeePayment } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
 import { normalizeManagerCollectFeePaymentStatus } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeStatusNormalization';
+import type { z } from 'zod';
 
 type PaymentApiRecord = z.infer<typeof managerFinancePaymentApiSchema>;
 

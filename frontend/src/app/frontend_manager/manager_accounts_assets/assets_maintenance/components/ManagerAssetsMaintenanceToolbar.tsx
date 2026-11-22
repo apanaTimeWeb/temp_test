@@ -1,7 +1,6 @@
 'use client';
 
-import { Search, X, RotateCcw, ListFilter, Clock, Wrench, CheckCircle2, ShieldAlert } from 'lucide-react';
-import type { MaintenancePriority, MaintenanceType } from './ManagerAssetsMaintenanceTable';
+import { CheckCircle2,Clock,ListFilter,RotateCcw,Search,Wrench,X } from 'lucide-react';
 
 interface ManagerAssetsMaintenanceToolbarProps {
   statusFilter: string;

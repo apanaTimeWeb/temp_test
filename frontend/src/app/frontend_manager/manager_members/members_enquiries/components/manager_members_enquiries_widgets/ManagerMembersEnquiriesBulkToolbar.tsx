@@ -1,7 +1,7 @@
 'use client';
 
-import { CheckSquare, MessageCircle, X, Users, UserCheck, Flame, UserPlus, Trash2 } from 'lucide-react';
 import type { ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
+import { CheckSquare,Flame,MessageCircle,Trash2,UserCheck,UserPlus,Users,X } from 'lucide-react';
 
 export interface ManagerMembersEnquiriesBulkToolbarProps {
   selectedCount: number;

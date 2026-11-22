@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { managerHelpSupportTicketDraftSchema } from '@/app/frontend_manager/manager_settings/settings_help_support/schemas/ManagerSettingsHelpSupportTicketDraftSchema';
+import { describe,expect,it } from 'vitest';
 
 const validDraft = { category: 'billing', subject: 'Payment issue', description: 'The payment receipt is missing.', priority: 'Medium' };
 

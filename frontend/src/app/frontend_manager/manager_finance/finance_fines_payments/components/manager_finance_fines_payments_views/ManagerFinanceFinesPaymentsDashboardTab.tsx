@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { ArrowRight, CreditCard, TrendingUp, LucideIcon } from 'lucide-react';
+import { ArrowRight,CreditCard,LucideIcon,TrendingUp } from 'lucide-react';
 
 export interface DashboardKpiItem {
   id: string;

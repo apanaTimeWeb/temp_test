@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync,readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { describe,expect,it } from 'vitest';
 
 const moduleRootCandidates = [
   join(process.cwd(), 'src/app/frontend_manager/manager_settings/settings_help_support'),

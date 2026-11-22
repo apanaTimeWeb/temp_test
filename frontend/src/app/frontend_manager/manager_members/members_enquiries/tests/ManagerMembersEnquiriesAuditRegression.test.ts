@@ -1,16 +1,14 @@
-import { describe, expect, it } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import {
-  MANAGER_MEMBERS_ENQUIRIES_ROUTES,
-  MANAGER_MEMBERS_ENQUIRIES_API,
+MANAGER_MEMBERS_ENQUIRIES_ROUTES
 } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
+import { getManagerEnquiriesMockEnquiries } from '@/app/frontend_manager/manager_members/members_enquiries/mocks/manager_members_enquiries_fixtures/ManagerMembersEnquiriesFixtures';
 import {
-  managerCrmEnquirySchema,
-  managerCrmNormalizedEnquirySchema,
+managerCrmNormalizedEnquirySchema
 } from '@/app/frontend_manager/manager_members/members_enquiries/schemas/ManagerMembersEnquiriesSchema';
 import { normalizeManagerEnquiriesEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
-import { getManagerEnquiriesMockEnquiries } from '@/app/frontend_manager/manager_members/members_enquiries/mocks/manager_members_enquiries_fixtures/ManagerMembersEnquiriesFixtures';
+import { existsSync,readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { describe,expect,it } from 'vitest';
 
 const moduleRoot = [
   join(process.cwd(), 'src/app/frontend_manager/manager_members/members_enquiries'),

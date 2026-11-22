@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import type { ManagerFinanceCollectFeeContractStatus } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeComponentTypes';
 
 export interface ManagerFinanceCollectFeeDiscountsSectionProps {

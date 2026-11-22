@@ -1,5 +1,5 @@
-import type { ManagerDashboardOverviewData } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewTypes';
 import { ManagerDashboardOverviewDataSchema } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/schemas/ManagerDashboardOverviewSchema';
+import type { ManagerDashboardOverviewData } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewTypes';
 
 /** The supplied frontend contract does not define an external dashboard overview API endpoint. */
 export class ManagerDashboardOverviewContractBlockedError extends Error {

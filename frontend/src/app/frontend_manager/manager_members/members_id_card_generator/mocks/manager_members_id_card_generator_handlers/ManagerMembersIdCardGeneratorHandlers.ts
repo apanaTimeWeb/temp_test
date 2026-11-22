@@ -1,6 +1,6 @@
-import { http, HttpResponse } from 'msw';
 import { MANAGER_MEMBERS_ID_CARD_GENERATOR_API } from '@/app/frontend_manager/manager_members/members_id_card_generator/config/manager_members_id_card_generator.url_config';
 import { managerStudentsMockState } from '@/app/frontend_manager/manager_members/members_id_card_generator/mocks/manager_members_id_card_generator_fixtures/ManagerMembersIdCardGeneratorFixtures';
+import { http,HttpResponse } from 'msw';
 
 /** Read-only fixtures only. No create handler is registered without a supplied mutation contract. */
 const TEST_REQUEST_ID = 'msw-members-id-card-generator';

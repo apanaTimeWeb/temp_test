@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { readManagerIdCardGeneratorListUrlState, updateManagerIdCardGeneratorListUrl, updateManagerIdCardGeneratorSearchUrl } from '@/app/frontend_manager/manager_members/members_id_card_generator/utils/ManagerMembersIdCardGeneratorListUrlState';
 import { MANAGER_MEMBERS_ID_CARD_GENERATOR_ROUTES } from '@/app/frontend_manager/manager_members/members_id_card_generator/config/manager_members_id_card_generator.url_config';
+import { readManagerIdCardGeneratorListUrlState,updateManagerIdCardGeneratorListUrl,updateManagerIdCardGeneratorSearchUrl } from '@/app/frontend_manager/manager_members/members_id_card_generator/utils/ManagerMembersIdCardGeneratorListUrlState';
+import { describe,expect,it } from 'vitest';
 
 describe('student directory URL state behavior', () => {
   it('routes legacy admission-preview links to the canonical new-admission owner', () => {

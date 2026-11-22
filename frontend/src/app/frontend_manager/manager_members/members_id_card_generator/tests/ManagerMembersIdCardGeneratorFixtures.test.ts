@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { MANAGER_STUDENTS_FIXTURES } from '@/app/frontend_manager/manager_members/members_id_card_generator/mocks/manager_members_id_card_generator_fixtures/ManagerMembersIdCardGeneratorFixtures';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerMembersIdCardGeneratorFixtures', () => {
   it('provides unique stable identifiers for all sample students', () => {

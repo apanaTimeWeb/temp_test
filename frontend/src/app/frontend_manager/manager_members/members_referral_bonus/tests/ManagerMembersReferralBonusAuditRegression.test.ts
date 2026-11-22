@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { getInitialReferrals } from '@/app/frontend_manager/manager_members/members_referral_bonus/mocks/manager_members_referral_bonus_fixtures/ManagerMembersReferralBonusFixtures';
+import { existsSync,readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { describe,expect,it } from 'vitest';
 
 const moduleRoot = [
   join(process.cwd(), 'src/app/frontend_manager/manager_members/members_referral_bonus'),

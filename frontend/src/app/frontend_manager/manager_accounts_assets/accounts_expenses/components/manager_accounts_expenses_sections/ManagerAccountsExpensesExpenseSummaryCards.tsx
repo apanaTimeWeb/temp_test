@@ -1,7 +1,7 @@
 'use client';
 
 import type { ManagerAccountsExpensesExpenseSummaryCardsProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/types/ManagerAccountsExpensesComponentTypes';
-import { TrendingDown, Calendar, FileSpreadsheet, Layers, Wallet, Building } from 'lucide-react';
+import { Building,Calendar,TrendingDown,Wallet } from 'lucide-react';
 
 export default function ManagerAccountsExpensesExpenseSummaryCards({
   expenses,

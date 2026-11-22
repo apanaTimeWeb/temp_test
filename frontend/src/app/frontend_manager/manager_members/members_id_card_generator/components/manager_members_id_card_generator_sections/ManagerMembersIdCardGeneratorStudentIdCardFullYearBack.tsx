@@ -1,6 +1,5 @@
 'use client';
 // RESPONSIBILITY: Render the FULL YEAR / ANNUAL plan back ID card — Ultra Pro Champagne Edition with UV pattern, wave holo patch, embossed serial, and gold tier badge.
-import React from 'react';
 import type { IdCardData } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorComponentTypes';
 
 export interface ManagerMembersIdCardGeneratorStudentIdCardFullYearBackProps {

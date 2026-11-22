@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
-import { Edit3, X, IndianRupee, CheckCircle, Eye, Calendar, Clock, AlertCircle } from 'lucide-react';
-import type { ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
 import { useManagerPaymentPromisesDialogFocus } from '@/app/frontend_manager/manager_finance/finance_payment_promises/hooks/ManagerFinancePaymentPromisesDialogFocus';
+import type { ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
 import { managerFinancePaymentPromiseEditSchema } from '@/app/frontend_manager/manager_finance/finance_payment_promises/schemas/ManagerFinancePaymentPromisesSchema';
+import { AlertCircle,Calendar,CheckCircle,Clock,Edit3,Eye,IndianRupee,X } from 'lucide-react';
+import React,{ useEffect,useRef,useState } from 'react';
 
 export interface ManagerFinancePaymentPromisesEditModalProps {
   promise: ManagerFinancePaymentPromisesPaymentPromiseSample | null;

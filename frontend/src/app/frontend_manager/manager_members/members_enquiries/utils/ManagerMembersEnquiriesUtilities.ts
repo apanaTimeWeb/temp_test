@@ -1,4 +1,4 @@
-import type { ManagerMembersEnquiriesEnquiry, ManagerMembersEnquiriesApiEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
+import type { ManagerMembersEnquiriesApiEnquiry,ManagerMembersEnquiriesEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
 
 const CRM_MONTHS: Record<string, number> = {
   jan: 1, january: 1, feb: 2, february: 2, mar: 3, march: 3, apr: 4, april: 4,

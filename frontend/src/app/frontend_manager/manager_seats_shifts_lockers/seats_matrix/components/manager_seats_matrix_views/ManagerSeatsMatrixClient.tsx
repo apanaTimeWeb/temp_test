@@ -1,21 +1,21 @@
 'use client';
-import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Search, LayoutGrid, List, Plus, Download, Armchair, X, RotateCcw, ArrowLeftRight } from 'lucide-react';
-import { toast } from 'sonner';
-import { sanitizeManagerSeatMatrixCsvCell } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/utils/ManagerSeatsMatrixCsv';
-import { useManagerSeatsMatrix } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/hooks/useManagerSeatsMatrixSeatMatrix';
-import { SHIFT_TABS } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/constants/ManagerSeatsMatrixConstants';
-import { MANAGER_SEATS_MATRIX_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/config/manager_seats_matrix.url_config';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { ManagerSeatsMatrixModal } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_dialogs/ManagerSeatsMatrixModal';
 import { ManagerSeatsMatrixStudentProfileModal } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_dialogs/ManagerSeatsMatrixStudentProfileModal';
 import { ManagerSeatsMatrixSwapModal } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_dialogs/ManagerSeatsMatrixSwapModal';
+import { MANAGER_SEATS_MATRIX_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/config/manager_seats_matrix.url_config';
+import { SHIFT_TABS } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/constants/ManagerSeatsMatrixConstants';
+import { useManagerSeatsMatrix } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/hooks/useManagerSeatsMatrixSeatMatrix';
 import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
-import { ManagerSeatsMatrixGridView } from './ManagerSeatsMatrixGridView';
-import { ManagerSeatsMatrixTableView, type SeatSortField } from './ManagerSeatsMatrixTableView';
+import { sanitizeManagerSeatMatrixCsvCell } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/utils/ManagerSeatsMatrixCsv';
+import { Armchair,ArrowLeftRight,Download,LayoutGrid,List,Plus,RotateCcw,Search,X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
 import { ManagerSeatsMatrixAddModal } from '../manager_seats_matrix_dialogs/ManagerSeatsMatrixAddModal';
-import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { ManagerSeatsMatrixGridView } from './ManagerSeatsMatrixGridView';
+import { ManagerSeatsMatrixTableView,type SeatSortField } from './ManagerSeatsMatrixTableView';
 
 // RESPONSIBILITY: Main Client view for Seat Matrix (Unified interactive map & tabular manager). Glues data hook to UI. It does not own backend persistence or cross-feature business logic.
 

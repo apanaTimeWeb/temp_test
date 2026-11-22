@@ -1,28 +1,25 @@
 'use client';
-import type { ManagerAttendanceQrScannerMainProps } from '@/app/frontend_manager/manager_attendance/attendance_qr_scanner/types/ManagerAttendanceQrScannerMainTypes';
-import { useTranslations } from 'next-intl';
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import {
-  CameraOff,
-  ChevronRight,
-  QrCode,
-  Search,
-  CheckCircle2,
-  UserCheck,
-  ArrowRightLeft,
-  Maximize2,
-  Lock,
-  Unlock,
-  Volume2,
-  VolumeX,
-  AlertTriangle,
-  X,
-  ShieldAlert,
-} from 'lucide-react';
-import { toast } from 'sonner';
 import { MANAGER_ATTENDANCE_QR_SCANNER_ROUTES } from '@/app/frontend_manager/manager_attendance/attendance_qr_scanner/config/manager_attendance_qr_scanner.url_config';
+import type { ManagerAttendanceQrScannerMainProps } from '@/app/frontend_manager/manager_attendance/attendance_qr_scanner/types/ManagerAttendanceQrScannerMainTypes';
 import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
+import {
+ArrowRightLeft,
+CameraOff,
+ChevronRight,
+Lock,
+Maximize2,
+QrCode,
+Search,
+ShieldAlert,
+UserCheck,
+Volume2,
+VolumeX,
+X
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 const STUDENT_SHIFT_SCHEDULE: Record<
   string,

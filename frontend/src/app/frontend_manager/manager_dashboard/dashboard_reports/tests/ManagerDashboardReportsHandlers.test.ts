@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { fetchManagerReports } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/api/manager_dashboard_reports.api';
+import { MANAGER_DASHBOARD_REPORTS_API,MANAGER_DASHBOARD_REPORTS_ROUTES } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/config/manager_dashboard_reports.url_config';
 import { managerReportsHandlers } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/mocks/manager_dashboard_reports_handlers/ManagerDashboardReportsHandlers';
-import { MANAGER_DASHBOARD_REPORTS_API, MANAGER_DASHBOARD_REPORTS_ROUTES } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/config/manager_dashboard_reports.url_config';
-import { fetchManagerReports, ManagerDashboardReportsContractBlockedError } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/api/manager_dashboard_reports.api';
+import { describe,expect,it } from 'vitest';
 
 describe('Manager Reports API contract guard', () => {
   it('keeps the browser route separate from the absent API contract', () => {

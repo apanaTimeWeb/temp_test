@@ -3,10 +3,10 @@
 // RESPONSIBILITY: Define or render the table structure for the components feature. It does not own backend persistence or cross-feature business logic.
 import { displayValue } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/utils/ManagerDashboardReportsDisplayValue';
 
-import { useMemo, useState } from 'react';
-import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
-import type { ManagerDashboardReportsNativeTableProps, NativeCellParams, NativeColumn, ManagerDashboardReportsSortDirection } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsComponentTypes';
-export type { NativeCellParams, NativeColumn };
+import type { ManagerDashboardReportsNativeTableProps,ManagerDashboardReportsSortDirection,NativeCellParams,NativeColumn } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsComponentTypes';
+import { ArrowDown,ArrowUp,ArrowUpDown } from 'lucide-react';
+import { useMemo,useState } from 'react';
+export type { NativeCellParams,NativeColumn };
 
 
 

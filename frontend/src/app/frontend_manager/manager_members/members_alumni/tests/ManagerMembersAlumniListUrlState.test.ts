@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { readManagerAlumniListUrlState, updateManagerAlumniListUrl, updateManagerAlumniSearchUrl } from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniListUrlState';
+import { readManagerAlumniListUrlState,updateManagerAlumniListUrl,updateManagerAlumniSearchUrl } from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniListUrlState';
+import { describe,expect,it } from 'vitest';
 
 describe('student directory URL state behavior', () => {
   it('reads canonical search and legacy smartId parameters plus filters', () => {

@@ -1,12 +1,12 @@
-import { http, HttpResponse } from 'msw';
 import { MANAGER_SEATS_HISTORY_API } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/config/manager_seats_history.url_config';
 import {
-  MANAGER_SEATS_SHIFTS_LOCKERS_ALLOCATIONS_FIXTURE,
-  MANAGER_SEATS_SHIFTS_LOCKERS_EMPTY_FIXTURE,
-  MANAGER_SEATS_SHIFTS_LOCKERS_HISTORY_FIXTURE,
-  MANAGER_SEATS_SHIFTS_LOCKERS_LOCKERS_FIXTURE,
-  MANAGER_SEATS_SHIFTS_LOCKERS_SEAT_MATRIX_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_ALLOCATIONS_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_EMPTY_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_HISTORY_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_LOCKERS_FIXTURE,
+MANAGER_SEATS_SHIFTS_LOCKERS_SEAT_MATRIX_FIXTURE,
 } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/mocks/manager_seats_history_fixtures/ManagerSeatsHistoryApiFixtures';
+import { http,HttpResponse } from 'msw';
 
 const TEST_REQUEST_ID = 'msw-manager-seats-shifts-lockers';
 

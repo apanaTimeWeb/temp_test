@@ -1,7 +1,7 @@
 'use client';
 // RESPONSIBILITY: Modal dialog for directly swapping or exchanging seats between students without vacating or losing allocation data.
-import React, { useState, useMemo } from 'react';
-import { ArrowLeftRight, CheckCircle2, User, Armchair, AlertCircle, X } from 'lucide-react';
+import { ArrowLeftRight,CheckCircle2,User,X } from 'lucide-react';
+import { useMemo,useState } from 'react';
 import type { SeatData } from '../../types/ManagerSeatsMatrixTypes';
 
 export interface ManagerSeatsMatrixSwapModalProps {

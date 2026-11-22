@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { LogOut,User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { LogOut, User } from 'lucide-react';
+import { useEffect,useRef,useState } from 'react';
+import { createPortal } from 'react-dom';
 
 interface ManagerNavigationSidebarLogoutModalProps {
   isOpen: boolean;

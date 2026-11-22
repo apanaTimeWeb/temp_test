@@ -1,8 +1,8 @@
 /** Module-local component props and UI/state types extracted from component files. */
 import type { ManagerMembersNewAdmissionAdmissionFormValues } from '@/app/frontend_manager/manager_members/members_new_admission/schemas/ManagerMembersNewAdmissionAdmissionSchema';
 import type { ManagerMembersNewAdmissionSearchParams } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionMainTypes';
-import type { ErrorInfo, ReactNode } from 'react';
-import type { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form';
+import type { ErrorInfo,ReactNode } from 'react';
+import type { FieldErrors,UseFormRegister,UseFormSetValue,UseFormWatch } from 'react-hook-form';
 
 export interface ManagerMembersNewAdmissionErrorFallbackProps {
   onRetry: () => void;

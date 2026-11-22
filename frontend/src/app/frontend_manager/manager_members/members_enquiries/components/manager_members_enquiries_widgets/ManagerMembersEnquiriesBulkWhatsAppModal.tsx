@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
-import { MessageCircle, X, Users, Sparkles, RotateCcw, CheckCircle, Info } from 'lucide-react';
-import type { ManagerMembersEnquiriesEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
-import { MANAGER_CRM_DEFAULT_WHATSAPP_TEMPLATES } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
 import { ManagerMembersEnquiriesBulkWhatsAppItem } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesBulkWhatsAppItem';
+import { MANAGER_CRM_DEFAULT_WHATSAPP_TEMPLATES } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
+import type { ManagerMembersEnquiriesEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
+import { CheckCircle,Info,MessageCircle,RotateCcw,Sparkles,Users,X } from 'lucide-react';
+import { useEffect,useMemo,useState } from 'react';
 
 export interface ManagerMembersEnquiriesBulkWhatsAppModalProps {
   isOpen: boolean;

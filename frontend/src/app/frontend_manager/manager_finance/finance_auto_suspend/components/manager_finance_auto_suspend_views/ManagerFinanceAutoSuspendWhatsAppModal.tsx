@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { MessageCircle, X, Copy, Send, Phone, User, Armchair, AlertCircle } from 'lucide-react';
-import { toast } from 'sonner';
 import type { ManagerFinanceAutoSuspendSuspendedStudent as SuspendedStudent } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendTypes';
+import { AlertCircle,Armchair,Copy,MessageCircle,Phone,Send,User,X } from 'lucide-react';
+import { useEffect,useState } from 'react';
+import { toast } from 'sonner';
 
 export interface ManagerFinanceAutoSuspendWhatsAppModalProps {
   isOpen: boolean;

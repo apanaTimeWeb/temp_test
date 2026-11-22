@@ -1,20 +1,20 @@
 'use client';
 // RESPONSIBILITY: Provide the page/orchestration entry component for the components feature. It does not own backend persistence or cross-feature business logic.
 
-import { useState, useMemo } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
-import { Plus, LifeBuoy, ArrowLeft, AlertCircle } from 'lucide-react';
+import { AlertCircle,ArrowLeft,LifeBuoy,Plus } from 'lucide-react';
+import { useLocale,useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
 import { toast } from 'sonner';
 
-import { useManagerHelpSupportPageState } from '@/app/frontend_manager/manager_settings/settings_help_support/hooks/useManagerSettingsHelpSupportPageState';
 import { ManagerSettingsHelpSupportTicketForm } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_forms/ManagerSettingsHelpSupportTicketForm';
-import { MANAGER_HELP_SUPPORT_TABS } from '@/app/frontend_manager/manager_settings/settings_help_support/constants/ManagerSettingsHelpSupportConstants';
 import { ManagerSettingsHelpSupportTabs } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_sections/ManagerSettingsHelpSupportTabs';
-import {
-  ManagerSettingsHelpSupportTicketsTable,
-  type TicketSortField,
-} from './ManagerSettingsHelpSupportTicketsTable';
+import { MANAGER_HELP_SUPPORT_TABS } from '@/app/frontend_manager/manager_settings/settings_help_support/constants/ManagerSettingsHelpSupportConstants';
+import { useManagerHelpSupportPageState } from '@/app/frontend_manager/manager_settings/settings_help_support/hooks/useManagerSettingsHelpSupportPageState';
 import { ManagerSettingsHelpSupportAnnouncements } from './ManagerSettingsHelpSupportAnnouncements';
+import {
+ManagerSettingsHelpSupportTicketsTable,
+type TicketSortField,
+} from './ManagerSettingsHelpSupportTicketsTable';
 
 export default function ManagerSettingsHelpSupportPage() {
   const tManagerUi = useTranslations('manager.manager_help_support.ui');

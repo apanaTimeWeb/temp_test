@@ -1,12 +1,11 @@
 'use client';
 // RESPONSIBILITY: Render the HALF-YEARLY plan front ID card — Signature Edition with mini-chip, guilloche, and inline holo seal.
-import React, { useState, useEffect } from 'react';
-import { CreditCard, RotateCw } from 'lucide-react';
 import type {
-  IdCardData,
-  IdCardSide,
-  ManagerMembersIdCardGeneratorStudentIdCardProps,
+IdCardSide,
+ManagerMembersIdCardGeneratorStudentIdCardProps
 } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorComponentTypes';
+import { CreditCard,RotateCw } from 'lucide-react';
+import { useEffect,useState } from 'react';
 import { ManagerMembersIdCardGeneratorStudentIdCardHalfYearlyBack } from './ManagerMembersIdCardGeneratorStudentIdCardHalfYearlyBack';
 
 function maskPhone(phone?: string | null): string {

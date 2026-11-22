@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { displayValue } from '@/app/frontend_manager/manager_communication/communication_notification_center/utils/ManagerCommunicationNotificationCenterDisplayValue';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerCommunicationNotificationCenterDisplayValue', () => {
   it('uses an en dash for nullable, empty, and object values', () => {

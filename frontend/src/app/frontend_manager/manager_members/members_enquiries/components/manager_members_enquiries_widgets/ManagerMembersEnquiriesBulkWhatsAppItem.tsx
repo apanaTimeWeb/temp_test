@@ -1,8 +1,8 @@
 'use client';
 
-import { Send, CheckCircle, Phone, ExternalLink } from 'lucide-react';
 import type { ManagerMembersEnquiriesEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
 import { maskManagerEnquiriesPhone } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
+import { CheckCircle,ExternalLink,Phone,Send } from 'lucide-react';
 
 export interface ManagerMembersEnquiriesBulkWhatsAppItemProps {
   enq: ManagerMembersEnquiriesEnquiry;

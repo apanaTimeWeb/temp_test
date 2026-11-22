@@ -1,18 +1,18 @@
 "use client";
 
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
+import { useEffect,useState } from 'react';
 import { ManagerFinanceTrustScoresMain } from '../../components/ManagerFinanceTrustScoresMain';
 import messagesEn from '../../locales/manager_finance_trust_scores_domain_en.json';
 import messagesHi from '../../locales/manager_finance_trust_scores_domain_hi.json';
 import {
-  startManagerFinanceTrustScoresWorker,
-  stopManagerFinanceTrustScoresWorker,
-  HARNESS_SCENARIO_OPTIONS,
-  MANAGER_FINANCE_TRUST_SCORES_SCENARIO_PROBE_URL,
-  type ManagerFinanceTrustScoresHarnessScenario,
+HARNESS_SCENARIO_OPTIONS,
+MANAGER_FINANCE_TRUST_SCORES_SCENARIO_PROBE_URL,
+startManagerFinanceTrustScoresWorker,
+stopManagerFinanceTrustScoresWorker,
+type ManagerFinanceTrustScoresHarnessScenario,
 } from './bootstrap';
 
 type ManagerFinanceTrustScoresHarnessProps = {

@@ -1,8 +1,8 @@
 import type {
-  ManagerActiveSession,
-  ManagerLoginHistoryEntry,
-  ManagerProfileInfo,
-  ManagerTwoFactorConfig,
+ManagerActiveSession,
+ManagerLoginHistoryEntry,
+ManagerProfileInfo,
+ManagerTwoFactorConfig,
 } from '../types/ManagerSettingsSecurityTypes';
 
 export const INITIAL_MANAGER_PROFILE: ManagerProfileInfo = {

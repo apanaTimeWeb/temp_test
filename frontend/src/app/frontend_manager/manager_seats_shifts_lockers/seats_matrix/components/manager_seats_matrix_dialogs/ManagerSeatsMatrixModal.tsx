@@ -1,9 +1,9 @@
 'use client';
 
+import { Armchair,CheckCircle,History,Layers,Settings,X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { CheckCircle, Settings, History, Layers, Armchair, X } from 'lucide-react';
+import { useRef,useState } from 'react';
 
 import { useManagerSeatMatrixDialogFocus } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/hooks/ManagerSeatsMatrixDialogFocus';
 import type { ManagerSeatsMatrixModalProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixComponentTypes';

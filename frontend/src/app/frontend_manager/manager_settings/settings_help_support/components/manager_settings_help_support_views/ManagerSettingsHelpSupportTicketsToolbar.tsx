@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { Search, X, Download, Filter, RotateCcw, Ticket } from 'lucide-react';
+import { Download,Filter,RotateCcw,Search,Ticket,X } from 'lucide-react';
 
 interface ManagerSettingsHelpSupportTicketsToolbarProps {
   totalTicketsCount: number;

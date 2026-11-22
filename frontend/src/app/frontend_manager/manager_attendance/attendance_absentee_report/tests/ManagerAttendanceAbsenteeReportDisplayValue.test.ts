@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { displayValue } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/utils/ManagerAttendanceAbsenteeReportDisplayValue';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerAttendanceAbsenteeReportDisplayValue', () => {
   it('uses an en dash for nullable, empty, and object values', () => {

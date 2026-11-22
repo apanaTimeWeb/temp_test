@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { normalizeManagerAutoSuspendPaymentStatus, normalizeManagerAutoSuspendRefundStatus } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/utils/ManagerFinanceAutoSuspendStatusNormalization';
+import { normalizeManagerAutoSuspendPaymentStatus,normalizeManagerAutoSuspendRefundStatus } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/utils/ManagerFinanceAutoSuspendStatusNormalization';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerFinanceAutoSuspendStatusNormalization', () => {
   it('preserves known payment states and does not treat unknown states as valid', () => {

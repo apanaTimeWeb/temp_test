@@ -1,8 +1,8 @@
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
-import { setupServer } from 'msw/node';
 import { MANAGER_COMMUNICATION_COMPLAINTS_URL } from '@/app/frontend_manager/manager_communication/communication_complaints/config/manager_communication_complaints.url_config';
 import { managerComplaintsHandlers } from '@/app/frontend_manager/manager_communication/communication_complaints/mocks/manager_communication_complaints_handlers/ManagerCommunicationComplaintsHandlers';
 import { managerComplaintsComplaintResponseListSchema } from '@/app/frontend_manager/manager_communication/communication_complaints/schemas/ManagerCommunicationComplaintsSchema';
+import { setupServer } from 'msw/node';
+import { afterAll,afterEach,beforeAll,describe,expect,it } from 'vitest';
 
 const server = setupServer(...managerComplaintsHandlers);
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));

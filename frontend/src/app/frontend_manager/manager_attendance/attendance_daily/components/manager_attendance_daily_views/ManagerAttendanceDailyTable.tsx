@@ -1,14 +1,13 @@
 'use client';
 
-import React from 'react';
 import { useTranslations } from 'next-intl';
+import type {
+AttStatus,
+ManagerAttendanceDailyTimeField,
+Student,
+} from '../../types/ManagerAttendanceDailyComponentTypes';
 import { ManagerAttendanceDailyEmptyState } from '../manager_attendance_daily_empty_states/ManagerAttendanceDailyEmptyState';
 import { ManagerAttendanceDailyStudentRow } from '../manager_attendance_daily_widgets/ManagerAttendanceDailyStudentRow';
-import type {
-  AttStatus,
-  Student,
-  ManagerAttendanceDailyTimeField,
-} from '../../types/ManagerAttendanceDailyComponentTypes';
 
 interface ManagerAttendanceDailyTableProps {
   filtered: Student[];

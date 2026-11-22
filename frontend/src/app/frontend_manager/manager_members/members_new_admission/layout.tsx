@@ -1,5 +1,5 @@
-import type { Metadata } from 'next';
 import '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_styles/ManagerMembersNewAdmissionManager_new_admission.css';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'New Member Admission | Library OS',

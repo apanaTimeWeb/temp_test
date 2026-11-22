@@ -1,7 +1,7 @@
 'use client';
 
+import { Calendar } from 'lucide-react';
 import React from 'react';
-import { Calendar, Clock, X } from 'lucide-react';
 
 export type ManagerDailySettlementTimeHorizon = 'all' | 'today' | 'yesterday' | 'this_week' | 'this_month' | 'custom';
 

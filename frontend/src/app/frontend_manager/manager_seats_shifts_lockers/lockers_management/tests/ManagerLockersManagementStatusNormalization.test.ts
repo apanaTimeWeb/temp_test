@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { normalizeManagerSeatsAllocationStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementStatusNormalization';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerLockersManagementStatusNormalization', () => {
   it('preserves supported allocation statuses', () => {

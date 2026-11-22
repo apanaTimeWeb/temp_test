@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { Search, ChevronDown, X, RotateCcw } from 'lucide-react';
+import { ChevronDown,RotateCcw,Search,X } from 'lucide-react';
 import type { ManagerLockersManagementSampleLocker as Locker } from '../../mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
 
 interface ManagerLockersManagementToolbarProps {

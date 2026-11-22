@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { Receipt, X, Printer, MessageSquare, Mail, Smartphone } from 'lucide-react';
+import { Mail,MessageSquare,Printer,Receipt,Smartphone,X } from 'lucide-react';
 import type { ManagerReceiptRecord } from './ManagerFinanceFinesPaymentsFinesAndPaymentsPage';
 
 export interface ManagerFinanceFinesPaymentsReceiptModalProps {

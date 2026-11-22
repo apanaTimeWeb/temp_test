@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { ShieldAlert, RefreshCw } from 'lucide-react';
+import { RefreshCw,ShieldAlert } from 'lucide-react';
 
 export default function ManagerSettingsSecurityError({
   reset,

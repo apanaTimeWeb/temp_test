@@ -1,22 +1,22 @@
 'use client';
+import { ALL_SEAT_OPTIONS,isAdjacentSeat } from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionAdjacentSeats';
 import {
-  Trash2,
-  User,
-  Phone,
-  GraduationCap,
-  Calendar,
-  Building2,
-  UserCheck,
-  ShieldCheck,
-  MapPin,
-  Clock,
-  CreditCard,
-  Wallet,
-  Droplet,
-  Armchair,
+Armchair,
+Building2,
+Calendar,
+Clock,
+CreditCard,
+Droplet,
+GraduationCap,
+MapPin,
+Phone,
+ShieldCheck,
+Trash2,
+User,
+UserCheck,
+Wallet,
 } from 'lucide-react';
 import type { GroupStudentEntry } from './ManagerMembersGroupAdmissionManualModal';
-import { ALL_SEAT_OPTIONS, isAdjacentSeat } from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionAdjacentSeats';
 
 interface ManagerMembersGroupAdmissionCardViewProps {
   manualRows: GroupStudentEntry[];

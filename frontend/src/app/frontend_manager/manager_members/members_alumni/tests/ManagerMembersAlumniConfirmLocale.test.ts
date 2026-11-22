@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { describe,expect,it } from 'vitest';
 
 const english = JSON.parse(readFileSync(join(__dirname, '../locales/manager_members_alumni_domain_en.json'), 'utf8')) as unknown;
 const hindi = JSON.parse(readFileSync(join(__dirname, '../locales/manager_members_alumni_domain_hi.json'), 'utf8')) as unknown;

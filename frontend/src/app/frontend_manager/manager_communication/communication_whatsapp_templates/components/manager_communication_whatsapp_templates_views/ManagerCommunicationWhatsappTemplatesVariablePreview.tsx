@@ -1,25 +1,24 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
 import {
-  User,
-  CheckCircle2,
-  AlertTriangle,
-  AlertCircle,
-  Wand2,
-  Copy,
-  Check,
-  Eye,
-  SlidersHorizontal,
-  RotateCcw,
-  CheckCheck,
-  Phone,
-  Calendar,
-  IndianRupee,
-  BookOpen,
-  MapPin,
-  Armchair,
+AlertCircle,
+AlertTriangle,
+Armchair,
+BookOpen,
+Calendar,
+Check,
+CheckCheck,
+CheckCircle2,
+Copy,
+Eye,
+IndianRupee,
+MapPin,
+RotateCcw,
+SlidersHorizontal,
+User,
+Wand2
 } from 'lucide-react';
+import React,{ useMemo,useState } from 'react';
 import { toast } from 'sonner';
 
 export interface StudentSampleProfile {

@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
-import { Wallet, QrCode, ArrowUpRight, CheckCircle2, AlertCircle } from 'lucide-react';
 import type { ManagerDashboardOverviewCashDrawerCardProps } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewComponentTypes';
+import { AlertCircle,ArrowUpRight,CheckCircle2,QrCode,Wallet } from 'lucide-react';
+import Link from 'next/link';
 
 export function ManagerDashboardOverviewCashDrawerCard({
   cashInDrawer = 4200,

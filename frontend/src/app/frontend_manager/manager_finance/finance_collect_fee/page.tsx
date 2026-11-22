@@ -1,6 +1,6 @@
 import { ManagerFinanceCollectFeeMain } from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/ManagerFinanceCollectFeeMain';
-import type { ManagerFinanceCollectFeeMainProps } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeMainTypes';
 import type { ManagerFinanceCollectFeePageProps } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeComponentTypes';
+import type { ManagerFinanceCollectFeeMainProps } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeMainTypes';
 
 
 

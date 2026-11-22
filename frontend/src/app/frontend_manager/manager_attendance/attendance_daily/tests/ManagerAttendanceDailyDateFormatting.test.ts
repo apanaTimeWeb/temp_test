@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { formatManagerAttendanceCalendarDate } from '@/app/frontend_manager/manager_attendance/attendance_daily/utils/ManagerAttendanceDailyDateFormatting';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerAttendanceDailyDateFormatting', () => {
   it('formats date-only values as local calendar dates and rejects impossible dates', () => {

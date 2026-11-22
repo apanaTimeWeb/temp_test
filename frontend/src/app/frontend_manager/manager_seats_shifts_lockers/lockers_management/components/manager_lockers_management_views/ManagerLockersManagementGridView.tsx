@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { DoorClosed, User, CheckCircle2, AlertTriangle, Key } from 'lucide-react';
+import { AlertTriangle,CheckCircle2,DoorClosed,User } from 'lucide-react';
 import type { ManagerLockersManagementSampleLocker as Locker } from '../../mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
 
 export interface ManagerLockersManagementGridViewProps {

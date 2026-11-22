@@ -1,12 +1,12 @@
 'use client';
-import { useTranslations } from 'next-intl';
-import { useState, useMemo } from 'react';
 import { MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_trust_scores/hooks/ManagerFinanceTrustScoresDemoRepository';
 import { useManagerTrustScoresUrlFilters } from '@/app/frontend_manager/manager_finance/finance_trust_scores/hooks/useManagerFinanceTrustScoresUrlFilters';
-import { ShieldCheck, ShieldX, Users, Search, X, Download, Printer } from 'lucide-react';
 import type { ManagerFinanceTrustScoresRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_trust_scores/types/ManagerFinanceTrustScoresComponentTypes';
 import { sanitizeManagerTrustScoresCsvCell } from '@/app/frontend_manager/manager_finance/finance_trust_scores/utils/ManagerFinanceTrustScoresCsv';
-import { ManagerFinanceTrustScoresTable, type TrustSortField } from './ManagerFinanceTrustScoresTable';
+import { Download,Printer,Search,ShieldCheck,ShieldX,Users,X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
+import { ManagerFinanceTrustScoresTable,type TrustSortField } from './ManagerFinanceTrustScoresTable';
 
 // RESPONSIBILITY: Entry page for the manager_trust_scores module.
 // DATA FLOW: Next.js Router -> Page -> Components

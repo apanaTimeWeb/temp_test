@@ -1,12 +1,11 @@
 'use client';
 // RESPONSIBILITY: Render the QUARTERLY plan front ID card — Gold/Metallic Foil theme with holographic seal.
-import React, { useState, useEffect } from 'react';
-import { CreditCard, RotateCw } from 'lucide-react';
 import type {
-  IdCardData,
-  IdCardSide,
-  ManagerMembersIdCardGeneratorStudentIdCardProps,
+IdCardSide,
+ManagerMembersIdCardGeneratorStudentIdCardProps
 } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorComponentTypes';
+import { CreditCard,RotateCw } from 'lucide-react';
+import { useEffect,useState } from 'react';
 import { ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack } from './ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack';
 
 function maskPhone(phone?: string | null): string {

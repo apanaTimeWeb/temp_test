@@ -1,6 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import React from 'react';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 import { ManagerAccountsDailySettlementConfirmModal } from '../components/manager_accounts_daily_settlement_dialogs/ManagerAccountsDailySettlementConfirmModal';
 
 describe('ManagerAccountsDailySettlementConfirmModal', () => {

@@ -1,10 +1,10 @@
-import { describe, expect, it } from 'vitest';
 import {
-  escapeWifiString,
-  formatWifiQrPayload,
-  generateQrMatrix,
-  generateQrSvgPath,
+escapeWifiString,
+formatWifiQrPayload,
+generateQrMatrix,
+generateQrSvgPath,
 } from '@/app/frontend_manager/manager_settings/settings_branch_info/utils/ManagerSettingsBranchInfoWifiQr';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerSettingsBranchInfoWifiQr', () => {
   describe('escapeWifiString', () => {

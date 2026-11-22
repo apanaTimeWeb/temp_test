@@ -1,5 +1,5 @@
-import type { Metadata } from 'next';
 import '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_styles/ManagerSeatsMatrixManager_seat_matrix.css';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Seat Matrix | Library OS',

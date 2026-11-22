@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { maskManagerComplaintsPhone } from '@/app/frontend_manager/manager_communication/communication_complaints/utils/ManagerCommunicationComplaintsUtilities';
+import { describe,expect,it } from 'vitest';
 
 describe('maskManagerComplaintsPhone', () => {
   it('masks raw phone values without exposing middle digits', () => {

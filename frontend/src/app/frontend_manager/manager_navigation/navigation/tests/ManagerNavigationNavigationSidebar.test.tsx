@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
-import { NextIntlClientProvider } from 'next-intl';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import messages from '@/app/frontend_manager/manager_navigation/navigation/locales/manager_navigation_navigation_domain_en.json';
 import ManagerNavigationSidebar from '@/app/frontend_manager/manager_navigation/navigation/components/ManagerNavigationNavigationSidebar';
+import messages from '@/app/frontend_manager/manager_navigation/navigation/locales/manager_navigation_navigation_domain_en.json';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { NextIntlClientProvider } from 'next-intl';
+import { describe,expect,it,vi } from 'vitest';
 
 vi.mock('next/navigation', () => ({
   usePathname: () => '/frontend_manager/manager_dashboard/dashboard_overview',

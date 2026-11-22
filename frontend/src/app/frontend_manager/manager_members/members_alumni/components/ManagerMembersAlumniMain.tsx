@@ -1,6 +1,6 @@
 'use client';
-import { ManagerMembersAlumniClient } from '@/app/frontend_manager/manager_members/members_alumni/components/manager_members_alumni_views/ManagerMembersAlumniClient';
 import { ManagerMembersAlumniErrorBoundary } from '@/app/frontend_manager/manager_members/members_alumni/components/manager_members_alumni_states/ManagerMembersAlumniErrorBoundary';
+import { ManagerMembersAlumniClient } from '@/app/frontend_manager/manager_members/members_alumni/components/manager_members_alumni_views/ManagerMembersAlumniClient';
 import type { ManagerMembersAlumniMainProps } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniMainTypes';
 
 // RESPONSIBILITY: Preserve route query context for the manager members alumni feature.

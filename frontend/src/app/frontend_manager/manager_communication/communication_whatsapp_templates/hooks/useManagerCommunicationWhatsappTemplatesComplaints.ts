@@ -1,7 +1,7 @@
 'use client';
-import { useQuery } from '@tanstack/react-query';
 import { fetchManagerWhatsappTemplatesComplaints } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/api/manager_communication_whatsapp_templates.api';
 import { MANAGER_COMMUNICATION_QUERY_KEYS } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/api/manager_communication_whatsapp_templates.query_keys';
+import { useQuery } from '@tanstack/react-query';
 
 /** DATA FLOW: Feature-owned inputs/state -> hook result for its caller; no backend/API flow is inferred without source evidence. */
 

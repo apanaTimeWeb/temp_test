@@ -1,20 +1,20 @@
 'use client';
 
-import { useEffect } from 'react';
-import {
-  X,
-  AlertTriangle,
-  Clock,
-  IndianRupee,
-  Layers,
-  Wrench,
-  CheckCircle2,
-  Printer,
-  Calendar,
-  Sparkles,
-  Target,
-} from 'lucide-react';
 import type { GapRow } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/hooks/ManagerAccountsSeatGapReportDemoRepository';
+import {
+AlertTriangle,
+Calendar,
+CheckCircle2,
+Clock,
+IndianRupee,
+Layers,
+Printer,
+Sparkles,
+Target,
+Wrench,
+X,
+} from 'lucide-react';
+import { useEffect } from 'react';
 
 interface ManagerAccountsSeatGapReportDetailsModalProps {
   isOpen: boolean;

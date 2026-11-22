@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { formatManagerQrScannerCalendarDate } from '@/app/frontend_manager/manager_attendance/attendance_qr_scanner/utils/ManagerAttendanceQrScannerDateFormatting';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerAttendanceQrScannerDateFormatting', () => {
   it('formats date-only values as local calendar dates and rejects impossible dates', () => {

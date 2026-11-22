@@ -1,12 +1,11 @@
 'use client';
 // RESPONSIBILITY: Render the FULL YEAR / ANNUAL plan front ID card — Ultra Pro Champagne Edition with silk, woven thread, UV latent, and pulsing NFC rings.
-import React, { useState, useEffect } from 'react';
-import { CreditCard, RotateCw } from 'lucide-react';
 import type {
-  IdCardData,
-  IdCardSide,
-  ManagerMembersIdCardGeneratorStudentIdCardProps,
+IdCardSide,
+ManagerMembersIdCardGeneratorStudentIdCardProps
 } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorComponentTypes';
+import { CreditCard,RotateCw } from 'lucide-react';
+import { useEffect,useState } from 'react';
 import { ManagerMembersIdCardGeneratorStudentIdCardFullYearBack } from './ManagerMembersIdCardGeneratorStudentIdCardFullYearBack';
 
 function maskPhone(phone?: string | null): string {

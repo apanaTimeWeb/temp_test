@@ -1,11 +1,11 @@
 'use client';
 // RESPONSIBILITY: Modal dialog allowing manager to edit any member attributes (seat, shift, locker, phone, name, guardian, plan, status).
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { Armchair, Check, CreditCard, GraduationCap, User, X, AlertTriangle } from 'lucide-react';
-import { z } from 'zod';
+import { ManagerMembersDirectoryEditFormTabs,type EditTab } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryEditFormTabs';
 import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
-import { ManagerMembersDirectoryEditFormTabs, type EditTab } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryEditFormTabs';
+import { AlertTriangle,Armchair,Check,CreditCard,GraduationCap,User,X } from 'lucide-react';
+import React,{ useEffect,useMemo,useState } from 'react';
+import { z } from 'zod';
 
 export const memberEditSchema = z.object({
   name: z.string().trim().min(1, 'Student Full Name is required.'),

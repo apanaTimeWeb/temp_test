@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { formatManagerAbsenteeReportCalendarDate } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/utils/ManagerAttendanceAbsenteeReportDateFormatting';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerAttendanceAbsenteeReportDateFormatting', () => {
   it('formats date-only values as local calendar dates and rejects impossible dates', () => {

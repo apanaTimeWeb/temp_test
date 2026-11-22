@@ -3,10 +3,10 @@
 // RESPONSIBILITY: Define or render the table structure for the components feature. It does not own backend persistence or cross-feature business logic.
 import { displayValue } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/utils/ManagerCommunicationWhatsappLogsDisplayValue';
 
-import { useMemo, useState } from 'react';
-import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
-import type { ManagerCommunicationWhatsappLogsNativeTableProps, NativeCellParams, NativeColumn, ManagerCommunicationWhatsappLogsSortDirection } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/types/ManagerCommunicationWhatsappLogsComponentTypes';
-export type { NativeCellParams, NativeColumn };
+import type { ManagerCommunicationWhatsappLogsNativeTableProps,ManagerCommunicationWhatsappLogsSortDirection,NativeCellParams,NativeColumn } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/types/ManagerCommunicationWhatsappLogsComponentTypes';
+import { ArrowDown,ArrowUp,ArrowUpDown } from 'lucide-react';
+import { useMemo,useState } from 'react';
+export type { NativeCellParams,NativeColumn };
 
 
 

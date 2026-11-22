@@ -1,5 +1,5 @@
-import type { ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
+import type { ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 
 export const MANAGER_ADMISSION_REFERRAL_OPTIONS: ComboboxOption[] = [
   { value: 'Direct Walk-in', label: 'Direct Walk-in / Self (No Referral)', badge: 'Default' },

@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
-import { Search, X, Download } from 'lucide-react';
-import ManagerFinanceFinesPaymentsNativeTable, { type NativeColumn } from '@/app/frontend_manager/manager_finance/finance_fines_payments/components/manager_finance_fines_payments_table_parts/ManagerFinanceFinesPaymentsNativeTable';
+import ManagerFinanceFinesPaymentsNativeTable,{ type NativeColumn } from '@/app/frontend_manager/manager_finance/finance_fines_payments/components/manager_finance_fines_payments_table_parts/ManagerFinanceFinesPaymentsNativeTable';
+import { Download,Search,X } from 'lucide-react';
 import type { ManagerReceiptRecord } from './ManagerFinanceFinesPaymentsFinesAndPaymentsPage';
 
 export interface ManagerFinanceFinesPaymentsTablesSectionProps {

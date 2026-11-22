@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { MANAGER_DASHBOARD_QUERY_KEYS } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/api/manager_dashboard_overview.query_keys';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerDashboardOverviewQueryKeys', () => {
   it('uses the canonical module namespace and distinct resource keys', () => {

@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
-import { ShieldAlert, UserX, Wrench, PhoneCall, ArrowRight } from 'lucide-react';
 import type { ManagerDashboardOverviewOperationalAlertsProps } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewComponentTypes';
+import { ArrowRight,PhoneCall,ShieldAlert,UserX,Wrench } from 'lucide-react';
+import Link from 'next/link';
 
 export function ManagerDashboardOverviewOperationalAlerts({
   dropoutRiskCount = 4,

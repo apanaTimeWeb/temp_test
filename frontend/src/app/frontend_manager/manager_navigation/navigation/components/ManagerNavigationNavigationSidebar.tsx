@@ -1,17 +1,17 @@
 'use client';
 // RESPONSIBILITY: Render the navigation navigation sidebar navigation UI for navigation. It does not own backend persistence or cross-feature business logic.
 
-import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { BookOpen,Menu,Search,X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { BookOpen, Menu, Search, X } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname,useSearchParams } from 'next/navigation';
+import { useEffect,useRef,useState } from 'react';
 
-import { MANAGER_NAVIGATION_HREFS, MANAGER_NAVIGATION_ITEMS } from '@/app/frontend_manager/manager_navigation/navigation/constants/ManagerNavigationNavigationConstants';
 import { MANAGER_NAVIGATION_NAVIGATION_ROUTES } from '@/app/frontend_manager/manager_navigation/navigation/config/manager_navigation_navigation.url_config';
+import { MANAGER_NAVIGATION_HREFS,MANAGER_NAVIGATION_ITEMS } from '@/app/frontend_manager/manager_navigation/navigation/constants/ManagerNavigationNavigationConstants';
 import type { ManagerNavigationSidebarProps } from '@/app/frontend_manager/manager_navigation/navigation/types/ManagerNavigationNavigationComponentTypes';
-import { ManagerNavigationSidebarSearch } from './ManagerNavigationSidebarSearch';
 import { ManagerNavigationSidebarNavSection } from './ManagerNavigationSidebarNavSection';
+import { ManagerNavigationSidebarSearch } from './ManagerNavigationSidebarSearch';
 
 export type { ManagerNavigationSidebarProps };
 

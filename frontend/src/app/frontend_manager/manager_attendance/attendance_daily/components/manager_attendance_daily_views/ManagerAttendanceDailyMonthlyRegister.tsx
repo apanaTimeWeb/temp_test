@@ -1,26 +1,21 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
 import {
-  Calendar,
-  Search,
-  Download,
-  Printer,
-  X,
-  Users,
-  CheckCircle2,
-  AlertTriangle,
-  Clock,
-  ExternalLink,
-  ChevronRight,
+Calendar,
+ChevronRight,
+Download,
+Printer,
+Search,
+X
 } from 'lucide-react';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
 import type { Student } from '../../types/ManagerAttendanceDailyComponentTypes';
 import {
-  getStudentMonthlyAttendance,
-  MONTH_OPTIONS,
-  type StudentMonthlyAttendanceSummary,
+getStudentMonthlyAttendance,
+MONTH_OPTIONS,
+type StudentMonthlyAttendanceSummary,
 } from '../../utils/ManagerAttendanceDailyMonthlyHistoryUtils';
-import { toast } from 'sonner';
 
 interface ManagerAttendanceDailyMonthlyRegisterProps {
   students: Student[];

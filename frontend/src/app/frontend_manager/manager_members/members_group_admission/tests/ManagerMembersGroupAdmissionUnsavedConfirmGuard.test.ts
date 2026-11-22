@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { describe,expect,it } from 'vitest';
 
 const formSource = readFileSync(join(__dirname, '../components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionAdmissionForm.tsx'), 'utf8');
 const summarySource = readFileSync(join(__dirname, '../components/manager_members_group_admission_sections/ManagerMembersGroupAdmissionAdmissionSummary.tsx'), 'utf8');

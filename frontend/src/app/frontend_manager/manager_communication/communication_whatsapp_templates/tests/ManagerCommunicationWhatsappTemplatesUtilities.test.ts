@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { maskManagerWhatsappTemplatesPhone } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/utils/ManagerCommunicationWhatsappTemplatesUtilities';
+import { describe,expect,it } from 'vitest';
 
 describe('maskManagerWhatsappTemplatesPhone', () => {
   it('masks raw phone values without exposing middle digits', () => {

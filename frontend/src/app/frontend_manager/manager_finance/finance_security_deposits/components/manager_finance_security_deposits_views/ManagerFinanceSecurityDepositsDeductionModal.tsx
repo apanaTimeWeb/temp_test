@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import { Minus, X, CheckCircle, IndianRupee } from 'lucide-react';
 import type { ManagerFinanceSecurityDepositsSampleDeposit } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
+import { CheckCircle,IndianRupee,Minus,X } from 'lucide-react';
+import React from 'react';
 
 export interface ManagerFinanceSecurityDepositsDeductionModalProps {
   deductionTarget: ManagerFinanceSecurityDepositsSampleDeposit | null;

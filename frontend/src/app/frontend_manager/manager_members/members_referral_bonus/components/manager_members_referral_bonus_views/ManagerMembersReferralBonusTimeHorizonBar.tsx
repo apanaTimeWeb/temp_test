@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { CalendarRange, X } from 'lucide-react';
+import { CalendarRange,X } from 'lucide-react';
 
 export type ManagerReferralTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
 

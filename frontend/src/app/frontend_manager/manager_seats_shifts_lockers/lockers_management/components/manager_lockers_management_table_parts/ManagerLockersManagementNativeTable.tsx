@@ -1,10 +1,10 @@
 'use client';
 // RESPONSIBILITY: Define or render the table structure for the components feature. It does not own backend persistence or cross-feature business logic.
+import type { ManagerLockersManagementNativeCellParams,ManagerLockersManagementNativeColumn,ManagerLockersManagementNativeTableProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/types/ManagerLockersManagementComponentTypes';
 import { displayValue } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementDisplayValue';
-import { createElement, useState, useMemo, type ReactNode } from 'react';
-import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
-import type { ManagerLockersManagementNativeCellParams, ManagerLockersManagementNativeColumn, ManagerLockersManagementNativeTableProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/types/ManagerLockersManagementComponentTypes';
-export type { ManagerLockersManagementNativeCellParams, ManagerLockersManagementNativeColumn, ManagerLockersManagementNativeTableProps };
+import { ArrowDown,ArrowUp,ArrowUpDown } from 'lucide-react';
+import { createElement,useMemo,useState,type ReactNode } from 'react';
+export type { ManagerLockersManagementNativeCellParams,ManagerLockersManagementNativeColumn,ManagerLockersManagementNativeTableProps };
 
 /** Accessible, keyboard-native data table owned by the seats/shifts/lockers feature. */
 export function ManagerLockersManagementNativeTable<T extends object>({ rows, columns, getRowKey, label }: ManagerLockersManagementNativeTableProps<T>) {

@@ -1,14 +1,14 @@
-import { describe, expect, it } from 'vitest';
 import {
-  MANAGER_FINANCE_API_PAYMENT_FIXTURES,
-  MANAGER_FINANCE_API_REFUND_FIXTURES,
-  MANAGER_FINANCE_EMPTY_PAYMENT_FIXTURE,
-  MANAGER_FINANCE_EMPTY_REFUND_FIXTURE,
+MANAGER_FINANCE_API_PAYMENT_FIXTURES,
+MANAGER_FINANCE_API_REFUND_FIXTURES,
+MANAGER_FINANCE_EMPTY_PAYMENT_FIXTURE,
+MANAGER_FINANCE_EMPTY_REFUND_FIXTURE,
 } from '@/app/frontend_manager/manager_finance/finance_security_deposits/mocks/manager_finance_security_deposits_fixtures/ManagerFinanceSecurityDepositsApiFixtures';
 import {
-  managerFinancePaymentResponseSchema,
-  managerFinanceRefundResponseSchema,
+managerFinancePaymentResponseSchema,
+managerFinanceRefundResponseSchema,
 } from '@/app/frontend_manager/manager_finance/finance_security_deposits/schemas/ManagerFinanceSecurityDepositsSchema';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerFinanceSecurityDepositsApiFixtures', () => {
   it('keeps the expanded payment and refund fixtures schema-shaped', () => {

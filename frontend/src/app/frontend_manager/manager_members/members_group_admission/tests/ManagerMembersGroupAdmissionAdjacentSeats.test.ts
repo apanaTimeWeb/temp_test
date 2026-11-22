@@ -1,12 +1,11 @@
-import { describe, expect, it } from 'vitest';
-import {
-  getAdjacentSeatSuggestions,
-  autoAllocateAdjacentSeats,
-  isAdjacentSeat,
-  MANAGER_GROUP_SEAT_CLUSTERS,
-} from '../utils/ManagerMembersGroupAdmissionAdjacentSeats';
-import { readFileSync, existsSync } from 'node:fs';
+import { existsSync,readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { describe,expect,it } from 'vitest';
+import {
+autoAllocateAdjacentSeats,
+getAdjacentSeatSuggestions,
+isAdjacentSeat
+} from '../utils/ManagerMembersGroupAdmissionAdjacentSeats';
 
 const moduleRoot = [
   join(process.cwd(), 'src/app/frontend_manager/manager_members/members_group_admission'),

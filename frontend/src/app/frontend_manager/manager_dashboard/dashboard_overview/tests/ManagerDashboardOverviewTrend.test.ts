@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { getManagerDashboardTrendTone } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/utils/ManagerDashboardOverviewTrend';
+import { describe,expect,it } from 'vitest';
 
 describe('getManagerDashboardTrendTone', () => {
   it('classifies signed positive and negative trends', () => {

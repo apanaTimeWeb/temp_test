@@ -1,6 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import React from 'react';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it,vi } from 'vitest';
 import ManagerFinanceAutoSuspendKioskModal from '../components/manager_finance_auto_suspend_views/ManagerFinanceAutoSuspendKioskModal';
 
 describe('Module 19: Auto Suspend - QR Kiosk Block Sync & Access Denied Simulation', () => {

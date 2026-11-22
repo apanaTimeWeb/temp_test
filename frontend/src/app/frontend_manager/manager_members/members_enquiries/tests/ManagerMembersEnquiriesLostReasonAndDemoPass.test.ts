@@ -1,10 +1,10 @@
-import { describe, expect, it } from 'vitest';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import {
-  MANAGER_CRM_LOST_REASONS,
+MANAGER_CRM_LOST_REASONS,
 } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesLostReasonModal';
 import { MANAGER_CRM_DEFAULT_WHATSAPP_TEMPLATES } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { describe,expect,it } from 'vitest';
 
 const readSource = (relativePath: string) =>
   readFileSync(join(__dirname, '..', relativePath), 'utf8');

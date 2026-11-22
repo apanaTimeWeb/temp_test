@@ -1,16 +1,16 @@
 'use client';
 // RESPONSIBILITY: Render the members id card generator student id card component with premium frontend card UI, clean barcode layout, and back side support.
-import { useTranslations } from 'next-intl';
-import React, { useState, useEffect } from 'react';
-import { CreditCard, RotateCw } from 'lucide-react';
 import type {
-  IdCardData,
-  IdCardSide,
-  ManagerMembersIdCardGeneratorStudentIdCardProps,
+IdCardData,
+IdCardSide,
+ManagerMembersIdCardGeneratorStudentIdCardProps,
 } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorComponentTypes';
+import { CreditCard,RotateCw } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect,useState } from 'react';
 import { ManagerMembersIdCardGeneratorStudentIdCardBack } from './ManagerMembersIdCardGeneratorStudentIdCardBack';
 
-export type { IdCardData, IdCardSide, ManagerMembersIdCardGeneratorStudentIdCardProps };
+export type { IdCardData,IdCardSide,ManagerMembersIdCardGeneratorStudentIdCardProps };
 
 function maskCardPhone(phone?: string | null): string {
   if (!phone) return '—';

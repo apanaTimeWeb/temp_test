@@ -1,22 +1,21 @@
 'use client';
 
+import { ManagerAssetsRegisterEmptyState } from '@/app/frontend_manager/manager_accounts_assets/assets_register/components/manager_assets_register_empty_states/ManagerAssetsRegisterEmptyState';
+import type { ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
 import {
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  Package,
-  CheckCircle2,
-  Wrench,
-  Archive,
-  Eye,
-  Trash2,
-  Calendar,
-  MapPin,
-  Tag,
+Archive,
+ArrowDown,
+ArrowUp,
+ArrowUpDown,
+Calendar,
+CheckCircle2,
+Eye,
+MapPin,
+Package,
+Trash2,
+Wrench
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import type { ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
-import { ManagerAssetsRegisterEmptyState } from '@/app/frontend_manager/manager_accounts_assets/assets_register/components/manager_assets_register_empty_states/ManagerAssetsRegisterEmptyState';
 
 export type AssetSortField =
   | 'name'

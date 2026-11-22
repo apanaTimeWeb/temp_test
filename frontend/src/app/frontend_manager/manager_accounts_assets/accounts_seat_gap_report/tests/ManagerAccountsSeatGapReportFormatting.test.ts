@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { formatManagerSeatGapReportCurrency, toManagerSeatGapReportMinorUnits } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/utils/ManagerAccountsSeatGapReportFormatting';
+import { formatManagerSeatGapReportCurrency,toManagerSeatGapReportMinorUnits } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/utils/ManagerAccountsSeatGapReportFormatting';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerAccountsSeatGapReportFormatting', () => {
   it('formats integer minor units as currency', () => {

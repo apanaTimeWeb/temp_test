@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe,expect,it } from 'vitest';
 import { memberEditSchema } from '../components/manager_members_directory_sections/ManagerMembersDirectoryEditModal';
 
 describe('Manager Members Directory Audit Regression Tests', () => {

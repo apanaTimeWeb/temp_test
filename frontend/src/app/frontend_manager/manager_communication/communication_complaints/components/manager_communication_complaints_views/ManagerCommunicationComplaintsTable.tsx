@@ -1,20 +1,20 @@
 'use client';
 
-import React from 'react';
-import { useTranslations } from 'next-intl';
 import {
-  Eye,
-  RefreshCw,
-  CheckCircle,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  MessageSquare,
-  Armchair,
+Armchair,
+ArrowDown,
+ArrowUp,
+ArrowUpDown,
+CheckCircle,
+Eye,
+MessageSquare,
+RefreshCw,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import React from 'react';
 import type {
-  ManagerCommunicationComplaintsComplaint,
-  ManagerCommunicationComplaintsComplaintStatus,
+ManagerCommunicationComplaintsComplaint,
+ManagerCommunicationComplaintsComplaintStatus,
 } from '../../types/ManagerCommunicationComplaintsTypes';
 
 export type ComplaintSortField = 'title' | 'student' | 'description' | 'status' | 'date' | 'resolvedBy';

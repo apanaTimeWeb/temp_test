@@ -1,4 +1,4 @@
-import type { ManagerDashboardReportsData, ManagerDashboardReportsDateRange } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
+import type { ManagerDashboardReportsData,ManagerDashboardReportsDateRange } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
 
 /** Explicitly empty, test-only response fixture. It contains no fabricated operational totals. */
 export const MANAGER_REPORTS_EMPTY_FIXTURE: ManagerDashboardReportsData = {

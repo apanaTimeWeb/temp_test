@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import type { ManagerSettingsHelpSupportLocalDraft } from '@/app/frontend_manager/manager_settings/settings_help_support/types/ManagerSettingsHelpSupportLocalDraft';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerSettingsHelpSupportLocalDraft', () => {
   it('supports a minimal local draft/metadata shape without claiming a backend operation', () => {

@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { normalizeManagerSecurityDepositsPaymentStatus, normalizeManagerSecurityDepositsRefundStatus } from '@/app/frontend_manager/manager_finance/finance_security_deposits/utils/ManagerFinanceSecurityDepositsStatusNormalization';
+import { normalizeManagerSecurityDepositsPaymentStatus,normalizeManagerSecurityDepositsRefundStatus } from '@/app/frontend_manager/manager_finance/finance_security_deposits/utils/ManagerFinanceSecurityDepositsStatusNormalization';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerFinanceSecurityDepositsStatusNormalization', () => {
   it('preserves known payment states and does not treat unknown states as valid', () => {

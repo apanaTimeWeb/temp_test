@@ -1,6 +1,6 @@
 import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
-import { describe, expect, it } from 'vitest';
-import { managerCrmAddEnquirySchema, managerCrmFollowUpDraftSchema } from '@/app/frontend_manager/manager_members/members_enquiries/schemas/ManagerMembersEnquiriesSchema';
+import { managerCrmAddEnquirySchema,managerCrmFollowUpDraftSchema } from '@/app/frontend_manager/manager_members/members_enquiries/schemas/ManagerMembersEnquiriesSchema';
+import { describe,expect,it } from 'vitest';
 
 describe('CRM local draft schemas', () => {
   it('accepts a valid enquiry draft without implying a durable create operation', () => {

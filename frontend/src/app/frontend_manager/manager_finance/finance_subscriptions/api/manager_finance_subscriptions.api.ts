@@ -3,7 +3,7 @@
  * endpoint/response contract for this domain mapping. Do not treat another domain's
  * payment/refund response as this feature's data.
  */
-import type { ManagerFinanceSubscriptionsPayment, ManagerFinanceSubscriptionsRefund } from '@/app/frontend_manager/manager_finance/finance_subscriptions/types/ManagerFinanceSubscriptionsTypes';
+import type { ManagerFinanceSubscriptionsPayment,ManagerFinanceSubscriptionsRefund } from '@/app/frontend_manager/manager_finance/finance_subscriptions/types/ManagerFinanceSubscriptionsTypes';
 export const MANAGER_SUBSCRIPTIONS_API_CONTRACT_STATUS = 'CONTRACT_NOT_FOUND_IN_WEB_ZIP' as const;
 
 export async function fetchManagerSubscriptionsPayments(): Promise<ManagerFinanceSubscriptionsPayment[]> {

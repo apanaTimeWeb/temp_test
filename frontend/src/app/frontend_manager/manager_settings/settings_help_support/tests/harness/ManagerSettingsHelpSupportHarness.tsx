@@ -1,18 +1,18 @@
 "use client";
 
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
+import { useEffect,useState } from 'react';
 import { ManagerSettingsHelpSupportMain } from '../../components/ManagerSettingsHelpSupportMain';
 import messagesEn from '../../locales/manager_settings_help_support_domain_en.json';
 import messagesHi from '../../locales/manager_settings_help_support_domain_hi.json';
 import {
-  startManagerSettingsHelpSupportWorker,
-  stopManagerSettingsHelpSupportWorker,
-  HARNESS_SCENARIO_OPTIONS,
-  MANAGER_SETTINGS_HELP_SUPPORT_SCENARIO_PROBE_URL,
-  type ManagerSettingsHelpSupportHarnessScenario,
+HARNESS_SCENARIO_OPTIONS,
+MANAGER_SETTINGS_HELP_SUPPORT_SCENARIO_PROBE_URL,
+startManagerSettingsHelpSupportWorker,
+stopManagerSettingsHelpSupportWorker,
+type ManagerSettingsHelpSupportHarnessScenario,
 } from './bootstrap';
 
 type ManagerSettingsHelpSupportHarnessProps = {

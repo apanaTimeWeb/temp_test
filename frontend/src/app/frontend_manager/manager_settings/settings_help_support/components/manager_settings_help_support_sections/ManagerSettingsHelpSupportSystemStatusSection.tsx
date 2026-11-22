@@ -1,6 +1,6 @@
 // RESPONSIBILITY: Render the settings help support system status section section of the components feature. It does not own backend persistence or cross-feature business logic.
+import { CircleHelp,Database,Globe,Server } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { CircleHelp, Server, Database, Globe } from 'lucide-react';
 
 export function ManagerSettingsHelpSupportSystemStatusSection() {
   const tManagerUi = useTranslations('manager.manager_help_support.ui');

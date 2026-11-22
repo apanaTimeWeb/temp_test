@@ -1,21 +1,21 @@
 'use client';
 // RESPONSIBILITY: Render the canonical add-enquiry view and preserve incoming route query context.
 // DATA FLOW: Enquiries Main -> AddPage -> enquiry form UI.
-import { useTranslations } from 'next-intl';
-import { useRef, useState } from 'react';
 import { useManagerEnquiriesDialogFocus } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/ManagerMembersEnquiriesDialogFocus';
+import { useTranslations } from 'next-intl';
+import { useRef,useState } from 'react';
 
 import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
 
-import { useRouter } from 'next/navigation';
 import { useManagerMembersEnquiriesConfirm } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesConfirm';
 import { useManagerMembersEnquiriesUnsavedChangesGuard } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesUnsavedChangesGuard';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { PhoneCall, Save, X } from 'lucide-react';
-import { managerCrmAddEnquirySchema, type ManagerMembersEnquiriesAddEnquiryFormData } from '@/app/frontend_manager/manager_members/members_enquiries/schemas/ManagerMembersEnquiriesSchema';
-import { MANAGER_CRM_SAMPLE_SOURCE_OPTIONS, MANAGER_CRM_SAMPLE_SHIFT_OPTIONS, MANAGER_CRM_SAMPLE_STAFF_OPTIONS } from '@/app/frontend_manager/manager_members/members_enquiries/mocks/manager_members_enquiries_fixtures/ManagerMembersEnquiriesFixtures';
+import { MANAGER_CRM_SAMPLE_SHIFT_OPTIONS,MANAGER_CRM_SAMPLE_SOURCE_OPTIONS,MANAGER_CRM_SAMPLE_STAFF_OPTIONS } from '@/app/frontend_manager/manager_members/members_enquiries/mocks/manager_members_enquiries_fixtures/ManagerMembersEnquiriesFixtures';
+import { managerCrmAddEnquirySchema,type ManagerMembersEnquiriesAddEnquiryFormData } from '@/app/frontend_manager/manager_members/members_enquiries/schemas/ManagerMembersEnquiriesSchema';
 import type { ManagerMembersEnquiriesAddPageRouteProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { PhoneCall,Save,X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 
 
 

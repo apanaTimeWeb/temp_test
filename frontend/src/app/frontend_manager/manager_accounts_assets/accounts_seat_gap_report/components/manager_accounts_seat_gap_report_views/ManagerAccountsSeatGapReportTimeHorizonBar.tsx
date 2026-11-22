@@ -1,7 +1,7 @@
 'use client';
 
+import { Calendar,Clock,X } from 'lucide-react';
 import React from 'react';
-import { Clock, X, Calendar, Sparkles } from 'lucide-react';
 
 export type ManagerSeatGapTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
 

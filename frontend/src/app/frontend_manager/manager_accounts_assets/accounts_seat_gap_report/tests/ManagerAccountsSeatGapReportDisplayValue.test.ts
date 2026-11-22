@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { displayValue } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/utils/ManagerAccountsSeatGapReportDisplayValue';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerAccountsSeatGapReportDisplayValue', () => {
   it('uses an en dash for nullable, empty, and object values', () => {

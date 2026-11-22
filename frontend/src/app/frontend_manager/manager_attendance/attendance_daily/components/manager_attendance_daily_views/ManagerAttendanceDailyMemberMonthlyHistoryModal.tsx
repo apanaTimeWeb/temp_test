@@ -1,27 +1,23 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
 import {
-  X,
-  Calendar,
-  Clock,
-  Printer,
-  Download,
-  CheckCircle2,
-  XCircle,
-  AlertCircle,
-  FileText,
-  User,
-  Armchair,
-  Timer,
+Armchair,
+Calendar,
+CheckCircle2,
+Clock,
+Download,
+Printer,
+X,
+XCircle
 } from 'lucide-react';
+import { useEffect,useMemo,useState } from 'react';
+import { toast } from 'sonner';
 import type { Student } from '../../types/ManagerAttendanceDailyComponentTypes';
 import {
-  getStudentMonthlyAttendance,
-  MONTH_OPTIONS,
-  type AttendanceDailyMonthStatus,
+getStudentMonthlyAttendance,
+MONTH_OPTIONS,
+type AttendanceDailyMonthStatus,
 } from '../../utils/ManagerAttendanceDailyMonthlyHistoryUtils';
-import { toast } from 'sonner';
 
 export interface ManagerAttendanceDailyMemberMonthlyHistoryModalProps {
   isOpen: boolean;

@@ -1,6 +1,6 @@
 import { ManagerCommunicationNotificationCenterMain } from '@/app/frontend_manager/manager_communication/communication_notification_center/components/ManagerCommunicationNotificationCenterMain';
-import type { ManagerCommunicationNotificationCenterMainProps } from '@/app/frontend_manager/manager_communication/communication_notification_center/types/ManagerCommunicationNotificationCenterMainTypes';
 import type { ManagerCommunicationNotificationCenterPageProps } from '@/app/frontend_manager/manager_communication/communication_notification_center/types/ManagerCommunicationNotificationCenterComponentTypes';
+import type { ManagerCommunicationNotificationCenterMainProps } from '@/app/frontend_manager/manager_communication/communication_notification_center/types/ManagerCommunicationNotificationCenterMainTypes';
 
 
 

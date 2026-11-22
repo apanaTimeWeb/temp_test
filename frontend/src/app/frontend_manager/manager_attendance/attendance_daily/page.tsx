@@ -1,6 +1,6 @@
 import { ManagerAttendanceDailyMain } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/ManagerAttendanceDailyMain';
-import type { ManagerAttendanceDailyMainProps } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyMainTypes';
 import type { ManagerAttendanceDailyPageProps } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
+import type { ManagerAttendanceDailyMainProps } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyMainTypes';
 
 
 

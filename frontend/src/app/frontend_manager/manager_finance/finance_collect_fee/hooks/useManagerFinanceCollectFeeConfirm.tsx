@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback, useId, useRef, useState } from 'react';
 import { useManagerCollectFeeDialogFocus } from '@/app/frontend_manager/manager_finance/finance_collect_fee/hooks/ManagerFinanceCollectFeeDialogFocus';
 import type { PendingConfirmation } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeComponentTypes';
+import { useCallback,useId,useRef,useState } from 'react';
 
 
 

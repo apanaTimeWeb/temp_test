@@ -2,13 +2,13 @@
 // RESPONSIBILITY: Render the navigation header and its navigation context. It does not own backend persistence or cross-feature business logic.
 import { useTranslations } from 'next-intl';
 
-import Link from 'next/link';
-import { Bell, Building2, ChevronDown, ChevronRight, LogOut, Menu, User } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
-import { toast } from 'sonner';
-import { ThemeToggle } from '@/components/ThemeToggle';
 import { MANAGER_NAVIGATION_NAVIGATION_ROUTES } from '@/app/frontend_manager/manager_navigation/navigation/config/manager_navigation_navigation.url_config';
 import type { ManagerNavigationHeaderProps } from '@/app/frontend_manager/manager_navigation/navigation/types/ManagerNavigationNavigationComponentTypes';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { Bell,Building2,ChevronDown,ChevronRight,LogOut,Menu,User } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect,useRef,useState } from 'react';
+import { toast } from 'sonner';
 import { ManagerNavigationSidebarLogoutModal } from './ManagerNavigationSidebarLogoutModal';
 export type { ManagerNavigationHeaderProps };
 

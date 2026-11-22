@@ -5,11 +5,11 @@ import { useTranslations } from 'next-intl';
 
 import { useManagerNewAdmissionFormatting } from '@/app/frontend_manager/manager_members/members_new_admission/hooks/useManagerMembersNewAdmissionFormatting';
 
-import { CheckCircle } from 'lucide-react';
-import Link from 'next/link';
 import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { MANAGER_MEMBERS_NEW_ADMISSION_ROUTES } from '@/app/frontend_manager/manager_members/members_new_admission/config/manager_members_new_admission.url_config';
 import type { ManagerMembersNewAdmissionAdmissionSummaryProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
+import { CheckCircle } from 'lucide-react';
+import Link from 'next/link';
 export type { ManagerMembersNewAdmissionAdmissionSummaryProps };
 
 

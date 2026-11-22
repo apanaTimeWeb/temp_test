@@ -1,9 +1,9 @@
 'use client';
+import { autoAllocateAdjacentSeats } from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionAdjacentSeats';
+import { Armchair,CheckCircle2,FileSpreadsheet,Upload,Users,X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { FileSpreadsheet, X, Upload, CheckCircle2, Users, Armchair, Sparkles } from 'lucide-react';
 import type { RecentGroupAdmission } from '../manager_members_group_admission_tables/ManagerMembersGroupAdmissionRecentGroupsTable';
-import { autoAllocateAdjacentSeats } from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionAdjacentSeats';
 
 interface GroupStudentEntry {
   id: string;

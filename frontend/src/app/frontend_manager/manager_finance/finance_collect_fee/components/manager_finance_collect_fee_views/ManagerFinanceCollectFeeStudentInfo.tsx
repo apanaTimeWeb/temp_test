@@ -1,10 +1,9 @@
 'use client';
 
-import React from 'react';
-import { CheckCircle, AlertTriangle, AlertCircle, ArrowRight, Check } from 'lucide-react';
-import { maskManagerCollectFeePhone } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
-import type { MANAGER_FINANCE_COLLECT_FEE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/mocks/manager_finance_collect_fee_fixtures/ManagerFinanceCollectFeeMocks';
 import type { ManagerFinanceCollectionType } from '@/app/frontend_manager/manager_finance/finance_collect_fee/constants/ManagerFinanceCollectFeeConstants';
+import type { MANAGER_FINANCE_COLLECT_FEE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/mocks/manager_finance_collect_fee_fixtures/ManagerFinanceCollectFeeMocks';
+import { maskManagerCollectFeePhone } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
+import { AlertCircle,AlertTriangle,ArrowRight,Check,CheckCircle } from 'lucide-react';
 
 export interface ManagerFinanceCollectFeeStudentInfoProps {
   selectedStudent: (typeof MANAGER_FINANCE_COLLECT_FEE_STUDENTS)[number] | null;

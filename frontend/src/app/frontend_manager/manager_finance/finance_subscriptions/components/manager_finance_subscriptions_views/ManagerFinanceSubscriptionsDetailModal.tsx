@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import Link from 'next/link';
-import { X, AlertCircle, ArrowUpRight, Clock, RefreshCw } from 'lucide-react';
 import type { MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS } from '@/app/frontend_manager/manager_finance/finance_subscriptions/hooks/ManagerFinanceSubscriptionsDemoRepository';
+import { AlertCircle,ArrowUpRight,Clock,RefreshCw,X } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect } from 'react';
 
 const STATUS_BADGE: Record<string, string> = {
   active: 'fin-badge fin-badge--success',

@@ -1,18 +1,16 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
 import {
-  X,
-  CheckCircle2,
-  MessageSquare,
-  Armchair,
-  User,
-  Phone,
-  Send,
-  AlertCircle,
-  FileCheck,
+Armchair,
+CheckCircle2,
+FileCheck,
+MessageSquare,
+Phone,
+Send,
+User,
+X
 } from 'lucide-react';
-import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { useEffect,useState } from 'react';
 import { toast } from 'sonner';
 import type { ManagerCommunicationComplaintsComplaint } from '../../types/ManagerCommunicationComplaintsTypes';
 

@@ -1,10 +1,10 @@
 'use client';
 // RESPONSIBILITY: Define or render the table structure for the components feature. It does not own backend persistence or cross-feature business logic.
+import type { ManagerSeatsHistoryNativeCellParams,ManagerSeatsHistoryNativeColumn,ManagerSeatsHistoryNativeTableProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryComponentTypes';
 import { displayValue } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/utils/ManagerSeatsHistoryDisplayValue';
-import { createElement, useState, useMemo, type ReactNode } from 'react';
-import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
-import type { ManagerSeatsHistoryNativeCellParams, ManagerSeatsHistoryNativeColumn, ManagerSeatsHistoryNativeTableProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryComponentTypes';
-export type { ManagerSeatsHistoryNativeCellParams, ManagerSeatsHistoryNativeColumn, ManagerSeatsHistoryNativeTableProps };
+import { ArrowDown,ArrowUp,ArrowUpDown } from 'lucide-react';
+import { createElement,useMemo,useState,type ReactNode } from 'react';
+export type { ManagerSeatsHistoryNativeCellParams,ManagerSeatsHistoryNativeColumn,ManagerSeatsHistoryNativeTableProps };
 
 /** Accessible, keyboard-native data table owned by the seats/shifts/lockers feature. */
 export function ManagerSeatsHistoryNativeTable<T extends object>({ rows, columns, getRowKey, label }: ManagerSeatsHistoryNativeTableProps<T>) {

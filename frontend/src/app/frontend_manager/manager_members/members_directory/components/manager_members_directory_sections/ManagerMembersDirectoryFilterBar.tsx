@@ -1,12 +1,11 @@
 'use client';
 
-import React from 'react';
-import { useTranslations } from 'next-intl';
-import { Search, X, RotateCcw, Download } from 'lucide-react';
 import {
-  MANAGER_MEMBERSHIP_TYPE_OPTIONS,
-  MANAGER_MEMBERS_GENDER_OPTIONS,
+MANAGER_MEMBERSHIP_TYPE_OPTIONS,
+MANAGER_MEMBERS_GENDER_OPTIONS,
 } from '@/app/frontend_manager/manager_members/members_directory/constants/ManagerMembersDirectoryConstants';
+import { Download,RotateCcw,Search,X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export interface ManagerMembersDirectoryFilterBarProps {
   searchQuery: string;

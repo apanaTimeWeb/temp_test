@@ -1,18 +1,18 @@
 "use client";
 
-import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
+import type { ReactNode } from 'react';
+import { useEffect,useState } from 'react';
 import { ManagerCommunicationWhatsappLogsMain } from '../../components/ManagerCommunicationWhatsappLogsMain';
 import messagesEn from '../../locales/manager_communication_whatsapp_logs_domain_en.json';
 import messagesHi from '../../locales/manager_communication_whatsapp_logs_domain_hi.json';
 import {
-  startManagerCommunicationWhatsappLogsWorker,
-  stopManagerCommunicationWhatsappLogsWorker,
-  HARNESS_SCENARIO_OPTIONS,
-  MANAGER_COMMUNICATION_WHATSAPP_LOGS_SCENARIO_PROBE_URL,
-  type ManagerCommunicationWhatsappLogsHarnessScenario,
+HARNESS_SCENARIO_OPTIONS,
+MANAGER_COMMUNICATION_WHATSAPP_LOGS_SCENARIO_PROBE_URL,
+startManagerCommunicationWhatsappLogsWorker,
+stopManagerCommunicationWhatsappLogsWorker,
+type ManagerCommunicationWhatsappLogsHarnessScenario,
 } from './bootstrap';
 
 type ManagerCommunicationWhatsappLogsHarnessProps = {

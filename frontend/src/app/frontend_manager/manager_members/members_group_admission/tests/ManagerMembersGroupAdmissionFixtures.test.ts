@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { MANAGER_STUDENTS_FIXTURES } from '@/app/frontend_manager/manager_members/members_group_admission/mocks/manager_members_group_admission_fixtures/ManagerMembersGroupAdmissionFixtures';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerMembersGroupAdmissionFixtures', () => {
   it('provides unique stable identifiers for all sample students', () => {

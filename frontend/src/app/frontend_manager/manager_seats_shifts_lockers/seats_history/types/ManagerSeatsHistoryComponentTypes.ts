@@ -1,6 +1,6 @@
 /** Module-local component props and UI/state types extracted from component files. */
 import type { ManagerSeatsHistorySearchParams } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryMainTypes';
-import type { ComponentType, ReactNode } from 'react';
+import type { ComponentType,ReactNode } from 'react';
 
 export type ManagerSeatsHistoryEmptyStateProps = { children: ReactNode; className?: string; testId?: string };
 

@@ -1,13 +1,13 @@
-import { describe, expect, it } from 'vitest';
 import {
-  getManagerEnquiriesInitials,
-  maskManagerEnquiriesPhone,
-  getManagerEnquiriesLocalDateInputMinimum,
-  cleanManagerEnquiriesWhatsAppPhone,
-  getManagerEnquiriesDemoPassWhatsAppUrl,
-  getManagerEnquiriesLocationWhatsAppUrl,
-  normalizeManagerEnquiriesEnquiry,
+cleanManagerEnquiriesWhatsAppPhone,
+getManagerEnquiriesDemoPassWhatsAppUrl,
+getManagerEnquiriesInitials,
+getManagerEnquiriesLocalDateInputMinimum,
+getManagerEnquiriesLocationWhatsAppUrl,
+maskManagerEnquiriesPhone,
+normalizeManagerEnquiriesEnquiry,
 } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerMembersEnquiriesUtilities', () => {
   it('masks phone numbers while keeping recognizable prefix/suffix', () => {

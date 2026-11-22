@@ -1,21 +1,21 @@
 'use client';
 // RESPONSIBILITY: Render the canonical group-admission feature view with incoming route context.
 // DATA FLOW: Next.js route page -> Main -> GroupPage.
-import { useState, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
-import { Users2, Plus, Download, Upload, FileSpreadsheet } from 'lucide-react';
-import Link from 'next/link';
-import { ManagerMembersGroupAdmissionManualModal, type GroupStudentEntry } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionManualModal';
+import { ManagerMembersGroupAdmissionManualModal,type GroupStudentEntry } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionManualModal';
 import { MANAGER_MEMBERS_GROUP_ADMISSION_ROUTES } from '@/app/frontend_manager/manager_members/members_group_admission/config/manager_members_group_admission.url_config';
 import type { ManagerMembersGroupAdmissionGroupPageRouteProps } from '@/app/frontend_manager/manager_members/members_group_admission/types/ManagerMembersGroupAdmissionComponentTypes';
-import {
-  ManagerMembersGroupAdmissionRecentGroupsTable,
-  type RecentGroupAdmission,
-  type GroupSortField,
-} from '../manager_members_group_admission_tables/ManagerMembersGroupAdmissionRecentGroupsTable';
-import { ManagerMembersGroupAdmissionBulkModal } from '../manager_members_group_admission_dialogs/ManagerMembersGroupAdmissionBulkModal';
 import { sanitizeManagerGroupAdmissionCsvCell } from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionCsv';
+import { Download,FileSpreadsheet,Plus,Upload,Users2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
+import { ManagerMembersGroupAdmissionBulkModal } from '../manager_members_group_admission_dialogs/ManagerMembersGroupAdmissionBulkModal';
+import {
+ManagerMembersGroupAdmissionRecentGroupsTable,
+type GroupSortField,
+type RecentGroupAdmission,
+} from '../manager_members_group_admission_tables/ManagerMembersGroupAdmissionRecentGroupsTable';
 
 const INITIAL_RECENT_GROUPS: RecentGroupAdmission[] = [
   { batchId: 'GRP-2026-001', batchName: 'UPSC Aspirants Study Circle', date: '2026-10-25', count: 6, shift: 'Morning', status: 'Active' },

@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
-import { NextIntlClientProvider } from 'next-intl';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import messages from '@/app/frontend_manager/manager_navigation/navigation/locales/manager_navigation_navigation_domain_en.json';
 import ManagerNavigationHeader from '@/app/frontend_manager/manager_navigation/navigation/components/ManagerNavigationNavigationHeader';
+import messages from '@/app/frontend_manager/manager_navigation/navigation/locales/manager_navigation_navigation_domain_en.json';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { NextIntlClientProvider } from 'next-intl';
+import { describe,expect,it,vi } from 'vitest';
 
 const { toastMock } = vi.hoisted(() => {
   const toastMock = { info: vi.fn(), error: vi.fn(), success: vi.fn() };

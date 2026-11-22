@@ -1,22 +1,20 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import Link from 'next/link';
+import { Download,Printer,RefreshCw,Save } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { ChevronRight, Save, RefreshCw, CheckCircle2, Download, Printer } from 'lucide-react';
+import { useMemo,useState } from 'react';
 import { toast } from 'sonner';
 
-import type { ManagerAttendanceDailyMainProps } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyMainTypes';
-import { MANAGER_ATTENDANCE_DAILY_ROUTES } from '@/app/frontend_manager/manager_attendance/attendance_daily/config/manager_attendance_daily.url_config';
-import { MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE } from '@/app/frontend_manager/manager_attendance/attendance_daily/hooks/ManagerAttendanceDailyDemoRepository';
-import { ManagerAttendanceDailyFloorTurnoverQueue } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_widgets/ManagerAttendanceDailyFloorTurnoverQueue';
-import type { AttStatus, Student, ManagerAttendanceDailyTimeField } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
-import { ManagerAttendanceDailyKpis } from './ManagerAttendanceDailyKpis';
-import { ManagerAttendanceDailyToolbar } from './ManagerAttendanceDailyToolbar';
-import { ManagerAttendanceDailyTable } from './ManagerAttendanceDailyTable';
-import { ManagerAttendanceDailyMonthlyRegister } from './ManagerAttendanceDailyMonthlyRegister';
-import { ManagerAttendanceDailyMemberMonthlyHistoryModal } from './ManagerAttendanceDailyMemberMonthlyHistoryModal';
 import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { ManagerAttendanceDailyFloorTurnoverQueue } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_widgets/ManagerAttendanceDailyFloorTurnoverQueue';
+import { MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE } from '@/app/frontend_manager/manager_attendance/attendance_daily/hooks/ManagerAttendanceDailyDemoRepository';
+import type { AttStatus,ManagerAttendanceDailyTimeField,Student } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
+import type { ManagerAttendanceDailyMainProps } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyMainTypes';
+import { ManagerAttendanceDailyKpis } from './ManagerAttendanceDailyKpis';
+import { ManagerAttendanceDailyMemberMonthlyHistoryModal } from './ManagerAttendanceDailyMemberMonthlyHistoryModal';
+import { ManagerAttendanceDailyMonthlyRegister } from './ManagerAttendanceDailyMonthlyRegister';
+import { ManagerAttendanceDailyTable } from './ManagerAttendanceDailyTable';
+import { ManagerAttendanceDailyToolbar } from './ManagerAttendanceDailyToolbar';
 
 const INIT_STUDENTS: Student[] = MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE.map((student) => ({ ...student }));
 

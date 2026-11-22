@@ -1,8 +1,8 @@
 /** Module-local component props and UI/state types extracted from component files. */
 import type { ManagerMembersEnquiriesFollowUpFormData } from '@/app/frontend_manager/manager_members/members_enquiries/schemas/ManagerMembersEnquiriesSchema';
 import type { ManagerMembersEnquiriesSearchParams } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesMainTypes';
-import type { ManagerMembersEnquiriesEnquiry, ManagerMembersEnquiriesEnquiryStatus, ManagerMembersEnquiriesFollowUp } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
-import type { ErrorInfo, ReactNode } from 'react';
+import type { ManagerMembersEnquiriesEnquiry,ManagerMembersEnquiriesEnquiryStatus,ManagerMembersEnquiriesFollowUp } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
+import type { ErrorInfo,ReactNode } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 
 export type ManagerMembersEnquiriesEmptyStateProps = { children: ReactNode; className?: string; testId?: string };

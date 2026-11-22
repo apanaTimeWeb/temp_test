@@ -1,12 +1,12 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import {
-  fetchManagerLockersAllocations,
-  fetchManagerLockersLockerMatrix,
-  fetchManagerLockersSeatHistory,
+fetchManagerLockersAllocations,
+fetchManagerLockersLockerMatrix,
+fetchManagerLockersSeatHistory,
 } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/api/manager_lockers_management.api';
 import { MANAGER_LOCKERS_MANAGEMENT_QUERY_KEYS } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/api/manager_lockers_management.query_keys';
+import { useQuery } from '@tanstack/react-query';
 
 /** DATA FLOW: Feature-owned inputs/state -> hook result for its caller; no backend/API flow is inferred without source evidence. */
 

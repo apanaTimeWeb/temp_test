@@ -1,6 +1,6 @@
 /** Module-local component props and UI/state types extracted from component files. */
 import type { ManagerMembersIdCardGeneratorSearchParams } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorMainTypes';
-import type { ErrorInfo, ReactNode } from 'react';
+import type { ErrorInfo,ReactNode } from 'react';
 
 export type ManagerMembersIdCardGeneratorEmptyStateProps = { children: ReactNode; className?: string; testId?: string };
 

@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { Calendar, X } from 'lucide-react';
+import { Calendar,X } from 'lucide-react';
 
 export type ManagerMembersTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
 

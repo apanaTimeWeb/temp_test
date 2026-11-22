@@ -1,10 +1,10 @@
 'use client';
-import { useTranslations } from 'next-intl';
-import { Suspense } from 'react';
+import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import ManagerMembersNewAdmissionAdmissionForm from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_forms/ManagerMembersNewAdmissionAdmissionForm';
 import { ManagerMembersNewAdmissionErrorBoundary } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_states/ManagerMembersNewAdmissionErrorBoundary';
 import type { ManagerMembersNewAdmissionMainProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionMainTypes';
-import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { useTranslations } from 'next-intl';
+import { Suspense } from 'react';
 
 // RESPONSIBILITY: Preserve route query context for the manager members new admission feature.
 // DATA FLOW: Next.js route page -> typed Main props -> feature client/view boundary.

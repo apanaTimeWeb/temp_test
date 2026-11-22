@@ -1,6 +1,5 @@
-import React from 'react';
-import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render,screen } from '@testing-library/react';
+import { describe,expect,it } from 'vitest';
 import ManagerAccountsExpensesExpenseSummaryCards from '../components/manager_accounts_expenses_sections/ManagerAccountsExpensesExpenseSummaryCards';
 import { managerAccountsExpensesAddExpenseModalSchema } from '../schemas/ManagerAccountsExpensesExpenseDraftSchema';
 import type { Expense } from '../types/ManagerAccountsExpensesComponentTypes';

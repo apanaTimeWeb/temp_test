@@ -1,9 +1,9 @@
 'use client';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale,useTranslations } from 'next-intl';
 
-import { PhoneCall, CalendarDays, CheckCircle, User, Clock, MessageCircle, Sun, Sunset, Moon } from 'lucide-react';
-import { formatManagerEnquiriesDisplayDate, maskManagerEnquiriesPhone, getManagerEnquiriesDemoPassWhatsAppUrl } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
 import type { ManagerMembersEnquiriesKanbanCardProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
+import { formatManagerEnquiriesDisplayDate,getManagerEnquiriesDemoPassWhatsAppUrl,maskManagerEnquiriesPhone } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
+import { CalendarDays,CheckCircle,Clock,MessageCircle,Moon,PhoneCall,Sun,Sunset,User } from 'lucide-react';
 
 export function ManagerMembersEnquiriesKanbanCard({ enq, colClass, onClick }: ManagerMembersEnquiriesKanbanCardProps) {
   const tManagerUi = useTranslations('manager.manager_enquiries.ui');

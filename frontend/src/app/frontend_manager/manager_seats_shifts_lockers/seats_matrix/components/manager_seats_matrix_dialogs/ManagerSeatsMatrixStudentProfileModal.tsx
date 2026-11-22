@@ -1,23 +1,23 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
 import {
-  X,
-  ShieldCheck,
-  Armchair,
-  Clock,
-  Phone,
-  MessageCircle,
-  ExternalLink,
-  ZoomIn,
-  GraduationCap,
-  Calendar,
-  CheckCircle2,
-  Sparkles,
+Armchair,
+Calendar,
+CheckCircle2,
+Clock,
+ExternalLink,
+GraduationCap,
+MessageCircle,
+Phone,
+ShieldCheck,
+Sparkles,
+X,
+ZoomIn,
 } from 'lucide-react';
-import type { SeatData } from '../../types/ManagerSeatsMatrixTypes';
+import { useEffect,useState } from 'react';
 import { MANAGER_SEATS_MATRIX_ROUTES } from '../../config/manager_seats_matrix.url_config';
 import { REGISTERED_STUDENT_CANDIDATES } from '../../constants/ManagerSeatsMatrixConstants';
+import type { SeatData } from '../../types/ManagerSeatsMatrixTypes';
 
 export interface ManagerSeatsMatrixStudentProfileModalProps {
   isOpen: boolean;

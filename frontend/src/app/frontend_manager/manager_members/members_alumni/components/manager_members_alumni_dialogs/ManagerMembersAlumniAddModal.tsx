@@ -1,30 +1,29 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
-import { toast } from 'sonner';
-import {
-  Award,
-  Briefcase,
-  Calendar,
-  Check,
-  CheckCircle2,
-  Clock,
-  ExternalLink,
-  GraduationCap,
-  Phone,
-  Quote,
-  ShieldAlert,
-  ShieldCheck,
-  User,
-} from 'lucide-react';
-import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
-import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
 import type { MembersAlumniRow } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniComponentTypes';
 import {
-  checkMemberDepositSettlement,
-  getDepositSettlementFinanceUrl,
-  settleAndRefundDepositInLedger,
+checkMemberDepositSettlement,
+getDepositSettlementFinanceUrl,
+settleAndRefundDepositInLedger,
 } from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniDepositSettlement';
+import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
+import { SearchableCombobox,type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
+import {
+Award,
+Briefcase,
+Calendar,
+Check,
+CheckCircle2,
+Clock,
+ExternalLink,
+GraduationCap,
+Phone,
+Quote,
+ShieldAlert,
+User
+} from 'lucide-react';
+import { useEffect,useMemo,useState } from 'react';
+import { toast } from 'sonner';
 
 export interface ManagerMembersAlumniAddModalProps {
   isOpen: boolean;

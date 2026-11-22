@@ -1,10 +1,9 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import React from 'react';
-import { NextIntlClientProvider } from 'next-intl';
 import ManagerSettingsBranchInfoPage from '@/app/frontend_manager/manager_settings/settings_branch_info/components/manager_settings_branch_info_views/ManagerSettingsBranchInfoPage';
 import messagesEn from '@/app/frontend_manager/manager_settings/settings_branch_info/locales/manager_settings_branch_info_domain_en.json';
 import messagesHi from '@/app/frontend_manager/manager_settings/settings_branch_info/locales/manager_settings_branch_info_domain_hi.json';
+import { fireEvent,render,screen } from '@testing-library/react';
+import { NextIntlClientProvider } from 'next-intl';
+import { beforeEach,describe,expect,it,vi } from 'vitest';
 
 vi.mock('sonner', () => ({
   toast: {

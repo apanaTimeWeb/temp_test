@@ -1,13 +1,13 @@
-import React from 'react';
-import { describe, expect, it } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent,render,screen } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
-import messagesEn from '../locales/manager_members_id_card_generator_domain_en.json';
+import { existsSync,readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import React from 'react';
+import { describe,expect,it } from 'vitest';
 import ManagerMembersIdCardGeneratorStudentIdCard from '../components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCard';
 import { ManagerMembersIdCardGeneratorStudentIdCardBack } from '../components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCardBack';
+import messagesEn from '../locales/manager_members_id_card_generator_domain_en.json';
 import type { IdCardData } from '../types/ManagerMembersIdCardGeneratorComponentTypes';
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
 
 const mockCardData: IdCardData = {
   name: 'Rahul Sharma',

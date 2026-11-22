@@ -1,10 +1,10 @@
 // RESPONSIBILITY: Render the attendance absentee report columns component within the components feature. It does not own backend persistence or cross-feature business logic.
 // RESPONSIBILITY: Render the attendance absentee report columns component within the components feature. It does not own backend persistence or cross-feature business logic.
-import { Mail, Phone, MessageSquare, Eye } from 'lucide-react';
-import type { NativeColumn, NativeCellParams } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportNativeTable';
-import { formatManagerAbsenteeReportCalendarDate } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/utils/ManagerAttendanceAbsenteeReportDateFormatting';
+import type { NativeCellParams,NativeColumn } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportNativeTable';
 import type { ManagerAttendanceAbsenteeReportSampleAbsentee } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/hooks/ManagerAttendanceAbsenteeReportDemoRepository';
 import type { ManagerAttendanceAbsenteeReportAbsenteeColumnLabels } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/types/ManagerAttendanceAbsenteeReportComponentTypes';
+import { formatManagerAbsenteeReportCalendarDate } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/utils/ManagerAttendanceAbsenteeReportDateFormatting';
+import { Eye,Mail,MessageSquare,Phone } from 'lucide-react';
 export type { ManagerAttendanceAbsenteeReportAbsenteeColumnLabels };
 
 export function createManagerAbsenteeReportAbsenteeColumns(

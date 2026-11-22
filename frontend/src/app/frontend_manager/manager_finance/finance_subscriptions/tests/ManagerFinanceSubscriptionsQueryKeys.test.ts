@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { MANAGER_FINANCE_QUERY_KEYS } from '@/app/frontend_manager/manager_finance/finance_subscriptions/api/manager_finance_subscriptions.query_keys';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerFinanceSubscriptionsQueryKeys', () => {
   it('uses the canonical module namespace and distinct resource keys', () => {

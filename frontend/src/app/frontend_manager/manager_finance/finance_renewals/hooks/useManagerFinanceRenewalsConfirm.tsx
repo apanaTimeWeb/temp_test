@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useId, useRef, useState } from 'react';
 import { useManagerRenewalsDialogFocus } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/ManagerFinanceRenewalsDialogFocus';
+import { useCallback,useId,useRef,useState } from 'react';
 
 export interface RenewalsPendingConfirmation {
   message: string;

@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { displayValue } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/utils/ManagerCommunicationWhatsappTemplatesDisplayValue';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerCommunicationWhatsappTemplatesDisplayValue', () => {
   it('uses an en dash for nullable, empty, and object values', () => {

@@ -1,18 +1,18 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import {
-  KeyRound,
-  Eye,
-  EyeOff,
-  CheckCircle2,
-  XCircle,
-  ShieldCheck,
-  AlertCircle,
+AlertCircle,
+CheckCircle2,
+Eye,
+EyeOff,
+KeyRound,
+ShieldCheck,
+XCircle,
 } from 'lucide-react';
+import React,{ useMemo,useState } from 'react';
 import { toast } from 'sonner';
 import { changePasswordSchema } from '../schemas/ManagerSettingsSecuritySchema';
-import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
 export function ManagerSettingsSecurityPasswordForm() {
   const [currentPassword, setCurrentPassword] = useState('');

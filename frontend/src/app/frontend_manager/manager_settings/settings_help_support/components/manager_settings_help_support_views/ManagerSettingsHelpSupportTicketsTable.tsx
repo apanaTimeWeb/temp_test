@@ -1,10 +1,9 @@
 'use client';
 
-import React from 'react';
+import { AlertCircle,ArrowDown,ArrowUp,ArrowUpDown,CheckCircle,Clock,RotateCcw } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { ArrowUpDown, ArrowUp, ArrowDown, Clock, CheckCircle, RotateCcw, AlertCircle } from 'lucide-react';
-import { ManagerSettingsHelpSupportEmptyState } from '../ManagerSettingsHelpSupportEmptyState';
 import { formatManagerHelpSupportCalendarDate } from '../../utils/ManagerSettingsHelpSupportDateFormatting';
+import { ManagerSettingsHelpSupportEmptyState } from '../ManagerSettingsHelpSupportEmptyState';
 import { ManagerSettingsHelpSupportTicketsToolbar } from './ManagerSettingsHelpSupportTicketsToolbar';
 
 export interface ManagerSettingsHelpSupportTicketItem {

@@ -1,37 +1,35 @@
 'use client';
 
+import { ManagerAccountsSeatGapReportEmptyState } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/components/manager_accounts_seat_gap_report_empty_states/ManagerAccountsSeatGapReportEmptyState';
+import {
+MANAGER_ACCOUNTING_SAMPLE_SEAT_GAPS,
+type GapRow,
+} from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/hooks/ManagerAccountsSeatGapReportDemoRepository';
+import { useManagerSeatGapReportCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/hooks/ManagerAccountsSeatGapReportFormattingHook';
 import type { ManagerAccountsSeatGapReportMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/types/ManagerAccountsSeatGapReportMainTypes';
 import {
-  MANAGER_ACCOUNTING_SAMPLE_SEAT_GAPS,
-  type GapRow,
-} from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/hooks/ManagerAccountsSeatGapReportDemoRepository';
-import { useLocale, useTranslations } from 'next-intl';
-import { useManagerSeatGapReportCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/hooks/ManagerAccountsSeatGapReportFormattingHook';
-import { useState, useMemo } from 'react';
-import {
-  Search,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  Printer,
-  Download,
-  AlertTriangle,
-  IndianRupee,
-  Clock,
-  Wrench,
-  CheckCircle2,
-  Eye,
-  Layers,
-  Target,
+AlertTriangle,
+ArrowDown,
+ArrowUp,
+ArrowUpDown,
+CheckCircle2,
+Clock,
+Download,
+Eye,
+IndianRupee,
+Printer,
+Target,
+Wrench
 } from 'lucide-react';
+import { useLocale,useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
 import { toast } from 'sonner';
-import { ManagerAccountsSeatGapReportEmptyState } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/components/manager_accounts_seat_gap_report_empty_states/ManagerAccountsSeatGapReportEmptyState';
-import ManagerAccountsSeatGapReportTimeHorizonBar, {
-  type ManagerSeatGapTimeHorizon,
-} from './ManagerAccountsSeatGapReportTimeHorizonBar';
-import { ManagerAccountsSeatGapReportToolbar } from './ManagerAccountsSeatGapReportToolbar';
 import { ManagerAccountsSeatGapReportDetailsModal } from './ManagerAccountsSeatGapReportDetailsModal';
 import { ManagerAccountsSeatGapReportRetargetModal } from './ManagerAccountsSeatGapReportRetargetModal';
+import ManagerAccountsSeatGapReportTimeHorizonBar,{
+type ManagerSeatGapTimeHorizon,
+} from './ManagerAccountsSeatGapReportTimeHorizonBar';
+import { ManagerAccountsSeatGapReportToolbar } from './ManagerAccountsSeatGapReportToolbar';
 
 function formatKnownIsoCalendarDate(value: string, locale: string): string {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);

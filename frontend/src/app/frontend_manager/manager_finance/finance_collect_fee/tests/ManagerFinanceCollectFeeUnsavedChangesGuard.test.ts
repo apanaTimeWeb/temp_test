@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync,readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { describe,expect,it } from 'vitest';
 const candidates = [join(process.cwd(), 'src/app/frontend_manager/manager_finance/finance_collect_fee'), join(process.cwd(), 'app/frontend_manager/manager_finance/finance_collect_fee'), join(process.cwd(), 'frontend_manager/manager_finance/finance_collect_fee')];
 const moduleRoot = candidates.find((candidate) => existsSync(join(candidate, 'hooks/useManagerFinanceCollectFeeUnsavedChangesGuard.ts')));
 if (!moduleRoot) throw new Error('Could not locate the Finance Collect Fee module source.');

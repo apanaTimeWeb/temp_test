@@ -1,23 +1,23 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
-import { toast } from 'sonner';
 import {
-  MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS,
-  MANAGER_FINANCE_SAMPLE_PENDING_FINES,
-  MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY,
-  MANAGER_FINANCE_SAMPLE_RECEIPTS,
-} from './ManagerFinanceFinesPaymentsDemoRepository';
-import {
-  IndianRupee,
-  AlertCircle,
-  Clock,
-  FileText,
-  AlertTriangle,
+AlertCircle,
+AlertTriangle,
+Clock,
+FileText,
+IndianRupee,
 } from 'lucide-react';
+import { useCallback,useMemo,useState } from 'react';
+import { toast } from 'sonner';
 import type { DashboardKpiItem } from '../components/manager_finance_fines_payments_views/ManagerFinanceFinesPaymentsDashboardTab';
 import type { ManagerReceiptRecord } from '../components/manager_finance_fines_payments_views/ManagerFinanceFinesPaymentsFinesAndPaymentsPage';
 import type { ManagerFinanceTimeHorizon } from '../components/manager_finance_fines_payments_views/ManagerFinanceFinesPaymentsTimeHorizonBar';
+import {
+MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS,
+MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY,
+MANAGER_FINANCE_SAMPLE_PENDING_FINES,
+MANAGER_FINANCE_SAMPLE_RECEIPTS,
+} from './ManagerFinanceFinesPaymentsDemoRepository';
 
 export interface UseManagerFinanceFinesPaymentsPageDataParams {
   formatCurrency: (n: number) => string;

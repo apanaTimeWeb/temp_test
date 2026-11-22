@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
-import { User, UserPlus, Wrench, CheckCircle, LogOut, Layers, ArrowLeftRight } from 'lucide-react';
+import { SearchableCombobox,type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
+import { ArrowLeftRight,CheckCircle,Layers,LogOut,User,UserPlus,Wrench } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
-import type { SeatData, ShiftType } from '../../types/ManagerSeatsMatrixTypes';
-import { SHIFT_BADGE, REGISTERED_STUDENT_CANDIDATES } from '../../constants/ManagerSeatsMatrixConstants';
+import React,{ useMemo,useState } from 'react';
 import { MANAGER_SEATS_MATRIX_ROUTES } from '../../config/manager_seats_matrix.url_config';
+import { REGISTERED_STUDENT_CANDIDATES } from '../../constants/ManagerSeatsMatrixConstants';
+import type { SeatData,ShiftType } from '../../types/ManagerSeatsMatrixTypes';
 import { ManagerSeatsMatrixStudentProfileModal } from './ManagerSeatsMatrixStudentProfileModal';
 
 interface ManagerSeatsMatrixModalActionsTabProps {

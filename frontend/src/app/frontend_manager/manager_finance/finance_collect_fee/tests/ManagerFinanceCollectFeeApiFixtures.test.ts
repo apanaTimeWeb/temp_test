@@ -1,9 +1,9 @@
-import { describe, expect, it } from 'vitest';
 import {
-  MANAGER_FINANCE_API_PAYMENT_FIXTURES,
-  MANAGER_FINANCE_EMPTY_PAYMENT_FIXTURE,
+MANAGER_FINANCE_API_PAYMENT_FIXTURES,
+MANAGER_FINANCE_EMPTY_PAYMENT_FIXTURE,
 } from '@/app/frontend_manager/manager_finance/finance_collect_fee/mocks/manager_finance_collect_fee_fixtures/ManagerFinanceCollectFeeApiFixtures';
 import { managerFinancePaymentResponseSchema } from '@/app/frontend_manager/manager_finance/finance_collect_fee/schemas/ManagerFinanceCollectFeeSchema';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerFinanceCollectFeeApiFixtures', () => {
   it('keeps payment fixtures schema-shaped and supports an empty collection', () => {

@@ -1,7 +1,6 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen, fireEvent, act } from '@testing-library/react';
-import React from 'react';
 import { useManagerFinanceRenewalsConfirm } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsConfirm';
+import { act,fireEvent,render,screen } from '@testing-library/react';
+import { describe,expect,it } from 'vitest';
 
 function TestConfirmComponent({ onResult }: { onResult: (res: boolean) => void }) {
   const { confirm, dialog } = useManagerFinanceRenewalsConfirm();

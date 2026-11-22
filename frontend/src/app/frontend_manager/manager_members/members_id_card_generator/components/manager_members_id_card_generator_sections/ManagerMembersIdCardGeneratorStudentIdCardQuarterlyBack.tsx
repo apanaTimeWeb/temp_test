@@ -1,6 +1,5 @@
 'use client';
 // RESPONSIBILITY: Render the QUARTERLY plan back ID card — Gold foil back with magnetic stripe, holographic patch, tier badge, signature strip, rules & contact grid.
-import React from 'react';
 import type { IdCardData } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorComponentTypes';
 
 export interface ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBackProps {

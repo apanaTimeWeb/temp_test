@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { managerFinanceCollectFeeDraftSchema } from '@/app/frontend_manager/manager_finance/finance_collect_fee/schemas/ManagerFinanceCollectFeeDraftSchema';
+import { describe,expect,it } from 'vitest';
 
 const validDraft = { member: 'student-1', amount: '125.50', mode: 'cash' as const, txnId: '', couponCode: '', lateFee: '', monthsToRenew: '1' as const, remark: '' };
 

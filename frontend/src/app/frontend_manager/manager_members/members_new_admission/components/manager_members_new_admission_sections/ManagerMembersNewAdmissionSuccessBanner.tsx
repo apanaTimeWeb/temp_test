@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import { AlertCircle,CheckCircle2,IdCard,MessageSquare,UserPlus } from 'lucide-react';
 import Link from 'next/link';
-import { CheckCircle2, MessageSquare, IdCard, UserPlus, AlertCircle } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 export interface AdmittedStudentInfo {

@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
+import { MANAGER_REPORTS_EMPTY_FIXTURE,MANAGER_REPORTS_POPULATED_FIXTURE } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/mocks/manager_dashboard_reports_fixtures/ManagerDashboardReportsFixtures';
 import { managerReportsSchema } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/schemas/ManagerDashboardReportsSchema';
-import { MANAGER_REPORTS_EMPTY_FIXTURE, MANAGER_REPORTS_POPULATED_FIXTURE } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/mocks/manager_dashboard_reports_fixtures/ManagerDashboardReportsFixtures';
+import { describe,expect,it } from 'vitest';
 
 const completeEmptyReport = {
   kpiCards: [], occupancyData: [], growthData: [], attendanceData: [], absenteesChartData: [],

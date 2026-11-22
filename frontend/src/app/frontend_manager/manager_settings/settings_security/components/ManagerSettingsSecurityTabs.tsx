@@ -1,7 +1,7 @@
 'use client';
 
+import { History,KeyRound,MonitorSmartphone,Shield } from 'lucide-react';
 import React from 'react';
-import { KeyRound, Shield, MonitorSmartphone, History } from 'lucide-react';
 import type { ManagerSecurityTab } from '../types/ManagerSettingsSecurityTypes';
 
 interface ManagerSettingsSecurityTabsProps {

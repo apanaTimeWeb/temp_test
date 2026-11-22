@@ -1,9 +1,8 @@
 'use client';
 
-import React from 'react';
-import { useTranslations } from 'next-intl';
-import { Users, Clock, DollarSign } from 'lucide-react';
 import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
+import { Clock,DollarSign,Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export interface ManagerMembersReferralBonusKpisProps {
   records: ReferralRow[];

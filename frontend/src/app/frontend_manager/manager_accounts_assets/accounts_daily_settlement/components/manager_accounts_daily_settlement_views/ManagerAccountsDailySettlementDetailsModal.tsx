@@ -1,20 +1,19 @@
 'use client';
 
-import { useEffect } from 'react';
-import {
-  X,
-  Scale,
-  Coins,
-  QrCode,
-  TrendingDown,
-  CheckCircle2,
-  Clock,
-  Printer,
-  ShieldCheck,
-  Building2,
-  Calendar,
-} from 'lucide-react';
 import type { Entry } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
+import {
+Building2,
+CheckCircle2,
+Clock,
+Coins,
+Printer,
+QrCode,
+Scale,
+ShieldCheck,
+TrendingDown,
+X
+} from 'lucide-react';
+import { useEffect } from 'react';
 
 export interface ManagerAccountsDailySettlementDetailsModalProps {
   isOpen: boolean;

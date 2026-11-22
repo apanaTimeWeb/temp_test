@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import { DoorClosed,Key,Plus,X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { DoorClosed, X, Plus, Key } from 'lucide-react';
+import React from 'react';
 
 interface ManagerLockersManagementAddModalProps {
   dialogRef: React.Ref<HTMLDivElement>;

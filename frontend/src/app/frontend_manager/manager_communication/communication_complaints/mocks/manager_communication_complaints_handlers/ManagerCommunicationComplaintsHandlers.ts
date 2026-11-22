@@ -1,7 +1,7 @@
-import { http, HttpResponse } from 'msw';
 import { MANAGER_COMMUNICATION_COMPLAINTS_URL } from '@/app/frontend_manager/manager_communication/communication_complaints/config/manager_communication_complaints.url_config';
+import { MANAGER_COMPLAINTS_API_FIXTURES,MANAGER_COMPLAINTS_EMPTY_FIXTURE } from '@/app/frontend_manager/manager_communication/communication_complaints/mocks/manager_communication_complaints_fixtures/ManagerCommunicationComplaintsApiFixtures';
 import { managerComplaintsComplaintResponseListSchema } from '@/app/frontend_manager/manager_communication/communication_complaints/schemas/ManagerCommunicationComplaintsSchema';
-import { MANAGER_COMPLAINTS_API_FIXTURES, MANAGER_COMPLAINTS_EMPTY_FIXTURE } from '@/app/frontend_manager/manager_communication/communication_complaints/mocks/manager_communication_complaints_fixtures/ManagerCommunicationComplaintsApiFixtures';
+import { http,HttpResponse } from 'msw';
 
 const TEST_REQUEST_ID = 'msw-manager-communication-complaints';
 

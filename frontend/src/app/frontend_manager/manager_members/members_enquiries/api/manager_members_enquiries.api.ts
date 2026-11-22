@@ -1,16 +1,16 @@
-import { apiFetch, type ApiResponse } from '@/lib/api';
 import {
-  MANAGER_MEMBERS_ENQUIRIES_API,
+MANAGER_MEMBERS_ENQUIRIES_API,
 } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
 import {
-  managerCrmEnquiryResponseSchema,
-  managerCrmEnquirySchema,
-  managerCrmNormalizedEnquirySchema,
+managerCrmEnquiryResponseSchema,
+managerCrmEnquirySchema,
+managerCrmNormalizedEnquirySchema,
 } from '@/app/frontend_manager/manager_members/members_enquiries/schemas/ManagerMembersEnquiriesSchema';
-import type { ManagerMembersEnquiriesEnquiry, ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
+import type { ManagerMembersEnquiriesEnquiry,ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
 import { normalizeManagerEnquiriesEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
+import { apiFetch,type ApiResponse } from '@/lib/api';
 
-import { getManagerEnquiriesMockEnquiries, getManagerEnquiriesMockEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/mocks/manager_members_enquiries_fixtures/ManagerMembersEnquiriesFixtures';
+import { getManagerEnquiriesMockEnquiries,getManagerEnquiriesMockEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/mocks/manager_members_enquiries_fixtures/ManagerMembersEnquiriesFixtures';
 
 function unwrapManagerApiResponse<T>(response: ApiResponse<T>, fallbackMessage: string): T {
   if (!response.success) {

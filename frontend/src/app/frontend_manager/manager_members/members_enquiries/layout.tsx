@@ -1,5 +1,5 @@
-import type { Metadata } from 'next';
 import '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_styles/ManagerMembersEnquiriesManager_enquiries.css';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Enquiries CRM | Library OS',

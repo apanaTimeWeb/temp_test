@@ -2,9 +2,9 @@
  * Module-local MSW lifecycle for the communication_whatsapp_templates standalone harness.
  * The __harness__ probe is test-only and is not a backend or feature API route.
  */
-import { delay, http, HttpResponse, type RequestHandler } from 'msw';
+import { delay,http,HttpResponse,type RequestHandler } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { MANAGER_COMMUNICATION_WHATSAPP_TEMPLATES_SCENARIOS as MODULE_SCENARIOS, type CommunicationWhatsappTemplatesScenario as HarnessScenario } from '../../mocks/scenarios/manager_communication_whatsapp_templates.scenarios';
+import { MANAGER_COMMUNICATION_WHATSAPP_TEMPLATES_SCENARIOS as MODULE_SCENARIOS,type CommunicationWhatsappTemplatesScenario as HarnessScenario } from '../../mocks/scenarios/manager_communication_whatsapp_templates.scenarios';
 // No module-owned handler array was supplied for this module. Keep business API mocking empty rather than inventing an endpoint.
 const MODULE_HANDLERS: RequestHandler[] = [];
 

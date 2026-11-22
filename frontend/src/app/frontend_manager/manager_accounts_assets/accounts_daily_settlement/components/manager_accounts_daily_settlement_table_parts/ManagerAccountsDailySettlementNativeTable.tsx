@@ -3,10 +3,10 @@
 // RESPONSIBILITY: Define or render the table structure for the components feature. It does not own backend persistence or cross-feature business logic.
 import { displayValue } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/utils/ManagerAccountsDailySettlementDisplayValue';
 
-import { useMemo, useState } from 'react';
-import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
-import type { ManagerAccountsDailySettlementNativeTableProps, NativeCellParams, NativeColumn, ManagerAccountsDailySettlementSortDirection } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/types/ManagerAccountsDailySettlementComponentTypes';
-export type { NativeCellParams, NativeColumn };
+import type { ManagerAccountsDailySettlementNativeTableProps,ManagerAccountsDailySettlementSortDirection,NativeCellParams,NativeColumn } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/types/ManagerAccountsDailySettlementComponentTypes';
+import { ArrowDown,ArrowUp,ArrowUpDown } from 'lucide-react';
+import { useMemo,useState } from 'react';
+export type { NativeCellParams,NativeColumn };
 
 
 

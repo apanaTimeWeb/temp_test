@@ -2,10 +2,10 @@
  * Module-local MSW lifecycle for the dashboard_reports standalone harness.
  * The __harness__ probe is test-only and is not a backend or feature API route.
  */
-import { delay, http, HttpResponse, type RequestHandler } from 'msw';
+import { delay,http,HttpResponse,type RequestHandler } from 'msw';
 import { setupWorker } from 'msw/browser';
-import { MANAGER_DASHBOARD_REPORTS_SCENARIOS as MODULE_SCENARIOS, type DashboardReportsScenario as HarnessScenario } from '../../mocks/scenarios/manager_dashboard_reports.scenarios';
 import { managerReportsHandlers as MODULE_HANDLERS_SOURCE } from '../../mocks/manager_dashboard_reports_handlers/ManagerDashboardReportsHandlers';
+import { MANAGER_DASHBOARD_REPORTS_SCENARIOS as MODULE_SCENARIOS,type DashboardReportsScenario as HarnessScenario } from '../../mocks/scenarios/manager_dashboard_reports.scenarios';
 // This list contains only module-owned, source-backed business handlers; no API routes are inferred here.
 const MODULE_HANDLERS: RequestHandler[] = [...MODULE_HANDLERS_SOURCE];
 

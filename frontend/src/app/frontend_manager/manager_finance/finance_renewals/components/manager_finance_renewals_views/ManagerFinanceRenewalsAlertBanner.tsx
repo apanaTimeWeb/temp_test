@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { BellRing, MessageSquare, Clock, UserX, AlertTriangle, ShieldAlert } from 'lucide-react';
+import { BellRing,Clock,MessageSquare,UserX } from 'lucide-react';
 
 export interface ManagerFinanceRenewalsAlertBannerProps {
   expiringCount: number;

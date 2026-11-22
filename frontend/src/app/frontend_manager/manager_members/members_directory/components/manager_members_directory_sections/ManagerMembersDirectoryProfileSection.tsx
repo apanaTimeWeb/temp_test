@@ -1,29 +1,38 @@
 'use client';
 // RESPONSIBILITY: Render the members directory profile section section of the components feature. It does not own backend persistence or cross-feature business logic.
-import { useState } from 'react';
+import { useLocale,useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 import {
-  Award, CheckCircle, Clock, ExternalLink, FileText, GraduationCap,
-  Mail, MapPin, Pencil, Phone, Search, ShieldCheck, Users, ArrowLeft, MessageSquare, MessageCircle, PhoneCall, AlertTriangle, X,
-  IndianRupee, PauseCircle, PlayCircle
+AlertTriangle,
+ArrowLeft,
+Award,CheckCircle,Clock,ExternalLink,FileText,GraduationCap,
+IndianRupee,
+Mail,MapPin,
+MessageCircle,
+PauseCircle,
+Pencil,Phone,
+PhoneCall,
+PlayCircle,
+Search,ShieldCheck,Users,
+X
 } from 'lucide-react';
 
-import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
-import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
+import { ManagerMembersDirectoryDocLightbox } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryDocLightbox';
 import { ManagerMembersDirectoryEditModal } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryEditModal';
 import { ManagerMembersDirectoryExtendedCards } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryExtendedCards';
-import { ManagerMembersDirectoryDocLightbox } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryDocLightbox';
-import {
-  ManagerMembersDirectoryGraduateAlumniModal,
-  type ManagerGraduateAlumniDetails,
-} from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryGraduateAlumniModal';
 import { ManagerMembersDirectoryFreezeModal } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryFreezeModal';
-import { graduateMemberToAlumni } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryGraduateAlumni';
-import type { ManagerMembersDirectoryRecord, ManagerMembersDirectoryLeaveDetails } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
+import {
+ManagerMembersDirectoryGraduateAlumniModal,
+type ManagerGraduateAlumniDetails,
+} from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryGraduateAlumniModal';
 import type { ManagerMembersDirectoryProfileSectionProps } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryComponentTypes';
+import type { ManagerMembersDirectoryLeaveDetails,ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
+import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
+import { graduateMemberToAlumni } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryGraduateAlumni';
+import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
 export type { ManagerMembersDirectoryProfileSectionProps };
 
 export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchChange, member, onUpdateMember, initialEdit, onBack }: ManagerMembersDirectoryProfileSectionProps) {

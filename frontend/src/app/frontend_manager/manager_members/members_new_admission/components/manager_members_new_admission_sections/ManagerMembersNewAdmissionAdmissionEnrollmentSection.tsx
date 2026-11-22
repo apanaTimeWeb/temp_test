@@ -1,16 +1,16 @@
 'use client';
 // RESPONSIBILITY: Render the members new admission admission enrollment section with multi-shift support.
-import { useTranslations } from 'next-intl';
-import { FileText, Clock, Check, IndianRupee } from 'lucide-react';
-import { useState, useEffect, useMemo } from 'react';
-import { SearchableCombobox } from '@/components/ui/combobox/SearchableCombobox';
 import {
-  MANAGER_ADMISSION_FLOOR_OPTIONS,
-  MANAGER_ADMISSION_SEAT_OPTIONS,
-  MANAGER_ADMISSION_LOCKER_OPTIONS,
+MANAGER_ADMISSION_FLOOR_OPTIONS,
+MANAGER_ADMISSION_LOCKER_OPTIONS,
+MANAGER_ADMISSION_SEAT_OPTIONS,
 } from '@/app/frontend_manager/manager_members/members_new_admission/config/manager_members_new_admission_options';
 import type { ManagerMembersNewAdmissionAdmissionEnrollmentSectionProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
-import { getLibraryPricingConfig, type LibraryPricingConfig } from '@/lib/pricing/libraryPricingEngine';
+import { SearchableCombobox } from '@/components/ui/combobox/SearchableCombobox';
+import { getLibraryPricingConfig,type LibraryPricingConfig } from '@/lib/pricing/libraryPricingEngine';
+import { Check,Clock,FileText,IndianRupee } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect,useMemo,useState } from 'react';
 
 export type { ManagerMembersNewAdmissionAdmissionEnrollmentSectionProps };
 

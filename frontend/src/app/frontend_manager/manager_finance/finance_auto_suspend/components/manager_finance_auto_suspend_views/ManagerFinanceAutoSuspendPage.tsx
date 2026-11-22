@@ -1,15 +1,15 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { useState, useMemo } from 'react';
-import { toast } from 'sonner';
-import { MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIG, MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/hooks/ManagerFinanceAutoSuspendDemoRepository';
-import type { ManagerFinanceAutoSuspendConfig as Config, ManagerFinanceAutoSuspendSuspendedStudent as SuspendedStudent } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendTypes';
-import { Settings, Ban, RotateCcw, UserCheck, ShieldAlert, Search, X, Download, Printer, QrCode } from 'lucide-react';
+import { MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIG,MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/hooks/ManagerFinanceAutoSuspendDemoRepository';
 import type { ManagerFinanceAutoSuspendRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendComponentTypes';
-import ManagerFinanceAutoSuspendTable, { type SuspendSortField } from './ManagerFinanceAutoSuspendTable';
-import ManagerFinanceAutoSuspendWhatsAppModal from './ManagerFinanceAutoSuspendWhatsAppModal';
+import type { ManagerFinanceAutoSuspendConfig as Config,ManagerFinanceAutoSuspendSuspendedStudent as SuspendedStudent } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendTypes';
+import { Ban,Download,Printer,QrCode,RotateCcw,Search,Settings,ShieldAlert,UserCheck,X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
 import ManagerFinanceAutoSuspendKioskModal from './ManagerFinanceAutoSuspendKioskModal';
+import ManagerFinanceAutoSuspendTable,{ type SuspendSortField } from './ManagerFinanceAutoSuspendTable';
+import ManagerFinanceAutoSuspendWhatsAppModal from './ManagerFinanceAutoSuspendWhatsAppModal';
 
 export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanceAutoSuspendRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_auto_suspend.ui');

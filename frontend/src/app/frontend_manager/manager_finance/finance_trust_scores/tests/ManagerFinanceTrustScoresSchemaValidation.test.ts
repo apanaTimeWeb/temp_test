@@ -1,8 +1,8 @@
-import { describe, it, expect } from 'vitest';
 import {
-  managerTrustScoreStudentSchema,
-  managerTrustScoreResponseSchema,
+managerTrustScoreResponseSchema,
+managerTrustScoreStudentSchema,
 } from '@/app/frontend_manager/manager_finance/finance_trust_scores/schemas/ManagerFinanceTrustScoresSchema';
+import { describe,expect,it } from 'vitest';
 
 describe('ManagerFinanceTrustScoresSchema validation', () => {
   it('validates a valid student trust score record', () => {

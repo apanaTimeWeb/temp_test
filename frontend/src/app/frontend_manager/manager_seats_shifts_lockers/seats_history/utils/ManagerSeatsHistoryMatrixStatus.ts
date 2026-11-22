@@ -1,4 +1,4 @@
-import type { LockerCellStatus, SeatStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryTypes';
+import type { LockerCellStatus,SeatStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryTypes';
 
 function normalizedStatus(value: unknown): string {
   return typeof value === 'string' ? value.trim().toLowerCase() : '';

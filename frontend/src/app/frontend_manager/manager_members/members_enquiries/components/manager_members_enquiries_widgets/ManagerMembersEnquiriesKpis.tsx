@@ -1,5 +1,5 @@
 'use client';
-import { Users, UserPlus, GitBranch, GraduationCap } from 'lucide-react';
+import { GitBranch,GraduationCap,UserPlus,Users } from 'lucide-react';
 
 interface ManagerMembersEnquiriesKpisProps {
   stats: {

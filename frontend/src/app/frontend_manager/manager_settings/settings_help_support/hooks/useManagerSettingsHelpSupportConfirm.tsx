@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { PendingConfirmation } from '@/app/frontend_manager/manager_settings/settings_help_support/types/ManagerSettingsHelpSupportComponentTypes';
+import { useCallback,useEffect,useId,useRef,useState } from 'react';
 
 
 

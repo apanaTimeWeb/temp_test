@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { Megaphone, Calendar, AlertCircle, Sparkles, Wrench, Layers } from 'lucide-react';
+import { AlertCircle,Calendar,Layers,Megaphone,Sparkles,Wrench } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { formatManagerHelpSupportCalendarDate } from '../../utils/ManagerSettingsHelpSupportDateFormatting';
 

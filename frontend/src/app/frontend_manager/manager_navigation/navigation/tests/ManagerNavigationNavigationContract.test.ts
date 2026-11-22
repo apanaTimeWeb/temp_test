@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { MANAGER_NAVIGATION_HREFS, MANAGER_NAVIGATION_ITEMS } from '@/app/frontend_manager/manager_navigation/navigation/constants/ManagerNavigationNavigationConstants';
+import { MANAGER_NAVIGATION_HREFS,MANAGER_NAVIGATION_ITEMS } from '@/app/frontend_manager/manager_navigation/navigation/constants/ManagerNavigationNavigationConstants';
+import { describe,expect,it } from 'vitest';
 
 describe('manager navigation route contract', () => {
   it('keeps every configured primary navigation destination on the canonical frontend_manager route', () => {

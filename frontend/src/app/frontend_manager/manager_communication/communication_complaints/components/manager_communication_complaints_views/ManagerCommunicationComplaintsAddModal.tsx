@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { toast } from 'sonner';
-import { X, MessageSquarePlus, AlertCircle, Armchair, MapPin } from 'lucide-react';
 import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
-import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
-import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
 import type { ManagerCommunicationComplaintsComplaint } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
+import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
+import { SearchableCombobox,type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
+import { Armchair,MessageSquarePlus,X } from 'lucide-react';
+import { useMemo,useState } from 'react';
+import { toast } from 'sonner';
 
 export interface ManagerCommunicationComplaintsAddModalProps {
   isOpen: boolean;

@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { X, RefreshCw, CheckCircle, Calendar, CreditCard, User, Sparkles } from 'lucide-react';
 import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import type { MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS } from '@/app/frontend_manager/manager_finance/finance_subscriptions/hooks/ManagerFinanceSubscriptionsDemoRepository';
+import { Calendar,RefreshCw,Sparkles,User,X } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
 
 export type SubscriptionRecord = (typeof MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS)[0];
 

@@ -1,12 +1,12 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { fetchManagerAlumni,fetchManagerStudentById } from '@/app/frontend_manager/manager_members/members_alumni/api/manager_members_alumni.api';
 import { apiFetch } from '@/lib/api';
-import { fetchManagerAlumni, fetchManagerStudentById } from '@/app/frontend_manager/manager_members/members_alumni/api/manager_members_alumni.api';
+import { beforeEach,describe,expect,it,vi } from 'vitest';
 
 vi.mock('@/lib/api', () => ({ apiFetch: vi.fn() }));
 const apiFetchMock: any = vi.mocked(apiFetch);
 const studentEnvelopeData = {"id": "student-1", "smartId": "SMART-001", "name": "Test Student", "phone": "9876543210", "shift": "Morning", "seat": "S-01", "status": "Active", "plan": "Monthly", "dueMinor": 0, "currency": "INR", "joined": "2026-10-01"} as const;
 
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync,readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const moduleRoot = [

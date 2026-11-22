@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { Clock, X, AlertCircle } from 'lucide-react';
+import { AlertCircle,Clock,X } from 'lucide-react';
 
 export type ManagerPromisesTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
 

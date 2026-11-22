@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { CheckCircle2, ShieldCheck, X } from 'lucide-react';
 import type { ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
+import { CheckCircle2,ShieldCheck,X } from 'lucide-react';
+import { useEffect,useRef } from 'react';
 
 export interface ManagerAssetsRegisterConfirmModalProps {
   isOpen: boolean;

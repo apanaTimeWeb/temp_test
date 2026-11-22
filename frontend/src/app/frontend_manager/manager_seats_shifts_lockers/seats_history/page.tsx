@@ -1,6 +1,6 @@
 import { ManagerSeatsHistoryMain } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/components/ManagerSeatsHistoryMain';
-import { parseManagerSeatHistoryView, type ManagerSeatsHistoryMainProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryMainTypes';
 import type { ManagerSeatsHistoryPageProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryComponentTypes';
+import { parseManagerSeatHistoryView,type ManagerSeatsHistoryMainProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryMainTypes';
 
 
 

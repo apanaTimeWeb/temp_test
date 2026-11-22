@@ -1,24 +1,24 @@
 'use client';
 
-import { format, parseISO, isValid } from 'date-fns';
-import { enUS, hi } from 'date-fns/locale';
-import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useMemo, useState } from 'react';
-import { Search, Download, X, History, RotateCcw, Calendar, Armchair, ShieldAlert, Filter } from 'lucide-react';
+import { ButtonLoader,LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { format,isValid,parseISO } from 'date-fns';
+import { enUS,hi } from 'date-fns/locale';
+import { Armchair,Calendar,Download,History,RotateCcw,Search,ShieldAlert,X } from 'lucide-react';
+import { useLocale,useTranslations } from 'next-intl';
+import { useEffect,useMemo,useState } from 'react';
 import { toast } from 'sonner';
-import { LibraryLoader, ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
+import { ManagerSeatsHistoryAuditModal } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/components/manager_seats_history_dialogs/ManagerSeatsHistoryAuditModal';
+import { ManagerSeatsHistoryEmptyState } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/components/manager_seats_history_empty_states/ManagerSeatsHistoryEmptyState';
+import type {
+ManagerSeatsHistoryNativeColumn as ColDef,
+ManagerSeatsHistoryNativeCellParams as ICellRendererParams,
+} from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/components/manager_seats_history_table_parts/ManagerSeatsHistoryNativeTable';
 import { ManagerSeatsHistoryNativeTable } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/components/manager_seats_history_table_parts/ManagerSeatsHistoryNativeTable';
-import { sanitizeManagerSeatHistoryCsvCell } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/utils/ManagerSeatsHistoryCsv';
+import { MANAGER_SEATS_HISTORY_HISTORY_REASON_CLASSES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/constants/ManagerSeatsHistoryConstants';
 import { useManagerSeatsHistory } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/hooks/useManagerSeatsHistoryTables';
 import type { ManagerSeatsHistoryRow } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryTypes';
-import { MANAGER_SEATS_HISTORY_HISTORY_REASON_CLASSES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/constants/ManagerSeatsHistoryConstants';
-import type {
-  ManagerSeatsHistoryNativeColumn as ColDef,
-  ManagerSeatsHistoryNativeCellParams as ICellRendererParams,
-} from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/components/manager_seats_history_table_parts/ManagerSeatsHistoryNativeTable';
-import { ManagerSeatsHistoryEmptyState } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/components/manager_seats_history_empty_states/ManagerSeatsHistoryEmptyState';
-import { ManagerSeatsHistoryAuditModal } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/components/manager_seats_history_dialogs/ManagerSeatsHistoryAuditModal';
+import { sanitizeManagerSeatHistoryCsvCell } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/utils/ManagerSeatsHistoryCsv';
 
 // RESPONSIBILITY: Renders read-only seat history filters, pagination and table using module-owned Query server state.
 export function ManagerSeatsHistoryClient() {

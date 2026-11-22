@@ -1,7 +1,7 @@
 'use client';
 
+import { Calendar,X } from 'lucide-react';
 import React from 'react';
-import { Calendar, X, Clock } from 'lucide-react';
 
 export type ManagerAbsenteeTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
 

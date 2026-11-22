@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
+import { AlertTriangle,Clock,UserCheck,Users,UserX } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Users, UserCheck, UserX, Clock, AlertTriangle } from 'lucide-react';
 import type { Student } from '../../types/ManagerAttendanceDailyComponentTypes';
 
 interface ManagerAttendanceDailyKpisProps {

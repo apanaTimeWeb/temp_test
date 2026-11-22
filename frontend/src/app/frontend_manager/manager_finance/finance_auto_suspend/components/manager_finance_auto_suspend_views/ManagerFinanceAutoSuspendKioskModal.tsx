@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
-import { ShieldAlert, X, QrCode, Volume2, CheckCircle2, Lock, Unlock, AlertOctagon } from 'lucide-react';
 import type { ManagerFinanceAutoSuspendSuspendedStudent as SuspendedStudent } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendTypes';
+import { AlertOctagon,CheckCircle2,Lock,QrCode,Unlock,Volume2,X } from 'lucide-react';
+import { useState } from 'react';
 
 export interface ManagerFinanceAutoSuspendKioskModalProps {
   isOpen: boolean;

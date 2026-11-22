@@ -1,6 +1,5 @@
 'use client';
 // RESPONSIBILITY: Render the HALF-YEARLY plan back ID card — Signature Edition with magnetic stripe, holo patch, tier badge, signature strip, and rules/contacts.
-import React from 'react';
 import type { IdCardData } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorComponentTypes';
 
 export interface ManagerMembersIdCardGeneratorStudentIdCardHalfYearlyBackProps {

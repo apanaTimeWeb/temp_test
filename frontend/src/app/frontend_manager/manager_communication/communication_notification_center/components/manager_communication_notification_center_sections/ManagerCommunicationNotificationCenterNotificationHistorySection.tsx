@@ -1,30 +1,29 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { useTranslations } from 'next-intl';
 import {
-  Mail,
-  MessageSquare,
-  Smartphone,
-  Search,
-  X,
-  Download,
-  Printer,
-  CheckCheck,
-  AlertCircle,
-  Clock,
-  Filter,
-  Eye,
-  RotateCcw,
-  Copy,
-  Send,
-  Sparkles,
+AlertCircle,
+CheckCheck,
+Clock,
+Copy,
+Download,
+Eye,
+Filter,
+Mail,
+MessageSquare,
+Printer,
+RotateCcw,
+Search,
+Send,
+Smartphone,
+X
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo,useState } from 'react';
 import { toast } from 'sonner';
 
-import ManagerCommunicationNotificationCenterNativeTable, {
-  type NativeColumn,
-  type NativeCellParams,
+import ManagerCommunicationNotificationCenterNativeTable,{
+type NativeCellParams,
+type NativeColumn,
 } from '@/app/frontend_manager/manager_communication/communication_notification_center/components/manager_communication_notification_center_table_parts/ManagerCommunicationNotificationCenterNativeTable';
 import { MANAGER_COMMUNICATION_SAMPLE_NOTIFICATION_HISTORY } from '@/app/frontend_manager/manager_communication/communication_notification_center/hooks/ManagerCommunicationNotificationCenterDemoRepository';
 import type { ManagerCommunicationNotificationCenterNotificationHistoryRow } from '@/app/frontend_manager/manager_communication/communication_notification_center/mocks/manager_communication_notification_center_fixtures/ManagerCommunicationNotificationCenterOperationalSampleFixtures';

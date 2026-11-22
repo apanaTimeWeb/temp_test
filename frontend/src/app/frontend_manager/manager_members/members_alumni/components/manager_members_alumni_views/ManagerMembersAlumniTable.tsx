@@ -1,27 +1,27 @@
 'use client';
-import {
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  Award,
-  AlertTriangle,
-  Briefcase,
-  Calendar,
-  ChevronLeft,
-  ChevronRight,
-  Clock,
-  ExternalLink,
-  GraduationCap,
-  CheckCircle2,
-  Phone,
-  Quote,
-  Search,
-  ShieldCheck,
-  Trash2,
-  X,
-} from 'lucide-react';
 import type { MembersAlumniRow } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniComponentTypes';
 import { getDepositSettlementFinanceUrl } from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniDepositSettlement';
+import {
+AlertTriangle,
+ArrowDown,
+ArrowUp,
+ArrowUpDown,
+Award,
+Briefcase,
+Calendar,
+CheckCircle2,
+ChevronLeft,
+ChevronRight,
+Clock,
+ExternalLink,
+GraduationCap,
+Phone,
+Quote,
+Search,
+ShieldCheck,
+Trash2,
+X,
+} from 'lucide-react';
 
 export type AlumniSortField = 'id' | 'name' | 'phone' | 'leftDate' | 'duration' | 'exam' | 'currentStatus';
 
