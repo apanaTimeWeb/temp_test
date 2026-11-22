@@ -3,7 +3,8 @@
 import SuperadminAuditLogsOverviewSemanticTable, { type SemanticColumnDef, type SemanticCellParams } from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/components/SuperadminAuditLogsOverviewSemanticTable';
 import { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import Link from 'next/link';
-import { Download, ShieldCheck, ScrollText, AlertCircle, ArrowUpRight } from 'lucide-react';
+import { Download, ShieldCheck, ScrollText, AlertCircle, ArrowUpRight, Search, X, RotateCcw, RotateCw, Printer, Eye } from 'lucide-react';
+import { toast } from 'sonner';
 import { buildSuperadminAuditLogsSampleCsv } from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/utils/SuperadminAuditLogsOverviewExportUtilities';
 import SuperadminAuditLogsOverviewActionBadge from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/components/SuperadminAuditLogsOverviewActionBadge';
 import SuperadminAuditLogsOverviewDetailDrawer from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/components/SuperadminAuditLogsOverviewDetailDrawer';
@@ -119,6 +120,24 @@ export default function SuperadminAuditLogsOverviewPageClient() {
     },
     { headerName: t("COPY.TABLE_COLUMN_IP_ADDRESS"), field: 'ip', flex: 0.9, minWidth: 120,
       cellClass: () => 'font-mono text-xs text-indigo-300/80' },
+    {
+      headerName: 'Details',
+      field: 'id',
+      flex: 0.8,
+      minWidth: 90,
+      sortable: false,
+      cellRenderer: (p: SemanticCellParams<Log>) => (
+        <button
+          type="button"
+          onClick={() => p.data && setSelected(p.data)}
+          className="inline-flex items-center gap-1 rounded-lg border border-indigo-500/30 bg-indigo-500/15 px-2.5 py-1 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/25 cursor-pointer transition-all"
+          title="View audit event details"
+        >
+          <Eye size={12} className="text-indigo-400" />
+          <span>View</span>
+        </button>
+      ),
+    },
   ], [t]);
 
   const stats = useMemo(() => {
