@@ -2355,7 +2355,10 @@
     "DISCARD_TITLE": "Discard Changes?",
     "DISCARD_MESSAGE": "You have unsaved changes. Are you sure you want to discard them?",
     "CONTINUE_EDITING": "Continue Editing",
-    "DISCARD_BUTTON": "Discard"
+    "DISCARD_BUTTON": "Discard",
+    "SMS": "SMS",
+    "SMS_TITLE": "SMS provider integration is not configured",
+    "SMS_UNAVAILABLE": "SMS delivery requires a provider integration; no messages were sent."
   },
   "ADMIN_PLANS": {
     "BREADCRUMB": "Smart Library Management › Admin › Plans",

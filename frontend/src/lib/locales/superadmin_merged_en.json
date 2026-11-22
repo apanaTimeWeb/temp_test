@@ -2705,7 +2705,9 @@
       "CONFIRM_DIALOG_CONTINUE": "Continue",
       "WORKFLOW_NAVIGATION": "Workflow navigation",
       "WORKFLOW_SETTINGS_LIBRARY_CONFIGURATION": "Settings Library Configuration",
-      "TAB_PERMISSIONS": "Permissions & Security"
+      "TAB_PERMISSIONS": "Permissions & Security",
+      "SMS_GATEWAY_API_OTP_AND_ALERTS": "SMS Gateway API (OTP & Alerts)",
+      "SMS_GATEWAY_API_KEY": "SMS Gateway API Key"
     }
   },
   "SUPERADMIN_PROFILE": {

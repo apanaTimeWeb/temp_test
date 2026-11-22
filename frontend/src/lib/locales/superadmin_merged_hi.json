@@ -2705,7 +2705,9 @@
       "CONFIRM_DIALOG_CONTINUE": "जारी रखें",
       "WORKFLOW_NAVIGATION": "कार्यप्रवाह नेविगेशन",
       "WORKFLOW_SETTINGS_LIBRARY_CONFIGURATION": "लाइब्रेरी कॉन्फ़िगरेशन",
-      "TAB_PERMISSIONS": "अनुमतियाँ और सुरक्षा"
+      "TAB_PERMISSIONS": "अनुमतियाँ और सुरक्षा",
+      "SMS_GATEWAY_API_OTP_AND_ALERTS": "SMS Gateway API (OTP & अलर्ट)",
+      "SMS_GATEWAY_API_KEY": "SMS Gateway API Key"
     }
   },
   "SUPERADMIN_PROFILE": {
