@@ -1,7 +1,7 @@
-import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
-// frontend/src/app/frontend_superadmin/superadmin_data/data_restore_operations/components/SuperadminDataRestoreOperationsSnapshotsTable.tsx
 'use client';
 
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
+// frontend/src/app/frontend_superadmin/superadmin_data/data_restore_operations/components/SuperadminDataRestoreOperationsSnapshotsTable.tsx
 /**
  * @file SuperadminDataRestoreOperationsSnapshotsTable.tsx
  * @description Catalog table of previous backup snapshots with verification badges,

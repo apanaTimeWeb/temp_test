@@ -1,9 +1,9 @@
+'use client';
+
 import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 // components/SuperadminIntegrationsOverviewLogsPanel.tsx
 // RESPONSIBILITY: Render searchable live integration logs and inspect HTTP request/response payloads.
 // DATA FLOW: Logs array -> SuperadminIntegrationsOverviewLogsPanel -> Inspector Modal.
-'use client';
-
 import { Activity, Copy, Eye, Filter, Search, X } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import type { IntegrationLogItem } from '../types/superadmin_integrations_overview.types';

@@ -1,7 +1,7 @@
-import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
-// frontend/src/app/frontend_superadmin/superadmin_data/data_import_migration/components/SuperadminDataImportMigrationHistoryTable.tsx
 'use client';
 
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
+// frontend/src/app/frontend_superadmin/superadmin_data/data_import_migration/components/SuperadminDataImportMigrationHistoryTable.tsx
 /**
  * @file SuperadminDataImportMigrationHistoryTable.tsx
  * @description Migration Batches History, Error CSV Download, and Instant Rollback Trigger (Feature 11).

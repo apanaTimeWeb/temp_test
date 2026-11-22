@@ -1,7 +1,7 @@
-import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
-// frontend/src/app/frontend_superadmin/superadmin_data/data_export_management/components/SuperadminDataExportManagementJobQueueTable.tsx
 'use client';
 
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
+// frontend/src/app/frontend_superadmin/superadmin_data/data_export_management/components/SuperadminDataExportManagementJobQueueTable.tsx
 /**
  * @file SuperadminDataExportManagementJobQueueTable.tsx
  * @description Asynchronous Export Job Queue and Download Center with integrity verification.

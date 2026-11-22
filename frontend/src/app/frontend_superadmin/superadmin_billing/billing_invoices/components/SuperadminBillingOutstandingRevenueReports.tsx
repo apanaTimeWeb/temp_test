@@ -1,8 +1,7 @@
-import { useMemo } from 'react';
-import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 import { toast } from 'sonner';
 import {
   BarChart3, AlertOctagon, Send, ShieldAlert, Download, Printer,

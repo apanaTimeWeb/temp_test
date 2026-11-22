@@ -1,7 +1,7 @@
-import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
-// frontend/src/app/frontend_superadmin/superadmin_data/data_archive_retention/components/SuperadminDataArchiveRetentionRulesTable.tsx
 'use client';
 
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
+// frontend/src/app/frontend_superadmin/superadmin_data/data_archive_retention/components/SuperadminDataArchiveRetentionRulesTable.tsx
 /**
  * @file SuperadminDataArchiveRetentionRulesTable.tsx
  * @description Data Retention Rules & Automated Auto-Purge Scheduler Configuration (Feature 8).

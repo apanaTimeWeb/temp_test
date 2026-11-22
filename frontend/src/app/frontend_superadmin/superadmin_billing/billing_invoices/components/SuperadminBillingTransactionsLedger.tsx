@@ -1,6 +1,6 @@
-import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 'use client';
 
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 import React, { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import {

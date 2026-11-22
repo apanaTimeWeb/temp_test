@@ -1,5 +1,6 @@
-import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 'use client';
+
+import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 // RESPONSIBILITY: Delivery tracking table with delivery status, failure reasons, and 1-click retry with Cyber-Luxury styling.
 // FLOW: SuperadminCommunicationNotificationCenterMain -> LogsTable -> Detail drawer / Retry mutation.
 
