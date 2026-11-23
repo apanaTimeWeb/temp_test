@@ -4,10 +4,14 @@ import React, { useState } from 'react';
 import {
   Lock, KeyRound, Eye, EyeOff, Check, AlertCircle, CheckCircle2,
 } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
+import {
+  SuperadminLibrariesProfileConfigurationCard as Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from './SuperadminLibrariesProfileConfigurationCard';
 
 interface SecurityCardProps {
   tCopy: (key: string) => string;
@@ -66,18 +70,18 @@ export default function SuperadminLibrariesProfileSecurityCard({ tCopy }: Securi
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* Current Password */}
             <div className="space-y-1.5">
-              <Label htmlFor="current-password">
+              <label htmlFor="current-password" className="flex items-center gap-1.5 text-xs font-medium text-slate-300">
                 <KeyRound size={12} className="text-amber-400" />
                 {tCopy("COPY.CURRENT_PASSWORD")}<span className="text-rose-400">*</span>
-              </Label>
+              </label>
               <div className="relative">
-                <Input
+                <input
                   id="current-password"
                   type={showCurrentPassword ? 'text' : 'password'}
                   value={currentPassword}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentPassword(e.target.value)}
                   placeholder="Current master password"
-                  className="pr-10"
+                  className="w-full rounded-xl border border-slate-700/80 bg-slate-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all pr-10"
                   data-testid="superadmin_libraries_profile_configuration-current-password"
                 />
                 <button
@@ -93,18 +97,18 @@ export default function SuperadminLibrariesProfileSecurityCard({ tCopy }: Securi
 
             {/* New Password */}
             <div className="space-y-1.5">
-              <Label htmlFor="new-password">
+              <label htmlFor="new-password" className="flex items-center gap-1.5 text-xs font-medium text-slate-300">
                 <KeyRound size={12} className="text-amber-400" />
                 {tCopy("COPY.NEW_PASSWORD")}<span className="text-rose-400">*</span>
-              </Label>
+              </label>
               <div className="relative">
-                <Input
+                <input
                   id="new-password"
                   type={showNewPassword ? 'text' : 'password'}
                   value={newPassword}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPassword(e.target.value)}
                   placeholder="Minimum 8 characters"
-                  className="pr-10"
+                  className="w-full rounded-xl border border-slate-700/80 bg-slate-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all pr-10"
                   data-testid="superadmin_libraries_profile_configuration-new-password"
                 />
                 <button
@@ -120,18 +124,18 @@ export default function SuperadminLibrariesProfileSecurityCard({ tCopy }: Securi
 
             {/* Confirm Password */}
             <div className="space-y-1.5">
-              <Label htmlFor="confirm-password">
+              <label htmlFor="confirm-password" className="flex items-center gap-1.5 text-xs font-medium text-slate-300">
                 <KeyRound size={12} className="text-amber-400" />
                 {tCopy("COPY.CONFIRM_NEW_PASSWORD")}<span className="text-rose-400">*</span>
-              </Label>
+              </label>
               <div className="relative">
-                <Input
+                <input
                   id="confirm-password"
                   type={showConfirmPassword ? 'text' : 'password'}
                   value={confirmPassword}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
                   placeholder="Re-enter new password"
-                  className="pr-10"
+                  className="w-full rounded-xl border border-slate-700/80 bg-slate-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all pr-10"
                   data-testid="superadmin_libraries_profile_configuration-confirm-password"
                 />
                 <button
@@ -183,17 +187,16 @@ export default function SuperadminLibrariesProfileSecurityCard({ tCopy }: Securi
         <span className="text-xs text-slate-400 hidden sm:inline">
           Password updates take effect on subsequent logins across all sessions.
         </span>
-        <Button
+        <button
           type="button"
           id="change-password-btn"
-          variant="primary"
           onClick={handlePasswordUpdate}
           data-testid="superadmin_libraries_profile_configuration-change-password-btn"
-          className="w-full sm:w-auto"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 transition-all hover:bg-indigo-500 cursor-pointer disabled:opacity-50 w-full sm:w-auto"
         >
           <KeyRound size={15} />
           Update Master Password
-        </Button>
+        </button>
       </CardFooter>
     </Card>
   );
