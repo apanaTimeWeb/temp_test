@@ -43,7 +43,7 @@ export default function SuperadminSecurityUserSessionsSemanticTable<T extends ob
   const totalFlexibleUnits = columns.reduce((total, column) => total + (column.width === undefined ? Math.max(0, column.flex ?? 1) : 0), 0) || 1;
 
   return (
-    <div className={`${styles.responsiveRegion} overflow-x-auto ${className}`} role="region" aria-label={tCopy('COPY.TABLE_ARIA_LABEL')} tabIndex={0}>
+    <div className={`${(styles as unknown as Record<string, string>)?.responsiveRegion ?? ''} overflow-x-auto ${className}`} role="region" aria-label={tCopy('COPY.TABLE_ARIA_LABEL')} tabIndex={0}>
       {/* Search & Filter Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/80 p-3 sm:p-4 bg-slate-900/30">
         <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">

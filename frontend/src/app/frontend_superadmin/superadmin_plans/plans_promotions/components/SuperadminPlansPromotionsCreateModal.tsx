@@ -7,7 +7,7 @@ import type { SuperadminBillingPromoFormValues } from '../schemas/SuperadminPlan
 
 interface CreateModalProps {
   showModal: boolean;
-  promoDialogRef: React.RefObject<HTMLDivElement | null>;
+  promoDialogRef: React.Ref<HTMLDivElement>;
   requestClosePromo: () => void;
   handleSubmit: UseFormHandleSubmit<SuperadminBillingPromoFormValues>;
   handleSavePromo: (values: SuperadminBillingPromoFormValues) => void;

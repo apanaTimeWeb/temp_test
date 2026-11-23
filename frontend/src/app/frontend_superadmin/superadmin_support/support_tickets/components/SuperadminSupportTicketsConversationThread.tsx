@@ -6,7 +6,7 @@ import type { SuperadminSupportTicketMessage } from '../types/SuperadminSupportT
 
 interface SuperadminSupportTicketsConversationThreadProps {
   messages: SuperadminSupportTicketMessage[];
-  messagesEndRef: React.RefObject<HTMLDivElement | null>;
+  messagesEndRef: React.Ref<HTMLDivElement>;
   isInternalNote: boolean;
   setIsInternalNote: (val: boolean) => void;
   replyText: string;

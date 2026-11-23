@@ -75,7 +75,7 @@ export default function SuperadminLibrariesProfileSecurityCard({ tCopy }: Securi
                   id="current-password"
                   type={showCurrentPassword ? 'text' : 'password'}
                   value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentPassword(e.target.value)}
                   placeholder="Current master password"
                   className="pr-10"
                   data-testid="superadmin_libraries_profile_configuration-current-password"
@@ -102,7 +102,7 @@ export default function SuperadminLibrariesProfileSecurityCard({ tCopy }: Securi
                   id="new-password"
                   type={showNewPassword ? 'text' : 'password'}
                   value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPassword(e.target.value)}
                   placeholder="Minimum 8 characters"
                   className="pr-10"
                   data-testid="superadmin_libraries_profile_configuration-new-password"
@@ -129,7 +129,7 @@ export default function SuperadminLibrariesProfileSecurityCard({ tCopy }: Securi
                   id="confirm-password"
                   type={showConfirmPassword ? 'text' : 'password'}
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
                   placeholder="Re-enter new password"
                   className="pr-10"
                   data-testid="superadmin_libraries_profile_configuration-confirm-password"

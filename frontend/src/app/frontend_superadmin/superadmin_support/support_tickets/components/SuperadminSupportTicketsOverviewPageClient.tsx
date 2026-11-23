@@ -114,6 +114,8 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
   };
 
   const colDefs = useSupportTicketsColumns({ t, setSelected, showToast });
+  const openCount = useMemo(() => tickets.filter((ticket) => ticket.status === 'Open').length, [tickets]);
+  const slaBreachCount = useMemo(() => tickets.filter((ticket) => ticket.slaBreach).length, [tickets]);
 
   return (
     <div className="w-full max-w-full min-w-0 space-y-4 pb-8">
@@ -147,13 +149,18 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
         printTicketsRoster={printTicketsRoster}
       />
 
-      <SuperadminSupportTicketsOverviewKpiCards tickets={tickets} />
+      <SuperadminSupportTicketsOverviewKpiCards
+        openCount={openCount}
+        slaBreachCount={slaBreachCount}
+        avgResponse="1.8 hrs"
+        totalCount={tickets.length}
+      />
 
       <div className="rounded-2xl border border-indigo-500/20 bg-[#090d26]/80 p-4 shadow-xl">
         <SuperadminSupportTicketsOverviewSemanticTable
-          tickets={filtered}
+          rowData={filtered}
           columnDefs={colDefs}
-          onSelectTicket={setSelected}
+          onRowClick={setSelected}
         />
       </div>
     </div>

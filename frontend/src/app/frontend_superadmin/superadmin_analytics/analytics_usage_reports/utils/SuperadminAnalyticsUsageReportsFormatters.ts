@@ -20,17 +20,17 @@ export function formatStorageSize(megabytes: number): string {
 }
 
 export function generateUsageReportCsv(records: UsageReportTableRecord[]): string {
-  const headers = ['Library Code', 'Library Name', 'Plan', 'Branches', 'Active Students', 'Storage Used (MB)', 'Storage Formatted', 'API Calls Today', 'Max Daily Quota'];
+  const headers = ['Library Code', 'Library Name', 'Plan', 'Branch', 'Active Members', 'Storage Used (MB)', 'Storage Formatted', 'API Calls Today', 'Max Daily Quota'];
   const rows = records.map((r) => [
     r.libraryCode,
     `"${r.libraryName.replace(/"/g, '""')}"`,
     r.plan,
-    r.branchCount,
-    r.activeStudents,
-    r.storageUsedMb,
-    formatStorageSize(r.storageUsedMb),
-    r.apiCallsToday,
-    r.maxApiQuotaDaily,
+    `"${(r.branchName || 'Main').replace(/"/g, '""')}"`,
+    r.membersCount,
+    r.storageMb,
+    formatStorageSize(r.storageMb),
+    r.apiCalls,
+    10000,
   ]);
   return [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
 }
@@ -53,9 +53,9 @@ export function exportUsageRecordsAsCsv(records: UsageReportTableRecord[], filen
 }
 
 export function exportUsageRecordsAsExcel(records: UsageReportTableRecord[], filename = 'usage_report.xls'): void {
-  const headers = ['Library Code', 'Library Name', 'Plan', 'Branches', 'Active Students', 'Storage Used (MB)', 'Storage Formatted', 'API Calls Today', 'Max Daily Quota'];
+  const headers = ['Library Code', 'Library Name', 'Plan', 'Branch', 'Active Members', 'Storage Used (MB)', 'Storage Formatted', 'API Calls Today', 'Max Daily Quota'];
   const rows = records.map((r) => [
-    r.libraryCode, r.libraryName, r.plan, r.branchCount, r.activeStudents, r.storageUsedMb, formatStorageSize(r.storageUsedMb), r.apiCallsToday, r.maxApiQuotaDaily,
+    r.libraryCode, r.libraryName, r.plan, r.branchName || 'Main', r.membersCount, r.storageMb, formatStorageSize(r.storageMb), r.apiCalls, 10000,
   ]);
 
   const html = `

@@ -71,3 +71,33 @@ export function downloadSuperadminInvoicesExcel(
   document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
+
+/**
+ * Downloads invoices as a standard comma-separated CSV file.
+ */
+export function downloadSuperadminInvoicesCsv(
+  invoices: SuperadminBillingInvoiceSample[],
+  filename = 'superadmin_invoices_statement.csv'
+): void {
+  const headers = ['Invoice ID', 'Tenant', 'Date', 'Amount', 'Status', 'Method', 'GSTIN'];
+  const rows = invoices.map((inv) => [
+    inv.id,
+    `"${inv.tenant.replace(/"/g, '""')}"`,
+    inv.date,
+    inv.amount,
+    inv.status,
+    inv.method,
+    inv.gst,
+  ]);
+  const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
+  const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.hidden = true;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
