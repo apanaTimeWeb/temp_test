@@ -235,36 +235,17 @@ export default function SuperadminSubscriptionsOverviewActionModal({
           <div className="grid grid-cols-2 gap-2.5">
             <div>
               <label className="block font-semibold text-slate-300 mb-1">Grace Period (Days)</label>
-              <input
-                type="number"
-                min={0}
-                max={60}
-                value={gracePeriodDays}
-                onChange={(e) => setGracePeriodDays(Number(e.target.value))}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-slate-100"
-              />
+              <input type="number" min={0} max={60} value={gracePeriodDays} onChange={(e) => setGracePeriodDays(Number(e.target.value))} className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-slate-100" />
             </div>
             <div>
               <label className="block font-semibold text-slate-300 mb-1">Coupon Discount (%)</label>
-              <input
-                type="number"
-                min={0}
-                max={100}
-                value={discountPercent}
-                onChange={(e) => setDiscountPercent(Number(e.target.value))}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-slate-100"
-              />
+              <input type="number" min={0} max={100} value={discountPercent} onChange={(e) => setDiscountPercent(Number(e.target.value))} className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-slate-100" />
             </div>
           </div>
 
           {/* Auto Renewal Toggle */}
           <label className="flex items-center gap-2 p-2 rounded-xl bg-slate-900/60 border border-border/40 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={autoRenewal}
-              onChange={(e) => setAutoRenewal(e.target.checked)}
-              className="rounded text-indigo-600 h-4 w-4"
-            />
+            <input type="checkbox" checked={autoRenewal} onChange={(e) => setAutoRenewal(e.target.checked)} className="rounded text-indigo-600 h-4 w-4" />
             <div>
               <span className="font-semibold text-slate-100">Enable Auto-Renewal</span>
               <p className="text-[10px] text-slate-400">Automatically charges saved payment method on renewal date</p>
@@ -280,17 +261,10 @@ export default function SuperadminSubscriptionsOverviewActionModal({
           </div>
 
           <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-indigo-500/20">
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-xl border border-border/80 bg-card/80 px-4 py-1.5 font-semibold text-slate-300 hover:bg-slate-800"
-            >
+            <button type="button" onClick={onClose} className="rounded-xl border border-border/80 bg-card/80 px-4 py-1.5 font-semibold text-slate-300 hover:bg-slate-800">
               Cancel
             </button>
-            <button
-              type="submit"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 px-4 py-1.5 font-semibold text-white shadow-md active:scale-95"
-            >
+            <button type="submit" className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 px-4 py-1.5 font-semibold text-white shadow-md active:scale-95">
               <Check size={14} />
               <span>Apply Changes</span>
             </button>

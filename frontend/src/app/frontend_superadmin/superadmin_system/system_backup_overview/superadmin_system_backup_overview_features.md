@@ -339,10 +339,8 @@ This leaf has 71 total files, including 66 source files. The count includes the 
 - Backend aggregate, permissions, and durable mutation contracts remain blocked unless explicitly evidenced in inherited source.
 
 ## Rule Compliance Checklist
-- [x] Own route, direct refresh, local boundaries, local tests and mocks.
-- [x] Secondary navigation links to canonical route per workflow.
-- [x] No invented API contracts.
-- [ ] Host build, browser, and backend contract verification: deferred.
+- [x] Own route, direct refresh, local boundaries, local tests and mocks; secondary navigation links to canonical route.
+- [ ] No invented API contracts; host build, browser, and backend contract verification deferred.
 - [ ] Rule 0A.2: Autonomous leaf is at the canonical one-level depth under its domain container
 - [ ] Rule 1: Production components, hooks, API services, stores, schemas and utilities stay within their hard line ceilings
 - [ ] Rule 2: No cross-role business import is present
@@ -395,9 +393,7 @@ This leaf has 71 total files, including 66 source files. The count includes the 
 - [ ] Runtime Honesty: Unavailable host checks are marked DEFERRED_TO_HOST_RUNTIME, not passed
 ## Standalone Run, Mock & Test Harness
 - Use the host project's existing test runner. Local fixture/handler/scenario files are included. Host package configuration is outside this archive.
-
 ## Module Portability & Host Integration Guide
 - Merge the route folder into the existing `frontend_superadmin` App Router tree. Confirm host rewrites documented in `INTEGRATION_GUIDE.md`.
-
 ## Deliverables & Version History
 - V1: extracted the Create Backup workflow into an autonomous route in RBG 6.

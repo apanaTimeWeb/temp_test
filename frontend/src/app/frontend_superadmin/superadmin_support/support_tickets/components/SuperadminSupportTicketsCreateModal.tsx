@@ -2,10 +2,11 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Plus, Ticket, Building2, User, Mail, Phone, FileText } from 'lucide-react';
+import { X, Plus, Ticket, FileText } from 'lucide-react';
 import type { SuperadminSupportTicket, SuperadminSupportTicketCategory, SuperadminSupportTicketPriority } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
 import { SUPERADMIN_SUPPORT_TICKET_TYPES } from '@/app/frontend_superadmin/superadmin_support/support_tickets/constants/SuperadminSupportTicketsOverviewConstants';
 import { useModalScrollLock } from '@/lib/useModalScrollLock';
+import SuperadminSupportTicketsCreateContactFields from './SuperadminSupportTicketsCreateContactFields';
 
 interface SuperadminSupportTicketsCreateModalProps {
   isOpen: boolean;
@@ -145,70 +146,17 @@ export default function SuperadminSupportTicketsCreateModal({
         {/* Form Body - Scrollable Form Container */}
         <form onSubmit={handleSubmit} className="flex-1 min-h-0 flex flex-col overflow-hidden" noValidate>
           <div className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-5 space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Tenant/Library */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-                  <Building2 size={13} className="text-indigo-400" />
-                  <span>Library / Tenant Name</span>
-                  <span className="text-rose-400">*</span>
-                </label>
-                <input maxLength={100}
-                  type="text"
-                  placeholder="e.g. Apex Central Library"
-                  value={tenant}
-                  onChange={(e) => setTenant(e.target.value)}
-                  className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all ${errors.tenant ? 'border-rose-500 focus:border-rose-400' : 'border-indigo-500/30 focus:border-indigo-400'
-                    }`}
-                />
-                {errors.tenant && <p className="text-[11px] text-rose-400 mt-1">{errors.tenant}</p>}
-              </div>
-
-              {/* Contact Person */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-                  <User size={13} className="text-indigo-400" />
-                  <span>Contact Person (Optional)</span>
-                </label>
-                <input maxLength={100}
-                  type="text"
-                  placeholder="e.g. Anil Kumar (Admin)"
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
-                  className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none transition-all"
-                />
-              </div>
-
-              {/* Phone */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-                  <Phone size={13} className="text-indigo-400" />
-                  <span>Phone / WhatsApp</span>
-                </label>
-                <input maxLength={15}
-                  type="tel"
-                  placeholder="+91 98765 43210"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none transition-all"
-                />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-                  <Mail size={13} className="text-indigo-400" />
-                  <span>Email Address</span>
-                </label>
-                <input maxLength={254}
-                  type="email"
-                  placeholder="owner@library.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none transition-all"
-                />
-              </div>
-            </div>
+            <SuperadminSupportTicketsCreateContactFields
+              tenant={tenant}
+              setTenant={setTenant}
+              contact={contact}
+              setContact={setContact}
+              phone={phone}
+              setPhone={setPhone}
+              email={email}
+              setEmail={setEmail}
+              errors={errors}
+            />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Category / Ticket Type */}

@@ -1,6 +1,3 @@
-// RESPONSIBILITY: Central constants for Superadmin Notification & Communication management.
-// FLOW: Feature domain -> constants/SuperadminCommunicationNotificationCenterNotificationConstants.ts -> components/hooks/mocks.
-
 import type {
   NotificationCategory,
   NotificationChannel,

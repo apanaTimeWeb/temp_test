@@ -1,31 +1,13 @@
-// RESPONSIBILITY: Own module-local state or interaction logic for settings library configuration; it does not imply persistence beyond verified contracts.
-// FLOW: Feature component -> superadmin_settings/settings_library_configuration/hooks/useSuperadminSettingsGeneralSettingsLibraryConfigurationConfirm.ts -> local state/typed dependencies -> returned state and actions.
 "use client";
-/** Leaf-local accessible confirmation dialog hook. No backend/API behavior is inferred here. */
 import { AlertTriangle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { createElement, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
+import type { SuperadminSettingsGeneralSettingsLibraryConfigurationConfirmOptions } from '../types/SuperadminSettingsGeneralSettingsLibraryConfigurationConfirmTypes';
 
-/**
- * Defines the public SuperadminSettingsGeneralSettingsLibraryConfigurationConfirmOptions contract for this owning feature. Optionality and nullability follow the declared fields; no additional backend guarantees are implied.
- * @property title Display label for the owning feature. Declared type: string.
- * @property confirmLabel Display label for the owning feature. Declared type: string.
- * @property cancelLabel Boolean state used by the owning feature. Declared type: string.
- * @property destructive Value defined by the existing feature-local contract. Declared type: boolean.
- */
-export type SuperadminSettingsGeneralSettingsLibraryConfigurationConfirmOptions = {
-  title?: string;
-  confirmLabel?: string;
-  cancelLabel?: string;
-  destructive?: boolean;
-  description?: string;
-  isDestructive?: boolean;
-};
+export type { SuperadminSettingsGeneralSettingsLibraryConfigurationConfirmOptions };
 
-/** Uses the native modal-dialog focus/keyboard model with design-system semantic tokens. 
- * @returns The module-owned state/actions or utility result consumed by the caller.
- */
+/** Uses the native modal-dialog focus/keyboard model with design-system semantic tokens. */
 export function useSuperadminSettingsGeneralSettingsLibraryConfigurationConfirm() {
   const t = useTranslations('SUPERADMIN_SYSTEM');
   return useCallback((message: string, options: SuperadminSettingsGeneralSettingsLibraryConfigurationConfirmOptions = {}): Promise<boolean> =>
@@ -100,7 +82,6 @@ export function useSuperadminSettingsGeneralSettingsLibraryConfigurationConfirm(
         dialog.dataset.superadminConfirmFallback = 'true';
         dialog.setAttribute('role', 'dialog');
         dialog.setAttribute('tabindex', '-1');
-        // Emulate the native modal overlay when showModal() is unavailable.
         dialog.className = 'sa-confirm-dialog-fallback fixed inset-0 m-0 h-screen w-screen max-w-none max-h-none flex items-center justify-center bg-overlay text-primary p-0';
         for (const child of Array.from(document.body.children)) {
           if (child === dialog || !(child instanceof HTMLElement)) continue;
@@ -127,7 +108,7 @@ export function useSuperadminSettingsGeneralSettingsLibraryConfigurationConfirm(
       const finish = (approved: boolean) => {
         if (settled) return;
         settled = true;
-        try { if (dialog.open && typeof dialog.close === 'function') dialog.close(); } catch { /* DOM cleanup remains authoritative. */ }
+        try { if (dialog.open && typeof dialog.close === 'function') dialog.close(); } catch { /* DOM cleanup */ }
         restoreAccessibleFallback();
         warningRoot?.unmount();
         dialog.remove();

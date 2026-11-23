@@ -11,6 +11,7 @@ import {
 } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/constants/SuperadminBillingCanonicalTenants';
 import SuperadminBillingCreateInvoiceAddressSection from './SuperadminBillingCreateInvoiceAddressSection';
 import SuperadminBillingCreateInvoiceTaxSection from './SuperadminBillingCreateInvoiceTaxSection';
+import SuperadminBillingCreateInvoicePaymentControls from './SuperadminBillingCreateInvoicePaymentControls';
 
 export { CANONICAL_LIBRARY_TENANTS, type LibraryTenantOption };
 
@@ -245,44 +246,14 @@ export default function SuperadminBillingCreateInvoiceModal({
             totalAmount={totalAmount}
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-              <label className="block font-semibold text-secondary mb-1">Payment Method</label>
-              <select
-                value={method}
-                onChange={(e) => setMethod(e.target.value)}
-                className="w-full rounded-xl border border-border bg-input px-3 py-2 text-primary cursor-pointer"
-              >
-                <option value="UPI">UPI (GooglePay / PhonePe)</option>
-                <option value="Card">Credit / Debit Card</option>
-                <option value="NetBanking">Net Banking</option>
-                <option value="Bank Transfer">Direct NEFT/RTGS</option>
-              </select>
-            </div>
-            <div>
-              <label className="block font-semibold text-secondary mb-1">Invoice Status</label>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value as 'Paid' | 'Pending' | 'Overdue')}
-                className="w-full rounded-xl border border-border bg-input px-3 py-2 text-primary cursor-pointer"
-              >
-                <option value="Paid">Paid</option>
-                <option value="Pending">Pending Verification</option>
-                <option value="Overdue">Overdue</option>
-              </select>
-            </div>
-            <div>
-              <label className="block font-semibold text-secondary mb-1">Billing Cadence</label>
-              <select
-                value={billingCycle}
-                onChange={(e) => setBillingCycle(e.target.value as 'Monthly' | 'Annual')}
-                className="w-full rounded-xl border border-border bg-input px-3 py-2 text-primary cursor-pointer"
-              >
-                <option value="Monthly">Monthly</option>
-                <option value="Annual">Annual Pre-paid</option>
-              </select>
-            </div>
-          </div>
+          <SuperadminBillingCreateInvoicePaymentControls
+            method={method}
+            setMethod={setMethod}
+            status={status}
+            setStatus={setStatus}
+            billingCycle={billingCycle}
+            setBillingCycle={setBillingCycle}
+          />
 
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
             <button
