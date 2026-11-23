@@ -2,7 +2,7 @@
 
 // RESPONSIBILITY: Render the route loading state for superadmin_data/data_import_migration; it does not fetch or mutate business data.
 // FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
-import { SuperadminPageLoader } from '@/app/frontend_superadmin/components/SuperadminLoader';
+import { SuperadminPageLoader } from '@/components/ui/loader/SuperadminLoader';
 
 export default function ModuleLoading() {
   return (

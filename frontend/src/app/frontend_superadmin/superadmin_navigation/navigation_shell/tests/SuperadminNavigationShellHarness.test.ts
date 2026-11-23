@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { SUPERADMIN_NAVIGATION_SHELL_ROUTES as __SUPERADMIN_NAVIGATION_SHELL_ROUTES } from "@/app/frontend_superadmin/superadmin_navigation/navigation_shell/config/superadmin_navigation_shell.url_config";
 import { SUPERADMIN_NAVIGATION_SHELL_QUERY_KEYS } from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/api/superadmin_navigation_shell.query_keys';
 import { SUPERADMIN_NAVIGATION_NAV_ITEMS } from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/constants/SuperadminNavigationShellItems';
+import { SUPERADMIN_NAVIGATION_SHELL_CANONICAL_SCENARIOS } from '../mocks/scenarios/superadmin_navigation_shell.scenarios';
 
 describe('navigation_shell standalone contract', () => {
   it('keeps the public route inside its owning domain', () => {
@@ -29,5 +30,10 @@ describe('navigation_shell standalone contract', () => {
     const header = readFileSync(resolve(__dirname, '../components/SuperadminNavigationShellHeader.tsx'), 'utf8');
     expect(header).toContain('logoutTriggerRef.current =');
     expect(header).toContain('setShowLogout(true);');
+  });
+
+  it('defines canonical eight-state navigation shell scenario contracts', () => {
+    expect(SUPERADMIN_NAVIGATION_SHELL_CANONICAL_SCENARIOS.length).toBe(8);
+    expect(SUPERADMIN_NAVIGATION_SHELL_CANONICAL_SCENARIOS[0].id).toBe('ACTIVE');
   });
 });

@@ -1,6 +1,8 @@
 // RESPONSIBILITY: Verify all 16 library modules are defined with complete contract properties.
 import { describe, it, expect } from 'vitest';
 import { ALL_16_LIBRARY_MODULES } from '@/app/frontend_superadmin/superadmin_features/features_overview/constants/superadmin_features_overview.constants';
+import { fetchPlatformModuleStates, fetchTenantOverrides } from '../api/superadmin_features_overview.api';
+import { SUPERADMIN_FEATURES_URL_CONFIG } from '../config/superadmin_features_overview.url_config';
 
 describe('Superadmin Features Overview - 16 Library Modules Registry', () => {
   it('should contain exactly 16 modules as per specification', () => {
@@ -79,5 +81,16 @@ describe('Superadmin Features Overview - 16 Library Modules Registry', () => {
       expect(validCategories).toContain(mod.category);
       expect(validTiers).toContain(mod.minPlanTier);
     }
+  });
+
+  it('exposes features api service and endpoint url configurations', async () => {
+    const states = await fetchPlatformModuleStates();
+    expect(states.success).toBe(true);
+    expect(states.data.length).toBeGreaterThan(0);
+
+    const overrides = await fetchTenantOverrides();
+    expect(overrides.success).toBe(true);
+
+    expect(SUPERADMIN_FEATURES_URL_CONFIG.PAGE_ROUTE).toBe('/superadmin/superadmin_features/features_overview');
   });
 });
