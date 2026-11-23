@@ -87,7 +87,6 @@ const SUPERADMIN_PRIMARY_MODULES: SuperadminNavigationItem[] = [
     subItems: [
       { id: 'user_dir', label: 'Admin Users Directory', href: SUPERADMIN_NAVIGATION_ROUTES.users_directory },
       { id: 'roles_perm', label: 'Roles & Permissions Matrix', href: SUPERADMIN_NAVIGATION_ROUTES.users_roles_permissions },
-      { id: 'users_overview', label: 'User Operations & Analytics', href: SUPERADMIN_NAVIGATION_ROUTES.users_overview },
     ],
   },
   {

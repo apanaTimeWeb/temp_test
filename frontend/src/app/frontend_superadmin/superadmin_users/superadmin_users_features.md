@@ -24,7 +24,6 @@ User directory, overview and role/permission administration.
 | Leaf submodule | Canonical route | Ownership note |
 |---|---|---|
 | `users_directory` | `/superadmin/superadmin_users/users_directory` | Leaf-local documentation trio and local implementation remain authoritative. |
-| `users_overview` | `/superadmin/superadmin_users/users_overview` | Leaf-local documentation trio and local implementation remain authoritative. |
 | `users_roles_permissions` | `/superadmin/superadmin_users/users_roles_permissions` | Leaf-local documentation trio and local implementation remain authoritative. |
 
 ## API and data contracts

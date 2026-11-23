@@ -18,12 +18,12 @@ export const SUPERADMIN_NAVIGATION_CORE_ROUTES = {
   branches_overview: '/superadmin/superadmin_branches/branches_overview',
 
   // 04 Admin & User Management
-  superadmin_users: '/superadmin/superadmin_users/users_overview',
-  users_overview: '/superadmin/superadmin_users/users_overview',
+  superadmin_users: '/superadmin/superadmin_users/users_directory',
+  users_overview: '/superadmin/superadmin_users/users_directory',
   users_directory: '/superadmin/superadmin_users/users_directory',
   users_roles_permissions: '/superadmin/superadmin_users/users_roles_permissions',
-  users_member_referrals: '/superadmin/superadmin_users/users_overview',
-  users_member_trust_score: '/superadmin/superadmin_users/users_overview',
+  users_member_referrals: '/superadmin/superadmin_users/users_directory',
+  users_member_trust_score: '/superadmin/superadmin_users/users_directory',
 
   // 05 Plans & Subscription
   superadmin_plans: '/superadmin/superadmin_plans/plans_pricing_catalog',

@@ -25,12 +25,12 @@ export const SUPERADMIN_MEMBER_FINANCE_URLS = {
   MEMBER_PAYMENTS_COLLECTION: '/superadmin/superadmin_billing/billing_overview?view=member_payments_collection',
   MEMBER_RECEIPT_DETAIL: '/superadmin/superadmin_billing/billing_invoices?view=member_receipts_detail',
   MEMBER_RECEIPTS: '/superadmin/superadmin_billing/billing_invoices?view=member_receipts',
-  MEMBER_REFERRALS: '/superadmin/superadmin_users/users_overview?view=member_referrals',
+  MEMBER_REFERRALS: '/superadmin/superadmin_users/users_directory?view=member_referrals',
   MEMBER_REFUNDS: '/superadmin/superadmin_billing/billing_overview?view=member_refunds',
   MEMBER_RENEWALS: '/superadmin/superadmin_subscriptions/subscriptions_overview?view=member_renewals',
   MEMBER_SECURITY_DEPOSITS: '/superadmin/superadmin_billing/billing_overview?view=member_security_deposits',
   MEMBER_SUBSCRIPTIONS: '/superadmin/superadmin_subscriptions/subscriptions_overview?view=member_subscriptions',
-  MEMBER_TRUST_SCORE: '/superadmin/superadmin_users/users_overview?view=member_trust_score',
+  MEMBER_TRUST_SCORE: '/superadmin/superadmin_users/users_directory?view=member_trust_score',
 } as const;
 export const SUPERADMIN_PLANS_URLS = {
   PAGE: '/superadmin/superadmin_plans',
@@ -91,7 +91,7 @@ export const SUPERADMIN_SYSTEM_HEALTH_URLS = {
 export const SUPERADMIN_USERS_URLS = {
   PAGE: '/superadmin/superadmin_users',
   DIRECTORY: '/superadmin/superadmin_users/users_directory',
-  OVERVIEW: '/superadmin/superadmin_users/users_overview',
+  OVERVIEW: '/superadmin/superadmin_users/users_directory',
   ROLES_PERMISSIONS: '/superadmin/superadmin_users/users_roles_permissions',
 } as const;
 export const SUPERADMIN_NAVIGATION_DOMAIN_URLS = {
