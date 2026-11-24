@@ -28,7 +28,7 @@ export const SUPERADMIN_NAVIGATION_EXTENDED_ROUTES = {
   // 11 Support & Ticket Management
   superadmin_support: '/superadmin/superadmin_support/support_tickets',
   support_tickets: '/superadmin/superadmin_support/support_tickets',
-  support_complaints: '/superadmin/superadmin_support/support_complaints',
+  support_complaints: '/superadmin/superadmin_support/support_tickets',
 
   // 12 Notification Management
   superadmin_communication: '/superadmin/superadmin_communication/communication_notification_center',

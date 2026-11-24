@@ -14,7 +14,7 @@ const SUPERADMIN_COMMUNICATION_NOTICES_URLS = {
   NOTICES_LIST: '/communication/notices',
 
   // Existing public page routes.
-  COMPLAINTS_PAGE: '/superadmin/superadmin_support/support_complaints',
+  COMPLAINTS_PAGE: '/superadmin/superadmin_support/support_tickets',
   NOTICES_PAGE: '/superadmin/superadmin_communication/communication_notices',
   NOTIFICATION_CENTER_PAGE: '/superadmin/superadmin_communication/communication_notification_center',
 

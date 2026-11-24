@@ -16,12 +16,7 @@ Owns navigation and route composition for the Superadmin System domain. All exec
 
 ## Canonical submodules
 - `system_health_overview/` — `system_health_overview/superadmin_system_health_overview_features.md`
-- `backup_overview/` — `backup_overview/superadmin_backup_overview_features.md`
-- `backup_configuration/` — `backup_configuration/superadmin_backup_configuration_features.md`
-- `backup_schedules/` — `backup_schedules/superadmin_backup_schedules_features.md`
-- `backup_history/` — `backup_history/superadmin_backup_history_features.md`
-- `data_export_jobs/` — `data_export_jobs/superadmin_data_export_jobs_features.md`
-- `audit_logs/` — `audit_logs/superadmin_audit_logs_features.md`
+- `system_audit_logs/` — `system_audit_logs/superadmin_system_audit_logs_features.md`
 
 ## Scope and Non-Scope
 

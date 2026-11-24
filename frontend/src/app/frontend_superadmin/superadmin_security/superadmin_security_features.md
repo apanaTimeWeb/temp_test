@@ -31,7 +31,6 @@ Global security policy, threats, API keys, firewall and session-related views; u
 | `security_overview` | `/superadmin/superadmin_security/security_overview` | Leaf-local documentation trio and local implementation remain authoritative. |
 | `security_password_policy` | `/superadmin/superadmin_security/security_password_policy` | Leaf-local documentation trio and local implementation remain authoritative. |
 | `security_threats` | `/superadmin/superadmin_security/security_threats` | Leaf-local documentation trio and local implementation remain authoritative. |
-| `security_user_sessions` | `/superadmin/superadmin_security/security_user_sessions` | Leaf-local documentation trio and local implementation remain authoritative. |
 
 ## API and data contracts
 

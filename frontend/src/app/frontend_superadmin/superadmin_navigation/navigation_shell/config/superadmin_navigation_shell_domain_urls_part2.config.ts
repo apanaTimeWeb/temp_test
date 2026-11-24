@@ -57,7 +57,7 @@ export const SUPERADMIN_SECURITY_URLS = {
   OVERVIEW: '/superadmin/superadmin_security/security_overview',
   PASSWORD_POLICY: '/superadmin/superadmin_security/security_password_policy',
   THREATS: '/superadmin/superadmin_security/security_threats',
-  USER_SESSIONS: '/superadmin/superadmin_security/security_user_sessions',
+  USER_SESSIONS: '/superadmin/superadmin_security/security_active_sessions',
 } as const;
 export const SUPERADMIN_SETTINGS_URLS = {
   PAGE: '/superadmin/superadmin_settings',
@@ -81,7 +81,7 @@ export const SUPERADMIN_SUBSCRIPTIONS_URLS = {
 } as const;
 export const SUPERADMIN_SUPPORT_URLS = {
   PAGE: '/superadmin/superadmin_support',
-  COMPLAINTS: '/superadmin/superadmin_support/support_complaints',
+  COMPLAINTS: '/superadmin/superadmin_support/support_tickets',
   TICKETS: '/superadmin/superadmin_support/support_tickets',
 } as const;
 export const SUPERADMIN_SYSTEM_HEALTH_URLS = {
