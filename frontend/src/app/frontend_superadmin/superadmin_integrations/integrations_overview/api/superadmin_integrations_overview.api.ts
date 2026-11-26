@@ -1,20 +1,20 @@
 // api/superadmin_integrations_overview.api.ts
 // Feature-scoped API client with typed ApiResponse<T> envelope, fallback mock store, and idempotency keys.
 import { apiFetch, type ApiResponse } from '@/lib/api';
-import { SUPERADMIN_INTEGRATIONS_OVERVIEW_API } from '../config/superadmin_integrations_overview.url_config';
+import { SUPERADMIN_INTEGRATIONS_OVERVIEW_API } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/config/superadmin_integrations_overview.url_config';
 import {
   MOCK_INTEGRATION_GATEWAYS,
   MOCK_INTEGRATION_LOGS,
   MOCK_INTEGRATION_SUMMARY,
   MOCK_PLAN_ENTITLEMENTS,
-} from '../mocks/fixtures/superadmin_integrations_overview.fixtures';
+} from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/mocks/fixtures/superadmin_integrations_overview.fixtures';
 import type {
   GatewayUpdatePayload,
   IntegrationGatewayItem,
   IntegrationLogItem,
   IntegrationSummaryStats,
   PlanEntitlementItem,
-} from '../types/superadmin_integrations_overview.types';
+} from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/types/superadmin_integrations_overview.types';
 
 // In-memory persistent local state for standalone preview and resilient network fallbacks
 const fallbackSummary: IntegrationSummaryStats = { ...MOCK_INTEGRATION_SUMMARY };
@@ -155,4 +155,4 @@ export {
   testWebhookPing,
   triggerWebhookRetry,
   updateRateLimits,
-} from './superadmin_integrations_webhooks_keys.api';
+} from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/api/superadmin_integrations_webhooks_keys.api';

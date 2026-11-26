@@ -9,7 +9,7 @@ import type {
   SuperadminSupportTicketEscalation,
   SuperadminSupportTicketPriority,
   SuperadminSupportTicketResolution,
-} from '../types/SuperadminSupportTicketsOverviewTypes';
+} from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
 
 interface SuperadminSupportTicketsDetailTabsProps {
   activeTab: 'internal_notes' | 'attachments' | 'sla_escalation';
@@ -94,7 +94,7 @@ export default function SuperadminSupportTicketsDetailTabs({
             <button
               type="button"
               onClick={onAddAttachment}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-xs font-bold text-white transition-all cursor-pointer shrink-0"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-xs font-bold text-white motion-safe:transition-all cursor-pointer shrink-0"
             >
               <Plus size={14} />
               <span>{t('COPY.UPLOAD_ATTACHMENT')}</span>
@@ -122,7 +122,7 @@ export default function SuperadminSupportTicketsDetailTabs({
                 <button
                   type="button"
                   onClick={() => toast.success(`Simulated download of ${att.name}`)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 text-xs font-semibold transition-all cursor-pointer shrink-0"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 text-xs font-semibold motion-safe:transition-all cursor-pointer shrink-0"
                 >
                   <Download size={12} />
                   <span>{t('COPY.DOWNLOAD_FILE')}</span>

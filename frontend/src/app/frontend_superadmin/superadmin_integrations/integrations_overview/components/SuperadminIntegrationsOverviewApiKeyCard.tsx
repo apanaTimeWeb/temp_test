@@ -5,7 +5,7 @@
 
 import { CheckCircle2, Copy, Key, Lock, RotateCcw, Trash2 } from 'lucide-react';
 import React from 'react';
-import type { ApiKeyItem } from '../types/superadmin_integrations_overview.types';
+import type { ApiKeyItem } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/types/superadmin_integrations_overview.types';
 
 interface SuperadminIntegrationsOverviewApiKeyCardProps {
   apiKeyItem: ApiKeyItem;

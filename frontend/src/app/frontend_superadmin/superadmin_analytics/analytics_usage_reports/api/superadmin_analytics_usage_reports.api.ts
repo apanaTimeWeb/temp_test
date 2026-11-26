@@ -2,13 +2,13 @@
 // API Service for Superadmin Usage Reports
 
 import { apiFetch, type ApiResponse } from '@/lib/api';
-import { SUPERADMIN_ANALYTICS_USAGE_REPORTS_API } from '../config/superadmin_analytics_usage_reports.url_config';
+import { SUPERADMIN_ANALYTICS_USAGE_REPORTS_API } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/config/superadmin_analytics_usage_reports.url_config';
 import type {
   UsageReportsOverviewData,
   SuperadminAnalyticsUsageReportsFilters,
   ExportFormatType,
-} from '../types/SuperadminAnalyticsUsageReportsTypes';
-import { SUPERADMIN_USAGE_REPORTS_SCENARIOS } from '../mocks/scenarios/superadmin_analytics_usage_reports.scenarios';
+} from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/types/SuperadminAnalyticsUsageReportsTypes';
+import { SUPERADMIN_USAGE_REPORTS_SCENARIOS } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/mocks/scenarios/superadmin_analytics_usage_reports.scenarios';
 
 export async function fetchUsageReportsOverview(
   filters: SuperadminAnalyticsUsageReportsFilters

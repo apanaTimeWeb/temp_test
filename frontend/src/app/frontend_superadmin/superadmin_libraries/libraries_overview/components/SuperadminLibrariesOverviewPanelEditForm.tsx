@@ -2,8 +2,8 @@
 
 import React from 'react';
 import type { UseFormRegister, FieldErrors } from 'react-hook-form';
-import type { SuperadminLibrariesEditFormValues } from '../schemas/SuperadminLibrariesOverviewSchema';
-import { SUPERADMIN_LIBRARIES_PLAN_VALUES } from '../constants/SuperadminLibrariesOverviewConstants';
+import type { SuperadminLibrariesEditFormValues } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/schemas/SuperadminLibrariesOverviewSchema';
+import { SUPERADMIN_LIBRARIES_PLAN_VALUES } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/constants/SuperadminLibrariesOverviewConstants';
 import { useTranslations } from 'next-intl';
 
 interface SuperadminLibrariesOverviewPanelEditFormProps {
@@ -38,7 +38,7 @@ export default function SuperadminLibrariesOverviewPanelEditForm({
           </label>
           <input maxLength={30}
             id="superadmin-libraries-name"
-            className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-indigo-500/30 bg-[#131d38] text-white placeholder:text-slate-500 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none transition-all"
+            className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-indigo-500/30 bg-[#131d38] text-white placeholder:text-slate-500 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none motion-safe:transition-all"
             aria-invalid={Boolean(errors.name)}
             aria-describedby={errors.name ? 'superadmin-libraries-name-error' : undefined}
             {...register('name')}
@@ -61,7 +61,7 @@ export default function SuperadminLibrariesOverviewPanelEditForm({
           </label>
           <input maxLength={30}
             id="superadmin-libraries-owner"
-            className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-indigo-500/30 bg-[#131d38] text-white placeholder:text-slate-500 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none transition-all"
+            className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-indigo-500/30 bg-[#131d38] text-white placeholder:text-slate-500 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none motion-safe:transition-all"
             aria-invalid={Boolean(errors.owner)}
             aria-describedby={errors.owner ? 'superadmin-libraries-owner-error' : undefined}
             {...register('owner')}
@@ -84,7 +84,7 @@ export default function SuperadminLibrariesOverviewPanelEditForm({
             id="superadmin-libraries-email"
             type="email"
             autoComplete="email"
-            className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-indigo-500/30 bg-[#131d38] text-white placeholder:text-slate-500 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none transition-all"
+            className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-indigo-500/30 bg-[#131d38] text-white placeholder:text-slate-500 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none motion-safe:transition-all"
             aria-invalid={Boolean(errors.email)}
             aria-describedby={errors.email ? 'superadmin-libraries-email-error' : undefined}
             {...register('email')}
@@ -105,7 +105,7 @@ export default function SuperadminLibrariesOverviewPanelEditForm({
             id="superadmin-libraries-phone"
             type="tel"
             autoComplete="tel"
-            className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-indigo-500/30 bg-[#131d38] text-white placeholder:text-slate-500 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none transition-all"
+            className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-indigo-500/30 bg-[#131d38] text-white placeholder:text-slate-500 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none motion-safe:transition-all"
             aria-invalid={Boolean(errors.phone)}
             aria-describedby={errors.phone ? 'superadmin-libraries-phone-error' : undefined}
             {...register('phone')}
@@ -125,7 +125,7 @@ export default function SuperadminLibrariesOverviewPanelEditForm({
         </label>
         <input maxLength={30}
           id="superadmin-libraries-gst"
-          className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-indigo-500/30 bg-[#131d38] text-white placeholder:text-slate-500 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none transition-all"
+          className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-indigo-500/30 bg-[#131d38] text-white placeholder:text-slate-500 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none motion-safe:transition-all"
           aria-invalid={Boolean(errors.gstNumber)}
           aria-describedby={errors.gstNumber ? 'superadmin-libraries-gst-error' : undefined}
           {...register('gstNumber')}
@@ -145,7 +145,7 @@ export default function SuperadminLibrariesOverviewPanelEditForm({
           </label>
           <input maxLength={30}
             id="superadmin-libraries-location"
-            className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-indigo-500/30 bg-[#131d38] text-white placeholder:text-slate-500 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none transition-all"
+            className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-indigo-500/30 bg-[#131d38] text-white placeholder:text-slate-500 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none motion-safe:transition-all"
             aria-invalid={Boolean(errors.location)}
             aria-describedby={errors.location ? 'superadmin-libraries-location-error' : undefined}
             {...register('location')}
@@ -181,7 +181,7 @@ export default function SuperadminLibrariesOverviewPanelEditForm({
       <div className="flex items-center justify-end gap-3 pt-3">
         <button
           type="button"
-          className="px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-700 transition-all cursor-pointer"
+          className="px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-700 motion-safe:transition-all cursor-pointer"
           onClick={onCancel}
           data-testid="superadmin-libraries-libraries-cancel-10"
         >
@@ -189,7 +189,7 @@ export default function SuperadminLibrariesOverviewPanelEditForm({
         </button>
         <button
           type="submit"
-          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-xs font-bold shadow-md shadow-emerald-950/50 cursor-pointer disabled:opacity-50 transition-all"
+          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-xs font-bold shadow-md shadow-emerald-950/50 cursor-pointer disabled:opacity-50 motion-safe:transition-all"
           disabled={isSubmitting}
           data-testid="superadmin-libraries-libraries-applying-preview-11"
         >

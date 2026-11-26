@@ -4,13 +4,13 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { SUPERADMIN_SECURITY_REPORTS_QUERY_KEYS } from '../api/superadmin_analytics_security_reports.query_keys';
-import { fetchSecurityReportsOverview } from '../api/superadmin_analytics_security_reports.api';
-import { DEFAULT_SECURITY_REPORTS_FILTERS } from '../constants/SuperadminAnalyticsSecurityReportsConstants';
+import { SUPERADMIN_SECURITY_REPORTS_QUERY_KEYS } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/api/superadmin_analytics_security_reports.query_keys';
+import { fetchSecurityReportsOverview } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/api/superadmin_analytics_security_reports.api';
+import { DEFAULT_SECURITY_REPORTS_FILTERS } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/constants/SuperadminAnalyticsSecurityReportsConstants';
 import type {
   SuperadminAnalyticsSecurityReportsFilters,
   SecurityReportTableRecord,
-} from '../types/SuperadminAnalyticsSecurityReportsTypes';
+} from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/types/SuperadminAnalyticsSecurityReportsTypes';
 
 export function useSuperadminAnalyticsSecurityReports() {
   const [filters, setFilters] = useState<SuperadminAnalyticsSecurityReportsFilters>(

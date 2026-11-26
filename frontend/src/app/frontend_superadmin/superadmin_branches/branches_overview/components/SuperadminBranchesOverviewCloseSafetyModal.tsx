@@ -52,11 +52,11 @@ export default function SuperadminBranchesOverviewCloseSafetyModal({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-40 flex items-center justify-center bg-overlay-backdrop backdrop-blur-sm p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
+      className="fixed inset-0 z-40 flex items-center justify-center bg-overlay-backdrop backdrop-blur-sm p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in motion-safe:duration-200"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-2xl border border-border bg-overlay p-6 shadow-dialog text-foreground flex flex-col animate-in zoom-in-95 duration-200 ease-out"
+        className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-2xl border border-border bg-overlay p-6 shadow-dialog text-foreground flex flex-col animate-in zoom-in-95 motion-safe:duration-200 ease-out"
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
@@ -225,7 +225,7 @@ export default function SuperadminBranchesOverviewCloseSafetyModal({
             type="button"
             onClick={handleSubmit}
             disabled={!canSubmit}
-            className={`px-5 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`px-5 py-2 rounded-xl text-xs font-bold motion-safe:transition-all ${
               canSubmit
                 ? 'bg-danger hover:bg-danger text-white shadow-sm cursor-pointer'
                 : 'bg-surface text-muted cursor-not-allowed'

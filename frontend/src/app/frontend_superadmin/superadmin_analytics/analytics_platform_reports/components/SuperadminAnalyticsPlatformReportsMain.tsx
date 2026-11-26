@@ -4,12 +4,12 @@
 
 import React from 'react';
 import { Building2, RefreshCw, X } from 'lucide-react';
-import { useSuperadminAnalyticsPlatformReports } from '../hooks/useSuperadminAnalyticsPlatformReports';
-import { SuperadminAnalyticsPlatformReportsKpiGrid } from './SuperadminAnalyticsPlatformReportsKpiGrid';
-import { SuperadminAnalyticsPlatformReportsCharts } from './SuperadminAnalyticsPlatformReportsCharts';
-import { SuperadminAnalyticsPlatformReportsFilterBar } from './SuperadminAnalyticsPlatformReportsFilterBar';
-import { SuperadminAnalyticsPlatformReportsTable } from './SuperadminAnalyticsPlatformReportsTable';
-import { SuperadminAnalyticsPlatformReportsExportModal } from './SuperadminAnalyticsPlatformReportsExportModal';
+import { useSuperadminAnalyticsPlatformReports } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/hooks/useSuperadminAnalyticsPlatformReports';
+import { SuperadminAnalyticsPlatformReportsKpiGrid } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/components/SuperadminAnalyticsPlatformReportsKpiGrid';
+import { SuperadminAnalyticsPlatformReportsCharts } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/components/SuperadminAnalyticsPlatformReportsCharts';
+import { SuperadminAnalyticsPlatformReportsFilterBar } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/components/SuperadminAnalyticsPlatformReportsFilterBar';
+import { SuperadminAnalyticsPlatformReportsTable } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/components/SuperadminAnalyticsPlatformReportsTable';
+import { SuperadminAnalyticsPlatformReportsExportModal } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/components/SuperadminAnalyticsPlatformReportsExportModal';
 
 export function SuperadminAnalyticsPlatformReportsMain() {
   const {

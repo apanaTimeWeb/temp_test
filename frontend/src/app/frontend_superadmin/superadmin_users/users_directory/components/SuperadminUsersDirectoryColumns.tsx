@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import type { SemanticCellParams as ICellRendererParams, SemanticColumnDef as ColDef } from './SuperadminUsersDirectorySemanticTable';
-import type { SuperadminUserData, SuperadminUsersStatus } from '../types/SuperadminUsersDirectoryTypes';
-import { maskSensitiveData } from '../utils/SuperadminUsersDirectoryMaskSensitiveData';
+import type { SemanticCellParams as ICellRendererParams, SemanticColumnDef as ColDef } from '@/app/frontend_superadmin/superadmin_users/users_directory/components/SuperadminUsersDirectorySemanticTable';
+import type { SuperadminUserData, SuperadminUsersStatus } from '@/app/frontend_superadmin/superadmin_users/users_directory/types/SuperadminUsersDirectoryTypes';
+import { maskSensitiveData } from '@/app/frontend_superadmin/superadmin_users/users_directory/utils/SuperadminUsersDirectoryMaskSensitiveData';
 import { Ban, Check, KeyRound, Mail, MessageSquare, Pencil, ShieldAlert, ShieldCheck } from 'lucide-react';
 
 function getSuperadminInteractiveTestIdSuffix(value: unknown): string {
@@ -159,7 +159,7 @@ export function useUsersDirectoryColumns({
               p.value === 'Active' ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : 'bg-rose-500/15 text-rose-300 border-rose-500/30'
             }`}
           >
-            <span className={`h-1.5 w-1.5 rounded-full ${p.value === 'Active' ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'}`} />
+            <span className={`h-1.5 w-1.5 rounded-full ${p.value === 'Active' ? 'bg-emerald-400 motion-safe:animate-pulse' : 'bg-rose-400'}`} />
             {p.value === 'Active' ? t('COPY.STATUS_ACTIVE') : t('COPY.STATUS_SUSPENDED')}
           </span>
         ),

@@ -23,7 +23,7 @@ export function SuperadminSettingsGeneralSubscriptionGraceCard() {
     <section
       id="section-subscription_grace"
       aria-labelledby="heading-subscription-grace"
-      className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-6 space-y-6 hover:border-indigo-500/35 transition-all"
+      className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-6 space-y-6 hover:border-indigo-500/35 motion-safe:transition-all"
     >
       <div className="flex items-center justify-between border-b border-indigo-500/15 pb-4">
         <div className="flex items-center gap-3">
@@ -42,7 +42,7 @@ export function SuperadminSettingsGeneralSubscriptionGraceCard() {
         <div className="flex items-center gap-2">
           <Link
             href="/superadmin/superadmin_plans/plans_pricing_catalog"
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-semibold transition-all shadow-xs cursor-pointer no-underline"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-semibold motion-safe:transition-all shadow-xs cursor-pointer no-underline"
           >
             <span>Open Plans Module 05</span>
             <ExternalLink size={12} />
@@ -71,7 +71,7 @@ export function SuperadminSettingsGeneralSubscriptionGraceCard() {
             min={0}
             max={90}
             {...register('subscriptionGrace.defaultTrialDays', { valueAsNumber: true })}
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             data-testid="settings-sub-trial-days-input"
           />
           <span className="text-[11px] text-slate-400">
@@ -101,7 +101,7 @@ export function SuperadminSettingsGeneralSubscriptionGraceCard() {
             min={0}
             max={60}
             {...register('subscriptionGrace.paymentGracePeriodDays', { valueAsNumber: true })}
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             data-testid="settings-sub-grace-days-input"
           />
           <span className="text-[11px] text-slate-400">
@@ -131,7 +131,7 @@ export function SuperadminSettingsGeneralSubscriptionGraceCard() {
             min={1}
             max={30}
             {...register('subscriptionGrace.reminderTriggerDaysBefore', { valueAsNumber: true })}
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             data-testid="settings-sub-reminder-days-input"
           />
           <span className="text-[11px] text-slate-400">

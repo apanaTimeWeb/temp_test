@@ -5,8 +5,8 @@ import {
   X, ShieldAlert, KeyRound, Lock, CheckCircle2,
   Trash2, Globe, Monitor
 } from 'lucide-react';
-import type { UserSecurityAccount } from '../types/SuperadminRolesPermissionsManagementTypes';
-import SuperadminUserSecurityControlsTab from './SuperadminUserSecurityControlsTab';
+import type { UserSecurityAccount } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/types/SuperadminRolesPermissionsManagementTypes';
+import SuperadminUserSecurityControlsTab from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/components/SuperadminUserSecurityControlsTab';
 
 interface SuperadminUserSecurityAuditModalProps {
   user: UserSecurityAccount;
@@ -72,21 +72,21 @@ export default function SuperadminUserSecurityAuditModal({
           <button
             type="button"
             onClick={() => setActiveTab('security_actions')}
-            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${activeTab === 'security_actions' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
+            className={`px-3 py-1.5 rounded-lg motion-safe:transition-all cursor-pointer ${activeTab === 'security_actions' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
           >
             Security Controls
           </button>
           <button
             type="button"
             onClick={() => setActiveTab('sessions')}
-            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${activeTab === 'sessions' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
+            className={`px-3 py-1.5 rounded-lg motion-safe:transition-all cursor-pointer ${activeTab === 'sessions' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
           >
             Active Sessions ({user.activeSessions.length})
           </button>
           <button
             type="button"
             onClick={() => setActiveTab('login_history')}
-            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${activeTab === 'login_history' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
+            className={`px-3 py-1.5 rounded-lg motion-safe:transition-all cursor-pointer ${activeTab === 'login_history' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
           >
             Login History ({user.loginHistory.length})
           </button>

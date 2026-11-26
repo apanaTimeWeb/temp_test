@@ -82,7 +82,7 @@ export function SuperadminCommunicationNotificationCenterOverview() {
         <button
           type="button"
           onClick={() => refetch()}
-          className="px-4 py-2 rounded-xl bg-slate-900 border border-indigo-500/30 text-xs font-semibold text-slate-200 hover:text-white cursor-pointer transition-all"
+          className="px-4 py-2 rounded-xl bg-slate-900 border border-indigo-500/30 text-xs font-semibold text-slate-200 hover:text-white cursor-pointer motion-safe:transition-all"
         >
           Retry Fetch
         </button>
@@ -135,7 +135,7 @@ export function SuperadminCommunicationNotificationCenterOverview() {
                 <div
                   key={n.id}
                   onClick={() => setSelectedNotification(n)}
-                  className="p-4 sm:p-5 rounded-2xl bg-[#0b0f28]/90 border border-indigo-500/20 hover:border-indigo-400/50 transition-all cursor-pointer shadow-xl backdrop-blur-md flex flex-col md:flex-row md:items-center justify-between gap-4 group hover:shadow-indigo-500/10"
+                  className="p-4 sm:p-5 rounded-2xl bg-[#0b0f28]/90 border border-indigo-500/20 hover:border-indigo-400/50 motion-safe:transition-all cursor-pointer shadow-xl backdrop-blur-md flex flex-col md:flex-row md:items-center justify-between gap-4 group hover:shadow-indigo-500/10"
                   data-testid={`notif-card-${n.id}`}
                 >
                   <div className="flex items-start gap-4 flex-1 min-w-0">
@@ -203,10 +203,10 @@ export function SuperadminCommunicationNotificationCenterOverview() {
                         type="button"
                         onClick={(e) => handleRetry(n, e)}
                         disabled={isRetrying}
-                        className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-rose-500 to-amber-600 hover:from-rose-600 hover:to-amber-700 text-white font-semibold text-xs shadow-md shadow-rose-500/20 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
+                        className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-rose-500 to-amber-600 hover:from-rose-600 hover:to-amber-700 text-white font-semibold text-xs shadow-md shadow-rose-500/20 active:scale-95 motion-safe:transition-all flex items-center gap-1.5 cursor-pointer"
                         title={n.failureReason ?? 'Retry transmission'}
                       >
-                        <RefreshCw className={`w-3.5 h-3.5 ${isRetrying ? 'animate-spin' : ''}`} />
+                        <RefreshCw className={`w-3.5 h-3.5 ${isRetrying ? 'motion-safe:animate-spin' : ''}`} />
                         <span>{isRetrying ? 'Retrying…' : 'Retry'}</span>
                       </button>
                     )}

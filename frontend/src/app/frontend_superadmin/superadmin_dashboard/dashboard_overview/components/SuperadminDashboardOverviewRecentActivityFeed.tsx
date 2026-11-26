@@ -49,7 +49,7 @@ export default function SuperadminDashboardOverviewRecentActivityFeed({ items }:
 
         <Link
           href={SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.MODULE_URLS.AUDIT_LOGS}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 transition-all shadow-sm active:scale-95 cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 motion-safe:transition-all shadow-sm active:scale-95 cursor-pointer"
           data-testid="superadmin-dashboard-dashboard_overview-link-1"
         >
           <span>{t("COPY.VIEW_ALL_LOGS")}</span>
@@ -63,7 +63,7 @@ export default function SuperadminDashboardOverviewRecentActivityFeed({ items }:
           <Link
             key={item.id}
             href={item.href}
-            className="block p-3.5 sm:p-4 rounded-xl hover:bg-surface-hover/60 transition-all duration-200 group"
+            className="block p-3.5 sm:p-4 rounded-xl hover:bg-surface-hover/60 motion-safe:transition-all motion-safe:duration-200 group"
             data-testid="superadmin-dashboard-dashboard_overview-link-2"
           >
             <div className="flex items-center justify-between gap-3 sm:gap-4 flex-wrap sm:flex-nowrap">

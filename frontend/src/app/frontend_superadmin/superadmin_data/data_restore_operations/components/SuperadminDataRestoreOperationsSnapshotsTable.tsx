@@ -19,13 +19,13 @@ import {
   Layers,
   Building,
 } from 'lucide-react';
-import type { BackupSnapshotRecord } from '../types/superadmin_data_restore_operations.types';
+import type { BackupSnapshotRecord } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/types/superadmin_data_restore_operations.types';
 import {
   displayValue,
   formatBytes,
   formatTimestamp,
   formatShortHash,
-} from '../utils/superadmin_data_restore_operations_formatters';
+} from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/utils/superadmin_data_restore_operations_formatters';
 
 interface SnapshotsTableProps {
   snapshots: BackupSnapshotRecord[];

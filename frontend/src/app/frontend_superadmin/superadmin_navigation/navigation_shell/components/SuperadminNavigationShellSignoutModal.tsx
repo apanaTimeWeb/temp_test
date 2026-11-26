@@ -31,12 +31,12 @@ export default function SuperadminNavigationShellSignoutModal({
       data-testid="superadmin-logout-overlay"
     >
       <div
-        className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity animate-in fade-in duration-200"
+        className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity animate-in fade-in motion-safe:duration-200"
         onClick={onClose}
         aria-hidden="true"
       />
       <section
-        className="relative z-10 w-full max-w-sm rounded-2xl border border-indigo-500/30 bg-[#0b0c20] p-6 text-white shadow-2xl animate-in zoom-in-95 fade-in duration-200 focus:outline-none"
+        className="relative z-10 w-full max-w-sm rounded-2xl border border-indigo-500/30 bg-[#0b0c20] p-6 text-white shadow-2xl animate-in zoom-in-95 fade-in motion-safe:duration-200 focus:outline-none"
         role="alertdialog"
         aria-modal="true"
         aria-labelledby="superadmin-logout-title"

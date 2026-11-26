@@ -162,7 +162,7 @@ export default function SuperadminSecurityMfaPolicyPanels({
                 <label
                   key={value}
                   onClick={() => onSelectMethod?.(value)}
-                  className={`flex flex-col justify-between p-3.5 rounded-xl border transition-all cursor-pointer ${
+                  className={`flex flex-col justify-between p-3.5 rounded-xl border motion-safe:transition-all cursor-pointer ${
                     isSelected
                       ? 'border-indigo-400 bg-gradient-to-b from-indigo-950/70 to-indigo-900/40 shadow-md'
                       : 'border-indigo-500/20 bg-[#07091a]/80 hover:border-indigo-500/40'
@@ -222,7 +222,7 @@ export default function SuperadminSecurityMfaPolicyPanels({
                 onGenerateRecoveryCodes?.();
                 setShowRecoveryModal(true);
               }}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-300 hover:bg-amber-500/20 active:scale-95 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-300 hover:bg-amber-500/20 active:scale-95 motion-safe:transition-all cursor-pointer"
               data-testid="superadmin-mfa-generate-codes-button"
             >
               <RefreshCw size={12} />
@@ -231,7 +231,7 @@ export default function SuperadminSecurityMfaPolicyPanels({
             <button
               type="button"
               onClick={() => setShowRecoveryModal(true)}
-              className="inline-flex items-center rounded-xl border border-slate-700/80 bg-slate-800/80 hover:bg-slate-700 px-3 py-1.5 text-xs font-semibold text-slate-200 active:scale-95 transition-all cursor-pointer"
+              className="inline-flex items-center rounded-xl border border-slate-700/80 bg-slate-800/80 hover:bg-slate-700 px-3 py-1.5 text-xs font-semibold text-slate-200 active:scale-95 motion-safe:transition-all cursor-pointer"
               data-testid="superadmin-mfa-view-codes-button"
             >
               <span>View Codes</span>
@@ -248,7 +248,7 @@ export default function SuperadminSecurityMfaPolicyPanels({
         <button
           type="button"
           onClick={handleSave}
-          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 px-6 py-2.5 text-xs sm:text-sm font-bold text-white shadow-lg shadow-emerald-500/25 transition-all hover:from-emerald-500 hover:to-teal-600 active:scale-[0.98] cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 px-6 py-2.5 text-xs sm:text-sm font-bold text-white shadow-lg shadow-emerald-500/25 motion-safe:transition-all hover:from-emerald-500 hover:to-teal-600 active:scale-[0.98] cursor-pointer"
           data-testid="superadmin-mfa-save-policy-button"
         >
           <ShieldCheck size={16} />

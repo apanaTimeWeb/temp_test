@@ -18,14 +18,14 @@ import {
   updateIntegrationGateway,
   updatePlanEntitlement,
   updateRateLimits,
-} from '../api/superadmin_integrations_overview.api';
-import { SUPERADMIN_INTEGRATIONS_OVERVIEW_KEYS } from '../api/superadmin_integrations_overview.query_keys';
+} from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/api/superadmin_integrations_overview.api';
+import { SUPERADMIN_INTEGRATIONS_OVERVIEW_KEYS } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/api/superadmin_integrations_overview.query_keys';
 import type {
   ApiKeyCreatePayload,
   GatewayUpdatePayload,
   RateLimitPolicy,
   WebhookCreatePayload,
-} from '../types/superadmin_integrations_overview.types';
+} from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/types/superadmin_integrations_overview.types';
 
 export function useSuperadminIntegrationsOverviewMutations() {
   const queryClient = useQueryClient();

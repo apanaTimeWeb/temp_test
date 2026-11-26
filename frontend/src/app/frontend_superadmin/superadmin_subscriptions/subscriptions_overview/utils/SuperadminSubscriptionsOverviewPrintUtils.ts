@@ -1,6 +1,6 @@
 'use client';
 
-import type { SuperadminSubscriptionRecord } from '../types/SuperadminSubscriptionsOverviewTypes';
+import type { SuperadminSubscriptionRecord } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/types/SuperadminSubscriptionsOverviewTypes';
 
 /**
  * Opens a print dialog for subscriptions roster.

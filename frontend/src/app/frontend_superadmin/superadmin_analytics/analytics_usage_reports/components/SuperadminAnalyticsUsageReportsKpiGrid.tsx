@@ -3,8 +3,8 @@
 
 import React from 'react';
 import { Users, UserCheck, GitBranch, HardDrive, Cpu, MessageSquare } from 'lucide-react';
-import type { UsageReportsKpiData } from '../types/SuperadminAnalyticsUsageReportsTypes';
-import { formatUsageNumber, formatStorageSize } from '../utils/SuperadminAnalyticsUsageReportsFormatters';
+import type { UsageReportsKpiData } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/types/SuperadminAnalyticsUsageReportsTypes';
+import { formatUsageNumber, formatStorageSize } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/utils/SuperadminAnalyticsUsageReportsFormatters';
 
 interface Props {
   kpis?: UsageReportsKpiData;
@@ -58,7 +58,7 @@ export function SuperadminAnalyticsUsageReportsKpiGrid({ kpis }: Props) {
       blurColor: 'bg-emerald-500/15',
       valueColor: 'text-emerald-300',
       badgeStyle: 'text-emerald-300 bg-emerald-500/15 border-emerald-500/30',
-      dotColor: 'bg-emerald-400 animate-pulse',
+      dotColor: 'bg-emerald-400 motion-safe:animate-pulse',
     },
     {
       title: 'Cloud Storage Used',
@@ -94,7 +94,7 @@ export function SuperadminAnalyticsUsageReportsKpiGrid({ kpis }: Props) {
       blurColor: 'bg-teal-500/15',
       valueColor: 'text-teal-300',
       badgeStyle: 'text-teal-300 bg-teal-500/15 border-teal-500/30',
-      dotColor: 'bg-teal-400 animate-pulse',
+      dotColor: 'bg-teal-400 motion-safe:animate-pulse',
     },
   ];
 
@@ -108,14 +108,14 @@ export function SuperadminAnalyticsUsageReportsKpiGrid({ kpis }: Props) {
         return (
           <div
             key={i}
-            className={`group relative overflow-hidden p-4 rounded-2xl border shadow-lg backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:scale-[1.01] ${card.cardBg}`}
+            className={`group relative overflow-hidden p-4 rounded-2xl border shadow-lg backdrop-blur-md flex flex-col justify-between motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] ${card.cardBg}`}
           >
-            <div className={`pointer-events-none absolute -right-6 -bottom-6 h-20 w-20 rounded-full blur-xl transition-all duration-500 group-hover:scale-125 ${card.blurColor}`} />
+            <div className={`pointer-events-none absolute -right-6 -bottom-6 h-20 w-20 rounded-full blur-xl motion-safe:transition-all motion-safe:duration-500 group-hover:scale-125 ${card.blurColor}`} />
             <div className="relative flex items-center justify-between gap-2">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
                 {card.title}
               </span>
-              <div className={`p-2 rounded-xl border shrink-0 transition-transform duration-200 group-hover:scale-110 shadow-md ${card.iconStyle}`}>
+              <div className={`p-2 rounded-xl border shrink-0 transition-transform motion-safe:duration-200 group-hover:scale-110 shadow-md ${card.iconStyle}`}>
                 <Icon size={16} strokeWidth={2.3} aria-hidden="true" />
               </div>
             </div>

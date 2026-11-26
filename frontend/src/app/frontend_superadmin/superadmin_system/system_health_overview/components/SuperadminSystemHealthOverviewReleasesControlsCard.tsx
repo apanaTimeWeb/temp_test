@@ -9,8 +9,8 @@ import {
   INITIAL_FLAGS,
   KILLSWITCH_ITEMS,
   type SystemRuntimeControls,
-} from './SuperadminSystemHealthKillswitchesConfig';
-import SuperadminSystemHealthDeploymentsGrid from './SuperadminSystemHealthDeploymentsGrid';
+} from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthKillswitchesConfig';
+import SuperadminSystemHealthDeploymentsGrid from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthDeploymentsGrid';
 
 export function SuperadminSystemHealthOverviewReleasesControlsCard() {
   const [deployments, setDeployments] = useState<DeploymentRecord[]>(INITIAL_DEPLOYMENTS);
@@ -21,15 +21,21 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
     const nextState = !featureFlags[key];
     setFeatureFlags((prev) => ({ ...prev, [key]: nextState }));
     if (nextState) {
-      toast.success(`${label} is now active (nominal cluster state)`);
+      toast.success(`${label} is now active (nominal cluster state)`, {
+        id: `superadmin:system_health:flag:${String(key)}`,
+      });
     } else {
-      toast.warning(`${label} killswitch engaged: Subsystem isolated cluster-wide`);
+      toast.warning(`${label} killswitch engaged: Subsystem isolated cluster-wide`, {
+        id: `superadmin:system_health:flag:${String(key)}`,
+      });
     }
   };
 
   const handleRollback = (record: DeploymentRecord) => {
     setRollingBackSha(record.commitSha);
-    toast.info(`Initiating verified blue/green rollback to ${record.version}...`);
+    toast.info(`Initiating verified blue/green rollback to ${record.version}...`, {
+      id: `superadmin:system_health:rollback:${record.commitSha}`,
+    });
 
     setTimeout(() => {
       setDeployments((prev) =>
@@ -40,7 +46,9 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
         )
       );
       setRollingBackSha(null);
-      toast.success(`Rollback succeeded: Cluster active build switched to ${record.version} (${record.commitSha})`);
+      toast.success(`Rollback succeeded: Cluster active build switched to ${record.version} (${record.commitSha})`, {
+        id: `superadmin:system_health:rollback:${record.commitSha}`,
+      });
     }, 1200);
   };
 
@@ -120,9 +128,9 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
             return (
               <div
                 key={key}
-                className={`group relative overflow-hidden rounded-2xl border ${theme.border} ${theme.bg} ${theme.shadow} p-5 transition-all duration-300 hover:-translate-y-0.5 flex flex-col justify-between`}
+                className={`group relative overflow-hidden rounded-2xl border ${theme.border} ${theme.bg} ${theme.shadow} p-5 motion-safe:transition-all motion-safe:duration-300 motion-safe:hover:-translate-y-0.5 flex flex-col justify-between`}
               >
-                <div className={`pointer-events-none absolute -right-16 -top-16 h-36 w-36 rounded-full ${theme.glow} blur-2xl transition-all duration-300`} />
+                <div className={`pointer-events-none absolute -right-16 -top-16 h-36 w-36 rounded-full ${theme.glow} blur-2xl motion-safe:transition-all motion-safe:duration-300`} />
 
                 <div className="relative z-10 flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3.5 min-w-0">
@@ -156,7 +164,7 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
                       aria-checked={isEnabled}
                       aria-label={`Toggle ${label}`}
                       onClick={() => toggleFlag(key, label)}
-                      className={`relative inline-flex h-9 w-[76px] shrink-0 cursor-pointer rounded-full border-2 p-1 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 focus:ring-offset-slate-950 shadow-inner ${
+                      className={`relative inline-flex h-9 w-[76px] shrink-0 cursor-pointer rounded-full border-2 p-1 transition-colors motion-safe:duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 focus:ring-offset-slate-950 shadow-inner ${
                         isEnabled
                           ? isEmergencyKey
                             ? 'border-rose-400 bg-rose-600 shadow-rose-900/50'
@@ -165,7 +173,7 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
                       }`}
                     >
                       <span
-                        className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                        className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-md ring-0 transition motion-safe:duration-200 ease-in-out ${
                           isEnabled ? 'translate-x-9' : 'translate-x-0'
                         }`}
                       />

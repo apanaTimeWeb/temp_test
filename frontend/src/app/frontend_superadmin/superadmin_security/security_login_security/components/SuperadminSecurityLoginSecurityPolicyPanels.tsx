@@ -212,7 +212,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
                 key={hours}
                 type="button"
                 onClick={() => setInviteExpiryHours(hours)}
-                className={`flex-1 py-1 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+                className={`flex-1 py-1 text-xs font-bold rounded-xl border motion-safe:transition-all cursor-pointer ${
                   inviteExpiryHours === hours ? 'border-indigo-400 bg-indigo-500/25 text-indigo-300 shadow-sm' : 'border-indigo-500/20 bg-[#07091a]/80 text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -248,7 +248,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
         <button
           type="button"
           onClick={handleSave}
-          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 px-6 py-2.5 text-xs sm:text-sm font-bold text-white shadow-lg shadow-amber-500/25 transition-all hover:from-amber-500 hover:to-amber-600 active:scale-[0.98] cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 px-6 py-2.5 text-xs sm:text-sm font-bold text-white shadow-lg shadow-amber-500/25 motion-safe:transition-all hover:from-amber-500 hover:to-amber-600 active:scale-[0.98] cursor-pointer"
           data-testid="superadmin-login-security-save-rules-button"
         >
           <ShieldCheck size={16} />

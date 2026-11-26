@@ -27,7 +27,7 @@ export function SuperadminSystemHealthOverviewSecurityMaintenanceCard() {
               </div>
             </div>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
               Threat Level: Nominal
             </span>
           </div>

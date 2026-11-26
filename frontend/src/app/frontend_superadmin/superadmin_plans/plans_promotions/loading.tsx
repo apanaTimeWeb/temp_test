@@ -5,7 +5,7 @@
 import { SuperadminPageLoader } from '@/components/ui/loader/SuperadminLoader';
 import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
-import SuperadminPlansPromotionsListSkeleton from './components/SuperadminPlansPromotionsListSkeleton';
+import SuperadminPlansPromotionsListSkeleton from '@/app/frontend_superadmin/superadmin_plans/plans_promotions/components/SuperadminPlansPromotionsListSkeleton';
 
 export default function ModuleLoading() {
   const t = useTranslations('SUPERADMIN_BILLING');

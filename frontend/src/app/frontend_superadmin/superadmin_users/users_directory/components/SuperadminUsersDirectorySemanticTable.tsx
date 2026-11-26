@@ -140,7 +140,7 @@ export default function SuperadminUsersDirectorySemanticTable<T extends object>(
           <div className="flex items-center gap-2">
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold motion-safe:transition-all cursor-pointer"
               disabled={page === 0}
               onClick={() => setPage((current) => Math.max(0, current - 1))}
               data-testid="superadmin-users-users-semantic-table-table-previous-3"
@@ -150,7 +150,7 @@ export default function SuperadminUsersDirectorySemanticTable<T extends object>(
             </button>
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold motion-safe:transition-all cursor-pointer"
               disabled={page + 1 >= pageCount}
               onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
               data-testid="superadmin-users-users-semantic-table-table-next-4"

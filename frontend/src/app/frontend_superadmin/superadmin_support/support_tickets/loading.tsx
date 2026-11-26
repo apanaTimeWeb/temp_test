@@ -5,7 +5,7 @@
 import { SuperadminPageLoader } from '@/components/ui/loader/SuperadminLoader';
 import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
-import SuperadminSupportTicketsListSkeleton from './components/SuperadminSupportTicketsListSkeleton';
+import SuperadminSupportTicketsListSkeleton from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsListSkeleton';
 
 export default function ModuleLoading() {
   const t = useTranslations('SUPERADMIN_SUPPORT_TICKETS');

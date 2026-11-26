@@ -2,7 +2,7 @@
 import React from 'react';
 import { AlertTriangle, ShieldCheck, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
-import { SUPERADMIN_USAGE_OVERVIEW_ROUTES } from '../config/superadmin_usage_overview.url_config';
+import { SUPERADMIN_USAGE_OVERVIEW_ROUTES } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/config/superadmin_usage_overview.url_config';
 
 interface SuperadminUsageOverviewOverageBannerProps {
   exceededCount: number;
@@ -50,7 +50,7 @@ export function SuperadminUsageOverviewOverageBanner({
           {pendingRequestsCount > 0 && (
             <Link
               href={SUPERADMIN_USAGE_OVERVIEW_ROUTES.quotaRequests}
-              className="inline-flex items-center gap-1.5 shrink-0 rounded-xl px-4 py-2 text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 transition-all shadow-md shadow-amber-500/20 active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-1.5 shrink-0 rounded-xl px-4 py-2 text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 motion-safe:transition-all shadow-md shadow-amber-500/20 active:scale-95 cursor-pointer"
             >
               Review {pendingRequestsCount} Quota Request <ArrowUpRight className="h-4 w-4" />
             </Link>

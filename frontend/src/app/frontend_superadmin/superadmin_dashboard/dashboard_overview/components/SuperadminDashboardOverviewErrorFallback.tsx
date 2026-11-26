@@ -23,7 +23,7 @@ export default function SuperadminDashboardOverviewErrorFallback({ reset }: Supe
       <p className="mt-2 text-xs sm:text-sm text-slate-300">{t('COPY.MODULE_ROUTE_ERROR_MESSAGE')}</p>
       <button
         type="button"
-        className="inline-flex items-center gap-2 min-h-10 px-4 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white text-xs font-bold shadow-md shadow-rose-950/50 transition-all hover:scale-[1.02] cursor-pointer mt-4"
+        className="inline-flex items-center gap-2 min-h-10 px-4 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white text-xs font-bold shadow-md shadow-rose-950/50 motion-safe:transition-all hover:scale-[1.02] cursor-pointer mt-4"
         onClick={reset}
         data-testid="superadmin_dashboard_overview-dashboard_overview-error-retry"
       >

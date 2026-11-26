@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { CheckCircle2, RotateCcw, X, Zap } from 'lucide-react';
-import { SUPERADMIN_SUPPORT_ESCALATION_TIERS } from '../constants/SuperadminSupportTicketsOverviewConstants';
-import SuperadminSupportTicketsGrantAccessModal from './SuperadminSupportTicketsGrantAccessModal';
+import { SUPERADMIN_SUPPORT_ESCALATION_TIERS } from '@/app/frontend_superadmin/superadmin_support/support_tickets/constants/SuperadminSupportTicketsOverviewConstants';
+import SuperadminSupportTicketsGrantAccessModal from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsGrantAccessModal';
 
 interface SuperadminSupportTicketsDetailModalsProps {
   showEscalateModal: boolean;
@@ -79,12 +79,12 @@ export default function SuperadminSupportTicketsDetailModals({
       {/* Escalate Modal Dialog */}
       {showEscalateModal && (
         <div
-          className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-150"
+          className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-in fade-in motion-safe:duration-150"
           onClick={(e) => {
             if (e.target === e.currentTarget) setShowEscalateModal(false);
           }}
         >
-          <div className="bg-[#0e122b] border border-red-500/40 rounded-2xl p-5 sm:p-6 max-w-md w-full space-y-4 shadow-2xl text-white my-auto animate-in zoom-in-95 duration-150 ease-out" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-[#0e122b] border border-red-500/40 rounded-2xl p-5 sm:p-6 max-w-md w-full space-y-4 shadow-2xl text-white my-auto animate-in zoom-in-95 motion-safe:duration-150 ease-out" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between border-b border-red-500/20 pb-3">
               <h3 className="text-sm font-bold flex items-center gap-2 text-red-400">
                 <Zap size={16} />
@@ -143,12 +143,12 @@ export default function SuperadminSupportTicketsDetailModals({
       {/* Resolve Modal Dialog */}
       {showResolveModal && (
         <div
-          className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-150"
+          className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-in fade-in motion-safe:duration-150"
           onClick={(e) => {
             if (e.target === e.currentTarget) setShowResolveModal(false);
           }}
         >
-          <div className="bg-[#0e122b] border border-emerald-500/40 rounded-2xl p-5 sm:p-6 max-w-md w-full space-y-4 shadow-2xl text-white my-auto animate-in zoom-in-95 duration-150 ease-out" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-[#0e122b] border border-emerald-500/40 rounded-2xl p-5 sm:p-6 max-w-md w-full space-y-4 shadow-2xl text-white my-auto animate-in zoom-in-95 motion-safe:duration-150 ease-out" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between border-b border-emerald-500/20 pb-3">
               <h3 className="text-sm font-bold flex items-center gap-2 text-emerald-400">
                 <CheckCircle2 size={16} />
@@ -203,12 +203,12 @@ export default function SuperadminSupportTicketsDetailModals({
       {/* Reopen Modal Dialog */}
       {showReopenModal && (
         <div
-          className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-150"
+          className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-in fade-in motion-safe:duration-150"
           onClick={(e) => {
             if (e.target === e.currentTarget) setShowReopenModal(false);
           }}
         >
-          <div className="bg-[#0e122b] border border-purple-500/40 rounded-2xl p-5 sm:p-6 max-w-md w-full space-y-4 shadow-2xl text-white my-auto animate-in zoom-in-95 duration-150 ease-out" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-[#0e122b] border border-purple-500/40 rounded-2xl p-5 sm:p-6 max-w-md w-full space-y-4 shadow-2xl text-white my-auto animate-in zoom-in-95 motion-safe:duration-150 ease-out" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between border-b border-purple-500/20 pb-3">
               <h3 className="text-sm font-bold flex items-center gap-2 text-purple-400">
                 <RotateCcw size={16} />

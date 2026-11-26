@@ -75,7 +75,7 @@ export default function SuperadminLibrariesOnboardingSetupSkipModal({ onClose, o
             id="skip-cancel-btn"
             type="button"
             onClick={onClose}
-            className="sa-btn-ghost flex-1 inline-flex items-center justify-center font-semibold rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 py-2.5 text-sm transition-all cursor-pointer"
+            className="sa-btn-ghost flex-1 inline-flex items-center justify-center font-semibold rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 py-2.5 text-sm motion-safe:transition-all cursor-pointer"
             data-testid="superadmin-setup-wizard-setup-wizard-skip-skip-cancel-btn-1">
             {tCopy("COPY.CONTINUE_SETUP")}
           </button>
@@ -83,7 +83,7 @@ export default function SuperadminLibrariesOnboardingSetupSkipModal({ onClose, o
             id="skip-confirm-btn"
             type="button"
             onClick={onConfirm}
-            className="sa-wizard-modal-go-btn flex-1 inline-flex items-center justify-center gap-2 font-semibold rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white shadow-md shadow-indigo-500/25 py-2.5 text-sm transition-all cursor-pointer"
+            className="sa-wizard-modal-go-btn flex-1 inline-flex items-center justify-center gap-2 font-semibold rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white shadow-md shadow-indigo-500/25 py-2.5 text-sm motion-safe:transition-all cursor-pointer"
             data-testid="superadmin-setup-wizard-setup-wizard-skip-skip-confirm-btn-2">
             <LayoutDashboard size={15} /> {tCopy("COPY.GO_TO_DASHBOARD")}
           </button>

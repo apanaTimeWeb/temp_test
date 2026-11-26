@@ -1,7 +1,7 @@
 'use client';
 
-import type { SuperadminBillingInvoiceSample } from '../types/SuperadminBillingInvoicesTypes';
-export { printSuperadminInvoicesRoster } from './SuperadminBillingInvoicesPrintUtils';
+import type { SuperadminBillingInvoiceSample } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/types/SuperadminBillingInvoicesTypes';
+export { printSuperadminInvoicesRoster } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/utils/SuperadminBillingInvoicesPrintUtils';
 
 /**
  * Downloads invoices as an Excel (.xls) spreadsheet with HTML formatting.

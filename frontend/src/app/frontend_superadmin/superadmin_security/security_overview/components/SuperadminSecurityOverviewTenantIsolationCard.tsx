@@ -137,7 +137,7 @@ export const SuperadminSecurityOverviewTenantIsolationCard: React.FC = () => {
             type="button"
             onClick={handleRunProbe}
             disabled={isProbing}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md shadow-purple-600/30 hover:shadow-purple-500/40 transition-all cursor-pointer min-w-36 justify-center active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md shadow-purple-600/30 hover:shadow-purple-500/40 motion-safe:transition-all cursor-pointer min-w-36 justify-center active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isProbing ? 'Running Probe...' : 'Simulate API Attack'}
           </button>
@@ -145,7 +145,7 @@ export const SuperadminSecurityOverviewTenantIsolationCard: React.FC = () => {
 
         {probeResult && (
           <div
-            className={`rounded-xl border p-3 text-xs space-y-1.5 animate-in fade-in-0 duration-150 ${
+            className={`rounded-xl border p-3 text-xs space-y-1.5 animate-in fade-in-0 motion-safe:duration-150 ${
               probeResult.blocked
                 ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300'
                 : 'border-amber-500/40 bg-amber-500/10 text-amber-300'

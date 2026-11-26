@@ -1,8 +1,8 @@
 // RESPONSIBILITY: Render system aggregate KPI meters across all 12 resources for SuperAdmin overview.
 import React from 'react';
 import { Building2, Users, HardDrive, MessageSquare, Database, ShieldCheck } from 'lucide-react';
-import type { SystemUsageAggregates } from '../types/SuperadminUsageOverviewTypes';
-import { calculateUsagePercent } from '../utils/SuperadminUsageOverviewFormatters';
+import type { SystemUsageAggregates } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/types/SuperadminUsageOverviewTypes';
+import { calculateUsagePercent } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/utils/SuperadminUsageOverviewFormatters';
 
 interface SuperadminUsageOverviewKpiCardsProps {
   summary?: SystemUsageAggregates;
@@ -13,7 +13,7 @@ export function SuperadminUsageOverviewKpiCards({ summary }: SuperadminUsageOver
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="h-28 rounded-2xl border border-indigo-500/20 bg-[#0a0d24]/60 animate-pulse" />
+          <div key={i} className="h-28 rounded-2xl border border-indigo-500/20 bg-[#0a0d24]/60 motion-safe:animate-pulse" />
         ))}
       </div>
     );
@@ -116,7 +116,7 @@ export function SuperadminUsageOverviewKpiCards({ summary }: SuperadminUsageOver
         return (
           <div
             key={kpi.id}
-            className={`p-3.5 rounded-2xl border ${kpi.border} ${kpi.bg} shadow-lg backdrop-blur-md flex flex-col justify-between space-y-2.5 transition-all hover:scale-[1.01]`}
+            className={`p-3.5 rounded-2xl border ${kpi.border} ${kpi.bg} shadow-lg backdrop-blur-md flex flex-col justify-between space-y-2.5 motion-safe:transition-all hover:scale-[1.01]`}
           >
             {/* Top row: Icon + Title + Percentage */}
             <div className="flex items-center justify-between text-xs">
@@ -139,7 +139,7 @@ export function SuperadminUsageOverviewKpiCards({ summary }: SuperadminUsageOver
             {/* Bottom row: Styled Progress Bar */}
             <div className="w-full bg-slate-900 border border-indigo-500/15 h-1.5 rounded-full overflow-hidden">
               <div
-                className={`h-full rounded-full transition-all duration-500 ${kpi.bar}`}
+                className={`h-full rounded-full motion-safe:transition-all motion-safe:duration-500 ${kpi.bar}`}
                 style={{ width: `${Math.min(100, kpi.pct)}%` }}
               />
             </div>

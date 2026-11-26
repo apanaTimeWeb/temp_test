@@ -73,7 +73,7 @@ export default function SuperadminFeaturesOverviewPageClient() {
     <div className="space-y-6">
       {/* Floating Notification Toast */}
       {notification && (
-        <div className="fixed bottom-5 right-5 z-[200] p-3.5 rounded-2xl border border-emerald-500/40 bg-slate-950/95 text-white shadow-2xl shadow-emerald-950/50 flex items-center gap-3 text-xs animate-in slide-in-from-bottom duration-200 backdrop-blur-xl">
+        <div className="fixed bottom-5 right-5 z-[200] p-3.5 rounded-2xl border border-emerald-500/40 bg-slate-950/95 text-white shadow-2xl shadow-emerald-950/50 flex items-center gap-3 text-xs animate-in slide-in-from-bottom motion-safe:duration-200 backdrop-blur-xl">
           {notification.type === 'success' ? (
             <CheckCircle2 size={18} className="text-emerald-400 shrink-0" />
           ) : (

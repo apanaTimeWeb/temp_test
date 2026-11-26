@@ -70,7 +70,7 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in motion-safe:duration-200"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) setIsTemplateModalOpen(false);
       }}
@@ -79,7 +79,7 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="template-modal-title"
-        className="bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] border border-indigo-500/30 text-slate-100 shadow-2xl rounded-3xl w-full max-w-2xl p-6 sm:p-7 relative space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200 ease-out"
+        className="bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] border border-indigo-500/30 text-slate-100 shadow-2xl rounded-3xl w-full max-w-2xl p-6 sm:p-7 relative space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 motion-safe:duration-200 ease-out"
         data-testid="template-detail-dialog"
       >
         {/* Header */}
@@ -111,7 +111,7 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
           <button
             type="button"
             onClick={() => setActiveChannel('EMAIL')}
-            className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+            className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 motion-safe:transition-all cursor-pointer ${
               activeChannel === 'EMAIL'
                 ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -124,7 +124,7 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
           <button
             type="button"
             onClick={() => setActiveChannel('SMS')}
-            className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+            className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 motion-safe:transition-all cursor-pointer ${
               activeChannel === 'SMS'
                 ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -137,7 +137,7 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
           <button
             type="button"
             onClick={() => setActiveChannel('WHATSAPP')}
-            className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+            className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 motion-safe:transition-all cursor-pointer ${
               activeChannel === 'WHATSAPP'
                 ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -159,7 +159,7 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
                 key={v}
                 type="button"
                 onClick={() => handleCopyVar(v)}
-                className="px-2.5 py-1 rounded-lg text-2xs font-mono bg-indigo-950/70 hover:bg-indigo-900 text-indigo-300 border border-indigo-500/30 transition-all flex items-center gap-1 cursor-pointer"
+                className="px-2.5 py-1 rounded-lg text-2xs font-mono bg-indigo-950/70 hover:bg-indigo-900 text-indigo-300 border border-indigo-500/30 motion-safe:transition-all flex items-center gap-1 cursor-pointer"
               >
                 <span>{`{{${v}}}`}</span>
                 {copiedVar === v ? (
@@ -239,7 +239,7 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
           <button
             type="button"
             onClick={() => setIsTemplateModalOpen(false)}
-            className="px-4 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-indigo-500/25 text-xs sm:text-sm font-semibold cursor-pointer transition-all"
+            className="px-4 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-indigo-500/25 text-xs sm:text-sm font-semibold cursor-pointer motion-safe:transition-all"
           >
             Cancel
           </button>
@@ -247,11 +247,11 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
             type="button"
             disabled={updateMutation.isPending}
             onClick={handleSave}
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold text-xs sm:text-sm active:scale-95 transition-all flex items-center gap-2 cursor-pointer min-w-36 justify-center shadow-lg shadow-indigo-500/25"
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold text-xs sm:text-sm active:scale-95 motion-safe:transition-all flex items-center gap-2 cursor-pointer min-w-36 justify-center shadow-lg shadow-indigo-500/25"
           >
             {updateMutation.isPending ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="w-4 h-4 motion-safe:animate-spin" />
                 <span>Saving…</span>
               </>
             ) : (

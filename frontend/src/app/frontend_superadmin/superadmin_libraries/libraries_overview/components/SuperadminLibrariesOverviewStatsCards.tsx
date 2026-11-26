@@ -21,8 +21,8 @@ export default function SuperadminLibrariesOverviewStatsCards({
   return (
     <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mb-6" aria-label="Libraries Statistics">
       {/* Card 1: Total Registered Libraries */}
-      <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#1a1f4e] to-indigo-900/60 p-5 sm:p-6 shadow-lg shadow-indigo-950/50 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/60">
-        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
+      <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#1a1f4e] to-indigo-900/60 p-5 sm:p-6 shadow-lg shadow-indigo-950/50 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-indigo-400/60">
+        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity motion-safe:duration-500 pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,32 Q15,22 35,18 T75,14 T115,8 T150,4" fill="none" stroke="#818cf8" strokeWidth="3" strokeLinecap="round" />
         </svg>
         <div className="flex items-start justify-between relative z-10 gap-3">
@@ -49,8 +49,8 @@ export default function SuperadminLibrariesOverviewStatsCards({
       </div>
 
       {/* Card 2: Active Tenants */}
-      <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0f2d22] to-emerald-900/60 p-5 sm:p-6 shadow-lg shadow-emerald-950/50 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/60">
-        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
+      <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0f2d22] to-emerald-900/60 p-5 sm:p-6 shadow-lg shadow-emerald-950/50 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-emerald-400/60">
+        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity motion-safe:duration-500 pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,30 Q20,20 40,24 T80,16 T120,10 T150,6" fill="none" stroke="#34d399" strokeWidth="3" strokeLinecap="round" />
         </svg>
         <div className="flex items-start justify-between relative z-10 gap-3">
@@ -77,8 +77,8 @@ export default function SuperadminLibrariesOverviewStatsCards({
       </div>
 
       {/* Card 3: Enrolled Students */}
-      <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0f2540] to-sky-900/60 p-5 sm:p-6 shadow-lg shadow-sky-950/50 transition-all duration-300 hover:scale-[1.01] hover:border-sky-400/60">
-        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
+      <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0f2540] to-sky-900/60 p-5 sm:p-6 shadow-lg shadow-sky-950/50 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-sky-400/60">
+        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity motion-safe:duration-500 pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,34 Q18,24 38,20 T78,12 T118,8 T150,4" fill="none" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" />
         </svg>
         <div className="flex items-start justify-between relative z-10 gap-3">
@@ -105,8 +105,8 @@ export default function SuperadminLibrariesOverviewStatsCards({
       </div>
 
       {/* Card 4: LTV Revenue */}
-      <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#2d1f08] to-amber-900/60 p-5 sm:p-6 shadow-lg shadow-amber-950/50 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/60">
-        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
+      <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#2d1f08] to-amber-900/60 p-5 sm:p-6 shadow-lg shadow-amber-950/50 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-amber-400/60">
+        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity motion-safe:duration-500 pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,36 Q16,26 36,22 T76,14 T116,8 T150,4" fill="none" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" />
         </svg>
         <div className="flex items-start justify-between relative z-10 gap-3">

@@ -22,7 +22,7 @@ export function SuperadminCommunicationNotificationCenterHeader() {
               Notification Center
             </h1>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
               Gateways Active
             </span>
           </div>
@@ -54,7 +54,7 @@ export function SuperadminCommunicationNotificationCenterHeader() {
         <button
           type="button"
           onClick={() => setIsComposeOpen(true)}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold text-xs sm:text-sm active:scale-95 transition-all shadow-lg shadow-indigo-500/25 cursor-pointer min-w-36"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold text-xs sm:text-sm active:scale-95 motion-safe:transition-all shadow-lg shadow-indigo-500/25 cursor-pointer min-w-36"
           data-testid="superadmin-notif-compose-btn"
         >
           <PlusCircle className="w-4 h-4" />

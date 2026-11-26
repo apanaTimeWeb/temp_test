@@ -1,6 +1,6 @@
 'use client';
 
-import type { SuperadminLibrariesLibrary } from '../types/SuperadminLibrariesOverviewTypes';
+import type { SuperadminLibrariesLibrary } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
 
 /**
  * Exports libraries to an Excel-compatible (.xls) HTML document with styling.

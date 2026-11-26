@@ -5,7 +5,7 @@
 import { SuperadminPageLoader } from '@/components/ui/loader/SuperadminLoader';
 import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
-import SuperadminCommunicationNotificationCenterListSkeleton from './components/SuperadminCommunicationNotificationCenterListSkeleton';
+import SuperadminCommunicationNotificationCenterListSkeleton from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/components/SuperadminCommunicationNotificationCenterListSkeleton';
 
 export default function ModuleLoading() {
   const t = useTranslations('SUPERADMIN_COMMUNICATION');

@@ -133,7 +133,7 @@ export default function SuperadminUsersBulkWhatsAppModal({
                   key={t.id}
                   type="button"
                   onClick={() => setTemplate(t.text)}
-                  className={`rounded-xl border p-2.5 text-left transition-all cursor-pointer ${
+                  className={`rounded-xl border p-2.5 text-left motion-safe:transition-all cursor-pointer ${
                     template === t.text
                       ? 'border-emerald-500/50 bg-emerald-500/15 text-emerald-300 font-semibold shadow-sm'
                       : 'border-slate-800 bg-slate-950/60 text-slate-400 hover:text-slate-200 hover:border-slate-700'
@@ -173,7 +173,7 @@ export default function SuperadminUsersBulkWhatsAppModal({
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-slate-800">
               <div
-                className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300 rounded-full"
+                className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 motion-safe:transition-all motion-safe:duration-300 rounded-full"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -209,7 +209,7 @@ export default function SuperadminUsersBulkWhatsAppModal({
                     <button
                       type="button"
                       onClick={() => handleOpenChat(u)}
-                      className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold transition-all cursor-pointer ${
+                      className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold motion-safe:transition-all cursor-pointer ${
                         isOpened
                           ? 'border border-slate-700 bg-slate-800/60 text-slate-400 hover:text-white'
                           : 'border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25'

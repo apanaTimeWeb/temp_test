@@ -12,8 +12,8 @@ import {
   fetchRateLimits,
   fetchWebhookEndpoints,
   fetchWebhookRetries,
-} from '../api/superadmin_integrations_overview.api';
-import { SUPERADMIN_INTEGRATIONS_OVERVIEW_KEYS } from '../api/superadmin_integrations_overview.query_keys';
+} from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/api/superadmin_integrations_overview.api';
+import { SUPERADMIN_INTEGRATIONS_OVERVIEW_KEYS } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/api/superadmin_integrations_overview.query_keys';
 
 export function useSuperadminIntegrationsQueries() {
   const summaryQuery = useQuery({

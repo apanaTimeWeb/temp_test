@@ -41,7 +41,7 @@ export default function SuperadminLibrariesCreateStepProvisioning({
   if (provisioningResult) {
     return (
       <div className="space-y-5 text-center py-4">
-        <div className="inline-flex p-3 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 animate-bounce">
+        <div className="inline-flex p-3 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 motion-safe:animate-bounce">
           <CheckCircle2 size={36} />
         </div>
 
@@ -85,7 +85,7 @@ export default function SuperadminLibrariesCreateStepProvisioning({
               <button
                 type="button"
                 onClick={handleCopyLink}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shrink-0 cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold motion-safe:transition-all shrink-0 cursor-pointer"
               >
                 {copied ? <Check size={14} /> : <Copy size={14} />}
                 <span>{copied ? 'Copied!' : 'Copy Link'}</span>
@@ -101,7 +101,7 @@ export default function SuperadminLibrariesCreateStepProvisioning({
           <button
             type="button"
             onClick={onDone}
-            className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all cursor-pointer shadow-md"
+            className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold motion-safe:transition-all cursor-pointer shadow-md"
           >
             Done & View in Library Directory
           </button>
@@ -174,7 +174,7 @@ export default function SuperadminLibrariesCreateStepProvisioning({
           type="button"
           disabled={isExecuting}
           onClick={onExecuteProvisioning}
-          className="w-full sm:w-auto min-w-[260px] inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-500 text-white text-sm font-bold shadow-lg shadow-emerald-950/60 transition-all hover:scale-[1.01] active:scale-95 cursor-pointer disabled:opacity-50"
+          className="w-full sm:w-auto min-w-[260px] inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-500 text-white text-sm font-bold shadow-lg shadow-emerald-950/60 motion-safe:transition-all hover:scale-[1.01] active:scale-95 cursor-pointer disabled:opacity-50"
         >
           {isExecuting ? (
             <span>Provisioning Workspace Architecture...</span>

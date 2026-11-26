@@ -125,7 +125,7 @@ export default function SuperadminNavigationShellAlertsDropdown({
               <div
                 key={alert.id}
                 onClick={() => onMarkAlertRead(alert.id, alert.link)}
-                className={`sa-notif-item p-3.5 hover:bg-white/[0.04] transition-all cursor-pointer flex gap-3 text-left ${
+                className={`sa-notif-item p-3.5 hover:bg-white/[0.04] motion-safe:transition-all cursor-pointer flex gap-3 text-left ${
                   alert.unread ? 'sa-notif-item--unread bg-indigo-500/[0.06]' : ''
                 }`}
               >
@@ -147,7 +147,7 @@ export default function SuperadminNavigationShellAlertsDropdown({
                 </div>
                 {alert.unread && (
                   <div className="sa-notif-unread-dot self-center">
-                    <span className="inline-block h-2 w-2 rounded-full bg-indigo-400 shadow-sm shadow-indigo-400/80 animate-pulse" />
+                    <span className="inline-block h-2 w-2 rounded-full bg-indigo-400 shadow-sm shadow-indigo-400/80 motion-safe:animate-pulse" />
                   </div>
                 )}
               </div>

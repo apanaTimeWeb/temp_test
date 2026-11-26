@@ -11,7 +11,7 @@ import {
   Users,
 } from 'lucide-react';
 import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/config/superadmin_navigation_routes';
-import { SUPERADMIN_SECONDARY_MODULES } from './SuperadminNavigationShellItemsSecondary';
+import { SUPERADMIN_SECONDARY_MODULES } from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/constants/SuperadminNavigationShellItemsSecondary';
 
 export interface SuperadminNavSubItem {
   id: string;

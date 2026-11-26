@@ -20,7 +20,7 @@ import {
   getFallbackTemplates,
   getFallbackUsage,
   getFallbackAccounts,
-} from './superadmin_communication_notification_center.store';
+} from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/api/superadmin_communication_notification_center.store';
 
 export type { NotificationFilterParams };
 
@@ -130,4 +130,4 @@ export {
   updateSuperadminNotificationTemplate,
   fetchSuperadminNotificationUsage,
   fetchSuperadminTargetAccounts,
-} from './superadmin_communication_notification_center_templates.api';
+} from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/api/superadmin_communication_notification_center_templates.api';

@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Display aggregate KPI telemetry cards for quota expansion requests.
 import React from 'react';
 import { GitBranch, Clock, CheckCircle2, XCircle } from 'lucide-react';
-import type { QuotaRequestsKpis } from '../types/SuperadminUsageQuotaRequestsTypes';
+import type { QuotaRequestsKpis } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/types/SuperadminUsageQuotaRequestsTypes';
 
 interface SuperadminUsageQuotaRequestsKpiCardsProps {
   kpis?: QuotaRequestsKpis;
@@ -15,7 +15,7 @@ export function SuperadminUsageQuotaRequestsKpiCards({
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-24 rounded-2xl border border-indigo-500/20 bg-[#0a0d24]/60 animate-pulse" />
+          <div key={i} className="h-24 rounded-2xl border border-indigo-500/20 bg-[#0a0d24]/60 motion-safe:animate-pulse" />
         ))}
       </div>
     );
@@ -79,7 +79,7 @@ export function SuperadminUsageQuotaRequestsKpiCards({
         return (
           <div
             key={c.title}
-            className={`p-4 rounded-2xl border ${c.border} ${c.bg} shadow-lg backdrop-blur-xl flex flex-col justify-between space-y-2 hover:scale-[1.01] transition-all`}
+            className={`p-4 rounded-2xl border ${c.border} ${c.bg} shadow-lg backdrop-blur-xl flex flex-col justify-between space-y-2 hover:scale-[1.01] motion-safe:transition-all`}
           >
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-200 flex items-center gap-2">

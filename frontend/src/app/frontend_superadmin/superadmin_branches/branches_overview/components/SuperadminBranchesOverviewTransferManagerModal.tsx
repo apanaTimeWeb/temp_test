@@ -114,7 +114,7 @@ export default function SuperadminBranchesOverviewTransferManagerModal({
             </button>
             <button
               type="submit"
-              className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-xs font-bold text-on-primary shadow-sm active:scale-95 transition-all cursor-pointer motion-safe:active:scale-95"
+              className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-xs font-bold text-on-primary shadow-sm active:scale-95 motion-safe:transition-all cursor-pointer motion-safe:active:scale-95"
             >
               Confirm Transfer & Log
             </button>

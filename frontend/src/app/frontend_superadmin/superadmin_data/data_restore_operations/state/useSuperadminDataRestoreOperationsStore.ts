@@ -5,7 +5,7 @@
  */
 
 import { create } from 'zustand';
-import type { BackupSnapshotRecord } from '../types/superadmin_data_restore_operations.types';
+import type { BackupSnapshotRecord } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/types/superadmin_data_restore_operations.types';
 
 interface RestoreOperationsState {
   selectedSnapshot: BackupSnapshotRecord | null;

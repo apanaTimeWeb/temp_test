@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { Download, FileSpreadsheet, Printer, RotateCcw, Search, Ticket, X } from 'lucide-react';
-import { SUPERADMIN_SUPPORT_TICKETS_FILTERS, SUPERADMIN_SUPPORT_TICKET_TYPES } from '../constants/SuperadminSupportTicketsOverviewConstants';
-import type { SuperadminSupportTicketsFilter } from '../types/SuperadminSupportTicketsOverviewTypes';
+import { SUPERADMIN_SUPPORT_TICKETS_FILTERS, SUPERADMIN_SUPPORT_TICKET_TYPES } from '@/app/frontend_superadmin/superadmin_support/support_tickets/constants/SuperadminSupportTicketsOverviewConstants';
+import type { SuperadminSupportTicketsFilter } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
 
 interface SuperadminSupportTicketsHeroControlsProps {
   t: (key: string, values?: Record<string, string | number>) => string;
@@ -59,7 +59,7 @@ export default function SuperadminSupportTicketsHeroControls({
             <button
               type="button"
               onClick={onOpenCreate}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-indigo-600 text-xs font-bold text-white shadow-lg shadow-rose-950/40 hover:shadow-rose-500/30 hover:from-rose-500 hover:to-indigo-500 transition-all duration-200 active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 group"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-indigo-600 text-xs font-bold text-white shadow-lg shadow-rose-950/40 hover:shadow-rose-500/30 hover:from-rose-500 hover:to-indigo-500 motion-safe:transition-all motion-safe:duration-200 active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 group"
             >
               <div className="p-1 rounded-lg bg-white/20 text-white group-hover:scale-110 transition-transform">
                 <Ticket size={14} strokeWidth={2.4} />
@@ -69,7 +69,7 @@ export default function SuperadminSupportTicketsHeroControls({
             <button
               type="button"
               onClick={exportSampleTicketsExcel}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-xs font-semibold transition-all cursor-pointer shadow-xs whitespace-nowrap shrink-0 active:scale-[0.97]"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-xs whitespace-nowrap shrink-0 active:scale-[0.97]"
               title="Download support tickets Excel table (.xls)"
             >
               <FileSpreadsheet size={14} className="text-emerald-400" />
@@ -78,7 +78,7 @@ export default function SuperadminSupportTicketsHeroControls({
             <button
               type="button"
               onClick={printTicketsRoster}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 text-xs font-semibold transition-all cursor-pointer shadow-xs whitespace-nowrap shrink-0 active:scale-[0.97]"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-xs whitespace-nowrap shrink-0 active:scale-[0.97]"
               title="Print support tickets roster"
             >
               <Printer size={14} className="text-indigo-400" />
@@ -87,7 +87,7 @@ export default function SuperadminSupportTicketsHeroControls({
             <button
               type="button"
               onClick={exportSampleTickets}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-all cursor-pointer shadow-xs whitespace-nowrap shrink-0 active:scale-[0.97]"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-xs whitespace-nowrap shrink-0 active:scale-[0.97]"
               title="Download sample CSV of visible tickets"
             >
               <Download size={14} className="text-slate-400" />

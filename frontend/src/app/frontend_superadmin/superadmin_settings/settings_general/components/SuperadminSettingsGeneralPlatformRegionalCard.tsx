@@ -15,7 +15,7 @@ export const SuperadminSettingsGeneralPlatformRegionalCard: FC = () => {
   const { register, formState: { errors } } = useFormContext<SuperadminSettingsFormValues>();
 
   return (
-    <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-6 space-y-6 hover:border-indigo-500/35 transition-all">
+    <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-6 space-y-6 hover:border-indigo-500/35 motion-safe:transition-all">
       <div className="flex items-center justify-between border-b border-indigo-500/15 pb-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400">
@@ -40,7 +40,7 @@ export const SuperadminSettingsGeneralPlatformRegionalCard: FC = () => {
           <input maxLength={30}
             id="settings-platform-name"
             type="text"
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             placeholder="e.g. Library OS"
             {...register('generalConfig.platformName')}
             data-testid="superadmin-settings-platform-name-input"
@@ -58,7 +58,7 @@ export const SuperadminSettingsGeneralPlatformRegionalCard: FC = () => {
           <input maxLength={30}
             id="settings-support-email"
             type="email"
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             placeholder="support@example.com"
             {...register('generalConfig.supportEmail')}
             data-testid="superadmin-settings-support-email-input"
@@ -75,7 +75,7 @@ export const SuperadminSettingsGeneralPlatformRegionalCard: FC = () => {
           </label>
           <input
             id="settings-support-phone" type="tel" maxLength={15} inputMode="tel"
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             placeholder="+91 98765 43210"
             {...register('generalConfig.supportPhone')}
             data-testid="superadmin-settings-support-phone-input"
@@ -90,7 +90,7 @@ export const SuperadminSettingsGeneralPlatformRegionalCard: FC = () => {
           </label>
           <select
             id="settings-default-timezone"
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             {...register('generalConfig.timezone')}
             data-testid="superadmin-settings-timezone-select"
           >
@@ -110,7 +110,7 @@ export const SuperadminSettingsGeneralPlatformRegionalCard: FC = () => {
           </label>
           <select
             id="settings-default-language"
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             {...register('generalConfig.defaultLanguage')}
             data-testid="superadmin-settings-language-select"
           >
@@ -130,7 +130,7 @@ export const SuperadminSettingsGeneralPlatformRegionalCard: FC = () => {
           </label>
           <select
             id="settings-default-currency"
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             {...register('generalConfig.currency')}
             data-testid="superadmin-settings-currency-select"
           >
@@ -158,7 +158,7 @@ export const SuperadminSettingsGeneralPlatformRegionalCard: FC = () => {
               <input maxLength={30}
                 id="settings-platform-logo-url"
                 type="text"
-                className="mt-1 w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 placeholder:text-slate-500 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                className="mt-1 w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 placeholder:text-slate-500 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 placeholder="/images/library-os-logo.svg"
                 {...register('generalConfig.platformLogoUrl')}
                 data-testid="superadmin-settings-logo-url-input"
@@ -171,7 +171,7 @@ export const SuperadminSettingsGeneralPlatformRegionalCard: FC = () => {
               <input maxLength={30}
                 id="settings-favicon-url"
                 type="text"
-                className="mt-1 w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 placeholder:text-slate-500 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                className="mt-1 w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 placeholder:text-slate-500 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 placeholder="/favicon.ico"
                 {...register('generalConfig.faviconUrl')}
                 data-testid="superadmin-settings-favicon-url-input"

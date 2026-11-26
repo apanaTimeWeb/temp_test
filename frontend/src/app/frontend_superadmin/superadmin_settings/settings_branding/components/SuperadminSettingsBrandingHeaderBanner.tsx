@@ -26,7 +26,7 @@ export const SuperadminSettingsBrandingHeaderBanner: FC<SuperadminSettingsBrandi
       <p className="text-slate-400 text-xs sm:text-sm max-w-2xl leading-relaxed">{subtitle}</p>
     </div>
     <div className="flex items-center gap-2.5 text-xs text-slate-300 bg-slate-900/90 border border-indigo-500/30 rounded-xl px-4 py-2 self-start md:self-auto shrink-0 shadow-lg relative">
-      <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
+      <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
       <span className="font-semibold text-indigo-200">Live Simulator Sandbox</span>
     </div>
   </div>

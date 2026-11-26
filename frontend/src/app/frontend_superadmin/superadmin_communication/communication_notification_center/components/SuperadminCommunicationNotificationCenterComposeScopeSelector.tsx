@@ -28,7 +28,7 @@ export function SuperadminCommunicationNotificationCenterComposeScopeSelector({
         <label className="text-xs font-bold text-slate-200">Target Audience Scope</label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <label
-            className={`p-3.5 rounded-xl border flex items-center gap-2.5 cursor-pointer transition-all ${
+            className={`p-3.5 rounded-xl border flex items-center gap-2.5 cursor-pointer motion-safe:transition-all ${
               selectedTargetScope === 'GLOBAL'
                 ? 'border-indigo-500 bg-indigo-500/15 text-white font-semibold shadow-inner shadow-indigo-500/20'
                 : 'border-indigo-500/20 bg-slate-950/60 hover:bg-slate-900/60 text-slate-400'
@@ -48,7 +48,7 @@ export function SuperadminCommunicationNotificationCenterComposeScopeSelector({
           </label>
 
           <label
-            className={`p-3.5 rounded-xl border flex items-center gap-2.5 cursor-pointer transition-all ${
+            className={`p-3.5 rounded-xl border flex items-center gap-2.5 cursor-pointer motion-safe:transition-all ${
               selectedTargetScope === 'ACCOUNT_SPECIFIC'
                 ? 'border-indigo-500 bg-indigo-500/15 text-white font-semibold shadow-inner shadow-indigo-500/20'
                 : 'border-indigo-500/20 bg-slate-950/60 hover:bg-slate-900/60 text-slate-400'

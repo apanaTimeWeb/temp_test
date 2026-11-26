@@ -18,7 +18,7 @@ export default function SuperadminAnalyticsUsageReportsNotFound() {
       </div>
       <Link
         href={SUPERADMIN_NAVIGATION_ROUTES.analytics_usage_reports}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-500 text-white hover:bg-emerald-600 transition-all cursor-pointer"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-500 text-white hover:bg-emerald-600 motion-safe:transition-all cursor-pointer"
       >
         <ArrowLeft size={14} />
         <span>Return to Usage Reports</span>

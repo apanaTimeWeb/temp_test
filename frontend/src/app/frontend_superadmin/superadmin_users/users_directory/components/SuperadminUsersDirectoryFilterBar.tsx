@@ -75,7 +75,7 @@ export default function SuperadminUsersDirectoryFilterBar({
             <Filter size={13} className="absolute left-2.5 text-purple-400 pointer-events-none" />
             <select
               value={roleFilter}
-              onChange={(e) => setRoleFilter(e.target.value as any)}
+              onChange={(e) => setRoleFilter(e.target.value as SuperadminUsersDirectoryFilterBarProps['roleFilter'])}
               aria-label="Filter by role"
               className="rounded-xl border border-slate-700/60 bg-slate-950/70 pl-7 pr-3 py-1.5 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none transition-colors cursor-pointer"
             >
@@ -90,7 +90,7 @@ export default function SuperadminUsersDirectoryFilterBar({
             <CheckCircle size={13} className="absolute left-2.5 text-emerald-400 pointer-events-none" />
             <select
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value as any)}
+              onChange={(e) => setStatusFilter(e.target.value as SuperadminUsersDirectoryFilterBarProps['statusFilter'])}
               aria-label="Filter by status"
               className="rounded-xl border border-slate-700/60 bg-slate-950/70 pl-7 pr-3 py-1.5 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none transition-colors cursor-pointer"
             >
@@ -104,7 +104,7 @@ export default function SuperadminUsersDirectoryFilterBar({
             <ShieldCheck size={13} className="absolute left-2.5 text-sky-400 pointer-events-none" />
             <select
               value={twoFactorFilter}
-              onChange={(e) => setTwoFactorFilter(e.target.value as any)}
+              onChange={(e) => setTwoFactorFilter(e.target.value as SuperadminUsersDirectoryFilterBarProps['twoFactorFilter'])}
               aria-label="Filter by 2FA"
               className="rounded-xl border border-slate-700/60 bg-slate-950/70 pl-7 pr-3 py-1.5 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none transition-colors cursor-pointer"
             >

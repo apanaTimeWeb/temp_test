@@ -13,7 +13,7 @@ import type {
   PlatformModuleState,
   EffectiveAccessResult,
 } from '@/app/frontend_superadmin/superadmin_features/features_overview/types/superadmin_features_overview.types';
-import { SuperadminFeaturesToggleSwitch } from './SuperadminFeaturesToggleSwitch';
+import { SuperadminFeaturesToggleSwitch } from '@/app/frontend_superadmin/superadmin_features/features_overview/components/SuperadminFeaturesToggleSwitch';
 
 interface MatrixTableProps {
   items: Array<{

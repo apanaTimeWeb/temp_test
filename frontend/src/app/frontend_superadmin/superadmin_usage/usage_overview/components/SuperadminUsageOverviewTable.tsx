@@ -2,9 +2,9 @@
 import React, { useState, useMemo } from 'react';
 import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTablePagination';
 import { Eye, AlertCircle, Building2, HardDrive, MessageSquare, Database } from 'lucide-react';
-import type { LibraryUsageRecord } from '../types/SuperadminUsageOverviewTypes';
-import { calculateUsagePercent, getQuotaColorClasses } from '../utils/SuperadminUsageOverviewFormatters';
-import { OVERAGE_POLICIES, USAGE_TABLE_COLUMNS } from '../constants/SuperadminUsageOverviewConstants';
+import type { LibraryUsageRecord } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/types/SuperadminUsageOverviewTypes';
+import { calculateUsagePercent, getQuotaColorClasses } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/utils/SuperadminUsageOverviewFormatters';
+import { OVERAGE_POLICIES, USAGE_TABLE_COLUMNS } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/constants/SuperadminUsageOverviewConstants';
 
 interface SuperadminUsageOverviewTableProps {
   libraries: LibraryUsageRecord[];
@@ -158,7 +158,7 @@ export function SuperadminUsageOverviewTable({
                         e.stopPropagation();
                         onSelectLibrary(lib.id);
                       }}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-sky-500/40 bg-sky-500/15 px-3 py-1.5 text-xs font-bold text-sky-300 hover:bg-sky-500/25 hover:text-white transition-all shadow-xs cursor-pointer active:scale-95"
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-sky-500/40 bg-sky-500/15 px-3 py-1.5 text-xs font-bold text-sky-300 hover:bg-sky-500/25 hover:text-white motion-safe:transition-all shadow-xs cursor-pointer active:scale-95"
                     >
                       <Eye className="h-3.5 w-3.5 text-sky-400" /> View 12 Quotas
                     </button>

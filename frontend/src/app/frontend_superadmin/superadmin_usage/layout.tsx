@@ -112,13 +112,13 @@ export default function SuperadminUsageLayout({ children }: { children: ReactNod
               <Link
                 key={route.key}
                 href={route.href}
-                className={`group relative flex items-center justify-between rounded-xl border p-3.5 transition-all duration-200 ${
+                className={`group relative flex items-center justify-between rounded-xl border p-3.5 motion-safe:transition-all motion-safe:duration-200 ${
                   isActive ? route.theme.activeCard : route.theme.inactiveCard
                 }`}
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div
-                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-transform duration-200 ${
+                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-transform motion-safe:duration-200 ${
                       isActive ? route.theme.activeIconTile : route.theme.inactiveIconTile
                     }`}
                   >
@@ -134,7 +134,7 @@ export default function SuperadminUsageLayout({ children }: { children: ReactNod
                           isActive ? route.theme.activeBadge : 'border-indigo-500/20 bg-slate-900/80 text-slate-400'
                         }`}
                       >
-                        {isActive && <span className={`h-1.5 w-1.5 rounded-full animate-pulse ${route.theme.pulseDot}`} />}
+                        {isActive && <span className={`h-1.5 w-1.5 rounded-full motion-safe:animate-pulse ${route.theme.pulseDot}`} />}
                         {route.badge}
                       </span>
                     </div>

@@ -6,7 +6,7 @@
 
 import React from 'react';
 import type { Metadata } from 'next';
-import { SuperadminDataRestoreOperationsMain } from './components/SuperadminDataRestoreOperationsMain';
+import { SuperadminDataRestoreOperationsMain } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/components/SuperadminDataRestoreOperationsMain';
 
 export const metadata: Metadata = {
   title: 'Restore Operations & Disaster Drills | Superadmin Data',

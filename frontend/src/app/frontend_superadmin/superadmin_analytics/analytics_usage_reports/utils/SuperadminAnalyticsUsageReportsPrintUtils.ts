@@ -1,5 +1,5 @@
-import type { UsageReportTableRecord } from '../types/SuperadminAnalyticsUsageReportsTypes';
-import { formatStorageSize } from './SuperadminAnalyticsUsageReportsFormatters';
+import type { UsageReportTableRecord } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/types/SuperadminAnalyticsUsageReportsTypes';
+import { formatStorageSize } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/utils/SuperadminAnalyticsUsageReportsFormatters';
 
 /** Prints usage reports roster in 1 landscape page without overflow. */
 export function printUsageReportsRoster(records: readonly UsageReportTableRecord[], title = 'SuperAdmin System Resource & API Usage Report'): void {

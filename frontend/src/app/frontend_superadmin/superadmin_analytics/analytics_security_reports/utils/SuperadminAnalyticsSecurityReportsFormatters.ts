@@ -1,8 +1,8 @@
 // utils/SuperadminAnalyticsSecurityReportsFormatters.ts
 // Formatters and client-side export utilities for Security Reports
 
-import type { SecurityReportTableRecord, SecurityReportsOverviewData } from '../types/SuperadminAnalyticsSecurityReportsTypes';
-export { printSecurityReportsRoster } from './SuperadminAnalyticsSecurityReportsPrintUtils';
+import type { SecurityReportTableRecord, SecurityReportsOverviewData } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/types/SuperadminAnalyticsSecurityReportsTypes';
+export { printSecurityReportsRoster } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/utils/SuperadminAnalyticsSecurityReportsPrintUtils';
 
 export function formatSecurityNumber(val: number): string {
   return new Intl.NumberFormat('en-IN').format(val);

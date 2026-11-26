@@ -12,8 +12,8 @@ import type { SuperadminLibrariesPanelProps, SuperadminLibrariesLibrary } from '
 import { SUPERADMIN_LIBRARIES_EDIT_SCHEMA, type SuperadminLibrariesEditFormValues } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/schemas/SuperadminLibrariesOverviewSchema';
 import { useTranslations } from 'next-intl';
 import { useSuperadminLibrariesOverviewUnsavedChangesGuard } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/hooks/useSuperadminLibrariesOverviewUnsavedChangesGuard';
-import SuperadminLibrariesOverviewPanelEditForm from './SuperadminLibrariesOverviewPanelEditForm';
-import SuperadminLibrariesOverviewPanelViewContent from './SuperadminLibrariesOverviewPanelViewContent';
+import SuperadminLibrariesOverviewPanelEditForm from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewPanelEditForm';
+import SuperadminLibrariesOverviewPanelViewContent from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewPanelViewContent';
 
 /**
  * Accessible, solid, non-transparent center modal popup for library details & configuration.
@@ -155,7 +155,7 @@ export default function SuperadminLibrariesOverviewPanel({ lib, mode, onClose, o
                     ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
                     : 'bg-amber-500/15 text-amber-400 border-amber-500/30'
                 }`}>
-                  <span className={`w-1.5 h-1.5 rounded-full ${lib.status === 'Active' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
+                  <span className={`w-1.5 h-1.5 rounded-full ${lib.status === 'Active' ? 'bg-emerald-400 motion-safe:animate-pulse' : 'bg-amber-400'}`} />
                   {lib.status}
                 </span>
               </div>
@@ -175,7 +175,7 @@ export default function SuperadminLibrariesOverviewPanel({ lib, mode, onClose, o
               <button
                 type="button"
                 aria-label={t('COPY.EDIT_LIBRARY_DETAILS_IN_PREVIEW')}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/35 bg-indigo-500/20 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/35 bg-indigo-500/20 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 motion-safe:transition-all cursor-pointer"
                 onClick={() => setEditing(true)}
                 title="Edit details"
                 data-testid="superadmin-libraries-libraries-edit-library-details-in-preview-1"
@@ -186,7 +186,7 @@ export default function SuperadminLibrariesOverviewPanel({ lib, mode, onClose, o
             ) : (
               <button
                 type="button"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800 text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800 text-xs font-semibold text-slate-300 hover:text-white motion-safe:transition-all cursor-pointer"
                 onClick={requestCancelEdit}
                 title="Switch to Overview"
               >
@@ -197,7 +197,7 @@ export default function SuperadminLibrariesOverviewPanel({ lib, mode, onClose, o
             <button
               type="button"
               aria-label={t('COPY.CLOSE_LIBRARY_DETAILS')}
-              className="p-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 hover:border-slate-600 transition-all cursor-pointer"
+              className="p-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 hover:border-slate-600 motion-safe:transition-all cursor-pointer"
               onClick={requestClose}
               title="Close drawer"
               data-testid="superadmin-libraries-libraries-close-library-details-2"
@@ -212,7 +212,7 @@ export default function SuperadminLibrariesOverviewPanel({ lib, mode, onClose, o
           <button
             type="button"
             onClick={() => setEditing(false)}
-            className={`inline-flex items-center gap-2 py-3 px-3 text-xs font-bold border-b-2 transition-all cursor-pointer ${
+            className={`inline-flex items-center gap-2 py-3 px-3 text-xs font-bold border-b-2 motion-safe:transition-all cursor-pointer ${
               !editing
                 ? 'border-indigo-400 text-indigo-300'
                 : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -224,7 +224,7 @@ export default function SuperadminLibrariesOverviewPanel({ lib, mode, onClose, o
           <button
             type="button"
             onClick={() => setEditing(true)}
-            className={`inline-flex items-center gap-2 py-3 px-3 text-xs font-bold border-b-2 transition-all cursor-pointer ${
+            className={`inline-flex items-center gap-2 py-3 px-3 text-xs font-bold border-b-2 motion-safe:transition-all cursor-pointer ${
               editing
                 ? 'border-indigo-400 text-indigo-300'
                 : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -268,7 +268,7 @@ export default function SuperadminLibrariesOverviewPanel({ lib, mode, onClose, o
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
               type="button"
-              className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all border cursor-pointer ${
+              className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl motion-safe:transition-all border cursor-pointer ${
                 lib.status === 'Active'
                   ? 'text-rose-300 bg-rose-500/15 border-rose-500/35 hover:bg-rose-500/25 shadow-sm shadow-rose-950/40'
                   : 'text-emerald-300 bg-emerald-500/15 border-emerald-500/35 hover:bg-emerald-500/25 shadow-sm shadow-emerald-950/40'
@@ -285,7 +285,7 @@ export default function SuperadminLibrariesOverviewPanel({ lib, mode, onClose, o
             <button
               type="button"
               onClick={requestClose}
-              className="px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-700 transition-all cursor-pointer"
+              className="px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-700 motion-safe:transition-all cursor-pointer"
             >
               Close
             </button>

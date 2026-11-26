@@ -13,7 +13,7 @@ export function SuperadminLibrariesProfileConfigurationCard({ children, classNam
   return (
     <div
       className={cn(
-        'sys-card rounded-2xl border border-indigo-500/20 bg-card/85 backdrop-blur-md shadow-xl shadow-black/20 p-6 transition-all hover:border-indigo-500/35 overflow-hidden',
+        'sys-card rounded-2xl border border-indigo-500/20 bg-card/85 backdrop-blur-md shadow-xl shadow-black/20 p-6 motion-safe:transition-all hover:border-indigo-500/35 overflow-hidden',
         className
       )}
     >

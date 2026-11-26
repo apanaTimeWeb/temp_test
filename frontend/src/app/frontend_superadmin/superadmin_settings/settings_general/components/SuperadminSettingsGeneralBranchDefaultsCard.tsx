@@ -10,7 +10,7 @@ export const SuperadminSettingsGeneralBranchDefaultsCard: FC = () => {
   const { register, formState: { errors } } = useFormContext<SuperadminSettingsFormValues>();
 
   return (
-    <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-6 space-y-6 hover:border-indigo-500/35 transition-all">
+    <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-6 space-y-6 hover:border-indigo-500/35 motion-safe:transition-all">
       <div className="flex items-center justify-between border-b border-indigo-500/15 pb-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400">
@@ -38,7 +38,7 @@ export const SuperadminSettingsGeneralBranchDefaultsCard: FC = () => {
             type="number"
             min={10}
             max={50000}
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             {...register('branchDefaults.defaultMemberCapacity', { valueAsNumber: true })}
             data-testid="superadmin-settings-branch-capacity-input"
           />
@@ -56,7 +56,7 @@ export const SuperadminSettingsGeneralBranchDefaultsCard: FC = () => {
           <input maxLength={30}
             id="settings-opening-time"
             type="time"
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             {...register('branchDefaults.openingTime')}
             data-testid="superadmin-settings-opening-time-input"
           />
@@ -71,7 +71,7 @@ export const SuperadminSettingsGeneralBranchDefaultsCard: FC = () => {
           <input maxLength={30}
             id="settings-closing-time"
             type="time"
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             {...register('branchDefaults.closingTime')}
             data-testid="superadmin-settings-closing-time-input"
           />
@@ -84,7 +84,7 @@ export const SuperadminSettingsGeneralBranchDefaultsCard: FC = () => {
           </label>
           <select
             id="settings-slot-duration"
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             {...register('branchDefaults.slotDurationMinutes', { valueAsNumber: true })}
             data-testid="superadmin-settings-slot-duration-select"
           >
@@ -106,7 +106,7 @@ export const SuperadminSettingsGeneralBranchDefaultsCard: FC = () => {
             type="number"
             min={0}
             max={120}
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             {...register('branchDefaults.checkInGraceMinutes', { valueAsNumber: true })}
             data-testid="superadmin-settings-checkin-grace-input"
           />
@@ -121,7 +121,7 @@ export const SuperadminSettingsGeneralBranchDefaultsCard: FC = () => {
           </label>
           <select
             id="settings-weekend-schedule"
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             {...register('branchDefaults.weekendSchedule')}
             data-testid="superadmin-settings-weekend-schedule-select"
           >

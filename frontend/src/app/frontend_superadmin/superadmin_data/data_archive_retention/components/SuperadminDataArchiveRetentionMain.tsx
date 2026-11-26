@@ -7,12 +7,12 @@
  */
 
 import React from 'react';
-import { useSuperadminDataArchiveRetention } from '../hooks/useSuperadminDataArchiveRetention';
-import { SuperadminDataArchiveRetentionSkeleton } from './SuperadminDataArchiveRetentionSkeleton';
-import { SuperadminDataArchiveRetentionRulesTable } from './SuperadminDataArchiveRetentionRulesTable';
-import { SuperadminDataArchiveRetentionArchiveCatalog } from './SuperadminDataArchiveRetentionArchiveCatalog';
-import { SuperadminDataArchiveRetentionRuleModal } from './SuperadminDataArchiveRetentionRuleModal';
-import { SuperadminDataArchiveRetentionEmptyState } from './SuperadminDataArchiveRetentionEmptyState';
+import { useSuperadminDataArchiveRetention } from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/hooks/useSuperadminDataArchiveRetention';
+import { SuperadminDataArchiveRetentionSkeleton } from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/components/SuperadminDataArchiveRetentionSkeleton';
+import { SuperadminDataArchiveRetentionRulesTable } from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/components/SuperadminDataArchiveRetentionRulesTable';
+import { SuperadminDataArchiveRetentionArchiveCatalog } from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/components/SuperadminDataArchiveRetentionArchiveCatalog';
+import { SuperadminDataArchiveRetentionRuleModal } from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/components/SuperadminDataArchiveRetentionRuleModal';
+import { SuperadminDataArchiveRetentionEmptyState } from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/components/SuperadminDataArchiveRetentionEmptyState';
 import { AlertCircle, RotateCcw } from 'lucide-react';
 
 export function SuperadminDataArchiveRetentionMain() {

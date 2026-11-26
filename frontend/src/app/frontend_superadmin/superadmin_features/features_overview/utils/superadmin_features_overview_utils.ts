@@ -10,7 +10,7 @@ import { ALL_16_LIBRARY_MODULES } from '@/app/frontend_superadmin/superadmin_fea
 export {
   simulateApiGuardEvaluation,
   batchSimulateAllEndpoints,
-} from './superadmin_features_overview_simulation_utils';
+} from '@/app/frontend_superadmin/superadmin_features/features_overview/utils/superadmin_features_overview_simulation_utils';
 
 export function isPlanEntitled(state: PlatformModuleState, tier: PlanTier): boolean {
   if (tier === 'Starter') return state.starterPlanAllowed;

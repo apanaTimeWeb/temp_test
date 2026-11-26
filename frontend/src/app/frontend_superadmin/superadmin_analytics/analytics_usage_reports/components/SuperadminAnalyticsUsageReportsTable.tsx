@@ -3,9 +3,9 @@
 
 import React from 'react';
 import { Eye, ChevronLeft, ChevronRight } from 'lucide-react';
-import type { UsageReportTableRecord } from '../types/SuperadminAnalyticsUsageReportsTypes';
-import { formatUsageNumber, formatStorageSize } from '../utils/SuperadminAnalyticsUsageReportsFormatters';
-import { SuperadminAnalyticsUsageReportsEmptyState } from './SuperadminAnalyticsUsageReportsEmptyState';
+import type { UsageReportTableRecord } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/types/SuperadminAnalyticsUsageReportsTypes';
+import { formatUsageNumber, formatStorageSize } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/utils/SuperadminAnalyticsUsageReportsFormatters';
+import { SuperadminAnalyticsUsageReportsEmptyState } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/components/SuperadminAnalyticsUsageReportsEmptyState';
 
 interface Props {
   records: UsageReportTableRecord[];
@@ -126,7 +126,7 @@ export function SuperadminAnalyticsUsageReportsTable({
                     <button
                       type="button"
                       onClick={() => onSelectRecord(r)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border border-indigo-500/30 bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border border-indigo-500/30 bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 hover:text-white motion-safe:transition-all cursor-pointer shadow-xs active:scale-95"
                       title="Inspect library usage details"
                     >
                       <Eye size={13} />
@@ -151,7 +151,7 @@ export function SuperadminAnalyticsUsageReportsTable({
             type="button"
             onClick={() => onPageChange(Math.max(1, currentPage - 1))}
             disabled={currentPage <= 1}
-            className="p-1.5 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-indigo-500/20 text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-all"
+            className="p-1.5 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-indigo-500/20 text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer motion-safe:transition-all"
             aria-label="Previous page"
           >
             <ChevronLeft size={14} />
@@ -163,7 +163,7 @@ export function SuperadminAnalyticsUsageReportsTable({
             type="button"
             onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
             disabled={currentPage >= totalPages}
-            className="p-1.5 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-indigo-500/20 text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-all"
+            className="p-1.5 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-indigo-500/20 text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer motion-safe:transition-all"
             aria-label="Next page"
           >
             <ChevronRight size={14} />

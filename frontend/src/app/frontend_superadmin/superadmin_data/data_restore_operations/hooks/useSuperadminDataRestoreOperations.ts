@@ -6,16 +6,16 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { superadminDataRestoreOperationsKeys } from '../api/superadmin_data_restore_operations.query_keys';
+import { superadminDataRestoreOperationsKeys } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/api/superadmin_data_restore_operations.query_keys';
 import {
   fetchRestoreOverview,
   fetchBackupSnapshots,
   fetchDrillHistory,
   executeRestore,
   triggerSandboxDrill,
-} from '../api/superadmin_data_restore_operations.api';
-import { useSuperadminDataRestoreOperationsStore } from '../state/useSuperadminDataRestoreOperationsStore';
-import type { RestoreExecutionRequest } from '../types/superadmin_data_restore_operations.types';
+} from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/api/superadmin_data_restore_operations.api';
+import { useSuperadminDataRestoreOperationsStore } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/state/useSuperadminDataRestoreOperationsStore';
+import type { RestoreExecutionRequest } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/types/superadmin_data_restore_operations.types';
 
 export function useSuperadminDataRestoreOperations() {
   const queryClient = useQueryClient();

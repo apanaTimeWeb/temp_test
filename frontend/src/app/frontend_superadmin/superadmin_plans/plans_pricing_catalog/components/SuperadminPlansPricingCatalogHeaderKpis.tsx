@@ -45,7 +45,7 @@ export default function SuperadminPlansPricingCatalogHeaderKpis({
                   {t('COPY.SAAS_SUBSCRIPTIONS')}
                 </h1>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="h-2 w-2 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
                   SaaS Control Active
                 </span>
                 <span className="inline-flex items-center gap-1 rounded-full border border-indigo-500/30 bg-indigo-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-indigo-300">
@@ -59,7 +59,7 @@ export default function SuperadminPlansPricingCatalogHeaderKpis({
           </div>
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-md shadow-indigo-500/25 transition-all active:scale-95 cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-md shadow-indigo-500/25 motion-safe:transition-all active:scale-95 cursor-pointer"
             onClick={onOpenAdd}
             data-testid="superadmin-subscriptions-subscriptions-overview-create-plan-2"
           >
@@ -162,7 +162,7 @@ export default function SuperadminPlansPricingCatalogHeaderKpis({
           <button
             type="button"
             onClick={() => onCycleChange('monthly')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold motion-safe:transition-all cursor-pointer ${
               selectedCycle === 'monthly'
                 ? 'bg-indigo-600 text-white shadow-sm'
                 : 'text-slate-400 hover:text-slate-200'
@@ -174,7 +174,7 @@ export default function SuperadminPlansPricingCatalogHeaderKpis({
           <button
             type="button"
             onClick={() => onCycleChange('half_yearly')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold motion-safe:transition-all cursor-pointer flex items-center gap-1.5 ${
               selectedCycle === 'half_yearly'
                 ? 'bg-indigo-600 text-white shadow-sm'
                 : 'text-slate-400 hover:text-slate-200'
@@ -189,7 +189,7 @@ export default function SuperadminPlansPricingCatalogHeaderKpis({
           <button
             type="button"
             onClick={() => onCycleChange('annual')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold motion-safe:transition-all cursor-pointer flex items-center gap-1.5 ${
               selectedCycle === 'annual'
                 ? 'bg-indigo-600 text-white shadow-sm'
                 : 'text-slate-400 hover:text-slate-200'

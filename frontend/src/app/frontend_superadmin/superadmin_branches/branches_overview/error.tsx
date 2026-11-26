@@ -1,6 +1,6 @@
 'use client';
 // RESPONSIBILITY: Route error boundary for branches overview.
-import SuperadminBranchesOverviewErrorFallback from './components/SuperadminBranchesOverviewErrorFallback';
+import SuperadminBranchesOverviewErrorFallback from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewErrorFallback';
 
 type ModuleErrorProps = { error: Error & { digest?: string }; reset: () => void };
 

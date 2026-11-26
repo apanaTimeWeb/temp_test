@@ -6,7 +6,7 @@
 
 import React from 'react';
 import type { Metadata } from 'next';
-import { SuperadminDataArchiveRetentionMain } from './components/SuperadminDataArchiveRetentionMain';
+import { SuperadminDataArchiveRetentionMain } from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/components/SuperadminDataArchiveRetentionMain';
 
 export const metadata: Metadata = {
   title: 'Data Archive & Retention | Superadmin Data',

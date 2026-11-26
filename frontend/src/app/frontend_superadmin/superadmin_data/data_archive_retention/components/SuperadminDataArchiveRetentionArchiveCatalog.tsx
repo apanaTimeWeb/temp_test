@@ -18,12 +18,12 @@ import {
   HardDrive,
   Lock,
 } from 'lucide-react';
-import type { ArchivedRecordItem } from '../types/superadmin_data_archive_retention.types';
+import type { ArchivedRecordItem } from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/types/superadmin_data_archive_retention.types';
 import {
   displayValue,
   formatBytes,
   formatTimestamp,
-} from '../utils/superadmin_data_archive_retention_formatters';
+} from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/utils/superadmin_data_archive_retention_formatters';
 
 interface ArchiveCatalogProps {
   records: ArchivedRecordItem[];

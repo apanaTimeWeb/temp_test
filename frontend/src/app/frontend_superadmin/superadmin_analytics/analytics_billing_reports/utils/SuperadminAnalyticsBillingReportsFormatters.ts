@@ -1,8 +1,8 @@
 // utils/SuperadminAnalyticsBillingReportsFormatters.ts
 // Formatters and export tools for Superadmin Billing Reports (Rule 80 Minor Unit compliance)
 
-import type { BillingReportTableRecord, BillingReportsOverviewData } from '../types/SuperadminAnalyticsBillingReportsTypes';
-export { printBillingReportsRoster } from './SuperadminAnalyticsBillingReportsPrintUtils';
+import type { BillingReportTableRecord, BillingReportsOverviewData } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/types/SuperadminAnalyticsBillingReportsTypes';
+export { printBillingReportsRoster } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/utils/SuperadminAnalyticsBillingReportsPrintUtils';
 
 export function formatBillingCurrency(amountMinor: number, currency = 'INR', locale = 'en-IN'): string {
   const divisor = currency === 'JPY' ? 1 : 100;

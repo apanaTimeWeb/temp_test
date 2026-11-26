@@ -20,7 +20,7 @@ export default function SuperadminModuleNotFound() {
         <p className="mt-1.5 text-xs sm:text-sm text-slate-400 max-w-md mx-auto">{t('COPY.MODULE_NOT_FOUND_MESSAGE')}</p>
       </div>
       <div>
-        <Link className="sa-btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 transition-all active:scale-95 cursor-pointer" href={SUPERADMIN_LIBRARIES_PROFILE_CONFIGURATION_ROUTES.SUPERADMIN_SYSTEM_PROFILE_URLS.DASHBOARD_OVERVIEW} data-testid="superadmin-libraries-profile-configuration-not-found-dashboard-link">
+        <Link className="sa-btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 motion-safe:transition-all active:scale-95 cursor-pointer" href={SUPERADMIN_LIBRARIES_PROFILE_CONFIGURATION_ROUTES.SUPERADMIN_SYSTEM_PROFILE_URLS.DASHBOARD_OVERVIEW} data-testid="superadmin-libraries-profile-configuration-not-found-dashboard-link">
           <ArrowLeft size={16} />
           {t('COPY.BACK_TO_DASHBOARD')}
         </Link>

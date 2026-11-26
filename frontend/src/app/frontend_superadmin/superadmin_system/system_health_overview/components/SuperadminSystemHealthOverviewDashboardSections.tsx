@@ -71,7 +71,7 @@ export default function SuperadminSystemHealthOverviewDashboardSections({
                   window.history.replaceState({}, '', url.toString());
                 }
               }}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
                 isSelected
                   ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-xs'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'

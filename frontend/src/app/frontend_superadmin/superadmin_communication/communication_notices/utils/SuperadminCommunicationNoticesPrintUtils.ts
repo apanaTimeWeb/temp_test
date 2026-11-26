@@ -1,4 +1,4 @@
-import type { SuperadminCommunicationNotice as Notice } from '../types/SuperadminCommunicationNoticesTypes';
+import type { SuperadminCommunicationNotice as Notice } from '@/app/frontend_superadmin/superadmin_communication/communication_notices/types/SuperadminCommunicationNoticesTypes';
 
 /** Prints notices broadcast roster in 1 landscape page without overflow. */
 export function printSuperadminNoticesRoster(notices: readonly Notice[], title = 'SuperAdmin Notices & Broadcast Roster'): void {

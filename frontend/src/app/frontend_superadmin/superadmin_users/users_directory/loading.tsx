@@ -5,7 +5,7 @@
 import { SuperadminPageLoader } from '@/components/ui/loader/SuperadminLoader';
 import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
-import SuperadminUsersDirectoryListSkeleton from './components/SuperadminUsersDirectoryListSkeleton';
+import SuperadminUsersDirectoryListSkeleton from '@/app/frontend_superadmin/superadmin_users/users_directory/components/SuperadminUsersDirectoryListSkeleton';
 
 export default function ModuleLoading() {
   const t = useTranslations('SUPERADMIN_USERS');

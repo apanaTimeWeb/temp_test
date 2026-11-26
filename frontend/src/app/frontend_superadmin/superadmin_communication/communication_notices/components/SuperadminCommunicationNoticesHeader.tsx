@@ -35,7 +35,7 @@ export function SuperadminCommunicationNoticesHeader({
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/25 text-sky-400 text-xs font-semibold mb-3 shadow-xs">
-            <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-sky-400 motion-safe:animate-pulse" />
             <Radio className="w-3.5 h-3.5" />
             <span>Broadcast Network Active</span>
           </div>
@@ -55,7 +55,7 @@ export function SuperadminCommunicationNoticesHeader({
           <button
             type="button"
             onClick={onExportCsv}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-sky-500/50 hover:bg-sky-500/10 text-slate-200 text-xs font-medium transition-all shadow-sm cursor-pointer active:scale-95"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-sky-500/50 hover:bg-sky-500/10 text-slate-200 text-xs font-medium motion-safe:transition-all shadow-sm cursor-pointer active:scale-95"
             title="Export notices to CSV"
           >
             <Download className="w-4 h-4 text-sky-400" />
@@ -65,7 +65,7 @@ export function SuperadminCommunicationNoticesHeader({
             <button
               type="button"
               onClick={onExportExcel}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-950/80 border border-emerald-500/25 hover:border-emerald-500/50 hover:bg-emerald-500/10 text-slate-200 text-xs font-medium transition-all shadow-sm cursor-pointer active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-950/80 border border-emerald-500/25 hover:border-emerald-500/50 hover:bg-emerald-500/10 text-slate-200 text-xs font-medium motion-safe:transition-all shadow-sm cursor-pointer active:scale-95"
               title="Export notices to Excel"
             >
               <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
@@ -75,7 +75,7 @@ export function SuperadminCommunicationNoticesHeader({
           <button
             type="button"
             onClick={onPrint ?? (() => window.print())}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-slate-500/50 hover:bg-white/[0.05] text-slate-300 text-xs font-medium transition-all shadow-sm cursor-pointer active:scale-95"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-slate-500/50 hover:bg-white/[0.05] text-slate-300 text-xs font-medium motion-safe:transition-all shadow-sm cursor-pointer active:scale-95"
             title="Print notices roster"
           >
             <Printer className="w-4 h-4 text-slate-400" />
@@ -84,7 +84,7 @@ export function SuperadminCommunicationNoticesHeader({
           <button
             type="button"
             onClick={onOpenAdd}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 hover:from-sky-500 hover:to-purple-500 text-white text-xs font-bold shadow-lg shadow-sky-500/20 transition-all active:scale-95 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 hover:from-sky-500 hover:to-purple-500 text-white text-xs font-bold shadow-lg shadow-sky-500/20 motion-safe:transition-all active:scale-95 cursor-pointer"
             data-testid="superadmin-communication-communication-notices-post-notice-15"
           >
             <Plus size={15} />
@@ -96,13 +96,13 @@ export function SuperadminCommunicationNoticesHeader({
       {/* Live KPI Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 pt-6 border-t border-indigo-500/20 relative z-10">
         {/* 1. Total Notices - Indigo / Sky */}
-        <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#0c0f2a]/95 via-[#090d24]/90 to-[#141a45]/85 p-5 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/50 hover:shadow-xl hover:shadow-indigo-950/50">
-          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-indigo-500/15 blur-2xl transition-all duration-500 group-hover:bg-indigo-500/25" />
+        <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#0c0f2a]/95 via-[#090d24]/90 to-[#141a45]/85 p-5 shadow-lg shadow-indigo-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-indigo-400/50 hover:shadow-xl hover:shadow-indigo-950/50">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-indigo-500/15 blur-2xl motion-safe:transition-all motion-safe:duration-500 group-hover:bg-indigo-500/25" />
           <div className="relative flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
               Total Notices
             </span>
-            <div className="p-2.5 rounded-xl border shrink-0 transition-transform duration-200 group-hover:scale-110 shadow-md shadow-indigo-500/20 bg-indigo-500/20 border-indigo-500/40 text-indigo-300">
+            <div className="p-2.5 rounded-xl border shrink-0 transition-transform motion-safe:duration-200 group-hover:scale-110 shadow-md shadow-indigo-500/20 bg-indigo-500/20 border-indigo-500/40 text-indigo-300">
               <Bell size={18} strokeWidth={2.3} />
             </div>
           </div>
@@ -116,33 +116,33 @@ export function SuperadminCommunicationNoticesHeader({
         </div>
 
         {/* 2. Active Broadcasts - Emerald / Green */}
-        <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-[#061e14]/95 via-[#061810]/90 to-[#0a2e1d]/85 p-5 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/50 hover:shadow-xl hover:shadow-emerald-950/50">
-          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-emerald-500/15 blur-2xl transition-all duration-500 group-hover:bg-emerald-500/25" />
+        <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-[#061e14]/95 via-[#061810]/90 to-[#0a2e1d]/85 p-5 shadow-lg shadow-emerald-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-emerald-400/50 hover:shadow-xl hover:shadow-emerald-950/50">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-emerald-500/15 blur-2xl motion-safe:transition-all motion-safe:duration-500 group-hover:bg-emerald-500/25" />
           <div className="relative flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-emerald-400/90">
               Active Broadcasts
             </span>
-            <div className="p-2.5 rounded-xl border shrink-0 transition-transform duration-200 group-hover:scale-110 shadow-md shadow-emerald-500/20 bg-emerald-500/20 border-emerald-500/40 text-emerald-400">
+            <div className="p-2.5 rounded-xl border shrink-0 transition-transform motion-safe:duration-200 group-hover:scale-110 shadow-md shadow-emerald-500/20 bg-emerald-500/20 border-emerald-500/40 text-emerald-400">
               <CheckCircle2 size={18} strokeWidth={2.3} />
             </div>
           </div>
           <p className="mt-3 text-3xl font-black tracking-tight text-emerald-300">{stats.active}</p>
           <div className="mt-2.5 flex items-center gap-1.5 text-xs">
             <span className="inline-flex items-center gap-1.5 font-semibold rounded-full px-2.5 py-0.5 border text-emerald-300 bg-emerald-500/15 border-emerald-500/30">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
               Currently Live to Libraries
             </span>
           </div>
         </div>
 
         {/* 3. Expired Notices - Amber */}
-        <div className="group relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/85 p-5 shadow-lg shadow-amber-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/50 hover:shadow-xl hover:shadow-amber-950/50">
-          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-amber-500/15 blur-2xl transition-all duration-500 group-hover:bg-amber-500/25" />
+        <div className="group relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/85 p-5 shadow-lg shadow-amber-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-amber-400/50 hover:shadow-xl hover:shadow-amber-950/50">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-amber-500/15 blur-2xl motion-safe:transition-all motion-safe:duration-500 group-hover:bg-amber-500/25" />
           <div className="relative flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-amber-400/90">
               Expired Notices
             </span>
-            <div className="p-2.5 rounded-xl border shrink-0 transition-transform duration-200 group-hover:scale-110 shadow-md shadow-amber-500/20 bg-amber-500/20 border-amber-500/40 text-amber-400">
+            <div className="p-2.5 rounded-xl border shrink-0 transition-transform motion-safe:duration-200 group-hover:scale-110 shadow-md shadow-amber-500/20 bg-amber-500/20 border-amber-500/40 text-amber-400">
               <Clock size={18} strokeWidth={2.3} />
             </div>
           </div>

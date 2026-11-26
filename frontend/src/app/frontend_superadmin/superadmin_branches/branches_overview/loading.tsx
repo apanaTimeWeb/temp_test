@@ -4,7 +4,7 @@
 // FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
 import { SuperadminPageLoader } from '@/components/ui/loader/SuperadminLoader';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
-import SuperadminBranchesOverviewListSkeleton from './components/SuperadminBranchesOverviewListSkeleton';
+import SuperadminBranchesOverviewListSkeleton from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewListSkeleton';
 
 export default function ModuleLoading() {
   return (

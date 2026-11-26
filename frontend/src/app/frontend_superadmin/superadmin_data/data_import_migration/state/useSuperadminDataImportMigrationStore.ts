@@ -5,7 +5,7 @@
  */
 
 import { create } from 'zustand';
-import type { PreflightValidationResult } from '../types/superadmin_data_import_migration.types';
+import type { PreflightValidationResult } from '@/app/frontend_superadmin/superadmin_data/data_import_migration/types/superadmin_data_import_migration.types';
 
 interface ImportMigrationState {
   activePreflightResult: PreflightValidationResult | null;

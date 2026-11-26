@@ -1,7 +1,7 @@
 // constants/SuperadminAnalyticsBillingReportsConstants.ts
 // Constant configurations for Superadmin Billing Reports
 
-import type { SuperadminAnalyticsBillingReportsFilters } from '../types/SuperadminAnalyticsBillingReportsTypes';
+import type { SuperadminAnalyticsBillingReportsFilters } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/types/SuperadminAnalyticsBillingReportsTypes';
 
 export const BILLING_REPORTS_DATE_RANGES = [
   { value: 'today', labelKey: 'DATE_RANGE_TODAY' },

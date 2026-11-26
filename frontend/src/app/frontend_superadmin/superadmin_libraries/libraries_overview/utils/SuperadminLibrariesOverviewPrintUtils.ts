@@ -1,6 +1,6 @@
 'use client';
 
-import type { SuperadminLibrariesLibrary } from '../types/SuperadminLibrariesOverviewTypes';
+import type { SuperadminLibrariesLibrary } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
 
 /**
  * Opens a print-formatted window to print the libraries roster.

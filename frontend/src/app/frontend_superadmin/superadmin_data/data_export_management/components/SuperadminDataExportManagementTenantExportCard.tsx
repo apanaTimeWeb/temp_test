@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { Building, Download, ShieldCheck, Database } from 'lucide-react';
-import type { TenantOption } from '../types/superadmin_data_export_management.types';
-import { formatNumberWithCommas } from '../utils/superadmin_data_export_management_formatters';
+import type { TenantOption } from '@/app/frontend_superadmin/superadmin_data/data_export_management/types/superadmin_data_export_management.types';
+import { formatNumberWithCommas } from '@/app/frontend_superadmin/superadmin_data/data_export_management/utils/superadmin_data_export_management_formatters';
 
 interface TenantExportCardProps {
   tenants: TenantOption[];
@@ -91,7 +91,7 @@ export function SuperadminDataExportManagementTenantExportCard({
           type="button"
           onClick={() => onInitiateExport(selectedTenantId)}
           disabled={!selectedTenantId}
-          className="group w-full inline-flex items-center justify-center gap-2.5 px-4 py-2.5 text-xs font-extrabold text-white bg-gradient-to-r from-sky-600 via-blue-500 to-sky-600 hover:from-sky-500 hover:to-blue-400 disabled:opacity-50 rounded-xl shadow-lg shadow-sky-600/30 hover:shadow-sky-500/50 hover:scale-[1.01] active:scale-[0.97] transition-all duration-300 cursor-pointer"
+          className="group w-full inline-flex items-center justify-center gap-2.5 px-4 py-2.5 text-xs font-extrabold text-white bg-gradient-to-r from-sky-600 via-blue-500 to-sky-600 hover:from-sky-500 hover:to-blue-400 disabled:opacity-50 rounded-xl shadow-lg shadow-sky-600/30 hover:shadow-sky-500/50 hover:scale-[1.01] active:scale-[0.97] motion-safe:transition-all motion-safe:duration-300 cursor-pointer"
         >
           <span className="p-1 rounded-md bg-white/20 text-white border border-white/30 group-hover:scale-110 transition-transform">
             <Download className="w-3.5 h-3.5" />

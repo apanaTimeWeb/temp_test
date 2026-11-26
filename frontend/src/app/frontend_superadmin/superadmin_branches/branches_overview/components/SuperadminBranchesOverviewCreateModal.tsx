@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X, GitBranch, AlertCircle, Building2 } from 'lucide-react';
 import type { SuperadminBranchRecord, SuperadminLibraryOption } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
-import SuperadminBranchesOverviewQuotaBlockBanner from './SuperadminBranchesOverviewQuotaBlockBanner';
-import SuperadminBranchesOverviewCreateModalFields from './SuperadminBranchesOverviewCreateModalFields';
+import SuperadminBranchesOverviewQuotaBlockBanner from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewQuotaBlockBanner';
+import SuperadminBranchesOverviewCreateModalFields from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewCreateModalFields';
 import { useModalScrollLock } from '@/lib/useModalScrollLock';
 
 interface SuperadminBranchesOverviewCreateModalProps {
@@ -137,13 +137,13 @@ export default function SuperadminBranchesOverviewCreateModal({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-40 flex items-center justify-center bg-overlay-backdrop backdrop-blur-sm p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
+      className="fixed inset-0 z-40 flex items-center justify-center bg-overlay-backdrop backdrop-blur-sm p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in motion-safe:duration-200"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div
-        className="relative w-full max-w-4xl rounded-2xl border border-border bg-overlay p-6 shadow-dialog text-foreground max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 ease-out"
+        className="relative w-full max-w-4xl rounded-2xl border border-border bg-overlay p-6 shadow-dialog text-foreground max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 motion-safe:duration-200 ease-out"
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
@@ -272,7 +272,7 @@ export default function SuperadminBranchesOverviewCreateModal({
             <button
               type="submit"
               disabled={isLimitReached}
-              className={`px-5 py-2.5 rounded-xl text-xs font-bold text-on-primary shadow-sm transition-all cursor-pointer motion-safe:active:scale-95 ${
+              className={`px-5 py-2.5 rounded-xl text-xs font-bold text-on-primary shadow-sm motion-safe:transition-all cursor-pointer motion-safe:active:scale-95 ${
                 isLimitReached
                   ? 'bg-surface opacity-60 cursor-not-allowed text-muted'
                   : 'bg-primary hover:bg-primary-hover'

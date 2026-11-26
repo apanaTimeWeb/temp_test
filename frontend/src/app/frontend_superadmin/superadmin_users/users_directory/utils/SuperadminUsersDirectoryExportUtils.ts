@@ -1,6 +1,6 @@
 import type { SuperadminUserData } from '@/app/frontend_superadmin/superadmin_users/users_directory/types/SuperadminUsersDirectoryTypes';
 import { maskSensitiveData } from '@/app/frontend_superadmin/superadmin_users/users_directory/utils/SuperadminUsersDirectoryMaskSensitiveData';
-export { printSuperadminUsersRoster } from './SuperadminUsersDirectoryPrintUtils';
+export { printSuperadminUsersRoster } from '@/app/frontend_superadmin/superadmin_users/users_directory/utils/SuperadminUsersDirectoryPrintUtils';
 
 function quoteCsvCell(value: unknown): string {
   const str = String(value ?? '');

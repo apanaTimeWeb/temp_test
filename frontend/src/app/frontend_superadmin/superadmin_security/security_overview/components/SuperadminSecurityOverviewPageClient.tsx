@@ -20,14 +20,14 @@ import {
 import {
   SuperadminSecurityOverviewMetricsGrid,
   type SecurityMetricItem,
-} from './SuperadminSecurityOverviewMetricsGrid';
-import { SuperadminSecurityOverviewComplianceCard } from './SuperadminSecurityOverviewComplianceCard';
-import { SuperadminSecurityOverviewTenantIsolationCard } from './SuperadminSecurityOverviewTenantIsolationCard';
-import { SuperadminSecurityOverviewGovernanceCard } from './SuperadminSecurityOverviewGovernanceCard';
+} from '@/app/frontend_superadmin/superadmin_security/security_overview/components/SuperadminSecurityOverviewMetricsGrid';
+import { SuperadminSecurityOverviewComplianceCard } from '@/app/frontend_superadmin/superadmin_security/security_overview/components/SuperadminSecurityOverviewComplianceCard';
+import { SuperadminSecurityOverviewTenantIsolationCard } from '@/app/frontend_superadmin/superadmin_security/security_overview/components/SuperadminSecurityOverviewTenantIsolationCard';
+import { SuperadminSecurityOverviewGovernanceCard } from '@/app/frontend_superadmin/superadmin_security/security_overview/components/SuperadminSecurityOverviewGovernanceCard';
 import {
   SuperadminSecurityOverviewThreatEventsTable,
   type ThreatEvent,
-} from './SuperadminSecurityOverviewThreatEventsTable';
+} from '@/app/frontend_superadmin/superadmin_security/security_overview/components/SuperadminSecurityOverviewThreatEventsTable';
 
 const SAMPLE_SECURITY_EVENTS: ThreatEvent[] = [
   { id: 'SEC-8091', timestamp: '2026-11-20 12:55:10', event: 'Brute Force Login Spike', originIp: '203.0.113.11', location: 'Frankfurt, DE', targetUser: 'superadmin@libraryos.com', severity: 'Critical', actionTaken: 'IP Auto-Banned by WAF', status: 'Blocked' },
@@ -161,7 +161,7 @@ export default function SuperadminSecurityOverviewPageClient() {
                 {t('COPY.SECURITY_CENTER')}
               </h1>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
                 Security Engine Active
               </span>
             </div>
@@ -175,10 +175,10 @@ export default function SuperadminSecurityOverviewPageClient() {
               type="button"
               onClick={handleRunThreatScan}
               disabled={isScanning}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-600/25 hover:shadow-indigo-500/35 transition-all cursor-pointer active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-600/25 hover:shadow-indigo-500/35 motion-safe:transition-all cursor-pointer active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
               data-testid="superadmin-security-overview-scan-threats"
             >
-              <Radar size={14} className={isScanning ? 'animate-spin' : ''} />
+              <Radar size={14} className={isScanning ? 'motion-safe:animate-spin' : ''} />
               <span>{isScanning ? 'Scanning...' : 'Scan Threats'}</span>
             </button>
           </div>

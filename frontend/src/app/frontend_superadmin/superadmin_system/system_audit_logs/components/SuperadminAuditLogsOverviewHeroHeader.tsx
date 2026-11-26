@@ -23,7 +23,7 @@ export default function SuperadminAuditLogsOverviewHeroHeader({
               {t('COPY.SYSTEM_AUDIT_LOGS_SAMPLE')}
             </h1>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
               HMAC SHA-256 Tamper-Proof Active
             </span>
           </div>
@@ -35,7 +35,7 @@ export default function SuperadminAuditLogsOverviewHeroHeader({
         <div className="flex flex-wrap items-center gap-2.5">
           <Link
             href="/superadmin/superadmin_security/security_overview"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs font-semibold shadow-xs transition-all cursor-pointer active:scale-[0.98]"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs font-semibold shadow-xs motion-safe:transition-all cursor-pointer active:scale-[0.98]"
           >
             <ShieldCheck size={14} />
             <span>Security Center</span>

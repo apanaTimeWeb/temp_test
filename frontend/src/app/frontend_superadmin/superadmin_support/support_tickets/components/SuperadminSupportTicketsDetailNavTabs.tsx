@@ -25,7 +25,7 @@ export default function SuperadminSupportTicketsDetailNavTabs({
       <button
         type="button"
         onClick={() => setActiveTab('conversation')}
-        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
+        className={`px-3 py-1 rounded-lg text-xs font-bold motion-safe:transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
           activeTab === 'conversation' ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
         }`}
       >
@@ -35,7 +35,7 @@ export default function SuperadminSupportTicketsDetailNavTabs({
       <button
         type="button"
         onClick={() => setActiveTab('internal_notes')}
-        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
+        className={`px-3 py-1 rounded-lg text-xs font-bold motion-safe:transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
           activeTab === 'internal_notes' ? 'bg-amber-600 text-white shadow-xs' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
         }`}
       >
@@ -45,7 +45,7 @@ export default function SuperadminSupportTicketsDetailNavTabs({
       <button
         type="button"
         onClick={() => setActiveTab('attachments')}
-        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
+        className={`px-3 py-1 rounded-lg text-xs font-bold motion-safe:transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
           activeTab === 'attachments' ? 'bg-sky-600 text-white shadow-xs' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
         }`}
       >
@@ -55,7 +55,7 @@ export default function SuperadminSupportTicketsDetailNavTabs({
       <button
         type="button"
         onClick={() => setActiveTab('sla_escalation')}
-        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
+        className={`px-3 py-1 rounded-lg text-xs font-bold motion-safe:transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
           activeTab === 'sla_escalation' ? 'bg-rose-600 text-white shadow-xs' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
         }`}
       >

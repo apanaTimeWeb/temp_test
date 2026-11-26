@@ -6,7 +6,7 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { superadminDataArchiveRetentionKeys } from '../api/superadmin_data_archive_retention.query_keys';
+import { superadminDataArchiveRetentionKeys } from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/api/superadmin_data_archive_retention.query_keys';
 import {
   fetchArchiveOverview,
   fetchRetentionRules,
@@ -14,9 +14,9 @@ import {
   fetchArchivedRecords,
   unarchiveRecord,
   toggleLegalHold,
-} from '../api/superadmin_data_archive_retention.api';
-import { useSuperadminDataArchiveRetentionStore } from '../state/useSuperadminDataArchiveRetentionStore';
-import type { UpdateRetentionRulePayload } from '../types/superadmin_data_archive_retention.types';
+} from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/api/superadmin_data_archive_retention.api';
+import { useSuperadminDataArchiveRetentionStore } from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/state/useSuperadminDataArchiveRetentionStore';
+import type { UpdateRetentionRulePayload } from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/types/superadmin_data_archive_retention.types';
 
 export function useSuperadminDataArchiveRetention() {
   const queryClient = useQueryClient();

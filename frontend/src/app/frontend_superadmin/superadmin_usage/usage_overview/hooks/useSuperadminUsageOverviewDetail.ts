@@ -1,9 +1,9 @@
 // hooks/useSuperadminUsageOverviewDetail.ts
 // RESPONSIBILITY: Fetches detailed 12-resource breakdown for a single selected library.
 import { useQuery } from '@tanstack/react-query';
-import { SUPERADMIN_USAGE_OVERVIEW_QUERY_KEYS } from '../api/superadmin_usage_overview.query_keys';
-import { fetchLibraryUsageDetailById } from '../api/superadmin_usage_overview.api';
-import { getMockLibraryDetailResponse } from '../mocks/handlers/superadmin_usage_overview.handlers';
+import { SUPERADMIN_USAGE_OVERVIEW_QUERY_KEYS } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/api/superadmin_usage_overview.query_keys';
+import { fetchLibraryUsageDetailById } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/api/superadmin_usage_overview.api';
+import { getMockLibraryDetailResponse } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/mocks/handlers/superadmin_usage_overview.handlers';
 
 export function useSuperadminUsageOverviewDetail(libraryId: string | null) {
   return useQuery({

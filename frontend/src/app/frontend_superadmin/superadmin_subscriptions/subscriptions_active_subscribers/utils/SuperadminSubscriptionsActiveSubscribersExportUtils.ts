@@ -1,7 +1,13 @@
 'use client';
 
-import type { SuperadminSubscriptionRecord } from '../types/SuperadminSubscriptionsActiveSubscribersTypes';
-export { printSuperadminSubscriptionsRoster } from './SuperadminSubscriptionsActiveSubscribersPrintUtils';
+import type { SuperadminSubscriptionRecord } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/types/SuperadminSubscriptionsActiveSubscribersTypes';
+export { printSuperadminSubscriptionsRoster } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/utils/SuperadminSubscriptionsActiveSubscribersPrintUtils';
+
+type SubscriberContactFields = SuperadminSubscriptionRecord & {
+  billingContact?: string;
+  phone?: string;
+  email?: string;
+};
 
 function escapeCsv(val: unknown): string {
   if (val === null || val === undefined) return '""';
@@ -24,9 +30,9 @@ export function downloadSuperadminSubscriptionsCsv(
     escapeCsv(sub.cycle),
     escapeCsv(sub.mrr),
     escapeCsv(sub.status),
-    escapeCsv((sub as any).billingContact || 'Primary Admin'),
-    escapeCsv((sub as any).phone || 'N/A'),
-    escapeCsv((sub as any).email || 'N/A'),
+    escapeCsv((sub as SubscriberContactFields).billingContact || 'Primary Admin'),
+    escapeCsv((sub as SubscriberContactFields).phone || 'N/A'),
+    escapeCsv((sub as SubscriberContactFields).email || 'N/A'),
   ]);
 
   const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
@@ -59,9 +65,9 @@ export function downloadSuperadminSubscriptionsExcel(
         <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: center;">${sub.cycle}</td>
         <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold;">₹${sub.mrr?.toLocaleString('en-IN') ?? 0}</td>
         <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: center; color: ${statusColor}; font-weight: bold;">${sub.status}</td>
-        <td style="padding: 8px; border: 1px solid #cbd5e1;">${(sub as any).billingContact || 'Primary Admin'}</td>
-        <td style="padding: 8px; border: 1px solid #cbd5e1;">${(sub as any).phone || 'N/A'}</td>
-        <td style="padding: 8px; border: 1px solid #cbd5e1;">${(sub as any).email || 'N/A'}</td>
+        <td style="padding: 8px; border: 1px solid #cbd5e1;">${(sub as SubscriberContactFields).billingContact || 'Primary Admin'}</td>
+        <td style="padding: 8px; border: 1px solid #cbd5e1;">${(sub as SubscriberContactFields).phone || 'N/A'}</td>
+        <td style="padding: 8px; border: 1px solid #cbd5e1;">${(sub as SubscriberContactFields).email || 'N/A'}</td>
       </tr>`;
     })
     .join('');

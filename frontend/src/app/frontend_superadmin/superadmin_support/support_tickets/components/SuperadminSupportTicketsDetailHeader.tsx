@@ -20,9 +20,9 @@ import type {
   SuperadminSupportTicketPriority,
   SuperadminSupportTicketStatus,
   SuperadminSupportTimeLimitedAccess,
-} from '../types/SuperadminSupportTicketsOverviewTypes';
-import { SUPERADMIN_SUPPORT_TICKETS_ASSIGNEE_OPTIONS } from '../constants/SuperadminSupportTicketsOverviewConstants';
-import { SuperadminSupportTicketsCategoryIcon } from './SuperadminSupportTicketsCategoryIcon';
+} from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
+import { SUPERADMIN_SUPPORT_TICKETS_ASSIGNEE_OPTIONS } from '@/app/frontend_superadmin/superadmin_support/support_tickets/constants/SuperadminSupportTicketsOverviewConstants';
+import { SuperadminSupportTicketsCategoryIcon } from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsCategoryIcon';
 
 interface SuperadminSupportTicketsDetailHeaderProps {
   tkt: SuperadminSupportTicket;
@@ -84,7 +84,7 @@ export default function SuperadminSupportTicketsDetailHeader({
                   : 'text-amber-300 bg-amber-500/15 border-amber-500/30'
               }`}
             >
-              <span className={`w-1.5 h-1.5 rounded-full ${status === 'Resolved' ? 'bg-emerald-400' : status === 'Escalated' ? 'bg-red-400' : status === 'Open' ? 'bg-rose-400' : 'bg-amber-400 animate-pulse'}`} />
+              <span className={`w-1.5 h-1.5 rounded-full ${status === 'Resolved' ? 'bg-emerald-400' : status === 'Escalated' ? 'bg-red-400' : status === 'Open' ? 'bg-rose-400' : 'bg-amber-400 motion-safe:animate-pulse'}`} />
               {status}
             </span>
 
@@ -128,7 +128,7 @@ export default function SuperadminSupportTicketsDetailHeader({
               <button
                 type="button"
                 onClick={onOpenEscalate}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-red-500/40 bg-red-500/15 hover:bg-red-500/25 text-red-300 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-[0.97]"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-red-500/40 bg-red-500/15 hover:bg-red-500/25 text-red-300 text-xs font-bold motion-safe:transition-all shadow-xs cursor-pointer active:scale-[0.97]"
                 title={t('COPY.ESCALATE_TICKET')}
               >
                 <Zap size={12} className="text-red-400" />
@@ -140,7 +140,7 @@ export default function SuperadminSupportTicketsDetailHeader({
               <button
                 type="button"
                 onClick={onOpenReopen}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-purple-500/40 bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-[0.97]"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-purple-500/40 bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 text-xs font-bold motion-safe:transition-all shadow-xs cursor-pointer active:scale-[0.97]"
                 title={t('COPY.REOPEN_TICKET')}
               >
                 <RotateCcw size={12} className="text-purple-400" />
@@ -150,7 +150,7 @@ export default function SuperadminSupportTicketsDetailHeader({
               <button
                 type="button"
                 onClick={onOpenResolve}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-emerald-500/40 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-[0.97]"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-emerald-500/40 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 text-xs font-bold motion-safe:transition-all shadow-xs cursor-pointer active:scale-[0.97]"
                 title={t('COPY.RESOLVE_TICKET')}
               >
                 <CheckCircle2 size={12} className="text-emerald-400" />
@@ -270,7 +270,7 @@ export default function SuperadminSupportTicketsDetailHeader({
 
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 px-3 py-1 text-xs font-bold text-white shadow-md shadow-indigo-950/40 transition-all cursor-pointer active:scale-[0.97] shrink-0"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 px-3 py-1 text-xs font-bold text-white shadow-md shadow-indigo-950/40 motion-safe:transition-all cursor-pointer active:scale-[0.97] shrink-0"
               onClick={onSavePreview}
               data-testid="superadmin-support-tickets-support-tickets-detail-apply-local-preview-changes-4"
             >

@@ -16,13 +16,13 @@ export default function SuperadminLibrariesOverviewHeader({
   onPrintRoster,
 }: SuperadminLibrariesOverviewHeaderProps) {
   return (
-    <div className="w-full max-w-full min-w-0 rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#1a1f4e] to-indigo-900/60 p-5 sm:p-6 shadow-lg transition-all mb-6">
+    <div className="w-full max-w-full min-w-0 rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#1a1f4e] to-indigo-900/60 p-5 sm:p-6 shadow-lg motion-safe:transition-all mb-6">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         {/* Left: Titles & Meta Chips */}
         <div className="space-y-2">
           <div className="flex items-center gap-2 flex-wrap text-xs">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
               Live Multi-Tenant Core
             </span>
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
@@ -50,7 +50,7 @@ export default function SuperadminLibrariesOverviewHeader({
             <button
               type="button"
               onClick={onExportCsv}
-              className="p-2.5 rounded-xl border border-indigo-500/25 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all cursor-pointer"
+              className="p-2.5 rounded-xl border border-indigo-500/25 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 motion-safe:transition-all cursor-pointer"
               title="Export to CSV"
             >
               <Download size={15} />
@@ -58,7 +58,7 @@ export default function SuperadminLibrariesOverviewHeader({
             <button
               type="button"
               onClick={onExportExcel}
-              className="p-2.5 rounded-xl border border-indigo-500/25 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all cursor-pointer"
+              className="p-2.5 rounded-xl border border-indigo-500/25 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 motion-safe:transition-all cursor-pointer"
               title="Export to Excel (.xls)"
             >
               <FileSpreadsheet size={15} />
@@ -66,7 +66,7 @@ export default function SuperadminLibrariesOverviewHeader({
             <button
               type="button"
               onClick={onPrintRoster}
-              className="p-2.5 rounded-xl border border-indigo-500/25 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all cursor-pointer"
+              className="p-2.5 rounded-xl border border-indigo-500/25 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 motion-safe:transition-all cursor-pointer"
               title="Print Library Directory Roster"
             >
               <Printer size={15} />
@@ -78,7 +78,7 @@ export default function SuperadminLibrariesOverviewHeader({
             type="button"
             onClick={onCreateNew}
             id="superadmin-create-library-btn"
-            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-500 text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-emerald-950/60 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-500 text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-emerald-950/60 motion-safe:transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
           >
             <Building2 size={16} className="text-emerald-200" />
             <span>Create New Library Account</span>

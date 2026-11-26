@@ -15,20 +15,21 @@ import {
   Webhook,
 } from 'lucide-react';
 import React, { useState } from 'react';
-import { useSuperadminIntegrationsOverview } from '../hooks/useSuperadminIntegrationsOverview';
-import { useSuperadminIntegrationsOverviewConfirm } from '../hooks/useSuperadminIntegrationsOverviewConfirm';
-import { useSuperadminIntegrationsOverviewMutations } from '../hooks/useSuperadminIntegrationsOverviewMutations';
-import { useSuperadminIntegrationsOverviewStore } from '../state/useSuperadminIntegrationsOverviewStore';
-import { SuperadminIntegrationsOverviewApiGuardSimulatorModal } from './SuperadminIntegrationsOverviewApiGuardSimulatorModal';
-import { SuperadminIntegrationsOverviewApiKeysPanel } from './SuperadminIntegrationsOverviewApiKeysPanel';
-import { SuperadminIntegrationsOverviewEntitlementsPanel } from './SuperadminIntegrationsOverviewEntitlementsPanel';
-import { SuperadminIntegrationsOverviewErrorFallback } from './SuperadminIntegrationsOverviewErrorFallback';
-import { SuperadminIntegrationsOverviewGatewayConfigModal } from './SuperadminIntegrationsOverviewGatewayConfigModal';
-import { SuperadminIntegrationsOverviewGatewayGrid } from './SuperadminIntegrationsOverviewGatewayGrid';
-import { SuperadminIntegrationsOverviewListSkeleton } from './SuperadminIntegrationsOverviewListSkeleton';
-import { SuperadminIntegrationsOverviewLogsPanel } from './SuperadminIntegrationsOverviewLogsPanel';
-import { SuperadminIntegrationsOverviewWebhooksPanel } from './SuperadminIntegrationsOverviewWebhooksPanel';
-import { SuperadminIntegrationsOverviewKpis } from './SuperadminIntegrationsOverviewKpis';
+import type { IntegrationTabId } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/constants/superadmin_integrations_overview.constants';
+import { useSuperadminIntegrationsOverview } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/hooks/useSuperadminIntegrationsOverview';
+import { useSuperadminIntegrationsOverviewConfirm } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/hooks/useSuperadminIntegrationsOverviewConfirm';
+import { useSuperadminIntegrationsOverviewMutations } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/hooks/useSuperadminIntegrationsOverviewMutations';
+import { useSuperadminIntegrationsOverviewStore } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/state/useSuperadminIntegrationsOverviewStore';
+import { SuperadminIntegrationsOverviewApiGuardSimulatorModal } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewApiGuardSimulatorModal';
+import { SuperadminIntegrationsOverviewApiKeysPanel } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewApiKeysPanel';
+import { SuperadminIntegrationsOverviewEntitlementsPanel } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewEntitlementsPanel';
+import { SuperadminIntegrationsOverviewErrorFallback } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewErrorFallback';
+import { SuperadminIntegrationsOverviewGatewayConfigModal } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewGatewayConfigModal';
+import { SuperadminIntegrationsOverviewGatewayGrid } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewGatewayGrid';
+import { SuperadminIntegrationsOverviewListSkeleton } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewListSkeleton';
+import { SuperadminIntegrationsOverviewLogsPanel } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewLogsPanel';
+import { SuperadminIntegrationsOverviewWebhooksPanel } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewWebhooksPanel';
+import { SuperadminIntegrationsOverviewKpis } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewKpis';
 
 export const SuperadminIntegrationsOverviewMain: React.FC = () => {
   const {
@@ -135,8 +136,8 @@ export const SuperadminIntegrationsOverviewMain: React.FC = () => {
                   key={tab.id}
                   role="tab"
                   aria-selected={isActive}
-                  onClick={() => handleTabSelect(tab.id as any)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer whitespace-nowrap ${
+                  onClick={() => handleTabSelect(tab.id as IntegrationTabId)}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl motion-safe:transition-all cursor-pointer whitespace-nowrap ${
                     isActive
                       ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold shadow-md shadow-indigo-500/25'
                       : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60'
@@ -156,7 +157,7 @@ export const SuperadminIntegrationsOverviewMain: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsApiGuardOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-teal-500/15 hover:bg-teal-500/25 border border-teal-500/35 text-teal-300 transition-all cursor-pointer whitespace-nowrap shadow-xs active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-teal-500/15 hover:bg-teal-500/25 border border-teal-500/35 text-teal-300 motion-safe:transition-all cursor-pointer whitespace-nowrap shadow-xs active:scale-95"
             >
               <Terminal size={14} />
               <span>API Guard Probe</span>

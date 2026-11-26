@@ -38,7 +38,7 @@ export function SuperadminCommunicationNotificationCenterTemplatesView() {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-56 rounded-2xl bg-slate-950/60 border border-indigo-500/20 animate-pulse" />
+          <div key={i} className="h-56 rounded-2xl bg-slate-950/60 border border-indigo-500/20 motion-safe:animate-pulse" />
         ))}
       </div>
     );
@@ -65,7 +65,7 @@ export function SuperadminCommunicationNotificationCenterTemplatesView() {
           <button
             type="button"
             onClick={() => setChannelFilter('ALL')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer motion-safe:transition-all ${
               channelFilter === 'ALL'
                 ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -76,7 +76,7 @@ export function SuperadminCommunicationNotificationCenterTemplatesView() {
           <button
             type="button"
             onClick={() => setChannelFilter('EMAIL')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer motion-safe:transition-all flex items-center gap-1.5 ${
               channelFilter === 'EMAIL'
                 ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -88,7 +88,7 @@ export function SuperadminCommunicationNotificationCenterTemplatesView() {
           <button
             type="button"
             onClick={() => setChannelFilter('SMS')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer motion-safe:transition-all flex items-center gap-1.5 ${
               channelFilter === 'SMS'
                 ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -100,7 +100,7 @@ export function SuperadminCommunicationNotificationCenterTemplatesView() {
           <button
             type="button"
             onClick={() => setChannelFilter('WHATSAPP')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer motion-safe:transition-all flex items-center gap-1.5 ${
               channelFilter === 'WHATSAPP'
                 ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -120,7 +120,7 @@ export function SuperadminCommunicationNotificationCenterTemplatesView() {
           return (
             <div
               key={tmpl.id}
-              className="p-5 rounded-2xl bg-[#0b0f28]/90 border border-indigo-500/20 hover:border-indigo-400/50 shadow-xl backdrop-blur-md transition-all hover:shadow-indigo-500/10 flex flex-col justify-between space-y-4 group"
+              className="p-5 rounded-2xl bg-[#0b0f28]/90 border border-indigo-500/20 hover:border-indigo-400/50 shadow-xl backdrop-blur-md motion-safe:transition-all hover:shadow-indigo-500/10 flex flex-col justify-between space-y-4 group"
               data-testid={`template-card-${tmpl.id}`}
             >
               <div>
@@ -199,7 +199,7 @@ export function SuperadminCommunicationNotificationCenterTemplatesView() {
                 <button
                   type="button"
                   onClick={() => handleEdit(tmpl)}
-                  className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-500/20 to-purple-500/20 hover:from-indigo-500/35 hover:to-purple-500/35 text-indigo-200 border border-indigo-500/40 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-sm"
+                  className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-500/20 to-purple-500/20 hover:from-indigo-500/35 hover:to-purple-500/35 text-indigo-200 border border-indigo-500/40 text-xs font-semibold motion-safe:transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-sm"
                   data-testid={`edit-template-btn-${tmpl.id}`}
                 >
                   <Edit3 className="w-3.5 h-3.5 text-indigo-300" />

@@ -18,7 +18,7 @@ export function SuperadminCommunicationNotificationCenterUsageView() {
   if (isLoading || !usage) {
     return (
       <div className="p-8 rounded-2xl bg-[#0c102b]/85 border border-indigo-500/20 flex items-center justify-center text-slate-400 text-sm shadow-xl">
-        <RefreshCw className="w-5 h-5 animate-spin mr-2 text-indigo-400" />
+        <RefreshCw className="w-5 h-5 motion-safe:animate-spin mr-2 text-indigo-400" />
         <span>Loading usage and quota analytics…</span>
       </div>
     );
@@ -86,13 +86,13 @@ export function SuperadminCommunicationNotificationCenterUsageView() {
         {channels.map(({ channel, icon: Icon, data, cardBg, iconStyle, badgeStyle, blurColor, quotaColor }) => (
           <div
             key={channel}
-            className={`group relative overflow-hidden p-5 rounded-2xl border shadow-xl backdrop-blur-md space-y-4 transition-all duration-300 hover:scale-[1.01] ${cardBg}`}
+            className={`group relative overflow-hidden p-5 rounded-2xl border shadow-xl backdrop-blur-md space-y-4 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] ${cardBg}`}
             data-testid={`quota-card-${channel.toLowerCase()}`}
           >
-            <div className={`pointer-events-none absolute -right-6 -bottom-6 w-28 h-28 rounded-full blur-2xl transition-all duration-500 ${blurColor}`} />
+            <div className={`pointer-events-none absolute -right-6 -bottom-6 w-28 h-28 rounded-full blur-2xl motion-safe:transition-all motion-safe:duration-500 ${blurColor}`} />
             <div className="relative flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className={`p-2.5 rounded-xl border shrink-0 transition-transform duration-200 group-hover:scale-110 shadow-md ${iconStyle}`}>
+                <div className={`p-2.5 rounded-xl border shrink-0 transition-transform motion-safe:duration-200 group-hover:scale-110 shadow-md ${iconStyle}`}>
                   <Icon className="w-5 h-5" strokeWidth={2.3} />
                 </div>
                 <div>
@@ -110,7 +110,7 @@ export function SuperadminCommunicationNotificationCenterUsageView() {
             <div className="space-y-1.5 relative">
               <div className="h-2.5 w-full rounded-full bg-slate-950/80 border border-indigo-500/20 overflow-hidden p-0.5">
                 <div
-                  className={`h-full rounded-full ${quotaColor} shadow-sm transition-all duration-500`}
+                  className={`h-full rounded-full ${quotaColor} shadow-sm motion-safe:transition-all motion-safe:duration-500`}
                   style={{ width: `${Math.min(data.quotaUsedPercent, 100)}%` }}
                 />
               </div>

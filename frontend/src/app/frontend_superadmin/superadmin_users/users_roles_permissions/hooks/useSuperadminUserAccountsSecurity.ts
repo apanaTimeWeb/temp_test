@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import type { UserSecurityAccount } from '../types/SuperadminRolesPermissionsManagementTypes';
-import { INITIAL_USER_SECURITY_ACCOUNTS } from '../constants/SuperadminUserSecurityAccountsData';
+import type { UserSecurityAccount } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/types/SuperadminRolesPermissionsManagementTypes';
+import { INITIAL_USER_SECURITY_ACCOUNTS } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/constants/SuperadminUserSecurityAccountsData';
 
 export function useSuperadminUserAccountsSecurity(
   initialAccounts: UserSecurityAccount[] = INITIAL_USER_SECURITY_ACCOUNTS

@@ -1,7 +1,9 @@
 'use client';
 
-import type { SuperadminSupportTicket } from '../types/SuperadminSupportTicketsOverviewTypes';
-export { printSuperadminSupportTicketsRoster } from './SuperadminSupportTicketsOverviewPrintUtils';
+import type { SuperadminSupportTicket } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
+export { printSuperadminSupportTicketsRoster } from '@/app/frontend_superadmin/superadmin_support/support_tickets/utils/SuperadminSupportTicketsOverviewPrintUtils';
+
+type TicketWithOptionalPhone = SuperadminSupportTicket & { phone?: string };
 
 /**
  * Downloads support tickets as an Excel (.xls) spreadsheet.
@@ -25,7 +27,7 @@ export function downloadSuperadminSupportTicketsExcel(
         <td style="padding: 8px; border: 1px solid #cbd5e1;">${tkt.assignee}</td>
         <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: center;">${tkt.slaBreach ? 'BREACHED' : 'OK'}</td>
         <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: center;">${tkt.age}</td>
-        <td style="padding: 8px; border: 1px solid #cbd5e1;">${(tkt as any).phone || 'N/A'}</td>
+        <td style="padding: 8px; border: 1px solid #cbd5e1;">${(tkt as TicketWithOptionalPhone).phone || 'N/A'}</td>
       </tr>`;
     })
     .join('');

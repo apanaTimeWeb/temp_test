@@ -11,7 +11,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/config/superadmin_navigation_routes';
-import type { SuperadminNavigationItem } from './SuperadminNavigationShellItems';
+import type { SuperadminNavigationItem } from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/constants/SuperadminNavigationShellItems';
 
 export const SUPERADMIN_SECONDARY_MODULES: SuperadminNavigationItem[] = [
   {

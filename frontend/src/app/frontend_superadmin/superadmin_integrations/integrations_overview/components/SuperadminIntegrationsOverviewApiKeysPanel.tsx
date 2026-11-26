@@ -10,11 +10,11 @@ import type {
   ApiKeyCreatedResult,
   ApiKeyItem,
   RateLimitPolicy,
-} from '../types/superadmin_integrations_overview.types';
-import { SuperadminIntegrationsOverviewApiKeyCard } from './SuperadminIntegrationsOverviewApiKeyCard';
-import { SuperadminIntegrationsOverviewApiKeyGenerateModal } from './SuperadminIntegrationsOverviewApiKeyGenerateModal';
-import { SuperadminIntegrationsOverviewApiKeySecretModal } from './SuperadminIntegrationsOverviewApiKeySecretModal';
-import { SuperadminIntegrationsOverviewRateLimitForm } from './SuperadminIntegrationsOverviewRateLimitForm';
+} from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/types/superadmin_integrations_overview.types';
+import { SuperadminIntegrationsOverviewApiKeyCard } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewApiKeyCard';
+import { SuperadminIntegrationsOverviewApiKeyGenerateModal } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewApiKeyGenerateModal';
+import { SuperadminIntegrationsOverviewApiKeySecretModal } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewApiKeySecretModal';
+import { SuperadminIntegrationsOverviewRateLimitForm } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewRateLimitForm';
 
 interface SuperadminIntegrationsOverviewApiKeysPanelProps {
   apiKeys: ApiKeyItem[];

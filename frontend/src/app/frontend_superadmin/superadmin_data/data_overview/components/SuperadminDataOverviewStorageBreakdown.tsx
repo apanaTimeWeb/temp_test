@@ -36,7 +36,7 @@ export function SuperadminDataOverviewStorageBreakdown({ storage }: SuperadminDa
             key={item.category}
             style={{ width: `${item.percentage}%`, backgroundColor: item.colorHex }}
             title={`${item.category}: ${item.percentage}%`}
-            className="h-full transition-all"
+            className="h-full motion-safe:transition-all"
           />
         ))}
       </div>

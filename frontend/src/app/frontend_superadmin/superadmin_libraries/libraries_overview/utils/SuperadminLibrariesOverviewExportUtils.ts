@@ -1,6 +1,6 @@
 'use client';
 
-import type { SuperadminLibrariesLibrary } from '../types/SuperadminLibrariesOverviewTypes';
+import type { SuperadminLibrariesLibrary } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
 
 /**
  * Escapes a single CSV cell value according to RFC 4180.
@@ -66,5 +66,5 @@ export function downloadSuperadminLibrariesCsv(
 }
 
 // Re-export excel and print utilities from dedicated modules to respect file limits
-export { downloadSuperadminLibrariesExcel } from './SuperadminLibrariesOverviewExcelUtils';
-export { printSuperadminLibrariesRoster } from './SuperadminLibrariesOverviewPrintUtils';
+export { downloadSuperadminLibrariesExcel } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/utils/SuperadminLibrariesOverviewExcelUtils';
+export { printSuperadminLibrariesRoster } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/utils/SuperadminLibrariesOverviewPrintUtils';

@@ -28,8 +28,8 @@ import {
   Check,
   Award
 } from 'lucide-react';
-import SuperadminLibrariesProfileSecurityCard from './SuperadminLibrariesProfileSecurityCard';
-import SuperadminLibrariesProfileDevicesCard from './SuperadminLibrariesProfileDevicesCard';
+import SuperadminLibrariesProfileSecurityCard from '@/app/frontend_superadmin/superadmin_libraries/libraries_profile_configuration/components/SuperadminLibrariesProfileSecurityCard';
+import SuperadminLibrariesProfileDevicesCard from '@/app/frontend_superadmin/superadmin_libraries/libraries_profile_configuration/components/SuperadminLibrariesProfileDevicesCard';
 import { useSuperadminLibrariesProfileConfigurationUnsavedChangesGuard } from '@/app/frontend_superadmin/superadmin_libraries/libraries_profile_configuration/hooks/useSuperadminLibrariesProfileConfigurationUnsavedChangesGuard';
 
 /**
@@ -71,7 +71,7 @@ export default function SuperadminLibrariesProfileConfigurationPageClient() {
                   {tCopy("COPY.MY_PROFILE")}
                 </h1>
                 <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-400">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
                   Online
                 </span>
               </div>

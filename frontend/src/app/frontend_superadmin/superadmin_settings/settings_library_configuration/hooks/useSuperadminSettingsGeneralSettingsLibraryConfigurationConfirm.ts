@@ -3,7 +3,7 @@ import { AlertTriangle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { createElement, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
-import type { SuperadminSettingsGeneralSettingsLibraryConfigurationConfirmOptions } from '../types/SuperadminSettingsGeneralSettingsLibraryConfigurationConfirmTypes';
+import type { SuperadminSettingsGeneralSettingsLibraryConfigurationConfirmOptions } from '@/app/frontend_superadmin/superadmin_settings/settings_library_configuration/types/SuperadminSettingsGeneralSettingsLibraryConfigurationConfirmTypes';
 
 export type { SuperadminSettingsGeneralSettingsLibraryConfigurationConfirmOptions };
 

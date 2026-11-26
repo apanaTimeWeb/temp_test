@@ -90,14 +90,14 @@ export default function SuperadminSecurityLoginSecurityLockedAccountsTable({
                       <button
                         type="button"
                         onClick={() => onUnlockAccount(acc.id, acc.email)}
-                        className="px-3 py-1 rounded-lg border border-emerald-500/30 bg-emerald-500/15 hover:bg-emerald-500/25 text-[11px] font-semibold text-emerald-300 active:scale-95 transition-all cursor-pointer shadow-xs"
+                        className="px-3 py-1 rounded-lg border border-emerald-500/30 bg-emerald-500/15 hover:bg-emerald-500/25 text-[11px] font-semibold text-emerald-300 active:scale-95 motion-safe:transition-all cursor-pointer shadow-xs"
                       >
                         Unlock
                       </button>
                       <button
                         type="button"
                         onClick={() => onSendRecoveryLink(acc.email)}
-                        className="inline-flex items-center gap-1 px-3 py-1 rounded-lg border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-[11px] font-semibold text-indigo-300 active:scale-95 transition-all cursor-pointer shadow-xs"
+                        className="inline-flex items-center gap-1 px-3 py-1 rounded-lg border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-[11px] font-semibold text-indigo-300 active:scale-95 motion-safe:transition-all cursor-pointer shadow-xs"
                       >
                         <Send size={11} />
                         <span>Send Link</span>

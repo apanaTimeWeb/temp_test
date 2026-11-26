@@ -5,7 +5,7 @@
 import { SuperadminPageLoader } from '@/components/ui/loader/SuperadminLoader';
 import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
-import SuperadminSystemHealthOverviewListSkeleton from './components/SuperadminSystemHealthOverviewListSkeleton';
+import SuperadminSystemHealthOverviewListSkeleton from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewListSkeleton';
 
 export default function ModuleLoading() {
   const t = useTranslations('SUPERADMIN_SYSTEM_HEALTH');

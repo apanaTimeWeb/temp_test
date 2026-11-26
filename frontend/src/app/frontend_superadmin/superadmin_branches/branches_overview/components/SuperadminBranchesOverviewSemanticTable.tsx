@@ -208,7 +208,7 @@ export default function SuperadminBranchesOverviewSemanticTable({
               key={`branch-pg-${i}`}
               type="button"
               onClick={() => setCurrentPage(i)}
-              className={`min-w-8 h-8 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              className={`min-w-8 h-8 px-2 rounded-lg text-xs font-bold motion-safe:transition-all cursor-pointer ${
                 activePage === i
                   ? 'bg-primary text-on-primary shadow-sm font-extrabold'
                   : 'border border-border bg-surface text-secondary hover:bg-surface-elevated hover:text-foreground'

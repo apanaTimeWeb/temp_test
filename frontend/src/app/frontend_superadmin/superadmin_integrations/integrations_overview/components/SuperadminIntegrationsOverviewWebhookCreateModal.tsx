@@ -8,8 +8,8 @@ import React, { useState } from 'react';
 import {
   WEBHOOK_EVENT_CATALOG,
   type WebhookEventName,
-} from '../constants/superadmin_integrations_overview.constants';
-import type { WebhookCreatePayload } from '../types/superadmin_integrations_overview.types';
+} from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/constants/superadmin_integrations_overview.constants';
+import type { WebhookCreatePayload } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/types/superadmin_integrations_overview.types';
 
 interface SuperadminIntegrationsOverviewWebhookCreateModalProps {
   isOpen: boolean;
@@ -57,7 +57,7 @@ export const SuperadminIntegrationsOverviewWebhookCreateModal: React.FC<
       aria-modal="true"
       aria-labelledby="webhook-modal-title"
     >
-      <div className="relative w-full max-w-lg rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] p-6 shadow-2xl text-slate-100 animate-in fade-in-0 zoom-in-95 duration-150">
+      <div className="relative w-full max-w-lg rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] p-6 shadow-2xl text-slate-100 animate-in fade-in-0 zoom-in-95 motion-safe:duration-150">
         <div className="flex items-center justify-between pb-3 border-b border-indigo-500/20">
           <h3 id="webhook-modal-title" className="text-sm font-bold text-slate-100">
             Register New Webhook Endpoint
@@ -136,7 +136,7 @@ export const SuperadminIntegrationsOverviewWebhookCreateModal: React.FC<
               disabled={isCreating}
               className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 px-4 py-1.5 font-semibold text-white cursor-pointer min-w-32 justify-center shadow-md shadow-indigo-500/25 transition-opacity"
             >
-              {isCreating ? <Loader2 size={13} className="animate-spin" /> : <Plus size={13} />}
+              {isCreating ? <Loader2 size={13} className="motion-safe:animate-spin" /> : <Plus size={13} />}
               <span>Save Endpoint</span>
             </button>
           </div>

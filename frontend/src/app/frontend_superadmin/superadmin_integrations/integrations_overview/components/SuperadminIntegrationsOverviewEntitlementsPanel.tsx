@@ -13,7 +13,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import React from 'react';
-import type { PlanEntitlementItem } from '../types/superadmin_integrations_overview.types';
+import type { PlanEntitlementItem } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/types/superadmin_integrations_overview.types';
 
 interface SuperadminIntegrationsOverviewEntitlementsPanelProps {
   entitlements: PlanEntitlementItem[];
@@ -79,7 +79,7 @@ export const SuperadminIntegrationsOverviewEntitlementsPanel: React.FC<
           {/* Telemetry Status Legend (matching Server & Health style) */}
           <div className="flex items-center gap-3 self-start sm:self-auto text-[10px] font-mono font-semibold tracking-wider uppercase select-none">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 shadow-xs">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
               <span>ACTIVE (ON)</span>
             </div>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-slate-700 bg-slate-800/80 text-slate-400">
@@ -134,7 +134,7 @@ export const SuperadminIntegrationsOverviewEntitlementsPanel: React.FC<
                               aria-pressed={isAllowed}
                               onClick={() => onToggleEntitlement(plan.planId, col.key, !isAllowed)}
                               disabled={isUpdating}
-                              className={`premium-switch relative flex items-center w-[62px] h-[28px] p-[3px] rounded-full border-0 cursor-pointer box-border transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed ${
+                              className={`premium-switch relative flex items-center w-[62px] h-[28px] p-[3px] rounded-full border-0 cursor-pointer box-border motion-safe:transition-all motion-safe:duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed ${
                                 isAllowed
                                   ? 'is-armed bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-400 shadow-[0_0_14px_rgba(16,185,129,0.45),inset_0_1px_2px_rgba(0,0,0,0.25)]'
                                   : 'bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-[inset_0_2px_5px_rgba(0,0,0,0.8)] border border-slate-700/80 hover:border-slate-600'
@@ -143,7 +143,7 @@ export const SuperadminIntegrationsOverviewEntitlementsPanel: React.FC<
                             >
                               {/* Recessed internal circuit track glow */}
                               <div
-                                className={`pointer-events-none absolute inset-x-2.5 top-1/2 -translate-y-1/2 h-1 rounded-full transition-all duration-300 ${
+                                className={`pointer-events-none absolute inset-x-2.5 top-1/2 -translate-y-1/2 h-1 rounded-full motion-safe:transition-all motion-safe:duration-300 ${
                                   isAllowed
                                     ? 'bg-gradient-to-r from-emerald-400 to-teal-300 opacity-60 shadow-[0_0_6px_rgba(16,185,129,0.8)]'
                                     : 'bg-slate-950/80 opacity-40'
@@ -153,7 +153,7 @@ export const SuperadminIntegrationsOverviewEntitlementsPanel: React.FC<
                               {/* Tactile Circular White Chrome Knob with Power Icon ⏻ */}
                               <span
                                 aria-hidden="true"
-                                className={`switch-knob relative z-10 flex items-center justify-center w-[22px] h-[22px] min-w-[22px] min-h-[22px] rounded-full bg-white transition-transform duration-300 ease-out select-none shadow-[0_3px_8px_rgba(0,0,0,0.5),0_1px_2px_rgba(255,255,255,0.8)_inset] ${
+                                className={`switch-knob relative z-10 flex items-center justify-center w-[22px] h-[22px] min-w-[22px] min-h-[22px] rounded-full bg-white transition-transform motion-safe:duration-300 ease-out select-none shadow-[0_3px_8px_rgba(0,0,0,0.5),0_1px_2px_rgba(255,255,255,0.8)_inset] ${
                                   isAllowed
                                     ? 'translate-x-[34px] text-emerald-600'
                                     : 'translate-x-0 text-slate-800'

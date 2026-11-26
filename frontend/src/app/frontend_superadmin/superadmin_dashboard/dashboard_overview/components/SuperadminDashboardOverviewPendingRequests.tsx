@@ -52,7 +52,7 @@ export default function SuperadminDashboardOverviewPendingRequests({
             {branchRequests.map((req) => (
               <div
                 key={req.id}
-                className="group p-3.5 rounded-xl border border-cyan-500/20 bg-slate-900/60 hover:bg-slate-900/90 hover:border-cyan-500/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                className="group p-3.5 rounded-xl border border-cyan-500/20 bg-slate-900/60 hover:bg-slate-900/90 hover:border-cyan-500/40 motion-safe:transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
               >
                 <div className="min-w-0 space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -81,7 +81,7 @@ export default function SuperadminDashboardOverviewPendingRequests({
                 <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
                   <Link
                     href={SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.MODULE_URLS.BRANCHES}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-600 hover:bg-cyan-500 text-white shadow-sm transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-600 hover:bg-cyan-500 text-white shadow-sm motion-safe:transition-all cursor-pointer"
                   >
                     <Check size={12} />
                     <span>Approve</span>
@@ -133,7 +133,7 @@ export default function SuperadminDashboardOverviewPendingRequests({
             {upgradeRequests.map((req) => (
               <div
                 key={req.id}
-                className="group p-3.5 rounded-xl border border-purple-500/20 bg-slate-900/60 hover:bg-slate-900/90 hover:border-purple-500/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                className="group p-3.5 rounded-xl border border-purple-500/20 bg-slate-900/60 hover:bg-slate-900/90 hover:border-purple-500/40 motion-safe:transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
               >
                 <div className="min-w-0 space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -158,7 +158,7 @@ export default function SuperadminDashboardOverviewPendingRequests({
                 <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
                   <Link
                     href={SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.MODULE_URLS.PLANS}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-600 hover:bg-purple-500 text-white shadow-sm transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-600 hover:bg-purple-500 text-white shadow-sm motion-safe:transition-all cursor-pointer"
                   >
                     <ShieldCheck size={12} />
                     <span>Approve Upgrade</span>

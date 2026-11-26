@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import SuperadminBranchesOverviewScreen from './components/SuperadminBranchesOverviewScreen';
+import SuperadminBranchesOverviewScreen from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewScreen';
 
 export default function SuperadminBranchesOverviewPage() {
   return (

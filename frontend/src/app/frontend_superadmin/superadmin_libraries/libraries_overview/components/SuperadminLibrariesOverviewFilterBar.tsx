@@ -43,7 +43,7 @@ export default function SuperadminLibrariesOverviewFilterBar({
           placeholder="Search by library name, owner, city, code..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-8 py-2 text-xs rounded-xl border border-indigo-500/25 bg-input text-white placeholder:text-secondary focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none transition-all"
+          className="w-full pl-10 pr-8 py-2 text-xs rounded-xl border border-indigo-500/25 bg-input text-white placeholder:text-secondary focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none motion-safe:transition-all"
         />
         {searchQuery && (
           <button
@@ -87,7 +87,7 @@ export default function SuperadminLibrariesOverviewFilterBar({
         <button
           type="button"
           onClick={onResetFilters}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/35 hover:text-rose-100 transition-all cursor-pointer shadow-sm shadow-rose-950/40"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/35 hover:text-rose-100 motion-safe:transition-all cursor-pointer shadow-sm shadow-rose-950/40"
           title="Clear all active filters"
         >
           <RotateCcw size={13} />
@@ -100,7 +100,7 @@ export default function SuperadminLibrariesOverviewFilterBar({
         <button
           type="button"
           onClick={onExportCsv}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-teal-500/30 bg-teal-500/10 text-teal-300 hover:bg-teal-500/20 text-xs font-semibold transition-all cursor-pointer shadow-xs"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-teal-500/30 bg-teal-500/10 text-teal-300 hover:bg-teal-500/20 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-xs"
           title="Export filtered libraries to CSV"
         >
           <Download size={13} className="text-teal-400" />
@@ -110,7 +110,7 @@ export default function SuperadminLibrariesOverviewFilterBar({
         <button
           type="button"
           onClick={onExportExcel}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs font-semibold transition-all cursor-pointer shadow-xs"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-xs"
           title="Export filtered libraries to Excel (.xls)"
         >
           <FileSpreadsheet size={13} className="text-indigo-400" />
@@ -120,7 +120,7 @@ export default function SuperadminLibrariesOverviewFilterBar({
         <button
           type="button"
           onClick={onPrintRoster}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20 text-xs font-semibold transition-all cursor-pointer shadow-xs"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-xs"
           title="Print facilities roster"
         >
           <Printer size={13} className="text-sky-400" />

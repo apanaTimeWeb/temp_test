@@ -30,7 +30,7 @@ export const SuperadminLibrariesProfileConfigurationButton = forwardRef<HTMLButt
       onBlur={onBlur}
       tabIndex={tabIndex}
       className={cn(
-        'inline-flex items-center justify-center font-semibold transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed',
+        'inline-flex items-center justify-center font-semibold motion-safe:transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed',
         SUPERADMIN_SYSTEM_BUTTON_VARIANT[variant],
         SUPERADMIN_SYSTEM_BUTTON_SIZE[size],
         className

@@ -118,7 +118,7 @@ export default function SuperadminDashboardOverviewRecentLibrariesTable({ data }
         const config = STATUS_STYLES[status] ?? STATUS_STYLES.inactive;
         return (
           <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${config.badge}`}>
-            <span className={`w-1.5 h-1.5 rounded-full ${config.dot} ${status === 'active' ? 'animate-pulse' : ''}`} />
+            <span className={`w-1.5 h-1.5 rounded-full ${config.dot} ${status === 'active' ? 'motion-safe:animate-pulse' : ''}`} />
             <span>{config.label}</span>
           </span>
         );
@@ -149,7 +149,7 @@ export default function SuperadminDashboardOverviewRecentLibrariesTable({ data }
       cellRenderer: (p: ICellRendererParams<Library>) => (
         <Link
           href={SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.MODULE_URLS.LIBRARIES}
-          className="inline-flex min-h-8 px-2.5 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all shadow-xs"
+          className="inline-flex min-h-8 px-2.5 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 motion-safe:transition-all shadow-xs"
           title={`Manage ${p.data?.name}`}
         >
           <span>Manage</span>
@@ -174,7 +174,7 @@ export default function SuperadminDashboardOverviewRecentLibrariesTable({ data }
 
         <Link
           href={SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.MODULE_URLS.LIBRARIES}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 transition-all shadow-sm active:scale-95 cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 motion-safe:transition-all shadow-sm active:scale-95 cursor-pointer"
           data-testid="superadmin-dashboard-dashboard_overview-link-1"
         >
           <span>{t("COPY.VIEW_ALL")}</span>

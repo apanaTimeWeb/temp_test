@@ -6,7 +6,7 @@ import { X, Plus, Ticket, FileText } from 'lucide-react';
 import type { SuperadminSupportTicket, SuperadminSupportTicketCategory, SuperadminSupportTicketPriority } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
 import { SUPERADMIN_SUPPORT_TICKET_TYPES } from '@/app/frontend_superadmin/superadmin_support/support_tickets/constants/SuperadminSupportTicketsOverviewConstants';
 import { useModalScrollLock } from '@/lib/useModalScrollLock';
-import SuperadminSupportTicketsCreateContactFields from './SuperadminSupportTicketsCreateContactFields';
+import SuperadminSupportTicketsCreateContactFields from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsCreateContactFields';
 
 interface SuperadminSupportTicketsCreateModalProps {
   isOpen: boolean;
@@ -105,7 +105,7 @@ export default function SuperadminSupportTicketsCreateModal({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto animate-in fade-in motion-safe:duration-200"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -115,7 +115,7 @@ export default function SuperadminSupportTicketsCreateModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="create-ticket-title"
-        className="w-full max-w-xl rounded-2xl border border-indigo-500/30 bg-[#0a0d22] shadow-2xl shadow-indigo-950/80 flex flex-col max-h-[90vh] my-auto overflow-hidden text-white animate-in zoom-in-95 duration-200 ease-out"
+        className="w-full max-w-xl rounded-2xl border border-indigo-500/30 bg-[#0a0d22] shadow-2xl shadow-indigo-950/80 flex flex-col max-h-[90vh] my-auto overflow-hidden text-white animate-in zoom-in-95 motion-safe:duration-200 ease-out"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header - Fixed at Top */}
@@ -207,7 +207,7 @@ export default function SuperadminSupportTicketsCreateModal({
                 placeholder="e.g. Biometric QR scanner not connecting after power outage"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all ${errors.subject ? 'border-rose-500 focus:border-rose-400' : 'border-indigo-500/30 focus:border-indigo-400'
+                className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none motion-safe:transition-all ${errors.subject ? 'border-rose-500 focus:border-rose-400' : 'border-indigo-500/30 focus:border-indigo-400'
                   }`}
               />
               {errors.subject && <p className="text-[11px] text-rose-400 mt-1">{errors.subject}</p>}
@@ -223,7 +223,7 @@ export default function SuperadminSupportTicketsCreateModal({
                 placeholder="Describe the issue, device model, affected students/seats, and error messages..."
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
-                className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all resize-none min-h-[90px] ${
+                className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none motion-safe:transition-all resize-none min-h-[90px] ${
                   errors.desc ? 'border-rose-500 focus:border-rose-400' : 'border-indigo-500/30 focus:border-indigo-400'
                 }`}
               />
@@ -242,7 +242,7 @@ export default function SuperadminSupportTicketsCreateModal({
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-indigo-600 text-xs font-bold text-white hover:from-rose-500 hover:to-indigo-500 shadow-lg shadow-rose-950/40 hover:shadow-rose-500/30 transition-all duration-150 cursor-pointer active:scale-[0.97] group"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-indigo-600 text-xs font-bold text-white hover:from-rose-500 hover:to-indigo-500 shadow-lg shadow-rose-950/40 hover:shadow-rose-500/30 motion-safe:transition-all motion-safe:duration-150 cursor-pointer active:scale-[0.97] group"
             >
               <Plus size={15} strokeWidth={2.5} className="group-hover:scale-110 transition-transform" />
               <span>Create Ticket</span>

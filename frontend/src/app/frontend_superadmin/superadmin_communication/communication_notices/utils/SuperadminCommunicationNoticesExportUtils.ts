@@ -1,6 +1,6 @@
-import type { SuperadminCommunicationNotice as Notice } from '../types/SuperadminCommunicationNoticesTypes';
+import type { SuperadminCommunicationNotice as Notice } from '@/app/frontend_superadmin/superadmin_communication/communication_notices/types/SuperadminCommunicationNoticesTypes';
 
-export { printSuperadminNoticesRoster } from './SuperadminCommunicationNoticesPrintUtils';
+export { printSuperadminNoticesRoster } from '@/app/frontend_superadmin/superadmin_communication/communication_notices/utils/SuperadminCommunicationNoticesPrintUtils';
 
 function quoteCsvCell(value: unknown): string {
   const str = String(value ?? '');

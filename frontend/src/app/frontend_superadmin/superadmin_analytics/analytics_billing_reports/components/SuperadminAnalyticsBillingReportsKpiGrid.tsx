@@ -3,8 +3,8 @@
 
 import React from 'react';
 import { IndianRupee, TrendingUp, Calendar, AlertCircle, XCircle, RotateCcw } from 'lucide-react';
-import type { BillingReportsKpiData } from '../types/SuperadminAnalyticsBillingReportsTypes';
-import { formatBillingCurrency } from '../utils/SuperadminAnalyticsBillingReportsFormatters';
+import type { BillingReportsKpiData } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/types/SuperadminAnalyticsBillingReportsTypes';
+import { formatBillingCurrency } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/utils/SuperadminAnalyticsBillingReportsFormatters';
 
 interface Props {
   kpis?: BillingReportsKpiData;
@@ -35,7 +35,7 @@ export function SuperadminAnalyticsBillingReportsKpiGrid({ kpis }: Props) {
       blurColor: 'bg-emerald-500/15',
       valueColor: 'text-emerald-300',
       badgeStyle: 'text-emerald-300 bg-emerald-500/15 border-emerald-500/30',
-      dotColor: 'bg-emerald-400 animate-pulse',
+      dotColor: 'bg-emerald-400 motion-safe:animate-pulse',
     },
     {
       title: 'Monthly Recurring (MRR)',
@@ -83,7 +83,7 @@ export function SuperadminAnalyticsBillingReportsKpiGrid({ kpis }: Props) {
       blurColor: 'bg-rose-500/15',
       valueColor: 'text-rose-300',
       badgeStyle: 'text-rose-300 bg-rose-500/15 border-rose-500/30',
-      dotColor: 'bg-rose-400 animate-pulse',
+      dotColor: 'bg-rose-400 motion-safe:animate-pulse',
     },
     {
       title: 'Refunds Processed',
@@ -106,14 +106,14 @@ export function SuperadminAnalyticsBillingReportsKpiGrid({ kpis }: Props) {
         return (
           <div
             key={c.title}
-            className={`group relative overflow-hidden p-4 rounded-2xl border shadow-lg backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:scale-[1.01] ${c.cardBg}`}
+            className={`group relative overflow-hidden p-4 rounded-2xl border shadow-lg backdrop-blur-md flex flex-col justify-between motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] ${c.cardBg}`}
           >
-            <div className={`pointer-events-none absolute -right-6 -bottom-6 h-20 w-20 rounded-full blur-xl transition-all duration-500 group-hover:scale-125 ${c.blurColor}`} />
+            <div className={`pointer-events-none absolute -right-6 -bottom-6 h-20 w-20 rounded-full blur-xl motion-safe:transition-all motion-safe:duration-500 group-hover:scale-125 ${c.blurColor}`} />
             <div className="relative flex items-center justify-between gap-2">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
                 {c.title}
               </span>
-              <div className={`p-2 rounded-xl border shrink-0 transition-transform duration-200 group-hover:scale-110 shadow-md ${c.iconStyle}`}>
+              <div className={`p-2 rounded-xl border shrink-0 transition-transform motion-safe:duration-200 group-hover:scale-110 shadow-md ${c.iconStyle}`}>
                 <Icon size={16} strokeWidth={2.3} aria-hidden="true" />
               </div>
             </div>

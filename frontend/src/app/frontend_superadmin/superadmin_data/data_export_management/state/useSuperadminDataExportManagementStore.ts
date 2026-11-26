@@ -5,7 +5,7 @@
  */
 
 import { create } from 'zustand';
-import type { ExportScope } from '../types/superadmin_data_export_management.types';
+import type { ExportScope } from '@/app/frontend_superadmin/superadmin_data/data_export_management/types/superadmin_data_export_management.types';
 
 interface ExportManagementState {
   isExportModalOpen: boolean;

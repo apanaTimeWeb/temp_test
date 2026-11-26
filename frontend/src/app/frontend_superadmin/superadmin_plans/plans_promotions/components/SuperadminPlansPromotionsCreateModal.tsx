@@ -3,7 +3,7 @@
 import React from 'react';
 import { Tag, X } from 'lucide-react';
 import type { UseFormRegister, FieldErrors, UseFormHandleSubmit } from 'react-hook-form';
-import type { SuperadminBillingPromoFormValues } from '../schemas/SuperadminPlansPromotionsPromoSchema';
+import type { SuperadminBillingPromoFormValues } from '@/app/frontend_superadmin/superadmin_plans/plans_promotions/schemas/SuperadminPlansPromotionsPromoSchema';
 
 interface CreateModalProps {
   showModal: boolean;
@@ -139,7 +139,7 @@ export default function SuperadminPlansPromotionsCreateModal({
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-indigo-500/20 mt-4">
             <button
               type="button"
-              className="rounded-xl border border-border/80 bg-card/80 px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-800/60 cursor-pointer transition-all"
+              className="rounded-xl border border-border/80 bg-card/80 px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-800/60 cursor-pointer motion-safe:transition-all"
               onClick={requestClosePromo}
               data-testid="superadmin-billing-billing-overview-cancel-10"
             >
@@ -147,7 +147,7 @@ export default function SuperadminPlansPromotionsCreateModal({
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-emerald-600 px-5 py-2 text-xs font-semibold text-white shadow-md shadow-emerald-500/25 cursor-pointer transition-all active:scale-95"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-emerald-600 px-5 py-2 text-xs font-semibold text-white shadow-md shadow-emerald-500/25 cursor-pointer motion-safe:transition-all active:scale-95"
               data-testid="superadmin-billing-billing-overview-generate-preview-11"
             >
               <span>{tCopy("COPY.GENERATE_PREVIEW")}</span>

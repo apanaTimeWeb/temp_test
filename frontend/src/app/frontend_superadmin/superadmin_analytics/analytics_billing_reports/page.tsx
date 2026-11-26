@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Server component route entry for Superadmin Billing Reports.
 // FLOW: App Router -> analytics_billing_reports/page.tsx -> SuperadminAnalyticsBillingReportsMain
 
-import { SuperadminAnalyticsBillingReportsMain } from './components/SuperadminAnalyticsBillingReportsMain';
+import { SuperadminAnalyticsBillingReportsMain } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/components/SuperadminAnalyticsBillingReportsMain';
 
 export const metadata = {
   title: 'Billing Reports | Superadmin Analytics',

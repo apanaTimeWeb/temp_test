@@ -1,5 +1,5 @@
 // utils/SuperadminUsageOverviewFormatters.ts
-import type { QuotaSeverity } from '../types/SuperadminUsageOverviewTypes';
+import type { QuotaSeverity } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/types/SuperadminUsageOverviewTypes';
 
 export function calculateUsagePercent(current: number, limit: number): number {
   if (limit <= 0) return 100;

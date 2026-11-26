@@ -229,7 +229,7 @@ export default function SuperadminBranchesOverviewEditModalFields({
               type="button"
               key={key}
               onClick={() => onToggleModule(key)}
-              className={`p-2.5 rounded-xl border text-xs flex items-center justify-between cursor-pointer transition-all ${
+              className={`p-2.5 rounded-xl border text-xs flex items-center justify-between cursor-pointer motion-safe:transition-all ${
                 enabled
                   ? 'border-success-border bg-success-bg text-success'
                   : 'border-border bg-surface text-muted hover:border-border-hover'

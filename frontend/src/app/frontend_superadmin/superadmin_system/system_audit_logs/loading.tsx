@@ -5,7 +5,7 @@
 import { SuperadminPageLoader } from '@/components/ui/loader/SuperadminLoader';
 import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
-import SuperadminAuditLogsListSkeleton from './components/SuperadminAuditLogsListSkeleton';
+import SuperadminAuditLogsListSkeleton from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/components/SuperadminAuditLogsListSkeleton';
 
 export default function ModuleLoading() {
   const t = useTranslations('SUPERADMIN_AUDIT_LOGS');

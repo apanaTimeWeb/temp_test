@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import type { SemanticColumnDef, SemanticCellParams } from './SuperadminAuditLogsOverviewSemanticTable';
-import type { Log } from '../types/SuperadminAuditLogsOverviewPageClientComponentTypes';
-import SuperadminAuditLogsOverviewActionBadge from './SuperadminAuditLogsOverviewActionBadge';
+import type { SemanticColumnDef, SemanticCellParams } from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/components/SuperadminAuditLogsOverviewSemanticTable';
+import type { Log } from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/types/SuperadminAuditLogsOverviewPageClientComponentTypes';
+import SuperadminAuditLogsOverviewActionBadge from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/components/SuperadminAuditLogsOverviewActionBadge';
 import { Eye } from 'lucide-react';
 
 interface UseAuditLogsColumnsParams {
@@ -68,7 +68,7 @@ export function useAuditLogsColumns({ t, onSelectLog }: UseAuditLogsColumnsParam
           <button
             type="button"
             onClick={() => p.data && onSelectLog(p.data)}
-            className="inline-flex items-center gap-1 rounded-lg border border-indigo-500/30 bg-indigo-500/15 px-2.5 py-1 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/25 cursor-pointer transition-all"
+            className="inline-flex items-center gap-1 rounded-lg border border-indigo-500/30 bg-indigo-500/15 px-2.5 py-1 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/25 cursor-pointer motion-safe:transition-all"
             title="View audit event details"
           >
             <Eye size={12} className="text-indigo-400" />

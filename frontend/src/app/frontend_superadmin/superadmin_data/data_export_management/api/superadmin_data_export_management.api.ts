@@ -5,20 +5,20 @@
  */
 
 import { apiFetch } from '@/lib/api';
-import { EXPORT_MANAGEMENT_URLS } from '../config/superadmin_data_export_management.url_config';
+import { EXPORT_MANAGEMENT_URLS } from '@/app/frontend_superadmin/superadmin_data/data_export_management/config/superadmin_data_export_management.url_config';
 import type {
   ExportJobRecord,
   TenantOption,
   BranchOption,
   CreateExportPayload,
   ExportManagementOverview,
-} from '../types/superadmin_data_export_management.types';
+} from '@/app/frontend_superadmin/superadmin_data/data_export_management/types/superadmin_data_export_management.types';
 import {
   MOCK_EXPORT_OVERVIEW,
   MOCK_EXPORT_TENANTS,
   MOCK_EXPORT_BRANCHES,
   MOCK_EXPORT_JOBS,
-} from '../mocks/fixtures/superadmin_data_export_management.fixtures';
+} from '@/app/frontend_superadmin/superadmin_data/data_export_management/mocks/fixtures/superadmin_data_export_management.fixtures';
 
 const IS_MOCK_ENV = process.env.NODE_ENV !== 'production';
 

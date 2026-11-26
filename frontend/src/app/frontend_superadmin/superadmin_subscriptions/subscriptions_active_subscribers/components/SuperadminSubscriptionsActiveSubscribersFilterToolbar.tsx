@@ -47,7 +47,7 @@ export function SuperadminSubscriptionsActiveSubscribersFilterToolbar({
           placeholder="Search by tenant, plan, contact..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-9 pr-8 py-2 text-xs rounded-xl border border-indigo-500/25 bg-input text-white placeholder:text-secondary focus:border-indigo-400 focus:outline-none transition-all"
+          className="w-full pl-9 pr-8 py-2 text-xs rounded-xl border border-indigo-500/25 bg-input text-white placeholder:text-secondary focus:border-indigo-400 focus:outline-none motion-safe:transition-all"
         />
         {searchQuery && (
           <button
@@ -103,7 +103,7 @@ export function SuperadminSubscriptionsActiveSubscribersFilterToolbar({
         <button
           type="button"
           onClick={onResetFilters}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 text-xs font-semibold cursor-pointer transition-all w-full sm:w-auto justify-center"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 text-xs font-semibold cursor-pointer motion-safe:transition-all w-full sm:w-auto justify-center"
         >
           <RotateCcw size={12} />
           <span>Reset</span>
@@ -117,7 +117,7 @@ export function SuperadminSubscriptionsActiveSubscribersFilterToolbar({
             type="button"
             onClick={onBulkWhatsApp}
             disabled={(filteredCount ?? 0) === 0}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/15 hover:bg-emerald-500/25 text-xs font-semibold text-emerald-300 transition-all cursor-pointer shadow-xs disabled:opacity-40 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/15 hover:bg-emerald-500/25 text-xs font-semibold text-emerald-300 motion-safe:transition-all cursor-pointer shadow-xs disabled:opacity-40 disabled:cursor-not-allowed"
             title="Broadcast WhatsApp to filtered subscribers"
           >
             <MessageSquare size={13} className="text-emerald-400" />
@@ -128,7 +128,7 @@ export function SuperadminSubscriptionsActiveSubscribersFilterToolbar({
         <button
           type="button"
           onClick={onExportCsv}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-indigo-500/25 bg-card hover:bg-card-hover text-xs font-semibold text-slate-200 transition-all cursor-pointer shadow-xs"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-indigo-500/25 bg-card hover:bg-card-hover text-xs font-semibold text-slate-200 motion-safe:transition-all cursor-pointer shadow-xs"
           title="Export Active Subscribers as CSV"
         >
           <Download size={13} className="text-indigo-400" />
@@ -138,7 +138,7 @@ export function SuperadminSubscriptionsActiveSubscribersFilterToolbar({
         <button
           type="button"
           onClick={onExportExcel}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-xs font-semibold text-emerald-300 transition-all cursor-pointer shadow-xs"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-xs font-semibold text-emerald-300 motion-safe:transition-all cursor-pointer shadow-xs"
           title="Export Active Subscribers as Excel (.xls)"
         >
           <FileSpreadsheet size={13} className="text-emerald-400" />
@@ -148,7 +148,7 @@ export function SuperadminSubscriptionsActiveSubscribersFilterToolbar({
         <button
           type="button"
           onClick={onPrintRoster}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-indigo-500/25 bg-card hover:bg-card-hover text-xs font-semibold text-slate-200 transition-all cursor-pointer shadow-xs"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-indigo-500/25 bg-card hover:bg-card-hover text-xs font-semibold text-slate-200 motion-safe:transition-all cursor-pointer shadow-xs"
           title="Print Active Subscribers Directory"
         >
           <Printer size={13} className="text-slate-400" />

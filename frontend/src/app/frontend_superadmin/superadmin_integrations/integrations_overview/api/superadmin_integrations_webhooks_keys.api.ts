@@ -1,11 +1,11 @@
 import { apiFetch, type ApiResponse } from '@/lib/api';
-import { SUPERADMIN_INTEGRATIONS_OVERVIEW_API } from '../config/superadmin_integrations_overview.url_config';
+import { SUPERADMIN_INTEGRATIONS_OVERVIEW_API } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/config/superadmin_integrations_overview.url_config';
 import {
   MOCK_API_KEYS,
   MOCK_RATE_LIMIT_POLICY,
   MOCK_WEBHOOK_RETRIES,
   MOCK_WEBHOOKS,
-} from '../mocks/fixtures/superadmin_integrations_overview.fixtures';
+} from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/mocks/fixtures/superadmin_integrations_overview.fixtures';
 import type {
   ApiKeyCreatePayload,
   ApiKeyCreatedResult,
@@ -14,7 +14,7 @@ import type {
   WebhookCreatePayload,
   WebhookEndpointItem,
   WebhookRetryItem,
-} from '../types/superadmin_integrations_overview.types';
+} from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/types/superadmin_integrations_overview.types';
 
 let fallbackWebhooks: WebhookEndpointItem[] = [...MOCK_WEBHOOKS.map((w) => ({ ...w }))];
 let fallbackWebhookRetries: WebhookRetryItem[] = [...MOCK_WEBHOOK_RETRIES.map((r) => ({ ...r }))];

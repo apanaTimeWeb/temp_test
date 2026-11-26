@@ -45,7 +45,7 @@ export function SuperadminCommunicationNotificationCenterOverviewFilters({
             placeholder="Search by title, recipient, library name or message content..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 transition-all shadow-inner"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 motion-safe:transition-all shadow-inner"
             data-testid="notif-search-input"
           />
         </div>
@@ -55,7 +55,7 @@ export function SuperadminCommunicationNotificationCenterOverviewFilters({
           <button
             type="button"
             onClick={() => setTargetScopeFilter('ALL')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer motion-safe:transition-all ${
               targetScopeFilter === 'ALL'
                 ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -66,7 +66,7 @@ export function SuperadminCommunicationNotificationCenterOverviewFilters({
           <button
             type="button"
             onClick={() => setTargetScopeFilter('GLOBAL')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer motion-safe:transition-all flex items-center gap-1.5 ${
               targetScopeFilter === 'GLOBAL'
                 ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -78,7 +78,7 @@ export function SuperadminCommunicationNotificationCenterOverviewFilters({
           <button
             type="button"
             onClick={() => setTargetScopeFilter('ACCOUNT_SPECIFIC')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer motion-safe:transition-all flex items-center gap-1.5 ${
               targetScopeFilter === 'ACCOUNT_SPECIFIC'
                 ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -125,7 +125,7 @@ export function SuperadminCommunicationNotificationCenterOverviewFilters({
           <button
             type="button"
             onClick={resetFilters}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-indigo-500/20 text-xs font-semibold cursor-pointer transition-all"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-indigo-500/20 text-xs font-semibold cursor-pointer motion-safe:transition-all"
           >
             <RotateCcw className="w-3 h-3 text-indigo-400" />
             <span>Clear Filters</span>

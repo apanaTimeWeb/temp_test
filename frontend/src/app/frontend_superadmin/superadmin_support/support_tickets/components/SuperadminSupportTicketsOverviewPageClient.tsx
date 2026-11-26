@@ -16,8 +16,8 @@ import {
 import SuperadminSupportTicketsOverviewDetailPanel from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsOverviewDetailPanel';
 import SuperadminSupportTicketsOverviewKpiCards from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsOverviewKpiCards';
 import SuperadminSupportTicketsCreateModal from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsCreateModal';
-import { useSupportTicketsColumns } from './SuperadminSupportTicketsColumns';
-import SuperadminSupportTicketsHeroControls from './SuperadminSupportTicketsHeroControls';
+import { useSupportTicketsColumns } from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsColumns';
+import SuperadminSupportTicketsHeroControls from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsHeroControls';
 import { useTranslations } from 'next-intl';
 
 export default function SuperadminSupportTicketsOverviewPageClient() {

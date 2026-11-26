@@ -264,7 +264,7 @@ export default function SuperadminSettingsBrandingPageClient() {
                       key={tab}
                       type="button"
                       onClick={() => setActivePreviewTab(tab)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer capitalize ${
+                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold motion-safe:transition-all cursor-pointer capitalize ${
                         activePreviewTab === tab
                           ? 'bg-gradient-to-r from-purple-500/25 to-indigo-500/25 text-purple-200 border border-purple-500/40 shadow-sm font-bold'
                           : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'

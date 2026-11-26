@@ -5,7 +5,7 @@
 
 import { AlertCircle, Copy, Key, Lock, X } from 'lucide-react';
 import React, { useState } from 'react';
-import type { ApiKeyCreatedResult } from '../types/superadmin_integrations_overview.types';
+import type { ApiKeyCreatedResult } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/types/superadmin_integrations_overview.types';
 
 interface SuperadminIntegrationsOverviewApiKeySecretModalProps {
   newKeyResult: ApiKeyCreatedResult | null;
@@ -32,7 +32,7 @@ export const SuperadminIntegrationsOverviewApiKeySecretModal: React.FC<
       aria-modal="true"
       aria-labelledby="api-secret-modal-title"
     >
-      <div className="relative w-full max-w-lg rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-[#051814] via-[#090d24] to-[#050714] p-6 shadow-2xl text-slate-100 animate-in fade-in-0 zoom-in-95 duration-150 space-y-4">
+      <div className="relative w-full max-w-lg rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-[#051814] via-[#090d24] to-[#050714] p-6 shadow-2xl text-slate-100 animate-in fade-in-0 zoom-in-95 motion-safe:duration-150 space-y-4">
         <div className="flex items-start justify-between pb-3 border-b border-indigo-500/20">
           <div className="flex items-center gap-2.5">
             <span className="p-2 rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">

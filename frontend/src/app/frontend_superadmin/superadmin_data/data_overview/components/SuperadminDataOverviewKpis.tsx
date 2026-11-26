@@ -26,9 +26,9 @@ export function SuperadminDataOverviewKpis({ metrics }: SuperadminDataOverviewKp
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5" data-testid="data_overview-kpis-grid">
       {/* 1. DR Readiness Score - Emerald Jewel Theme */}
-      <div className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-950/70 via-[#07251a] to-[#04150e] p-5 shadow-lg shadow-emerald-950/40 hover:border-emerald-400/60 transition-all duration-300 flex flex-col justify-between group">
+      <div className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-950/70 via-[#07251a] to-[#04150e] p-5 shadow-lg shadow-emerald-950/40 hover:border-emerald-400/60 motion-safe:transition-all motion-safe:duration-300 flex flex-col justify-between group">
         {/* Decorative background glow */}
-        <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-emerald-500/10 blur-2xl pointer-events-none group-hover:bg-emerald-500/20 transition-all" />
+        <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-emerald-500/10 blur-2xl pointer-events-none group-hover:bg-emerald-500/20 motion-safe:transition-all" />
         
         <div>
           <div className="flex items-center justify-between">
@@ -51,7 +51,7 @@ export function SuperadminDataOverviewKpis({ metrics }: SuperadminDataOverviewKp
 
         <div className="mt-4 pt-3 border-t border-emerald-500/20 flex items-center justify-between text-[11px] text-emerald-200/80">
           <span className="flex items-center gap-1.5 font-medium">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block" />
+            <span className="w-2 h-2 rounded-full bg-emerald-400 motion-safe:animate-pulse inline-block" />
             Cross-Region Synchronized
           </span>
           <span className="text-emerald-300 font-bold">0% Bleed</span>
@@ -59,8 +59,8 @@ export function SuperadminDataOverviewKpis({ metrics }: SuperadminDataOverviewKp
       </div>
 
       {/* 2. Active Snapshots - Sky Blue Jewel Theme */}
-      <div className="relative overflow-hidden rounded-2xl border border-sky-500/30 bg-gradient-to-br from-sky-950/70 via-[#07213d] to-[#041424] p-5 shadow-lg shadow-sky-950/40 hover:border-sky-400/60 transition-all duration-300 flex flex-col justify-between group">
-        <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-sky-500/10 blur-2xl pointer-events-none group-hover:bg-sky-500/20 transition-all" />
+      <div className="relative overflow-hidden rounded-2xl border border-sky-500/30 bg-gradient-to-br from-sky-950/70 via-[#07213d] to-[#041424] p-5 shadow-lg shadow-sky-950/40 hover:border-sky-400/60 motion-safe:transition-all motion-safe:duration-300 flex flex-col justify-between group">
+        <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-sky-500/10 blur-2xl pointer-events-none group-hover:bg-sky-500/20 motion-safe:transition-all" />
         
         <div>
           <div className="flex items-center justify-between">
@@ -90,8 +90,8 @@ export function SuperadminDataOverviewKpis({ metrics }: SuperadminDataOverviewKp
       </div>
 
       {/* 3. Storage Consumption - Amber/Gold Jewel Theme */}
-      <div className="relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-950/70 via-[#2a1b06] to-[#150d03] p-5 shadow-lg shadow-amber-950/40 hover:border-amber-400/60 transition-all duration-300 flex flex-col justify-between group">
-        <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-amber-500/10 blur-2xl pointer-events-none group-hover:bg-amber-500/20 transition-all" />
+      <div className="relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-950/70 via-[#2a1b06] to-[#150d03] p-5 shadow-lg shadow-amber-950/40 hover:border-amber-400/60 motion-safe:transition-all motion-safe:duration-300 flex flex-col justify-between group">
+        <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-amber-500/10 blur-2xl pointer-events-none group-hover:bg-amber-500/20 motion-safe:transition-all" />
         
         <div>
           <div className="flex items-center justify-between">
@@ -115,7 +115,7 @@ export function SuperadminDataOverviewKpis({ metrics }: SuperadminDataOverviewKp
         <div className="mt-4 space-y-1.5">
           <div className="w-full bg-amber-950/80 border border-amber-500/30 rounded-full h-2 overflow-hidden p-0.5">
             <div
-              className={`h-full rounded-full transition-all duration-500 ${
+              className={`h-full rounded-full motion-safe:transition-all motion-safe:duration-500 ${
                 storagePercentage > 85
                   ? 'bg-gradient-to-r from-rose-500 to-rose-400'
                   : 'bg-gradient-to-r from-amber-500 via-amber-400 to-amber-300'
@@ -131,8 +131,8 @@ export function SuperadminDataOverviewKpis({ metrics }: SuperadminDataOverviewKp
       </div>
 
       {/* 4. Multi-Tenant Isolation Integrity - Pink/Purple Jewel Theme */}
-      <div className="relative overflow-hidden rounded-2xl border border-pink-500/30 bg-gradient-to-br from-pink-950/70 via-[#2d0a20] to-[#170410] p-5 shadow-lg shadow-pink-950/40 hover:border-pink-400/60 transition-all duration-300 flex flex-col justify-between group">
-        <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-pink-500/10 blur-2xl pointer-events-none group-hover:bg-pink-500/20 transition-all" />
+      <div className="relative overflow-hidden rounded-2xl border border-pink-500/30 bg-gradient-to-br from-pink-950/70 via-[#2d0a20] to-[#170410] p-5 shadow-lg shadow-pink-950/40 hover:border-pink-400/60 motion-safe:transition-all motion-safe:duration-300 flex flex-col justify-between group">
+        <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-pink-500/10 blur-2xl pointer-events-none group-hover:bg-pink-500/20 motion-safe:transition-all" />
         
         <div>
           <div className="flex items-center justify-between">
@@ -153,7 +153,7 @@ export function SuperadminDataOverviewKpis({ metrics }: SuperadminDataOverviewKp
 
         <div className="mt-4 pt-3 border-t border-pink-500/20 flex items-center justify-between text-[11px] text-pink-200/80">
           <span className="flex items-center gap-1.5 font-medium">
-            <RefreshCw size={11} className="text-pink-400 animate-spin" />
+            <RefreshCw size={11} className="text-pink-400 motion-safe:animate-spin" />
             Replication: {replicationBadge.label}
           </span>
           <span className="text-pink-300 font-semibold">Zero-Bleed</span>

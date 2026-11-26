@@ -12,7 +12,7 @@ export const SuperadminSettingsGeneralSecurityPoliciesCard: FC = () => {
   const { register } = useFormContext<SuperadminSettingsFormValues>();
 
   return (
-    <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-6 space-y-6 hover:border-indigo-500/35 transition-all">
+    <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-6 space-y-6 hover:border-indigo-500/35 motion-safe:transition-all">
       <div className="flex items-center justify-between border-b border-indigo-500/15 pb-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-400">
@@ -26,7 +26,7 @@ export const SuperadminSettingsGeneralSecurityPoliciesCard: FC = () => {
         <div className="flex items-center gap-2">
           <Link
             href="/superadmin/superadmin_security/security_password_policy"
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 text-purple-300 text-xs font-semibold transition-all shadow-xs cursor-pointer no-underline"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 text-purple-300 text-xs font-semibold motion-safe:transition-all shadow-xs cursor-pointer no-underline"
           >
             <span>Open Security Module 09</span>
             <ExternalLink size={12} />
@@ -56,7 +56,7 @@ export const SuperadminSettingsGeneralSecurityPoliciesCard: FC = () => {
               type="number"
               min={8}
               max={32}
-              className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
               {...register('securityPolicy.minPasswordLength', { valueAsNumber: true })}
               data-testid="superadmin-settings-min-password-input"
             />
@@ -100,7 +100,7 @@ export const SuperadminSettingsGeneralSecurityPoliciesCard: FC = () => {
             </label>
             <select
               id="settings-password-expiry"
-              className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
               {...register('securityPolicy.passwordExpiryDays', { valueAsNumber: true })}
               data-testid="superadmin-settings-password-expiry-select"
             >
@@ -128,7 +128,7 @@ export const SuperadminSettingsGeneralSecurityPoliciesCard: FC = () => {
             </label>
             <select
               id="settings-mfa-enforcement"
-              className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
               {...register('securityPolicy.mfaEnforcement')}
               data-testid="superadmin-settings-mfa-enforcement-select"
             >
@@ -147,7 +147,7 @@ export const SuperadminSettingsGeneralSecurityPoliciesCard: FC = () => {
               </label>
               <select
                 id="settings-session-timeout"
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 {...register('securityPolicy.sessionTimeoutMinutes', { valueAsNumber: true })}
                 data-testid="superadmin-settings-session-timeout-select"
               >
@@ -165,7 +165,7 @@ export const SuperadminSettingsGeneralSecurityPoliciesCard: FC = () => {
               </label>
               <select
                 id="settings-max-failed-logins"
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 {...register('securityPolicy.maxFailedLogins', { valueAsNumber: true })}
                 data-testid="superadmin-settings-max-failed-logins-select"
               >

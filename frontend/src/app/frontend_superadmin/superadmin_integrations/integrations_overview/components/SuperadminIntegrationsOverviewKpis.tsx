@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { CheckCircle2, RefreshCw } from 'lucide-react';
-import type { IntegrationSummaryStats } from '../types/superadmin_integrations_overview.types';
+import type { IntegrationSummaryStats } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/types/superadmin_integrations_overview.types';
 
 interface SuperadminIntegrationsOverviewKpisProps {
   summary: IntegrationSummaryStats | null | undefined;

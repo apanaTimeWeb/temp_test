@@ -4,13 +4,13 @@
 
 import React from 'react';
 import { Search, X, RotateCcw } from 'lucide-react';
-import type { SuperadminAnalyticsSecurityReportsFilters } from '../types/SuperadminAnalyticsSecurityReportsTypes';
+import type { SuperadminAnalyticsSecurityReportsFilters } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/types/SuperadminAnalyticsSecurityReportsTypes';
 import {
   SECURITY_REPORTS_DATE_RANGES,
   SECURITY_PLAN_OPTIONS,
   SECURITY_STATUS_OPTIONS,
   SECURITY_PAYMENT_STATUS_OPTIONS,
-} from '../constants/SuperadminAnalyticsSecurityReportsConstants';
+} from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/constants/SuperadminAnalyticsSecurityReportsConstants';
 
 interface Props {
   filters: SuperadminAnalyticsSecurityReportsFilters;
@@ -59,7 +59,7 @@ export function SuperadminAnalyticsSecurityReportsFilterBar({
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search by event, IP, user email, library name..."
             data-testid="security-search-input"
-            className="w-full pl-9 pr-8 py-2 text-xs rounded-xl border border-indigo-500/25 bg-slate-900/80 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400/40 transition-all"
+            className="w-full pl-9 pr-8 py-2 text-xs rounded-xl border border-indigo-500/25 bg-slate-900/80 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400/40 motion-safe:transition-all"
           />
           {searchInput && (
             <button
@@ -76,7 +76,7 @@ export function SuperadminAnalyticsSecurityReportsFilterBar({
           <button
             type="button"
             onClick={onResetFilters}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:text-white hover:bg-indigo-500/20 transition-all cursor-pointer active:scale-95 shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:text-white hover:bg-indigo-500/20 motion-safe:transition-all cursor-pointer active:scale-95 shadow-xs"
             title="Reset all filters"
           >
             <RotateCcw size={13} />

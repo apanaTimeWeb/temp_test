@@ -88,7 +88,7 @@ export function SuperadminCommunicationNotificationCenterTabs() {
               type="button"
               onClick={() => handleTabChange(tab.id)}
               aria-current={isActive ? 'page' : undefined}
-              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold motion-safe:transition-all cursor-pointer ${
                 isActive
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/30'
                   : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60'

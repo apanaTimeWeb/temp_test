@@ -9,7 +9,7 @@ import type {
   BACKUP_VERIFICATION_STATUS,
   RESTORE_STATUS,
   DRILL_STATUS,
-} from '../constants/superadmin_data_restore_operations.constants';
+} from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/constants/superadmin_data_restore_operations.constants';
 
 export type RestoreTargetType = keyof typeof RESTORE_TARGET_TYPES;
 export type BackupVerificationStatus = keyof typeof BACKUP_VERIFICATION_STATUS;

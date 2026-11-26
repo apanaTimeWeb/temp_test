@@ -3,8 +3,8 @@
 
 import React from 'react';
 import { Search, Calendar, Filter, X, Download, RotateCcw } from 'lucide-react';
-import type { SuperadminAnalyticsPlatformReportsFilters } from '../types/SuperadminAnalyticsPlatformReportsTypes';
-import { PLATFORM_REPORTS_DATE_RANGES } from '../constants/SuperadminAnalyticsPlatformReportsConstants';
+import type { SuperadminAnalyticsPlatformReportsFilters } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/types/SuperadminAnalyticsPlatformReportsTypes';
+import { PLATFORM_REPORTS_DATE_RANGES } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/constants/SuperadminAnalyticsPlatformReportsConstants';
 
 interface Props {
   filters: SuperadminAnalyticsPlatformReportsFilters;
@@ -70,7 +70,7 @@ export function SuperadminAnalyticsPlatformReportsFilterBar({
           <button
             type="button"
             onClick={onResetFilters}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold border border-indigo-500/25 bg-slate-900/90 text-slate-300 hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer active:scale-95 shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold border border-indigo-500/25 bg-slate-900/90 text-slate-300 hover:text-white hover:bg-white/[0.08] motion-safe:transition-all cursor-pointer active:scale-95 shadow-xs"
             aria-label="Reset all filters"
           >
             <RotateCcw size={13} />

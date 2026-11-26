@@ -50,7 +50,7 @@ export default function SuperadminLibrariesOnboardingSetupStepper({
             id="skip-setup-btn"
             type="button"
             onClick={openSkipModal}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700/60 bg-slate-800/60 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 hover:border-slate-600 transition-all cursor-pointer shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700/60 bg-slate-800/60 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 hover:border-slate-600 motion-safe:transition-all cursor-pointer shadow-xs"
             data-testid="superadmin-setup-wizard-setup-wizard-overview-skip-setup-btn-2"
           >
             <SkipForward size={13} className="text-slate-400" /> {tCopy("COPY.SKIP_SETUP")}
@@ -59,7 +59,7 @@ export default function SuperadminLibrariesOnboardingSetupStepper({
             id="skip-setup-sidebar-btn"
             type="button"
             onClick={openSkipModal}
-            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700/40 bg-transparent text-xs text-slate-400 hover:text-slate-200 transition-all cursor-pointer"
+            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700/40 bg-transparent text-xs text-slate-400 hover:text-slate-200 motion-safe:transition-all cursor-pointer"
             data-testid="superadmin-setup-wizard-setup-wizard-overview-skip-setup-sidebar-btn-1"
           >
             {tCopy("COPY.SKIP_SETUP_FOR_NOW")}
@@ -71,14 +71,14 @@ export default function SuperadminLibrariesOnboardingSetupStepper({
       <div className="mb-5">
         <div className="flex items-center justify-between text-xs text-slate-400 mb-1.5">
           <span className="text-indigo-300 font-medium flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-indigo-400 animate-pulse" />
+            <span className="h-2 w-2 rounded-full bg-indigo-400 motion-safe:animate-pulse" />
             {tCopy(STEPS[step - 1].titleKey)}
           </span>
           <span className="font-semibold text-slate-300">{Math.round(progress)}% Completed</span>
         </div>
         <div className="h-2 w-full rounded-full bg-slate-800/80 overflow-hidden p-0.5 border border-slate-700/40">
           <div
-            className="h-full bg-gradient-to-r from-indigo-500 via-indigo-400 to-emerald-400 transition-all duration-300 ease-out rounded-full"
+            className="h-full bg-gradient-to-r from-indigo-500 via-indigo-400 to-emerald-400 motion-safe:transition-all motion-safe:duration-300 ease-out rounded-full"
             style={{ width: `${Math.max(6, progress)}%` }}
           />
         </div>
@@ -97,7 +97,7 @@ export default function SuperadminLibrariesOnboardingSetupStepper({
             <div
               key={s.num}
               onClick={() => { if (isDone) setStep(s.num); }}
-              className={`group relative flex flex-col items-center text-center p-2 sm:p-2.5 rounded-xl transition-all ${
+              className={`group relative flex flex-col items-center text-center p-2 sm:p-2.5 rounded-xl motion-safe:transition-all ${
                 isDone
                   ? 'cursor-pointer hover:bg-slate-800/50'
                   : isActive
@@ -117,7 +117,7 @@ export default function SuperadminLibrariesOnboardingSetupStepper({
 
               {/* Step Circle Badge */}
               <div
-                className={`relative z-10 flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full text-xs font-bold transition-all duration-200 ${
+                className={`relative z-10 flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full text-xs font-bold motion-safe:transition-all motion-safe:duration-200 ${
                   isDone
                     ? 'bg-emerald-500/20 border-2 border-emerald-500 text-emerald-400 shadow-md shadow-emerald-500/20'
                     : isActive

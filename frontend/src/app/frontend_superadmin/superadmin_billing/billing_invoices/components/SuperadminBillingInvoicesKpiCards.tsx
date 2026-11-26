@@ -16,7 +16,7 @@ export default function SuperadminBillingInvoicesKpiCards() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 mb-6">
       {/* 1. Lifetime Collections */}
-      <div className="relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-emerald-950/40 via-[#0a0d24] to-[#060812] p-5 shadow-xl backdrop-blur-md hover:border-emerald-500/40 transition-all">
+      <div className="relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-emerald-950/40 via-[#0a0d24] to-[#060812] p-5 shadow-xl backdrop-blur-md hover:border-emerald-500/40 motion-safe:transition-all">
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
             {tCopy('COPY.SAMPLE_SAAS_REVENUE')}
@@ -40,7 +40,7 @@ export default function SuperadminBillingInvoicesKpiCards() {
       </div>
 
       {/* 2. Pending / Overdue Invoices */}
-      <div className="relative overflow-hidden rounded-2xl border border-rose-500/25 bg-gradient-to-br from-rose-950/40 via-[#0a0d24] to-[#060812] p-5 shadow-xl backdrop-blur-md hover:border-rose-500/40 transition-all">
+      <div className="relative overflow-hidden rounded-2xl border border-rose-500/25 bg-gradient-to-br from-rose-950/40 via-[#0a0d24] to-[#060812] p-5 shadow-xl backdrop-blur-md hover:border-rose-500/40 motion-safe:transition-all">
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs font-bold uppercase tracking-wider text-rose-400">
             {tCopy('COPY.SAMPLE_PENDING_INVOICES')}
@@ -64,7 +64,7 @@ export default function SuperadminBillingInvoicesKpiCards() {
       </div>
 
       {/* 3. Next Automated Payout */}
-      <div className="relative overflow-hidden rounded-2xl border border-sky-500/25 bg-gradient-to-br from-sky-950/40 via-[#0a0d24] to-[#060812] p-5 shadow-xl backdrop-blur-md hover:border-sky-500/40 transition-all">
+      <div className="relative overflow-hidden rounded-2xl border border-sky-500/25 bg-gradient-to-br from-sky-950/40 via-[#0a0d24] to-[#060812] p-5 shadow-xl backdrop-blur-md hover:border-sky-500/40 motion-safe:transition-all">
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs font-bold uppercase tracking-wider text-sky-400">
             {tCopy('COPY.SAMPLE_NEXT_PAYOUT')}

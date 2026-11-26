@@ -1,5 +1,5 @@
 // constants/SuperadminUsageQuotaRequestsConstants.ts
-import type { QuotaRequestResourceType, QuotaRequestStatus } from '../types/SuperadminUsageQuotaRequestsTypes';
+import type { QuotaRequestResourceType, QuotaRequestStatus } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/types/SuperadminUsageQuotaRequestsTypes';
 
 export const QUOTA_RESOURCE_TYPE_LABELS: Record<QuotaRequestResourceType, { label: string; badgeClass: string; icon: string }> = {
   BRANCH: {

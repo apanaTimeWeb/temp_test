@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Display modal dialog to temporarily suspend a branch without affecting sibling branches.
 import React, { useState } from 'react';
 import { ShieldAlert, X } from 'lucide-react';
-import type { SuperadminBranchRecord } from '../types/SuperadminBranchesOverviewTypes';
+import type { SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
 
 interface SuperadminBranchesOverviewSuspendModalProps {
   branch: SuperadminBranchRecord;
@@ -91,7 +91,7 @@ export default function SuperadminBranchesOverviewSuspendModal({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-xl bg-danger hover:bg-danger text-white text-xs font-bold shadow-sm transition-all cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-danger hover:bg-danger text-white text-xs font-bold shadow-sm motion-safe:transition-all cursor-pointer"
             >
               Confirm Suspension
             </button>

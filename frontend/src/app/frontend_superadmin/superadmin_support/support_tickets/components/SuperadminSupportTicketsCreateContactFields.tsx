@@ -41,7 +41,7 @@ export default function SuperadminSupportTicketsCreateContactFields({
           placeholder="e.g. Apex Central Library"
           value={tenant}
           onChange={(e) => setTenant(e.target.value)}
-          className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all ${
+          className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none motion-safe:transition-all ${
             errors.tenant ? 'border-rose-500 focus:border-rose-400' : 'border-indigo-500/30 focus:border-indigo-400'
           }`}
         />
@@ -60,7 +60,7 @@ export default function SuperadminSupportTicketsCreateContactFields({
           placeholder="e.g. Anil Kumar (Admin)"
           value={contact}
           onChange={(e) => setContact(e.target.value)}
-          className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none transition-all"
+          className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none motion-safe:transition-all"
         />
       </div>
 
@@ -76,7 +76,7 @@ export default function SuperadminSupportTicketsCreateContactFields({
           placeholder="+91 98765 43210"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
-          className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none transition-all"
+          className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none motion-safe:transition-all"
         />
       </div>
 
@@ -92,7 +92,7 @@ export default function SuperadminSupportTicketsCreateContactFields({
           placeholder="owner@library.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none transition-all"
+          className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none motion-safe:transition-all"
         />
       </div>
     </div>

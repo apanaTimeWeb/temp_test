@@ -1,6 +1,6 @@
 'use client';
 
-import type { SuperadminSupportTicket } from '../types/SuperadminSupportTicketsOverviewTypes';
+import type { SuperadminSupportTicket } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
 
 /**
  * Prints support tickets roster.

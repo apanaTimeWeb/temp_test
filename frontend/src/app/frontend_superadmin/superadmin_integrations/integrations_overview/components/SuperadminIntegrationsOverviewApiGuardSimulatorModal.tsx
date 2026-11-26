@@ -20,8 +20,18 @@ const API_ENDPOINTS = [
 ] as const;
 
 type ProbeScenario = 'authorized' | 'feature_disabled' | 'rate_limit' | 'unauthorized' | 'ip_restricted';
+type HttpMethod = 'POST' | 'GET' | 'PUT' | 'DELETE';
 
-function buildSimulationResponse(scenario: ProbeScenario, endpoint: string, tenant: string, method: string) {
+interface ApiGuardSimulationResult {
+  status: number;
+  allowed: boolean;
+  latencyMs: number;
+  curlCommand: string;
+  requestHeaders: Record<string, string>;
+  responsePayload: Record<string, unknown>;
+}
+
+function buildSimulationResponse(scenario: ProbeScenario, endpoint: string, tenant: string, method: string): ApiGuardSimulationResult {
   const isOk = scenario === 'authorized';
   const status = isOk ? 200 : scenario === 'feature_disabled' ? 403 : scenario === 'rate_limit' ? 429 : scenario === 'ip_restricted' ? 403 : 401;
   const domain = `${tenant.toLowerCase().replace(/\s+/g, '-')}.libraryos.app`;
@@ -33,7 +43,7 @@ function buildSimulationResponse(scenario: ProbeScenario, endpoint: string, tena
     'X-Enforcement-Layer': 'PlatformZeroTrustGatekeeper',
   };
 
-  const payloads: Record<ProbeScenario, any> = {
+  const payloads: Record<ProbeScenario, Record<string, unknown>> = {
     authorized: { success: true, statusCode: 200, message: `Authorized. Endpoint [${endpoint}] executed successfully.`, tenant, verdict: 'ALLOW' },
     feature_disabled: { success: false, statusCode: 403, errorCode: 'FEATURE_DISABLED', error: 'Feature Disabled', message: `Target feature disabled for "${tenant}".`, verdict: 'KILLSWITCH' },
     rate_limit: { success: false, statusCode: 429, errorCode: 'RATE_LIMIT_EXCEEDED', error: 'Too Many Requests', message: 'Quota of 120 RPM exceeded.', retryAfter: 42 },
@@ -47,13 +57,13 @@ function buildSimulationResponse(scenario: ProbeScenario, endpoint: string, tena
 export const SuperadminIntegrationsOverviewApiGuardSimulatorModal: React.FC<ApiGuardSimulatorModalProps> = ({ isOpen, onClose }) => {
   useModalScrollLock(isOpen);
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>(API_ENDPOINTS[0].path);
-  const [method, setMethod] = useState<'POST' | 'GET' | 'PUT' | 'DELETE'>('GET');
+  const [method, setMethod] = useState<HttpMethod>('GET');
   const [scenario, setScenario] = useState<ProbeScenario>('authorized');
   const [tenantName, setTenantName] = useState<string>('Patna Central Reading Rooms');
   const [activeTab, setActiveTab] = useState<'response' | 'curl' | 'headers'>('response');
   const [copiedPayload, setCopiedPayload] = useState(false);
   const [copiedCurl, setCopiedCurl] = useState(false);
-  const [simulationResult, setSimulationResult] = useState<any | null>(null);
+  const [simulationResult, setSimulationResult] = useState<ApiGuardSimulationResult | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => { if (e.key === 'Escape' && isOpen) onClose(); };
@@ -74,8 +84,8 @@ export const SuperadminIntegrationsOverviewApiGuardSimulatorModal: React.FC<ApiG
   };
 
   return (
-    <div className="fixed inset-0 z-[150] flex items-center justify-center p-3 sm:p-5 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-200" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="w-full max-w-2xl rounded-3xl border border-teal-500/30 bg-[#0a0d24] text-white shadow-2xl flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200">
+    <div role="dialog" aria-modal="true" className="fixed inset-0 z-[150] flex items-center justify-center p-3 sm:p-5 bg-slate-950/85 backdrop-blur-md animate-in fade-in motion-safe:duration-200" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="w-full max-w-2xl rounded-3xl border border-teal-500/30 bg-[#0a0d24] text-white shadow-2xl flex flex-col max-h-[90vh] animate-in zoom-in-95 motion-safe:duration-200">
         <div className="flex items-center justify-between px-6 py-4 border-b border-indigo-500/20 bg-[#060818]/95">
           <div className="flex items-center gap-3">
             <span className="p-2.5 rounded-xl bg-teal-500/15 border border-teal-500/30 text-teal-400"><Terminal size={20} /></span>
@@ -109,7 +119,7 @@ export const SuperadminIntegrationsOverviewApiGuardSimulatorModal: React.FC<ApiG
             <div>
               <label className="text-slate-400 text-[11px] font-bold block mb-1">Probe Endpoint & Method:</label>
               <div className="flex items-center gap-2">
-                <select value={method} onChange={(e) => setMethod(e.target.value as any)} className="w-24 px-2.5 py-2 text-xs font-mono font-bold rounded-xl border border-indigo-500/25 bg-slate-950 text-teal-300 focus:ring-1 focus:ring-teal-500">
+                <select value={method} onChange={(e) => setMethod(e.target.value as HttpMethod)} className="w-24 px-2.5 py-2 text-xs font-mono font-bold rounded-xl border border-indigo-500/25 bg-slate-950 text-teal-300 focus:ring-1 focus:ring-teal-500">
                   <option value="GET">GET</option>
                   <option value="POST">POST</option>
                   <option value="PUT">PUT</option>
@@ -118,7 +128,7 @@ export const SuperadminIntegrationsOverviewApiGuardSimulatorModal: React.FC<ApiG
                 <select value={selectedEndpoint} onChange={(e) => { setSelectedEndpoint(e.target.value); setSimulationResult(null); }} className="flex-1 px-3 py-2 text-xs font-mono rounded-xl border border-indigo-500/25 bg-slate-950 text-teal-300 focus:ring-1 focus:ring-teal-500">
                   {API_ENDPOINTS.map((ep) => (<option key={ep.path} value={ep.path}>{ep.name} ({ep.path})</option>))}
                 </select>
-                <button type="button" onClick={handleRunSimulation} className="px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold flex items-center gap-1.5 transition-all shadow-md shrink-0 cursor-pointer active:scale-95">
+                <button type="button" onClick={handleRunSimulation} className="px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold flex items-center gap-1.5 motion-safe:transition-all shadow-md shrink-0 cursor-pointer active:scale-95">
                   <Play size={14} /><span>Send Request</span>
                 </button>
               </div>
@@ -126,7 +136,7 @@ export const SuperadminIntegrationsOverviewApiGuardSimulatorModal: React.FC<ApiG
           </div>
 
           {simulationResult && (
-            <div className="space-y-2 animate-in fade-in duration-150">
+            <div className="space-y-2 animate-in fade-in motion-safe:duration-150">
               <div className="flex items-center justify-between border-b border-indigo-500/20 pb-2">
                 <div className="flex items-center gap-2">
                   <span className={`text-xs px-2.5 py-0.5 rounded-full font-mono font-bold ${simulationResult.status === 200 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : simulationResult.status === 429 ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'}`}>

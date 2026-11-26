@@ -1,6 +1,6 @@
 // RESPONSIBILITY: Provide deterministic module-owned helper behavior for communication notices; it does not own page routing or live backend persistence.
 // FLOW: Feature caller -> superadmin_communication/communication_notices/utils/SuperadminCommunicationNoticesApiResponse.ts -> typed input/contract -> deterministic helper result.
-import type { ApiFailure, ApiResponse, PaginationMeta, ValidationErrorItem } from '../contracts/SuperadminCommunicationNoticesApiResponse';
+import type { ApiFailure, ApiResponse, PaginationMeta, ValidationErrorItem } from '@/app/frontend_superadmin/superadmin_communication/communication_notices/contracts/SuperadminCommunicationNoticesApiResponse';
 
 /** Safe, typed representation of a failed canonical API response. */
 export class SuperadminCommunicationNoticesApiFailureError extends Error {

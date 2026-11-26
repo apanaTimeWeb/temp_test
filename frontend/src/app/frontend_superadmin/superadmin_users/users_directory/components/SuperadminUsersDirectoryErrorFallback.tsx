@@ -33,7 +33,7 @@ export default function SuperadminUsersDirectoryErrorFallback({ onRetry }: Super
       <div>
         <button
           type="button"
-          className="sa-btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 transition-all active:scale-95 cursor-pointer"
+          className="sa-btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 motion-safe:transition-all active:scale-95 cursor-pointer"
           onClick={onRetry}
           data-testid="superadmin-users-users-directory-error-retry"
         >

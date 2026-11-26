@@ -5,7 +5,7 @@
 import { SuperadminPageLoader } from '@/components/ui/loader/SuperadminLoader';
 import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
-import SuperadminSubscriptionsActiveSubscribersListSkeleton from './components/SuperadminSubscriptionsActiveSubscribersListSkeleton';
+import SuperadminSubscriptionsActiveSubscribersListSkeleton from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/components/SuperadminSubscriptionsActiveSubscribersListSkeleton';
 
 export default function ModuleLoading() {
   const t = useTranslations('SUPERADMIN_SUBSCRIPTIONS');

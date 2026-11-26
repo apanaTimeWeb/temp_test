@@ -1,15 +1,15 @@
 'use client';
 // RESPONSIBILITY: Orchestrates layout and child components for Usage & Limit Monitoring overview. No direct fetch calls.
 import React from 'react';
-import { SuperadminUsageOverviewOverageBanner } from './SuperadminUsageOverviewOverageBanner';
-import { SuperadminUsageOverviewKpiCards } from './SuperadminUsageOverviewKpiCards';
-import { SuperadminUsageOverviewFilters } from './SuperadminUsageOverviewFilters';
-import { SuperadminUsageOverviewTable } from './SuperadminUsageOverviewTable';
-import { SuperadminUsageOverviewDetailDrawer } from './SuperadminUsageOverviewDetailDrawer';
-import { SuperadminUsageOverviewEmptyState } from './SuperadminUsageOverviewEmptyState';
-import { useSuperadminUsageOverviewList } from '../hooks/useSuperadminUsageOverviewList';
-import { useSuperadminUsageOverviewDetail } from '../hooks/useSuperadminUsageOverviewDetail';
-import { useSuperadminUsageOverviewStore } from '../state/useSuperadminUsageOverviewStore';
+import { SuperadminUsageOverviewOverageBanner } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/components/SuperadminUsageOverviewOverageBanner';
+import { SuperadminUsageOverviewKpiCards } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/components/SuperadminUsageOverviewKpiCards';
+import { SuperadminUsageOverviewFilters } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/components/SuperadminUsageOverviewFilters';
+import { SuperadminUsageOverviewTable } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/components/SuperadminUsageOverviewTable';
+import { SuperadminUsageOverviewDetailDrawer } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/components/SuperadminUsageOverviewDetailDrawer';
+import { SuperadminUsageOverviewEmptyState } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/components/SuperadminUsageOverviewEmptyState';
+import { useSuperadminUsageOverviewList } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/hooks/useSuperadminUsageOverviewList';
+import { useSuperadminUsageOverviewDetail } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/hooks/useSuperadminUsageOverviewDetail';
+import { useSuperadminUsageOverviewStore } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/state/useSuperadminUsageOverviewStore';
 
 export default function SuperadminUsageOverviewMain() {
   const { libraries, summary, isPending } = useSuperadminUsageOverviewList();

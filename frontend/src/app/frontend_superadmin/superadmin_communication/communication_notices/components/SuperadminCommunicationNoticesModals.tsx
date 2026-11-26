@@ -51,12 +51,12 @@ export function SuperadminCommunicationNoticesModals({
       {/* Add / Edit Notice Modal */}
       {showAdd && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-hidden animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-hidden animate-in fade-in motion-safe:duration-200"
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) onCloseAdd();
           }}
         >
-          <div className="w-full max-w-lg rounded-3xl border border-indigo-500/30 bg-slate-950/95 p-6 sm:p-7 shadow-2xl space-y-5 animate-in zoom-in-95 duration-200 ease-out">
+          <div className="w-full max-w-lg rounded-3xl border border-indigo-500/30 bg-slate-950/95 p-6 sm:p-7 shadow-2xl space-y-5 animate-in zoom-in-95 motion-safe:duration-200 ease-out">
             <div className="flex items-center justify-between pb-3 border-b border-indigo-500/20">
               <p className="text-base font-bold text-white flex items-center gap-2.5">
                 <div className="p-1.5 rounded-lg bg-sky-500/15 text-sky-400">
@@ -67,7 +67,7 @@ export function SuperadminCommunicationNoticesModals({
               <button
                 type="button"
                 onClick={onCloseAdd}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all cursor-pointer"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 motion-safe:transition-all cursor-pointer"
                 aria-label={tCopy('COPY.CLOSE_ADD_EDIT_NOTICE_DIALOG')}
                 data-testid="superadmin-communication-communication-notices-close-add-edit-notice-dialog-5"
               >
@@ -87,7 +87,7 @@ export function SuperadminCommunicationNoticesModals({
                 </label>
                 <input maxLength={30}
                   id="notice-title"
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-400 transition-all shadow-inner"
+                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-400 motion-safe:transition-all shadow-inner"
                   placeholder={tCopy('COPY.NOTICE_TITLE')}
                   aria-invalid={Boolean(errors.title)}
                   aria-describedby={errors.title ? 'notice-title-error' : undefined}
@@ -107,7 +107,7 @@ export function SuperadminCommunicationNoticesModals({
                 </label>
                 <textarea maxLength={1000}
                   id="notice-message"
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-400 resize-none transition-all shadow-inner"
+                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-400 resize-none motion-safe:transition-all shadow-inner"
                   rows={4}
                   placeholder={tCopy('COPY.NOTICE_MESSAGE')}
                   aria-invalid={Boolean(translateValidationMessage(errors.message?.message))}
@@ -129,7 +129,7 @@ export function SuperadminCommunicationNoticesModals({
                 <input maxLength={30}
                   id="notice-valid-till"
                   type="date"
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3.5 py-2.5 text-sm text-white focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-400 [color-scheme:dark] transition-all shadow-inner cursor-pointer"
+                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3.5 py-2.5 text-sm text-white focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-400 [color-scheme:dark] motion-safe:transition-all shadow-inner cursor-pointer"
                   min={today}
                   aria-invalid={Boolean(errors.validTill)}
                   aria-describedby={errors.validTill ? 'notice-valid-till-error' : undefined}
@@ -147,14 +147,14 @@ export function SuperadminCommunicationNoticesModals({
                 <button
                   type="button"
                   onClick={onCloseAdd}
-                  className="px-4 py-2 rounded-xl border border-slate-700 bg-slate-800/80 text-xs font-semibold text-slate-300 hover:bg-slate-700 transition-all cursor-pointer"
+                  className="px-4 py-2 rounded-xl border border-slate-700 bg-slate-800/80 text-xs font-semibold text-slate-300 hover:bg-slate-700 motion-safe:transition-all cursor-pointer"
                   data-testid="superadmin-communication-communication-notices-cancel-9"
                 >
                   {tCopy('COPY.CANCEL')}
                 </button>
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-1.5 px-5 py-2 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-5 py-2 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md motion-safe:transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
                   disabled={isSubmitting}
                   data-testid="superadmin-communication-communication-notices-update-notice-preview-10"
                 >
@@ -169,12 +169,12 @@ export function SuperadminCommunicationNoticesModals({
       {/* Delete Confirmation Modal */}
       {deleteItem && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-hidden animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-hidden animate-in fade-in motion-safe:duration-200"
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) onCancelDelete();
           }}
         >
-          <div className="w-full max-w-sm rounded-3xl border border-rose-500/30 bg-slate-950/95 p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-200 ease-out">
+          <div className="w-full max-w-sm rounded-3xl border border-rose-500/30 bg-slate-950/95 p-6 shadow-2xl space-y-4 animate-in zoom-in-95 motion-safe:duration-200 ease-out">
             <div className="flex items-center gap-2.5 text-rose-400">
               <AlertTriangle size={20} />
               <p className="text-base font-bold text-white">{tCopy('COPY.DELETE_NOTICE')}</p>
@@ -186,7 +186,7 @@ export function SuperadminCommunicationNoticesModals({
               <button
                 type="button"
                 onClick={onCancelDelete}
-                className="px-4 py-2 rounded-xl border border-slate-700 bg-slate-800/80 text-xs font-semibold text-slate-300 hover:bg-slate-700 transition-all cursor-pointer"
+                className="px-4 py-2 rounded-xl border border-slate-700 bg-slate-800/80 text-xs font-semibold text-slate-300 hover:bg-slate-700 motion-safe:transition-all cursor-pointer"
                 data-testid="superadmin-communication-communication-notices-cancel-11"
               >
                 {tCopy('COPY.CANCEL')}
@@ -208,12 +208,12 @@ export function SuperadminCommunicationNoticesModals({
       {/* Broadcast Confirmation Modal */}
       {broadcastItem && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-hidden animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-hidden animate-in fade-in motion-safe:duration-200"
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) onCancelBroadcast();
           }}
         >
-          <div className="w-full max-w-sm rounded-3xl border border-sky-500/30 bg-slate-950/95 p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-200 ease-out">
+          <div className="w-full max-w-sm rounded-3xl border border-sky-500/30 bg-slate-950/95 p-6 shadow-2xl space-y-4 animate-in zoom-in-95 motion-safe:duration-200 ease-out">
             <div className="flex items-center gap-2.5 text-sky-400">
               <Send size={20} />
               <p className="text-base font-bold text-white">{tCopy('COPY.BROADCAST_VIA_WHATSAPP')}</p>
@@ -232,7 +232,7 @@ export function SuperadminCommunicationNoticesModals({
                   const popup = window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
                   if (popup) popup.opener = null;
                 }}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/15 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/25 transition-all cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/15 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/25 motion-safe:transition-all cursor-pointer"
               >
                 <span>Share via WhatsApp Web (Free)</span>
               </button>
@@ -241,7 +241,7 @@ export function SuperadminCommunicationNoticesModals({
               <button
                 type="button"
                 onClick={onCancelBroadcast}
-                className="px-4 py-2 rounded-xl border border-slate-700 bg-slate-800/80 text-xs font-semibold text-slate-300 hover:bg-slate-700 transition-all cursor-pointer"
+                className="px-4 py-2 rounded-xl border border-slate-700 bg-slate-800/80 text-xs font-semibold text-slate-300 hover:bg-slate-700 motion-safe:transition-all cursor-pointer"
                 data-testid="superadmin-communication-communication-notices-cancel-13"
               >
                 {tCopy('COPY.CANCEL')}

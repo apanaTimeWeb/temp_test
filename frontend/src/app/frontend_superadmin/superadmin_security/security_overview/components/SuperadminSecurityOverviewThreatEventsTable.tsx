@@ -126,7 +126,7 @@ export const SuperadminSecurityOverviewThreatEventsTable: React.FC<
           <button
             type="button"
             onClick={onExportCsv}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-[0.98]"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-xs active:scale-[0.98]"
           >
             <Download size={13} />
             <span>Export CSV</span>
@@ -216,7 +216,7 @@ export const SuperadminSecurityOverviewThreatEventsTable: React.FC<
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-950/40 text-slate-300 hover:bg-indigo-900/50 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold cursor-pointer transition-all shadow-xs active:scale-[0.98]"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-950/40 text-slate-300 hover:bg-indigo-900/50 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold cursor-pointer motion-safe:transition-all shadow-xs active:scale-[0.98]"
             disabled={page === 0}
             onClick={() => onPageChange(Math.max(0, page - 1))}
           >
@@ -230,7 +230,7 @@ export const SuperadminSecurityOverviewThreatEventsTable: React.FC<
 
           <button
             type="button"
-            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-950/40 text-slate-300 hover:bg-indigo-900/50 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold cursor-pointer transition-all shadow-xs active:scale-[0.98]"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-950/40 text-slate-300 hover:bg-indigo-900/50 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold cursor-pointer motion-safe:transition-all shadow-xs active:scale-[0.98]"
             disabled={page + 1 >= totalPages}
             onClick={() => onPageChange(Math.min(totalPages - 1, page + 1))}
           >

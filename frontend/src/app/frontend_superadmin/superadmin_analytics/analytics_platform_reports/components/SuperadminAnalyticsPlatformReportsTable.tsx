@@ -3,9 +3,9 @@
 
 import React, { useState } from 'react';
 import { Eye, ChevronLeft, ChevronRight } from 'lucide-react';
-import type { PlatformReportTableRecord } from '../types/SuperadminAnalyticsPlatformReportsTypes';
-import { PLATFORM_STATUS_COLORS, PLATFORM_PAYMENT_STATUS_COLORS } from '../constants/SuperadminAnalyticsPlatformReportsConstants';
-import { SuperadminAnalyticsPlatformReportsEmptyState } from './SuperadminAnalyticsPlatformReportsEmptyState';
+import type { PlatformReportTableRecord } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/types/SuperadminAnalyticsPlatformReportsTypes';
+import { PLATFORM_STATUS_COLORS, PLATFORM_PAYMENT_STATUS_COLORS } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/constants/SuperadminAnalyticsPlatformReportsConstants';
+import { SuperadminAnalyticsPlatformReportsEmptyState } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/components/SuperadminAnalyticsPlatformReportsEmptyState';
 
 interface Props {
   records: PlatformReportTableRecord[];

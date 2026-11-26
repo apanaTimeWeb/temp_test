@@ -1,8 +1,8 @@
 // utils/SuperadminAnalyticsUsageReportsFormatters.ts
 // Formatters and client-side export utilities for Usage Reports
 
-import type { UsageReportTableRecord, UsageReportsOverviewData } from '../types/SuperadminAnalyticsUsageReportsTypes';
-export { printUsageReportsRoster } from './SuperadminAnalyticsUsageReportsPrintUtils';
+import type { UsageReportTableRecord, UsageReportsOverviewData } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/types/SuperadminAnalyticsUsageReportsTypes';
+export { printUsageReportsRoster } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/utils/SuperadminAnalyticsUsageReportsPrintUtils';
 
 export function formatUsageNumber(val: number): string {
   return new Intl.NumberFormat('en-IN').format(val);

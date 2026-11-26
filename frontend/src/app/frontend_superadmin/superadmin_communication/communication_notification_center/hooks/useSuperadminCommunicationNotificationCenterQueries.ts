@@ -16,7 +16,7 @@ export {
   useDispatchNotificationMutation,
   useRetryNotificationMutation,
   useUpdateTemplateMutation,
-} from './useSuperadminCommunicationNotificationCenterMutations';
+} from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/hooks/useSuperadminCommunicationNotificationCenterMutations';
 
 /** Hook to fetch notifications list */
 export function useSuperadminNotificationsQuery(params: NotificationFilterParams = {}) {

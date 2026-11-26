@@ -6,7 +6,6 @@ import { AlertTriangle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { createElement, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
-
 /**
  * Defines the public SuperadminSecurityOverviewConfirmOptions contract for security overview. Optionality and nullability follow the declared fields; no additional backend guarantees are implied.
  * @property title Display label for the owning feature. Declared type: string.

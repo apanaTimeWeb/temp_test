@@ -49,7 +49,7 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
                   <Link
                     href={route.href}
                     aria-current={active ? 'page' : undefined}
-                    className={`inline-flex min-h-10 items-center gap-2 rounded-xl border px-4 py-2 text-xs sm:text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 cursor-pointer ${
+                    className={`inline-flex min-h-10 items-center gap-2 rounded-xl border px-4 py-2 text-xs sm:text-sm font-semibold motion-safe:transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 cursor-pointer ${
                       active
                         ? `${cfg.activeClasses} font-bold`
                         : 'border-transparent text-slate-400 hover:bg-slate-800/60 hover:text-slate-200'

@@ -4,8 +4,8 @@ import React from 'react';
 import {
   IndianRupee, Building, Users, Mail, Phone, UserCheck, MapPin
 } from 'lucide-react';
-import type { SuperadminLibrariesLibrary } from '../types/SuperadminLibrariesOverviewTypes';
-import { SuperadminLibrariesFormatMajorPreviewCurrency } from '../utils/SuperadminLibrariesOverviewFormattingUtilities';
+import type { SuperadminLibrariesLibrary } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
+import { SuperadminLibrariesFormatMajorPreviewCurrency } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/utils/SuperadminLibrariesOverviewFormattingUtilities';
 import { useTranslations, useLocale } from 'next-intl';
 
 interface SuperadminLibrariesOverviewPanelViewContentProps {

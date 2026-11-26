@@ -17,7 +17,7 @@ import SuperadminLibrariesOnboardingSetupStep2Form from '@/app/frontend_superadm
 import SuperadminLibrariesOnboardingSetupStep3Form from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/components/SuperadminLibrariesOnboardingSetupStep3Form';
 import SuperadminLibrariesOnboardingSetupStep4Form from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/components/SuperadminLibrariesOnboardingSetupStep4Form';
 import SuperadminSetupWizardOverviewSkipModal from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/components/SuperadminLibrariesOnboardingSetupSkipModal';
-import SuperadminLibrariesOnboardingSetupStepper from './SuperadminLibrariesOnboardingSetupStepper';
+import SuperadminLibrariesOnboardingSetupStepper from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/components/SuperadminLibrariesOnboardingSetupStepper';
 import { useTranslations, useLocale } from 'next-intl';
 import { useSuperadminLibrariesOnboardingSetupUnsavedChangesGuard } from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/hooks/useSuperadminLibrariesOnboardingSetupUnsavedChangesGuard';
 
@@ -183,7 +183,7 @@ export default function SuperadminLibrariesOnboardingSetupPageClient() {
               onClick={handleLaunch}
               disabled
               title={tCopy("COPY.SETUP_LAUNCH_UNAVAILABLE")}
-              className="sa-wizard-launch-btn w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-indigo-500/30 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="sa-wizard-launch-btn w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-indigo-500/30 motion-safe:transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               aria-describedby="setup-launch-note"
               data-testid="superadmin-setup-wizard-setup-wizard-overview-launch-dashboard-btn-3"
             >
@@ -201,7 +201,7 @@ export default function SuperadminLibrariesOnboardingSetupPageClient() {
               id="wizard-back-btn"
               onClick={prevStep}
               disabled={step === 1}
-              className="sa-btn-ghost sa-btn-ghost--sm inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs sm:text-sm font-semibold transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+              className="sa-btn-ghost sa-btn-ghost--sm inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs sm:text-sm font-semibold motion-safe:transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
               data-testid="superadmin-setup-wizard-setup-wizard-overview-wizard-back-btn-4"
             >
               <ChevronLeft size={16} /> {tCopy("COPY.BACK")}
@@ -213,7 +213,7 @@ export default function SuperadminLibrariesOnboardingSetupPageClient() {
               type="submit"
               id="wizard-next-btn"
               form={`step${step}-form`}
-              className="sa-wizard-next-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 transition-all active:scale-95 cursor-pointer"
+              className="sa-wizard-next-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 motion-safe:transition-all active:scale-95 cursor-pointer"
               data-testid="superadmin-setup-wizard-setup-wizard-overview-wizard-next-btn-5"
             >
               {tCopy("COPY.NEXT_STEP")} <ChevronRight size={16} />

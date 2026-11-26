@@ -1,6 +1,6 @@
 // RESPONSIBILITY: Typed API client methods for Superadmin Branch Management with canonical ApiResponse envelope.
-import type { SuperadminBranchRecord, SuperadminBranchAuditLog } from '../types/SuperadminBranchesOverviewTypes';
-import { SUPERADMIN_BRANCHES_OVERVIEW_URLS } from '../config/superadmin_branches_overview.url_config';
+import type { SuperadminBranchRecord, SuperadminBranchAuditLog } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
+import { SUPERADMIN_BRANCHES_OVERVIEW_URLS } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/config/superadmin_branches_overview.url_config';
 
 export interface ApiResponseSuccess<T> {
   success: true;

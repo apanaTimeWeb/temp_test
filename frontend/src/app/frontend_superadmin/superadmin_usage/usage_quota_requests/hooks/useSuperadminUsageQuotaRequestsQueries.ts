@@ -2,16 +2,16 @@
 // RESPONSIBILITY: TanStack Query v5 hooks for quota upgrade requests list and KPIs with debouncing.
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { SUPERADMIN_USAGE_QUOTA_REQUESTS_QUERY_KEYS } from '../api/superadmin_usage_quota_requests.query_keys';
+import { SUPERADMIN_USAGE_QUOTA_REQUESTS_QUERY_KEYS } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/api/superadmin_usage_quota_requests.query_keys';
 import {
   fetchQuotaRequestsList,
   fetchQuotaRequestsKpis,
-} from '../api/superadmin_usage_quota_requests.api';
-import { useSuperadminUsageQuotaRequestsStore } from '../state/useSuperadminUsageQuotaRequestsStore';
+} from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/api/superadmin_usage_quota_requests.api';
+import { useSuperadminUsageQuotaRequestsStore } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/state/useSuperadminUsageQuotaRequestsStore';
 import {
   getMockQuotaRequestsResponse,
   getMockQuotaRequestsKpisResponse,
-} from '../mocks/handlers/superadmin_usage_quota_requests.handlers';
+} from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/mocks/handlers/superadmin_usage_quota_requests.handlers';
 
 export function useSuperadminUsageQuotaRequestsQueries() {
   const { search, status, resourceType } = useSuperadminUsageQuotaRequestsStore();

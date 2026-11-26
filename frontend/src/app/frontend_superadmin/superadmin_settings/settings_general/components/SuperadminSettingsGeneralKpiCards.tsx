@@ -20,8 +20,8 @@ export const SuperadminSettingsGeneralKpiCards: FC = () => {
   return (
     <section className="grid grid-cols-1 sm:grid-cols-3 gap-4" aria-label="Global Settings Status Metrics">
       {/* Security & Access Baseline - Rose/Ruby */}
-      <div className="group relative overflow-hidden rounded-2xl border border-rose-500/25 bg-gradient-to-br from-[#1c0810]/95 via-[#1c0810]/90 to-[#2c0c1a]/80 p-5 shadow-lg shadow-rose-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-rose-500/40 hover:shadow-xl hover:shadow-rose-950/40">
-        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-rose-500/10 blur-2xl transition-all duration-500 group-hover:bg-rose-500/20" />
+      <div className="group relative overflow-hidden rounded-2xl border border-rose-500/25 bg-gradient-to-br from-[#1c0810]/95 via-[#1c0810]/90 to-[#2c0c1a]/80 p-5 shadow-lg shadow-rose-950/30 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-rose-500/40 hover:shadow-xl hover:shadow-rose-950/40">
+        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-rose-500/10 blur-2xl motion-safe:transition-all motion-safe:duration-500 group-hover:bg-rose-500/20" />
         <div className="relative flex items-center justify-between">
           <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
             Security Baseline
@@ -45,8 +45,8 @@ export const SuperadminSettingsGeneralKpiCards: FC = () => {
       </div>
 
       {/* Branch & Capacity Limits - Amber/Gold */}
-      <div className="group relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 p-5 shadow-lg shadow-amber-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-amber-500/40 hover:shadow-xl hover:shadow-amber-950/40">
-        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-amber-500/10 blur-2xl transition-all duration-500 group-hover:bg-amber-500/20" />
+      <div className="group relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 p-5 shadow-lg shadow-amber-950/30 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-amber-500/40 hover:shadow-xl hover:shadow-amber-950/40">
+        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-amber-500/10 blur-2xl motion-safe:transition-all motion-safe:duration-500 group-hover:bg-amber-500/20" />
         <div className="relative flex items-center justify-between">
           <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
             Tenant Baseline Quota
@@ -66,8 +66,8 @@ export const SuperadminSettingsGeneralKpiCards: FC = () => {
       </div>
 
       {/* Data Retention & Backups - Cyan/Indigo */}
-      <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 p-5 shadow-lg shadow-cyan-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-cyan-500/40 hover:shadow-xl hover:shadow-cyan-950/40">
-        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-cyan-500/10 blur-2xl transition-all duration-500 group-hover:bg-cyan-500/20" />
+      <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 p-5 shadow-lg shadow-cyan-950/30 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-cyan-500/40 hover:shadow-xl hover:shadow-cyan-950/40">
+        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-cyan-500/10 blur-2xl motion-safe:transition-all motion-safe:duration-500 group-hover:bg-cyan-500/20" />
         <div className="relative flex items-center justify-between">
           <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
             Compliance & Snapshots

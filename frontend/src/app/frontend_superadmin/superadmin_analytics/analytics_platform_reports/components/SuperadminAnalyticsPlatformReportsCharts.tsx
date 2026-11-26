@@ -2,8 +2,8 @@
 // RESPONSIBILITY: Visual analytics charts for platform growth and status distributions.
 
 import React from 'react';
-import type { PlatformGrowthTimelinePoint, PlatformStatusDistributionPoint } from '../types/SuperadminAnalyticsPlatformReportsTypes';
-import { PLATFORM_STATUS_COLORS } from '../constants/SuperadminAnalyticsPlatformReportsConstants';
+import type { PlatformGrowthTimelinePoint, PlatformStatusDistributionPoint } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/types/SuperadminAnalyticsPlatformReportsTypes';
+import { PLATFORM_STATUS_COLORS } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/constants/SuperadminAnalyticsPlatformReportsConstants';
 
 interface Props {
   growthTimeline?: PlatformGrowthTimelinePoint[];

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Edit2, Check } from 'lucide-react';
 import type { SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
-import SuperadminBranchesOverviewEditModalFields from './SuperadminBranchesOverviewEditModalFields';
+import SuperadminBranchesOverviewEditModalFields from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewEditModalFields';
 import { useModalScrollLock } from '@/lib/useModalScrollLock';
 
 interface SuperadminBranchesOverviewEditModalProps {
@@ -102,11 +102,11 @@ export default function SuperadminBranchesOverviewEditModal({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-40 flex items-center justify-center bg-overlay-backdrop backdrop-blur-sm p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
+      className="fixed inset-0 z-40 flex items-center justify-center bg-overlay-backdrop backdrop-blur-sm p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in motion-safe:duration-200"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-4xl rounded-2xl border border-border bg-overlay p-6 shadow-dialog text-foreground max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 ease-out"
+        className="relative w-full max-w-4xl rounded-2xl border border-border bg-overlay p-6 shadow-dialog text-foreground max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 motion-safe:duration-200 ease-out"
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
@@ -202,7 +202,7 @@ export default function SuperadminBranchesOverviewEditModal({
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-xs font-bold text-on-primary shadow-sm active:scale-95 transition-all cursor-pointer motion-safe:active:scale-95"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-xs font-bold text-on-primary shadow-sm active:scale-95 motion-safe:transition-all cursor-pointer motion-safe:active:scale-95"
             >
               <Check size={14} />
               <span>Save Branch Changes</span>

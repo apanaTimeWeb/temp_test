@@ -94,7 +94,7 @@ export function SuperadminCommunicationNotificationCenterComposeModal() {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in motion-safe:duration-200"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) setIsComposeOpen(false);
       }}
@@ -103,7 +103,7 @@ export function SuperadminCommunicationNotificationCenterComposeModal() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="compose-modal-title"
-        className="bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] border border-indigo-500/30 text-slate-100 shadow-2xl rounded-3xl w-full max-w-2xl p-6 sm:p-7 relative max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200 ease-out"
+        className="bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] border border-indigo-500/30 text-slate-100 shadow-2xl rounded-3xl w-full max-w-2xl p-6 sm:p-7 relative max-h-[90vh] overflow-y-auto animate-in zoom-in-95 motion-safe:duration-200 ease-out"
         data-testid="notif-compose-dialog"
       >
         {/* Header */}
@@ -207,19 +207,19 @@ export function SuperadminCommunicationNotificationCenterComposeModal() {
             <button
               type="button"
               onClick={() => setIsComposeOpen(false)}
-              className="px-4 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-indigo-500/25 text-xs sm:text-sm font-semibold cursor-pointer transition-all"
+              className="px-4 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-indigo-500/25 text-xs sm:text-sm font-semibold cursor-pointer motion-safe:transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold text-xs sm:text-sm active:scale-95 transition-all flex items-center gap-2 cursor-pointer min-w-36 justify-center shadow-lg shadow-indigo-500/25"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold text-xs sm:text-sm active:scale-95 motion-safe:transition-all flex items-center gap-2 cursor-pointer min-w-36 justify-center shadow-lg shadow-indigo-500/25"
               data-testid="dispatch-submit-btn"
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-4 h-4 motion-safe:animate-spin" />
                   <span>Dispatching…</span>
                 </>
               ) : (

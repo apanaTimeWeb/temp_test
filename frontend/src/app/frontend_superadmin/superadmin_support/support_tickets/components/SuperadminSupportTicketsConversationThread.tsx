@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Headphones, Lock, MessageSquare, Paperclip, Send, ShieldCheck, Zap } from 'lucide-react';
-import type { SuperadminSupportTicketMessage } from '../types/SuperadminSupportTicketsOverviewTypes';
+import type { SuperadminSupportTicketMessage } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
 
 interface SuperadminSupportTicketsConversationThreadProps {
   messages: SuperadminSupportTicketMessage[];
@@ -93,7 +93,7 @@ export default function SuperadminSupportTicketsConversationThread({
             <button
               type="button"
               aria-pressed={!isInternalNote}
-              className={`text-xs font-bold px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 active:scale-[0.97] ${!isInternalNote ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+              className={`text-xs font-bold px-3 py-1 rounded-lg motion-safe:transition-all cursor-pointer flex items-center gap-1.5 active:scale-[0.97] ${!isInternalNote ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
               onClick={() => setIsInternalNote(false)}
               data-testid="superadmin-support-tickets-support-tickets-detail-public-reply-5"
             >
@@ -103,7 +103,7 @@ export default function SuperadminSupportTicketsConversationThread({
             <button
               type="button"
               aria-pressed={isInternalNote}
-              className={`text-xs font-bold px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 active:scale-[0.97] ${isInternalNote ? 'bg-amber-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+              className={`text-xs font-bold px-3 py-1 rounded-lg motion-safe:transition-all cursor-pointer flex items-center gap-1.5 active:scale-[0.97] ${isInternalNote ? 'bg-amber-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
               onClick={() => setIsInternalNote(true)}
               data-testid="superadmin-support-tickets-support-tickets-detail-internal-note-hidden-6"
             >
@@ -141,7 +141,7 @@ export default function SuperadminSupportTicketsConversationThread({
             </button>
             <button
               type="button"
-              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shadow-md active:scale-[0.97] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${isInternalNote ? 'bg-amber-600 hover:bg-amber-500 text-white' : 'bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white'}`}
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold motion-safe:transition-all shadow-md active:scale-[0.97] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${isInternalNote ? 'bg-amber-600 hover:bg-amber-500 text-white' : 'bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white'}`}
               onClick={handleSendReply}
               disabled={!replyText.trim()}
               data-testid="superadmin-support-tickets-support-tickets-detail-add-note-9"

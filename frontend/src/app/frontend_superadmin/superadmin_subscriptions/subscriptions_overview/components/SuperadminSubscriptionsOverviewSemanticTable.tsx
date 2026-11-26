@@ -152,7 +152,7 @@ export default function SuperadminSubscriptionsOverviewSemanticTable<T extends o
           <div className="flex items-center gap-2">
             <button
               type="button"
-              className="inline-flex items-center gap-1 rounded-xl border border-indigo-500/30 bg-indigo-500/10 px-3 py-1.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 disabled:cursor-not-allowed disabled:opacity-40 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1 rounded-xl border border-indigo-500/30 bg-indigo-500/10 px-3 py-1.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 disabled:cursor-not-allowed disabled:opacity-40 motion-safe:transition-all cursor-pointer"
               disabled={activePage === 0}
               onClick={() => { const nextPage = Math.max(0, activePage - 1); setPage(nextPage); onPageChange?.(nextPage); }}
               data-testid="superadmin-subscriptions-subscriptions-semantic-table-table-previous-3"
@@ -162,7 +162,7 @@ export default function SuperadminSubscriptionsOverviewSemanticTable<T extends o
             </button>
             <button
               type="button"
-              className="inline-flex items-center gap-1 rounded-xl border border-indigo-500/30 bg-indigo-500/10 px-3 py-1.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 disabled:cursor-not-allowed disabled:opacity-40 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1 rounded-xl border border-indigo-500/30 bg-indigo-500/10 px-3 py-1.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 disabled:cursor-not-allowed disabled:opacity-40 motion-safe:transition-all cursor-pointer"
               disabled={activePage + 1 >= pageCount}
               onClick={() => { const nextPage = Math.min(pageCount - 1, activePage + 1); setPage(nextPage); onPageChange?.(nextPage); }}
               data-testid="superadmin-subscriptions-subscriptions-semantic-table-table-next-4"

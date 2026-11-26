@@ -28,10 +28,14 @@ export default function SuperadminLibrariesImpersonateModal({
         sessionStorage.setItem('superadmin_impersonating_name', library.name);
         window.open('/admin/admin_dashboard/dashboard_overview', '_blank', 'noopener,noreferrer');
       }
-      toast.success(`Authorized Impersonation: Launched Admin session for "${library.name}" (Audit Logged).`);
+      toast.success(`Authorized Impersonation: Launched Admin session for "${library.name}" (Audit Logged).`, {
+        id: `superadmin:libraries_overview:impersonate-success:${library.id}`,
+      });
       onClose();
     } catch {
-      toast.error('Unable to launch impersonated admin session.');
+      toast.error('Unable to launch impersonated admin session.', {
+        id: 'superadmin:libraries_overview:impersonate-error',
+      });
     }
   };
 
@@ -46,7 +50,8 @@ export default function SuperadminLibrariesImpersonateModal({
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 rounded-lg text-slate-400 hover:text-white"
+          aria-label="Close impersonation dialog"
+          className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
         >
           <X size={18} />
         </button>

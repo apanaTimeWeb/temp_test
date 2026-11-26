@@ -64,7 +64,7 @@ export function SuperadminSettingsGeneralResetConfirmModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-all cursor-pointer"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 motion-safe:transition-all cursor-pointer"
             aria-label="Close dialog"
             disabled={isPending}
           >
@@ -81,7 +81,7 @@ export function SuperadminSettingsGeneralResetConfirmModal({
             type="button"
             onClick={onClose}
             disabled={isPending}
-            className="px-4 py-2 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700/80 text-xs font-semibold text-slate-300 transition-all cursor-pointer"
+            className="px-4 py-2 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700/80 text-xs font-semibold text-slate-300 motion-safe:transition-all cursor-pointer"
           >
             Cancel
           </button>
@@ -90,10 +90,10 @@ export function SuperadminSettingsGeneralResetConfirmModal({
             type="button"
             onClick={onConfirm}
             disabled={isPending}
-            className="px-4 py-2 rounded-xl border border-rose-500/40 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-xs font-bold text-white shadow-lg shadow-rose-950/50 inline-flex items-center gap-2 transition-all cursor-pointer"
+            className="px-4 py-2 rounded-xl border border-rose-500/40 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-xs font-bold text-white shadow-lg shadow-rose-950/50 inline-flex items-center gap-2 motion-safe:transition-all cursor-pointer"
             data-testid="settings-reset-modal-confirm-btn"
           >
-            <RotateCcw size={14} className={isPending ? 'animate-spin' : ''} aria-hidden="true" />
+            <RotateCcw size={14} className={isPending ? 'motion-safe:animate-spin' : ''} aria-hidden="true" />
             <span>{isPending ? 'Resetting...' : 'Yes, Reset All Settings'}</span>
           </button>
         </div>

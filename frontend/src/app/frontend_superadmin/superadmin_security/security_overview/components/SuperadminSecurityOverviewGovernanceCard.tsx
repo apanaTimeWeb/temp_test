@@ -206,7 +206,7 @@ export const SuperadminSecurityOverviewGovernanceCard: React.FC = () => {
             <button
               type="submit"
               disabled={isStartingSession}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-bold text-xs shadow-md shadow-indigo-600/25 hover:shadow-indigo-500/35 transition-all cursor-pointer active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-bold text-xs shadow-md shadow-indigo-600/25 hover:shadow-indigo-500/35 motion-safe:transition-all cursor-pointer active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <Eye size={13} />
               <span>{isStartingSession ? 'Authorizing Session...' : 'Start Impersonation Session'}</span>

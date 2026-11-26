@@ -33,7 +33,7 @@ export function SuperadminCommunicationNoticesFilters({
             placeholder="Search by title, message, or author..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-950/80 border border-indigo-500/25 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400/50 focus:border-sky-400 transition-all shadow-inner"
+            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-950/80 border border-indigo-500/25 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400/50 focus:border-sky-400 motion-safe:transition-all shadow-inner"
           />
         </div>
 
@@ -44,7 +44,7 @@ export function SuperadminCommunicationNoticesFilters({
             <select
               value={statusFilter}
               onChange={(e) => onStatusChange(e.target.value as 'All' | 'Active' | 'Expired')}
-              className="py-2 px-3 rounded-xl bg-slate-950/80 border border-indigo-500/25 text-slate-200 text-xs focus:ring-2 focus:ring-sky-400/50 focus:outline-none transition-all cursor-pointer shadow-inner [color-scheme:dark]"
+              className="py-2 px-3 rounded-xl bg-slate-950/80 border border-indigo-500/25 text-slate-200 text-xs focus:ring-2 focus:ring-sky-400/50 focus:outline-none motion-safe:transition-all cursor-pointer shadow-inner [color-scheme:dark]"
             >
               <option value="All">All Statuses</option>
               <option value="Active">Active Only</option>
@@ -56,7 +56,7 @@ export function SuperadminCommunicationNoticesFilters({
             <button
               type="button"
               onClick={onReset}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-sky-400 bg-sky-500/10 border border-sky-500/30 hover:bg-sky-500/20 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-sky-400 bg-sky-500/10 border border-sky-500/30 hover:bg-sky-500/20 motion-safe:transition-all cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset Filters</span>

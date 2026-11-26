@@ -18,12 +18,12 @@ import type {
 import { useTranslations } from 'next-intl';
 import { SUPERADMIN_SUPPORT_TICKETS_DETAIL_PANEL_SELECTOR } from '@/app/frontend_superadmin/superadmin_support/support_tickets/constants/SuperadminSupportTicketsOverviewStaticConstants';
 import { toast } from 'sonner';
-import SuperadminSupportTicketsDetailHeader from './SuperadminSupportTicketsDetailHeader';
-import SuperadminSupportTicketsDetailModals from './SuperadminSupportTicketsDetailModals';
-import SuperadminSupportTicketsDetailTabs from './SuperadminSupportTicketsDetailTabs';
-import SuperadminSupportTicketsConversationThread from './SuperadminSupportTicketsConversationThread';
-import SuperadminSupportTicketsDetailNavTabs from './SuperadminSupportTicketsDetailNavTabs';
-import { useSuperadminSupportTicketsDetailActions } from '../hooks/useSuperadminSupportTicketsDetailActions';
+import SuperadminSupportTicketsDetailHeader from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsDetailHeader';
+import SuperadminSupportTicketsDetailModals from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsDetailModals';
+import SuperadminSupportTicketsDetailTabs from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsDetailTabs';
+import SuperadminSupportTicketsConversationThread from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsConversationThread';
+import SuperadminSupportTicketsDetailNavTabs from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsDetailNavTabs';
+import { useSuperadminSupportTicketsDetailActions } from '@/app/frontend_superadmin/superadmin_support/support_tickets/hooks/useSuperadminSupportTicketsDetailActions';
 
 export default function SuperadminSupportTicketsOverviewDetailPanel({
   tkt,
@@ -200,7 +200,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
         role="dialog"
         aria-modal="true"
         aria-labelledby="superadmin-support-ticket-detail-title"
-        className="bg-[#0a0e27] border border-indigo-500/30 rounded-2xl shadow-2xl shadow-black/95 w-full max-w-5xl flex flex-col my-auto overflow-hidden text-slate-100 animate-in zoom-in-95 duration-200 ease-out"
+        className="bg-[#0a0e27] border border-indigo-500/30 rounded-2xl shadow-2xl shadow-black/95 w-full max-w-5xl flex flex-col my-auto overflow-hidden text-slate-100 animate-in zoom-in-95 motion-safe:duration-200 ease-out"
         style={{ height: 'calc(100dvh - 32px)', maxHeight: 'calc(100dvh - 32px)' }}
         onClick={(e) => e.stopPropagation()}
         data-testid="superadmin-superadmin-support-tickets-overview-detail-panel-div-line-73"

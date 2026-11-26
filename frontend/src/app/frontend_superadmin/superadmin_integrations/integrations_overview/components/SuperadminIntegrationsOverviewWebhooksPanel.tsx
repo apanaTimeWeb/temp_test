@@ -18,8 +18,8 @@ import type {
   WebhookCreatePayload,
   WebhookEndpointItem,
   WebhookRetryItem,
-} from '../types/superadmin_integrations_overview.types';
-import { SuperadminIntegrationsOverviewWebhookCreateModal } from './SuperadminIntegrationsOverviewWebhookCreateModal';
+} from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/types/superadmin_integrations_overview.types';
+import { SuperadminIntegrationsOverviewWebhookCreateModal } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewWebhookCreateModal';
 
 interface SuperadminIntegrationsOverviewWebhooksPanelProps {
   webhooks: WebhookEndpointItem[];
@@ -208,7 +208,7 @@ export const SuperadminIntegrationsOverviewWebhooksPanel: React.FC<
                       className="inline-flex items-center gap-1.5 rounded-xl border border-amber-500/40 bg-amber-500/20 text-amber-300 px-3 py-1 font-semibold text-xs hover:bg-amber-500/30 cursor-pointer min-w-32 justify-center shadow-xs transition-opacity disabled:opacity-50"
                     >
                       {isRetrying ? (
-                        <Loader2 size={12} className="animate-spin text-amber-400" />
+                        <Loader2 size={12} className="motion-safe:animate-spin text-amber-400" />
                       ) : (
                         <RefreshCw size={12} />
                       )}

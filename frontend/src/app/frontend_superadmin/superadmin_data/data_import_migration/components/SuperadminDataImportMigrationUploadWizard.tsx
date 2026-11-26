@@ -13,12 +13,12 @@ import { UploadCloud, FileSpreadsheet, Play, ShieldAlert } from 'lucide-react';
 import {
   PreflightValidateSchema,
   type PreflightValidateFormData,
-} from '../schemas/superadmin_data_import_migration.schemas';
+} from '@/app/frontend_superadmin/superadmin_data/data_import_migration/schemas/superadmin_data_import_migration.schemas';
 import {
   IMPORT_ENTITY_TYPES,
   DUPLICATE_STRATEGIES,
   SUPPORTED_IMPORT_EXTENSIONS,
-} from '../constants/superadmin_data_import_migration.constants';
+} from '@/app/frontend_superadmin/superadmin_data/data_import_migration/constants/superadmin_data_import_migration.constants';
 
 interface UploadWizardProps {
   onRunPreflight: (data: PreflightValidateFormData) => void;
@@ -174,7 +174,7 @@ export function SuperadminDataImportMigrationUploadWizard({
           <button
             type="submit"
             disabled={!selectedFile || isValidating}
-            className="group inline-flex items-center gap-2.5 px-5 py-2.5 text-xs font-extrabold text-white bg-gradient-to-r from-amber-600 via-orange-500 to-amber-600 hover:from-amber-500 hover:to-orange-400 disabled:opacity-50 rounded-xl shadow-lg shadow-amber-600/30 hover:shadow-amber-500/50 hover:scale-[1.02] active:scale-[0.97] transition-all duration-300 cursor-pointer"
+            className="group inline-flex items-center gap-2.5 px-5 py-2.5 text-xs font-extrabold text-white bg-gradient-to-r from-amber-600 via-orange-500 to-amber-600 hover:from-amber-500 hover:to-orange-400 disabled:opacity-50 rounded-xl shadow-lg shadow-amber-600/30 hover:shadow-amber-500/50 hover:scale-[1.02] active:scale-[0.97] motion-safe:transition-all motion-safe:duration-300 cursor-pointer"
           >
             <span className="p-1 rounded-md bg-white/20 text-white border border-white/30 group-hover:scale-110 transition-transform">
               <Play className="w-3.5 h-3.5 fill-current" />

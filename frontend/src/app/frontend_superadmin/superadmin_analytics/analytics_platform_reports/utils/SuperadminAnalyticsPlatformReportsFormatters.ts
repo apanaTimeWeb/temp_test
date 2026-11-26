@@ -1,8 +1,8 @@
 // utils/SuperadminAnalyticsPlatformReportsFormatters.ts
 // Formatters and client export utilities for Platform Reports
 
-import type { PlatformReportTableRecord, PlatformReportsOverviewData } from '../types/SuperadminAnalyticsPlatformReportsTypes';
-export { printPlatformReportsRoster } from './SuperadminAnalyticsPlatformReportsPrintUtils';
+import type { PlatformReportTableRecord, PlatformReportsOverviewData } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/types/SuperadminAnalyticsPlatformReportsTypes';
+export { printPlatformReportsRoster } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/utils/SuperadminAnalyticsPlatformReportsPrintUtils';
 
 export function formatPlatformReportNumber(val: number): string {
   return new Intl.NumberFormat('en-IN').format(val);

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, CheckCircle2, Send, ShieldAlert } from 'lucide-react';
-import type { SuperadminLibraryOption } from '../types/SuperadminBranchesOverviewTypes';
+import type { SuperadminLibraryOption } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
 
 interface SuperadminBranchesOverviewQuotaBlockBannerProps {
   library: SuperadminLibraryOption;
@@ -55,7 +55,7 @@ export default function SuperadminBranchesOverviewQuotaBlockBanner({
           {/* Upgrade Plan CTA */}
           <Link
             href="/superadmin/superadmin_plans"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-warning text-black text-xs font-bold transition-all shadow-xs hover:bg-warning"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-warning text-black text-xs font-bold motion-safe:transition-all shadow-xs hover:bg-warning"
           >
             Upgrade Plan <ArrowUpRight className="w-3.5 h-3.5" />
           </Link>
@@ -64,7 +64,7 @@ export default function SuperadminBranchesOverviewQuotaBlockBanner({
           <button
             type="button"
             onClick={() => setShowRequestForm(!showRequestForm)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-danger-border bg-surface hover:bg-surface-elevated text-danger text-xs font-semibold transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-danger-border bg-surface hover:bg-surface-elevated text-danger text-xs font-semibold motion-safe:transition-all cursor-pointer"
           >
             <Send className="w-3.5 h-3.5" />
             {showRequestForm ? 'Cancel Request' : 'Request Additional Branch'}
@@ -97,7 +97,7 @@ export default function SuperadminBranchesOverviewQuotaBlockBanner({
             </button>
             <button
               type="submit"
-              className="px-3.5 py-1 rounded-lg bg-danger hover:bg-danger text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
+              className="px-3.5 py-1 rounded-lg bg-danger hover:bg-danger text-white text-xs font-bold motion-safe:transition-all shadow-xs cursor-pointer"
             >
               Submit Request
             </button>

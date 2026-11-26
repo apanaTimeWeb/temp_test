@@ -5,7 +5,7 @@
 import { SuperadminPageLoader } from '@/components/ui/loader/SuperadminLoader';
 import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
-import SuperadminLibrariesOnboardingSetupListSkeleton from './components/SuperadminLibrariesOnboardingSetupListSkeleton';
+import SuperadminLibrariesOnboardingSetupListSkeleton from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/components/SuperadminLibrariesOnboardingSetupListSkeleton';
 
 export default function ModuleLoading() {
   const t = useTranslations('SUPERADMIN_SETUP_WIZARD');

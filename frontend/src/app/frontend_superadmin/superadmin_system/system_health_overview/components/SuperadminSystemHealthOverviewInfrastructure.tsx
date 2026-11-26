@@ -21,7 +21,9 @@ export default function SuperadminSystemHealthOverviewInfrastructure() {
         )
       );
       setOptimizingCompute(false);
-      toast.success('Worker cluster autoscaled: 3 additional pods warm, CPU reduced to 58%');
+      toast.success('Worker cluster autoscaled: 3 additional pods warm, CPU reduced to 58%', {
+        id: 'superadmin:system_health:autoscale-compute',
+      });
     }, 600);
   };
 
@@ -34,7 +36,9 @@ export default function SuperadminSystemHealthOverviewInfrastructure() {
         )
       );
       setOptimizingDb(false);
-      toast.success('PgBouncer connection pool purged: 320 idle leases reclaimed');
+      toast.success('PgBouncer connection pool purged: 320 idle leases reclaimed', {
+        id: 'superadmin:system_health:optimize-db',
+      });
     }, 600);
   };
 
@@ -58,9 +62,9 @@ export default function SuperadminSystemHealthOverviewInfrastructure() {
               type="button"
               onClick={handleOptimizeCompute}
               disabled={optimizingCompute}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
             >
-              <Sliders size={12} className={optimizingCompute ? 'animate-spin' : ''} />
+              <Sliders size={12} className={optimizingCompute ? 'motion-safe:animate-spin' : ''} />
               <span>{optimizingCompute ? 'Optimizing...' : 'Autoscale Pool'}</span>
             </button>
           </div>
@@ -86,7 +90,7 @@ export default function SuperadminSystemHealthOverviewInfrastructure() {
 
                 <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
                   <div
-                    className={`h-full rounded-full transition-all duration-500 ${
+                    className={`h-full rounded-full motion-safe:transition-all motion-safe:duration-500 ${
                       node.usage > 85
                         ? 'bg-amber-400'
                         : 'bg-gradient-to-r from-sky-500 to-emerald-400'
@@ -126,9 +130,9 @@ export default function SuperadminSystemHealthOverviewInfrastructure() {
               type="button"
               onClick={handleOptimizeDb}
               disabled={optimizingDb}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
             >
-              <RefreshCw size={12} className={optimizingDb ? 'animate-spin' : ''} />
+              <RefreshCw size={12} className={optimizingDb ? 'motion-safe:animate-spin' : ''} />
               <span>{optimizingDb ? 'Optimizing...' : 'Optimize Pool'}</span>
             </button>
           </div>
@@ -152,7 +156,7 @@ export default function SuperadminSystemHealthOverviewInfrastructure() {
 
                 <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-400 transition-all duration-500"
+                    className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-400 motion-safe:transition-all motion-safe:duration-500"
                     style={{ width: `${node.pct}%` }}
                   />
                 </div>

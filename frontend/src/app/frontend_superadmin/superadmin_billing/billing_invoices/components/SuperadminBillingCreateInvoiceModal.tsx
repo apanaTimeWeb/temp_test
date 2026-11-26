@@ -9,9 +9,9 @@ import {
   CANONICAL_LIBRARY_TENANTS,
   type LibraryTenantOption,
 } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/constants/SuperadminBillingCanonicalTenants';
-import SuperadminBillingCreateInvoiceAddressSection from './SuperadminBillingCreateInvoiceAddressSection';
-import SuperadminBillingCreateInvoiceTaxSection from './SuperadminBillingCreateInvoiceTaxSection';
-import SuperadminBillingCreateInvoicePaymentControls from './SuperadminBillingCreateInvoicePaymentControls';
+import SuperadminBillingCreateInvoiceAddressSection from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingCreateInvoiceAddressSection';
+import SuperadminBillingCreateInvoiceTaxSection from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingCreateInvoiceTaxSection';
+import SuperadminBillingCreateInvoicePaymentControls from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingCreateInvoicePaymentControls';
 
 export { CANONICAL_LIBRARY_TENANTS, type LibraryTenantOption };
 

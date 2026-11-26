@@ -131,11 +131,11 @@ export default function SuperadminSystemHealthOverviewNetworkMetrics({ refreshTr
         return (
           <div
             key={kpi.id}
-            className={`group relative overflow-hidden rounded-2xl border ${theme.border} ${theme.bg} p-5 ${theme.shadow} transition-all duration-300 hover:scale-[1.01]`}
+            className={`group relative overflow-hidden rounded-2xl border ${theme.border} ${theme.bg} p-5 ${theme.shadow} motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01]`}
           >
             {/* Ambient Backdrop Radial Glow */}
             <div
-              className={`pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full blur-2xl transition-all duration-500 ${theme.glow}`}
+              className={`pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full blur-2xl motion-safe:transition-all motion-safe:duration-500 ${theme.glow}`}
               aria-hidden="true"
             />
 
@@ -150,7 +150,7 @@ export default function SuperadminSystemHealthOverviewNetworkMetrics({ refreshTr
                 <span
                   className={`inline-flex items-center gap-1.5 font-semibold rounded-full px-2.5 py-0.5 border text-xs ${theme.badge}`}
                 >
-                  <span className={`w-1.5 h-1.5 rounded-full ${theme.pulseDot} animate-pulse`} />
+                  <span className={`w-1.5 h-1.5 rounded-full ${theme.pulseDot} motion-safe:animate-pulse`} />
                   <span>{t(kpi.trendKey)}</span>
                 </span>
               </div>
@@ -206,7 +206,7 @@ export default function SuperadminSystemHealthOverviewNetworkMetrics({ refreshTr
               {sparkline.map((val, idx) => (
                 <div
                   key={idx}
-                  className={`flex-1 bg-gradient-to-t ${theme.sparkline} ${theme.sparklineHover} rounded-xs transition-all duration-500`}
+                  className={`flex-1 bg-gradient-to-t ${theme.sparkline} ${theme.sparklineHover} rounded-xs motion-safe:transition-all motion-safe:duration-500`}
                   style={{ height: `${Math.max(15, val)}%` }}
                 />
               ))}
@@ -215,7 +215,7 @@ export default function SuperadminSystemHealthOverviewNetworkMetrics({ refreshTr
             {/* Progress Accent */}
             <div className="relative mt-2.5 h-1 w-full overflow-hidden rounded-full bg-slate-800/80">
               <div
-                className={`h-full bg-gradient-to-r ${theme.progressBar} transition-all duration-500`}
+                className={`h-full bg-gradient-to-r ${theme.progressBar} motion-safe:transition-all motion-safe:duration-500`}
                 style={{ width: `${kpi.id === 'errors' ? 98 : 75 + (jitter % 10)}%` }}
               />
             </div>

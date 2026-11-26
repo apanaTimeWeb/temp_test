@@ -11,7 +11,7 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from './SuperadminLibrariesProfileConfigurationCard';
+} from '@/app/frontend_superadmin/superadmin_libraries/libraries_profile_configuration/components/SuperadminLibrariesProfileConfigurationCard';
 
 interface SecurityCardProps {
   tCopy: (key: string) => string;
@@ -81,7 +81,7 @@ export default function SuperadminLibrariesProfileSecurityCard({ tCopy }: Securi
                   value={currentPassword}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentPassword(e.target.value)}
                   placeholder="Current master password"
-                  className="w-full rounded-xl border border-slate-700/80 bg-slate-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all pr-10"
+                  className="w-full rounded-xl border border-slate-700/80 bg-slate-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 motion-safe:transition-all pr-10"
                   data-testid="superadmin_libraries_profile_configuration-current-password"
                 />
                 <button
@@ -108,7 +108,7 @@ export default function SuperadminLibrariesProfileSecurityCard({ tCopy }: Securi
                   value={newPassword}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPassword(e.target.value)}
                   placeholder="Minimum 8 characters"
-                  className="w-full rounded-xl border border-slate-700/80 bg-slate-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all pr-10"
+                  className="w-full rounded-xl border border-slate-700/80 bg-slate-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 motion-safe:transition-all pr-10"
                   data-testid="superadmin_libraries_profile_configuration-new-password"
                 />
                 <button
@@ -135,7 +135,7 @@ export default function SuperadminLibrariesProfileSecurityCard({ tCopy }: Securi
                   value={confirmPassword}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
                   placeholder="Re-enter new password"
-                  className="w-full rounded-xl border border-slate-700/80 bg-slate-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all pr-10"
+                  className="w-full rounded-xl border border-slate-700/80 bg-slate-900/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 motion-safe:transition-all pr-10"
                   data-testid="superadmin_libraries_profile_configuration-confirm-password"
                 />
                 <button
@@ -192,7 +192,7 @@ export default function SuperadminLibrariesProfileSecurityCard({ tCopy }: Securi
           id="change-password-btn"
           onClick={handlePasswordUpdate}
           data-testid="superadmin_libraries_profile_configuration-change-password-btn"
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 transition-all hover:bg-indigo-500 cursor-pointer disabled:opacity-50 w-full sm:w-auto"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 motion-safe:transition-all hover:bg-indigo-500 cursor-pointer disabled:opacity-50 w-full sm:w-auto"
         >
           <KeyRound size={15} />
           Update Master Password

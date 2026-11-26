@@ -1,8 +1,8 @@
 // RESPONSIBILITY: Render search, plan filter, and category tabs for usage overview table.
 import React from 'react';
 import { Search, RotateCcw } from 'lucide-react';
-import { useSuperadminUsageOverviewStore } from '../state/useSuperadminUsageOverviewStore';
-import { USAGE_CATEGORY_TABS } from '../constants/SuperadminUsageOverviewConstants';
+import { useSuperadminUsageOverviewStore } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/state/useSuperadminUsageOverviewStore';
+import { USAGE_CATEGORY_TABS } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/constants/SuperadminUsageOverviewConstants';
 
 export function SuperadminUsageOverviewFilters() {
   const {
@@ -25,7 +25,7 @@ export function SuperadminUsageOverviewFilters() {
             <button
               key={tab.id}
               onClick={() => setCategoryTab(tab.id as typeof categoryTab)}
-              className={`rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all duration-200 cursor-pointer ${
+              className={`rounded-xl px-3.5 py-1.5 text-xs font-bold motion-safe:transition-all motion-safe:duration-200 cursor-pointer ${
                 isActive
                   ? 'bg-sky-500 text-slate-950 shadow-md shadow-sky-500/25 scale-[1.02]'
                   : 'bg-slate-900/60 text-slate-400 hover:text-white hover:bg-slate-800/60 border border-indigo-500/20'

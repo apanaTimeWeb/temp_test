@@ -1,5 +1,5 @@
-import type { BillingReportTableRecord } from '../types/SuperadminAnalyticsBillingReportsTypes';
-import { formatBillingCurrency } from './SuperadminAnalyticsBillingReportsFormatters';
+import type { BillingReportTableRecord } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/types/SuperadminAnalyticsBillingReportsTypes';
+import { formatBillingCurrency } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/utils/SuperadminAnalyticsBillingReportsFormatters';
 
 /** Prints billing reports roster in 1 landscape page without overflow. */
 export function printBillingReportsRoster(records: readonly BillingReportTableRecord[], title = 'SuperAdmin Billing & Revenue Analytics Report'): void {

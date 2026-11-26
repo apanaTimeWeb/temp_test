@@ -1,6 +1,11 @@
 'use client';
 
-import type { SuperadminSubscriptionRecord } from '../types/SuperadminSubscriptionsActiveSubscribersTypes';
+import type { SuperadminSubscriptionRecord } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/types/SuperadminSubscriptionsActiveSubscribersTypes';
+
+type SubscriberContactFields = SuperadminSubscriptionRecord & {
+  billingContact?: string;
+  phone?: string;
+};
 
 /**
  * Prints subscriber roster.
@@ -24,7 +29,7 @@ export function printSuperadminSubscriptionsRoster(
       <td style="padding: 5px 6px; border: 1px solid #cbd5e1; text-align: center; color: #64748b; font-size: 9.5px;">${sub.cycle}</td>
       <td style="padding: 5px 6px; border: 1px solid #cbd5e1; text-align: right; font-weight: 700; font-size: 10px; color: #059669;">₹${sub.mrr?.toLocaleString('en-IN') ?? 0}</td>
       <td style="padding: 5px 6px; border: 1px solid #cbd5e1; text-align: center; font-size: 9px;"><span style="display:inline-block; padding: 1px 6px; border-radius: 9999px; font-weight: 700; background: ${sub.status === 'Paid' ? '#dcfce7; color: #15803d;' : sub.status === 'Due Soon' ? '#fef3c7; color: #b45309;' : '#ffe4e6; color: #e11d48;'}">${sub.status}</span></td>
-      <td style="padding: 5px 6px; border: 1px solid #cbd5e1; font-size: 9.5px; color: #334155;">${(sub as any).billingContact || 'Primary Admin'}<br/><span style="color:#0284c7;font-weight:600;">${(sub as any).phone || ''}</span></td>
+      <td style="padding: 5px 6px; border: 1px solid #cbd5e1; font-size: 9.5px; color: #334155;">${(sub as SubscriberContactFields).billingContact || 'Primary Admin'}<br/><span style="color:#0284c7;font-weight:600;">${(sub as SubscriberContactFields).phone || ''}</span></td>
     </tr>`
     )
     .join('');

@@ -19,8 +19,8 @@ import { AlertTriangle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { SUPERADMIN_USERS_OVERVIEW_PAGE_CLIENT_COLUMNS } from '@/app/frontend_superadmin/superadmin_users/users_directory/constants/SuperadminUsersDirectoryStaticConstants';
 import { maskSensitiveData } from '@/app/frontend_superadmin/superadmin_users/users_directory/utils/SuperadminUsersDirectoryMaskSensitiveData';
-import { useUsersDirectoryColumns } from './SuperadminUsersDirectoryColumns';
-import SuperadminUsersDirectoryHeroControls from './SuperadminUsersDirectoryHeroControls';
+import { useUsersDirectoryColumns } from '@/app/frontend_superadmin/superadmin_users/users_directory/components/SuperadminUsersDirectoryColumns';
+import SuperadminUsersDirectoryHeroControls from '@/app/frontend_superadmin/superadmin_users/users_directory/components/SuperadminUsersDirectoryHeroControls';
 
 export default function SuperadminUsersDirectoryPageClient() {
   const t = useTranslations('SUPERADMIN_USERS');

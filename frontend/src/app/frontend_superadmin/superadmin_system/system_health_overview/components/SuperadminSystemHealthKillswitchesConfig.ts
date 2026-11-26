@@ -1,7 +1,7 @@
 import { Activity, Cpu, Database, Power, ShieldAlert, Webhook } from 'lucide-react';
 
-export { type DeploymentRecord, INITIAL_DEPLOYMENTS } from './SuperadminSystemHealthDeploymentsConfig';
-export { type SystemRuntimeControls, INITIAL_FLAGS } from './SuperadminSystemHealthRuntimeFlagsConfig';
+export { type DeploymentRecord, INITIAL_DEPLOYMENTS } from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthDeploymentsConfig';
+export { type SystemRuntimeControls, INITIAL_FLAGS } from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthRuntimeFlagsConfig';
 
 export const KILLSWITCH_ITEMS = [
   {

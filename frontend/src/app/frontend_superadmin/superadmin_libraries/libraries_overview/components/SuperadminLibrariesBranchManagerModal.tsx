@@ -5,8 +5,8 @@ import {
   X, Building2, MapPin, Armchair, Clock, UserCheck, Plus,
   KeyRound, ShieldCheck, AlertCircle, Phone, Mail, Store
 } from 'lucide-react';
-import type { SuperadminLibrariesLibrary, SuperadminBranchRecord } from '../types/SuperadminLibrariesOverviewTypes';
-import SuperadminLibrariesBranchAddForm from './SuperadminLibrariesBranchAddForm';
+import type { SuperadminLibrariesLibrary, SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
+import SuperadminLibrariesBranchAddForm from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesBranchAddForm';
 
 interface SuperadminLibrariesBranchManagerModalProps {
   lib: SuperadminLibrariesLibrary;
@@ -55,7 +55,7 @@ export default function SuperadminLibrariesBranchManagerModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="branch-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in motion-safe:duration-200"
     >
       <div className="relative w-full max-w-3xl max-h-[90vh] flex flex-col rounded-2xl border border-indigo-500/30 bg-[#0a0d22] text-slate-100 shadow-2xl overflow-hidden">
         {/* Header */}
@@ -114,7 +114,7 @@ export default function SuperadminLibrariesBranchManagerModal({
             <button
               type="button"
               onClick={() => onToggleAdminPanel(lib.id)}
-              className={`shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all active:scale-95 cursor-pointer ${
+              className={`shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border motion-safe:transition-all active:scale-95 cursor-pointer ${
                 isAdminPanelEnabled
                   ? 'border-rose-500/30 bg-rose-500/15 text-rose-300 hover:bg-rose-500/25'
                   : 'border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25'
@@ -138,7 +138,7 @@ export default function SuperadminLibrariesBranchManagerModal({
               <button
                 type="button"
                 onClick={() => setShowAddForm(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/40 bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 text-xs font-bold transition-all active:scale-95 cursor-pointer shadow-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/40 bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 text-xs font-bold motion-safe:transition-all active:scale-95 cursor-pointer shadow-sm"
               >
                 <Plus size={13} />
                 <span>+ Add Branch</span>
@@ -163,7 +163,7 @@ export default function SuperadminLibrariesBranchManagerModal({
             {branches.map((br, idx) => (
               <div
                 key={br.id || idx}
-                className="rounded-xl border border-indigo-500/20 bg-[#0d102c]/90 p-4 hover:border-indigo-400/40 transition-all shadow-sm"
+                className="rounded-xl border border-indigo-500/20 bg-[#0d102c]/90 p-4 hover:border-indigo-400/40 motion-safe:transition-all shadow-sm"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="space-y-1">
@@ -232,7 +232,7 @@ export default function SuperadminLibrariesBranchManagerModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs font-bold rounded-xl border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 transition-all cursor-pointer"
+            className="px-4 py-2 text-xs font-bold rounded-xl border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 motion-safe:transition-all cursor-pointer"
           >
             Close
           </button>

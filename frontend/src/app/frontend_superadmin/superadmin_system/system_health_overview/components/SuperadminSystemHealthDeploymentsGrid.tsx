@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { CheckCircle2, GitBranch, RotateCcw, Tag } from 'lucide-react';
-import type { DeploymentRecord } from './SuperadminSystemHealthKillswitchesConfig';
+import type { DeploymentRecord } from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthKillswitchesConfig';
 
 interface SuperadminSystemHealthDeploymentsGridProps {
   deployments: DeploymentRecord[];
@@ -34,7 +34,7 @@ export default function SuperadminSystemHealthDeploymentsGrid({
           return (
             <div
               key={dep.commitSha}
-              className={`group relative overflow-hidden rounded-2xl p-4 transition-all duration-300 flex flex-col justify-between ${
+              className={`group relative overflow-hidden rounded-2xl p-4 motion-safe:transition-all motion-safe:duration-300 flex flex-col justify-between ${
                 isLive
                   ? 'border border-emerald-500/40 bg-gradient-to-br from-emerald-950/30 via-slate-900/80 to-[#080d1e] shadow-lg shadow-emerald-500/5'
                   : 'border border-slate-800/80 bg-slate-900/50 hover:border-slate-700/80 hover:bg-slate-900/70'
@@ -72,10 +72,10 @@ export default function SuperadminSystemHealthDeploymentsGrid({
                     type="button"
                     onClick={() => onRollback(dep)}
                     disabled={isRolling}
-                    className="inline-flex items-center gap-1 rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 px-2.5 py-1 text-[11px] font-semibold shadow-xs transition-all active:scale-95 cursor-pointer disabled:opacity-50 shrink-0"
+                    className="inline-flex items-center gap-1 rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 px-2.5 py-1 text-[11px] font-semibold shadow-xs motion-safe:transition-all active:scale-95 cursor-pointer disabled:opacity-50 shrink-0"
                     title="Rollback cluster to this release"
                   >
-                    <RotateCcw size={11} className={isRolling ? 'animate-spin' : ''} />
+                    <RotateCcw size={11} className={isRolling ? 'motion-safe:animate-spin' : ''} />
                     <span>{isRolling ? 'Rolling...' : 'Rollback'}</span>
                   </button>
                 ) : (

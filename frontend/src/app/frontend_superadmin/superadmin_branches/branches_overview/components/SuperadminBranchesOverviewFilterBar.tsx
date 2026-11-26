@@ -86,7 +86,7 @@ export default function SuperadminBranchesOverviewFilterBar({
         <button
           type="button"
           onClick={onReset}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-danger-bg text-danger border border-danger-border hover:bg-danger-bg transition-all cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-danger-bg text-danger border border-danger-border hover:bg-danger-bg motion-safe:transition-all cursor-pointer"
           title="Clear all filters"
         >
           <RotateCcw size={12} />

@@ -1,8 +1,8 @@
 // RESPONSIBILITY: Define canonical route/configuration constants for navigation shell; it does not perform navigation or network I/O itself.
 // FLOW: Feature/navigation caller -> superadmin_navigation/navigation_shell/config/superadmin_navigation_shell.url_config.ts -> typed constants -> owning route or API caller.
 
-import * as part1 from './superadmin_navigation_shell_domain_urls_part1.config';
-import * as part2 from './superadmin_navigation_shell_domain_urls_part2.config';
+import * as part1 from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/config/superadmin_navigation_shell_domain_urls_part1.config';
+import * as part2 from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/config/superadmin_navigation_shell_domain_urls_part2.config';
 
 /** Canonical route contract; every value is retained from a pre-existing verified route constant. */
 export const SUPERADMIN_NAVIGATION_SHELL_ROUTES = {

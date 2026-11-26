@@ -45,7 +45,7 @@ export default function SuperadminUsersDirectoryContent({ activeTab, users, user
             </div>
             <a
               href="/superadmin/superadmin_users/users_roles_permissions"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 transition-all cursor-pointer shrink-0"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 motion-safe:transition-all cursor-pointer shrink-0"
             >
               Open Full Roles Matrix →
             </a>

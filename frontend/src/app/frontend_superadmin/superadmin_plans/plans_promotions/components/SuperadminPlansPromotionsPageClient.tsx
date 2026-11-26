@@ -3,8 +3,8 @@
 import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_plans/plans_promotions/config/superadmin_plans_promotions.url_config.ts';
 import { useSuperadminPlansPromotionsConfirm } from '@/app/frontend_superadmin/superadmin_plans/plans_promotions/hooks/useSuperadminPlansPromotionsConfirm';
 import SuperadminPlansPromotionsEmptyState from '@/app/frontend_superadmin/superadmin_plans/plans_promotions/components/SuperadminPlansPromotionsEmptyState';
-import SuperadminPlansPromotionsKpiGrid from './SuperadminPlansPromotionsKpiGrid';
-import SuperadminPlansPromotionsCreateModal from './SuperadminPlansPromotionsCreateModal';
+import SuperadminPlansPromotionsKpiGrid from '@/app/frontend_superadmin/superadmin_plans/plans_promotions/components/SuperadminPlansPromotionsKpiGrid';
+import SuperadminPlansPromotionsCreateModal from '@/app/frontend_superadmin/superadmin_plans/plans_promotions/components/SuperadminPlansPromotionsCreateModal';
 import { toast } from 'sonner';
 /** Responsibility: renders the superadmin_billing overview route UI; the module Main remains a thin composition boundary. */
 /** Data-Flow: canonical route -> SuperadminPlansPromotionsPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
@@ -112,7 +112,7 @@ export default function SuperadminPlansPromotionsPageClient() {
                   {tCopy("COPY.BILLING_REVENUE")}
                 </h1>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="h-2 w-2 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
                   Promotions Engine Active
                 </span>
                 <span className="inline-flex items-center gap-1 rounded-full border border-indigo-500/30 bg-indigo-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-indigo-300">
@@ -127,7 +127,7 @@ export default function SuperadminPlansPromotionsPageClient() {
           <button
             ref={createPromoButtonRef}
             type="button"
-            className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-emerald-600 px-4 py-2.5 text-xs font-semibold text-white shadow-md shadow-emerald-500/25 transition-all active:scale-95 cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-emerald-600 px-4 py-2.5 text-xs font-semibold text-white shadow-md shadow-emerald-500/25 motion-safe:transition-all active:scale-95 cursor-pointer"
             onClick={() => { reset({ code: '', discount: '', expiry: '', maxUses: 100 }); setShowModal(true); }}
             data-testid="superadmin-billing-billing-overview-create-promo-code-3"
           >
@@ -158,7 +158,7 @@ export default function SuperadminPlansPromotionsPageClient() {
             </div>
             <button
               type="button"
-              className="rounded-xl border border-border/80 bg-card/80 px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800/60 cursor-pointer transition-all"
+              className="rounded-xl border border-border/80 bg-card/80 px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-800/60 cursor-pointer motion-safe:transition-all"
               onClick={() => setPromoPreview(null)}
               aria-label={tCopy('COPY.CLOSE_PROMO_CODE_DIALOG')}
               data-testid="superadmin-plans-promotions-dismiss-local-preview"
@@ -215,7 +215,7 @@ export default function SuperadminPlansPromotionsPageClient() {
               return (
                 <div
                   key={p.id}
-                  className="flex flex-col md:flex-row md:items-center justify-between p-5 rounded-2xl border border-indigo-500/20 bg-[#0c0f28]/80 hover:bg-indigo-500/[0.04] transition-all gap-4 backdrop-blur-md shadow-md"
+                  className="flex flex-col md:flex-row md:items-center justify-between p-5 rounded-2xl border border-indigo-500/20 bg-[#0c0f28]/80 hover:bg-indigo-500/[0.04] motion-safe:transition-all gap-4 backdrop-blur-md shadow-md"
                 >
                   <div className="flex items-center gap-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shadow-inner shrink-0">

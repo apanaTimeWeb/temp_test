@@ -2,10 +2,10 @@
 import { useState, useMemo } from 'react';
 import { Server, Search, RefreshCw, Filter } from 'lucide-react';
 import { toast } from 'sonner';
-import SuperadminSystemHealthOverviewInspectModal from './SuperadminSystemHealthOverviewInspectModal';
-import SuperadminSystemHealthOverviewRestartModal from './SuperadminSystemHealthOverviewRestartModal';
-import { SuperadminSystemHealthOverviewServicesTableRow } from './SuperadminSystemHealthOverviewServicesTableRow';
-import { SuperadminSystemHealthOverviewServicesPagination } from './SuperadminSystemHealthOverviewServicesPagination';
+import SuperadminSystemHealthOverviewInspectModal from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewInspectModal';
+import SuperadminSystemHealthOverviewRestartModal from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewRestartModal';
+import { SuperadminSystemHealthOverviewServicesTableRow } from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewServicesTableRow';
+import { SuperadminSystemHealthOverviewServicesPagination } from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewServicesPagination';
 
 export interface ServiceNode {
   id: string;
@@ -75,13 +75,17 @@ export default function SuperadminSystemHealthOverviewServicesTable() {
         prev.map((s) => (s.name === name ? { ...s, latency: randomPing } : s))
       );
       setPingingId(null);
-      toast.success(`Service check: ${name} responded OK (200 in ${randomPing})`);
+      toast.success(`Service check: ${name} responded OK (200 in ${randomPing})`, {
+        id: `superadmin:system_health:service-ping:${targetId || name}`,
+      });
     }, 400);
   };
 
   const handlePingAll = () => {
     setPingAllActive(true);
-    toast.info('Pinging all 8 cluster services simultaneously...');
+    toast.info('Pinging all 8 cluster services simultaneously...', {
+      id: 'superadmin:system_health:ping-all',
+    });
 
     setTimeout(() => {
       setServices((prev) =>
@@ -92,7 +96,9 @@ export default function SuperadminSystemHealthOverviewServicesTable() {
         }))
       );
       setPingAllActive(false);
-      toast.success('All cluster services responded OK (HTTP 200)');
+      toast.success('All cluster services responded OK (HTTP 200)', {
+        id: 'superadmin:system_health:ping-all',
+      });
     }, 800);
   };
 
@@ -128,9 +134,9 @@ export default function SuperadminSystemHealthOverviewServicesTable() {
               type="button"
               onClick={handlePingAll}
               disabled={pingAllActive}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-xs font-semibold transition-all cursor-pointer shadow-sm active:scale-95 disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-sm active:scale-95 disabled:opacity-50"
             >
-              <RefreshCw size={13} className={pingAllActive ? 'animate-spin' : ''} />
+              <RefreshCw size={13} className={pingAllActive ? 'motion-safe:animate-spin' : ''} />
               <span>{pingAllActive ? 'Pinging All Nodes...' : 'Ping All Services'}</span>
             </button>
           </div>
@@ -147,7 +153,7 @@ export default function SuperadminSystemHealthOverviewServicesTable() {
                     setCategoryFilter(cat);
                     setPage(0);
                   }}
-                  className={`px-3 py-1.5 rounded-xl font-medium whitespace-nowrap transition-all cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-xl font-medium whitespace-nowrap motion-safe:transition-all cursor-pointer ${
                     active
                       ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 shadow-sm'
                       : 'border border-slate-800 bg-slate-900/40 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'

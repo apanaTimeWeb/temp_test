@@ -30,10 +30,10 @@ export const SuperadminSettingsBrandingLivePreviewCards: FC<SuperadminSettingsBr
     <div className="w-full space-y-6">
       {/* Mini Sidebar Preview */}
       {showSidebar && (
-        <div className="rounded-2xl border border-indigo-500/25 bg-slate-950/60 p-4 sm:p-5 backdrop-blur-md shadow-lg transition-all hover:border-indigo-500/40">
+        <div className="rounded-2xl border border-indigo-500/25 bg-slate-950/60 p-4 sm:p-5 backdrop-blur-md shadow-lg motion-safe:transition-all hover:border-indigo-500/40">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="h-2 w-2 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
               {tCopy('COPY.SIDEBAR')} Preview
             </span>
             <span className="text-[11px] font-medium text-slate-400">Navigation Shell</span>
@@ -79,7 +79,7 @@ export const SuperadminSettingsBrandingLivePreviewCards: FC<SuperadminSettingsBr
 
       {/* Mini Login Preview */}
       {showLogin && (
-        <div className="rounded-2xl border border-indigo-500/25 bg-slate-950/60 p-4 sm:p-5 backdrop-blur-md shadow-lg transition-all hover:border-indigo-500/40">
+        <div className="rounded-2xl border border-indigo-500/25 bg-slate-950/60 p-4 sm:p-5 backdrop-blur-md shadow-lg motion-safe:transition-all hover:border-indigo-500/40">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
               <Lock size={13} className="text-purple-400" />
@@ -122,7 +122,7 @@ export const SuperadminSettingsBrandingLivePreviewCards: FC<SuperadminSettingsBr
               </div>
 
               <div
-                className="sys-preview-login-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-md transition-all cursor-pointer text-center"
+                className="sys-preview-login-btn w-full py-2.5 rounded-xl font-bold text-xs shadow-md motion-safe:transition-all cursor-pointer text-center"
                 role="button"
                 tabIndex={0}
               >
@@ -135,7 +135,7 @@ export const SuperadminSettingsBrandingLivePreviewCards: FC<SuperadminSettingsBr
 
       {/* Mini ID Card Preview */}
       {showIdCard && (
-        <div className="rounded-2xl border border-indigo-500/25 bg-slate-950/60 p-4 sm:p-5 backdrop-blur-md shadow-lg transition-all hover:border-indigo-500/40">
+        <div className="rounded-2xl border border-indigo-500/25 bg-slate-950/60 p-4 sm:p-5 backdrop-blur-md shadow-lg motion-safe:transition-all hover:border-indigo-500/40">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
               <CreditCard size={13} className="text-purple-400" />

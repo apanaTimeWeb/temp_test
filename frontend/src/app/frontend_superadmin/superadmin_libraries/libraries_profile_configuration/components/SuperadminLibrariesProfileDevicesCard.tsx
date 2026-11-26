@@ -8,7 +8,7 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-} from './SuperadminLibrariesProfileConfigurationCard';
+} from '@/app/frontend_superadmin/superadmin_libraries/libraries_profile_configuration/components/SuperadminLibrariesProfileConfigurationCard';
 
 export default function SuperadminLibrariesProfileDevicesCard() {
   return (
@@ -25,7 +25,7 @@ export default function SuperadminLibrariesProfileDevicesCard() {
             </div>
           </div>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-300">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
             Enforced
           </span>
         </div>

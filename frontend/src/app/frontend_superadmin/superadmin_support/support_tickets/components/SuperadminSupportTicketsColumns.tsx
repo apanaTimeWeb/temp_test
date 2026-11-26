@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import type { SemanticColumnDef, SemanticCellParams } from './SuperadminSupportTicketsOverviewSemanticTable';
-import type { SuperadminSupportTicket } from '../types/SuperadminSupportTicketsOverviewTypes';
+import type { SemanticColumnDef, SemanticCellParams } from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsOverviewSemanticTable';
+import type { SuperadminSupportTicket } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
 import { AlertTriangle, Clock, Eye, Mail, MessageSquare, Paperclip, Tag, User } from 'lucide-react';
 
 function getSuperadminInteractiveTestIdSuffix(value: unknown): string {
@@ -104,7 +104,7 @@ export function useSupportTicketsColumns({ t, setSelected, showToast }: UseSuppo
             : t('COPY.ASSIGNEE_SAMPLE_AGENT_B');
           return (
             <div className="flex items-center gap-1.5 min-w-0 max-w-[120px]" title={label}>
-              <span className={`w-1.5 h-1.5 rounded-full ${isUnassigned ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'} shrink-0`} />
+              <span className={`w-1.5 h-1.5 rounded-full ${isUnassigned ? 'bg-amber-400 motion-safe:animate-pulse' : 'bg-emerald-400'} shrink-0`} />
               <span className={`text-xs font-medium truncate ${isUnassigned ? 'text-amber-300/80 italic' : 'text-slate-200'}`}>
                 {label}
               </span>
@@ -199,7 +199,7 @@ export function useSupportTicketsColumns({ t, setSelected, showToast }: UseSuppo
             <div className="flex items-center justify-end gap-1 flex-nowrap whitespace-nowrap">
               <button
                 type="button"
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-500/15 border border-indigo-500/35 text-indigo-300 hover:bg-indigo-600/30 hover:border-indigo-400 hover:text-white text-xs font-semibold transition-all duration-150 cursor-pointer shadow-xs shrink-0 whitespace-nowrap active:scale-[0.97] group"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-500/15 border border-indigo-500/35 text-indigo-300 hover:bg-indigo-600/30 hover:border-indigo-400 hover:text-white text-xs font-semibold motion-safe:transition-all motion-safe:duration-150 cursor-pointer shadow-xs shrink-0 whitespace-nowrap active:scale-[0.97] group"
                 onClick={(e) => {
                   e.stopPropagation();
                   setSelected(tkt);
@@ -220,7 +220,7 @@ export function useSupportTicketsColumns({ t, setSelected, showToast }: UseSuppo
                   if (popup) popup.opener = null;
                   showToast(`Opened WhatsApp for Ticket ${tkt.id}`);
                 }}
-                className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-emerald-500/35 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 hover:border-emerald-400 transition-all duration-150 shadow-xs cursor-pointer shrink-0 active:scale-[0.97]"
+                className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-emerald-500/35 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 hover:border-emerald-400 motion-safe:transition-all motion-safe:duration-150 shadow-xs cursor-pointer shrink-0 active:scale-[0.97]"
                 title={`WhatsApp reply to ${tkt.tenant}`}
                 aria-label={`WhatsApp for ticket ${tkt.id}`}
               >
@@ -231,7 +231,7 @@ export function useSupportTicketsColumns({ t, setSelected, showToast }: UseSuppo
                 <a
                   href={`mailto:${tkt.email}?subject=${encodeURIComponent(`[Ticket ${tkt.id}] ${tkt.subject}`)}&body=${encodeURIComponent(`Dear ${tkt.contact || tkt.tenant},\n\nRegarding your ticket "${tkt.subject}" (${tkt.id}):\n\n`)}`}
                   onClick={(e) => e.stopPropagation()}
-                  className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-purple-500/35 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 hover:border-purple-400 transition-all duration-150 shadow-xs cursor-pointer shrink-0 active:scale-[0.97]"
+                  className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-purple-500/35 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 hover:border-purple-400 motion-safe:transition-all motion-safe:duration-150 shadow-xs cursor-pointer shrink-0 active:scale-[0.97]"
                   title={`Email reply to ${tkt.tenant}`}
                   aria-label={`Email for ticket ${tkt.id}`}
                 >

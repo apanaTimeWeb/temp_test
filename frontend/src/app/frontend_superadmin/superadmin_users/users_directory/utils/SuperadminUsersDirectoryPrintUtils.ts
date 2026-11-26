@@ -1,5 +1,5 @@
-import type { SuperadminUserData } from '../types/SuperadminUsersDirectoryTypes';
-import { maskSensitiveData } from './SuperadminUsersDirectoryMaskSensitiveData';
+import type { SuperadminUserData } from '@/app/frontend_superadmin/superadmin_users/users_directory/types/SuperadminUsersDirectoryTypes';
+import { maskSensitiveData } from '@/app/frontend_superadmin/superadmin_users/users_directory/utils/SuperadminUsersDirectoryMaskSensitiveData';
 
 /** Prints user directory roster. */
 export function printSuperadminUsersRoster(users: readonly SuperadminUserData[], title = 'SuperAdmin User Access Control Roster'): void {

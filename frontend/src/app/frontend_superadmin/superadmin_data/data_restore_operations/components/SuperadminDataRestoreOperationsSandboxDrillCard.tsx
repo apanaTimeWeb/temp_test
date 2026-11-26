@@ -8,9 +8,9 @@
 
 import React from 'react';
 import { Activity, Play, CheckCircle2, AlertTriangle, Clock } from 'lucide-react';
-import type { RestoreDrillRecord } from '../types/superadmin_data_restore_operations.types';
-import { formatTimestamp, formatRtoDuration } from '../utils/superadmin_data_restore_operations_formatters';
-import { SLA_TARGETS } from '../constants/superadmin_data_restore_operations.constants';
+import type { RestoreDrillRecord } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/types/superadmin_data_restore_operations.types';
+import { formatTimestamp, formatRtoDuration } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/utils/superadmin_data_restore_operations_formatters';
+import { SLA_TARGETS } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/constants/superadmin_data_restore_operations.constants';
 
 interface SandboxDrillCardProps {
   lastDrill?: RestoreDrillRecord | null;
@@ -48,7 +48,7 @@ export function SuperadminDataRestoreOperationsSandboxDrillCard({
           type="button"
           onClick={onTriggerDrill}
           disabled={isTriggering}
-          className="group inline-flex items-center gap-2 px-4 py-2.5 text-xs font-extrabold text-white bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-600 hover:from-emerald-500 hover:to-teal-400 disabled:opacity-50 rounded-xl shadow-lg shadow-emerald-600/30 hover:shadow-emerald-500/50 hover:scale-[1.02] active:scale-[0.97] transition-all duration-300 shrink-0 cursor-pointer"
+          className="group inline-flex items-center gap-2 px-4 py-2.5 text-xs font-extrabold text-white bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-600 hover:from-emerald-500 hover:to-teal-400 disabled:opacity-50 rounded-xl shadow-lg shadow-emerald-600/30 hover:shadow-emerald-500/50 hover:scale-[1.02] active:scale-[0.97] motion-safe:transition-all motion-safe:duration-300 shrink-0 cursor-pointer"
         >
           <span className="p-1 rounded-md bg-white/20 text-white border border-white/30 group-hover:scale-110 transition-transform">
             <Play className="w-3.5 h-3.5 fill-current" />

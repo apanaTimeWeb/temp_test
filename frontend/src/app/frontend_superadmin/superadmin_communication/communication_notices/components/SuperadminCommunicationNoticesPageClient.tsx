@@ -184,7 +184,7 @@ export default function SuperadminCommunicationNoticesPageClient({ id }: { id?: 
             <button
               type="button"
               onClick={openAdd}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-500/15 border border-sky-500/30 text-xs font-semibold text-sky-300 hover:bg-sky-500/25 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-500/15 border border-sky-500/30 text-xs font-semibold text-sky-300 hover:bg-sky-500/25 motion-safe:transition-all cursor-pointer"
               data-testid="superadmin-communication-communication-notices-post-notice-16"
             >
               <Plus size={14} /> {tCopy('COPY.POST_NOTICE')}

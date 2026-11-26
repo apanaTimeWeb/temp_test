@@ -3,7 +3,7 @@
 /** Framework error boundary delegates to the feature-local retry fallback. */
 'use client';
 
-import SuperadminSettingsGeneralSettingsLibraryConfigurationErrorFallback from './components/SuperadminSettingsGeneralSettingsLibraryConfigurationErrorFallback';
+import SuperadminSettingsGeneralSettingsLibraryConfigurationErrorFallback from '@/app/frontend_superadmin/superadmin_settings/settings_library_configuration/components/SuperadminSettingsGeneralSettingsLibraryConfigurationErrorFallback';
 
 type ModuleErrorProps = { error: Error & { digest?: string }; reset: () => void };
 

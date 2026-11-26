@@ -15,7 +15,7 @@ export default function SuperadminNavigationRootNotFound() {
       </div>
       <div>
         <Link
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-on-primary font-bold text-xs sm:text-sm shadow-sm transition-all motion-safe:active:scale-95 cursor-pointer"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-on-primary font-bold text-xs sm:text-sm shadow-sm motion-safe:transition-all motion-safe:active:scale-95 cursor-pointer"
           href="/superadmin/superadmin_dashboard/dashboard_overview"
         >
           <ArrowLeft size={16} />

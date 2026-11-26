@@ -12,7 +12,7 @@ import {
 import {
   createEmptyPermissionMatrix,
 } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/constants/SuperadminRolesPermissionsMetadata';
-import { useSuperadminUserAccountsSecurity } from './useSuperadminUserAccountsSecurity';
+import { useSuperadminUserAccountsSecurity } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/hooks/useSuperadminUserAccountsSecurity';
 
 export function useSuperadminRolesPermissions() {
   const [roles, setRoles] = useState<RoleDefinition[]>(INITIAL_ROLES);

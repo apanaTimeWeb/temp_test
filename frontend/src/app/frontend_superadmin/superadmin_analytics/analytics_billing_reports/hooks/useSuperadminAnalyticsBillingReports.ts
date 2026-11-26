@@ -4,13 +4,13 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { SUPERADMIN_BILLING_REPORTS_QUERY_KEYS } from '../api/superadmin_analytics_billing_reports.query_keys';
-import { fetchBillingReportsOverview } from '../api/superadmin_analytics_billing_reports.api';
-import { DEFAULT_BILLING_REPORTS_FILTERS } from '../constants/SuperadminAnalyticsBillingReportsConstants';
+import { SUPERADMIN_BILLING_REPORTS_QUERY_KEYS } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/api/superadmin_analytics_billing_reports.query_keys';
+import { fetchBillingReportsOverview } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/api/superadmin_analytics_billing_reports.api';
+import { DEFAULT_BILLING_REPORTS_FILTERS } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/constants/SuperadminAnalyticsBillingReportsConstants';
 import type {
   SuperadminAnalyticsBillingReportsFilters,
   BillingReportTableRecord,
-} from '../types/SuperadminAnalyticsBillingReportsTypes';
+} from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/types/SuperadminAnalyticsBillingReportsTypes';
 
 export function useSuperadminAnalyticsBillingReports() {
   const [filters, setFilters] = useState<SuperadminAnalyticsBillingReportsFilters>(

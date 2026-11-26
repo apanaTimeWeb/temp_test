@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Lock, Unlock, Clock } from 'lucide-react';
-import type { UserSecurityAccount } from '../types/SuperadminRolesPermissionsManagementTypes';
+import type { UserSecurityAccount } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/types/SuperadminRolesPermissionsManagementTypes';
 
 interface SuperadminUserSecurityControlsTabProps {
   user: UserSecurityAccount;
@@ -61,7 +61,7 @@ export default function SuperadminUserSecurityControlsTab({
                 showFeedback('Account locked and all sessions terminated.');
               }
             }}
-            className={`px-3.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-lg font-bold motion-safe:transition-all cursor-pointer ${
               user.isLocked ? 'bg-emerald-600 hover:bg-emerald-500 text-white' : 'bg-rose-600 hover:bg-rose-500 text-white'
             }`}
           >

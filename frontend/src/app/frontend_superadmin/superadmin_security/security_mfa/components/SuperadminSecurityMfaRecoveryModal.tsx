@@ -92,7 +92,7 @@ export default function SuperadminSecurityMfaRecoveryModal({
             <button
               type="button"
               onClick={handleCopyCodes}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-xs font-semibold text-indigo-300 active:scale-95 transition-all cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-xs font-semibold text-indigo-300 active:scale-95 motion-safe:transition-all cursor-pointer shadow-xs"
             >
               {copiedCodes ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
               <span>{copiedCodes ? 'Copied!' : 'Copy All'}</span>
@@ -100,7 +100,7 @@ export default function SuperadminSecurityMfaRecoveryModal({
             <button
               type="button"
               onClick={handleDownloadCodes}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-200 active:scale-95 transition-all cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-200 active:scale-95 motion-safe:transition-all cursor-pointer shadow-xs"
             >
               <Download size={13} />
               <span>Download .txt</span>
@@ -110,7 +110,7 @@ export default function SuperadminSecurityMfaRecoveryModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-xs font-bold text-white shadow-md active:scale-95 transition-all cursor-pointer"
+            className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-xs font-bold text-white shadow-md active:scale-95 motion-safe:transition-all cursor-pointer"
           >
             I Have Stored Them Safely
           </button>

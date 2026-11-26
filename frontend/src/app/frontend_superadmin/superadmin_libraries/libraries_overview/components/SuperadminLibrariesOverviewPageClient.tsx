@@ -221,7 +221,7 @@ export default function SuperadminLibrariesOverviewPageClient() {
         const isActive = p.data?.status === 'Active';
         return (
           <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${isActive ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' : 'bg-amber-500/15 text-amber-400 border-amber-500/30'}`}>
-            <span className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
+            <span className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-emerald-400 motion-safe:animate-pulse' : 'bg-amber-400'}`} />
             <span>{isActive ? 'Active' : 'Maintenance'}</span>
           </span>
         );

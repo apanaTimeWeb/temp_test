@@ -6,7 +6,7 @@
 
 import React from 'react';
 import type { Metadata } from 'next';
-import { SuperadminDataExportManagementMain } from './components/SuperadminDataExportManagementMain';
+import { SuperadminDataExportManagementMain } from '@/app/frontend_superadmin/superadmin_data/data_export_management/components/SuperadminDataExportManagementMain';
 
 export const metadata: Metadata = {
   title: 'Data Export Management | Superadmin Data',

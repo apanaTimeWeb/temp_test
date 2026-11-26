@@ -9,7 +9,7 @@ import type {
   GatewayUpdatePayload,
   IntegrationEnvironment,
   IntegrationGatewayItem,
-} from '../types/superadmin_integrations_overview.types';
+} from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/types/superadmin_integrations_overview.types';
 
 interface SuperadminIntegrationsOverviewGatewayConfigModalProps {
   gateway: IntegrationGatewayItem | null;
@@ -61,7 +61,7 @@ export const SuperadminIntegrationsOverviewGatewayConfigModal: React.FC<
       aria-modal="true"
       aria-labelledby="gateway-config-modal-title"
     >
-      <div className="relative w-full max-w-lg rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] p-6 shadow-2xl text-slate-100 animate-in fade-in-0 zoom-in-95 duration-150">
+      <div className="relative w-full max-w-lg rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] p-6 shadow-2xl text-slate-100 animate-in fade-in-0 zoom-in-95 motion-safe:duration-150">
         {/* Modal Header */}
         <div className="flex items-start justify-between pb-4 border-b border-indigo-500/20">
           <div className="flex items-center gap-3">
@@ -157,7 +157,7 @@ export const SuperadminIntegrationsOverviewGatewayConfigModal: React.FC<
               disabled={isPinging}
               className="inline-flex items-center gap-1.5 rounded-xl border border-indigo-500/20 bg-slate-800/80 px-3 py-2 font-medium text-slate-200 hover:bg-slate-700/80 cursor-pointer transition-colors min-w-28 justify-center shadow-xs disabled:opacity-50"
             >
-              {isPinging ? <Loader2 size={13} className="animate-spin text-indigo-400" /> : <Activity size={13} />}
+              {isPinging ? <Loader2 size={13} className="motion-safe:animate-spin text-indigo-400" /> : <Activity size={13} />}
               <span>Test Ping</span>
             </button>
 
@@ -174,7 +174,7 @@ export const SuperadminIntegrationsOverviewGatewayConfigModal: React.FC<
                 disabled={isSaving}
                 className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 px-4 py-2 font-semibold text-white cursor-pointer transition-opacity min-w-32 justify-center shadow-md shadow-indigo-500/25"
               >
-                {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+                {isSaving ? <Loader2 size={14} className="motion-safe:animate-spin" /> : <Save size={14} />}
                 <span>Save Config</span>
               </button>
             </div>

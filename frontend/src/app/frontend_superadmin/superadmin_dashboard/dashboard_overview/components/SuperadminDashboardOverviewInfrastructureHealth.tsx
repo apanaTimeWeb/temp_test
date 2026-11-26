@@ -66,7 +66,7 @@ export default function SuperadminDashboardOverviewInfrastructureHealth({
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
                   <span>Server & Database Health</span>
                   <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
                     All Systems Operational
                   </span>
                 </h3>
@@ -188,7 +188,7 @@ export default function SuperadminDashboardOverviewInfrastructureHealth({
               <Link
                 key={ticket.id}
                 href={SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.MODULE_URLS.SUPPORT_TICKETS}
-                className="group block p-3 rounded-xl border border-indigo-500/20 bg-slate-900/60 hover:bg-slate-900/90 hover:border-indigo-500/40 transition-all"
+                className="group block p-3 rounded-xl border border-indigo-500/20 bg-slate-900/60 hover:bg-slate-900/90 hover:border-indigo-500/40 motion-safe:transition-all"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="space-y-0.5 min-w-0">

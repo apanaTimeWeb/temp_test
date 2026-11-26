@@ -21,7 +21,7 @@ export function SuperadminSettingsGeneralMaintenanceModeCard() {
     <section
       id="section-maintenance_mode"
       aria-labelledby="heading-maintenance-mode"
-      className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-6 space-y-6 hover:border-indigo-500/35 transition-all"
+      className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-6 space-y-6 hover:border-indigo-500/35 motion-safe:transition-all"
     >
       <div className="flex items-center justify-between border-b border-indigo-500/15 pb-4">
         <div className="flex items-center gap-3">
@@ -44,7 +44,7 @@ export function SuperadminSettingsGeneralMaintenanceModeCard() {
         <div className="flex items-center gap-2">
           <Link
             href="/superadmin/superadmin_system/system_health_overview"
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs font-semibold transition-all shadow-xs cursor-pointer no-underline"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs font-semibold motion-safe:transition-all shadow-xs cursor-pointer no-underline"
           >
             <span>Open System Health 15</span>
             <ExternalLink size={12} />
@@ -104,7 +104,7 @@ export function SuperadminSettingsGeneralMaintenanceModeCard() {
             rows={3}
             {...register('maintenance.message')}
             placeholder="e.g. System upgrade in progress. LibraryOS services will resume shortly."
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 resize-y"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 resize-y"
             aria-invalid={Boolean(errors.maintenance?.message)}
             aria-describedby={errors.maintenance?.message ? 'settings-maintenance-message-error' : undefined}
             data-testid="settings-maintenance-message-input"
@@ -127,7 +127,7 @@ export function SuperadminSettingsGeneralMaintenanceModeCard() {
             type="text"
             placeholder="e.g. 45 Minutes, 2 Hours"
             {...register('maintenance.estimatedDowntime')}
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             data-testid="settings-maintenance-downtime-input"
           />
         </div>
@@ -142,7 +142,7 @@ export function SuperadminSettingsGeneralMaintenanceModeCard() {
             id="settings-maintenance-bypass-key"
             type="text"
             {...register('maintenance.emergencyBypassKey')}
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 font-mono transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 font-mono motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             data-testid="settings-maintenance-bypass-key-input"
           />
         </div>
@@ -158,7 +158,7 @@ export function SuperadminSettingsGeneralMaintenanceModeCard() {
             type="text"
             placeholder="103.24.120.0/24, 182.74.88.10/32"
             {...register('maintenance.whitelistedIps')}
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 font-mono transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 font-mono motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             data-testid="settings-maintenance-ips-input"
           />
           <span className="text-[11px] text-slate-400">

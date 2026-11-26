@@ -3,8 +3,8 @@
 
 import React from 'react';
 import { ShieldCheck, ShieldAlert, Lock, UserCog, DownloadCloud, AlertTriangle } from 'lucide-react';
-import type { SecurityReportsKpiData } from '../types/SuperadminAnalyticsSecurityReportsTypes';
-import { formatSecurityNumber } from '../utils/SuperadminAnalyticsSecurityReportsFormatters';
+import type { SecurityReportsKpiData } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/types/SuperadminAnalyticsSecurityReportsTypes';
+import { formatSecurityNumber } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/utils/SuperadminAnalyticsSecurityReportsFormatters';
 
 interface Props {
   kpis?: SecurityReportsKpiData;
@@ -56,7 +56,7 @@ export function SuperadminAnalyticsSecurityReportsKpiGrid({ kpis }: Props) {
       blurColor: 'bg-rose-500/15',
       valueColor: 'text-rose-300',
       badgeStyle: 'text-rose-300 bg-rose-500/15 border-rose-500/30',
-      dotColor: 'bg-rose-400 animate-pulse',
+      dotColor: 'bg-rose-400 motion-safe:animate-pulse',
     },
     {
       title: 'Permission Changes',
@@ -92,7 +92,7 @@ export function SuperadminAnalyticsSecurityReportsKpiGrid({ kpis }: Props) {
       blurColor: 'bg-rose-500/15',
       valueColor: 'text-rose-300',
       badgeStyle: 'text-rose-300 bg-rose-500/15 border-rose-500/30',
-      dotColor: 'bg-rose-400 animate-pulse',
+      dotColor: 'bg-rose-400 motion-safe:animate-pulse',
     },
   ];
 
@@ -106,14 +106,14 @@ export function SuperadminAnalyticsSecurityReportsKpiGrid({ kpis }: Props) {
         return (
           <div
             key={i}
-            className={`group relative overflow-hidden p-4 rounded-2xl border shadow-lg backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:scale-[1.01] ${card.cardBg}`}
+            className={`group relative overflow-hidden p-4 rounded-2xl border shadow-lg backdrop-blur-md flex flex-col justify-between motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] ${card.cardBg}`}
           >
-            <div className={`pointer-events-none absolute -right-6 -bottom-6 h-20 w-20 rounded-full blur-xl transition-all duration-500 group-hover:scale-125 ${card.blurColor}`} />
+            <div className={`pointer-events-none absolute -right-6 -bottom-6 h-20 w-20 rounded-full blur-xl motion-safe:transition-all motion-safe:duration-500 group-hover:scale-125 ${card.blurColor}`} />
             <div className="relative flex items-center justify-between gap-2">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
                 {card.title}
               </span>
-              <div className={`p-2 rounded-xl border shrink-0 transition-transform duration-200 group-hover:scale-110 shadow-md ${card.iconStyle}`}>
+              <div className={`p-2 rounded-xl border shrink-0 transition-transform motion-safe:duration-200 group-hover:scale-110 shadow-md ${card.iconStyle}`}>
                 <Icon size={16} strokeWidth={2.3} aria-hidden="true" />
               </div>
             </div>

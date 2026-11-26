@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import { Activity, RefreshCw, ShieldCheck, Download, Stethoscope, Clock, CheckCircle2, Radio, FileText } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import SuperadminSystemHealthOverviewDiagnosticsModal from './SuperadminSystemHealthOverviewDiagnosticsModal';
-import SuperadminSystemHealthOverviewExportModal from './SuperadminSystemHealthOverviewExportModal';
+import SuperadminSystemHealthOverviewDiagnosticsModal from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewDiagnosticsModal';
+import SuperadminSystemHealthOverviewExportModal from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewExportModal';
 
 interface HeaderStatusProps {
   onRefresh?: () => void;
@@ -42,7 +42,9 @@ export default function SuperadminSystemHealthOverviewHeaderStatus({
     }
     setTimeout(() => {
       setLocalRefreshing(false);
-      toast.success('Telemetry matrix refreshed across 8 cluster nodes (18ms response)');
+      toast.success('Telemetry matrix refreshed across 8 cluster nodes (18ms response)', {
+        id: 'superadmin:system_health:telemetry-refresh',
+      });
     }, 500);
   };
 
@@ -54,7 +56,7 @@ export default function SuperadminSystemHealthOverviewHeaderStatus({
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-emerald-500/25 bg-emerald-950/20 px-4 py-2.5 text-xs text-emerald-200 shadow-sm backdrop-blur-xs">
         <div className="flex items-center gap-2.5">
           <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
           </span>
           <span className="font-semibold text-emerald-300">{t("COPY.SYSTEM_OPERATIONAL")}</span>
@@ -85,7 +87,7 @@ export default function SuperadminSystemHealthOverviewHeaderStatus({
               <span className="text-xs text-slate-400 font-mono">ap-south-1 (Mumbai Core)</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-100 flex items-center gap-3 tracking-tight">
-              <Activity className="text-emerald-400 animate-pulse" size={28} aria-hidden="true" />
+              <Activity className="text-emerald-400 motion-safe:animate-pulse" size={28} aria-hidden="true" />
               <span>{t("COPY.SYSTEM_HEALTH_TELEMETRY")}</span>
             </h1>
             <p className="text-xs sm:text-sm text-slate-300 max-w-2xl">
@@ -98,15 +100,15 @@ export default function SuperadminSystemHealthOverviewHeaderStatus({
             {/* Auto Refresh Interval Dropdown */}
             {setAutoRefreshInterval && (
               <div className="flex items-center rounded-xl border border-slate-700/80 bg-slate-900/80 px-2.5 py-1.5 text-xs text-slate-300">
-                <Radio size={13} className="text-emerald-400 mr-1.5 animate-pulse" />
+                <Radio size={13} className="text-emerald-400 mr-1.5 motion-safe:animate-pulse" />
                 <span className="text-slate-400 mr-1 text-[11px]">Stream:</span>
                 <select
                   value={autoRefreshInterval}
                   onChange={(e) => {
                     const val = Number(e.target.value);
                     setAutoRefreshInterval(val);
-                    if (val > 0) toast.info(`Live telemetry auto-refresh set to ${val}s`);
-                    else toast.info('Auto-refresh paused');
+                    if (val > 0) toast.info(`Live telemetry auto-refresh set to ${val}s`, { id: 'superadmin:system_health:auto-refresh' });
+                    else toast.info('Auto-refresh paused', { id: 'superadmin:system_health:auto-refresh' });
                   }}
                   className="bg-transparent text-emerald-300 font-semibold focus:outline-none cursor-pointer"
                 >
@@ -123,10 +125,10 @@ export default function SuperadminSystemHealthOverviewHeaderStatus({
               type="button"
               onClick={handleManualRefresh}
               disabled={refreshing}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-emerald-500/40 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 text-xs font-semibold shadow-sm transition-all active:scale-95 cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-emerald-500/40 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 text-xs font-semibold shadow-sm motion-safe:transition-all active:scale-95 cursor-pointer disabled:opacity-50"
               data-testid="superadmin-system-health-refresh-telemetry-btn"
             >
-              <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
+              <RefreshCw size={14} className={refreshing ? 'motion-safe:animate-spin' : ''} />
               <span>{refreshing ? 'Refreshing...' : t("COPY.REFRESH_TELEMETRY")}</span>
             </button>
 
@@ -134,7 +136,7 @@ export default function SuperadminSystemHealthOverviewHeaderStatus({
             <button
               type="button"
               onClick={() => setDiagnosticsOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-sky-500/40 bg-sky-500/20 text-sky-200 hover:bg-sky-500/30 text-xs font-semibold shadow-sm transition-all active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-sky-500/40 bg-sky-500/20 text-sky-200 hover:bg-sky-500/30 text-xs font-semibold shadow-sm motion-safe:transition-all active:scale-95 cursor-pointer"
             >
               <Stethoscope size={14} className="text-sky-400" />
               <span>{t("COPY.RUN_DIAGNOSTICS")}</span>
@@ -144,7 +146,7 @@ export default function SuperadminSystemHealthOverviewHeaderStatus({
             <button
               type="button"
               onClick={() => setExportOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-700/80 bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-semibold shadow-sm transition-all active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-700/80 bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-semibold shadow-sm motion-safe:transition-all active:scale-95 cursor-pointer"
             >
               <Download size={14} />
               <span>{t("COPY.EXPORT_SNAPSHOT")}</span>

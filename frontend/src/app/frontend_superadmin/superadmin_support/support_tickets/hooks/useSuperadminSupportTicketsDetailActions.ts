@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { SUPERADMIN_SUPPORT_ESCALATION_TIERS } from '../constants/SuperadminSupportTicketsOverviewConstants';
+import { SUPERADMIN_SUPPORT_ESCALATION_TIERS } from '@/app/frontend_superadmin/superadmin_support/support_tickets/constants/SuperadminSupportTicketsOverviewConstants';
 import type {
   SuperadminSupportTicket,
   SuperadminSupportTicketEscalation,
@@ -11,7 +11,7 @@ import type {
   SuperadminSupportTicketResolution,
   SuperadminSupportTicketStatus,
   SuperadminSupportTimeLimitedAccess,
-} from '../types/SuperadminSupportTicketsOverviewTypes';
+} from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
 
 interface UseSupportTicketActionsParams {
   tkt: SuperadminSupportTicket;

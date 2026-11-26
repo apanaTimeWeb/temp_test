@@ -21,10 +21,10 @@ import {
   AlertOctagon,
 } from 'lucide-react';
 import Link from 'next/link';
-import type { LibraryUsageRecord } from '../types/SuperadminUsageOverviewTypes';
-import { calculateUsagePercent, getQuotaColorClasses } from '../utils/SuperadminUsageOverviewFormatters';
-import { OVERAGE_POLICIES } from '../constants/SuperadminUsageOverviewConstants';
-import { SUPERADMIN_USAGE_OVERVIEW_ROUTES } from '../config/superadmin_usage_overview.url_config';
+import type { LibraryUsageRecord } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/types/SuperadminUsageOverviewTypes';
+import { calculateUsagePercent, getQuotaColorClasses } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/utils/SuperadminUsageOverviewFormatters';
+import { OVERAGE_POLICIES } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/constants/SuperadminUsageOverviewConstants';
+import { SUPERADMIN_USAGE_OVERVIEW_ROUTES } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/config/superadmin_usage_overview.url_config';
 
 interface SuperadminUsageOverviewDetailDrawerProps {
   library: LibraryUsageRecord | null;
@@ -67,14 +67,14 @@ export function SuperadminUsageOverviewDetailDrawer({
 
   return (
     <div
-      className="fixed inset-0 z-[150] flex items-center justify-center p-3 sm:p-5 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-200"
+      className="fixed inset-0 z-[150] flex items-center justify-center p-3 sm:p-5 bg-slate-950/85 backdrop-blur-md animate-in fade-in motion-safe:duration-200"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-labelledby="usage-detail-modal-title"
     >
       <div
-        className="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-3xl border border-indigo-500/30 bg-[#0a0d24] text-white shadow-2xl shadow-indigo-950/80 backdrop-blur-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-3xl border border-indigo-500/30 bg-[#0a0d24] text-white shadow-2xl shadow-indigo-950/80 backdrop-blur-2xl overflow-hidden animate-in zoom-in-95 motion-safe:duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* ── Fixed Modal Header (First Content - Always Visible) ── */}
@@ -164,7 +164,7 @@ export function SuperadminUsageOverviewDetailDrawer({
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-sky-400 motion-safe:animate-pulse" />
                 <span>12 Resource Utilization Monitors</span>
               </h3>
               <span className="text-[11px] font-mono text-slate-500">All Live telemetry</span>
@@ -199,7 +199,7 @@ export function SuperadminUsageOverviewDetailDrawer({
 
                     <div className="w-full bg-slate-900 border border-indigo-500/15 h-2 rounded-full overflow-hidden p-0.5">
                       <div
-                        className={`h-full rounded-full transition-all duration-500 shadow-xs ${colors.bar}`}
+                        className={`h-full rounded-full motion-safe:transition-all motion-safe:duration-500 shadow-xs ${colors.bar}`}
                         style={{ width: `${Math.min(100, pct)}%` }}
                       />
                     </div>
@@ -233,7 +233,7 @@ export function SuperadminUsageOverviewDetailDrawer({
         <div className="shrink-0 p-4 sm:p-5 border-t border-indigo-500/20 bg-[#060818]/95 backdrop-blur-md flex items-center justify-between gap-3 shadow-lg z-10">
           <Link
             href={SUPERADMIN_USAGE_OVERVIEW_ROUTES.quotaRequests}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl border border-amber-500/40 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 transition-all shadow-xs cursor-pointer active:scale-95"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl border border-amber-500/40 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 motion-safe:transition-all shadow-xs cursor-pointer active:scale-95"
           >
             Review Quota Requests <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
@@ -241,7 +241,7 @@ export function SuperadminUsageOverviewDetailDrawer({
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2 text-xs font-bold rounded-xl bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/40 text-white transition-all cursor-pointer shadow-xs active:scale-95"
+            className="px-5 py-2 text-xs font-bold rounded-xl bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/40 text-white motion-safe:transition-all cursor-pointer shadow-xs active:scale-95"
           >
             Close
           </button>

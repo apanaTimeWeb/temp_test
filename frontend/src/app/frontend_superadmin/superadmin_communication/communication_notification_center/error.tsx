@@ -3,7 +3,7 @@
 /** Framework error boundary delegates to the feature-local retry component with explicit props. */
 'use client';
 
-import SuperadminCommunicationNotificationCenterErrorFallback from './components/SuperadminCommunicationNotificationCenterErrorFallback';
+import SuperadminCommunicationNotificationCenterErrorFallback from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/components/SuperadminCommunicationNotificationCenterErrorFallback';
 
 type ModuleErrorProps = { error: Error & { digest?: string }; reset: () => void };
 

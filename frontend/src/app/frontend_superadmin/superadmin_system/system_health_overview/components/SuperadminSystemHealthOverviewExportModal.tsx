@@ -2,14 +2,14 @@
 import { useState } from 'react';
 import { X, Download, FileText, FileSpreadsheet, Printer, Check, Copy } from 'lucide-react';
 import { toast } from 'sonner';
-import { SAMPLE_SERVICE_NODES } from './SuperadminSystemHealthOverviewServicesTable';
+import { SAMPLE_SERVICE_NODES } from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewServicesTable';
 import {
   buildSystemHealthSnapshotPayload,
   exportSystemHealthCSV,
   exportSystemHealthJSON,
   printSystemHealthReport,
   type SystemHealthTelemetryData,
-} from '../utils/SuperadminSystemHealthOverviewExportUtils';
+} from '@/app/frontend_superadmin/superadmin_system/system_health_overview/utils/SuperadminSystemHealthOverviewExportUtils';
 
 interface ExportModalProps {
   isOpen: boolean;
@@ -46,7 +46,9 @@ export default function SuperadminSystemHealthOverviewExportModal({
     const payload = buildSystemHealthSnapshotPayload(telemetryData, SAMPLE_SERVICE_NODES);
     navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
     setCopied(true);
-    toast.success('Snapshot JSON copied to clipboard');
+    toast.success('Snapshot JSON copied to clipboard', {
+      id: 'superadmin:system_health:copy-json',
+    });
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -56,7 +58,7 @@ export default function SuperadminSystemHealthOverviewExportModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in motion-safe:duration-200">
       <div className="relative w-full max-w-lg rounded-2xl border border-emerald-500/30 bg-[#0c1022] p-6 shadow-2xl text-slate-100 flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-border/80">
@@ -84,7 +86,7 @@ export default function SuperadminSystemHealthOverviewExportModal({
           <button
             type="button"
             onClick={handleExportJSON}
-            className="flex flex-col items-center justify-center p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 hover:bg-emerald-500/15 transition-all text-center group cursor-pointer"
+            className="flex flex-col items-center justify-center p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 hover:bg-emerald-500/15 motion-safe:transition-all text-center group cursor-pointer"
           >
             <div className="p-3 rounded-xl bg-emerald-500/20 text-emerald-400 mb-2 group-hover:scale-110 transition-transform">
               <FileText size={22} />
@@ -96,7 +98,7 @@ export default function SuperadminSystemHealthOverviewExportModal({
           <button
             type="button"
             onClick={handleExportCSV}
-            className="flex flex-col items-center justify-center p-4 rounded-xl border border-teal-500/30 bg-teal-500/5 hover:bg-teal-500/15 transition-all text-center group cursor-pointer"
+            className="flex flex-col items-center justify-center p-4 rounded-xl border border-teal-500/30 bg-teal-500/5 hover:bg-teal-500/15 motion-safe:transition-all text-center group cursor-pointer"
           >
             <div className="p-3 rounded-xl bg-teal-500/20 text-teal-400 mb-2 group-hover:scale-110 transition-transform">
               <FileSpreadsheet size={22} />
@@ -108,7 +110,7 @@ export default function SuperadminSystemHealthOverviewExportModal({
           <button
             type="button"
             onClick={handlePrint}
-            className="flex flex-col items-center justify-center p-4 rounded-xl border border-sky-500/30 bg-sky-500/5 hover:bg-sky-500/15 transition-all text-center group cursor-pointer"
+            className="flex flex-col items-center justify-center p-4 rounded-xl border border-sky-500/30 bg-sky-500/5 hover:bg-sky-500/15 motion-safe:transition-all text-center group cursor-pointer"
           >
             <div className="p-3 rounded-xl bg-sky-500/20 text-sky-400 mb-2 group-hover:scale-110 transition-transform">
               <Printer size={22} />
@@ -139,7 +141,7 @@ export default function SuperadminSystemHealthOverviewExportModal({
           <button
             type="button"
             onClick={handleCopyJSON}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border/80 bg-slate-800/60 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border/80 bg-slate-800/60 hover:bg-slate-700 text-slate-200 text-xs font-semibold motion-safe:transition-all cursor-pointer"
           >
             {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
             <span>{copied ? 'Copied' : 'Copy JSON'}</span>
@@ -148,7 +150,7 @@ export default function SuperadminSystemHealthOverviewExportModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition-all cursor-pointer"
+            className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold motion-safe:transition-all cursor-pointer"
           >
             Close
           </button>

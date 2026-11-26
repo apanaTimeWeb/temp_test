@@ -1,17 +1,17 @@
-import { SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_API } from '../config/superadmin_communication_notification_center.url_config';
+import { SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_API } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/config/superadmin_communication_notification_center.url_config';
 import type {
   NotificationTargetAccount,
   NotificationTemplate,
   NotificationUsageAnalytics,
-} from '../types/SuperadminCommunicationNotificationCenterNotificationTypes';
+} from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/types/SuperadminCommunicationNotificationCenterNotificationTypes';
 import { apiFetch, type ApiResponse } from '@/lib/api';
 import {
   getFallbackAccounts,
   getFallbackTemplates,
   getFallbackUsage,
   updateFallbackTemplate,
-} from './superadmin_communication_notification_center.store';
-import { SUPERADMINCOMMUNICATIONNOTIFICATIONCENTER_API_CONTRACT_STATUS } from './superadmin_communication_notification_center.api';
+} from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/api/superadmin_communication_notification_center.store';
+import { SUPERADMINCOMMUNICATIONNOTIFICATIONCENTER_API_CONTRACT_STATUS } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/api/superadmin_communication_notification_center.api';
 
 const shouldCallNetwork = () =>
   SUPERADMINCOMMUNICATIONNOTIFICATIONCENTER_API_CONTRACT_STATUS.networkCallsEnabled &&

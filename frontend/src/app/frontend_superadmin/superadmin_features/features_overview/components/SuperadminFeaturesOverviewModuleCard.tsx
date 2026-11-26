@@ -31,7 +31,7 @@ import type {
   PlatformModuleState,
   EffectiveAccessResult,
 } from '@/app/frontend_superadmin/superadmin_features/features_overview/types/superadmin_features_overview.types';
-import { SuperadminFeaturesToggleSwitch } from './SuperadminFeaturesToggleSwitch';
+import { SuperadminFeaturesToggleSwitch } from '@/app/frontend_superadmin/superadmin_features/features_overview/components/SuperadminFeaturesToggleSwitch';
 
 interface ModuleCardProps {
   module: ModuleDefinition;
@@ -81,7 +81,7 @@ export default function SuperadminFeaturesOverviewModuleCard({
 
   return (
     <div
-      className={`p-5 rounded-2xl border transition-all duration-200 flex flex-col justify-between shadow-lg backdrop-blur-xl ${
+      className={`p-5 rounded-2xl border motion-safe:transition-all motion-safe:duration-200 flex flex-col justify-between shadow-lg backdrop-blur-xl ${
         isEffectiveAllowed
           ? 'border-indigo-500/30 bg-[#0a0d24]/90 hover:border-indigo-500/50 shadow-indigo-950/30'
           : 'border-rose-500/25 bg-slate-950/80 hover:border-rose-500/40'
@@ -264,7 +264,7 @@ export default function SuperadminFeaturesOverviewModuleCard({
           <button
             type="button"
             onClick={() => onOpenOverride(module)}
-            className="w-full px-3 py-2 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-slate-800 text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
+            className="w-full px-3 py-2 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-slate-800 text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 motion-safe:transition-all shadow-xs cursor-pointer active:scale-95"
           >
             <Settings2 size={13} />
             <span>Manage Custom Override</span>

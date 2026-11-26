@@ -3,10 +3,10 @@
 
 import React, { useState } from 'react';
 import { Eye, ChevronLeft, ChevronRight } from 'lucide-react';
-import type { BillingReportTableRecord } from '../types/SuperadminAnalyticsBillingReportsTypes';
-import { BILLING_PAYMENT_STATUS_COLORS } from '../constants/SuperadminAnalyticsBillingReportsConstants';
-import { formatBillingCurrency } from '../utils/SuperadminAnalyticsBillingReportsFormatters';
-import { SuperadminAnalyticsBillingReportsEmptyState } from './SuperadminAnalyticsBillingReportsEmptyState';
+import type { BillingReportTableRecord } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/types/SuperadminAnalyticsBillingReportsTypes';
+import { BILLING_PAYMENT_STATUS_COLORS } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/constants/SuperadminAnalyticsBillingReportsConstants';
+import { formatBillingCurrency } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/utils/SuperadminAnalyticsBillingReportsFormatters';
+import { SuperadminAnalyticsBillingReportsEmptyState } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/components/SuperadminAnalyticsBillingReportsEmptyState';
 
 interface Props {
   records: BillingReportTableRecord[];
@@ -137,7 +137,7 @@ export function SuperadminAnalyticsBillingReportsTable({
                     <button
                       type="button"
                       onClick={() => onSelectRecord(r)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border border-indigo-500/30 bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border border-indigo-500/30 bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 hover:text-white motion-safe:transition-all cursor-pointer shadow-xs active:scale-95"
                       aria-label={`View invoice ${r.invoiceNumber}`}
                     >
                       <Eye size={13} />
@@ -164,7 +164,7 @@ export function SuperadminAnalyticsBillingReportsTable({
               type="button"
               disabled={currentPage === 1}
               onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-              className="p-1.5 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-indigo-500/20 text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-all"
+              className="p-1.5 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-indigo-500/20 text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer motion-safe:transition-all"
               aria-label="Previous page"
             >
               <ChevronLeft size={14} />
@@ -176,7 +176,7 @@ export function SuperadminAnalyticsBillingReportsTable({
               type="button"
               disabled={currentPage === totalPages}
               onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-              className="p-1.5 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-indigo-500/20 text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-all"
+              className="p-1.5 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-indigo-500/20 text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer motion-safe:transition-all"
               aria-label="Next page"
             >
               <ChevronRight size={14} />

@@ -10,9 +10,14 @@ export interface SystemHealthTelemetryData {
   uptime: string;
 }
 
+export interface SystemHealthServiceExportNode {
+  id: string; name: string; category: string; node: string; latency: string;
+  cpu: number | string; memory: string; status: string; uptime: string;
+}
+
 export function buildSystemHealthSnapshotPayload(
   telemetryData: SystemHealthTelemetryData,
-  serviceNodes: any[]
+  serviceNodes: SystemHealthServiceExportNode[]
 ) {
   return {
     exportTimestamp: new Date().toISOString(),
@@ -32,7 +37,7 @@ export function buildSystemHealthSnapshotPayload(
 
 export function exportSystemHealthJSON(
   telemetryData: SystemHealthTelemetryData,
-  serviceNodes: any[]
+  serviceNodes: SystemHealthServiceExportNode[]
 ): void {
   const payload = buildSystemHealthSnapshotPayload(telemetryData, serviceNodes);
   const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(payload, null, 2));
@@ -42,10 +47,10 @@ export function exportSystemHealthJSON(
   document.body.appendChild(downloadAnchor);
   downloadAnchor.click();
   downloadAnchor.remove();
-  toast.success('JSON telemetry snapshot exported');
+  toast.success('JSON telemetry snapshot exported', { id: 'superadmin:system_health:export-json' });
 }
 
-export function exportSystemHealthCSV(serviceNodes: any[]): void {
+export function exportSystemHealthCSV(serviceNodes: SystemHealthServiceExportNode[]): void {
   const headers = ['ID', 'Service Name', 'Category', 'Cluster Node', 'Latency', 'CPU %', 'Memory Allocation', 'Status', 'Uptime'];
   const rows = serviceNodes.map((item) => [
     item.id,
@@ -68,10 +73,10 @@ export function exportSystemHealthCSV(serviceNodes: any[]): void {
   link.click();
   link.remove();
   URL.revokeObjectURL(url);
-  toast.success('CSV service health matrix exported');
+  toast.success('CSV service health matrix exported', { id: 'superadmin:system_health:export-csv' });
 }
 
-export function printSystemHealthReport(telemetryData: SystemHealthTelemetryData, serviceNodes: any[]): void {
+export function printSystemHealthReport(telemetryData: SystemHealthTelemetryData, serviceNodes: SystemHealthServiceExportNode[]): void {
   if (typeof window === 'undefined') return;
   const printWindow = window.open('', '_blank', 'width=1000,height=700');
   if (!printWindow) {

@@ -1,4 +1,4 @@
-import type { PlatformReportTableRecord } from '../types/SuperadminAnalyticsPlatformReportsTypes';
+import type { PlatformReportTableRecord } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/types/SuperadminAnalyticsPlatformReportsTypes';
 
 /** Prints platform reports roster in 1 landscape page without overflow. */
 export function printPlatformReportsRoster(records: readonly PlatformReportTableRecord[], title = 'SuperAdmin Platform Tenants & Growth Report'): void {

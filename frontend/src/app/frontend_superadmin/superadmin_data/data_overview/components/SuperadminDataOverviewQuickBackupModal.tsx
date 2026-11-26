@@ -59,7 +59,7 @@ export function SuperadminDataOverviewQuickBackupModal({
       aria-labelledby="quick-backup-title"
       data-testid="data_overview-quick-backup-modal"
     >
-      <div className="w-full max-w-lg rounded-xl border border-border bg-card shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="w-full max-w-lg rounded-xl border border-border bg-card shadow-xl overflow-hidden animate-in fade-in zoom-in-95 motion-safe:duration-200">
         {/* ── Modal Header ── */}
         <div className="flex items-center justify-between p-4 border-b border-border bg-neutral-900/40">
           <div className="flex items-center gap-2 text-foreground font-bold text-sm">
@@ -151,7 +151,7 @@ export function SuperadminDataOverviewQuickBackupModal({
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 size={13} className="animate-spin" />
+                  <Loader2 size={13} className="motion-safe:animate-spin" />
                   <span>Executing...</span>
                 </>
               ) : (

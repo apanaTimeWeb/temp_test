@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Next.js App Router route-level error boundary.
 'use client';
 
-import { SuperadminIntegrationsOverviewErrorFallback } from './components/SuperadminIntegrationsOverviewErrorFallback';
+import { SuperadminIntegrationsOverviewErrorFallback } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewErrorFallback';
 
 export default function ErrorBoundary({
   error,

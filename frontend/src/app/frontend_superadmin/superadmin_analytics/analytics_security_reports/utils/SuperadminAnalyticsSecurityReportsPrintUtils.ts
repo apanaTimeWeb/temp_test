@@ -1,5 +1,5 @@
-import type { SecurityReportTableRecord } from '../types/SuperadminAnalyticsSecurityReportsTypes';
-import { formatSecurityEventLabel } from './SuperadminAnalyticsSecurityReportsFormatters';
+import type { SecurityReportTableRecord } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/types/SuperadminAnalyticsSecurityReportsTypes';
+import { formatSecurityEventLabel } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/utils/SuperadminAnalyticsSecurityReportsFormatters';
 
 /** Prints security reports roster in 1 landscape page without overflow. */
 export function printSecurityReportsRoster(records: readonly SecurityReportTableRecord[], title = 'SuperAdmin Security Audit & Threat Intelligence Report'): void {

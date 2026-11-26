@@ -1,6 +1,6 @@
 'use client';
 
-import type { SuperadminBillingInvoiceSample } from '../types/SuperadminBillingInvoicesTypes';
+import type { SuperadminBillingInvoiceSample } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/types/SuperadminBillingInvoicesTypes';
 
 /**
  * Opens a print dialog for invoice roster.

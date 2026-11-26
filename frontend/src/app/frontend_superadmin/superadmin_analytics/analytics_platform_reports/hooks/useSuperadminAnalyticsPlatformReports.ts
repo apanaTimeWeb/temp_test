@@ -4,13 +4,13 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { SUPERADMIN_PLATFORM_REPORTS_QUERY_KEYS } from '../api/superadmin_analytics_platform_reports.query_keys';
-import { fetchPlatformReportsOverview } from '../api/superadmin_analytics_platform_reports.api';
-import { DEFAULT_PLATFORM_REPORTS_FILTERS } from '../constants/SuperadminAnalyticsPlatformReportsConstants';
+import { SUPERADMIN_PLATFORM_REPORTS_QUERY_KEYS } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/api/superadmin_analytics_platform_reports.query_keys';
+import { fetchPlatformReportsOverview } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/api/superadmin_analytics_platform_reports.api';
+import { DEFAULT_PLATFORM_REPORTS_FILTERS } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/constants/SuperadminAnalyticsPlatformReportsConstants';
 import type {
   SuperadminAnalyticsPlatformReportsFilters,
   PlatformReportTableRecord,
-} from '../types/SuperadminAnalyticsPlatformReportsTypes';
+} from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/types/SuperadminAnalyticsPlatformReportsTypes';
 
 export function useSuperadminAnalyticsPlatformReports() {
   const [filters, setFilters] = useState<SuperadminAnalyticsPlatformReportsFilters>(

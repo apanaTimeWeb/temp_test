@@ -3,8 +3,8 @@
 
 import React from 'react';
 import { X, ShieldAlert, ShieldCheck, Lock, Key, FileOutput, AlertTriangle, Globe, User, Building2, Terminal } from 'lucide-react';
-import type { SecurityReportTableRecord, SecurityEventType, SecuritySeverity } from '../types/SuperadminAnalyticsSecurityReportsTypes';
-import { formatSecurityEventLabel } from '../utils/SuperadminAnalyticsSecurityReportsFormatters';
+import type { SecurityReportTableRecord, SecurityEventType, SecuritySeverity } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/types/SuperadminAnalyticsSecurityReportsTypes';
+import { formatSecurityEventLabel } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/utils/SuperadminAnalyticsSecurityReportsFormatters';
 
 interface Props {
   record: SecurityReportTableRecord | null;
@@ -24,7 +24,7 @@ function getEventIcon(type: SecurityEventType) {
     case 'DATA_EXPORTED':
       return <FileOutput size={22} className="text-sky-400" />;
     case 'SUSPICIOUS_ACTIVITY':
-      return <AlertTriangle size={22} className="text-rose-500 animate-pulse" />;
+      return <AlertTriangle size={22} className="text-rose-500 motion-safe:animate-pulse" />;
     default:
       return <ShieldAlert size={22} className="text-slate-400" />;
   }
@@ -162,7 +162,7 @@ export function SuperadminAnalyticsSecurityReportsDetailModal({ record, onClose 
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2.5 rounded-xl text-xs font-bold bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/40 text-white transition-all cursor-pointer shadow-xs active:scale-95"
+            className="px-5 py-2.5 rounded-xl text-xs font-bold bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/40 text-white motion-safe:transition-all cursor-pointer shadow-xs active:scale-95"
           >
             Close Event Details
           </button>

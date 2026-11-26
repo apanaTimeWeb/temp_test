@@ -9,12 +9,12 @@ import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTable
 
 import React from 'react';
 import { Clock, ShieldAlert, Settings, HardDrive, AlertOctagon } from 'lucide-react';
-import type { RetentionRuleRecord } from '../types/superadmin_data_archive_retention.types';
+import type { RetentionRuleRecord } from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/types/superadmin_data_archive_retention.types';
 import {
   displayValue,
   formatDaysToYearsOrDays,
   formatTimestamp,
-} from '../utils/superadmin_data_archive_retention_formatters';
+} from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/utils/superadmin_data_archive_retention_formatters';
 
 interface RulesTableProps {
   rules: RetentionRuleRecord[];
@@ -134,9 +134,9 @@ export function SuperadminDataArchiveRetentionRulesTable({
                   <button
                     type="button"
                     onClick={() => onEditRule(rule)}
-                    className="group inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-rose-300 hover:text-white bg-rose-500/15 hover:bg-rose-500/30 border border-rose-500/30 hover:border-rose-400/50 rounded-xl transition-all duration-300 shadow-xs active:scale-[0.97] cursor-pointer"
+                    className="group inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-rose-300 hover:text-white bg-rose-500/15 hover:bg-rose-500/30 border border-rose-500/30 hover:border-rose-400/50 rounded-xl motion-safe:transition-all motion-safe:duration-300 shadow-xs active:scale-[0.97] cursor-pointer"
                   >
-                    <span className="p-0.5 rounded-md bg-rose-500/20 text-rose-300 group-hover:rotate-45 transition-transform duration-300">
+                    <span className="p-0.5 rounded-md bg-rose-500/20 text-rose-300 group-hover:rotate-45 transition-transform motion-safe:duration-300">
                       <Settings className="w-3 h-3" />
                     </span>
                     <span>Configure</span>

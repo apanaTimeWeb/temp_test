@@ -1,6 +1,6 @@
 'use client';
 // RESPONSIBILITY: Export utilities (CSV, Excel, Print) for SaaS Subscriptions Overview (< 120 lines).
-import type { SuperadminSubscriptionRecord } from '../types/SuperadminSubscriptionsOverviewTypes';
+import type { SuperadminSubscriptionRecord } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/types/SuperadminSubscriptionsOverviewTypes';
 
 /**
  * Downloads subscriptions as standard CSV with UTF-8 BOM.
@@ -88,4 +88,4 @@ export function downloadSuperadminSubscriptionsExcel(
 }
 
 // Re-export print utility from dedicated submodule to respect line limits
-export { printSuperadminSubscriptionsRoster } from './SuperadminSubscriptionsOverviewPrintUtils';
+export { printSuperadminSubscriptionsRoster } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/utils/SuperadminSubscriptionsOverviewPrintUtils';

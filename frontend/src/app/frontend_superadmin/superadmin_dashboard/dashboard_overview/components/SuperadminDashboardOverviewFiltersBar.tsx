@@ -82,7 +82,7 @@ export default function SuperadminDashboardOverviewFiltersBar({
                     key={range.id}
                     type="button"
                     onClick={() => onChange({ ...filters, timeRange: range.id })}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold motion-safe:transition-all cursor-pointer ${
                       isActive
                         ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30 ring-1 ring-indigo-400'
                         : 'bg-slate-800/60 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-700/50'
@@ -100,7 +100,7 @@ export default function SuperadminDashboardOverviewFiltersBar({
             <button
               type="button"
               onClick={onReset}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold text-rose-400 bg-rose-500/10 border border-rose-500/30 hover:bg-rose-500/20 transition-all cursor-pointer self-end md:self-auto"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold text-rose-400 bg-rose-500/10 border border-rose-500/30 hover:bg-rose-500/20 motion-safe:transition-all cursor-pointer self-end md:self-auto"
             >
               <RotateCcw size={12} />
               <span>Reset Filters</span>
@@ -120,7 +120,7 @@ export default function SuperadminDashboardOverviewFiltersBar({
               id="filter-account"
               value={filters.account}
               onChange={(e) => onChange({ ...filters, account: e.target.value })}
-              className="w-full rounded-xl border border-slate-700/60 bg-slate-900/90 px-3 py-2 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all cursor-pointer"
+              className="w-full rounded-xl border border-slate-700/60 bg-slate-900/90 px-3 py-2 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 motion-safe:transition-all cursor-pointer"
             >
               {ACCOUNT_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value} className="bg-slate-900 text-slate-200">
@@ -140,7 +140,7 @@ export default function SuperadminDashboardOverviewFiltersBar({
               id="filter-branch"
               value={filters.branch}
               onChange={(e) => onChange({ ...filters, branch: e.target.value })}
-              className="w-full rounded-xl border border-slate-700/60 bg-slate-900/90 px-3 py-2 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all cursor-pointer"
+              className="w-full rounded-xl border border-slate-700/60 bg-slate-900/90 px-3 py-2 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 motion-safe:transition-all cursor-pointer"
             >
               {BRANCH_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value} className="bg-slate-900 text-slate-200">
@@ -160,7 +160,7 @@ export default function SuperadminDashboardOverviewFiltersBar({
               id="filter-plan"
               value={filters.plan}
               onChange={(e) => onChange({ ...filters, plan: e.target.value })}
-              className="w-full rounded-xl border border-slate-700/60 bg-slate-900/90 px-3 py-2 text-xs text-slate-200 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-all cursor-pointer"
+              className="w-full rounded-xl border border-slate-700/60 bg-slate-900/90 px-3 py-2 text-xs text-slate-200 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 motion-safe:transition-all cursor-pointer"
             >
               {PLAN_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value} className="bg-slate-900 text-slate-200">
@@ -180,7 +180,7 @@ export default function SuperadminDashboardOverviewFiltersBar({
               id="filter-status"
               value={filters.status}
               onChange={(e) => onChange({ ...filters, status: e.target.value })}
-              className="w-full rounded-xl border border-slate-700/60 bg-slate-900/90 px-3 py-2 text-xs text-slate-200 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 transition-all cursor-pointer"
+              className="w-full rounded-xl border border-slate-700/60 bg-slate-900/90 px-3 py-2 text-xs text-slate-200 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 motion-safe:transition-all cursor-pointer"
             >
               {STATUS_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value} className="bg-slate-900 text-slate-200">

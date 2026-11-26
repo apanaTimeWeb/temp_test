@@ -9,7 +9,7 @@ import type {
   DUPLICATE_STRATEGIES,
   BATCH_STATUS,
   VALIDATION_SEVERITY,
-} from '../constants/superadmin_data_import_migration.constants';
+} from '@/app/frontend_superadmin/superadmin_data/data_import_migration/constants/superadmin_data_import_migration.constants';
 
 export type ImportEntityType = keyof typeof IMPORT_ENTITY_TYPES;
 export type DuplicateStrategy = keyof typeof DUPLICATE_STRATEGIES;

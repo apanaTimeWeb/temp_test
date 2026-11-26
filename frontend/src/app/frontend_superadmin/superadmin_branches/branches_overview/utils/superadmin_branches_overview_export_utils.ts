@@ -1,5 +1,5 @@
-import type { SuperadminBranchRecord } from '../types/SuperadminBranchesOverviewTypes';
-import { formatBranchStatusLabel, formatCurrencyInr } from './superadmin_branches_overview_utils';
+import type { SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
+import { formatBranchStatusLabel, formatCurrencyInr } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/utils/superadmin_branches_overview_utils';
 
 /** Builds an HTML/XML Excel spreadsheet from branch records. */
 export function buildSuperadminBranchesExcel(branches: readonly SuperadminBranchRecord[]): string {

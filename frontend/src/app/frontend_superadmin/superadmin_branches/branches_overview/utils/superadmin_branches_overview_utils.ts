@@ -1,7 +1,7 @@
 // RESPONSIBILITY: Formatting and data utility functions for Superadmin Branch Management.
-import type { SuperadminBranchRecord } from '../types/SuperadminBranchesOverviewTypes';
-export { printSuperadminBranchesRoster } from './superadmin_branches_overview_print_utils';
-export { buildSuperadminBranchesExcel, downloadSuperadminBranchesExcel } from './superadmin_branches_overview_export_utils';
+import type { SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
+export { printSuperadminBranchesRoster } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/utils/superadmin_branches_overview_print_utils';
+export { buildSuperadminBranchesExcel, downloadSuperadminBranchesExcel } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/utils/superadmin_branches_overview_export_utils';
 
 export function formatBranchStatusLabel(status: SuperadminBranchRecord['status']): string {
   switch (status) {

@@ -159,7 +159,7 @@ export default function SuperadminCommunicationNoticesSemanticTable<T extends ob
           <div className="flex items-center gap-2">
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold motion-safe:transition-all cursor-pointer"
               disabled={page === 0}
               onClick={() => setPage((current) => Math.max(0, current - 1))}
               data-testid="superadmin-communication-communication-semantic-table-table-previous-3"
@@ -175,7 +175,7 @@ export default function SuperadminCommunicationNoticesSemanticTable<T extends ob
                   key={idx}
                   type="button"
                   onClick={() => setPage(idx)}
-                  className={`w-7 h-7 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  className={`w-7 h-7 rounded-lg text-xs font-semibold motion-safe:transition-all cursor-pointer ${
                     page === idx ? 'bg-sky-600 text-white shadow-sm' : 'text-slate-400 hover:text-white hover:bg-slate-800'
                   }`}
                 >
@@ -186,7 +186,7 @@ export default function SuperadminCommunicationNoticesSemanticTable<T extends ob
 
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold motion-safe:transition-all cursor-pointer"
               disabled={page + 1 >= pageCount}
               onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
               data-testid="superadmin-communication-communication-semantic-table-table-next-4"

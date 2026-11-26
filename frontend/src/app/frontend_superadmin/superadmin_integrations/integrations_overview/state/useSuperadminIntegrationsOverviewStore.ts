@@ -3,12 +3,12 @@
 // DATA FLOW: UI interaction -> useSuperadminIntegrationsOverviewStore -> component render.
 // NOTE: Server data is owned strictly by TanStack Query, NOT Zustand.
 import { create } from 'zustand';
-import type { IntegrationTabId } from '../constants/superadmin_integrations_overview.constants';
+import type { IntegrationTabId } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/constants/superadmin_integrations_overview.constants';
 import type {
   ApiKeyCreatedResult,
   IntegrationGatewayItem,
   IntegrationLogItem,
-} from '../types/superadmin_integrations_overview.types';
+} from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/types/superadmin_integrations_overview.types';
 
 interface SuperadminIntegrationsOverviewState {
   activeTab: IntegrationTabId;

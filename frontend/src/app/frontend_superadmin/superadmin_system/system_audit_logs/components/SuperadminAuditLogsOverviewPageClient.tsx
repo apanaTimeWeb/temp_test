@@ -3,7 +3,7 @@
 import SuperadminAuditLogsOverviewSemanticTable from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/components/SuperadminAuditLogsOverviewSemanticTable';
 import { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import { Download, AlertCircle, Search, X, RotateCcw, RotateCw, Printer } from 'lucide-react';
-import SuperadminAuditLogsOverviewHeroHeader from './SuperadminAuditLogsOverviewHeroHeader';
+import SuperadminAuditLogsOverviewHeroHeader from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/components/SuperadminAuditLogsOverviewHeroHeader';
 import { toast } from 'sonner';
 import { buildSuperadminAuditLogsSampleCsv } from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/utils/SuperadminAuditLogsOverviewExportUtilities';
 import SuperadminAuditLogsOverviewDetailDrawer from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/components/SuperadminAuditLogsOverviewDetailDrawer';
@@ -12,7 +12,7 @@ import { SUPERADMIN_AUDIT_LOG_SAMPLE_FIXTURES } from '@/app/frontend_superadmin/
 import { useTranslations } from 'next-intl';
 import { SUPERADMIN_AUDIT_LOGS_OVERVIEW_PAGE_CLIENT_ACTION_OPTIONS, SUPERADMIN_AUDIT_LOGS_PAGE_SIZE_OPTIONS, SUPERADMIN_AUDIT_LOGS_DEFAULT_PAGE_SIZE } from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/constants/SuperadminAuditLogsOverviewStaticConstants';
 import type { Log } from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/types/SuperadminAuditLogsOverviewPageClientComponentTypes';
-import { useAuditLogsColumns } from './SuperadminAuditLogsOverviewColumns';
+import { useAuditLogsColumns } from '@/app/frontend_superadmin/superadmin_system/system_audit_logs/components/SuperadminAuditLogsOverviewColumns';
 
 export default function SuperadminAuditLogsOverviewPageClient() {
   const t = useTranslations('SUPERADMIN_AUDIT_LOGS');
@@ -192,7 +192,7 @@ export default function SuperadminAuditLogsOverviewPageClient() {
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 text-xs font-semibold cursor-pointer transition-all"
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 text-xs font-semibold cursor-pointer motion-safe:transition-all"
                 title="Clear all filters"
               >
                 <RotateCcw size={12} className="text-rose-400" />
@@ -210,16 +210,16 @@ export default function SuperadminAuditLogsOverviewPageClient() {
               type="button"
               onClick={handleRefresh}
               disabled={isRefreshing}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20 text-xs font-semibold cursor-pointer transition-all disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20 text-xs font-semibold cursor-pointer motion-safe:transition-all disabled:opacity-50"
               title="Refresh audit event stream"
             >
-              <RotateCw size={13} className={`text-sky-400 ${isRefreshing ? 'animate-spin' : ''}`} />
+              <RotateCw size={13} className={`text-sky-400 ${isRefreshing ? 'motion-safe:animate-spin' : ''}`} />
               <span>Refresh</span>
             </button>
 
             <button
               type="button"
-              className="sa-btn-primary inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-600/25 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98]"
+              className="sa-btn-primary inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-600/25 motion-safe:transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98]"
               onClick={handleExportSampleCsv}
               disabled={filtered.length === 0}
               data-testid="superadmin-audit-logs-audit-logs-overview-export-sample-csv-5"
@@ -232,7 +232,7 @@ export default function SuperadminAuditLogsOverviewPageClient() {
             <button
               type="button"
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-700 bg-slate-800/70 text-slate-300 hover:bg-slate-700 text-xs font-semibold cursor-pointer transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-700 bg-slate-800/70 text-slate-300 hover:bg-slate-700 text-xs font-semibold cursor-pointer motion-safe:transition-all"
               title="Print Audit Report"
             >
               <Printer size={13} className="text-slate-400" />

@@ -18,7 +18,7 @@ export const SuperadminSettingsBrandingLogoUpload: FC<SuperadminSettingsBranding
     <Label>{label}</Label>
     <div
       id="branding-logo-upload"
-      className="flex flex-col items-center justify-center border-2 border-dashed border-indigo-500/30 hover:border-purple-500/50 rounded-2xl p-6 bg-slate-950/60 transition-all text-center group"
+      className="flex flex-col items-center justify-center border-2 border-dashed border-indigo-500/30 hover:border-purple-500/50 rounded-2xl p-6 bg-slate-950/60 motion-safe:transition-all text-center group"
     >
       <div className="h-16 w-16 rounded-2xl flex items-center justify-center text-3xl font-bold mb-3 bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/30 text-purple-300 shadow-md group-hover:scale-105 transition-transform">
         📚

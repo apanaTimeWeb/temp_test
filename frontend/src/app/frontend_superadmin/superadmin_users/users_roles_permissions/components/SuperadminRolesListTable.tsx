@@ -81,7 +81,7 @@ export default function SuperadminRolesListTable({
               key={cat.id}
               type="button"
               onClick={() => { setCategoryFilter(cat.id); setPage(0); }}
-              className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
                 categoryFilter === cat.id
                   ? 'bg-indigo-600 text-white shadow-xs font-bold'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
@@ -168,7 +168,7 @@ export default function SuperadminRolesListTable({
                         <button
                           type="button"
                           onClick={() => onEditPermissions(role)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all font-semibold cursor-pointer shrink-0"
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 motion-safe:transition-all font-semibold cursor-pointer shrink-0"
                           title="Open Action-Level Permission Matrix"
                         >
                           <Edit3 size={12} />
@@ -179,7 +179,7 @@ export default function SuperadminRolesListTable({
                         <button
                           type="button"
                           onClick={() => onDuplicateRole(role)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 transition-all font-semibold cursor-pointer shrink-0"
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 motion-safe:transition-all font-semibold cursor-pointer shrink-0"
                           title="Duplicate this role"
                         >
                           <Copy size={12} />
@@ -191,7 +191,7 @@ export default function SuperadminRolesListTable({
                           <button
                             type="button"
                             onClick={() => onDeleteRole(role.id)}
-                            className="inline-flex items-center justify-center h-7 w-7 rounded-lg border border-rose-500/30 bg-rose-500/15 text-rose-300 hover:text-white hover:bg-rose-600/30 transition-all cursor-pointer shrink-0"
+                            className="inline-flex items-center justify-center h-7 w-7 rounded-lg border border-rose-500/30 bg-rose-500/15 text-rose-300 hover:text-white hover:bg-rose-600/30 motion-safe:transition-all cursor-pointer shrink-0"
                             title="Delete custom role"
                           >
                             <Trash2 size={12} />

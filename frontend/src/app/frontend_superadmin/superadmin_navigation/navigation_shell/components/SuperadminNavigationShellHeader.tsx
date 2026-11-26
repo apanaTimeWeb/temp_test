@@ -14,8 +14,8 @@ import { SUPERADMIN_NAVIGATION_SHELL_ROUTES as __SUPERADMIN_NAVIGATION_SHELL_ROU
 import Link from 'next/link';
 import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/config/superadmin_navigation_routes';
 import { toast } from 'sonner';
-import SuperadminNavigationShellAlertsDropdown, { type SystemAlert, DEFAULT_SYSTEM_ALERTS } from './SuperadminNavigationShellAlertsDropdown';
-import SuperadminNavigationShellSignoutModal from './SuperadminNavigationShellSignoutModal';
+import SuperadminNavigationShellAlertsDropdown, { type SystemAlert, DEFAULT_SYSTEM_ALERTS } from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/components/SuperadminNavigationShellAlertsDropdown';
+import SuperadminNavigationShellSignoutModal from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/components/SuperadminNavigationShellSignoutModal';
 
 export default function SuperadminNavigationShellHeader({ onMenuClick, menuExpanded }: SuperadminNavigationHeaderProps) {
   const t = useTranslations('SUPERADMIN_SHELL');
@@ -242,7 +242,7 @@ export default function SuperadminNavigationShellHeader({ onMenuClick, menuExpan
                 <div className="flex items-center justify-between text-slate-400">
                   <span>Status:</span>
                   <span className="inline-flex items-center gap-1.5 text-emerald-400 font-medium text-[11px]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
                     Online
                   </span>
                 </div>

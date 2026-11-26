@@ -8,7 +8,7 @@ import type {
   RETENTION_ENTITY_TYPES,
   RETENTION_ACTIONS,
   STORAGE_TIERS,
-} from '../constants/superadmin_data_archive_retention.constants';
+} from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/constants/superadmin_data_archive_retention.constants';
 
 export type RetentionEntityType = keyof typeof RETENTION_ENTITY_TYPES;
 export type RetentionAction = keyof typeof RETENTION_ACTIONS;

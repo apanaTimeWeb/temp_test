@@ -5,7 +5,7 @@
  */
 
 import { z } from 'zod';
-import { RESTORE_TYPE_CONFIRM_KEY } from '../constants/superadmin_data_restore_operations.constants';
+import { RESTORE_TYPE_CONFIRM_KEY } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/constants/superadmin_data_restore_operations.constants';
 
 export const RestoreExecutionSchema = z.object({
   snapshotId: z.string().min(1, 'Snapshot ID is required'),

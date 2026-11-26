@@ -77,7 +77,7 @@ export default function SuperadminBranchesOverviewHeader({
             type="button"
             onClick={onCreateBranch}
             id="superadmin-create-branch-btn"
-            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary hover:bg-primary-hover text-on-primary text-xs sm:text-sm font-bold shadow-sm transition-all motion-safe:hover:scale-[1.02] motion-safe:active:scale-95 cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary hover:bg-primary-hover text-on-primary text-xs sm:text-sm font-bold shadow-sm motion-safe:transition-all motion-safe:hover:scale-[1.02] motion-safe:active:scale-95 cursor-pointer"
           >
             <Plus size={16} className="text-on-primary" />
             <span>Create New Branch</span>

@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { X, CheckCircle2, ShieldCheck, AlertCircle, Loader2 } from 'lucide-react';
-import type { QuotaUpgradeRequestRecord } from '../types/SuperadminUsageQuotaRequestsTypes';
+import type { QuotaUpgradeRequestRecord } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/types/SuperadminUsageQuotaRequestsTypes';
 import {
   ApproveQuotaRequestSchema,
   type ApproveQuotaRequestFormValues,
-} from '../schemas/SuperadminUsageQuotaRequestsSchemas';
-import { useSuperadminUsageQuotaRequestsMutations } from '../hooks/useSuperadminUsageQuotaRequestsMutations';
+} from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/schemas/SuperadminUsageQuotaRequestsSchemas';
+import { useSuperadminUsageQuotaRequestsMutations } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/hooks/useSuperadminUsageQuotaRequestsMutations';
 
 interface SuperadminUsageQuotaRequestsApproveModalProps {
   request: QuotaUpgradeRequestRecord | null;
@@ -56,7 +56,7 @@ export function SuperadminUsageQuotaRequestsApproveModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in motion-safe:duration-200">
       <div className="w-full max-w-lg rounded-2xl border border-emerald-500/30 bg-[#0a0d24] p-6 shadow-2xl shadow-emerald-950/50 space-y-5 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-indigo-500/20 pb-3">
@@ -174,9 +174,9 @@ export function SuperadminUsageQuotaRequestsApproveModal({
             <button
               type="submit"
               disabled={isApproving}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition-all shadow-md shadow-emerald-500/20 cursor-pointer disabled:opacity-50 active:scale-95"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold motion-safe:transition-all shadow-md shadow-emerald-500/20 cursor-pointer disabled:opacity-50 active:scale-95"
             >
-              {isApproving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle2 className="h-3.5 w-3.5" />}
+              {isApproving ? <Loader2 className="h-3.5 w-3.5 motion-safe:animate-spin" /> : <CheckCircle2 className="h-3.5 w-3.5" />}
               Confirm Approval & Expand Quota
             </button>
           </div>

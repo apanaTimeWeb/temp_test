@@ -2,8 +2,8 @@
 // RESPONSIBILITY: Render security audit trend telemetry and threat category distribution.
 
 import React from 'react';
-import type { SecurityAuditTrendPoint, SecurityThreatDistributionItem } from '../types/SuperadminAnalyticsSecurityReportsTypes';
-import { formatSecurityNumber } from '../utils/SuperadminAnalyticsSecurityReportsFormatters';
+import type { SecurityAuditTrendPoint, SecurityThreatDistributionItem } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/types/SuperadminAnalyticsSecurityReportsTypes';
+import { formatSecurityNumber } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/utils/SuperadminAnalyticsSecurityReportsFormatters';
 
 interface Props {
   auditTrends?: SecurityAuditTrendPoint[];
@@ -57,11 +57,11 @@ export function SuperadminAnalyticsSecurityReportsCharts({
                 </div>
                 <div className="h-2.5 w-full bg-slate-900 border border-indigo-500/20 rounded-full overflow-hidden flex gap-1 p-0.5">
                   <div
-                    className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-full transition-all duration-500 shadow-xs shadow-emerald-500/30"
+                    className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-full motion-safe:transition-all motion-safe:duration-500 shadow-xs shadow-emerald-500/30"
                     style={{ width: `${successPercent}%` }}
                   />
                   <div
-                    className="h-full bg-gradient-to-r from-rose-600 to-rose-400 rounded-full transition-all duration-500 shadow-xs shadow-rose-500/30"
+                    className="h-full bg-gradient-to-r from-rose-600 to-rose-400 rounded-full motion-safe:transition-all motion-safe:duration-500 shadow-xs shadow-rose-500/30"
                     style={{ width: `${failPercent}%` }}
                   />
                 </div>
@@ -96,7 +96,7 @@ export function SuperadminAnalyticsSecurityReportsCharts({
                 </div>
                 <div className="h-2.5 w-full bg-slate-900 border border-indigo-500/20 rounded-full overflow-hidden p-0.5">
                   <div
-                    className={`h-full ${barGradient} rounded-full transition-all duration-500 shadow-xs`}
+                    className={`h-full ${barGradient} rounded-full motion-safe:transition-all motion-safe:duration-500 shadow-xs`}
                     style={{ width: `${Math.min(100, item.percentage)}%` }}
                   />
                 </div>
@@ -108,7 +108,7 @@ export function SuperadminAnalyticsSecurityReportsCharts({
         <div className="pt-3 border-t border-indigo-500/15 text-[11px] text-slate-400 flex items-center justify-between font-medium">
           <span>Real-time Sentinel Status</span>
           <span className="font-semibold text-emerald-400 flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
             Shield Active
           </span>
         </div>

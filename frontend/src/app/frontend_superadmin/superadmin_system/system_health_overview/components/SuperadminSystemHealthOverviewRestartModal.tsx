@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { X, AlertTriangle, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
-import type { ServiceNode } from './SuperadminSystemHealthOverviewServicesTable';
+import type { ServiceNode } from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewServicesTable';
 
 interface RestartModalProps {
   service: ServiceNode | null;
@@ -24,13 +24,15 @@ export default function SuperadminSystemHealthOverviewRestartModal({
     setTimeout(() => {
       setRestarting(false);
       onRestartComplete(service.id);
-      toast.success(`Service ${service.name} restarted successfully (zero downtime rolling deploy)`);
+      toast.success(`Service ${service.name} restarted successfully (zero downtime rolling deploy)`, {
+        id: `superadmin:system_health:restart:${service.id}`,
+      });
       onClose();
     }, 1500);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in motion-safe:duration-200">
       <div className="relative w-full max-w-md rounded-2xl border border-amber-500/40 bg-[#0c1022] p-6 shadow-2xl text-slate-100 flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-border/80">
@@ -73,7 +75,7 @@ export default function SuperadminSystemHealthOverviewRestartModal({
             type="button"
             onClick={onClose}
             disabled={restarting}
-            className="px-3.5 py-1.5 rounded-xl border border-border/80 hover:bg-slate-800 text-slate-300 text-xs font-semibold transition-all cursor-pointer"
+            className="px-3.5 py-1.5 rounded-xl border border-border/80 hover:bg-slate-800 text-slate-300 text-xs font-semibold motion-safe:transition-all cursor-pointer"
           >
             Cancel
           </button>
@@ -81,9 +83,9 @@ export default function SuperadminSystemHealthOverviewRestartModal({
             type="button"
             onClick={handleConfirmRestart}
             disabled={restarting}
-            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold transition-all cursor-pointer shadow-md disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-md disabled:opacity-50"
           >
-            {restarting && <RefreshCw size={13} className="animate-spin" />}
+            {restarting && <RefreshCw size={13} className="motion-safe:animate-spin" />}
             <span>{restarting ? 'Restarting Cluster...' : 'Confirm Restart'}</span>
           </button>
         </div>

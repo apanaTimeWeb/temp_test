@@ -176,7 +176,7 @@ export default function SuperadminBillingInvoicesSemanticTable<T extends object>
           <div className="flex gap-2">
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-950/50 hover:bg-indigo-900/60 text-slate-200 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold cursor-pointer transition-all shadow-xs active:scale-[0.98]"
+              className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-950/50 hover:bg-indigo-900/60 text-slate-200 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold cursor-pointer motion-safe:transition-all shadow-xs active:scale-[0.98]"
               disabled={page === 0}
               onClick={() => setPage((current) => Math.max(0, current - 1))}
               data-testid="superadmin-billing-billing-semantic-table-table-previous-3"
@@ -185,7 +185,7 @@ export default function SuperadminBillingInvoicesSemanticTable<T extends object>
             </button>
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-950/50 hover:bg-indigo-900/60 text-slate-200 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold cursor-pointer transition-all shadow-xs active:scale-[0.98]"
+              className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-950/50 hover:bg-indigo-900/60 text-slate-200 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold cursor-pointer motion-safe:transition-all shadow-xs active:scale-[0.98]"
               disabled={page + 1 >= pageCount}
               onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
               data-testid="superadmin-billing-billing-semantic-table-table-next-4"

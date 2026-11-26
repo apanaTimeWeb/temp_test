@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Key, ShieldCheck, X } from 'lucide-react';
-import { SUPERADMIN_SUPPORT_ACCESS_DURATIONS } from '../constants/SuperadminSupportTicketsOverviewConstants';
+import { SUPERADMIN_SUPPORT_ACCESS_DURATIONS } from '@/app/frontend_superadmin/superadmin_support/support_tickets/constants/SuperadminSupportTicketsOverviewConstants';
 
 interface SuperadminSupportTicketsGrantAccessModalProps {
   showGrantAccessModal: boolean;
@@ -33,12 +33,12 @@ export default function SuperadminSupportTicketsGrantAccessModal({
 
   return (
     <div
-      className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-150"
+      className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-in fade-in motion-safe:duration-150"
       onClick={(e) => {
         if (e.target === e.currentTarget) setShowGrantAccessModal(false);
       }}
     >
-      <div className="bg-[#0a0e28] border border-indigo-500/40 rounded-2xl p-5 sm:p-6 max-w-lg w-full space-y-4 shadow-2xl text-white my-auto animate-in zoom-in-95 duration-150 ease-out" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-[#0a0e28] border border-indigo-500/40 rounded-2xl p-5 sm:p-6 max-w-lg w-full space-y-4 shadow-2xl text-white my-auto animate-in zoom-in-95 motion-safe:duration-150 ease-out" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between border-b border-indigo-500/20 pb-3">
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-300">
