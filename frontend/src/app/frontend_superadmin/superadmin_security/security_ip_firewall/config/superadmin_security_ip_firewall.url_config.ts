@@ -19,7 +19,6 @@ export const SUPERADMIN_SECURITY_IP_FIREWALL_API = {} as const;
 /** Leaf-local navigation route map copied verbatim from this page client. Route values are source-observed and must not imply backend behavior. */
 export const SUPERADMIN_NAVIGATION_ROUTES = {
   security_active_sessions: '/superadmin/superadmin_security/security_active_sessions',
-  security_api_keys: '/superadmin/superadmin_security/security_api_keys',
   security_ip_firewall: '/superadmin/superadmin_security/security_ip_firewall',
   security_login_security: '/superadmin/superadmin_security/security_login_security',
   security_mfa: '/superadmin/superadmin_security/security_mfa',

@@ -2,8 +2,8 @@
 // FLOW: Feature/navigation caller -> superadmin_system/system_audit_logs/config/superadmin_audit_logs.url_config.ts -> typed constants -> owning route or API caller.
 /** Public route contract copied from the domain URL map; no backend endpoints are added. */
 const SUPERADMIN_AUDIT_LOGS_OVERVIEW_URLS = {
-  PAGE: "/superadmin/superadmin_system/audit_logs",
-  SCREEN: "/superadmin/superadmin_system/audit_logs",
+  PAGE: "/superadmin/superadmin_system/system_audit_logs",
+  SCREEN: "/superadmin/superadmin_system/system_audit_logs",
   DASHBOARD_OVERVIEW: '/superadmin/superadmin_dashboard/dashboard_overview',
 } as const;
 
