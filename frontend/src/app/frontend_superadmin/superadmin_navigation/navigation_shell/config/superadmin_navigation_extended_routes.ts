@@ -22,8 +22,6 @@ export const SUPERADMIN_NAVIGATION_EXTENDED_ROUTES = {
   analytics_usage_reports: '/superadmin/superadmin_analytics/analytics_usage_reports',
   analytics_security_reports: '/superadmin/superadmin_analytics/analytics_security_reports',
   analytics_financials: '/superadmin/superadmin_analytics/analytics_billing_reports',
-  analytics_library_growth: '/superadmin/superadmin_analytics/analytics_library_growth',
-  analytics_subscription_mix: '/superadmin/superadmin_analytics/analytics_subscription_mix',
 
   // 11 Support & Ticket Management
   superadmin_support: '/superadmin/superadmin_support/support_tickets',
@@ -81,9 +79,9 @@ export const SUPERADMIN_NAVIGATION_EXTENDED_ROUTES = {
   profile_login_history: '/superadmin/superadmin_security/security_login_security',
 
   // Legacy mappings
-  superadmin_accounting: '/superadmin/superadmin_billing/billing_overview',
-  accounting_daily_settlement: '/superadmin/superadmin_billing/billing_overview',
-  accounting_expense_categories: '/superadmin/superadmin_billing/billing_overview',
-  accounting_expenses: '/superadmin/superadmin_billing/billing_overview',
-  accounting_financial_reports: '/superadmin/superadmin_analytics/analytics_financials',
+  superadmin_accounting: '/superadmin/superadmin_billing/billing_invoices',
+  accounting_daily_settlement: '/superadmin/superadmin_billing/billing_invoices',
+  accounting_expense_categories: '/superadmin/superadmin_billing/billing_invoices',
+  accounting_expenses: '/superadmin/superadmin_billing/billing_invoices',
+  accounting_financial_reports: '/superadmin/superadmin_analytics/analytics_billing_reports',
 } as const;

@@ -21,10 +21,11 @@ export const SUPERADMIN_ACCOUNTING_URLS = {
 
 export const SUPERADMIN_ANALYTICS_URLS = {
   PAGE: '/superadmin/superadmin_analytics',
-  FINANCIALS: '/superadmin/superadmin_analytics/analytics_financials',
-  LIBRARY_GROWTH: '/superadmin/superadmin_analytics/analytics_library_growth',
-  OVERVIEW: '/superadmin/superadmin_analytics/analytics_overview',
-  SUBSCRIPTION_MIX: '/superadmin/superadmin_analytics/analytics_subscription_mix',
+  FINANCIALS: '/superadmin/superadmin_analytics/analytics_billing_reports',
+  PLATFORM_REPORTS: '/superadmin/superadmin_analytics/analytics_platform_reports',
+  OVERVIEW: '/superadmin/superadmin_analytics/analytics_platform_reports',
+  USAGE_REPORTS: '/superadmin/superadmin_analytics/analytics_usage_reports',
+  SECURITY_REPORTS: '/superadmin/superadmin_analytics/analytics_security_reports',
 } as const;
 
 export const SUPERADMIN_AUDIT_URLS = {
@@ -45,7 +46,7 @@ export const SUPERADMIN_BACKUP_URLS = {
 export const SUPERADMIN_BILLING_URLS = {
   PAGE: '/superadmin/superadmin_billing',
   INVOICES: '/superadmin/superadmin_billing/billing_invoices',
-  OVERVIEW: '/superadmin/superadmin_billing/billing_overview',
+  OVERVIEW: '/superadmin/superadmin_billing/billing_invoices',
 } as const;
 
 export const SUPERADMIN_COMMUNICATION_URLS = {

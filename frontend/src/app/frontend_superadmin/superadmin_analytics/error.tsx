@@ -29,7 +29,7 @@ export default function SuperadminAnalyticsRootError({
             Try Again
           </button>
           <Link
-            href="/superadmin/superadmin_analytics/analytics_overview"
+            href="/superadmin/superadmin_analytics/analytics_platform_reports"
             className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-300 transition hover:bg-slate-700"
           >
             Return to Analytics

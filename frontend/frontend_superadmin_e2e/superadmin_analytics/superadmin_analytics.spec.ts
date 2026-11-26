@@ -34,20 +34,6 @@ test('direct route loads analytics_security_reports', async ({ page }) => {
   await expect(page.getByText('This page could not be found', { exact: false })).toHaveCount(0);
 });
 
-test('direct route loads analytics_library_growth', async ({ page }) => {
-  await page.goto('/superadmin/superadmin_analytics/analytics_library_growth');
-  await expect(page).toHaveURL(/\/superadmin\/superadmin_analytics\/analytics_library_growth(?:[?#]|$)/);
-  await expect(page.locator('h1, h2, h3, main, [role="status"]').first()).toBeVisible();
-  await expect(page.getByText('This page could not be found', { exact: false })).toHaveCount(0);
-});
-
-test('direct route loads analytics_subscription_mix', async ({ page }) => {
-  await page.goto('/superadmin/superadmin_analytics/analytics_subscription_mix');
-  await expect(page).toHaveURL(/\/superadmin\/superadmin_analytics\/analytics_subscription_mix(?:[?#]|$)/);
-  await expect(page.locator('h1, h2, h3, main, [role="status"]').first()).toBeVisible();
-  await expect(page.getByText('This page could not be found', { exact: false })).toHaveCount(0);
-});
-
 test('legacy route redirects analytics_financials to analytics_billing_reports', async ({ page }) => {
   await page.goto('/superadmin/superadmin_analytics/analytics_financials');
   await expect(page).toHaveURL(/\/superadmin\/superadmin_analytics\/analytics_billing_reports(?:[?#]|$)/);

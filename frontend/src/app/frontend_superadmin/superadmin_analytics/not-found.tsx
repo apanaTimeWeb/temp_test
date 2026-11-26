@@ -10,7 +10,7 @@ export default function SuperadminAnalyticsRootNotFound() {
         </p>
         <div className="mt-6 flex justify-center">
           <Link
-            href="/superadmin/superadmin_analytics/analytics_overview"
+            href="/superadmin/superadmin_analytics/analytics_platform_reports"
             className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500"
           >
             Back to Analytics Overview

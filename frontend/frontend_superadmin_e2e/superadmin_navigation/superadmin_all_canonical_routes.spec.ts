@@ -51,8 +51,6 @@ const canonicalSuperadminRoutes = [
   { domain: 'superadmin_analytics', submodule: 'analytics_billing_reports', route: '/superadmin/superadmin_analytics/analytics_billing_reports' },
   { domain: 'superadmin_analytics', submodule: 'analytics_usage_reports', route: '/superadmin/superadmin_analytics/analytics_usage_reports' },
   { domain: 'superadmin_analytics', submodule: 'analytics_security_reports', route: '/superadmin/superadmin_analytics/analytics_security_reports' },
-  { domain: 'superadmin_analytics', submodule: 'analytics_library_growth', route: '/superadmin/superadmin_analytics/analytics_library_growth' },
-  { domain: 'superadmin_analytics', submodule: 'analytics_subscription_mix', route: '/superadmin/superadmin_analytics/analytics_subscription_mix' },
 
   // 11 Support & Tickets
   { domain: 'superadmin_support', submodule: 'support_tickets', route: '/superadmin/superadmin_support/support_tickets' },
