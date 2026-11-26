@@ -23,7 +23,6 @@ Support ticket queue and complaints view; separate complaint lifecycle remains c
 
 | Leaf submodule | Canonical route | Ownership note |
 |---|---|---|
-| `support_complaints` | `/superadmin/superadmin_support/support_complaints` | Leaf-local documentation trio and local implementation remain authoritative. |
 | `support_tickets` | `/superadmin/superadmin_support/support_tickets` | Leaf-local documentation trio and local implementation remain authoritative. |
 
 ## API and data contracts

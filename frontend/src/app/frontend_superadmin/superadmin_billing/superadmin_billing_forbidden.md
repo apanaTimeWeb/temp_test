@@ -11,4 +11,4 @@
 
 ## Leaf boundary
 
-`billing_invoices`, `billing_overview`
+`billing_invoices`

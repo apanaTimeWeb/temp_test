@@ -3,7 +3,7 @@
 ## STRICT BOUNDARIES & WET DIRECTIVES
 
 1. **Zero Cross-Sub-Module Imports:**
-   - Do NOT import from sibling sub-modules (e.g. `analytics_financials`, `analytics_billing_reports`, `analytics_usage_reports`, `analytics_security_reports`).
+   - Do NOT import from sibling sub-modules (e.g. `analytics_billing_reports`, `analytics_usage_reports`, `analytics_security_reports`).
    - All components, hooks, types, constants, schemas, formatters, and fixtures MUST remain self-contained.
 
 2. **Zero Parent Shared Business Folders:**

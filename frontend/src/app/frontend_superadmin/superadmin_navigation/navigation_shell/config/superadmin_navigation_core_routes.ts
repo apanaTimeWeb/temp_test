@@ -10,8 +10,6 @@ export const SUPERADMIN_NAVIGATION_CORE_ROUTES = {
   libraries_overview: '/superadmin/superadmin_libraries/libraries_overview',
   libraries_onboarding_setup: '/superadmin/superadmin_libraries/libraries_onboarding_setup',
   libraries_profile_configuration: '/superadmin/superadmin_libraries/libraries_profile_configuration',
-  libraries_student_bulk_import: '/superadmin/superadmin_libraries/libraries_overview',
-  libraries_student_smart_id: '/superadmin/superadmin_libraries/libraries_overview',
 
   // 03 Branch Management
   superadmin_branches: '/superadmin/superadmin_branches/branches_overview',
@@ -19,11 +17,8 @@ export const SUPERADMIN_NAVIGATION_CORE_ROUTES = {
 
   // 04 Admin & User Management
   superadmin_users: '/superadmin/superadmin_users/users_directory',
-  users_overview: '/superadmin/superadmin_users/users_directory',
   users_directory: '/superadmin/superadmin_users/users_directory',
   users_roles_permissions: '/superadmin/superadmin_users/users_roles_permissions',
-  users_member_referrals: '/superadmin/superadmin_users/users_directory',
-  users_member_trust_score: '/superadmin/superadmin_users/users_directory',
 
   // 05 Plans & Subscription
   superadmin_plans: '/superadmin/superadmin_plans/plans_pricing_catalog',
@@ -35,7 +30,6 @@ export const SUPERADMIN_NAVIGATION_CORE_ROUTES = {
 
   // 06 Billing & Payments
   superadmin_billing: '/superadmin/superadmin_billing/billing_invoices',
-  billing_overview: '/superadmin/superadmin_billing/billing_invoices',
   billing_invoices: '/superadmin/superadmin_billing/billing_invoices',
 
   // 07 Feature & Module Control

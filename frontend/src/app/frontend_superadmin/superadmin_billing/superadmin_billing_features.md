@@ -25,7 +25,6 @@ Billing overview and invoice workflows; precise invoice entity ownership must fo
 | Leaf submodule | Canonical route | Ownership note |
 |---|---|---|
 | `billing_invoices` | `/superadmin/superadmin_billing/billing_invoices` | Leaf-local documentation trio and local implementation remain authoritative. |
-| `billing_overview` | `/superadmin/superadmin_billing/billing_overview` | Leaf-local documentation trio and local implementation remain authoritative. |
 
 ## API and data contracts
 

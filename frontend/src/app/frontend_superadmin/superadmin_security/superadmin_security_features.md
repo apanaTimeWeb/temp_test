@@ -24,7 +24,7 @@ Global security policy, threats, API keys, firewall and session-related views; u
 | Leaf submodule | Canonical route | Ownership note |
 |---|---|---|
 | `security_active_sessions` | `/superadmin/superadmin_security/security_active_sessions` | Leaf-local documentation trio and local implementation remain authoritative. |
-| `security_api_keys` | `/superadmin/superadmin_security/security_api_keys` | Leaf-local documentation trio and local implementation remain authoritative. |
+| `security_audit_logs` | `/superadmin/superadmin_security/security_audit_logs` | Canonical sidebar route adapter delegating presentation to `SuperadminAuditLogsOverviewScreen`. |
 | `security_ip_firewall` | `/superadmin/superadmin_security/security_ip_firewall` | Leaf-local documentation trio and local implementation remain authoritative. |
 | `security_login_security` | `/superadmin/superadmin_security/security_login_security` | Leaf-local documentation trio and local implementation remain authoritative. |
 | `security_mfa` | `/superadmin/superadmin_security/security_mfa` | Leaf-local documentation trio and local implementation remain authoritative. |

@@ -25,8 +25,7 @@ Global settings, appearance, integrations, storage, maintenance mode, branding a
 |---|---|---|
 | `settings_general` | `/superadmin/superadmin_settings/settings_general` | Leaf-local documentation trio and local implementation remain authoritative. |
 | `settings_branding` | `/superadmin/superadmin_settings/settings_branding` | Leaf-local documentation trio and local implementation remain authoritative. |
-| `settings_overview` | `/superadmin/superadmin_settings/settings_overview` | Leaf-local documentation trio and local implementation remain authoritative. |
-| `settings_library_configuration` | `/superadmin/superadmin_settings/settings_general?view=settings_library_configuration` | Leaf-local documentation trio and local implementation remain authoritative. |
+| `settings_library_configuration` | `/superadmin/superadmin_settings/settings_library_configuration` | Leaf-local documentation trio and local implementation remain authoritative. |
 
 ## API and data contracts
 

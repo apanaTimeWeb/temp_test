@@ -11,4 +11,4 @@
 
 ## Leaf boundary
 
-`support_complaints`, `support_tickets`
+`support_tickets`

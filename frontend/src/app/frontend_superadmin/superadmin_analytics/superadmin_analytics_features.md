@@ -24,10 +24,10 @@ Platform-level reports including financial trends, subscription mix and Library 
 
 | Leaf submodule | Canonical route | Ownership note |
 |---|---|---|
-| `analytics_financials` | `/superadmin/superadmin_analytics/analytics_financials` | Leaf-local documentation trio and local implementation remain authoritative. |
-| `analytics_library_growth` | `/superadmin/superadmin_analytics/analytics_library_growth` | Leaf-local documentation trio and local implementation remain authoritative. |
-| `analytics_overview` | `/superadmin/superadmin_analytics/analytics_overview` | Leaf-local documentation trio and local implementation remain authoritative. |
-| `analytics_subscription_mix` | `/superadmin/superadmin_analytics/analytics_subscription_mix` | Leaf-local documentation trio and local implementation remain authoritative. |
+| `analytics_billing_reports` | `/superadmin/superadmin_analytics/analytics_billing_reports` | Leaf-local documentation trio and local implementation remain authoritative. |
+| `analytics_platform_reports` | `/superadmin/superadmin_analytics/analytics_platform_reports` | Leaf-local documentation trio and local implementation remain authoritative. |
+| `analytics_security_reports` | `/superadmin/superadmin_analytics/analytics_security_reports` | Leaf-local documentation trio and local implementation remain authoritative. |
+| `analytics_usage_reports` | `/superadmin/superadmin_analytics/analytics_usage_reports` | Leaf-local documentation trio and local implementation remain authoritative. |
 
 ## API and data contracts
 
