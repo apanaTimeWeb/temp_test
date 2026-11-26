@@ -1,0 +1,23 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://127.0.0.1:3000",
+      "localStorage": [
+        {
+          "name": "user",
+          "value": "{\"id\":\"superadmin-001\",\"name\":\"Super Admin\",\"email\":\"superadmin@library.com\",\"role\":\"superadmin\"}"
+        }
+      ]
+    },
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "user",
+          "value": "{\"id\":\"superadmin-001\",\"name\":\"Super Admin\",\"email\":\"superadmin@library.com\",\"role\":\"superadmin\"}"
+        }
+      ]
+    }
+  ]
+}
