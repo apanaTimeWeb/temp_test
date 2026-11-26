@@ -1,4 +1,4 @@
-/** Canonical UI route registry for the nine-domain Admin role. No legacy path aliases are exported. */
+/** Canonical UI route registry for the active eight-domain Admin role. No legacy path aliases are exported. */
 export const ADMIN_ROUTES = {
   PREFIX: '/admin',
   DASHBOARD: '/admin/admin_dashboard',

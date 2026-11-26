@@ -235,7 +235,7 @@ export function AdminCommunicationNoticesPage() {
         const isEmerg = p.data.priority === 'EMERGENCY' || p.data.isEmergency;
         return (
           <div className="flex items-center gap-1.5 flex-wrap mt-2">
-            <span className={`font-semibold ${isEmerg ? 'text-rose-400 font-bold' : 'text-primary'}`}>{p.value}</span>
+            <span className={`font-semibold ${isEmerg ? 'text-rose-400 font-bold' : 'text-primary'}`}>{p.data.title}</span>
             {isEmerg && (
               <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-extrabold bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse">
                 🚨 EMERGENCY
@@ -288,7 +288,7 @@ export function AdminCommunicationNoticesPage() {
         );
       },
     },
-    { field: 'message', headerName: t('NOTICE_COLUMN_MESSAGE'), flex: 1, minWidth: 230, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="text-text-secondary text-sm truncate block w-full pt-1" title={p.value}>{p.value}</span> },
+    { field: 'message', headerName: t('NOTICE_COLUMN_MESSAGE'), flex: 1, minWidth: 230, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="text-text-secondary text-sm truncate block w-full pt-1" title={p.data.message}>{p.data.message}</span> },
     { 
       field: 'status', 
       headerName: t('NOTICE_COLUMN_STATUS'),
@@ -301,9 +301,9 @@ export function AdminCommunicationNoticesPage() {
         </span>
       )
     },
-    { field: 'validTill', headerName: t('NOTICE_COLUMN_VALID_TILL'), width: 130, sortable: true, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-mono text-text-secondary text-sm">{p.value}</span> },
-    { field: 'postedBy', headerName: t('NOTICE_COLUMN_POSTED_BY'), width: 130, sortable: true, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="text-text-secondary text-sm">{p.value}</span> },
-    { field: 'postedDate', headerName: t('NOTICE_COLUMN_POSTED_DATE'), width: 130, sortable: true, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-mono text-text-secondary text-sm">{p.value}</span> },
+    { field: 'validTill', headerName: t('NOTICE_COLUMN_VALID_TILL'), width: 130, sortable: true, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-mono text-text-secondary text-sm">{p.data.validTill}</span> },
+    { field: 'postedBy', headerName: t('NOTICE_COLUMN_POSTED_BY'), width: 130, sortable: true, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="text-text-secondary text-sm">{p.data.postedBy}</span> },
+    { field: 'postedDate', headerName: t('NOTICE_COLUMN_POSTED_DATE'), width: 130, sortable: true, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-mono text-text-secondary text-sm">{p.data.postedDate}</span> },
     {
       headerName: t('NOTICE_COLUMN_ACTIONS'),
       width: 150,

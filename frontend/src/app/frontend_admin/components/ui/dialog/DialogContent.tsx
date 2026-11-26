@@ -9,11 +9,13 @@ import { Children,isValidElement,useEffect,useRef,type MouseEvent,type ReactNode
 
 function containsDialogSlot(children: ReactNode, slot: typeof DialogTitle | typeof DialogDescription): boolean {
   let found = false;
-  const targetName = (slot as any)?.name ?? (slot as any)?.displayName;
+  const slotMeta = slot as { name?: string; displayName?: string };
+  const targetName = slotMeta.name ?? slotMeta.displayName;
   Children.forEach(children, (child) => {
     if (!isValidElement(child) || found) return;
-    const type = child.type as any;
-    if (type === slot || (targetName && (type?.name === targetName || type?.displayName === targetName))) {
+    const type = child.type as string | { name?: string; displayName?: string };
+    const typeObj = typeof type === 'object' || typeof type === 'function' ? (type as { name?: string; displayName?: string }) : null;
+    if (type === slot || (targetName && (typeObj?.name === targetName || typeObj?.displayName === targetName))) {
       found = true;
       return;
     }

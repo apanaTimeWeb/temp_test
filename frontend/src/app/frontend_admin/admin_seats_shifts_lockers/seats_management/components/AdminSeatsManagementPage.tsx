@@ -23,8 +23,8 @@ import { useEffect,useMemo,useState } from 'react';
 import { toast } from 'sonner';
 
 
-function renderSeatNoCell({ value }: { value: string }) {
-  return <span className="font-mono text-sm font-semibold text-primary">{value}</span>;
+function renderSeatNoCell({ data }: { data: Seat }) {
+  return <span className="font-mono text-sm font-semibold text-primary">{data.seatNo}</span>;
 }
 
 function renderBranchCell({ data }: { data: Seat }) {
@@ -209,7 +209,8 @@ export function AdminSeatsManagementPage() {
       headerName: t('status'),
       flex: 1.2,
       sortable: true,
-      cellRenderer: ({ value }: { value: string }) => {
+      cellRenderer: ({ data }) => {
+        const value = data.status;
         const statusKey = ADMIN_SEATS_MANAGEMENT_STATUS_OPTIONS.find((option) => option.value === value)?.labelKey ?? 'statusUnknown';
         return (
           <span data-testid="admin_seats-page-state-001" className={ADMIN_SEATS_SEAT_STATUS_BADGE_CLASS[value as SeatStatus] ?? 'inline-flex min-h-6 items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs font-medium border-border bg-surface-highlight text-text-secondary'}>

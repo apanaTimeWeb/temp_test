@@ -1,4 +1,5 @@
 import { ApiResponseEnvelopeSchema,ApiResponseError,nonEmptyApiMessage } from '@/lib/apiSchema';
+import { readBrowserStorageItem } from '@/lib/browserStorage';
 import { frontendRuntimeConfig } from '@/lib/env';
 export type { ApiResponse,PaginationMeta,ValidationErrorItem } from '@/lib/apiSchema';
 
@@ -49,8 +50,8 @@ function resolveRequestBranchScope(): string | null {
   try {
     const urlParam = new URLSearchParams(window.location.search).get('branch');
     if (urlParam) return urlParam;
-    const stored = window.localStorage.getItem('admin_selected_branch');
-    if (stored) return stored;
+    const storedResult = readBrowserStorageItem('admin_selected_branch');
+    if (storedResult.available && storedResult.value) return storedResult.value;
     const cookieMatch = document.cookie.match(/(^| )admin_selected_branch=([^;]+)/);
     if (cookieMatch && cookieMatch[2]) return decodeURIComponent(cookieMatch[2]);
   } catch {

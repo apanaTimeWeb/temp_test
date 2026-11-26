@@ -29,6 +29,9 @@ vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => translations[key] ?? key,
   useLocale: () => 'en',
 }));
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ replace: vi.fn(), push: vi.fn() }),
+}));
 vi.mock('next/link', () => ({ default: ({ href, children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => <a href={href} {...props}>{children}</a> }));
 vi.mock('@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminShellThemeToggle', () => ({ AdminShellThemeToggle: () => <button type="button">Theme</button> }));
 const { toastMock } = vi.hoisted(() => {

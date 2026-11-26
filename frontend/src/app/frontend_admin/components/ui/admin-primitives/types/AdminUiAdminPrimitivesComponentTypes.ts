@@ -1,4 +1,5 @@
-import type { ButtonHTMLAttributes,ComponentType,HTMLAttributes,InputHTMLAttributes,LabelHTMLAttributes,ReactNode } from 'react';
+import type { LucideIcon } from 'lucide-react';
+import type { ButtonHTMLAttributes,HTMLAttributes,InputHTMLAttributes,LabelHTMLAttributes,ReactNode } from 'react';
 
 export type AdminSystemBadgeVariant = "default" | "primary" | "success" | "warning" | "danger" | "info" | "outline";
 
@@ -22,7 +23,7 @@ export interface AdminSystemCardHeaderProps extends HTMLAttributes<HTMLDivElemen
 
 export interface AdminSystemCardTitleProps extends HTMLAttributes<HTMLHeadingElement> { children?: ReactNode; }
 
-export interface AdminEmptyStateProps { title: string; description: string; icon?: ComponentType<any>; action?: ReactNode; className?: string; showIcon?: boolean; testId?: string; iconTestId?: string; titleTestId?: string; }
+export interface AdminEmptyStateProps { title: string; description: string; icon?: LucideIcon; action?: ReactNode; className?: string; showIcon?: boolean; testId?: string; iconTestId?: string; titleTestId?: string; }
 
 export interface AdminErrorBoundaryProps { children: ReactNode; title: string; description: string; retryLabel: string; className?: string; resetKeys?: readonly unknown[]; onReset?: () => void; }
 

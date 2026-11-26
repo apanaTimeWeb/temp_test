@@ -117,56 +117,6 @@ const ICONS: Record<string, LucideIcon> = {
   'file-text': FileText,
 };
 
-/* ---------- SCOPED ADMIN LOADER STYLE (Aurora Cyber-Luxury) ---------- */
-const ADMIN_LOADER_CSS = `
-  .library-loader-box {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .library-loader-box .loader-aura {
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    filter: blur(16px);
-    opacity: 0.6;
-    pointer-events: none;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.35) 0%, rgba(139, 92, 246, 0.2) 45%, rgba(34, 211, 238, 0.1) 70%, transparent 85%);
-  }
-  .library-loader-box .loader-ring {
-    width: 100%;
-    height: 100%;
-    animation: spinCW 1.4s linear infinite;
-  }
-  .library-loader-box .inner-svg {
-    position: absolute;
-    inset: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    pointer-events: none;
-    animation: spinCCW 2.4s linear infinite;
-  }
-  .library-loader-box .loader-icon {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    user-select: none;
-    color: #FFFFFF !important;
-  }
-  .library-loader-box .loader-icon svg {
-    width: 45%;
-    height: 45%;
-    filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.7)) drop-shadow(0 0 4px rgba(34, 211, 238, 0.5)) !important;
-  }
-  .library-loader-box.button-loader .loader-aura {
-    opacity: 0.25;
-  }
-`;
-
 /* ---------- GRADIENT DEFS ---------- */
 const AdminGradientDefs = React.memo(function AdminGradientDefs() {
   return (
@@ -212,7 +162,6 @@ export function AdminLoader({
       aria-live="polite"
       aria-busy="true"
     >
-      <style dangerouslySetInnerHTML={{ __html: ADMIN_LOADER_CSS }} />
       <span className="sr-only">{screenReaderText || label}</span>
       <AdminGradientDefs />
       <div className="loader-aura" aria-hidden="true" />
@@ -269,7 +218,7 @@ export function AdminPageLoader({
     >
       <AdminLoader {...props} />
       {message && (
-        <p className="text-sm font-medium text-slate-400 tracking-wide animate-pulse">
+        <p className="text-sm font-medium text-text-secondary tracking-wide motion-safe:animate-pulse">
           {message}
         </p>
       )}

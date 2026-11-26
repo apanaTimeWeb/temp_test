@@ -4,6 +4,7 @@ ALL_BRANCHES_ID,
 DEFAULT_ADMIN_BRANCHES,
 type AdminBranchItem,
 } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBranchConstants';
+import { readBrowserStorageItem,writeBrowserStorageItem } from '@/lib/browserStorage';
 import { createContext,useContext,useEffect,useMemo,useState,type ReactNode } from 'react';
 
 export interface AdminBranchContextValue {
@@ -35,9 +36,9 @@ function resolveInitialBranch(): string {
         return urlParam;
       }
     }
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (stored && (stored === ALL_BRANCHES_ID || DEFAULT_ADMIN_BRANCHES.some((b) => b.id === stored))) {
-      return stored;
+    const storedResult = readBrowserStorageItem(STORAGE_KEY);
+    if (storedResult.available && storedResult.value && (storedResult.value === ALL_BRANCHES_ID || DEFAULT_ADMIN_BRANCHES.some((b) => b.id === storedResult.value))) {
+      return storedResult.value;
     }
     const cookieMatch = document.cookie.match(new RegExp('(^| )' + STORAGE_KEY + '=([^;]+)'));
     if (cookieMatch && cookieMatch[2]) {
@@ -76,7 +77,11 @@ export function AdminBranchProvider({
     setSelectedBranchIdState(branchId);
     if (typeof window !== 'undefined') {
       try {
-        window.localStorage.setItem(STORAGE_KEY, branchId);
+        try {
+          writeBrowserStorageItem(STORAGE_KEY, branchId);
+        } catch {
+          // Storage disabled in restricted/incognito contexts; cookie/URL sync still applies
+        }
         document.cookie = `${STORAGE_KEY}=${encodeURIComponent(branchId)}; path=/; max-age=31536000; SameSite=Lax`;
         const url = new URL(window.location.href);
         if (branchId === ALL_BRANCHES_ID) {

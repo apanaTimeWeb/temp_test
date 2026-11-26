@@ -100,7 +100,7 @@ export function buildAdminCommunicationWhatsappLogColumns(
                 {initials}
               </div>
               <div className="min-w-0">
-                <span className="font-bold text-xs text-white truncate block">{p.value}</span>
+                <span className="font-bold text-xs text-white truncate block">{p.data.student}</span>
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <span className="font-mono text-[11px] text-emerald-400/90 font-medium">{p.data.phone}</span>
                   {p.data.branch && (

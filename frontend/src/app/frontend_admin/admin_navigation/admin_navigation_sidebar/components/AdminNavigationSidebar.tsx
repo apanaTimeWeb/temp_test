@@ -4,7 +4,15 @@
 import {
 ADMIN_NAVIGATION_GROUPS,
 } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_navigation_constants';
+import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 import type { AdminNavigationSidebarProps } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/types/AdminNavigationSidebarComponentTypes';
+import {
+isGroupActive,
+isSubmoduleActive,
+} from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/utils/AdminNavigationSidebarPathUtils';
+import { AdminNavigationSidebarCollapsedNav } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/components/AdminNavigationSidebarCollapsedNav';
+import { AdminNavigationSidebarNavGroup } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/components/AdminNavigationSidebarNavGroup';
+import { AdminNavigationSidebarSearch } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/components/AdminNavigationSidebarSearch';
 import {
 BookOpen,
 Menu,
@@ -15,13 +23,6 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback,useEffect,useMemo,useRef,useState } from 'react';
-import {
-isGroupActive,
-isSubmoduleActive,
-} from '../utils/AdminNavigationSidebarPathUtils';
-import { AdminNavigationSidebarCollapsedNav } from './AdminNavigationSidebarCollapsedNav';
-import { AdminNavigationSidebarNavGroup } from './AdminNavigationSidebarNavGroup';
-import { AdminNavigationSidebarSearch } from './AdminNavigationSidebarSearch';
 
 /**
  * @description Renders role-owned navigation, interactive search, expandable submodule accordions, and responsive drawer behavior.
@@ -180,20 +181,20 @@ export function AdminNavigationSidebar({
           </button>
           {expanded && (
             <Link
-              href="/admin/admin_dashboard"
+              href={ADMIN_ROUTES.DASHBOARD}
               className="admin-sidebar-brand-link group"
               onClick={mobileOpen ? closeMobile : undefined}
             >
               <span className="admin-sidebar-brand-mark" aria-hidden="true">
-                <BookOpen size={18} strokeWidth={2.2} className="text-white transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]" />
+                <BookOpen size={18} strokeWidth={2.2} className="text-on-primary motion-safe:transition-transform motion-safe:duration-slow group-hover:scale-110" />
               </span>
               <div className="flex flex-col min-w-0 justify-center">
                 <span className="admin-sidebar-brand-name flex items-center leading-none">
-                  <span className="text-white font-extrabold tracking-tight">Library</span>
-                  <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent font-black ml-0.5">OS</span>
+                  <span className="text-text-primary font-extrabold tracking-tight">Library</span>
+                  <span className="text-primary font-black ml-0.5">OS</span>
                 </span>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400 leading-none mt-1">
-                  Admin
+                <span className="text-[10px] font-bold uppercase tracking-wider text-primary leading-none mt-1">
+                  {t('ADMINISTRATOR') ?? 'Admin'}
                 </span>
               </div>
             </Link>

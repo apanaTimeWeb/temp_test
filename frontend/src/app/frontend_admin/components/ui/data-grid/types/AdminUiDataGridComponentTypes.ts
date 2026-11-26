@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
 
-export interface DataGridCellParams<TRow extends object = any> {
-  value: any;
+export interface DataGridCellParams<TRow extends object = Record<string, unknown>, TValue = unknown> {
+  value: TValue;
   data: TRow;
 }
 
-export interface DataGridColumn<TRow extends object = any> {
+export interface DataGridColumn<TRow extends object = Record<string, unknown>> {
   field?: Extract<keyof TRow, string>;
   headerName?: string;
   width?: number;
@@ -13,8 +13,8 @@ export interface DataGridColumn<TRow extends object = any> {
   minWidth?: number;
   sortable?: boolean;
   cellClass?: string;
-  valueFormatter?: (params: any) => ReactNode;
-  cellRenderer?: (params: any) => ReactNode;
+  valueFormatter?: (params: DataGridCellParams<TRow>) => ReactNode;
+  cellRenderer?: (params: DataGridCellParams<TRow>) => ReactNode;
 }
 
 export type AdminUiDataGridLocale = 'en' | 'hi';
