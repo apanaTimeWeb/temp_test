@@ -1,6 +1,5 @@
 'use client';
 
-import AdminProfileActiveBranchesPanel from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminProfileActiveBranchesPanel';
 import AdminProfileEditForm from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfileEditForm';
 import AdminProfilePasswordForm from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfilePasswordForm';
 import AdminSettingsProfileReadOnlyPanels from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfileReadOnlyPanels';
@@ -8,11 +7,12 @@ import AdminSettingsProfileUnsavedChangesDialog from '@/app/frontend_admin/admin
 import { ADMIN_PROFILE_NAVIGATION_ITEMS } from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.url_config';
 import useAdminSettingsProfileUnsavedChangesGuard from '@/app/frontend_admin/admin_settings/settings_profile/hooks/useAdminSettingsProfileUnsavedChangesGuard';
 import type { AdminProfileNavigationItem, AdminProfileTab } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
+import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { BellRing, Lock, ShieldAlert, User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export default function AdminSettingsProfileMain() {
   const t = useTranslations('ADMIN_PROFILE');
@@ -27,6 +27,11 @@ export default function AdminSettingsProfileMain() {
   const activeTab: AdminProfileTab = localActiveTab ?? (ADMIN_PROFILE_NAVIGATION_ITEMS.some((item) => item.id === requestedTab)
     ? requestedTab as AdminProfileTab
     : 'profile');
+  useEffect(() => {
+    if (requestedTab === 'branches') {
+      router.replace(ADMIN_ROUTES.SETTINGS_BRANCHES);
+    }
+  }, [requestedTab, router]);
   const setActiveTab = useCallback((tab: AdminProfileTab) => {
     setLocalActiveTab(tab);
     const next = new URLSearchParams(searchParams.toString());
@@ -152,7 +157,6 @@ export default function AdminSettingsProfileMain() {
               {activeTab === 'profile' && <AdminSettingsProfileReadOnlyPanels view="profile" />}
               {activeTab === 'subscription' && <AdminSettingsProfileReadOnlyPanels view="subscription" />}
               {activeTab === 'edit' && <AdminProfileEditForm onDirtyChange={setProfileDraftDirty} />}
-              {activeTab === 'branches' && <AdminProfileActiveBranchesPanel />}
               {activeTab === 'password' && (
                 <div className="space-y-6">
                   <AdminProfilePasswordForm onDirtyChange={setProfileDraftDirty} />

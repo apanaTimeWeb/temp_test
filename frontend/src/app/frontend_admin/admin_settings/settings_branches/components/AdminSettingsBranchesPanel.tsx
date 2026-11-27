@@ -1,31 +1,23 @@
 'use client';
 
-import { AdminProfileActiveBranchesMobileList } from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminProfileActiveBranchesMobileList';
-import {
-  AdminProfileActiveBranchesTable,
-  type AdminBranchSortField,
-} from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminProfileActiveBranchesTable';
-import {
-  AdminProfileBranchEditModal,
-  type AdminBranchEditFormValues,
-} from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminProfileBranchEditModal';
-import {
-  ADMIN_PROFILE_ACTIVE_BRANCHES,
-  type AdminProfileActiveBranch,
-} from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.demo_data';
+import { AdminSettingsBranchesEditModal, type AdminBranchEditFormValues } from '@/app/frontend_admin/admin_settings/settings_branches/components/AdminSettingsBranchesEditModal';
+import { AdminSettingsBranchesMobileList } from '@/app/frontend_admin/admin_settings/settings_branches/components/AdminSettingsBranchesMobileList';
+import { AdminSettingsBranchesTable } from '@/app/frontend_admin/admin_settings/settings_branches/components/AdminSettingsBranchesTable';
+import { ADMIN_SETTINGS_BRANCHES_DEMO_DATA } from '@/app/frontend_admin/admin_settings/settings_branches/config/admin_settings_branches.demo_data';
+import type { AdminBranchSortField, AdminSettingsBranchRecord } from '@/app/frontend_admin/admin_settings/settings_branches/types/AdminSettingsBranchesTypes';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import { Building2, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-export default function AdminProfileActiveBranchesPanel() {
-  const [branches, setBranches] = useState<AdminProfileActiveBranch[]>(() => ADMIN_PROFILE_ACTIVE_BRANCHES);
+export default function AdminSettingsBranchesPanel() {
+  const [branches, setBranches] = useState<AdminSettingsBranchRecord[]>(() => ADMIN_SETTINGS_BRANCHES_DEMO_DATA);
   const [search, setSearch] = useState('');
   const [sortField, setSortField] = useState<AdminBranchSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const [editingBranch, setEditingBranch] = useState<AdminProfileActiveBranch | null>(null);
+  const [editingBranch, setEditingBranch] = useState<AdminSettingsBranchRecord | null>(null);
 
   const toggleSort = (field: AdminBranchSortField) => {
     setPage(0);
@@ -163,21 +155,8 @@ export default function AdminProfileActiveBranchesPanel() {
           </div>
         ) : (
           <>
-            <AdminProfileActiveBranchesMobileList
-              rows={visibleRows}
-              onEdit={setEditingBranch}
-              onToggleStatus={handleToggleBranchStatus}
-            />
-
-            <AdminProfileActiveBranchesTable
-              rows={visibleRows}
-              sortField={sortField}
-              sortDirection={sortDirection}
-              onToggleSort={toggleSort}
-              onEdit={setEditingBranch}
-              onToggleStatus={handleToggleBranchStatus}
-            />
-
+            <AdminSettingsBranchesMobileList rows={visibleRows} onEdit={setEditingBranch} onToggleStatus={handleToggleBranchStatus} />
+            <AdminSettingsBranchesTable rows={visibleRows} sortField={sortField} sortDirection={sortDirection} onToggleSort={toggleSort} onEdit={setEditingBranch} onToggleStatus={handleToggleBranchStatus} />
             <AdminTablePagination
               page={safePage}
               pageSize={pageSize}
@@ -193,7 +172,7 @@ export default function AdminProfileActiveBranchesPanel() {
         )}
       </section>
 
-      <AdminProfileBranchEditModal
+      <AdminSettingsBranchesEditModal
         branch={editingBranch}
         open={editingBranch !== null}
         onClose={() => setEditingBranch(null)}

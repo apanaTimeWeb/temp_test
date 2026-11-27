@@ -1,10 +1,10 @@
 'use client';
 // Responsibility: Displays comprehensive member profile with tabs for Profile, Attendance, Membership, Renewal, Payments, Lost/Damaged, Activity, and Documents.
 
-import { AdminMembersDirectoryDetailModals } from '@/app/frontend_admin/admin_members/members_directory/components/detail/AdminMembersDirectoryDetailModals';
-import { AdminMembersDirectoryDetailOperationsTabs } from '@/app/frontend_admin/admin_members/members_directory/components/detail/AdminMembersDirectoryDetailOperationsTabs';
-import { AdminMembersDirectoryDetailPaymentTab } from '@/app/frontend_admin/admin_members/members_directory/components/detail/AdminMembersDirectoryDetailPaymentTab';
-import { AdminMembersDirectoryDetailProfileTab } from '@/app/frontend_admin/admin_members/members_directory/components/detail/AdminMembersDirectoryDetailProfileTab';
+import { AdminMembersDirectoryDetailModals } from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryDetailModals';
+import { AdminMembersDirectoryDetailOperationsTabs } from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryDetailOperationsTabs';
+import { AdminMembersDirectoryDetailPaymentTab } from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryDetailPaymentTab';
+import { AdminMembersDirectoryDetailProfileTab } from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryDetailProfileTab';
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import { formatAdminMembersDate } from '@/app/frontend_admin/admin_members/members_directory/utils/AdminMembersDirectoryExportUtils';
 import {

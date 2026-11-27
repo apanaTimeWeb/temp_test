@@ -59,6 +59,7 @@ export const ADMIN_NAV_SUBMODULE_COLORS: Record<string, AdminNavColorMeta> = {
 
   // Settings
   SUBMODULE_SETTINGS_PROFILE: { iconColor: '#34d399', bg: 'rgba(52, 211, 153, 0.14)' },
+  SUBMODULE_SETTINGS_BRANCHES: { iconColor: '#60a5fa', bg: 'rgba(96, 165, 250, 0.14)' },
   SUBMODULE_SETTINGS_SECURITY: { iconColor: '#10b981', bg: 'rgba(16, 185, 129, 0.14)' },
   SUBMODULE_SETTINGS_SUPPORT: { iconColor: '#38bdf8', bg: 'rgba(56, 189, 248, 0.14)' },
 };

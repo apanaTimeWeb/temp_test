@@ -1,6 +1,6 @@
 /** Canonical module routes/API endpoints and cohesive module-owned configuration constants. */
 import type { AdminProfileNavigationItem } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
-import { Building2,Crown,Edit3,Key,User } from 'lucide-react';
+import { Crown, Edit3, Key, User } from 'lucide-react';
 
 /** Canonical route and API contract for admin_settings_profile; API entries are source-observed only. */
 export const ADMIN_SETTINGS_PROFILE_ROUTES = {
@@ -26,7 +26,6 @@ export const ADMIN_PROFILE_NAVIGATION_ITEMS: readonly AdminProfileNavigationItem
   { id: 'profile', labelKey: 'NAV_PROFILE', label: 'Profile Overview', icon: User },
   { id: 'subscription', labelKey: 'NAV_SUBSCRIPTION', label: 'Platform Subscription', icon: Crown },
   { id: 'edit', labelKey: 'NAV_EDIT', label: 'Edit Profile', icon: Edit3 },
-  { id: 'branches', labelKey: 'NAV_BRANCHES', label: 'Active Branches', icon: Building2 },
   { id: 'password', labelKey: 'NAV_PASSWORD', label: 'Change Password', icon: Key },
 ] as const;
 

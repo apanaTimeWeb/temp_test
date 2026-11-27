@@ -37,6 +37,7 @@ export const ADMIN_ROUTES = {
   SETTINGS_SECURITY: '/admin/admin_settings/settings_security',
   SETTINGS_SUPPORT: '/admin/admin_settings/settings_support',
   SETTINGS_PROFILE: '/admin/admin_settings/settings_profile',
+  SETTINGS_BRANCHES: '/admin/admin_settings/settings_branches',
   COMMUNICATION_NOTICES: '/admin/admin_communication/communication_notices',
   COMMUNICATION_COMPLAINTS: '/admin/admin_communication/communication_complaints',
   COMMUNICATION_NOTIFICATION_CENTER: '/admin/admin_communication/communication_notification_center',

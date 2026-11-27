@@ -1,36 +1,28 @@
 'use client';
 
-import type { AdminProfileActiveBranch } from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.demo_data';
-import {
-  ArrowDown,
-  ArrowUp,
-  ArrowUpDown,
-  Clock,
-  Edit3,
-  Phone,
-  Power,
-  Users,
-} from 'lucide-react';
+import type {
+  AdminBranchSortField,
+  AdminSettingsBranchRecord,
+} from '@/app/frontend_admin/admin_settings/settings_branches/types/AdminSettingsBranchesTypes';
+import { ArrowDown, ArrowUp, ArrowUpDown, Clock, Edit3, Phone, Power, Users } from 'lucide-react';
 
-export type AdminBranchSortField = 'name' | 'manager' | 'code' | 'status';
-
-interface AdminProfileActiveBranchesTableProps {
-  rows: AdminProfileActiveBranch[];
+interface AdminSettingsBranchesTableProps {
+  rows: AdminSettingsBranchRecord[];
   sortField: AdminBranchSortField | null;
   sortDirection: 'asc' | 'desc';
   onToggleSort: (field: AdminBranchSortField) => void;
-  onEdit: (branch: AdminProfileActiveBranch) => void;
+  onEdit: (branch: AdminSettingsBranchRecord) => void;
   onToggleStatus: (branchId: string) => void;
 }
 
-export function AdminProfileActiveBranchesTable({
+export function AdminSettingsBranchesTable({
   rows,
   sortField,
   sortDirection,
   onToggleSort,
   onEdit,
   onToggleStatus,
-}: AdminProfileActiveBranchesTableProps) {
+}: AdminSettingsBranchesTableProps) {
   const renderSortableHeader = (field: AdminBranchSortField, label: string) => {
     const isActive = sortField === field;
     return (
@@ -64,10 +56,10 @@ export function AdminProfileActiveBranchesTable({
             {renderSortableHeader('name', 'Branch')}
             {renderSortableHeader('manager', 'Manager')}
             <th scope="col" className="px-4 py-3 whitespace-nowrap text-left text-xs uppercase tracking-wider text-text-secondary font-semibold">
-              Address & Timings
+              Address &amp; Timings
             </th>
             <th scope="col" className="px-4 py-3 whitespace-nowrap text-left text-xs uppercase tracking-wider text-text-secondary font-semibold">
-              Capacity & Contact
+              Capacity &amp; Contact
             </th>
             {renderSortableHeader('status', 'Status')}
             <th scope="col" className="px-4 py-3 whitespace-nowrap text-right text-xs uppercase tracking-wider text-text-secondary font-semibold">

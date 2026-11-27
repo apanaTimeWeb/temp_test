@@ -33,6 +33,7 @@ const canonicalRoutes = [
   { domain: 'admin_staff', submodule: 'staff_attendance', route: '/admin/admin_staff/staff_attendance' },
   { domain: 'admin_staff', submodule: 'staff_payroll', route: '/admin/admin_staff/staff_payroll' },
   { domain: 'admin_settings', submodule: 'settings_profile', route: '/admin/admin_settings/settings_profile' },
+  { domain: 'admin_settings', submodule: 'settings_branches', route: '/admin/admin_settings/settings_branches' },
   { domain: 'admin_settings', submodule: 'settings_security', route: '/admin/admin_settings/settings_security' },
   { domain: 'admin_settings', submodule: 'settings_support', route: '/admin/admin_settings/settings_support' },
 ] as const;

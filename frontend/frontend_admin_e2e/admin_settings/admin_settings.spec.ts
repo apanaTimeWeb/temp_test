@@ -22,3 +22,9 @@ test('direct route loads settings_profile', async ({ page }) => {
   await expect(page).toHaveURL(/\/admin\/admin_settings\/settings_profile(?:[?#]|$)/);
   await expect(page.getByRole('heading').first()).toBeVisible();
 });
+
+test('direct route loads settings_branches', async ({ page }) => {
+  await page.goto('/admin/admin_settings/settings_branches');
+  await expect(page).toHaveURL(/\/admin\/admin_settings\/settings_branches(?:[?#]|$)/);
+  await expect(page.getByRole('heading').first()).toBeVisible();
+});

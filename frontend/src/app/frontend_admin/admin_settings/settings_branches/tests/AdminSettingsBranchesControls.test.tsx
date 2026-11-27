@@ -1,4 +1,4 @@
-import AdminProfileActiveBranchesPanel from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminProfileActiveBranchesPanel';
+import AdminSettingsBranchesPanel from '@/app/frontend_admin/admin_settings/settings_branches/components/AdminSettingsBranchesPanel';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -14,9 +14,9 @@ vi.mock('sonner', () => ({
   },
 }));
 
-describe('Admin Settings Profile Branches Controls', () => {
+describe('Admin Settings Branches Controls', () => {
   it('renders branches with address, timings, capacity and status badges', () => {
-    render(<AdminProfileActiveBranchesPanel />);
+    render(<AdminSettingsBranchesPanel />);
 
     expect(screen.getAllByText('Downtown Central').length).toBeGreaterThan(0);
     expect(screen.getAllByText('North Hub').length).toBeGreaterThan(0);
@@ -29,7 +29,7 @@ describe('Admin Settings Profile Branches Controls', () => {
   });
 
   it('toggles branch status between Active and Inactive when clicked', () => {
-    render(<AdminProfileActiveBranchesPanel />);
+    render(<AdminSettingsBranchesPanel />);
 
     const toggleBtn = screen.getByTestId('admin-branch-toggle-BR-001');
     expect(toggleBtn).toBeDefined();
@@ -43,7 +43,7 @@ describe('Admin Settings Profile Branches Controls', () => {
   });
 
   it('opens Edit Branch modal with prefilled data and saves updates', async () => {
-    render(<AdminProfileActiveBranchesPanel />);
+    render(<AdminSettingsBranchesPanel />);
 
     const editBtn = screen.getByTestId('admin-branch-edit-BR-001');
     fireEvent.click(editBtn);

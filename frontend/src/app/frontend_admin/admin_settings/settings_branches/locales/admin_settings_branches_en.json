@@ -1,0 +1,31 @@
+{
+  "ADMIN_BRANCHES": {
+    "PAGE_TITLE": "Branches",
+    "PAGE_SUBTITLE": "Manage library branch locations, operating hours, seating capacity, and active status.",
+    "LOADING": "Loading branch management...",
+    "ROUTE_ERROR_TITLE": "Unable to load Branches",
+    "ROUTE_ERROR_DESCRIPTION": "An error occurred while loading branch management. Please retry.",
+    "ROUTE_ERROR_RETRY": "Try again",
+    "LIVE_UNAVAILABLE_NOTICE": "Demo branch catalogue active. Live branch API persistence requires a connected backend endpoint.",
+    "HEADER_BADGE": "Branch Registry",
+    "PANEL_TITLE": "Library Branches",
+    "PANEL_SUBTITLE": "Manage branch details, timings, capacity, and active status",
+    "SEARCH_PLACEHOLDER": "Search branches by name, code, manager, address, phone...",
+    "EMPTY_TITLE": "No branches found",
+    "EMPTY_DESC": "Try adjusting your search criteria.",
+    "COL_BRANCH": "Branch",
+    "COL_MANAGER": "Manager",
+    "COL_ADDRESS_TIMINGS": "Address & Timings",
+    "COL_CAPACITY_CONTACT": "Capacity & Contact",
+    "COL_STATUS": "Status",
+    "COL_ACTIONS": "Actions",
+    "EDIT": "Edit",
+    "EDIT_DETAILS": "Edit Details",
+    "ACTIVATE": "Activate",
+    "DEACTIVATE": "Deactivate",
+    "MODAL_EDIT_TITLE": "Edit Branch Details",
+    "MODAL_EDIT_DESC": "Update address, operational timings, contact phone, and total seating capacity.",
+    "CANCEL": "Cancel",
+    "SAVE_BRANCH": "Save Branch Details"
+  }
+}

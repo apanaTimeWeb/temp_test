@@ -1,19 +1,17 @@
 'use client';
 
-// RESPONSIBILITY: AdminProfileBranchEditModal component owned by admin_settings/settings_profile.
-
-import type { AdminProfileActiveBranch } from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.demo_data';
+import type { AdminSettingsBranchRecord } from '@/app/frontend_admin/admin_settings/settings_branches/types/AdminSettingsBranchesTypes';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Building2, Save } from 'lucide-react';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 
 const BranchEditSchema = z.object({
   name: z.string().trim().min(1, 'Branch name is required').max(100),
@@ -29,19 +27,19 @@ const BranchEditSchema = z.object({
 
 export type AdminBranchEditFormValues = z.infer<typeof BranchEditSchema>;
 
-interface AdminProfileBranchEditModalProps {
-  branch: AdminProfileActiveBranch | null;
+interface AdminSettingsBranchesEditModalProps {
+  branch: AdminSettingsBranchRecord | null;
   open: boolean;
   onClose: () => void;
   onSave: (branchId: string, values: AdminBranchEditFormValues) => void;
 }
 
-export function AdminProfileBranchEditModal({
+export function AdminSettingsBranchesEditModal({
   branch,
   open,
   onClose,
   onSave,
-}: AdminProfileBranchEditModalProps) {
+}: AdminSettingsBranchesEditModalProps) {
   const {
     register,
     handleSubmit,
@@ -124,15 +122,7 @@ export function AdminProfileBranchEditModal({
               <label htmlFor="admin-branch-edit-name" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
                 Branch Name *
               </label>
-              <input
-                id="admin-branch-edit-name"
-                maxLength={100}
-                type="text"
-                {...register('name')}
-                aria-invalid={Boolean(errors.name)}
-                className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="e.g. Downtown Central"
-              />
+              <input id="admin-branch-edit-name" maxLength={100} type="text" {...register('name')} aria-invalid={Boolean(errors.name)} className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. Downtown Central" />
               {errors.name && <p role="alert" className="mt-1 text-xs text-danger-text">{errors.name.message}</p>}
             </div>
 
@@ -140,15 +130,7 @@ export function AdminProfileBranchEditModal({
               <label htmlFor="admin-branch-edit-code" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
                 Branch Code *
               </label>
-              <input
-                id="admin-branch-edit-code"
-                maxLength={30}
-                type="text"
-                {...register('code')}
-                aria-invalid={Boolean(errors.code)}
-                className="w-full rounded-lg border border-border bg-input px-3 py-2 font-mono text-sm uppercase text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="e.g. DT-CEN"
-              />
+              <input id="admin-branch-edit-code" maxLength={30} type="text" {...register('code')} aria-invalid={Boolean(errors.code)} className="w-full rounded-lg border border-border bg-input px-3 py-2 font-mono text-sm uppercase text-text-primary focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. DT-CEN" />
               {errors.code && <p role="alert" className="mt-1 text-xs text-danger-text">{errors.code.message}</p>}
             </div>
 
@@ -156,72 +138,35 @@ export function AdminProfileBranchEditModal({
               <label htmlFor="admin-branch-edit-manager" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
                 Assigned Manager
               </label>
-              <input
-                id="admin-branch-edit-manager"
-                maxLength={100}
-                type="text"
-                {...register('manager')}
-                className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="e.g. Vikram Singh"
-              />
+              <input id="admin-branch-edit-manager" maxLength={100} type="text" {...register('manager')} className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. Vikram Singh" />
             </div>
 
             <div>
               <label htmlFor="admin-branch-edit-phone" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
                 Contact Phone Number
               </label>
-              <input
-                id="admin-branch-edit-phone"
-                maxLength={15}
-                type="tel"
-                {...register('phone')}
-                className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="e.g. +91 9876543210"
-              />
+              <input id="admin-branch-edit-phone" maxLength={15} type="tel" {...register('phone')} className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. +91 9876543210" />
             </div>
 
             <div>
               <label htmlFor="admin-branch-edit-timing" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
                 Operational Timings
               </label>
-              <input
-                id="admin-branch-edit-timing"
-                maxLength={100}
-                type="text"
-                {...register('timing')}
-                className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="e.g. 06:00 AM - 11:00 PM"
-              />
+              <input id="admin-branch-edit-timing" maxLength={100} type="text" {...register('timing')} className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. 06:00 AM - 11:00 PM" />
             </div>
 
             <div>
               <label htmlFor="admin-branch-edit-capacity" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
                 Total Seating Capacity
               </label>
-              <input
-                id="admin-branch-edit-capacity"
-                type="number"
-                min="1"
-                max="1000"
-                {...register('totalCapacity')}
-                className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="e.g. 150"
-              />
+              <input id="admin-branch-edit-capacity" type="number" min="1" max="1000" {...register('totalCapacity')} className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. 150" />
             </div>
 
             <div className="sm:col-span-2">
               <label htmlFor="admin-branch-edit-address" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-text-secondary">
                 Branch Address *
               </label>
-              <textarea
-                id="admin-branch-edit-address"
-                maxLength={1000}
-                rows={2}
-                {...register('address')}
-                aria-invalid={Boolean(errors.address)}
-                className="w-full resize-none rounded-lg border border-border bg-input px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="e.g. 123 Main Street, Central Plaza, City"
-              />
+              <textarea id="admin-branch-edit-address" maxLength={1000} rows={2} {...register('address')} aria-invalid={Boolean(errors.address)} className="w-full resize-none rounded-lg border border-border bg-input px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. 123 Main Street, Central Plaza, City" />
               {errors.address && <p role="alert" className="mt-1 text-xs text-danger-text">{errors.address.message}</p>}
             </div>
 
@@ -231,25 +176,11 @@ export function AdminProfileBranchEditModal({
               </span>
               <div className="flex flex-wrap items-center gap-4 pt-1">
                 <label className="inline-flex cursor-pointer items-center gap-2">
-                  <input
-                    type="radio"
-                    name="branchStatus"
-                    value="Active"
-                    checked={currentStatus === 'Active'}
-                    onChange={() => setValue('status', 'Active', { shouldDirty: true })}
-                    className="accent-primary"
-                  />
+                  <input type="radio" name="branchStatus" value="Active" checked={currentStatus === 'Active'} onChange={() => setValue('status', 'Active', { shouldDirty: true })} className="accent-primary" />
                   <span className="text-sm font-medium text-success-text">Active (Open for seating)</span>
                 </label>
                 <label className="inline-flex cursor-pointer items-center gap-2">
-                  <input
-                    type="radio"
-                    name="branchStatus"
-                    value="Inactive"
-                    checked={currentStatus === 'Inactive'}
-                    onChange={() => setValue('status', 'Inactive', { shouldDirty: true })}
-                    className="accent-danger"
-                  />
+                  <input type="radio" name="branchStatus" value="Inactive" checked={currentStatus === 'Inactive'} onChange={() => setValue('status', 'Inactive', { shouldDirty: true })} className="accent-danger" />
                   <span className="text-sm font-medium text-danger-text">Inactive (Temporarily closed / Suspended)</span>
                 </label>
               </div>
@@ -257,20 +188,12 @@ export function AdminProfileBranchEditModal({
           </div>
 
           <DialogFooter className="flex items-center justify-end gap-2 border-t border-border pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary motion-safe:transition-colors"
-            >
+            <button type="button" onClick={onClose} className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary motion-safe:transition-colors">
               Cancel
             </button>
-            <button
-              type="submit"
-              data-testid="admin-save-branch-details-button"
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-on-primary shadow-card hover:bg-primary-hover motion-safe:transition-colors"
-            >
-              <Save size={16} aria-hidden="true" />
-              <span>Save Changes</span>
+            <button type="submit" data-testid="admin-save-branch-details-button" className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-on-primary shadow-card hover:bg-primary-hover motion-safe:transition-colors">
+              <Save size={15} aria-hidden="true" />
+              <span>Save Branch Details</span>
             </button>
           </DialogFooter>
         </form>

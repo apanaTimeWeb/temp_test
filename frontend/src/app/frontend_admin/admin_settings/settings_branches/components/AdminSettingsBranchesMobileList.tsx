@@ -1,19 +1,19 @@
 'use client';
 
-import type { AdminProfileActiveBranch } from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.demo_data';
+import type { AdminSettingsBranchRecord } from '@/app/frontend_admin/admin_settings/settings_branches/types/AdminSettingsBranchesTypes';
 import { Clock, Edit3, MapPin, Power, Users } from 'lucide-react';
 
-interface AdminProfileActiveBranchesMobileListProps {
-  rows: AdminProfileActiveBranch[];
-  onEdit: (branch: AdminProfileActiveBranch) => void;
+interface AdminSettingsBranchesMobileListProps {
+  rows: AdminSettingsBranchRecord[];
+  onEdit: (branch: AdminSettingsBranchRecord) => void;
   onToggleStatus: (branchId: string) => void;
 }
 
-export function AdminProfileActiveBranchesMobileList({
+export function AdminSettingsBranchesMobileList({
   rows,
   onEdit,
   onToggleStatus,
-}: AdminProfileActiveBranchesMobileListProps) {
+}: AdminSettingsBranchesMobileListProps) {
   return (
     <div className="space-y-3 md:hidden p-4" aria-label="Branches mobile list">
       {rows.map((branch) => {
@@ -42,7 +42,7 @@ export function AdminProfileActiveBranchesMobileList({
 
             <dl className="grid grid-cols-1 gap-2 text-sm text-text-secondary">
               <div>
-                <dt className="text-xs text-text-secondary uppercase tracking-wide">Manager & Phone</dt>
+                <dt className="text-xs text-text-secondary uppercase tracking-wide">Manager &amp; Phone</dt>
                 <dd className="break-words font-medium text-text-primary flex items-center gap-2">
                   <span>{branch.manager}</span>
                   <span className="text-xs text-text-secondary">({branch.phone})</span>
