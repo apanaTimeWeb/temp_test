@@ -45,25 +45,6 @@ export interface AdminBlacklistRecord {
   pardonedBy?: string;
 }
 
-export interface AdminBlacklistFormValues {
-  name: string;
-  phone: string;
-  reason: string;
-  previousSeat: string;
-  category?: DisciplinaryCategory;
-  banScope?: BanScope;
-  banDuration?: BanDuration;
-  revokeSeat?: boolean;
-  revokeLocker?: boolean;
-  blockBiometric?: boolean;
-  confiscateDeposit?: boolean;
-  incidentDate?: string;
-  incidentLocation?: string;
-  firRefNo?: string;
-  incidentNotes?: string;
-  branch?: string;
-}
-
 export interface AdminBlacklistFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;

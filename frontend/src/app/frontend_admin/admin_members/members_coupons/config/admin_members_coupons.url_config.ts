@@ -20,8 +20,6 @@ export const ADMIN_COUPONS_URLS = {
   API_DETAIL: ADMIN_COUPONS_API_DETAIL,
 } as const;
 
-export const MODULE_URLS = ADMIN_COUPONS_URLS;
-
 /** Canonical typed route contract owned by this autonomous submodule. */
 export const ADMIN_MEMBERS_COUPONS_ROUTES = { ROOT: ADMIN_COUPONS_ROOT, DETAIL: ADMIN_COUPONS_DETAIL } as const;
 

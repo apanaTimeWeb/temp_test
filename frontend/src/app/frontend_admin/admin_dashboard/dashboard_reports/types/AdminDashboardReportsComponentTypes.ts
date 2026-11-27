@@ -18,7 +18,6 @@ export type AdminDashboardReportsReportCategory = 'members' | 'finance' | 'seats
 export type AdminDashboardReportsAnalyticsKpiValueKind = 'currency' | 'count';
 export type AdminDashboardReportsAnalyticsOccupancyItemToken = 'chart-primary' | 'chart-success' | 'chart-warning' | 'chart-info' | 'chart-danger' | 'chart-secondary';
 export type AdminDashboardReportsAnalyticsRange = 'thisMonth' | 'last3Months' | 'thisYear';
-export type AdminDashboardReportsView = 'analytics' | 'library';
 
 /** Source-bounded response record. No undeclared production DTO fields are inferred. */
 export interface AdminDashboardReportsAnalyticsApiRecord { id?: string | number; [key: string]: unknown }

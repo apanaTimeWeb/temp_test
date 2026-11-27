@@ -17,7 +17,6 @@ export const ADMIN_SEATS_MATRIX_CANONICAL_ROUTE = '/admin/admin_seats_shifts_loc
 export const ADMIN_SEAT_MATRIX_ROOT = HOST_ADMIN_SEAT_MATRIX_ROOT;
 export const ADMIN_SEAT_MATRIX_API_SEAT_MATRIX = '/seats_shifts_lockers/seat-matrix' as const;
 export const ADMIN_SEAT_MATRIX_URLS = { ROOT: ADMIN_SEAT_MATRIX_ROOT, SEAT_MATRIX: ADMIN_SEAT_MATRIX_API_SEAT_MATRIX } as const;
-export const MODULE_URLS = ADMIN_SEAT_MATRIX_URLS;
 
 export const ADMIN_SEAT_MATRIX_STATUS = {
   FREE: "free",

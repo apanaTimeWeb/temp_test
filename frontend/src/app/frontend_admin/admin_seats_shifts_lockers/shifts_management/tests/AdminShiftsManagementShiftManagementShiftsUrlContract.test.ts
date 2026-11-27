@@ -1,4 +1,4 @@
-import { ADMIN_SHIFTS_ROOT,ADMIN_SHIFTS_ROUTE_SHIFT_MANAGEMENT } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/config/admin_shifts_management_shifts_url_config_source_routes';
+import { ADMIN_SHIFTS_ROOT,ADMIN_SHIFTS_ROUTE_SHIFT_MANAGEMENT } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/config/admin_shifts_management.url_config';
 import { describe,expect,it } from 'vitest';
 
 describe('admin_shifts canonical URL contract', () => {

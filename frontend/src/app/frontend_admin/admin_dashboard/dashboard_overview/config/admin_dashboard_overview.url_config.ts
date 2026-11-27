@@ -13,13 +13,5 @@ export const ADMIN_DASHBOARD_OVERVIEW_API = {
   CONTRACT_MISSING: null as string | null,
 } as const;
 
-export const ADMIN_DASHBOARD_OVERVIEW_URL_CONFIG = {
-  route: '/admin/admin_dashboard/dashboard_overview',
-  routes: {
-    ROOT: '/admin/admin_dashboard/dashboard_overview',
-  },
-  api: {},
-} as const;
-
 /** Direct canonical UI route; legacy source URL aliases are intentionally retired. */
 export const ADMIN_DASHBOARD_OVERVIEW_CANONICAL_ROUTE = '/admin/admin_dashboard/dashboard_overview' as const;

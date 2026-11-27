@@ -21,8 +21,6 @@ export const ADMIN_SECURITY_ROOT = ADMIN_SETTINGS_SECURITY_ROUTES.ROOT;
 
 export const ADMIN_SECURITY_URLS = { ROOT: ADMIN_SECURITY_ROOT } as const;
 
-export const MODULE_URLS = ADMIN_SECURITY_URLS;
-
 export interface AdminSecurityEventFilterOption {
   value: AdminSecurityEventFilter;
   labelKey: AdminSecurityEventFilterOptionLabelKey;

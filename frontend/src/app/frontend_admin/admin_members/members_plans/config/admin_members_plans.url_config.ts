@@ -20,8 +20,6 @@ export const ADMIN_PLANS_URLS = {
   API_DETAIL: ADMIN_PLANS_API_DETAIL,
 } as const;
 
-export const MODULE_URLS = ADMIN_PLANS_URLS;
-
 /** Canonical typed route contract owned by this autonomous submodule. */
 export const ADMIN_MEMBERS_PLANS_ROUTES = { ROOT: ADMIN_PLANS_ROOT, DETAIL: ADMIN_PLANS_DETAIL } as const;
 

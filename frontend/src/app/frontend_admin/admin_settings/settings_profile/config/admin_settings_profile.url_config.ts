@@ -19,8 +19,6 @@ export const ADMIN_PROFILE_ROOT = ADMIN_SETTINGS_PROFILE_ROUTES.ROOT;
 
 export const ADMIN_PROFILE_URLS = { ROOT: ADMIN_PROFILE_ROOT } as const;
 
-export const MODULE_URLS = ADMIN_PROFILE_URLS;
-
 /** Role/module-owned navigation metadata; translations are supplied by ADMIN_PROFILE locale catalogs. */
 export const ADMIN_PROFILE_NAVIGATION_ITEMS: readonly AdminProfileNavigationItem[] = [
   { id: 'profile', labelKey: 'NAV_PROFILE', label: 'Profile Overview', icon: User },

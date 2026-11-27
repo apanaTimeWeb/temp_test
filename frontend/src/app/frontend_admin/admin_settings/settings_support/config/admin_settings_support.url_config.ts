@@ -23,8 +23,6 @@ export const ADMIN_SUPPORT_URLS = {
   API_DETAIL: ADMIN_SUPPORT_API_DETAIL,
 } as const;
 
-export const MODULE_URLS = ADMIN_SUPPORT_URLS;
-
 export const ADMIN_SUPPORT_TICKET_CATEGORIES = ['bug', 'feature', 'billing', 'other'] as const;
 
 export const ADMIN_SUPPORT_TICKET_PRIORITIES = ['low', 'medium', 'high', 'critical'] as const;

@@ -20,8 +20,6 @@ export const ADMIN_BLACKLIST_URLS = {
   API_DETAIL: ADMIN_BLACKLIST_API_DETAIL,
 } as const;
 
-export const MODULE_URLS = ADMIN_BLACKLIST_URLS;
-
 /** Canonical typed route contract owned by this autonomous submodule. */
 export const ADMIN_MEMBERS_BLACKLIST_ROUTES = { ROOT: ADMIN_BLACKLIST_ROOT, DETAIL: ADMIN_BLACKLIST_DETAIL } as const;
 

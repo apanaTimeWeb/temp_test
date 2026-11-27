@@ -40,7 +40,7 @@ describe('Admin dashboard overview canonical route and behavior', () => {
       'utf8',
     );
     const domainRoute = readFileSync(path.join(here, '../../page.tsx'), 'utf8');
-    expect(routeConfig).toContain("route: '/admin/admin_dashboard/dashboard_overview'");
+    expect(routeConfig).toContain("ROOT: '/admin/admin_dashboard/dashboard_overview'");
     expect(domainRoute).toContain('redirect(ADMIN_DASHBOARD_OVERVIEW_CANONICAL_ROUTE)');
   });
 });

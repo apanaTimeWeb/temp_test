@@ -123,6 +123,3 @@ export async function apiFetch<TResponse = unknown>(path: string, options: ApiFe
   }
   return payload as TResponse;
 }
-
-/** Transitional alias retained for the host application while feature APIs use apiFetch. */
-export const fetchApi = apiFetch;
