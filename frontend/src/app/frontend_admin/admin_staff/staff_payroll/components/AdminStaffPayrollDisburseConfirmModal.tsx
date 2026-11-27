@@ -5,15 +5,27 @@ DisburseSalaryInput,
 PaymentMethod,
 StaffSalaryRecord,
 } from '@/app/frontend_admin/admin_staff/staff_payroll/schemas/AdminStaffPayrollSchema';
+import { formatAdminStaffPayrollCurrency } from '@/app/frontend_admin/admin_staff/staff_payroll/utils/formatAdminStaffPayrollCurrency';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import { CheckCircle2,ShieldAlert } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CheckCircle2, ShieldAlert } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useEffect,useState } from 'react';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+const DisburseConfirmSchema = z.object({
+  paymentMethod: z.enum(['BANK_TRANSFER', 'UPI', 'CASH']),
+  transactionRef: z.string().trim().min(1),
+  notes: z.string().max(1000).optional(),
+});
+
+type DisburseConfirmValues = z.infer<typeof DisburseConfirmSchema>;
 
 interface Props {
   record: StaffSalaryRecord | null;
@@ -29,31 +41,53 @@ export function AdminStaffPayrollDisburseConfirmModal({
   onConfirm,
 }: Props) {
   const t = useTranslations('ADMIN_STAFF_PAYROLL');
-
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('BANK_TRANSFER');
-  const [transactionRef, setTransactionRef] = useState('');
-  const [notes, setNotes] = useState('');
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { isDirty },
+  } = useForm<DisburseConfirmValues>({
+    resolver: zodResolver(DisburseConfirmSchema),
+    defaultValues: {
+      paymentMethod: 'BANK_TRANSFER',
+      transactionRef: '',
+      notes: '',
+    },
+  });
 
   useEffect(() => {
     if (record) {
-      setPaymentMethod('BANK_TRANSFER');
-      setTransactionRef(`NEFT${Date.now().toString().slice(-8)}`);
-      setNotes('');
+      reset({
+        paymentMethod: 'BANK_TRANSFER',
+        transactionRef: `NEFT${Date.now().toString().slice(-8)}`,
+        notes: '',
+      });
     }
-  }, [record]);
+  }, [record, reset]);
+
+  useEffect(() => {
+    if (!isOpen || !isDirty) return;
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isDirty, isOpen]);
 
   if (!record) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!transactionRef.trim()) return;
+  const transactionRef = watch('transactionRef');
+
+  const submitForm = handleSubmit((values) => {
     onConfirm({
       payrollId: record.id,
-      paymentMethod,
-      transactionRef: transactionRef.trim(),
-      notes: notes.trim() || undefined,
+      paymentMethod: values.paymentMethod as PaymentMethod,
+      transactionRef: values.transactionRef.trim(),
+      notes: values.notes?.trim() || undefined,
     });
-  };
+  });
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
@@ -66,7 +100,7 @@ export function AdminStaffPayrollDisburseConfirmModal({
           <DialogDescription>{t('MODAL_DISBURSE_DESC')}</DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={submitForm} className="space-y-4">
           {/* Summary Box */}
           <div className="rounded-xl border border-warning-border bg-warning-bg p-3.5">
             <div className="flex justify-between items-start">
@@ -80,14 +114,14 @@ export function AdminStaffPayrollDisburseConfirmModal({
               <div className="text-right">
                 <span className="text-xs text-text-secondary">Net Payable:</span>
                 <p className="text-xl font-extrabold text-primary">
-                  ₹{record.netPayable.toLocaleString('en-IN')}
+                  {formatAdminStaffPayrollCurrency(record.netPayable)}
                 </p>
               </div>
             </div>
             {record.advanceSalaryDeduction > 0 && (
               <div className="mt-2.5 pt-2 border-t border-warning-border flex justify-between text-xs text-warning-text font-medium">
                 <span>{t('ADVANCE_DEDUCTION_SETTLED')}:</span>
-                <span className="font-mono font-bold">-₹{record.advanceSalaryDeduction.toLocaleString('en-IN')}</span>
+                <span className="font-mono font-bold">-{formatAdminStaffPayrollCurrency(record.advanceSalaryDeduction)}</span>
               </div>
             )}
           </div>
@@ -97,8 +131,7 @@ export function AdminStaffPayrollDisburseConfirmModal({
               {t('FIELD_PAYMENT_METHOD')}
             </label>
             <select
-              value={paymentMethod}
-              onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
+              {...register('paymentMethod')}
               className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-sm text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <option value="BANK_TRANSFER">{t('MODE_BANK_TRANSFER')}</option>
@@ -111,11 +144,11 @@ export function AdminStaffPayrollDisburseConfirmModal({
             <label className="block text-xs font-semibold text-text-secondary">
               {t('FIELD_TXN_REF')}
             </label>
-            <input maxLength={100}
+            <input
+              maxLength={100}
               type="text"
               required
-              value={transactionRef}
-              onChange={(e) => setTransactionRef(e.target.value)}
+              {...register('transactionRef')}
               placeholder={t('FIELD_TXN_REF_PLACEHOLDER')}
               className="min-h-11 w-full rounded-md border border-border bg-input px-3 font-mono text-sm text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             />

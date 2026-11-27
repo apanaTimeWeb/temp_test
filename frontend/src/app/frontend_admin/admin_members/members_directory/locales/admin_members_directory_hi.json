@@ -170,6 +170,27 @@
     "DISCARD_CHANGES": "बदलाव छोड़ें",
     "DEMO_METRICS_NOTICE": "डेमो मेट्रिक्स दिए गए नमूना रिकॉर्ड से निकाले जाते हैं; सत्यापित स्रोत फ़ील्ड न होने पर — दिखाया जाता है।",
     "PLANS_CANONICAL_DESCRIPTION": "सदस्यता योजनाएँ बनाने और प्रबंधित करने के लिए समर्पित सदस्यता योजना मॉड्यूल का उपयोग करें।",
-    "OPEN_MEMBERSHIP_PLANS": "सदस्यता योजना प्रबंधन खोलें"
+    "OPEN_MEMBERSHIP_PLANS": "सदस्यता योजना प्रबंधन खोलें",
+    "WAIVER_AMOUNT_LABEL": "माफ़ी / छूट राशि",
+    "DETAIL_PAID_DUE_SUMMARY": "भुगतान: {paid}{due}",
+    "DETAIL_DUE_SUFFIX": " · बकाया: {due}",
+    "DETAIL_PER_MONTH": "/ माह",
+    "PAYMENT_TOTAL_BILLED": "कुल बिल राशि",
+    "PAYMENT_TOTAL_PAID": "कुल भुगतान",
+    "PAYMENT_TOTAL_WAIVED": "कुल माफ़ी",
+    "PAYMENT_BALANCE_DUE": "बकाया शेष",
+    "PAYMENT_LIFETIME_SUB": "कुल शुल्क बिलिंग",
+    "PAYMENT_SETTLED_SUB": "100% भुगतान पूर्ण",
+    "PAYMENT_WAIVED_SUB": "एडमिन क्रेडिट नोट",
+    "PAYMENT_NO_DUES_SUB": "कोई बकाया नहीं",
+    "PAYMENT_EXCLUSIVE_TITLE": "एडमिन विशेष अधिकार: शुल्क छूट एवं माफ़ी",
+    "PAYMENT_EXCLUSIVE_DESC": "शाखा प्रबंधक शुल्क दर या छूट नहीं दे सकते। EWS, मेधावी छात्रवृत्ति या विलंब शुल्क माफ़ी के लिए एडमिन अधिकार का उपयोग करें।",
+    "PAYMENT_GRANT_WAIVER_BTN": "शुल्क छूट / माफ़ी दें",
+    "PAYMENT_CONCESSION_ORDER": "छूट आदेश",
+    "PAYMENT_RECEIPT_BTN": "रसीद",
+    "WAIVER_CANCEL": "रद्द करें",
+    "WAIVER_SUBMIT": "स्वीकृत करें और क्रेडिट मेमो जारी करें",
+    "WAIVER_CATEGORY_LABEL": "छूट श्रेणी / योजना",
+    "WAIVER_REASON_LABEL": "प्रशासनिक औचित्य / स्वीकृति टिप्पणी"
   }
 }

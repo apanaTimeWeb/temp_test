@@ -58,5 +58,12 @@
   "BTN_PRINT": "Print Pay Slip",
   "BTN_CLOSE": "Close",
   "ADVANCE_DEDUCTION_SETTLED": "Salary Advance Deducted",
-  "SLIP_ADVANCE_SETTLED": "Advance Salary Recovery"
+  "SLIP_ADVANCE_SETTLED": "Advance Salary Recovery",
+  "SLIP_BASIC_SALARY": "Basic Salary",
+  "SLIP_BONUS": "Shift / Performance Bonus",
+  "SLIP_UNPAID_ABSENCES": "Unpaid Absence Deductions",
+  "SLIP_NET_TRANSFER_NOTE": "Net salary transferred to bank",
+  "ERR_TITLE": "Unable to load Staff Payroll",
+  "ERR_DESC": "An error occurred while loading staff compensation and disbursement data.",
+  "ERR_RETRY": "Retry"
 }

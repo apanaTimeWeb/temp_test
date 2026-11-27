@@ -4,6 +4,7 @@ import AdminMembersDirectoryBulkImportModal from '@/app/frontend_admin/admin_mem
 import AdminMembersDirectoryDataToolsView from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryDataToolsView';
 import { AdminMembersDirectoryMemberDetailCard } from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryMemberDetailCard';
 import { ADMIN_MEMBERS_FIXTURES } from '@/app/frontend_admin/admin_members/members_directory/mocks/AdminMembersDirectoryFixtures';
+import adminMembersMessages from '@/app/frontend_admin/admin_members/members_directory/locales/admin_members_directory_en.json';
 import AdminMembersEnquiriesImportModal from '@/app/frontend_admin/admin_members/members_enquiries/components/AdminMembersEnquiriesImportModal';
 import { fireEvent,render,screen } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
@@ -134,7 +135,7 @@ describe('Admin Members - Newly Added Controls Regression Suite', () => {
     it('allows Admin to grant special fee waiver and displays concession credit in payment ledger', () => {
       const sampleMember = ADMIN_MEMBERS_FIXTURES[0];
       render(
-        <NextIntlClientProvider locale="en" messages={{ ADMIN_MEMBERS: { STATUS_ACTIVE: 'Active', UNKNOWN_DATE: 'Unknown' } }}>
+        <NextIntlClientProvider locale="en" messages={adminMembersMessages}>
           <AdminMembersDirectoryMemberDetailCard
             member={sampleMember}
             detailTab="paymentHistory"

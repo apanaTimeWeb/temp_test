@@ -2,6 +2,7 @@
 
 import type { StaffSalaryRecord } from '@/app/frontend_admin/admin_staff/staff_payroll/schemas/AdminStaffPayrollSchema';
 import { sharePayrollSlipWhatsApp } from '@/app/frontend_admin/admin_staff/staff_payroll/utils/adminStaffPayrollExports';
+import { formatAdminStaffPayrollCurrency } from '@/app/frontend_admin/admin_staff/staff_payroll/utils/formatAdminStaffPayrollCurrency';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import { AlertCircle, ArrowDown, ArrowUp, ArrowUpDown, Building2, CheckCircle2, Clock, CreditCard, FileText, MessageSquare, Send } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -143,14 +144,14 @@ export function AdminStaffPayrollTable({ records, onOpenSlip, onOpenDisburse }: 
                       <Building2 size={12} className="text-info-text shrink-0" /><span>{r.branchName}</span>
                     </span>
                   </td>
-                  <td className="px-3.5 py-2.5 text-right font-mono text-xs text-text-primary font-semibold whitespace-nowrap">₹{r.baseSalary.toLocaleString('en-IN')}</td>
-                  <td className="px-3.5 py-2.5 text-right font-mono text-xs text-success-text font-bold whitespace-nowrap">+₹{r.allowances.toLocaleString('en-IN')}</td>
+                  <td className="px-3.5 py-2.5 text-right font-mono text-xs text-text-primary font-semibold whitespace-nowrap">{formatAdminStaffPayrollCurrency(r.baseSalary)}</td>
+                  <td className="px-3.5 py-2.5 text-right font-mono text-xs text-success-text font-bold whitespace-nowrap">+{formatAdminStaffPayrollCurrency(r.allowances)}</td>
                   <td className="px-3.5 py-2.5 text-right font-mono text-xs whitespace-nowrap">
-                    {r.deductions > 0 ? <span className="font-bold text-danger-text">-₹{r.deductions.toLocaleString('en-IN')}</span> : <span className="text-text-secondary font-normal">₹0</span>}
-                    {r.advanceSalaryDeduction > 0 && <div className="text-[10px] text-text-secondary font-sans font-normal mt-0.5">(Adv: -₹{r.advanceSalaryDeduction.toLocaleString('en-IN')})</div>}
+                    {r.deductions > 0 ? <span className="font-bold text-danger-text">-{formatAdminStaffPayrollCurrency(r.deductions)}</span> : <span className="text-text-secondary font-normal">{formatAdminStaffPayrollCurrency(0)}</span>}
+                    {r.advanceSalaryDeduction > 0 && <div className="text-[10px] text-text-secondary font-sans font-normal mt-0.5">(Adv: -{formatAdminStaffPayrollCurrency(r.advanceSalaryDeduction)})</div>}
                   </td>
                   <td className="px-3.5 py-2.5 text-right whitespace-nowrap">
-                    <span className="inline-flex items-center justify-end px-2.5 py-1 rounded-lg bg-success-bg border border-success font-mono text-xs font-bold text-success-text shadow-xs">₹{r.netPayable.toLocaleString('en-IN')}</span>
+                    <span className="inline-flex items-center justify-end px-2.5 py-1 rounded-lg bg-success-bg border border-success font-mono text-xs font-bold text-success-text shadow-xs">{formatAdminStaffPayrollCurrency(r.netPayable)}</span>
                   </td>
                   <td className="px-3.5 py-2.5 whitespace-nowrap">
                     <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap shadow-xs ${statusConf.bg} ${statusConf.text} ${statusConf.border}`}>

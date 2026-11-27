@@ -5,7 +5,7 @@ import { ADMIN_ACCOUNTING_EXPENSE_CATEGORIES,ADMIN_ACCOUNTS_EXPENSES_ROUTES } fr
 import { useAdminAccountsExpensesUnsavedChangesGuard } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/hooks/useAdminAccountsExpensesUnsavedChangesGuard';
 import { createAdminAccountingExpenseFormSchema,type AdminAccountingExpense,type AdminAccountingExpenseFormValues,type AdminAccountingExpenseValidationKey } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/schemas/AdminAccountsExpensesSchemas';
 import type { AdminAccountsExpensesAddPageProps } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/types/AdminAccountsExpensesComponentTypes';
-import { toAdminAccountingMinorUnits } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/utils/AdminAccountsExpensesFormatCurrency';
+import { formatAdminAccountingCurrency, toAdminAccountingMinorUnits } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/utils/AdminAccountsExpensesFormatCurrency';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
@@ -83,7 +83,7 @@ export default function AdminAccountsExpensesAddPage({ onSaveExpense, onCancel }
     onSaveExpense(newExpense);
     form.reset(values);
     if (requiresAdminApproval) {
-      toast.info('High-value expense (> ₹2,000) queued in Pending Approval for Admin Review.', { id: 'admin-accounts-expenses-demo-saved' });
+      toast.info(`High-value expense (> ${formatAdminAccountingCurrency(200000)}) queued in Pending Approval for Admin Review.`, { id: 'admin-accounts-expenses-demo-saved' });
     } else {
       toast.info(t('DEMO_SAVED'), { id: 'admin-accounts-expenses-demo-saved' });
     }
@@ -141,9 +141,9 @@ export default function AdminAccountsExpensesAddPage({ onSaveExpense, onCancel }
             <div className="mt-2.5 flex items-start gap-2.5 rounded-lg border border-warning bg-warning-bg p-3 text-xs text-warning-text">
               <span className="text-base leading-none">🛡️</span>
               <div className="space-y-0.5">
-                <p className="font-semibold text-warning-text">High-Value Expense Governance (&gt; ₹2,000)</p>
+                <p className="font-semibold text-warning-text">High-Value Expense Governance (&gt; {formatAdminAccountingCurrency(200000)})</p>
                 <p className="text-[11px] text-warning-text">
-                  Amounts over ₹2,000 (such as electricity bills, major repairs, furniture) are placed in <strong>Pending Approval</strong> and require Admin sign-off before payout.
+                  Amounts over {formatAdminAccountingCurrency(200000)} (such as electricity bills, major repairs, furniture) are placed in <strong>Pending Approval</strong> and require Admin sign-off before payout.
                 </p>
               </div>
             </div>

@@ -7,7 +7,9 @@ import {
   type DocPreview,
   type ReceiptPreview,
 } from '@/app/frontend_admin/admin_members/members_directory/utils/adminMembersDirectoryDetailPrint';
+import { formatAdminMembersDirectoryCurrency } from '@/app/frontend_admin/admin_members/members_directory/utils/formatAdminMembersDirectoryCurrency';
 import { Activity, AlertTriangle, CheckCircle, Clock, Download, Eye, FileText, RotateCcw, ShieldCheck } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 interface AdminMembersDirectoryDetailOperationsTabsProps {
@@ -35,6 +37,8 @@ export function AdminMembersDirectoryDetailOperationsTabs({
   onPreviewReceipt,
   onPreviewDoc,
 }: AdminMembersDirectoryDetailOperationsTabsProps) {
+  const t = useTranslations('ADMIN_MEMBERS');
+  const locale = useLocale();
   if (detailTab === 'attendance') {
     const attendanceRecords = buildMemberAttendance(member, attendanceMonth);
     return (
@@ -58,8 +62,8 @@ export function AdminMembersDirectoryDetailOperationsTabs({
               <tr><th className="p-3 font-semibold">Date</th><th className="p-3 font-semibold">Punch In</th><th className="p-3 font-semibold">Punch Out</th><th className="p-3 font-semibold">Study Duration</th><th className="p-3 font-semibold">Shift Type</th><th className="p-3 font-semibold">Gate Entry</th><th className="p-3 font-semibold">Status</th></tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {attendanceRecords.map((r, i) => (
-                <tr key={i} className="hover:bg-surface-hover motion-safe:transition-colors">
+              {attendanceRecords.map((r) => (
+                <tr key={`${r.date}-${r.checkIn}-${r.shift}`} className="hover:bg-surface-hover motion-safe:transition-colors">
                   <td className="p-3 font-semibold text-text-primary">{r.date}</td><td className="p-3 font-mono text-success-text font-medium">{r.checkIn}</td><td className="p-3 font-mono text-text-secondary">{r.checkOut}</td><td className="p-3 font-semibold text-text-primary">{r.hours}</td><td className="p-3 text-text-secondary">{r.shift}</td><td className="p-3 text-text-secondary">{r.gate}</td>
                   <td className="p-3"><span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold border ${r.status === 'Present' ? 'border-success bg-success-bg text-success-text' : 'border-warning bg-warning-bg text-warning-text'}`}>{r.status}</span></td>
                 </tr>
@@ -85,7 +89,7 @@ export function AdminMembersDirectoryDetailOperationsTabs({
         <div className="rounded-2xl border border-border-focus bg-primary-subtle p-5 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div><span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border border-border-focus bg-card text-primary mb-2">Active Plan</span><h3 className="text-xl font-bold text-text-primary">{member.plan}</h3><p className="text-xs text-text-secondary mt-1">Full library facility access at {member.branch || 'Downtown Central'}</p></div>
-            <div className="text-right"><p className="text-2xl font-bold text-text-primary">₹6,500 <span className="text-xs text-text-secondary font-normal">/ month</span></p><p className="text-xs text-success-text font-semibold mt-0.5">Auto-Renewal Active</p></div>
+            <div className="text-right"><p className="text-2xl font-bold text-text-primary">{formatAdminMembersDirectoryCurrency(6500, locale)} <span className="text-xs text-text-secondary font-normal">{t('DETAIL_PER_MONTH')}</span></p><p className="text-xs text-success-text font-semibold mt-0.5">Auto-Renewal Active</p></div>
           </div>
           <div className="grid gap-3 sm:grid-cols-3 pt-3 border-t border-border text-xs">
             <div><span className="text-text-secondary">Admission Start Date:</span><p className="font-semibold text-text-primary mt-0.5">{member.joinDate || '01 Jan 2024'}</p></div>

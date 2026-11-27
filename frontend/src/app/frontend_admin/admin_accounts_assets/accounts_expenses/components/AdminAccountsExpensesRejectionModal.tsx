@@ -6,9 +6,18 @@ import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogD
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import { AlertTriangle,X } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { AlertTriangle, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useCallback,useEffect,useState } from 'react';
+import { useCallback, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+const RejectionReasonSchema = z.object({
+  reason: z.string().trim().min(5, 'Please provide a specific rejection reason (min 5 characters).').max(1000),
+});
+
+type RejectionReasonValues = z.infer<typeof RejectionReasonSchema>;
 
 export function AdminAccountsExpensesRejectionModal({
   expense,
@@ -17,15 +26,31 @@ export function AdminAccountsExpensesRejectionModal({
   onCancel,
 }: AdminAccountsExpensesRejectionModalProps) {
   const t = useTranslations('ADMIN_ACCOUNTING.EXPENSES');
-  const [reason, setReason] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isDirty },
+  } = useForm<RejectionReasonValues>({
+    resolver: zodResolver(RejectionReasonSchema),
+    defaultValues: { reason: '' },
+  });
 
   useEffect(() => {
     if (expense) {
-      setReason('');
-      setError(null);
+      reset({ reason: '' });
     }
-  }, [expense]);
+  }, [expense, reset]);
+
+  useEffect(() => {
+    if (!open || !isDirty) return;
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isDirty, open]);
 
   const handleOpenChange = useCallback((nextOpen: boolean) => {
     if (!nextOpen) onCancel();
@@ -33,19 +58,14 @@ export function AdminAccountsExpensesRejectionModal({
 
   if (!expense) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (reason.trim().length < 5) {
-      setError('Please provide a specific rejection reason (min 5 characters).');
-      return;
-    }
-    onConfirm(expense.id, reason.trim());
-  };
+  const submitForm = handleSubmit((values) => {
+    onConfirm(expense.id, values.reason.trim());
+  });
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-md">
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={submitForm} className="space-y-4">
           <DialogHeader>
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-destructive" />
@@ -63,19 +83,16 @@ export function AdminAccountsExpensesRejectionModal({
             <label htmlFor="rejection-reason" className="block text-xs font-semibold text-foreground">
               {t('REJECTION_REASON')}
             </label>
-            <textarea maxLength={1000}
+            <textarea
+              maxLength={1000}
               id="rejection-reason"
               rows={3}
-              value={reason}
-              onChange={(e) => {
-                setReason(e.target.value);
-                setError(null);
-              }}
               required
+              {...register('reason')}
               placeholder="e.g. Quotation too high / Item already covered under AMC / Unapproved personal item"
               className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             />
-            {error && <p className="text-xs text-destructive font-medium">{error}</p>}
+            {errors.reason?.message && <p className="text-xs text-destructive font-medium">{errors.reason.message}</p>}
           </div>
 
           <DialogFooter className="gap-2 pt-2">

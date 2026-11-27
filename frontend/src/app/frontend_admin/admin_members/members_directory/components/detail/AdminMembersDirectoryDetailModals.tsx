@@ -8,10 +8,12 @@ import {
   type WaiverCategory,
   type WaiverSlipPreview,
 } from '@/app/frontend_admin/admin_members/members_directory/utils/adminMembersDirectoryDetailPrint';
+import { getAdminMembersDirectoryCurrencySymbol } from '@/app/frontend_admin/admin_members/members_directory/utils/formatAdminMembersDirectoryCurrency';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import { Award, Check, Download, FileText, MessageSquare, Printer, Receipt, ShieldCheck, X } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 const WAIVER_OPTIONS: readonly WaiverCategory[] = ['EWS_ASSISTANCE', 'MERIT_SCHOLARSHIP', 'LATE_FEE_WAIVER', 'SPECIAL_ADMIN_DISCRETION'];
@@ -53,6 +55,8 @@ export function AdminMembersDirectoryDetailModals({
   previewWaiverSlip,
   onCloseWaiverSlip,
 }: AdminMembersDirectoryDetailModalsProps) {
+  const t = useTranslations('ADMIN_MEMBERS');
+  const currencySymbol = getAdminMembersDirectoryCurrencySymbol(useLocale());
   return (
     <>
       <Dialog open={previewDoc !== null} onOpenChange={(open) => { if (!open) onCloseDoc(); }}>
@@ -137,14 +141,14 @@ export function AdminMembersDirectoryDetailModals({
               </select>
             </div>
             <div>
-              <label htmlFor="admin-waiver-amount" className="block text-text-secondary font-medium mb-1">Waiver / Discount Amount (₹)</label>
+              <label htmlFor="admin-waiver-amount" className="block text-text-secondary font-medium mb-1">{t('WAIVER_AMOUNT_LABEL')} ({currencySymbol})</label>
               <div className="relative">
-                <span className="absolute left-3 top-2 text-text-secondary font-bold">₹</span>
+                <span className="absolute left-3 top-2 text-text-secondary font-bold">{currencySymbol}</span>
                 <input id="admin-waiver-amount" type="number" min="50" step="50" value={waiverAmount} onChange={(e) => onChangeWaiverAmount(e.target.value)} className="w-full pl-8 pr-3 py-2 rounded-lg border border-border bg-input text-text-primary font-mono font-bold focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. 1000" />
               </div>
             </div>
             <div>
-              <label htmlFor="admin-waiver-reason" className="block text-text-secondary font-medium mb-1">Administrative Justification / Approval Notes</label>
+              <label htmlFor="admin-waiver-reason" className="block text-text-secondary font-medium mb-1">{t('WAIVER_REASON_LABEL')}</label>
               <textarea id="admin-waiver-reason" maxLength={1000} rows={2} value={waiverReason} onChange={(e) => onChangeWaiverReason(e.target.value)} className="w-full rounded-lg border border-border bg-input px-3 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Reason for concession, income certificate / rank proof ref..." />
             </div>
             <div className="rounded-lg bg-surface-highlight border border-border p-2.5 flex items-center justify-between text-[11px]">
@@ -153,8 +157,8 @@ export function AdminMembersDirectoryDetailModals({
             </div>
           </div>
           <div className="flex items-center justify-end gap-2 pt-2 border-t border-border">
-            <button type="button" onClick={onCloseWaiverModal} className="px-3 py-2 rounded-lg border border-border bg-card text-xs font-semibold text-text-secondary hover:bg-surface-hover">Cancel</button>
-            <button type="button" onClick={onGrantWaiver} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary font-bold text-xs hover:bg-primary-hover shadow-card"><Check size={14} aria-hidden="true" /> Authorize & Credit Memo</button>
+            <button type="button" onClick={onCloseWaiverModal} className="px-3 py-2 rounded-lg border border-border bg-card text-xs font-semibold text-text-secondary hover:bg-surface-hover">{t('WAIVER_CANCEL')}</button>
+            <button type="button" onClick={onGrantWaiver} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary font-bold text-xs hover:bg-primary-hover shadow-card"><Check size={14} aria-hidden="true" /> {t('WAIVER_SUBMIT')}</button>
           </div>
         </DialogContent>
       </Dialog>

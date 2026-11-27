@@ -3,6 +3,8 @@
 ## Purpose and ownership boundary
 
 - Canonical domain container: `frontend_admin/admin_accounts_assets/`.
+- **Architecture Decision Record (ADR — Bounded-Context Container):** `admin_accounts_assets` is intentionally preserved as the stable route container for Accounting (`accounts_daily_settlement`, `accounts_expenses`, `accounts_financial_reports`) and Infrastructure Capital Assets (`assets_register`, `assets_maintenance`) so live `/admin/admin_accounts_assets/*` routes, bookmarks, and navigation contracts remain 100% backwards-compatible. Within this container, `accounts_*` and `assets_*` submodules remain strictly isolated autonomous bounded contexts with zero cross-submodule runtime imports (WET isolation).
+- Active submodules: `accounts_daily_settlement`, `accounts_expenses`, `accounts_financial_reports`, `assets_register`, `assets_maintenance` (plus legacy-documented slots as applicable).
 - User-frozen target submodules (7): `accounts_expenses`, `accounts_expense_categories`, `accounts_financial_reports`, `accounts_seat_gap_report`, `accounts_shift_gap_analyzer`, `assets_register`, `assets_maintenance`.
 - Only these listed directories are active business submodules in this domain. No pseudo-module such as `admin_accounts_assets_compatibility` or `admin_accounts_assets_main` is part of the frozen target.
 - Root files are limited to the domain navigation shell/redirect, applicable loading/error boundaries, the documentation trio and canonical domain URL configuration. Feature implementation remains inside the listed autonomous submodules.

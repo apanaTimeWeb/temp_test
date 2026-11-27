@@ -84,7 +84,7 @@ export function AdminAccountsDailySettlementTableRow({
             +{formatPaiseToRupees(record.difference)}
           </span>
         ) : (
-          <span className="text-xs text-text-secondary">₹0.00</span>
+          <span className="text-xs text-text-secondary">{formatPaiseToRupees(0)}</span>
         )}
       </td>
 

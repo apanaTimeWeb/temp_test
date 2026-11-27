@@ -123,9 +123,9 @@ const AdminGradientDefs = React.memo(function AdminGradientDefs() {
     <svg width="0" height="0" className="absolute pointer-events-none" aria-hidden="true">
       <defs>
         <linearGradient id="adminLibGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#22D3EE" />
-          <stop offset="50%" stopColor="#6366F1" />
-          <stop offset="100%" stopColor="#A78BFA" />
+          <stop offset="0%" stopColor="var(--info)" />
+          <stop offset="50%" stopColor="var(--primary)" />
+          <stop offset="100%" stopColor="var(--purple-text)" />
         </linearGradient>
       </defs>
     </svg>
@@ -170,7 +170,7 @@ export function AdminLoader({
       <svg className="loader-ring" viewBox="0 0 100 100" fill="none" aria-hidden="true">
         <circle
           cx="50" cy="50" r="44"
-          stroke="#6366F1" strokeWidth="2.5"
+          stroke="var(--primary)" strokeWidth="2.5"
           strokeDasharray="4 6" opacity="0.35"
           vectorEffect="non-scaling-stroke"
         />
@@ -186,7 +186,7 @@ export function AdminLoader({
       <svg className="inner-svg" viewBox="0 0 100 100" fill="none" aria-hidden="true">
         <circle
           cx="50" cy="50" r="35"
-          stroke="#22D3EE" strokeWidth="1.8"
+          stroke="var(--info)" strokeWidth="1.8"
           strokeDasharray="6 10" opacity="0.75"
           vectorEffect="non-scaling-stroke"
         />

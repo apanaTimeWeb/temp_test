@@ -18,7 +18,12 @@ import SelectContent from '@/components/ui/select/SelectContent';
 import { SelectItem } from '@/components/ui/select/SelectItem';
 import SelectTrigger from '@/components/ui/select/SelectTrigger';
 import SelectValue from '@/components/ui/select/SelectValue';
-import { readBrowserStorageItem } from '@/lib/browserStorage';
+import {
+  clearBrowserSessionStorage,
+  expireBrowserCookie,
+  readBrowserStorageItem,
+  removeBrowserStorageItem,
+} from '@/lib/browserStorage';
 import { Building2, Menu } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
@@ -70,16 +75,12 @@ const DEFAULT_HEADER_NOTIFICATIONS: AdminShellHeaderNotificationItem[] = [
 
 function clearAdminClientSession(): void {
   if (typeof window === 'undefined') return;
-  try {
-    for (const key of ['auth_token', 'user', 'token', 'admin_user']) {
-      window.localStorage.removeItem(key);
-    }
-    window.sessionStorage.clear();
-    document.cookie = 'auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
-    document.cookie = 'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
-    document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
-  } catch {
-    // Storage access resilience
+  for (const key of ['auth_token', 'user', 'token', 'admin_user']) {
+    removeBrowserStorageItem(key);
+  }
+  clearBrowserSessionStorage();
+  for (const cookieName of ['auth_token', 'session', 'token']) {
+    expireBrowserCookie(cookieName);
   }
 }
 

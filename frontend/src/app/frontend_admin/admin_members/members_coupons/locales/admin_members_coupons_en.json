@@ -74,6 +74,13 @@
     "UNSAVED_CHANGES_TITLE": "Discard changes?",
     "UNSAVED_CHANGES_DESCRIPTION": "Your coupon draft will be lost if you discard it.",
     "KEEP_EDITING": "Keep editing",
-    "DISCARD_CHANGES": "Discard draft"
+    "DISCARD_CHANGES": "Discard draft",
+    "TYPE_FLAT_LABEL": "Flat Discount (Amount Off)",
+    "TYPE_PERCENT_LABEL": "Percentage (% Off)",
+    "TARGET_BRANCH_TITLE": "Target Branch Condition",
+    "ACTIVE_BRANCH_LABEL": "Active: {branch}",
+    "BRANCH_POLICY_TITLE": "Branch Condition Policy",
+    "BRANCH_POLICY_ALL": "Global Network: Coupon can be redeemed across all branches.",
+    "BRANCH_POLICY_SINGLE": "Branch-Exclusive: Restricted to \"{branch}\"."
   }
 }

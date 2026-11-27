@@ -9,18 +9,19 @@ import {
   Receipt,
   ShieldCheck,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import React from 'react';
 
 export interface OperationsPulseCard {
   id: string;
-  category: string;
-  title: string;
-  badge: string;
+  categoryKey: string;
+  titleKey: string;
+  badgeKey: string;
   badgeTheme: string;
-  value: string;
-  detail: string;
-  actionText: string;
+  valueKey: string;
+  detailKey: string;
+  actionTextKey: string;
   actionHref: string;
   icon: React.ElementType;
   iconBoxTheme: string;
@@ -30,13 +31,13 @@ export interface OperationsPulseCard {
 export const ADMIN_OPERATIONS_PULSE_CARDS: OperationsPulseCard[] = [
   {
     id: 'pulse-complaints',
-    category: 'Grievance Hotline',
-    title: 'Urgent Student Complaints',
-    badge: '2 Action Needed',
+    categoryKey: 'PULSE_COMPLAINTS_CAT',
+    titleKey: 'PULSE_COMPLAINTS_TITLE',
+    badgeKey: 'PULSE_COMPLAINTS_BADGE',
     badgeTheme: 'border-danger bg-danger-bg text-danger-text',
-    value: '2 Urgent Pending',
-    detail: 'Karol Bagh AC repair · Wi-Fi mesh packet loss (14 resolved this week)',
-    actionText: 'Review Complaints',
+    valueKey: 'PULSE_COMPLAINTS_VAL',
+    detailKey: 'PULSE_COMPLAINTS_DETAIL',
+    actionTextKey: 'PULSE_COMPLAINTS_CTA',
     actionHref: ADMIN_ROUTES.COMMUNICATION_COMPLAINTS,
     icon: AlertTriangle,
     iconBoxTheme: 'bg-danger-bg border-danger text-danger-text',
@@ -44,13 +45,13 @@ export const ADMIN_OPERATIONS_PULSE_CARDS: OperationsPulseCard[] = [
   },
   {
     id: 'pulse-settlement',
-    category: 'Daily Reconciliation',
-    title: 'EOD Cash & Expenses',
-    badge: '1 Voucher Pending',
+    categoryKey: 'PULSE_SETTLEMENT_CAT',
+    titleKey: 'PULSE_SETTLEMENT_TITLE',
+    badgeKey: 'PULSE_SETTLEMENT_BADGE',
     badgeTheme: 'border-warning bg-warning-bg text-warning-text',
-    value: '3/3 Branches Settled',
-    detail: 'Yesterday ₹48,500 tallied · 1 Electrical Voucher (₹3,500) awaiting approval',
-    actionText: 'Verify Settlement',
+    valueKey: 'PULSE_SETTLEMENT_VAL',
+    detailKey: 'PULSE_SETTLEMENT_DETAIL',
+    actionTextKey: 'PULSE_SETTLEMENT_CTA',
     actionHref: ADMIN_ROUTES.ACCOUNTS_DAILY_SETTLEMENT,
     icon: Receipt,
     iconBoxTheme: 'bg-warning-bg border-warning text-warning-text',
@@ -58,13 +59,13 @@ export const ADMIN_OPERATIONS_PULSE_CARDS: OperationsPulseCard[] = [
   },
   {
     id: 'pulse-renewals',
-    category: 'Revenue Protection',
-    title: 'Renewals & Dues Pipeline',
-    badge: '48h Window',
+    categoryKey: 'PULSE_RENEWALS_CAT',
+    titleKey: 'PULSE_RENEWALS_TITLE',
+    badgeKey: 'PULSE_RENEWALS_BADGE',
     badgeTheme: 'border-border-focus bg-primary-subtle text-primary',
-    value: '38 Expiring in 48h',
-    detail: '₹42,000 recoverable dues · 6 auto-suspended accounts awaiting fee clearance',
-    actionText: 'Open Dues Pipeline',
+    valueKey: 'PULSE_RENEWALS_VAL',
+    detailKey: 'PULSE_RENEWALS_DETAIL',
+    actionTextKey: 'PULSE_RENEWALS_CTA',
     actionHref: ADMIN_ROUTES.FINANCE_AUTO_SUSPEND,
     icon: Clock,
     iconBoxTheme: 'bg-primary-subtle border-border-focus text-primary',
@@ -72,13 +73,13 @@ export const ADMIN_OPERATIONS_PULSE_CARDS: OperationsPulseCard[] = [
   },
   {
     id: 'pulse-facility',
-    category: 'Operational Readiness',
-    title: 'Staff & Facility Health',
-    badge: 'All On-Duty',
+    categoryKey: 'PULSE_FACILITY_CAT',
+    titleKey: 'PULSE_FACILITY_TITLE',
+    badgeKey: 'PULSE_FACILITY_BADGE',
     badgeTheme: 'border-success bg-success-bg text-success-text',
-    value: '3/3 Branches Open',
-    detail: 'All 5 managers punched in · Lockers 78% occupied (142/180 assigned)',
-    actionText: 'Staff Attendance',
+    valueKey: 'PULSE_FACILITY_VAL',
+    detailKey: 'PULSE_FACILITY_DETAIL',
+    actionTextKey: 'PULSE_FACILITY_CTA',
     actionHref: ADMIN_ROUTES.STAFF_ATTENDANCE,
     icon: ShieldCheck,
     iconBoxTheme: 'bg-success-bg border-success text-success-text',
@@ -87,20 +88,19 @@ export const ADMIN_OPERATIONS_PULSE_CARDS: OperationsPulseCard[] = [
 ];
 
 export function AdminDashboardOperationsPulse() {
+  const t = useTranslations('ADMIN_DASHBOARD');
   return (
     <section aria-labelledby="operations-pulse-heading" className="space-y-3.5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
         <div>
           <h2 id="operations-pulse-heading" className="text-sm sm:text-base font-bold text-text-primary flex items-center gap-2">
             <span className="flex h-2 w-2 rounded-full bg-success motion-safe:animate-pulse" aria-hidden="true" />
-            <span>Network Operations Pulse & Action Queue</span>
+            <span>{t('PULSE_HEADING')}</span>
           </h2>
-          <p className="text-xs text-text-secondary mt-0.5">
-            Real-time operational alerts: student grievances, cash settlement clearances, renewal dues, and branch readiness.
-          </p>
+          <p className="text-xs text-text-secondary mt-0.5">{t('PULSE_SUBTITLE')}</p>
         </div>
         <span className="text-micro font-semibold text-text-secondary bg-card px-2.5 py-1 rounded-lg border border-border self-start sm:self-auto">
-          Updated: Live Synced
+          {t('PULSE_UPDATED_SYNCED')}
         </span>
       </div>
 
@@ -118,22 +118,22 @@ export function AdminDashboardOperationsPulse() {
                     <Icon size={18} aria-hidden="true" />
                   </div>
                   <span className={`px-2.5 py-0.5 rounded-full text-micro font-bold border tracking-wide ${card.badgeTheme}`}>
-                    {card.badge}
+                    {t(card.badgeKey)}
                   </span>
                 </div>
 
                 <div>
                   <span className="text-micro font-bold uppercase tracking-wider text-text-secondary">
-                    {card.category}
+                    {t(card.categoryKey)}
                   </span>
                   <h3 className="text-sm font-bold text-text-primary truncate mt-0.5">
-                    {card.title}
+                    {t(card.titleKey)}
                   </h3>
                   <div className="text-lg sm:text-xl font-black text-text-primary tracking-tight mt-1">
-                    {card.value}
+                    {t(card.valueKey)}
                   </div>
                   <p className="text-xs text-text-secondary leading-relaxed mt-1.5 line-clamp-2">
-                    {card.detail}
+                    {t(card.detailKey)}
                   </p>
                 </div>
               </div>
@@ -143,7 +143,7 @@ export function AdminDashboardOperationsPulse() {
                   href={card.actionHref}
                   className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline motion-safe:transition-colors group cursor-pointer"
                 >
-                  <span>{card.actionText}</span>
+                  <span>{t(card.actionTextKey)}</span>
                   <ArrowRight size={13} className="motion-safe:transition-transform group-hover:translate-x-1" aria-hidden="true" />
                 </Link>
               </div>

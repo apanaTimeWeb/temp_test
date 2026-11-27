@@ -1,6 +1,7 @@
 'use client';
 
 import type { AdminFinanceAutoSuspendSuspendedStudent } from '@/app/frontend_admin/admin_finance/finance_auto_suspend/types/AdminFinanceAutoSuspendTypes';
+import { formatAdminFinanceAutoSuspendCurrency } from '@/app/frontend_admin/admin_finance/finance_auto_suspend/utils/formatAdminFinanceAutoSuspendCurrency';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
@@ -155,7 +156,7 @@ export function AdminFinanceAutoSuspendKioskModal({
                 <div className="flex justify-between"><span className="text-text-secondary">Student Name:</span><span className="font-bold text-text-primary">{scannedStudent.studentName}</span></div>
                 <div className="flex justify-between"><span className="text-text-secondary">Smart ID:</span><span className="font-mono text-text-primary">{scannedStudent.smartId}</span></div>
                 <div className="flex justify-between"><span className="text-text-secondary">Allotted Seat:</span><span className="font-bold text-text-primary">{scannedStudent.seat} ({scannedStudent.shift})</span></div>
-                <div className="flex justify-between"><span className="text-text-secondary">Pending Amount:</span><span className="font-bold text-danger-text">₹{(scannedStudent.duesAmount || 1500).toLocaleString('en-IN')}</span></div>
+                <div className="flex justify-between"><span className="text-text-secondary">Pending Amount:</span><span className="font-bold text-danger-text">{formatAdminFinanceAutoSuspendCurrency(scannedStudent.duesAmount || 1500)}</span></div>
                 <div className="flex justify-between"><span className="text-text-secondary">Branch:</span><span className="text-text-primary">{scannedStudent.branch}</span></div>
               </div>
 

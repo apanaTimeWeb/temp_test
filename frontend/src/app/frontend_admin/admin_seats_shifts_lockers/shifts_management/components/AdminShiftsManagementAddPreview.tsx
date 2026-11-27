@@ -77,9 +77,9 @@ export function AdminShiftsManagementAddPreview({
             <span>18:00</span>
             <span>24:00</span>
           </div>
-          {timelineSegments.map((seg, idx) => (
+          {timelineSegments.map((seg) => (
             <div
-              key={idx}
+              key={`${seg.left}-${seg.width}`}
               className="absolute top-0 bottom-0 bg-primary opacity-80 rounded-sm shadow-card"
               style={{ left: `${seg.left}%`, width: `${Math.max(1, seg.width)}%` }}
             />

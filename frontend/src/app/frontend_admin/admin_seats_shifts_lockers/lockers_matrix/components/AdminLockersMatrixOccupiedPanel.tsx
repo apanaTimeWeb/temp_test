@@ -1,8 +1,10 @@
 'use client';
 
 import type { AdminLockersLockerMatrixViewModel } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/types/AdminLockersMatrixTypes';
+import { formatAdminLockersMatrixCurrency } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/utils/formatAdminLockersMatrixCurrency';
 import { displayValue } from '@/lib/display_value';
 import { CheckCircle2, IndianRupee, User, Wrench, X } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 
 interface AdminLockersMatrixOccupiedPanelProps {
   locker: AdminLockersLockerMatrixViewModel;
@@ -17,6 +19,8 @@ export function AdminLockersMatrixOccupiedPanel({
   onVacate,
   onSetMaintenance,
 }: AdminLockersMatrixOccupiedPanelProps) {
+  const t = useTranslations('ADMIN_LOCKERS');
+  const locale = useLocale();
   if (locker.status === 'maintenance') {
     return (
       <div className="space-y-4">
@@ -63,7 +67,7 @@ export function AdminLockersMatrixOccupiedPanel({
         </div>
         <div className="text-right">
           <span className="inline-flex items-center gap-0.5 rounded-md border border-success bg-success-bg px-2 py-0.5 text-xs font-bold text-success-text">
-            <IndianRupee size={11} aria-hidden="true" /> ₹300/mo
+            <IndianRupee size={11} aria-hidden="true" /> {t('lockerMonthlyRateBadge', { amount: formatAdminLockersMatrixCurrency(300, locale) })}
           </span>
         </div>
       </div>

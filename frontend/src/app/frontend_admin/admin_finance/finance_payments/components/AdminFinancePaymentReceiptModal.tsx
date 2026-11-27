@@ -6,7 +6,11 @@ import {
   openFinanceMailtoClient,
 } from '@/app/frontend_admin/admin_finance/finance_payments/utils/adminFinancePaymentsExports';
 import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinancePaymentsFormat';
-import { buildWhatsAppLink, downloadPaymentReceiptPdf } from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
+import { formatAdminFinancePaymentsInr } from '@/app/frontend_admin/admin_finance/finance_payments/utils/formatAdminFinancePaymentsInr';
+import {
+  buildWhatsAppLink,
+  downloadPaymentReceiptPdf,
+} from '@/app/frontend_admin/admin_finance/finance_payments/utils/adminFinancePaymentsPdf';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
@@ -153,7 +157,7 @@ export function AdminFinancePaymentReceiptModal({ payment, isOpen, onClose }: Ad
               <div>
                 <span className="text-text-secondary block">Late Fee Component</span>
                 <span className="font-medium text-text-secondary mt-0.5 block">
-                  {payment.lateFee && payment.lateFee > 0 ? `₹${payment.lateFee}` : '₹0 (None)'}
+                  {payment.lateFee && payment.lateFee > 0 ? formatAdminFinancePaymentsInr(payment.lateFee) : `${formatAdminFinancePaymentsInr(0)} (None)`}
                 </span>
               </div>
               <div>

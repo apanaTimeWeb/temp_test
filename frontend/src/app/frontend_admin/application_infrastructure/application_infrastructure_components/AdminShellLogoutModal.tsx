@@ -29,7 +29,7 @@ export function AdminShellLogoutModal({
   if (!open || typeof document === 'undefined') return null;
 
   return createPortal(
-    <div
+    <section
       role="dialog"
       aria-modal="true"
       aria-labelledby="admin-logout-title"
@@ -37,8 +37,10 @@ export function AdminShellLogoutModal({
       className="fixed inset-0 z-[99999] flex items-center justify-center p-4"
       data-testid="admin-logout-overlay"
     >
-      <div
-        className="fixed inset-0 bg-overlay-backdrop backdrop-blur-md motion-safe:transition-opacity"
+      <button
+        type="button"
+        tabIndex={-1}
+        className="fixed inset-0 w-full h-full border-0 bg-overlay-backdrop backdrop-blur-md motion-safe:transition-opacity"
         onClick={onCancel}
         aria-hidden="true"
       />
@@ -91,7 +93,7 @@ export function AdminShellLogoutModal({
           </button>
         </div>
       </div>
-    </div>,
+    </section>,
     document.body,
   );
 }

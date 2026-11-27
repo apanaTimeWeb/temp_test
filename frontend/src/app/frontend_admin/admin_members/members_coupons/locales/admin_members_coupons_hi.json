@@ -74,6 +74,13 @@
     "UNSAVED_CHANGES_TITLE": "बदलाव छोड़ दें?",
     "UNSAVED_CHANGES_DESCRIPTION": "यदि आप कूपन प्रारूप छोड़ते हैं, तो आपके बदलाव खो जाएंगे।",
     "KEEP_EDITING": "संपादन जारी रखें",
-    "DISCARD_CHANGES": "प्रारूप छोड़ें"
+    "DISCARD_CHANGES": "प्रारूप छोड़ें",
+    "TYPE_FLAT_LABEL": "फ़्लैट छूट (राशि में छूट)",
+    "TYPE_PERCENT_LABEL": "प्रतिशत (% छूट)",
+    "TARGET_BRANCH_TITLE": "लक्षित शाखा शर्त",
+    "ACTIVE_BRANCH_LABEL": "सक्रिय: {branch}",
+    "BRANCH_POLICY_TITLE": "शाखा शर्त नीति",
+    "BRANCH_POLICY_ALL": "ग्लोबल नेटवर्क: यह कूपन सभी शाखाओं में लागू किया जा सकता है।",
+    "BRANCH_POLICY_SINGLE": "शाखा-विशिष्ट: केवल \"{branch}\" तक सीमित।"
   }
 }

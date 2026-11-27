@@ -2,10 +2,12 @@
 // RESPONSIBILITY: Edit shift details, timings, monthly fee, and active state for shifts management.
 
 import type { AdminShiftsShift } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/types/AdminShiftsManagementTypes';
+import { getAdminShiftsManagementCurrencySymbol } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/utils/formatAdminShiftsManagementCurrency';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import { Building2, Clock, IndianRupee, Moon, Power, Save, Sun, X } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -24,6 +26,8 @@ export function AdminShiftsManagementEditModal({
   shift,
   onSaveShift,
 }: AdminShiftsManagementEditModalProps) {
+  const t = useTranslations('ADMIN_SHIFTS');
+  const currencySymbol = getAdminShiftsManagementCurrencySymbol(useLocale());
   const [name, setName] = useState('');
   const [startTime, setStartTime] = useState('06:00');
   const [endTime, setEndTime] = useState('14:00');
@@ -177,7 +181,7 @@ export function AdminShiftsManagementEditModal({
             <div className="space-y-1.5">
               <label htmlFor="edit-shift-fee" className="text-xs font-semibold text-text-secondary flex items-center gap-1">
                 <IndianRupee size={13} className="text-success-text" aria-hidden="true" />
-                <span>Monthly Fee (₹)</span>
+                <span>{t('monthlyFeeLabel', { currency: currencySymbol })}</span>
               </label>
               <input
                 id="edit-shift-fee"

@@ -4,7 +4,7 @@ import type { AdminFinanceRefund } from '@/app/frontend_admin/admin_finance/fina
 import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsFormat';
 import { getAdminFinanceRefundStatusLabelKey } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsRefundStatus';
 import { buildRefundNotificationMessage } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/adminFinanceRefundsExports';
-import { buildWhatsAppLink, downloadRefundVoucherPdf } from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
+import { buildWhatsAppLink, downloadRefundVoucherPdf } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/adminFinanceRefundsPdf';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import { ArrowDown, ArrowUp, ArrowUpDown, Building2, Check, CheckCircle2, Eye, FileText, MessageSquare, RotateCcw, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';

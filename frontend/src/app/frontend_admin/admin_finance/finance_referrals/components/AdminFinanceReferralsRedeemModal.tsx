@@ -2,6 +2,7 @@
 
 import type { AdminFinanceDemoReferrer } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsTypes';
 import { formatAdminFinanceCurrency } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/AdminFinanceReferralsFormat';
+import { formatAdminFinanceReferralsInr, getAdminFinanceReferralsCurrencySymbol } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/formatAdminFinanceReferralsInr';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
@@ -64,11 +65,11 @@ export function AdminFinanceReferralsRedeemModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (amountRupees <= 0) {
-      setError('Please enter a valid redemption amount greater than ₹0.');
+      setError(`Please enter a valid redemption amount greater than ${formatAdminFinanceReferralsInr(0)}.`);
       return;
     }
     if (amountRupees > maxBalanceRupees) {
-      setError(`Amount cannot exceed the available balance of ₹${maxBalanceRupees}.`);
+      setError(`Amount cannot exceed the available balance of ${formatAdminFinanceReferralsInr(maxBalanceRupees)}.`);
       return;
     }
     if (mode === 'cash_upi' && subChannel === 'UPI' && !utrNumber.trim()) {
@@ -194,7 +195,7 @@ export function AdminFinanceReferralsRedeemModal({
                 <span className="font-mono text-xs font-bold text-success-text">{creditNoteNo}</span>
               </div>
               <p className="text-[11px] text-text-secondary">
-                This ₹{amountRupees} credit will be automatically applied to {referrer.name}&apos;s ledger and subtracted from their next monthly fee receipt.
+                This {formatAdminFinanceReferralsInr(amountRupees)} credit will be automatically applied to {referrer.name}&apos;s ledger and subtracted from their next monthly fee receipt.
               </p>
             </div>
           ) : (
@@ -226,13 +227,13 @@ export function AdminFinanceReferralsRedeemModal({
 
           <div className="space-y-1.5">
             <div className="flex justify-between items-center">
-              <label htmlFor="redeem-amount" className="text-xs font-bold uppercase tracking-wider text-text-secondary">Redemption Amount (₹ INR)</label>
+              <label htmlFor="redeem-amount" className="text-xs font-bold uppercase tracking-wider text-text-secondary">Redemption Amount ({getAdminFinanceReferralsCurrencySymbol()} INR)</label>
               <button type="button" onClick={() => setAmountRupees(maxBalanceRupees)} className="text-[11px] text-primary hover:underline font-medium">
-                Max Available (₹{maxBalanceRupees})
+                Max Available ({formatAdminFinanceReferralsInr(maxBalanceRupees)})
               </button>
             </div>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary font-bold text-sm">₹</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary font-bold text-sm">{getAdminFinanceReferralsCurrencySymbol()}</span>
               <input id="redeem-amount" type="number" min="1" max={maxBalanceRupees} value={amountRupees || ''} onChange={(e) => { setAmountRupees(Number(e.target.value)); setError(null); }} className="w-full pl-8 pr-3 py-2 text-sm rounded-lg border border-border bg-input text-text-primary focus:outline-none focus:ring-2 focus:ring-primary font-mono font-semibold" placeholder="Enter amount..." required />
             </div>
           </div>

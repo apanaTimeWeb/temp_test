@@ -13,7 +13,8 @@ import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/
 import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { useQueryClient } from '@tanstack/react-query';
 import { Download, FileSpreadsheet, KeyRound, LayoutGrid, List, Printer, Search, Settings, ShieldAlert } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { formatAdminLockersMatrixCurrency } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/utils/formatAdminLockersMatrixCurrency';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -25,6 +26,7 @@ const LEGEND_ITEMS: Array<{ label: string; dot: string }> = [
 
 export function AdminLockersLockerMatrixPage() {
   const t = useTranslations('ADMIN_LOCKERS');
+  const locale = useLocale();
   const isDemo = isFrontendDemoModeEnabled();
   const queryClient = useQueryClient();
   const queryKey = useMemo(() => ADMIN_LOCKERS_MATRIX_QUERY_KEYS.list({ resource: 'locker-matrix', demo: isDemo }), [isDemo]);
@@ -176,7 +178,7 @@ export function AdminLockersLockerMatrixPage() {
 
           <button type="button" onClick={() => setIsSettingsOpen(true)} className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-border-focus bg-primary-subtle px-3.5 py-1.5 text-xs font-semibold text-primary hover:opacity-90 motion-safe:transition-opacity shadow-card cursor-pointer" title="Configure Monthly Rent & Refundable Security Deposit">
             <Settings size={14} aria-hidden="true" />
-            <span>Settings (₹{pricingPolicy.monthlyRent}/mo)</span>
+            <span>{t('settingsButtonLabel', { amount: formatAdminLockersMatrixCurrency(pricingPolicy.monthlyRent, locale) })}</span>
           </button>
           <button type="button" onClick={() => exportLockersMatrixCsv(visibleLockers, activeBranchFilter)} disabled={visibleLockers.length === 0} className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-info bg-info-bg px-3.5 py-1.5 text-xs font-semibold text-info-text hover:opacity-90 motion-safe:transition-opacity shadow-card cursor-pointer disabled:opacity-40" title="Export Locker Allotment List to CSV">
             <Download size={14} aria-hidden="true" />

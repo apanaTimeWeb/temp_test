@@ -62,6 +62,21 @@
     "UNSAVED_CHANGES_TITLE": "Discard changes?",
     "UNSAVED_CHANGES_DESCRIPTION": "Your plan draft will be lost if you discard it.",
     "KEEP_EDITING": "Keep editing",
-    "DISCARD_CHANGES": "Discard draft"
+    "DISCARD_CHANGES": "Discard draft",
+    "PREVIEW_LIVE_CATALOG": "Live Catalog Preview",
+    "PREVIEW_INTERFACE": "Student & Manager Interface",
+    "PREVIEW_DEFAULT_NAME": "Plan Name Preview",
+    "PREVIEW_DAYS_SUFFIX": "/ {days} Days",
+    "PREVIEW_MORE_FEATURES": "+{count} more",
+    "PRICING_ENGINE_TITLE": "Shift Multiplier & Tenure Discount Engine",
+    "PRICING_RULES_UPDATED": "Dynamic Shift Pricing & Tenure rules updated successfully.",
+    "PRICING_LOCKER_FEE": "Locker Monthly Fee",
+    "PRICING_LOCKER_SUB": "Added to monthly shift rate",
+    "PRICING_RESERVED_DESK": "Reserved Desk Surcharge",
+    "PRICING_RESERVED_SUB": "Floor 3 / Private Cabin",
+    "PRICING_MULTI_SHIFT": "Multi-Shift Combo Discount",
+    "PRICING_MULTI_SHIFT_SUB": "When 2+ shifts selected",
+    "PRICING_PER_MO": "{amount} / mo",
+    "PRICING_COMBO_OFF": "{pct}% Combo Off"
   }
 }

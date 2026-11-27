@@ -1,9 +1,6 @@
-'use client';
-import AdminMembersDirectoryView from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryView';
-import useAdminMembersDirectoryMain from '@/app/frontend_admin/admin_members/members_directory/hooks/useAdminMembersDirectoryMain';
+import AdminMembersDirectoryMain from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryMain';
 
-/** Canonical route entry; the module hook owns state and the view owns presentation. */
+/** Canonical Server Component route entry delegating to client hook/view shell. */
 export default function AdminMembersDirectoryRoute() {
-  const model = useAdminMembersDirectoryMain();
-  return <AdminMembersDirectoryView model={model} />;
+  return <AdminMembersDirectoryMain />;
 }

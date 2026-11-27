@@ -1,9 +1,10 @@
 // components/AdminDashboardBranchLeaderboard.tsx
 'use client';
-import { ArrowDown,ArrowUp,ArrowUpDown,Trophy } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { useMemo,useState } from 'react';
 import { AdminDashboardBranchLeaderboardRow } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/components/AdminDashboardBranchLeaderboardRow';
+import { formatAdminDashboardCurrency } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/utils/formatAdminDashboardCurrency';
+import { ArrowDown, ArrowUp, ArrowUpDown, Trophy } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
+import { useMemo, useState } from 'react';
 
 export type AdminDashboardTimeRange = 'today' | 'this_week' | 'this_month' | 'custom';
 
@@ -92,10 +93,11 @@ export function AdminDashboardBranchLeaderboard({
   timeRange?: AdminDashboardTimeRange;
 }) {
   const t = useTranslations('ADMIN_DASHBOARD');
+  const locale = useLocale();
   const [sortBy, setSortBy] = useState<SortMetric>('profit');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
-  const formatRupees = (amount: number) => `₹${amount.toLocaleString('en-IN')}`;
+  const formatRupees = (amount: number) => formatAdminDashboardCurrency(amount, locale);
 
   const toggleSort = (metric: SortMetric) => {
     if (sortBy === metric) {
@@ -130,7 +132,7 @@ export function AdminDashboardBranchLeaderboard({
     });
   }, [adjustedBranches, sortBy, sortDirection]);
 
-  const periodLabel = timeRange === 'today' ? 'Today' : timeRange === 'this_week' ? 'This Week' : 'MTD';
+  const periodLabel = timeRange === 'today' ? t('HORIZON_TODAY') : timeRange === 'this_week' ? t('HORIZON_THIS_WEEK') : t('HORIZON_MTD');
 
   const renderSortableHeader = (metric: SortMetric, label: string, align: 'left' | 'right' | 'center' = 'left') => {
     const isActive = sortBy === metric;
@@ -164,11 +166,11 @@ export function AdminDashboardBranchLeaderboard({
           <div className="flex items-center gap-2">
             <Trophy className="text-warning-text" size={20} aria-hidden="true" />
             <h2 id="branch-leaderboard-title" className="text-base sm:text-lg font-bold text-text-primary">
-              Multi-Branch Performance & Benchmarking
+              {t('LEADERBOARD_PERF_TITLE')}
             </h2>
           </div>
           <p className="text-xs text-text-secondary mt-1">
-            Comparative revenue, occupancy, and bottleneck diagnostics ({periodLabel} Horizon)
+            {t('LEADERBOARD_PERF_SUB', { period: periodLabel })}
           </p>
         </div>
       </div>
@@ -177,14 +179,14 @@ export function AdminDashboardBranchLeaderboard({
         <table className="w-full text-left text-xs border-collapse">
           <thead>
             <tr className="border-b border-border bg-surface-highlight">
-              <th scope="col" className="p-3.5 uppercase font-bold text-text-secondary">Rank</th>
-              {renderSortableHeader('branch', 'Branch & Manager')}
-              {renderSortableHeader('occupancy', 'Occupancy')}
-              {renderSortableHeader('revenue', `Revenue (${periodLabel})`, 'right')}
-              {renderSortableHeader('expenses', `Expenses (${periodLabel})`, 'right')}
-              {renderSortableHeader('profit', `Net Profit (${periodLabel})`, 'right')}
-              {renderSortableHeader('renewal', 'Renewal %', 'center')}
-              <th scope="col" className="p-3.5 uppercase font-bold text-text-secondary">Key Bottleneck / Alert</th>
+              <th scope="col" className="p-3.5 uppercase font-bold text-text-secondary">{t('COL_RANK')}</th>
+              {renderSortableHeader('branch', t('COL_BRANCH'))}
+              {renderSortableHeader('occupancy', t('LEADERBOARD_COL_OCCUPANCY'))}
+              {renderSortableHeader('revenue', t('LEADERBOARD_COL_REVENUE_PERIOD', { period: periodLabel }), 'right')}
+              {renderSortableHeader('expenses', t('LEADERBOARD_COL_EXPENSES_PERIOD', { period: periodLabel }), 'right')}
+              {renderSortableHeader('profit', t('LEADERBOARD_COL_PROFIT_PERIOD', { period: periodLabel }), 'right')}
+              {renderSortableHeader('renewal', t('LEADERBOARD_COL_RENEWAL_PCT'), 'center')}
+              <th scope="col" className="p-3.5 uppercase font-bold text-text-secondary">{t('LEADERBOARD_COL_BOTTLENECK_ALERT')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">

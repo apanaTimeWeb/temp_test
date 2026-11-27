@@ -1,4 +1,4 @@
-/** Zero-business KPI card shared by admin modules with semantic theme tokens and motion-safe transitions. */
+/** Zero-business KPI card shared by admin modules with semantic theme tokens and motion-safe styling. */
 import type { AdminSystemKpiCardProps } from '@/app/frontend_admin/components/ui/admin-primitives/types/AdminUiAdminPrimitivesComponentTypes';
 import { Minus, TrendingDown, TrendingUp } from 'lucide-react';
 
@@ -57,7 +57,7 @@ export function AdminSystemKpiCard({ title, value, subtitle, icon, trend, trendL
       <svg
         aria-hidden="true"
         className={joinClasses(
-          'absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 motion-safe:transition-opacity motion-reduce:transition-none motion-safe:duration-500 pointer-events-none',
+          'absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 motion-safe:transition-opacity motion-safe:duration-500 pointer-events-none',
           theme.strokeClass
         )}
         viewBox="0 0 150 45"

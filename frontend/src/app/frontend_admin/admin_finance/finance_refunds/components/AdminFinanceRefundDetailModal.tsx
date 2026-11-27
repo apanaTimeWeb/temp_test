@@ -6,7 +6,10 @@ import {
   buildRefundDetailPrintHtml,
   buildRefundNotificationMessage,
 } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/adminFinanceRefundsExports';
-import { buildWhatsAppLink, downloadRefundVoucherPdf } from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
+import {
+  buildWhatsAppLink,
+  downloadRefundVoucherPdf,
+} from '@/app/frontend_admin/admin_finance/finance_refunds/utils/adminFinanceRefundsPdf';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';

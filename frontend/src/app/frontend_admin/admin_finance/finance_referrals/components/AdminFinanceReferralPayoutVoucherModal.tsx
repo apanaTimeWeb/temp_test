@@ -2,7 +2,8 @@
 
 import type { ReferralPayoutVoucher } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsTypes';
 import { buildReferralVoucherPrintHtml } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/adminFinanceReferralsExports';
-import { buildWhatsAppLink } from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
+import { formatAdminFinanceReferralsInr } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/formatAdminFinanceReferralsInr';
+import { buildWhatsAppLink } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/adminFinanceReferralsWhatsapp';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
@@ -42,7 +43,7 @@ export function AdminFinanceReferralPayoutVoucherModal({
       `Voucher No: ${voucher.voucherId}\n` +
       `Student: ${voucher.studentName} (${voucher.smartId})\n` +
       `Branch: ${voucher.branch}\n` +
-      `*Disbursed Amount: ₹${amountRupees.toLocaleString('en-IN')}*\n` +
+      `*Disbursed Amount: ${formatAdminFinanceReferralsInr(amountRupees)}*\n` +
       `Disbursement Mode: ${voucher.mode === 'fee_adjustment' ? 'Adjusted in Desk Fee (Credit Note: ' + (voucher.invoiceCreditNote || '') + ')' : 'Direct Transfer (UTR: ' + (voucher.utrReference || 'Cash') + ')'}\n` +
       `Date: ${voucher.disbursedAt}\n` +
       `Remarks: ${voucher.notes}\n` +
@@ -94,7 +95,7 @@ export function AdminFinanceReferralPayoutVoucherModal({
               </div>
               <div className="text-right">
                 <span className="text-[11px] text-text-secondary uppercase tracking-wider block">Disbursed Amount</span>
-                <span className="text-xl font-extrabold text-success-text font-mono">₹{amountRupees.toLocaleString('en-IN')}</span>
+                <span className="text-xl font-extrabold text-success-text font-mono">{formatAdminFinanceReferralsInr(amountRupees)}</span>
               </div>
             </div>
 

@@ -2,7 +2,9 @@
 
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import type { DocPreview } from '@/app/frontend_admin/admin_members/members_directory/utils/adminMembersDirectoryDetailPrint';
+import { formatAdminMembersDirectoryCurrency } from '@/app/frontend_admin/admin_members/members_directory/utils/formatAdminMembersDirectoryCurrency';
 import { Armchair, Award, Building2, CalendarCheck, Clock, CreditCard, Download, ExternalLink, Eye, FileText, GraduationCap, IndianRupee, Layers, Lock, PauseCircle, ShieldCheck, UserRound } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 interface AdminMembersDirectoryDetailProfileTabProps {
@@ -22,6 +24,8 @@ export function AdminMembersDirectoryDetailProfileTab({
   onSelectTab,
   onPreviewDoc,
 }: AdminMembersDirectoryDetailProfileTabProps) {
+  const t = useTranslations('ADMIN_MEMBERS');
+  const locale = useLocale();
   const kycDocs = [
     { title: 'Aadhaar Card (UIDAI)', number: `UID: XXXX-XXXX-${memberIdClean}849`, file: 'aadhaar_card_verified.pdf', verified: 'Verified by Desk Manager' },
     { title: 'College / Student ID Card', number: `Roll: DU-2024-ENG-${memberIdClean}9`, file: 'student_college_id.pdf', verified: 'Academic Enrollment Active' },
@@ -75,7 +79,10 @@ export function AdminMembersDirectoryDetailProfileTab({
               {member.feeStatus || 'Paid (All Dues Cleared)'}
             </p>
             <p className="text-xs text-text-secondary mt-0.5">
-              Paid: ₹{((member.totalPaidMinor || 1200000) / 100).toLocaleString('en-IN')} {member.dueFeeMinor ? `· Due: ₹${(member.dueFeeMinor / 100).toLocaleString('en-IN')}` : ''}
+              {t('DETAIL_PAID_DUE_SUMMARY', {
+                paid: formatAdminMembersDirectoryCurrency((member.totalPaidMinor || 1200000) / 100, locale),
+                due: member.dueFeeMinor ? t('DETAIL_DUE_SUFFIX', { due: formatAdminMembersDirectoryCurrency(member.dueFeeMinor / 100, locale) }) : '',
+              })}
             </p>
           </div>
         </div>

@@ -1,10 +1,15 @@
 'use client';
 // RESPONSIBILITY: Locker monthly rent, refundable caution deposit, and key replacement policy configuration modal.
 
+import {
+  formatAdminLockersMatrixCurrency,
+  getAdminLockersMatrixCurrencySymbol,
+} from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/utils/formatAdminLockersMatrixCurrency';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import { AlertCircle, IndianRupee, KeyRound, Save, ShieldCheck, X } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -29,6 +34,9 @@ export function AdminLockersMatrixSettingsModal({
   currentPolicy,
   onSavePolicy,
 }: AdminLockersMatrixSettingsModalProps) {
+  const t = useTranslations('ADMIN_LOCKERS');
+  const locale = useLocale();
+  const currencySymbol = getAdminLockersMatrixCurrencySymbol(locale);
   const [monthlyRent, setMonthlyRent] = useState(currentPolicy.monthlyRent);
   const [securityDeposit, setSecurityDeposit] = useState(currentPolicy.securityDeposit);
   const [lostKeyFee, setLostKeyFee] = useState(currentPolicy.lostKeyFee);
@@ -113,14 +121,14 @@ export function AdminLockersMatrixSettingsModal({
                 onClick={() => applyPreset(350, 750, 200, 30)}
                 className="rounded-lg border border-border bg-card px-2.5 py-1 text-xs text-text-secondary hover:text-text-primary hover:border-border-focus motion-safe:transition-colors"
               >
-                Pro Metal Box (₹350/mo · ₹750 Dep)
+                {t('presetProMetalBox', { rent: formatAdminLockersMatrixCurrency(350, locale), deposit: formatAdminLockersMatrixCurrency(750, locale) })}
               </button>
               <button
                 type="button"
                 onClick={() => applyPreset(150, 300, 100, 15)}
                 className="rounded-lg border border-border bg-card px-2.5 py-1 text-xs text-text-secondary hover:text-text-primary hover:border-success motion-safe:transition-colors"
               >
-                Exam Special (₹150/mo · ₹300 Dep)
+                {t('presetExamSpecial', { rent: formatAdminLockersMatrixCurrency(150, locale), deposit: formatAdminLockersMatrixCurrency(300, locale) })}
               </button>
             </div>
           </div>
@@ -129,7 +137,7 @@ export function AdminLockersMatrixSettingsModal({
             <div className="space-y-1.5">
               <label htmlFor="locker-monthly-rent" className="text-xs font-semibold text-text-secondary flex items-center gap-1.5">
                 <IndianRupee size={13} className="text-primary" aria-hidden="true" />
-                <span>Monthly Locker Rent (₹)</span>
+                <span>{t('monthlyLockerRentLabel', { currency: currencySymbol })}</span>
               </label>
               <input
                 id="locker-monthly-rent"
@@ -147,7 +155,7 @@ export function AdminLockersMatrixSettingsModal({
             <div className="space-y-1.5">
               <label htmlFor="locker-security-deposit" className="text-xs font-semibold text-text-secondary flex items-center gap-1.5">
                 <ShieldCheck size={13} className="text-success-text" aria-hidden="true" />
-                <span>Refundable Caution Deposit (₹)</span>
+                <span>{t('cautionDepositLabel', { currency: currencySymbol })}</span>
               </label>
               <input
                 id="locker-security-deposit"
@@ -165,7 +173,7 @@ export function AdminLockersMatrixSettingsModal({
             <div className="space-y-1.5">
               <label htmlFor="locker-lost-key-fee" className="text-xs font-semibold text-text-secondary flex items-center gap-1.5">
                 <KeyRound size={13} className="text-warning-text" aria-hidden="true" />
-                <span>Lost Key Replacement Charge (₹)</span>
+                <span>{t('lostKeyChargeLabel', { currency: currencySymbol })}</span>
               </label>
               <input
                 id="locker-lost-key-fee"
@@ -183,7 +191,7 @@ export function AdminLockersMatrixSettingsModal({
             <div className="space-y-1.5">
               <label htmlFor="locker-late-fee" className="text-xs font-semibold text-text-secondary flex items-center gap-1.5">
                 <AlertCircle size={13} className="text-danger-text" aria-hidden="true" />
-                <span>Late Key Return Daily Fee (₹)</span>
+                <span>{t('lateKeyFeeLabel', { currency: currencySymbol })}</span>
               </label>
               <input
                 id="locker-late-fee"
@@ -204,11 +212,11 @@ export function AdminLockersMatrixSettingsModal({
               <KeyRound size={13} aria-hidden="true" /> Admission Receipt Formula
             </span>
             <div className="text-xs text-text-primary flex items-center justify-between border-t border-border pt-2">
-              <span>First Allotment Due (Rent + Security Deposit):</span>
-              <strong className="text-success-text font-mono text-sm">₹{monthlyRent + securityDeposit}</strong>
+              <span>{t('firstAllotmentDueLabel')}</span>
+              <strong className="text-success-text font-mono text-sm">{formatAdminLockersMatrixCurrency(monthlyRent + securityDeposit, locale)}</strong>
             </div>
             <div className="text-[11px] text-text-secondary">
-              * ₹{securityDeposit} caution money is tracked in Security Deposits Ledger and refunded at exit.
+              {t('cautionMoneyTrackedNote', { amount: formatAdminLockersMatrixCurrency(securityDeposit, locale) })}
             </div>
           </div>
 

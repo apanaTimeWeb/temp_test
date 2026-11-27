@@ -5,6 +5,7 @@ import type {
   AdminFinanceSecurityDeposit,
   DepositSortField,
 } from '@/app/frontend_admin/admin_finance/finance_security_deposits/types/AdminFinanceSecurityDepositsTypes';
+import { formatAdminFinanceSecurityDepositsCurrency } from '@/app/frontend_admin/admin_finance/finance_security_deposits/utils/formatAdminFinanceSecurityDepositsCurrency';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import {
   AlertTriangle, Armchair, ArrowDown, ArrowUp, ArrowUpDown,
@@ -186,7 +187,7 @@ export function AdminFinanceSecurityDepositsTable({
 
                     <td className="py-3.5 px-4 text-right">
                       <span className="font-bold font-sans text-text-primary text-sm">
-                        ₹{d.depositAmount.toLocaleString('en-IN')}
+                        {formatAdminFinanceSecurityDepositsCurrency(d.depositAmount)}
                       </span>
                     </td>
 
@@ -216,7 +217,7 @@ export function AdminFinanceSecurityDepositsTable({
                       {d.deductionAmount > 0 ? (
                         <div>
                           <span className="font-bold text-danger-text">
-                            - ₹{d.deductionAmount.toLocaleString('en-IN')}
+                            - {formatAdminFinanceSecurityDepositsCurrency(d.deductionAmount)}
                           </span>
                           {d.deductionReason && (
                             <div
@@ -240,7 +241,7 @@ export function AdminFinanceSecurityDepositsTable({
                         </div>
                       ) : d.status === 'held' ? (
                         <div className="text-text-secondary">
-                          Net: <strong className="text-text-primary font-bold">₹{netRefundable.toLocaleString('en-IN')}</strong>
+                          Net: <strong className="text-text-primary font-bold">{formatAdminFinanceSecurityDepositsCurrency(netRefundable)}</strong>
                         </div>
                       ) : (
                         <span className="text-text-secondary text-[11px]">Retained</span>

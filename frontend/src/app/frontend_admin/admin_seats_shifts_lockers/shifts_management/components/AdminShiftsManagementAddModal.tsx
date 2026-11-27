@@ -1,17 +1,15 @@
 'use client';
 
-import {
-  AdminShiftsManagementAddPreview,
-  SHIFT_ADD_PRESETS,
-  SHIFT_BRANCH_METADATA,
-} from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/components/AdminShiftsManagementAddPreview';
+import { AdminShiftsManagementAddPreview, SHIFT_ADD_PRESETS, SHIFT_BRANCH_METADATA } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/components/AdminShiftsManagementAddPreview';
 import type { AdminShiftsShift } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/types/AdminShiftsManagementTypes';
+import { getAdminShiftsManagementCurrencySymbol } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/utils/formatAdminShiftsManagementCurrency';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import { getLibraryPricingConfig, saveLibraryPricingConfig } from '@/lib/pricing/libraryPricingEngine';
 import { AlertTriangle, Building2, CheckCircle2, Clock, IndianRupee, Info, Moon, ShieldCheck, X } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -28,6 +26,8 @@ export function AdminShiftsManagementAddModal({
   onAddShift,
   selectedBranchName,
 }: AdminShiftsManagementAddModalProps) {
+  const t = useTranslations('ADMIN_SHIFTS');
+  const currencySymbol = getAdminShiftsManagementCurrencySymbol(useLocale());
   const { branches } = useAdminBranch();
   const [targetBranch, setTargetBranch] = useState(selectedBranchName || 'All Branches');
   const [name, setName] = useState('');
@@ -257,7 +257,7 @@ export function AdminShiftsManagementAddModal({
             </div>
             <div>
               <label htmlFor="shift-monthly-price" className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1 flex items-center gap-1">
-                <IndianRupee size={12} className="text-success-text" aria-hidden="true" /> Base Monthly Fee (₹)
+                <IndianRupee size={12} className="text-success-text" aria-hidden="true" /> {t('baseMonthlyFeeLabel', { currency: currencySymbol })}
               </label>
               <input id="shift-monthly-price" type="number" min="0" step="50" required value={monthlyPrice} onChange={(e) => setMonthlyPrice(Number(e.target.value))} placeholder="700" className="w-full rounded-xl border border-border bg-input px-3 py-2 text-xs text-text-primary focus:border-border-focus focus:outline-none font-mono" />
             </div>

@@ -5,6 +5,7 @@ import type {
   AdminFinanceAutoSuspendSuspendedStudent,
   SuspendSortField,
 } from '@/app/frontend_admin/admin_finance/finance_auto_suspend/types/AdminFinanceAutoSuspendTypes';
+import { formatAdminFinanceAutoSuspendCurrency } from '@/app/frontend_admin/admin_finance/finance_auto_suspend/utils/formatAdminFinanceAutoSuspendCurrency';
 import {
   AlertTriangle, Armchair, ArrowDown, ArrowUp, ArrowUpDown, Building,
   Calendar, Check, ChevronLeft, ChevronRight, Clock, MessageCircle, QrCode, RotateCcw,
@@ -165,7 +166,7 @@ export function AdminFinanceAutoSuspendTable({
 
                     <td className="py-3.5 px-4">
                       <div>
-                        <span className="font-bold text-danger-text">₹{(student.duesAmount || 1500).toLocaleString('en-IN')}</span>
+                        <span className="font-bold text-danger-text">{formatAdminFinanceAutoSuspendCurrency(student.duesAmount || 1500)}</span>
                         <div className="text-[11px] text-text-secondary">{student.planName || 'Monthly Sub'}</div>
                       </div>
                     </td>

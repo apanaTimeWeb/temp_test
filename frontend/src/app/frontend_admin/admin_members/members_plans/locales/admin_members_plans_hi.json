@@ -62,6 +62,21 @@
     "UNSAVED_CHANGES_TITLE": "बदलाव छोड़ दें?",
     "UNSAVED_CHANGES_DESCRIPTION": "यदि आप योजना का प्रारूप छोड़ते हैं, तो आपके बदलाव खो जाएंगे।",
     "KEEP_EDITING": "संपादन जारी रखें",
-    "DISCARD_CHANGES": "प्रारूप छोड़ें"
+    "DISCARD_CHANGES": "प्रारूप छोड़ें",
+    "PREVIEW_LIVE_CATALOG": "लाइव कैटलॉग पूर्वावलोकन",
+    "PREVIEW_INTERFACE": "छात्र और प्रबंधक इंटरफ़ेस",
+    "PREVIEW_DEFAULT_NAME": "योजना का नाम पूर्वावलोकन",
+    "PREVIEW_DAYS_SUFFIX": "/ {days} दिन",
+    "PREVIEW_MORE_FEATURES": "+{count} और",
+    "PRICING_ENGINE_TITLE": "शिफ्ट गुणक और अवधि छूट इंजन",
+    "PRICING_RULES_UPDATED": "डायनामिक शिफ्ट मूल्य और अवधि नियम सफलतापूर्वक अपडेट हो गए।",
+    "PRICING_LOCKER_FEE": "लॉकर मासिक शुल्क",
+    "PRICING_LOCKER_SUB": "मासिक शिफ्ट दर में जोड़ा जाएगा",
+    "PRICING_RESERVED_DESK": "आरक्षित डेस्क अधिभार",
+    "PRICING_RESERVED_SUB": "मंजिल 3 / प्राइवेट केबिन",
+    "PRICING_MULTI_SHIFT": "मल्टी-शिफ्ट कॉम्बो छूट",
+    "PRICING_MULTI_SHIFT_SUB": "जब 2+ शिफ्ट चुनी जाएँ",
+    "PRICING_PER_MO": "{amount} / माह",
+    "PRICING_COMBO_OFF": "{pct}% कॉम्बो छूट"
   }
 }

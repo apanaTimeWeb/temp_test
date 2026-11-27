@@ -170,6 +170,27 @@
     "DISCARD_CHANGES": "Discard changes",
     "DEMO_METRICS_NOTICE": "Demo metrics are derived from supplied sample records; metrics without a verified source field are shown as —.",
     "PLANS_CANONICAL_DESCRIPTION": "Membership plan creation and management are handled in the dedicated Membership Plans module.",
-    "OPEN_MEMBERSHIP_PLANS": "Open membership plan management"
+    "OPEN_MEMBERSHIP_PLANS": "Open membership plan management",
+    "WAIVER_AMOUNT_LABEL": "Waiver / Discount Amount",
+    "DETAIL_PAID_DUE_SUMMARY": "Paid: {paid}{due}",
+    "DETAIL_DUE_SUFFIX": " · Due: {due}",
+    "DETAIL_PER_MONTH": "/ month",
+    "PAYMENT_TOTAL_BILLED": "Total Billed",
+    "PAYMENT_TOTAL_PAID": "Total Paid",
+    "PAYMENT_TOTAL_WAIVED": "Total Waived",
+    "PAYMENT_BALANCE_DUE": "Balance Due",
+    "PAYMENT_LIFETIME_SUB": "Lifetime fee billing",
+    "PAYMENT_SETTLED_SUB": "100% payments settled",
+    "PAYMENT_WAIVED_SUB": "Admin credit notes",
+    "PAYMENT_NO_DUES_SUB": "No outstanding dues",
+    "PAYMENT_EXCLUSIVE_TITLE": "Admin Exclusive Authority: Fee Concessions & Waivers",
+    "PAYMENT_EXCLUSIVE_DESC": "Branch managers cannot alter fee rates or grant discounts. Use official Admin authority to sanction EWS, merit scholarships, or late fee waivers.",
+    "PAYMENT_GRANT_WAIVER_BTN": "Grant Fee Waiver / Discount",
+    "PAYMENT_CONCESSION_ORDER": "Concession Order",
+    "PAYMENT_RECEIPT_BTN": "Receipt",
+    "WAIVER_CANCEL": "Cancel",
+    "WAIVER_SUBMIT": "Authorize & Credit Memo",
+    "WAIVER_CATEGORY_LABEL": "Concession Category / Scheme",
+    "WAIVER_REASON_LABEL": "Administrative Justification / Approval Notes"
   }
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import type { AdminFinanceSecurityDeposit } from '@/app/frontend_admin/admin_finance/finance_security_deposits/types/AdminFinanceSecurityDepositsTypes';
+import { formatAdminFinanceSecurityDepositsCurrency } from '@/app/frontend_admin/admin_finance/finance_security_deposits/utils/formatAdminFinanceSecurityDepositsCurrency';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
@@ -63,7 +64,7 @@ export function AdminFinanceSecurityDepositsDeductionModal({
             <div className="flex justify-between pt-1 border-t border-border mt-1">
               <span className="text-text-secondary">Available Escrow Deposit:</span>
               <span className="font-bold text-success-text">
-                ₹{currentAvailable.toLocaleString('en-IN')}
+                {formatAdminFinanceSecurityDepositsCurrency(currentAvailable)}
               </span>
             </div>
           </div>
@@ -84,9 +85,9 @@ export function AdminFinanceSecurityDepositsDeductionModal({
               }}
               className="w-full p-2.5 rounded-xl border border-border bg-input text-text-primary text-xs focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
             >
-              <option value="Locker Key Lost">Locker Key Lost (₹150)</option>
-              <option value="Desk or Chair Damage">Desk or Chair Damage (₹300)</option>
-              <option value="Lost Library RFID Smart ID">Lost Library RFID Smart ID (₹100)</option>
+              <option value="Locker Key Lost">Locker Key Lost ({formatAdminFinanceSecurityDepositsCurrency(150)})</option>
+              <option value="Desk or Chair Damage">Desk or Chair Damage ({formatAdminFinanceSecurityDepositsCurrency(300)})</option>
+              <option value="Lost Library RFID Smart ID">Lost Library RFID Smart ID ({formatAdminFinanceSecurityDepositsCurrency(100)})</option>
               <option value="Unpaid Late Overstay Fee">Unpaid Late Overstay Fee</option>
               <option value="Other">Other Specific Deduction</option>
             </select>
@@ -129,7 +130,7 @@ export function AdminFinanceSecurityDepositsDeductionModal({
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-danger text-on-primary hover:opacity-90 shadow-card cursor-pointer motion-safe:transition-transform motion-safe:active:scale-95"
             >
               <CheckCircle size={14} aria-hidden="true" />
-              <span>Apply ₹{deductionAmount} Deduction</span>
+              <span>Apply {formatAdminFinanceSecurityDepositsCurrency(Number(deductionAmount) || 0)} Deduction</span>
             </button>
           </div>
         </form>

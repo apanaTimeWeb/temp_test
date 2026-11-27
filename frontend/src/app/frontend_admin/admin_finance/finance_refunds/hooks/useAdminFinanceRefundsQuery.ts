@@ -2,140 +2,11 @@
 
 import { ADMIN_FINANCE_REFUNDS_QUERY_KEYS } from '@/app/frontend_admin/admin_finance/finance_refunds/api/admin_finance_refunds.query_keys';
 import { fetchAdminFinanceRefunds } from '@/app/frontend_admin/admin_finance/finance_refunds/api/admin_finance_refunds_api';
-import type { AdminFinanceRefundApiRecord } from '@/app/frontend_admin/admin_finance/finance_refunds/schemas/AdminFinanceRefundsSchema';
+import { FALLBACK_REFUNDS } from '@/app/frontend_admin/admin_finance/finance_refunds/config/admin_finance_refunds.demo_data';
 import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { useQuery } from '@tanstack/react-query';
 
-export const FALLBACK_REFUNDS: (AdminFinanceRefundApiRecord & { branchName: string; branchId: string; studentPhone: string; studentEmail: string })[] = [
-  {
-    id: 'ref-001',
-    studentName: 'Aditi Rao',
-    smartId: 'SL-DT-1002',
-    studentPhone: '9876543220',
-    studentEmail: 'aditi.rao@example.com',
-    exitDate: '2026-04-12',
-    depositHeld: 2500,
-    deductionAmount: 500,
-    netRefund: 2000,
-    currencyCode: 'INR',
-    amountUnit: 'major',
-    status: 'pending',
-    branchName: 'Downtown Central',
-    branchId: 'BR-001',
-    paymentMethod: 'UPI (GPay)',
-    rejectionReason: undefined,
-  },
-  {
-    id: 'ref-002',
-    studentName: 'Bhavya Mishra',
-    smartId: 'SL-WS-2003',
-    studentPhone: '9876543221',
-    studentEmail: 'bhavya.mishra@example.com',
-    exitDate: '2026-04-11',
-    depositHeld: 2000,
-    deductionAmount: 0,
-    netRefund: 2000,
-    currencyCode: 'INR',
-    amountUnit: 'major',
-    status: 'pending',
-    branchName: 'Westside Branch',
-    branchId: 'BR-002',
-    paymentMethod: 'Direct Bank Transfer',
-    rejectionReason: undefined,
-  },
-  {
-    id: 'ref-003',
-    studentName: 'Manish Joshi',
-    smartId: 'SL-NH-3004',
-    studentPhone: '9876543222',
-    studentEmail: 'manish.joshi@example.com',
-    exitDate: '2026-04-10',
-    depositHeld: 3000,
-    deductionAmount: 200,
-    netRefund: 2800,
-    currencyCode: 'INR',
-    amountUnit: 'major',
-    status: 'approved',
-    branchName: 'North Hub',
-    branchId: 'BR-003',
-    paymentMethod: 'UPI (PhonePe)',
-    rejectionReason: undefined,
-  },
-  {
-    id: 'ref-004',
-    studentName: 'Neha Choudhary',
-    smartId: 'SL-DT-1005',
-    studentPhone: '9876543223',
-    studentEmail: 'neha.choudhary@example.com',
-    exitDate: '2026-04-09',
-    depositHeld: 2500,
-    deductionAmount: 0,
-    netRefund: 2500,
-    currencyCode: 'INR',
-    amountUnit: 'major',
-    status: 'processed',
-    processedDate: '2026-04-10',
-    branchName: 'Downtown Central',
-    branchId: 'BR-001',
-    paymentMethod: 'UPI (Paytm)',
-    rejectionReason: undefined,
-  },
-  {
-    id: 'ref-005',
-    studentName: 'Pranav Kulkarni',
-    smartId: 'SL-WS-2006',
-    studentPhone: '9876543224',
-    studentEmail: 'pranav.kulkarni@example.com',
-    exitDate: '2026-04-08',
-    depositHeld: 2000,
-    deductionAmount: 2000,
-    netRefund: 0,
-    currencyCode: 'INR',
-    amountUnit: 'major',
-    status: 'rejected',
-    branchName: 'Westside Branch',
-    branchId: 'BR-002',
-    paymentMethod: 'Cash',
-    rejectionReason: 'Locker key not returned and damage to desk partition board.',
-  },
-  {
-    id: 'ref-006',
-    studentName: 'Tanvi Bhatia',
-    smartId: 'SL-NH-3008',
-    studentPhone: '9876543225',
-    studentEmail: 'tanvi.bhatia@example.com',
-    exitDate: '2026-04-07',
-    depositHeld: 2500,
-    deductionAmount: 300,
-    netRefund: 2200,
-    currencyCode: 'INR',
-    amountUnit: 'major',
-    status: 'processed',
-    processedDate: '2026-04-08',
-    branchName: 'North Hub',
-    branchId: 'BR-003',
-    paymentMethod: 'Direct Bank Transfer',
-    rejectionReason: undefined,
-  },
-  {
-    id: 'ref-007',
-    studentName: 'Utkarsh Pandey',
-    smartId: 'SL-DT-1009',
-    studentPhone: '9876543226',
-    studentEmail: 'utkarsh.pandey@example.com',
-    exitDate: '2026-04-06',
-    depositHeld: 2000,
-    deductionAmount: 0,
-    netRefund: 2000,
-    currencyCode: 'INR',
-    amountUnit: 'major',
-    status: 'pending',
-    branchName: 'Downtown Central',
-    branchId: 'BR-001',
-    paymentMethod: 'UPI (GPay)',
-    rejectionReason: undefined,
-  },
-];
+export { FALLBACK_REFUNDS };
 
 /** Owns the module list query while leaving presentation and local filters in the view. */
 export default function useAdminFinanceRefundsQuery() {
@@ -151,7 +22,7 @@ export default function useAdminFinanceRefundsQuery() {
           return FALLBACK_REFUNDS;
         }
         return data;
-      } catch (err) {
+      } catch {
         return FALLBACK_REFUNDS;
       }
     },

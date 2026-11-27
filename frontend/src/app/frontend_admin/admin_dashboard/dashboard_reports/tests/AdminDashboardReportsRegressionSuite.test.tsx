@@ -651,10 +651,11 @@ suite1_describe('Original suite: AdminDashboardReportsContract.test.ts', () => {
       const analytics = read('../components/AdminDashboardReportsAnalyticsPanel');
       const headerSection = read('../components/AdminDashboardReportsAnalyticsPageHeaderSection');
       const library = read('../page');
+      const localeEn = read('../locales/admin_dashboard_reports_en.json');
       suite1_expect(analytics).toContain('isFrontendDemoModeEnabled');
       suite1_expect(analytics).toContain('useAdminDashboardReportsAnalyticsViewState(isDemoMode)');
       suite1_expect(headerSection).toContain('LIVE_UNAVAILABLE_BANNER');
-      suite1_expect(library).toContain('REPORTS_DATA_PENDING');
+      suite1_expect(localeEn).toContain('REPORTS_DATA_PENDING');
       suite1_expect(library).not.toContain('admin_reports_main');
     });
 

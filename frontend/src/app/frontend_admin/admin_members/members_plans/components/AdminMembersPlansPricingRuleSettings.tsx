@@ -1,15 +1,23 @@
 'use client';
 
 import {
+  formatAdminMembersPlansInr,
+  getAdminMembersPlansCurrencySymbol,
+} from '@/app/frontend_admin/admin_members/members_plans/utils/formatAdminMembersPlansInr';
+import {
   getLibraryPricingConfig,
   saveLibraryPricingConfig,
   type LibraryPricingConfig,
 } from '@/lib/pricing/libraryPricingEngine';
 import { Armchair, Layers, Lock, Percent } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 export function AdminMembersPlansPricingRuleSettings() {
+  const t = useTranslations('ADMIN_PLANS');
+  const locale = useLocale();
+  const currencySymbol = getAdminMembersPlansCurrencySymbol(locale);
   const [config, setConfig] = useState<LibraryPricingConfig>(() => getLibraryPricingConfig());
   const [isEditing, setIsEditing] = useState(false);
   const [draftConfig, setDraftConfig] = useState<LibraryPricingConfig>(config);
@@ -147,7 +155,7 @@ export function AdminMembersPlansPricingRuleSettings() {
           </div>
           {isEditing ? (
             <div className="flex items-center gap-1">
-              <span className="text-xs text-text-secondary">₹</span>
+              <span className="text-xs text-text-secondary">{currencySymbol}</span>
               <input
                 type="number"
                 min="0"
@@ -158,7 +166,7 @@ export function AdminMembersPlansPricingRuleSettings() {
               />
             </div>
           ) : (
-            <span className="text-xs font-bold text-text-primary font-mono">₹{config.lockerMonthlyFee} / mo</span>
+            <span className="text-xs font-bold text-text-primary font-mono">{t('PRICING_PER_MO', { amount: formatAdminMembersPlansInr(config.lockerMonthlyFee, locale) })}</span>
           )}
         </div>
 
@@ -168,13 +176,13 @@ export function AdminMembersPlansPricingRuleSettings() {
               <Armchair size={16} aria-hidden="true" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-text-primary">Reserved Desk Surcharge</p>
-              <p className="text-[11px] text-text-secondary">Floor 3 / Private Cabin</p>
+              <p className="text-xs font-semibold text-text-primary">{t('PRICING_RESERVED_DESK')}</p>
+              <p className="text-[11px] text-text-secondary">{t('PRICING_RESERVED_SUB')}</p>
             </div>
           </div>
           {isEditing ? (
             <div className="flex items-center gap-1">
-              <span className="text-xs text-text-secondary">₹</span>
+              <span className="text-xs text-text-secondary">{currencySymbol}</span>
               <input
                 type="number"
                 min="0"
@@ -185,7 +193,7 @@ export function AdminMembersPlansPricingRuleSettings() {
               />
             </div>
           ) : (
-            <span className="text-xs font-bold text-text-primary font-mono">₹{config.reservedSeatMonthlyFee} / mo</span>
+            <span className="text-xs font-bold text-text-primary font-mono">{t('PRICING_PER_MO', { amount: formatAdminMembersPlansInr(config.reservedSeatMonthlyFee, locale) })}</span>
           )}
         </div>
 

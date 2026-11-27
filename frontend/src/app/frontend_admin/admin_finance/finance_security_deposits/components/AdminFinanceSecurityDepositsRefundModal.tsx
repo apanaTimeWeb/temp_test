@@ -1,6 +1,7 @@
 'use client';
 
 import type { AdminFinanceSecurityDeposit } from '@/app/frontend_admin/admin_finance/finance_security_deposits/types/AdminFinanceSecurityDepositsTypes';
+import { formatAdminFinanceSecurityDepositsCurrency } from '@/app/frontend_admin/admin_finance/finance_security_deposits/utils/formatAdminFinanceSecurityDepositsCurrency';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
@@ -105,28 +106,28 @@ export function AdminFinanceSecurityDepositsRefundModal({
             <div className="flex justify-between pt-2 border-t border-border">
               <span className="text-text-secondary">Gross Deposit Held:</span>
               <span className="font-bold text-text-primary">
-                ₹{refundTarget.depositAmount.toLocaleString('en-IN')}
+                {formatAdminFinanceSecurityDepositsCurrency(refundTarget.depositAmount)}
               </span>
             </div>
 
             {refundTarget.deductionAmount > 0 && (
               <div className="flex justify-between text-danger-text">
                 <span>Previous Deductions ({refundTarget.deductionReason}):</span>
-                <span>- ₹{refundTarget.deductionAmount.toLocaleString('en-IN')}</span>
+                <span>- {formatAdminFinanceSecurityDepositsCurrency(refundTarget.deductionAmount)}</span>
               </div>
             )}
 
             {hasDamageDeduction && (
               <div className="flex justify-between text-danger-text">
                 <span>Inspection Damage Deduction:</span>
-                <span>- ₹{damageAmount.toLocaleString('en-IN')}</span>
+                <span>- {formatAdminFinanceSecurityDepositsCurrency(damageAmount)}</span>
               </div>
             )}
 
             <div className="flex justify-between text-sm font-extrabold text-success-text pt-1.5 border-t border-border">
               <span>Net Refund Payable:</span>
               <span data-testid="net-refund-payable-amount">
-                ₹{netRefundAmount.toLocaleString('en-IN')}
+                {formatAdminFinanceSecurityDepositsCurrency(netRefundAmount)}
               </span>
             </div>
           </div>
@@ -254,7 +255,7 @@ export function AdminFinanceSecurityDepositsRefundModal({
               }`}
             >
               <CheckCircle size={14} aria-hidden="true" />
-              <span>Confirm & Disburse ₹{netRefundAmount.toLocaleString('en-IN')}</span>
+              <span>Confirm & Disburse {formatAdminFinanceSecurityDepositsCurrency(netRefundAmount)}</span>
             </button>
           </div>
         </form>

@@ -116,8 +116,8 @@ export function AdminAccountsExpensesTableSection({
             <div className="flex items-center gap-1.5 mt-0.5">
               <span className="text-[10px] uppercase font-semibold text-text-secondary">{params.data.mode}</span>
               {isHighValue && (
-                <span className="inline-flex items-center rounded bg-warning-bg border border-warning px-1 py-0.2 text-[9px] font-bold text-warning-text" title="High value (> ₹2,000) - requires Admin approval">
-                  &gt; ₹2k Admin
+                <span className="inline-flex items-center rounded bg-warning-bg border border-warning px-1 py-0.2 text-[9px] font-bold text-warning-text" title={`High value (> ${formatAdminAccountingCurrency(200000, locale)}) - requires Admin approval`}>
+                  &gt; {formatAdminAccountingCurrency(200000, locale)}
                 </span>
               )}
             </div>

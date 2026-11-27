@@ -1,9 +1,11 @@
 'use client';
 
 import { DEMO_GAP_RECORDS } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/config/admin_shifts_gap.demo_data';
+import { formatAdminShiftsGapCurrency } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/utils/formatAdminShiftsGapCurrency';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import { Building2, Clock, IndianRupee, Lightbulb, Search, TrendingDown } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 
 function getBranchBadgeClass(branch: string) {
@@ -15,6 +17,8 @@ function getBranchBadgeClass(branch: string) {
 }
 
 export function AdminShiftsGapOverstayAuditTable() {
+  const t = useTranslations('ADMIN_SHIFTS');
+  const locale = useLocale();
   const { selectedBranch, isAllBranches } = useAdminBranch();
   const [branchFilter, setBranchFilter] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
@@ -65,7 +69,7 @@ export function AdminShiftsGapOverstayAuditTable() {
         <div className="flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-danger bg-danger-bg px-3.5 py-1 text-xs font-bold text-danger-text shadow-card">
             <IndianRupee size={13} aria-hidden="true" />
-            Total Monthly Gap Opportunity: ₹{totalMonthlyLeakage.toLocaleString('en-IN')}/mo
+            {t('totalMonthlyGapOpportunity', { amount: formatAdminShiftsGapCurrency(totalMonthlyLeakage, locale) })}
           </span>
         </div>
       </div>
@@ -147,9 +151,9 @@ export function AdminShiftsGapOverstayAuditTable() {
                         <span className="font-mono text-[11px] text-text-secondary shrink-0 font-bold">{r.gapPercent}%</span>
                       </div>
                     </td>
-                    <td className="py-3 px-3.5 text-right font-mono text-text-secondary font-medium">₹{r.dailyGapLoss}</td>
+                    <td className="py-3 px-3.5 text-right font-mono text-text-secondary font-medium">{formatAdminShiftsGapCurrency(r.dailyGapLoss, locale)}</td>
                     <td className="py-3 px-3.5 text-right font-mono font-extrabold text-danger-text">
-                      ₹{r.monthlyLeakage.toLocaleString('en-IN')}
+                      {formatAdminShiftsGapCurrency(r.monthlyLeakage, locale)}
                     </td>
                     <td className="py-3 px-4 min-w-[220px]">
                       <div className="flex items-start gap-1.5 text-[11px] text-text-secondary leading-snug">

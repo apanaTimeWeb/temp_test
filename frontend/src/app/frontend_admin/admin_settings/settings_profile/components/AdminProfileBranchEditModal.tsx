@@ -48,7 +48,7 @@ export function AdminProfileBranchEditModal({
     reset,
     watch,
     setValue,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<AdminBranchEditFormValues>({
     resolver: zodResolver(BranchEditSchema),
     defaultValues: {
@@ -78,6 +78,16 @@ export function AdminProfileBranchEditModal({
       status: branch.status,
     });
   }, [branch, reset]);
+
+  useEffect(() => {
+    if (!open || !isDirty) return;
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isDirty, open]);
 
   const currentStatus = watch('status');
 

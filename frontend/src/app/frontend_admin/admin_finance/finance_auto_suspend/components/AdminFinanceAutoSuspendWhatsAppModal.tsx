@@ -1,6 +1,7 @@
 'use client';
 
 import type { AdminFinanceAutoSuspendSuspendedStudent } from '@/app/frontend_admin/admin_finance/finance_auto_suspend/types/AdminFinanceAutoSuspendTypes';
+import { formatAdminFinanceAutoSuspendCurrency } from '@/app/frontend_admin/admin_finance/finance_auto_suspend/utils/formatAdminFinanceAutoSuspendCurrency';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
@@ -28,7 +29,7 @@ export function AdminFinanceAutoSuspendWhatsAppModal({
     if (!isOpen || !student) return;
     setPhone(student.phone || '9876543210');
     setMessage(
-      `Dear ${student.studentName} (Smart ID: ${student.smartId}),\n\nThis is an official notice regarding your library membership at ${student.branch || 'Central Library'}.\n\nYour allotted seat ${student.seat} (${student.shift} Shift) is currently suspended due to pending subscription fee of ₹${(student.duesAmount || 1500).toLocaleString('en-IN')} (${student.daysOverdue} days overdue).\n\nKindly clear your pending balance online or at the reception desk to restore your turnstile gate access immediately.\n\nWarm regards,\nLibrary Administration`,
+      `Dear ${student.studentName} (Smart ID: ${student.smartId}),\n\nThis is an official notice regarding your library membership at ${student.branch || 'Central Library'}.\n\nYour allotted seat ${student.seat} (${student.shift} Shift) is currently suspended due to pending subscription fee of ${formatAdminFinanceAutoSuspendCurrency(student.duesAmount || 1500)} (${student.daysOverdue} days overdue).\n\nKindly clear your pending balance online or at the reception desk to restore your turnstile gate access immediately.\n\nWarm regards,\nLibrary Administration`,
     );
   }, [isOpen, student]);
 
@@ -89,7 +90,7 @@ export function AdminFinanceAutoSuspendWhatsAppModal({
               Seat {student.seat} · {student.shift}
             </span>
             <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded font-bold bg-danger-bg text-danger-text border border-danger">
-              ₹{(student.duesAmount || 1500).toLocaleString('en-IN')} Due ({student.daysOverdue}d)
+              {formatAdminFinanceAutoSuspendCurrency(student.duesAmount || 1500)} Due ({student.daysOverdue}d)
             </span>
           </div>
         </div>

@@ -8,21 +8,13 @@ import { useTranslations } from 'next-intl';
 
 export default function AdminEnquiriesEnquiryKanbanCard({ enq, colClass, onClick }: AdminEnquiriesEnquiryKanbanCardProps) {
   const t = useTranslations('ADMIN_ENQUIRIES');
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      onClick();
-    }
-  };
   const handledBy = typeof enq.handledBy === 'string' ? enq.handledBy.split(' ')[0] || t('UNASSIGNED') : t('UNASSIGNED');
   return (
-    <div
+    <button
+      type="button"
       data-testid="admin_enquiries-AdminEnquiriesEnquiryKanbanCard-control-001"
-      className={`rounded-lg border border-border bg-card p-3 shadow-card ${colClass}`}
+      className={`w-full text-left rounded-lg border border-border bg-card p-3 shadow-card cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${colClass}`}
       onClick={onClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
     >
       <div className="flex min-w-0 items-start gap-2">
         <p className="truncate text-body font-semibold text-text-primary">{enq.name}</p>
@@ -43,7 +35,7 @@ export default function AdminEnquiriesEnquiryKanbanCard({ enq, colClass, onClick
         {enq.convertedDate && <span className="bg-success-bg text-success-text"><CheckCircle size={18} strokeWidth={2}/>{enq.convertedDate}</span>}
         <span className="inline-flex items-center gap-1 text-caption text-text-secondary"><User size={18} strokeWidth={2}/>{handledBy}</span>
       </div>
-    </div>
+    </button>
   );
 }
 

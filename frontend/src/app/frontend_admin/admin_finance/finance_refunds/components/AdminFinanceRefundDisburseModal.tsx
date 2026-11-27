@@ -1,6 +1,7 @@
 'use client';
 
 import type { AdminFinanceRefund } from '@/app/frontend_admin/admin_finance/finance_refunds/types/AdminFinanceRefundsComponentTypes';
+import { formatAdminFinanceRefundsInr } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/formatAdminFinanceRefundsInr';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
@@ -114,13 +115,13 @@ export function AdminFinanceRefundDisburseModal({
             <div>
               <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider block">Net Refund Payable</span>
               <span className="text-2xl font-extrabold text-success-text font-mono">
-                ₹{refund.netRefund.toLocaleString('en-IN')}.00
+                {formatAdminFinanceRefundsInr(refund.netRefund, 2)}
               </span>
             </div>
             <div className="text-right text-xs text-text-secondary">
-              <div>Held: ₹{refund.depositHeld.toLocaleString('en-IN')}</div>
+              <div>Held: {formatAdminFinanceRefundsInr(refund.depositHeld)}</div>
               {refund.deductionAmount > 0 && (
-                <div className="text-danger-text">Deduction: -₹{refund.deductionAmount.toLocaleString('en-IN')}</div>
+                <div className="text-danger-text">Deduction: -{formatAdminFinanceRefundsInr(refund.deductionAmount)}</div>
               )}
             </div>
           </div>

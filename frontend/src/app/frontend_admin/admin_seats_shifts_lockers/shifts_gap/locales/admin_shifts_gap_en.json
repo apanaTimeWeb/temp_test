@@ -334,6 +334,8 @@
     "paymentModeUpi": "UPI",
     "paymentModeCard": "Card",
     "ratePerDay": "₹{rate}/day",
-    "migrationValidationFailed": "Check the required shift, seat, custom time range, and payment reference before continuing."
+    "migrationValidationFailed": "Check the required shift, seat, custom time range, and payment reference before continuing.",
+    "totalMonthlyGapOpportunity": "Total Monthly Gap Opportunity: {amount}/mo",
+    "negativeRatePerDay": "-{amount}/day"
   }
 }

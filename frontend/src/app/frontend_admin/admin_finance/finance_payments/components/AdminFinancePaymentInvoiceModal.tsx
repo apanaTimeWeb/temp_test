@@ -4,7 +4,11 @@ import type { AdminFinancePayment } from '@/app/frontend_admin/admin_finance/fin
 import { calculateInvoiceAmounts, generateInvoicePrintHtml } from '@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinanceInvoicePrintHtml';
 import { openFinanceMailtoClient } from '@/app/frontend_admin/admin_finance/finance_payments/utils/adminFinancePaymentsExports';
 import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinancePaymentsFormat';
-import { buildWhatsAppLink, downloadPaymentInvoicePdf } from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
+import { formatAdminFinancePaymentsInr } from '@/app/frontend_admin/admin_finance/finance_payments/utils/formatAdminFinancePaymentsInr';
+import {
+  buildWhatsAppLink,
+  downloadPaymentInvoicePdf,
+} from '@/app/frontend_admin/admin_finance/finance_payments/utils/adminFinancePaymentsPdf';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
@@ -47,8 +51,8 @@ export function AdminFinancePaymentInvoiceModal({ payment, isOpen, onClose }: Ad
       `Smart ID: ${payment.smartId}\n` +
       `Branch: ${payment.branch ?? 'Downtown Central'}\n` +
       `---------------------------------\n` +
-      `Taxable Value: ₹${calcs.taxableAmount.toLocaleString('en-IN')}\n` +
-      `GST (18%): ₹${calcs.gstAmount.toLocaleString('en-IN')}\n` +
+      `Taxable Value: ${formatAdminFinancePaymentsInr(calcs.taxableAmount)}\n` +
+      `GST (18%): ${formatAdminFinancePaymentsInr(calcs.gstAmount)}\n` +
       `*Grand Total: ${formattedAmount}*\n` +
       `Mode: ${payment.mode.toUpperCase()}\n` +
       (payment.txnId ? `Txn ID: ${payment.txnId}\n` : '') +
@@ -157,8 +161,8 @@ export function AdminFinancePaymentInvoiceModal({ payment, isOpen, onClose }: Ad
                     <span className="text-caption text-text-secondary">Monthly subscription fee</span>
                   </td>
                   <td className="px-3 py-3 text-center font-mono text-text-secondary">999293</td>
-                  <td className="px-3 py-3 text-right font-medium text-text-primary">₹{calcs.taxableAmount.toLocaleString('en-IN')}</td>
-                  <td className="px-3 py-3 text-right text-text-secondary">₹{calcs.gstAmount.toLocaleString('en-IN')}</td>
+                  <td className="px-3 py-3 text-right font-medium text-text-primary">{formatAdminFinancePaymentsInr(calcs.taxableAmount)}</td>
+                  <td className="px-3 py-3 text-right text-text-secondary">{formatAdminFinancePaymentsInr(calcs.gstAmount)}</td>
                   <td className="px-4 py-3 text-right font-bold text-text-primary">{formattedAmount}</td>
                 </tr>
               </tbody>
@@ -167,9 +171,9 @@ export function AdminFinancePaymentInvoiceModal({ payment, isOpen, onClose }: Ad
 
           <div className="flex justify-end">
             <div className="w-full sm:w-64 rounded-xl border border-border bg-card p-3 space-y-2 text-xs">
-              <div className="flex justify-between text-text-secondary"><span>Taxable Amount:</span><span>₹{calcs.taxableAmount.toLocaleString('en-IN')}</span></div>
-              <div className="flex justify-between text-text-secondary"><span>CGST (9%):</span><span>₹{calcs.cgst.toLocaleString('en-IN')}</span></div>
-              <div className="flex justify-between text-text-secondary"><span>SGST (9%):</span><span>₹{calcs.sgst.toLocaleString('en-IN')}</span></div>
+              <div className="flex justify-between text-text-secondary"><span>Taxable Amount:</span><span>{formatAdminFinancePaymentsInr(calcs.taxableAmount)}</span></div>
+              <div className="flex justify-between text-text-secondary"><span>CGST (9%):</span><span>{formatAdminFinancePaymentsInr(calcs.cgst)}</span></div>
+              <div className="flex justify-between text-text-secondary"><span>SGST (9%):</span><span>{formatAdminFinancePaymentsInr(calcs.sgst)}</span></div>
               <div className="flex justify-between font-bold text-sm text-text-primary border-t border-border pt-2">
                 <span>Grand Total:</span>
                 <span className="text-info-text">{formattedAmount}</span>

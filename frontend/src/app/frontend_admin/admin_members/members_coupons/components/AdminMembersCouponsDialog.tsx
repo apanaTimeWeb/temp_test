@@ -3,6 +3,7 @@
 import { ADMIN_COUPONS_EMPTY_FORM } from '@/app/frontend_admin/admin_members/members_coupons/config/admin_members_coupons.url_config';
 import { createAdminCouponsFormSchema, type AdminCouponsFormValues } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
 import type { AdminCouponsCreateDialogProps } from '@/app/frontend_admin/admin_members/members_coupons/types/AdminMembersCouponsComponentTypes';
+import { getAdminMembersCouponsCurrencySymbol } from '@/app/frontend_admin/admin_members/members_coupons/utils/formatAdminMembersCouponsCurrency';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
@@ -11,7 +12,7 @@ import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Building2, CheckCircle } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -43,6 +44,7 @@ export function AdminCouponsDialog({
   onConfirmDelete = () => undefined,
 }: AdminCouponsCreateDialogProps) {
   const t = useTranslations('ADMIN_COUPONS');
+  const currencySymbol = getAdminMembersCouponsCurrencySymbol(useLocale());
   const { selectedBranch, isAllBranches } = useAdminBranch();
   const [confirmDiscard, setConfirmDiscard] = useState(false);
 
@@ -169,8 +171,8 @@ export function AdminCouponsDialog({
 
             <div className="rounded-xl border border-border bg-surface-highlight p-3.5 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="block text-xs font-semibold uppercase tracking-wider text-text-secondary">Target Branch Condition</span>
-                <span className="text-[11px] text-primary font-medium">Active: {watchedBranch}</span>
+                <span className="block text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('TARGET_BRANCH_TITLE')}</span>
+                <span className="text-[11px] text-primary font-medium">{t('ACTIVE_BRANCH_LABEL', { branch: watchedBranch })}</span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 {BRANCH_OPTIONS.map((b) => {
@@ -188,9 +190,9 @@ export function AdminCouponsDialog({
                 })}
               </div>
               <div className="rounded-lg border border-border-focus bg-primary-subtle p-2.5 text-xs">
-                <div className="flex items-center gap-1.5 font-semibold text-primary text-[11px]"><Building2 size={12} aria-hidden="true" /> <span>Branch Condition Policy</span></div>
+                <div className="flex items-center gap-1.5 font-semibold text-primary text-[11px]"><Building2 size={12} aria-hidden="true" /> <span>{t('BRANCH_POLICY_TITLE')}</span></div>
                 <p className="text-text-secondary text-[11px] leading-relaxed mt-1">
-                  {watchedBranch === 'All Branches' ? '🌐 Global Network: Coupon can be redeemed across all branches.' : `📍 Branch-Exclusive: Restricted to "${watchedBranch}".`}
+                  {watchedBranch === 'All Branches' ? t('BRANCH_POLICY_ALL') : t('BRANCH_POLICY_SINGLE', { branch: watchedBranch })}
                 </p>
               </div>
             </div>
@@ -199,8 +201,8 @@ export function AdminCouponsDialog({
               <div className="space-y-1.5">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-text-secondary" htmlFor="admin-coupon-type">{t('FIELD_DISCOUNT_TYPE')}</label>
                 <select id="admin-coupon-type" {...form.register('type')} className="w-full rounded-xl border border-border bg-input px-3 py-2.5 text-xs text-text-primary focus:border-border-focus focus:outline-none">
-                  <option value="Flat">Flat Discount (₹ Amount Off)</option>
-                  <option value="Percent">Percentage (% Off)</option>
+                  <option value="Flat">{t('TYPE_FLAT_LABEL')}</option>
+                  <option value="Percent">{t('TYPE_PERCENT_LABEL')}</option>
                 </select>
                 {typeof errors.type?.message === 'string' && <p id="admin-coupon-type-error" role="alert" className="text-xs text-danger-text">{errors.type.message}</p>}
               </div>
@@ -211,7 +213,7 @@ export function AdminCouponsDialog({
                   <span className="text-xs text-danger-text font-bold">*</span>
                 </div>
                 <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-xs font-bold text-text-secondary">{watchedType === 'Percent' ? '%' : '₹'}</span>
+                  <span className="absolute left-3 top-2.5 text-xs font-bold text-text-secondary">{watchedType === 'Percent' ? '%' : currencySymbol}</span>
                   <input maxLength={30} id="admin-coupon-discount" type="number" min="0.01" step="any" {...form.register('discount')}
                     className="w-full rounded-xl border border-border bg-input pl-7 pr-3 py-2.5 text-xs text-text-primary focus:border-border-focus focus:outline-none font-mono"
                     placeholder={watchedType === 'Percent' ? '15' : '500'} aria-invalid={Boolean(errors.discount)} />

@@ -57,5 +57,8 @@
   "ACTION_REJECT_LEAVE": "Reject",
   "COL_LEAVE_TYPE": "Leave Type",
   "COL_DURATION": "Duration",
-  "COL_REASON": "Reason"
+  "COL_REASON": "Reason",
+  "ERR_TITLE": "Unable to load Staff Attendance",
+  "ERR_DESC": "An error occurred while loading staff shift attendance logs.",
+  "ERR_RETRY": "Retry"
 }

@@ -58,5 +58,12 @@
   "BTN_PRINT": "पर्ची प्रिंट करें",
   "BTN_CLOSE": "बंद करें",
   "ADVANCE_DEDUCTION_SETTLED": "वेतन अग्रिम (एडवांस) कटौती",
-  "SLIP_ADVANCE_SETTLED": "अग्रिम वेतन वसूली"
+  "SLIP_ADVANCE_SETTLED": "अग्रिम वेतन वसूली",
+  "SLIP_BASIC_SALARY": "मूल वेतन",
+  "SLIP_BONUS": "शिफ्ट / प्रदर्शन बोनस",
+  "SLIP_UNPAID_ABSENCES": "वेतनरहित अनुपस्थिति कटौती",
+  "SLIP_NET_TRANSFER_NOTE": "शुद्ध वेतन बैंक में हस्तांतरित",
+  "ERR_TITLE": "स्टाफ पेरोल लोड नहीं हो सका",
+  "ERR_DESC": "स्टाफ वेतन और भुगतान डेटा लोड करते समय त्रुटि हुई।",
+  "ERR_RETRY": "पुनः प्रयास करें"
 }

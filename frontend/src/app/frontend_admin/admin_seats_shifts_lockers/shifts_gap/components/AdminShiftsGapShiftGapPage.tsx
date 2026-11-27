@@ -3,10 +3,11 @@
 import { AdminShiftsGapKpiGrid } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/components/AdminShiftsGapKpiGrid';
 import AdminShiftsGapOverstayAuditTable from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/components/AdminShiftsGapOverstayAuditTable';
 import { ADMIN_SHIFTS_DEMO_SHIFT_GAPS } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/config/admin_shifts_gap.demo_data';
+import { formatAdminShiftsGapCurrency } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/utils/formatAdminShiftsGapCurrency';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { AlertCircle, CheckCircle2, Clock, Filter, TrendingUp, Zap } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
 function fmtH(h: number) {
@@ -17,6 +18,7 @@ function fmtH(h: number) {
 
 export function AdminShiftsShiftGapPage() {
   const t = useTranslations('ADMIN_SHIFTS');
+  const locale = useLocale();
   const isDemoMode = isFrontendDemoModeEnabled();
   const [shiftFilter, setShiftFilter] = useAdminApplicationInfrastructureUrlQueryState<string>('shiftFilter', 'All', {
     validValues: ['All', 'Morning', 'Afternoon', 'Evening', 'Night', 'Full Day'],
@@ -218,7 +220,7 @@ export function AdminShiftsShiftGapPage() {
                             </span>
                           </div>
                           <span className="font-mono font-bold text-danger-text">
-                            -₹{g.revLoss}/day
+                            {t('negativeRatePerDay', { amount: formatAdminShiftsGapCurrency(g.revLoss, locale) })}
                           </span>
                         </div>
                       ))

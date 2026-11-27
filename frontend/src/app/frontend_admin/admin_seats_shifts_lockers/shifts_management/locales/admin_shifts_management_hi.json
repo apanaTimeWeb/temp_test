@@ -313,6 +313,9 @@
     "paymentModeUpi": "UPI",
     "paymentModeCard": "कार्ड",
     "ratePerDay": "₹{rate}/दिन",
-    "migrationValidationFailed": "आगे बढ़ने से पहले शिफ्ट, सीट, कस्टम समय और भुगतान संदर्भ की जाँच करें।"
+    "migrationValidationFailed": "आगे बढ़ने से पहले शिफ्ट, सीट, कस्टम समय और भुगतान संदर्भ की जाँच करें।",
+    "baseMonthlyFeeLabel": "आधार मासिक शुल्क ({currency})",
+    "monthlyFeeLabel": "मासिक शुल्क ({currency})",
+    "monthlyRatePerMo": "{amount}/माह"
   }
 }

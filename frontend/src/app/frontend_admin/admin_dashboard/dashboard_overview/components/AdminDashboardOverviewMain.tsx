@@ -10,6 +10,7 @@ import {
 ADMIN_DASHBOARD_BRANCH_METRICS,
 ADMIN_DASHBOARD_DESTINATIONS,
 } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/constants/AdminDashboardOverviewConstants';
+import { formatAdminDashboardCurrency } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/utils/formatAdminDashboardCurrency';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 import {
@@ -24,7 +25,7 @@ Users,
 WalletCards,
 X
 } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useMemo,useState } from 'react';
 import { toast } from 'sonner';
@@ -35,7 +36,8 @@ import { toast } from 'sonner';
  */
 export default function AdminDashboardOverviewMain() {
   const t = useTranslations('ADMIN_DASHBOARD');
-  const { selectedBranchId, selectedBranch } = useAdminBranch();
+  const locale = useLocale();
+  const { selectedBranchId } = useAdminBranch();
   const rawMetrics = ADMIN_DASHBOARD_BRANCH_METRICS[selectedBranchId] ?? ADMIN_DASHBOARD_BRANCH_METRICS.all;
 
   // Global Time Horizon State
@@ -48,7 +50,7 @@ export default function AdminDashboardOverviewMain() {
     setIsSyncing(true);
     setTimeout(() => {
       setIsSyncing(false);
-      toast.success('Central network dashboard metrics synchronized', { id: 'admin-dashboard-sync-overview' });
+      toast.success(t('SYNC_SUCCESS_TOAST'), { id: 'admin-dashboard-sync-overview' });
     }, 600);
   };
 
@@ -56,65 +58,65 @@ export default function AdminDashboardOverviewMain() {
     const base = rawMetrics.revenueNum;
     if (timeRange === 'today') {
       const val = Math.round(base * 0.04);
-      return { value: `₹${val.toLocaleString('en-IN')}`, subtext: 'Realized today (Network)' };
+      return { value: formatAdminDashboardCurrency(val, locale), subtext: t('REALIZED_TODAY_SUB') };
     }
     if (timeRange === 'this_week') {
       const val = Math.round(base * 0.26);
-      return { value: `₹${val.toLocaleString('en-IN')}`, subtext: 'Realized this week (Network)' };
+      return { value: formatAdminDashboardCurrency(val, locale), subtext: t('REALIZED_WEEK_SUB') };
     }
     return { value: rawMetrics.revenue, subtext: rawMetrics.revenueSub };
-  }, [rawMetrics, timeRange]);
+  }, [locale, rawMetrics, t, timeRange]);
 
-  const periodLabel = timeRange === 'today' ? 'Today' : timeRange === 'this_week' ? 'This Week' : timeRange === 'custom' ? 'Custom Range' : 'This Month';
+  const periodLabel = timeRange === 'today' ? t('HORIZON_TODAY') : timeRange === 'this_week' ? t('HORIZON_THIS_WEEK') : timeRange === 'custom' ? t('HORIZON_CUSTOM_RANGE') : t('HORIZON_THIS_MONTH');
 
   const executiveKpis = [
     {
       id: 'kpi-branches',
-      title: 'Operating Branches',
+      title: t('KPI_BRANCHES_TITLE'),
       periodBadge: periodLabel,
       value: rawMetrics.branches,
       subtext: rawMetrics.branchesSub,
       Icon: Building2,
-      trend: selectedBranchId === 'all' ? '+1 this quarter' : 'Branch Active',
+      trend: selectedBranchId === 'all' ? t('KPI_BRANCHES_TREND_ALL') : t('KPI_BRANCHES_TREND_SINGLE'),
       theme: 'bg-info-bg text-info-text border border-info',
     },
     {
       id: 'kpi-members',
-      title: 'Active Members',
+      title: t('KPI_MEMBERS_TITLE'),
       periodBadge: periodLabel,
       value: rawMetrics.members,
       subtext: rawMetrics.membersSub,
       Icon: Users,
-      trend: '+12% vs last month',
+      trend: t('KPI_MEMBERS_TREND'),
       theme: 'bg-success-bg text-success-text border border-success',
     },
     {
       id: 'kpi-occupancy',
-      title: 'Seat Occupancy',
+      title: t('KPI_OCCUPANCY_TITLE'),
       periodBadge: periodLabel,
       value: rawMetrics.occupancy,
       subtext: rawMetrics.occupancySub,
       Icon: Armchair,
-      trend: 'Optimal capacity',
+      trend: t('KPI_OCCUPANCY_TREND'),
       theme: 'bg-primary-subtle text-primary border border-border-focus',
     },
     {
       id: 'kpi-revenue',
-      title: timeRange === 'today' ? 'Collections Today' : timeRange === 'this_week' ? 'Collections (Week)' : timeRange === 'custom' ? 'Collections (Custom)' : 'Monthly Collections',
+      title: timeRange === 'today' ? t('KPI_REVENUE_TODAY') : timeRange === 'this_week' ? t('KPI_REVENUE_WEEK') : timeRange === 'custom' ? t('KPI_REVENUE_CUSTOM') : t('KPI_REVENUE_MONTH'),
       periodBadge: periodLabel,
       value: dynamicRevenue.value,
       subtext: dynamicRevenue.subtext,
       Icon: WalletCards,
-      trend: '96% on-time fee recovery',
+      trend: t('KPI_REVENUE_TREND'),
       theme: 'bg-warning-bg text-warning-text border border-warning',
     },
   ];
 
   const timeHorizonOptions: Array<{ id: AdminDashboardTimeRange; label: string }> = [
-    { id: 'today', label: 'Today' },
-    { id: 'this_week', label: 'This Week' },
-    { id: 'this_month', label: 'This Month' },
-    { id: 'custom', label: 'Custom Range' },
+    { id: 'today', label: t('HORIZON_TODAY') },
+    { id: 'this_week', label: t('HORIZON_THIS_WEEK') },
+    { id: 'this_month', label: t('HORIZON_THIS_MONTH') },
+    { id: 'custom', label: t('HORIZON_CUSTOM_RANGE') },
   ];
 
   return (
@@ -135,10 +137,10 @@ export default function AdminDashboardOverviewMain() {
               onClick={handleSyncOverview}
               disabled={isSyncing}
               className="inline-flex items-center gap-2 min-h-10 px-4 rounded-xl border border-border bg-primary-subtle text-xs font-bold text-primary hover:bg-surface-hover motion-safe:transition-colors shadow-sm disabled:opacity-60 cursor-pointer"
-              title="Sync Central Analytics"
+              title={t('SYNC_CENTRAL_TITLE')}
             >
               <RefreshCw size={14} className={isSyncing ? 'motion-safe:animate-spin text-primary' : 'text-primary'} aria-hidden="true" />
-              <span>{isSyncing ? 'Syncing...' : 'Sync Central'}</span>
+              <span>{isSyncing ? t('SYNCING_BTN') : t('SYNC_CENTRAL_BTN')}</span>
             </button>
           </div>
         </div>
@@ -147,35 +149,35 @@ export default function AdminDashboardOverviewMain() {
         <div className="pt-4 border-t border-border flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
             <span className="text-xs font-bold uppercase tracking-wider text-text-secondary mr-1">
-              Quick Actions:
+              {t('QUICK_ACTIONS_LABEL')}
             </span>
             <Link
               href={ADMIN_ROUTES.MEMBERS_DIRECTORY}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary hover:bg-primary-hover text-on-primary text-xs font-bold shadow-card motion-safe:transition-colors cursor-pointer"
             >
               <Users size={13} aria-hidden="true" />
-              <span>Members Directory</span>
+              <span>{t('QUICK_MEMBERS')}</span>
             </Link>
             <Link
               href={ADMIN_ROUTES.SEATS_MATRIX}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-info-bg text-info-text border border-info hover:opacity-90 text-xs font-semibold motion-safe:transition-opacity cursor-pointer"
             >
               <LayoutGrid size={13} aria-hidden="true" />
-              <span>Seat Matrix</span>
+              <span>{t('QUICK_SEAT_MATRIX')}</span>
             </Link>
             <Link
               href={ADMIN_ROUTES.FINANCE_PAYMENTS}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-success-bg text-success-text border border-success hover:opacity-90 text-xs font-semibold motion-safe:transition-opacity cursor-pointer"
             >
               <CreditCard size={13} aria-hidden="true" />
-              <span>Finance Collections</span>
+              <span>{t('QUICK_FINANCE')}</span>
             </Link>
             <Link
               href={ADMIN_ROUTES.ACCOUNTS_DAILY_SETTLEMENT}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-bg text-purple border border-border hover:opacity-90 text-xs font-semibold motion-safe:transition-opacity cursor-pointer"
             >
               <Receipt size={13} aria-hidden="true" />
-              <span>Daily Settlement</span>
+              <span>{t('QUICK_SETTLEMENT')}</span>
             </Link>
           </div>
         </div>
@@ -186,7 +188,7 @@ export default function AdminDashboardOverviewMain() {
         <div className="flex items-center gap-2">
           <Clock size={16} className="text-primary shrink-0" aria-hidden="true" />
           <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">
-            Analytics Time Horizon:
+            {t('ANALYTICS_HORIZON_LABEL')}
           </span>
         </div>
 
@@ -213,7 +215,7 @@ export default function AdminDashboardOverviewMain() {
           {timeRange === 'custom' && (
             <div className="flex items-center gap-2 flex-wrap text-xs bg-card p-1.5 rounded-xl border border-border">
               <label className="flex items-center gap-1.5 text-text-secondary">
-                <span className="text-xs font-semibold">From:</span>
+                <span className="text-xs font-semibold">{t('DATE_FROM')}</span>
                 <input maxLength={100}
                   type="date"
                   value={customStartDate}
@@ -222,7 +224,7 @@ export default function AdminDashboardOverviewMain() {
                 />
               </label>
               <label className="flex items-center gap-1.5 text-text-secondary">
-                <span className="text-xs font-semibold">To:</span>
+                <span className="text-xs font-semibold">{t('DATE_TO')}</span>
                 <input maxLength={100}
                   type="date"
                   value={customEndDate}
@@ -238,7 +240,7 @@ export default function AdminDashboardOverviewMain() {
                     setCustomEndDate('');
                   }}
                   className="p-1 text-text-secondary hover:text-danger-text rounded motion-safe:transition-colors"
-                  title="Clear custom dates"
+                  title={t('CLEAR_CUSTOM_DATES')}
                 >
                   <X size={13} aria-hidden="true" />
                 </button>

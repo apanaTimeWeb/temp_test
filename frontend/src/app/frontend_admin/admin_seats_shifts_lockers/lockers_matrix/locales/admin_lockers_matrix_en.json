@@ -309,6 +309,16 @@
     "shiftAvailabilityRate": "{seats} seats available in {shift} shift. Rate: ₹{rate}/day.",
     "daysCount": "{count, plural, one {# day} other {# days}}",
     "maintenanceCostPlaceholder": "e.g. 350",
-    "maintenanceRemarkPlaceholder": "e.g. Chair leg repaired"
+    "maintenanceRemarkPlaceholder": "e.g. Chair leg repaired",
+    "settingsButtonLabel": "Settings ({amount}/mo)",
+    "lockerMonthlyRateBadge": "{amount}/mo",
+    "presetProMetalBox": "Pro Metal Box ({rent}/mo · {deposit} Dep)",
+    "presetExamSpecial": "Exam Special ({rent}/mo · {deposit} Dep)",
+    "monthlyLockerRentLabel": "Monthly Locker Rent ({currency})",
+    "cautionDepositLabel": "Refundable Caution Deposit ({currency})",
+    "lostKeyChargeLabel": "Lost Key Replacement Charge ({currency})",
+    "lateKeyFeeLabel": "Late Key Return Daily Fee ({currency})",
+    "firstAllotmentDueLabel": "First Allotment Due (Rent + Security Deposit):",
+    "cautionMoneyTrackedNote": "* {amount} caution money is tracked in Security Deposits Ledger and refunded at exit."
   }
 }

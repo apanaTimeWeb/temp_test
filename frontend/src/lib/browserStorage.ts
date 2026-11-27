@@ -61,3 +61,32 @@ export function writeBrowserSessionStorageItem(key: string, value: string): void
     throw new Error('Browser session storage could not persist the requested value.', { cause: error });
   }
 }
+
+export function removeBrowserStorageItem(key: string): void {
+  const storage = getLocalStorage();
+  if (!storage) return;
+  try {
+    storage.removeItem(key);
+  } catch {
+    // Resilience in restricted browser storage modes
+  }
+}
+
+export function clearBrowserSessionStorage(): void {
+  const storage = getSessionStorage();
+  if (!storage) return;
+  try {
+    storage.clear();
+  } catch {
+    // Resilience in restricted browser storage modes
+  }
+}
+
+export function expireBrowserCookie(name: string): void {
+  if (typeof document === 'undefined') return;
+  try {
+    document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+  } catch {
+    // Cookie write unavailable
+  }
+}

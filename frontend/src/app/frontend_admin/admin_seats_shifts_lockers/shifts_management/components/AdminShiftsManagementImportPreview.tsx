@@ -1,6 +1,8 @@
 'use client';
 
+import { formatAdminShiftsManagementCurrency } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/utils/formatAdminShiftsManagementCurrency';
 import { AlertTriangle, Check, CheckCircle2, FileText } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 
 export interface ParsedImportShift {
   name: string;
@@ -26,6 +28,8 @@ export function AdminShiftsManagementImportPreview({
   validCount,
   onReset,
 }: AdminShiftsManagementImportPreviewProps) {
+  const t = useTranslations('ADMIN_SHIFTS');
+  const locale = useLocale();
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between rounded-xl border border-border bg-surface-highlight p-3">
@@ -61,8 +65,8 @@ export function AdminShiftsManagementImportPreview({
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {parsedRows.map((r, idx) => (
-              <tr key={idx} className={r.isValid ? '' : 'bg-danger-bg'}>
+            {parsedRows.map((r) => (
+              <tr key={`${r.name}-${r.startTime}-${r.branchName}`} className={r.isValid ? '' : 'bg-danger-bg'}>
                 <td className="px-3.5 py-2">
                   {r.isValid ? (
                     <span className="text-success-text font-semibold flex items-center gap-1">
@@ -76,7 +80,7 @@ export function AdminShiftsManagementImportPreview({
                 </td>
                 <td className="px-3.5 py-2 font-medium text-text-primary">{r.name}</td>
                 <td className="px-3.5 py-2 font-mono text-text-secondary">{r.startTime} → {r.endTime}</td>
-                <td className="px-3.5 py-2 text-success-text">₹{r.monthlyPrice}/mo</td>
+                <td className="px-3.5 py-2 text-success-text">{t('monthlyRatePerMo', { amount: formatAdminShiftsManagementCurrency(r.monthlyPrice, locale) })}</td>
                 <td className="px-3.5 py-2 text-text-secondary">{r.capacity} seats</td>
                 <td className="px-3.5 py-2 text-primary">{r.branchName}</td>
               </tr>

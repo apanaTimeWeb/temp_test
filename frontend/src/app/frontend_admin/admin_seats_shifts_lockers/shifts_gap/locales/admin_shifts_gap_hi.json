@@ -334,6 +334,8 @@
     "paymentModeUpi": "UPI",
     "paymentModeCard": "कार्ड",
     "ratePerDay": "₹{rate}/दिन",
-    "migrationValidationFailed": "आगे बढ़ने से पहले शिफ्ट, सीट, कस्टम समय और भुगतान संदर्भ की जाँच करें।"
+    "migrationValidationFailed": "आगे बढ़ने से पहले शिफ्ट, सीट, कस्टम समय और भुगतान संदर्भ की जाँच करें।",
+    "totalMonthlyGapOpportunity": "कुल मासिक खाली क्षमता हानि अवसर: {amount}/माह",
+    "negativeRatePerDay": "-{amount}/दिन"
   }
 }

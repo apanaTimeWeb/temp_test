@@ -8,13 +8,9 @@ import useAdminFinancePaymentsQuery, { FALLBACK_PAYMENTS } from '@/app/frontend_
 import type { AdminFinancePaymentApiRecord } from '@/app/frontend_admin/admin_finance/finance_payments/schemas/AdminFinancePaymentsSchema';
 import type { AdminFinancePayment } from '@/app/frontend_admin/admin_finance/finance_payments/types/AdminFinancePaymentsComponentTypes';
 import { buildAdminFinancePaymentsCsv } from '@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinancePaymentsCsvUtils';
-import {
-  exportFinancePaymentsExcel,
-  openFinanceMailtoClient,
-  printFinancePaymentsLedger,
-} from '@/app/frontend_admin/admin_finance/finance_payments/utils/adminFinancePaymentsExports';
+import { exportFinancePaymentsExcel, openFinanceMailtoClient, printFinancePaymentsLedger } from '@/app/frontend_admin/admin_finance/finance_payments/utils/adminFinancePaymentsExports';
 import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinancePaymentsFormat';
-import { buildWhatsAppLink, downloadPaymentInvoicePdf } from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
+import { buildWhatsAppLink, downloadPaymentInvoicePdf } from '@/app/frontend_admin/admin_finance/finance_payments/utils/adminFinancePaymentsPdf';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { DataGrid, type DataGridCellParams, type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';

@@ -309,6 +309,16 @@
     "shiftAvailabilityRate": "{shift} शिफ्ट में {seats} सीटें उपलब्ध हैं। दर: ₹{rate}/दिन।",
     "daysCount": "{count} दिन",
     "maintenanceCostPlaceholder": "उदा. 350",
-    "maintenanceRemarkPlaceholder": "उदा. कुर्सी का पाया ठीक किया"
+    "maintenanceRemarkPlaceholder": "उदा. कुर्सी का पाया ठीक किया",
+    "settingsButtonLabel": "सेटिंग्स ({amount}/माह)",
+    "lockerMonthlyRateBadge": "{amount}/माह",
+    "presetProMetalBox": "प्रो मेटल बॉक्स ({rent}/माह · {deposit} जमानत)",
+    "presetExamSpecial": "एग्ज़ाम स्पेशल ({rent}/माह · {deposit} जमानत)",
+    "monthlyLockerRentLabel": "मासिक लॉकर किराया ({currency})",
+    "cautionDepositLabel": "वापसी योग्य जमानत राशि ({currency})",
+    "lostKeyChargeLabel": "चाबी खोने का शुल्क ({currency})",
+    "lateKeyFeeLabel": "विलंब चाबी वापसी दैनिक शुल्क ({currency})",
+    "firstAllotmentDueLabel": "प्रथम आवंटन देय (किराया + जमानत):",
+    "cautionMoneyTrackedNote": "* {amount} जमानत राशि सिक्योरिटी डिपॉज़िट लेजर में ट्रैक की जाती है और निकासी पर वापस की जाती है।"
   }
 }

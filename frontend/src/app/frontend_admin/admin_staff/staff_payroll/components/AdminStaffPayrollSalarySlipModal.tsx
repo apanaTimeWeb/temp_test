@@ -2,6 +2,7 @@
 
 import type { StaffSalaryRecord } from '@/app/frontend_admin/admin_staff/staff_payroll/schemas/AdminStaffPayrollSchema';
 import { sharePayrollSlipWhatsApp } from '@/app/frontend_admin/admin_staff/staff_payroll/utils/adminStaffPayrollExports';
+import { formatAdminStaffPayrollCurrency } from '@/app/frontend_admin/admin_staff/staff_payroll/utils/formatAdminStaffPayrollCurrency';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
@@ -68,14 +69,14 @@ export function AdminStaffPayrollSalarySlipModal({ record, isOpen, onClose }: Pr
           <div className="grid grid-cols-2 gap-4 border-t border-b border-border py-3 text-xs">
             <div className="space-y-1.5">
               <h4 className="font-bold text-text-primary uppercase tracking-wider text-[11px]">{t('SLIP_EARNINGS')}</h4>
-              <div className="flex justify-between text-text-secondary"><span>Basic Salary</span><span className="font-mono text-text-primary">₹{record.baseSalary.toLocaleString('en-IN')}</span></div>
-              <div className="flex justify-between text-text-secondary"><span>Shift / Performance Bonus</span><span className="font-mono text-success-text">+₹{record.allowances.toLocaleString('en-IN')}</span></div>
+              <div className="flex justify-between text-text-secondary"><span>{t('SLIP_BASIC_SALARY')}</span><span className="font-mono text-text-primary">{formatAdminStaffPayrollCurrency(record.baseSalary)}</span></div>
+              <div className="flex justify-between text-text-secondary"><span>{t('SLIP_BONUS')}</span><span className="font-mono text-success-text">+{formatAdminStaffPayrollCurrency(record.allowances)}</span></div>
             </div>
             <div className="space-y-1.5 border-l border-border pl-4">
               <h4 className="font-bold text-text-primary uppercase tracking-wider text-[11px]">{t('SLIP_DEDUCTIONS')}</h4>
-              <div className="flex justify-between text-text-secondary"><span>Unpaid Absence Deductions</span><span className="font-mono text-danger-text">{record.deductions > 0 ? `-₹${record.deductions.toLocaleString('en-IN')}` : '₹0'}</span></div>
+              <div className="flex justify-between text-text-secondary"><span>{t('SLIP_UNPAID_ABSENCES')}</span><span className="font-mono text-danger-text">{record.deductions > 0 ? `-${formatAdminStaffPayrollCurrency(record.deductions)}` : formatAdminStaffPayrollCurrency(0)}</span></div>
               {record.advanceSalaryDeduction > 0 && (
-                <div className="flex justify-between text-text-secondary"><span>{t('SLIP_ADVANCE_SETTLED')}</span><span className="font-mono text-warning-text">-₹{record.advanceSalaryDeduction.toLocaleString('en-IN')}</span></div>
+                <div className="flex justify-between text-text-secondary"><span>{t('SLIP_ADVANCE_SETTLED')}</span><span className="font-mono text-warning-text">-{formatAdminStaffPayrollCurrency(record.advanceSalaryDeduction)}</span></div>
               )}
             </div>
           </div>
@@ -83,10 +84,10 @@ export function AdminStaffPayrollSalarySlipModal({ record, isOpen, onClose }: Pr
           <div className="flex items-center justify-between rounded-xl bg-primary-subtle p-4">
             <div>
               <span className="text-xs font-semibold text-text-secondary block">{t('SLIP_NET_PAY')}</span>
-              <span className="text-[11px] text-text-disabled">Net salary transferred to bank</span>
+              <span className="text-[11px] text-text-disabled">{t('SLIP_NET_TRANSFER_NOTE')}</span>
             </div>
             <div className="text-right">
-              <p className="text-2xl font-black text-primary-text font-mono">₹{record.netPayable.toLocaleString('en-IN')}</p>
+              <p className="text-2xl font-black text-primary-text font-mono">{formatAdminStaffPayrollCurrency(record.netPayable)}</p>
               {record.status === 'DISBURSED' && (
                 <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-success-text">
                   <CheckCircle2 size={12} />
