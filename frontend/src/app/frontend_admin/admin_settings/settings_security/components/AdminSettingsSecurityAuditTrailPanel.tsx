@@ -1,6 +1,6 @@
 // components/AdminSettingsSecurityAuditTrailPanel.tsx
 'use client';
-import { ADMIN_SECURITY_ANTI_FRAUD_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
+import { ADMIN_SECURITY_ANTI_FRAUD_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/config/admin_settings_security.demo_data';
 import type {
 AntiFraudAuditRecord
 } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
@@ -87,7 +87,7 @@ export function AdminSettingsSecurityAuditTrailPanel() {
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-muted-foreground opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-muted-foreground opacity-40 group-hover:opacity-100 motion-safe:transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>

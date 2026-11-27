@@ -32,11 +32,8 @@ const ADMIN_FINANCE_MODE_BADGE: Record<AdminFinancePayment['mode'], string> = {
 };
 
 const MODE_OPTIONS = ['all', 'cash', 'upi', 'card', 'bank', 'unknown'] as const;
-type PaymentModeFilter = (typeof MODE_OPTIONS)[number];
-
-function parseModeFilter(val: string): PaymentModeFilter {
-  return MODE_OPTIONS.find((item) => item === val) ?? 'all';
-}
+const parseModeFilter = (val: string): (typeof MODE_OPTIONS)[number] =>
+  MODE_OPTIONS.find((item) => item === val) ?? 'all';
 
 function mapAdminFinancePayment(record: AdminFinancePaymentApiRecord): AdminFinancePayment {
   const norm = record.status?.trim().toLowerCase();

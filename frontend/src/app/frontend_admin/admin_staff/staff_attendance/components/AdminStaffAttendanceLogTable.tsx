@@ -79,7 +79,7 @@ export function AdminStaffAttendanceLogTable({ records, onInspect, onRegularize 
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 motion-safe:transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -117,7 +117,7 @@ export function AdminStaffAttendanceLogTable({ records, onInspect, onRegularize 
             {paginatedRecords.map((r) => {
               const statusBadgeClass = ATTENDANCE_STATUS_VARIANTS[r.status] || 'bg-surface text-text-secondary';
               return (
-                <tr key={r.id} className="transition-colors hover:bg-surface-hover">
+                <tr key={r.id} className="motion-safe:transition-colors hover:bg-surface-hover">
                   <td className="px-4 py-3 font-medium text-text-primary">
                     <div>
                       <span className="font-semibold">{r.staffName}</span>
@@ -170,7 +170,7 @@ export function AdminStaffAttendanceLogTable({ records, onInspect, onRegularize 
                         onClick={() => onInspect(r)}
                         title={t('ACTION_INSPECT')}
                         aria-label={t('ACTION_INSPECT')}
-                        className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-border bg-card text-text-secondary hover:text-text-primary hover:bg-surface-hover hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all"
+                        className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-border bg-card text-text-secondary hover:text-text-primary hover:bg-surface-hover motion-safe:hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all"
                       >
                         <Eye size={16} />
                       </button>
@@ -179,7 +179,7 @@ export function AdminStaffAttendanceLogTable({ records, onInspect, onRegularize 
                         onClick={() => onRegularize(r)}
                         title={t('ACTION_REGULARIZE')}
                         aria-label={t('ACTION_REGULARIZE')}
-                        className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all"
+                        className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-primary bg-info-bg text-primary-text hover:opacity-90 motion-safe:hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all"
                       >
                         <Edit3 size={16} />
                       </button>

@@ -1,0 +1,23 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://127.0.0.1:3000",
+      "localStorage": [
+        {
+          "name": "user",
+          "value": "{\"id\":\"admin-001\",\"name\":\"John Admin\",\"email\":\"admin@libraryos.com\",\"role\":\"admin\"}"
+        }
+      ]
+    },
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "user",
+          "value": "{\"id\":\"admin-001\",\"name\":\"John Admin\",\"email\":\"admin@libraryos.com\",\"role\":\"admin\"}"
+        }
+      ]
+    }
+  ]
+}

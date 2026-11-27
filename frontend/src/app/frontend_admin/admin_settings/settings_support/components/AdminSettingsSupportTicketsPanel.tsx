@@ -4,7 +4,7 @@
 
 import AdminSupportCreateTicketForm from '@/app/frontend_admin/admin_settings/settings_support/components/AdminSettingsSupportCreateTicketForm';
 import { AdminSettingsSupportKpiGrid } from '@/app/frontend_admin/admin_settings/settings_support/components/AdminSettingsSupportKpiGrid';
-import { ADMIN_SUPPORT_DEMO_TICKETS } from '@/app/frontend_admin/admin_settings/settings_support/mocks/scenarios/admin_settings_support.scenarios';
+import { ADMIN_SUPPORT_DEMO_TICKETS } from '@/app/frontend_admin/admin_settings/settings_support/config/admin_settings_support.demo_data';
 import {
   Clock,
   Mail,

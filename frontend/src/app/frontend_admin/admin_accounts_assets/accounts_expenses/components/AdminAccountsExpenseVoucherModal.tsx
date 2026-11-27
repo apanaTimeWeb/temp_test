@@ -1,21 +1,14 @@
 'use client';
 
 import type { AdminAccountingExpense } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/schemas/AdminAccountsExpensesSchemas';
+import { buildExpenseVoucherPrintHtml } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/utils/adminAccountsExpensesExports';
 import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/utils/AdminAccountsExpensesFormatCurrency';
+import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
+import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
+import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import {
-Building2,
-CheckCircle2,
-Clock,
-CreditCard,
-ExternalLink,
-FileText,
-Printer,
-Receipt,
-Share2,
-Tag,
-User,
-X,
-XCircle
+  Building2, CheckCircle2, Clock, CreditCard, ExternalLink, FileText,
+  Printer, Receipt, Share2, Tag, User, X, XCircle,
 } from 'lucide-react';
 
 interface AdminAccountsExpenseVoucherModalProps {
@@ -49,107 +42,7 @@ export function AdminAccountsExpenseVoucherModal({
       window.print();
       return;
     }
-
-    const html = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Operational Expense Voucher - ${voucherNo}</title>
-          <style>
-            @page { size: A5 landscape; margin: 10mm; }
-            body { font-family: system-ui, -apple-system, sans-serif; color: #0f172a; margin: 0; padding: 15px; font-size: 12px; }
-            .header { display: flex; justify-content: space-between; border-bottom: 2px solid #e11d48; padding-bottom: 8px; margin-bottom: 12px; }
-            .logo { font-size: 16px; font-weight: 800; color: #be123c; text-transform: uppercase; }
-            .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
-            .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
-            .box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; }
-            .box-title { font-size: 10px; font-weight: bold; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-            th { background: #be123c; color: #fff; padding: 6px; text-align: left; font-size: 11px; }
-            td { padding: 6px; border-bottom: 1px solid #e2e8f0; font-size: 11px; }
-            .net-box { background: #fff1f2; border: 2px solid #e11d48; border-radius: 6px; padding: 10px; text-align: right; margin-bottom: 15px; }
-            .footer { border-top: 1px solid #e2e8f0; padding-top: 10px; font-size: 10px; color: #94a3b8; display: flex; justify-content: space-between; }
-            .seal-box { border: 1px dashed #cbd5e1; border-radius: 4px; padding: 10px; text-align: center; font-size: 10px; color: #64748b; }
-          </style>
-        </head>
-        <body>
-          <div class="header">
-            <div>
-              <div class="logo">SMART LIBRARY NETWORK</div>
-              <div style="font-size: 11px; color: #64748b;">Central Operations & Accounts Division · Branch: ${expense.branchName ?? 'Downtown Central'}</div>
-            </div>
-            <div style="text-align: right;">
-              <span class="badge" style="background:#ffe4e6; color:#9f1239;">OPERATIONAL EXPENSE VOUCHER</span>
-              <div style="font-size: 12px; font-weight: bold; margin-top: 4px;">Ref: ${voucherNo}</div>
-              <div style="font-size: 10px; color: #64748b;">Date: ${expense.date}</div>
-            </div>
-          </div>
-
-          <div class="grid">
-            <div class="box">
-              <div class="box-title">Vendor / Payee Details</div>
-              <div style="font-size: 13px; font-weight: bold;">${vendor}</div>
-              <div style="color: #475569;">Category: <strong>${expense.category}</strong></div>
-              <div style="color: #475569;">Payment Mode: <strong style="text-transform: uppercase;">${expense.mode}</strong></div>
-              <div style="color: #475569;">Channel: <strong>${expense.isPettyCashRequest ? 'Petty Cash Counter Release' : 'Direct Account Disbursal'}</strong></div>
-            </div>
-            <div class="box">
-              <div class="box-title">Claimant & Audit Trail</div>
-              <div>Requested By: <strong>${claimant}</strong></div>
-              <div>Status: <strong style="text-transform: uppercase;">${expense.status ?? 'APPROVED'}</strong></div>
-              <div>Authorized By: <strong>${expense.approvedBy ?? (isApproved ? 'Satyam Gupta (Admin)' : 'Pending Review')}</strong></div>
-              <div>Branch: <strong>${expense.branchName ?? 'Downtown Central'}</strong></div>
-            </div>
-          </div>
-
-          <table>
-            <thead>
-              <tr>
-                <th>Expense Item / Purpose</th>
-                <th>Category</th>
-                <th style="text-align: right;">Amount (INR)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <strong>${expense.description}</strong>
-                  ${expense.notes ? `<div style="font-size: 10px; color: #64748b; margin-top: 2px;">${expense.notes}</div>` : ''}
-                  ${expense.rejectionReason ? `<div style="font-size: 10px; color: #dc2626; margin-top: 2px;">Rejection Audit: ${expense.rejectionReason}</div>` : ''}
-                </td>
-                <td>${expense.category}</td>
-                <td style="text-align: right; font-weight: bold;">${formatAdminAccountingCurrency(expense.amount, 'en')}</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div class="net-box">
-            <div style="font-size: 11px; color: #9f1239; font-weight: bold;">TOTAL DISBURSED / AUTHORIZED AMOUNT</div>
-            <div style="font-size: 20px; font-weight: 800; color: #be123c;">${formatAdminAccountingCurrency(expense.amount, 'en')}</div>
-          </div>
-
-          <div class="grid" style="margin-top: 20px;">
-            <div class="seal-box">
-              <div style="height: 30px;"></div>
-              <div>Prepared & Claimed By</div>
-              <div style="font-weight: bold; color: #1e293b;">${claimant}</div>
-            </div>
-            <div class="seal-box">
-              <div style="height: 30px;"></div>
-              <div>Authorized / Approved By</div>
-              <div style="font-weight: bold; color: #1e293b;">${expense.approvedBy ?? 'Satyam Gupta (Admin)'}</div>
-            </div>
-          </div>
-
-          <div class="footer" style="margin-top: 15px;">
-            <span>System Generated Financial Voucher · Valid with official signature</span>
-            <span>Printed on: ${new Date().toLocaleString('en-IN')}</span>
-          </div>
-        </body>
-      </html>
-    `;
-
-    printWindow.document.write(html);
+    printWindow.document.write(buildExpenseVoucherPrintHtml(expense, voucherNo, vendor, claimant, isApproved));
     printWindow.document.close();
     printWindow.focus();
     setTimeout(() => {
@@ -160,197 +53,173 @@ export function AdminAccountsExpenseVoucherModal({
 
   const handleShareWhatsApp = () => {
     const text = encodeURIComponent(
-      `*Library Operational Expense Voucher*\n` +
-      `Ref: ${voucherNo}\n` +
-      `Branch: ${expense.branchName ?? 'Downtown Central'}\n` +
-      `Category: ${expense.category}\n` +
-      `Vendor: ${vendor}\n` +
-      `Item: ${expense.description}\n` +
-      `Amount: ${formatAdminAccountingCurrency(expense.amount, 'en')}\n` +
-      `Claimed By: ${claimant}\n` +
-      `Status: ${expense.status ?? 'APPROVED'}\n` +
-      `Authorized By: ${expense.approvedBy ?? 'Satyam Gupta (Admin)'}`
+      `*Library Operational Expense Voucher*\nRef: ${voucherNo}\nBranch: ${expense.branchName ?? 'Downtown Central'}\nCategory: ${expense.category}\nVendor: ${vendor}\nItem: ${expense.description}\nAmount: ${formatAdminAccountingCurrency(expense.amount, 'en')}\nClaimed By: ${claimant}\nStatus: ${expense.status ?? 'APPROVED'}\nAuthorized By: ${expense.approvedBy ?? 'Satyam Gupta (Admin)'}`
     );
-    window.open(`https://wa.me/?text=${text}`, '_blank');
+    const popup = window.open(`https://wa.me/?text=${text}`, '_blank', 'noopener,noreferrer');
+    if (popup) popup.opener = null;
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl rounded-2xl border border-border bg-card shadow-2xl overflow-hidden my-8">
-        {/* Header Ribbon */}
-        <div className="flex items-center justify-between border-b border-border bg-surface-muted px-6 py-4">
+    <Dialog open={isOpen} onOpenChange={(nextOpen) => { if (!nextOpen) onClose(); }}>
+      <DialogContent className="relative w-full max-w-2xl rounded-2xl border border-border bg-overlay shadow-dialog overflow-hidden p-0">
+        <div className="flex items-center justify-between border-b border-border bg-surface-highlight px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400">
-              <Receipt className="h-5 w-5" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-danger bg-danger-bg text-danger-text">
+              <Receipt className="h-5 w-5" aria-hidden="true" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-foreground">Expense Audit Voucher</h3>
-                <span className="rounded bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 text-xs font-mono font-bold text-rose-400">
+                <DialogTitle className="text-base font-bold text-text-primary">Expense Audit Voucher</DialogTitle>
+                <span className="rounded bg-danger-bg border border-danger px-2 py-0.5 text-xs font-mono font-bold text-danger-text">
                   {voucherNo}
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                Central Accounting & Branch Ledger Audit Record
-              </p>
+              <p className="text-xs text-text-secondary mt-0.5">Central Accounting &amp; Branch Ledger Audit Record</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close voucher dialog"
-            className="rounded-lg p-2 text-muted-foreground hover:bg-surface hover:text-foreground transition-colors"
+            className="rounded-lg p-2 text-text-secondary hover:bg-surface-hover hover:text-text-primary motion-safe:transition-colors"
           >
-            <X className="h-5 w-5" />
+            <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
 
-        {/* Content Body */}
         <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
-          {/* Status & Amount Highlight Hero */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="rounded-xl border border-border bg-surface p-4 flex flex-col justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Total Expense Amount
-              </span>
-              <div className="text-2xl sm:text-3xl font-extrabold text-foreground font-mono mt-1">
+            <div className="rounded-xl border border-border bg-card p-4 flex flex-col justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Total Expense Amount</span>
+              <div className="text-2xl sm:text-3xl font-extrabold text-text-primary font-mono mt-1">
                 {formatAdminAccountingCurrency(expense.amount, 'en')}
               </div>
               <div className="flex items-center gap-2 mt-2">
-                <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2 py-0.5 text-[11px] font-medium text-text-secondary">
-                  <CreditCard className="h-3 w-3" />
+                <span className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-highlight px-2 py-0.5 text-[11px] font-medium text-text-secondary">
+                  <CreditCard className="h-3 w-3" aria-hidden="true" />
                   Mode: <strong className="uppercase">{expense.mode}</strong>
                 </span>
                 {expense.isPettyCashRequest && (
-                  <span className="rounded bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 text-[11px] font-semibold text-amber-400">
+                  <span className="rounded bg-warning-bg border border-warning px-2 py-0.5 text-[11px] font-semibold text-warning-text">
                     Petty Cash
                   </span>
                 )}
               </div>
             </div>
 
-            <div className="rounded-xl border border-border bg-surface p-4 flex flex-col justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Approval Status
-              </span>
+            <div className="rounded-xl border border-border bg-card p-4 flex flex-col justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Approval Status</span>
               <div className="mt-1">
                 {isApproved && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-3 py-1 text-xs font-bold text-emerald-400">
-                    <CheckCircle2 className="h-4 w-4" />
-                    Approved & Disbursed
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-success bg-success-bg px-3 py-1 text-xs font-bold text-success-text">
+                    <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+                    Approved &amp; Disbursed
                   </span>
                 )}
                 {isPending && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/15 px-3 py-1 text-xs font-bold text-amber-400">
-                    <Clock className="h-4 w-4" />
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-warning bg-warning-bg px-3 py-1 text-xs font-bold text-warning-text">
+                    <Clock className="h-4 w-4" aria-hidden="true" />
                     Pending Admin Approval
                   </span>
                 )}
                 {isRejected && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/15 px-3 py-1 text-xs font-bold text-rose-400">
-                    <XCircle className="h-4 w-4" />
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-danger bg-danger-bg px-3 py-1 text-xs font-bold text-danger-text">
+                    <XCircle className="h-4 w-4" aria-hidden="true" />
                     Rejected by Admin
                   </span>
                 )}
               </div>
-              <p className="text-xs text-muted-foreground mt-2">
-                Record Date: <strong className="text-foreground">{expense.date}</strong>
+              <p className="text-xs text-text-secondary mt-2">
+                Record Date: <strong className="text-text-primary">{expense.date}</strong>
               </p>
             </div>
           </div>
 
-          {/* Details Grid: Vendor & Staff */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Vendor / Payee Card */}
-            <div className="rounded-xl border border-border bg-surface p-4 space-y-2.5">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                <Building2 className="h-3.5 w-3.5 text-primary" />
+            <div className="rounded-xl border border-border bg-card p-4 space-y-2.5">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-text-secondary">
+                <Building2 className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
                 Vendor / Payee Information
               </div>
               <div>
-                <p className="text-sm font-bold text-foreground">{vendor}</p>
-                <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
-                  <Tag className="h-3 w-3" />
-                  Category: <span className="font-medium text-foreground">{expense.category}</span>
+                <p className="text-sm font-bold text-text-primary">{vendor}</p>
+                <p className="text-xs text-text-secondary mt-0.5 flex items-center gap-1">
+                  <Tag className="h-3 w-3" aria-hidden="true" />
+                  Category: <span className="font-medium text-text-primary">{expense.category}</span>
                 </p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Branch: <span className="font-semibold text-foreground">{expense.branchName ?? 'Downtown Central'}</span>
+                <p className="text-xs text-text-secondary mt-0.5">
+                  Branch: <span className="font-semibold text-text-primary">{expense.branchName ?? 'Downtown Central'}</span>
                 </p>
               </div>
             </div>
 
-            {/* Claimant & Approver Card */}
-            <div className="rounded-xl border border-border bg-surface p-4 space-y-2.5">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                <User className="h-3.5 w-3.5 text-secondary" />
-                Staff & Authorization Details
+            <div className="rounded-xl border border-border bg-card p-4 space-y-2.5">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-text-secondary">
+                <User className="h-3.5 w-3.5 text-text-secondary" aria-hidden="true" />
+                Staff &amp; Authorization Details
               </div>
               <div className="space-y-1 text-xs">
                 <div>
-                  <span className="text-muted-foreground">Incurred / Claimed By:</span>
-                  <p className="font-bold text-foreground">{claimant}</p>
+                  <span className="text-text-secondary">Incurred / Claimed By:</span>
+                  <p className="font-bold text-text-primary">{claimant}</p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Authorized By:</span>
-                  <p className="font-bold text-foreground">{expense.approvedBy ?? (isApproved ? 'Satyam Gupta (Admin)' : 'Pending Review')}</p>
+                  <span className="text-text-secondary">Authorized By:</span>
+                  <p className="font-bold text-text-primary">{expense.approvedBy ?? (isApproved ? 'Satyam Gupta (Admin)' : 'Pending Review')}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Description & Operational Notes */}
-          <div className="rounded-xl border border-border bg-surface p-4 space-y-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              Expense Purpose & Notes
-            </span>
-            <p className="text-sm font-semibold text-foreground">{expense.description}</p>
+          <div className="rounded-xl border border-border bg-card p-4 space-y-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">Expense Purpose &amp; Notes</span>
+            <p className="text-sm font-semibold text-text-primary">{expense.description}</p>
             {expense.notes && (
-              <div className="rounded-lg bg-surface-muted p-2.5 text-xs text-text-secondary border border-border">
-                <strong className="text-foreground">Manager Notes: </strong>
+              <div className="rounded-lg bg-surface-highlight p-2.5 text-xs text-text-secondary border border-border">
+                <strong className="text-text-primary">Manager Notes: </strong>
                 {expense.notes}
               </div>
             )}
             {expense.rejectionReason && (
-              <div className="rounded-lg bg-rose-500/10 p-2.5 text-xs text-rose-300 border border-rose-500/25">
-                <strong className="text-rose-400">Rejection Audit Reason: </strong>
+              <div className="rounded-lg bg-danger-bg p-2.5 text-xs text-danger-text border border-danger">
+                <strong>Rejection Audit Reason: </strong>
                 {expense.rejectionReason}
               </div>
             )}
             {expense.receiptUrl && (
               <div className="pt-2 flex items-center justify-between border-t border-border mt-3 text-xs">
-                <span className="text-muted-foreground">Supporting Quotation / Receipt Bill:</span>
+                <span className="text-text-secondary">Supporting Quotation / Receipt Bill:</span>
                 <a
                   href={expense.receiptUrl}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-1 font-semibold text-primary hover:underline"
                 >
-                  <FileText className="h-3.5 w-3.5" />
+                  <FileText className="h-3.5 w-3.5" aria-hidden="true" />
                   View Original Attachment
-                  <ExternalLink className="h-3 w-3" />
+                  <ExternalLink className="h-3 w-3" aria-hidden="true" />
                 </a>
               </div>
             )}
           </div>
         </div>
 
-        {/* Footer Actions */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border bg-surface-muted px-6 py-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border bg-surface-highlight px-6 py-4">
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-xs font-semibold text-foreground hover:bg-surface-hover transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-text-primary hover:bg-surface-hover motion-safe:transition-colors"
             >
-              <Printer className="h-4 w-4" />
+              <Printer className="h-4 w-4" aria-hidden="true" />
               Print Voucher
             </button>
             <button
               type="button"
               onClick={handleShareWhatsApp}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-success bg-success-bg px-3 py-2 text-xs font-semibold text-success-text hover:opacity-90 motion-safe:transition-opacity"
             >
-              <Share2 className="h-4 w-4" />
+              <Share2 className="h-4 w-4" aria-hidden="true" />
               WhatsApp
             </button>
           </div>
@@ -359,40 +228,34 @@ export function AdminAccountsExpenseVoucherModal({
             {isPending && onApprove && (
               <button
                 type="button"
-                onClick={() => {
-                  onApprove(expense);
-                  onClose();
-                }}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-500 transition-colors shadow-sm"
+                onClick={() => { onApprove(expense); onClose(); }}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-success px-3 py-2 text-xs font-semibold text-on-primary hover:opacity-90 motion-safe:transition-opacity shadow-card"
               >
-                <CheckCircle2 className="h-4 w-4" />
-                Approve & Release Cash
+                <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+                Approve &amp; Release Cash
               </button>
             )}
             {isPending && onReject && (
               <button
                 type="button"
-                onClick={() => {
-                  onReject(expense);
-                  onClose();
-                }}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-xs font-semibold text-rose-400 hover:bg-rose-500/20 transition-colors"
+                onClick={() => { onReject(expense); onClose(); }}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-danger bg-danger-bg px-3 py-2 text-xs font-semibold text-danger-text hover:opacity-90 motion-safe:transition-opacity"
               >
-                <XCircle className="h-4 w-4" />
+                <XCircle className="h-4 w-4" aria-hidden="true" />
                 Reject
               </button>
             )}
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-border bg-surface px-4 py-2 text-xs font-semibold text-foreground hover:bg-surface-hover transition-colors"
+              className="rounded-lg border border-border bg-card px-4 py-2 text-xs font-semibold text-text-primary hover:bg-surface-hover motion-safe:transition-colors"
             >
               Close
             </button>
           </div>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

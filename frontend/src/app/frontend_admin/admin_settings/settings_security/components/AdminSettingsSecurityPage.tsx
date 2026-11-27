@@ -4,7 +4,7 @@ import AdminSecurityDeviceSessionsPanel from '@/app/frontend_admin/admin_setting
 import AdminSecurityFailedLoginsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityFailedLoginsPanel';
 import { ADMIN_SECURITY_EVENT_FILTERS,ADMIN_SECURITY_NAV_ITEMS } from '@/app/frontend_admin/admin_settings/settings_security/config/admin_settings_security.url_config';
 import useAdminSecurityTabState from '@/app/frontend_admin/admin_settings/settings_security/hooks/useAdminSettingsSecurityTabState';
-import { ADMIN_SECURITY_ACTIVE_SESSION_FIXTURES,ADMIN_SECURITY_BLOCKED_ACCOUNT_FIXTURES,ADMIN_SECURITY_EVENT_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
+import { ADMIN_SECURITY_ACTIVE_SESSION_FIXTURES,ADMIN_SECURITY_BLOCKED_ACCOUNT_FIXTURES,ADMIN_SECURITY_EVENT_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/config/admin_settings_security.demo_data';
 import type { AdminSecurityEventFilter } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
 import { filterAdminSecurityEvents } from '@/app/frontend_admin/admin_settings/settings_security/utils/AdminSettingsSecurityEventUtils';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';

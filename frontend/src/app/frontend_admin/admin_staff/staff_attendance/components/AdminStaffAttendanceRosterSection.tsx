@@ -12,7 +12,7 @@ Sun,
 Sunset,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { AdminStaffAttendanceLeavesSection } from './AdminStaffAttendanceLeavesSection';
+import { AdminStaffAttendanceLeavesSection } from '@/app/frontend_admin/admin_staff/staff_attendance/components/AdminStaffAttendanceLeavesSection';
 
 export { AdminStaffAttendanceLeavesSection };
 

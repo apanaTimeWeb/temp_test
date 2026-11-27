@@ -1,7 +1,8 @@
 /** Data shape for the Communication-owned WhatsApp template preview. */
 export interface AdminCommunicationWhatsappTemplate {
-  id: AdminCommunicationWhatsappTemplateId;
+  id: AdminCommunicationWhatsappTemplateId | `custom_${string}`;
   labelKey: AdminCommunicationWhatsappTemplateLabelKey;
+  customTitle?: string;
   icon: string;
   body: string;
   category?: string;

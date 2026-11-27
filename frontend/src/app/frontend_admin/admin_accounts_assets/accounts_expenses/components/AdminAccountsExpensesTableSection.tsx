@@ -5,9 +5,9 @@ import type { AdminAccountingExpense } from '@/app/frontend_admin/admin_accounts
 import type { AdminAccountsExpensesTableSectionProps } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/types/AdminAccountsExpensesComponentTypes';
 import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/utils/AdminAccountsExpensesFormatCurrency';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
-import { DataGrid,type DataGridCellParams,type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import { Building2,Check,CheckCircle2,Clock,Eye,Trash2,User,X,XCircle } from 'lucide-react';
-import { useLocale,useTranslations } from 'next-intl';
+import { DataGrid, type DataGridCellParams, type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
+import { Building2, Check, CheckCircle2, Clock, Eye, Trash2, User, X, XCircle } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
 const CATEGORY_TRANSLATION_KEY = {
@@ -21,7 +21,6 @@ const CATEGORY_TRANSLATION_KEY = {
   Miscellaneous: 'CATEGORY_MISCELLANEOUS',
 } as const;
 
-/** Owns expense table columns, localized value labels, empty state, and row-level delete/approval initiation. */
 export function AdminAccountsExpensesTableSection({
   expenses,
   onRequestDelete,
@@ -47,8 +46,8 @@ export function AdminAccountsExpensesTableSection({
       sortable: true,
       cellRenderer: (params: DataGridCellParams<AdminAccountingExpense>) => (
         <div className="flex items-center gap-1.5">
-          <Building2 className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-          <span className="font-semibold text-foreground text-xs">{params.data.branchName ?? 'Downtown Central'}</span>
+          <Building2 className="h-3.5 w-3.5 text-text-secondary shrink-0" aria-hidden="true" />
+          <span className="font-semibold text-text-primary text-xs">{params.data.branchName ?? 'Downtown Central'}</span>
         </div>
       ),
     },
@@ -61,7 +60,7 @@ export function AdminAccountsExpensesTableSection({
         const value = String(params.value ?? '—');
         const key = CATEGORY_TRANSLATION_KEY[value as keyof typeof CATEGORY_TRANSLATION_KEY];
         return (
-          <span className="inline-flex items-center rounded-md border border-border px-2.5 py-1 text-xs font-medium bg-surface text-foreground">
+          <span className="inline-flex items-center rounded-md border border-border px-2.5 py-1 text-xs font-medium bg-surface-highlight text-text-primary">
             {key ? t(key) : value}
           </span>
         );
@@ -76,25 +75,25 @@ export function AdminAccountsExpensesTableSection({
       cellRenderer: (params: DataGridCellParams<AdminAccountingExpense>) => (
         <div className="flex flex-col py-1">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="font-semibold text-foreground text-xs sm:text-sm">{params.data.description}</span>
+            <span className="font-semibold text-text-primary text-xs sm:text-sm">{params.data.description}</span>
             {params.data.isPettyCashRequest && (
-              <span className="rounded bg-amber-500/15 border border-amber-500/30 px-1.5 py-0.5 text-[10px] font-bold text-amber-400">
+              <span className="rounded bg-warning-bg border border-warning px-1.5 py-0.5 text-[10px] font-bold text-warning-text">
                 Petty Cash
               </span>
             )}
             {params.data.vendorName && (
-              <span className="rounded bg-primary-subtle border border-primary/20 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+              <span className="rounded bg-primary-subtle border border-border-focus px-1.5 py-0.5 text-[10px] font-medium text-primary">
                 {params.data.vendorName}
               </span>
             )}
           </div>
           {params.data.notes && (
-            <span className="text-xs text-muted-foreground truncate max-w-sm mt-0.5" title={params.data.notes}>
+            <span className="text-xs text-text-secondary truncate max-w-sm mt-0.5" title={params.data.notes}>
               {params.data.notes}
             </span>
           )}
           {params.data.rejectionReason && (
-            <span className="text-xs text-rose-400 font-medium mt-0.5">
+            <span className="text-xs text-danger-text font-medium mt-0.5">
               Reason: {params.data.rejectionReason}
             </span>
           )}
@@ -111,15 +110,13 @@ export function AdminAccountsExpensesTableSection({
         const isHighValue = minorAmount > 200000;
         return (
           <div className="flex flex-col">
-            <span className="font-mono text-sm font-bold text-foreground">
+            <span className="font-mono text-sm font-bold text-text-primary">
               {formatAdminAccountingCurrency(minorAmount, locale)}
             </span>
             <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="text-[10px] uppercase font-semibold text-muted-foreground">
-                {params.data.mode}
-              </span>
+              <span className="text-[10px] uppercase font-semibold text-text-secondary">{params.data.mode}</span>
               {isHighValue && (
-                <span className="inline-flex items-center rounded bg-amber-500/15 border border-amber-500/30 px-1 py-0.2 text-[9px] font-bold text-amber-400" title="High value (> ₹2,000) - requires Admin approval">
+                <span className="inline-flex items-center rounded bg-warning-bg border border-warning px-1 py-0.2 text-[9px] font-bold text-warning-text" title="High value (> ₹2,000) - requires Admin approval">
                   &gt; ₹2k Admin
                 </span>
               )}
@@ -137,23 +134,23 @@ export function AdminAccountsExpensesTableSection({
         const status = params.data.status ?? 'APPROVED';
         if (status === 'PENDING_APPROVAL') {
           return (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/15 px-2.5 py-0.5 text-xs font-semibold text-amber-400">
-              <Clock className="h-3 w-3" />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-warning bg-warning-bg px-2.5 py-0.5 text-xs font-semibold text-warning-text">
+              <Clock className="h-3 w-3" aria-hidden="true" />
               <span>{t('STATUS_PENDING')}</span>
             </span>
           );
         }
         if (status === 'APPROVED') {
           return (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-400">
-              <CheckCircle2 className="h-3 w-3" />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-success bg-success-bg px-2.5 py-0.5 text-xs font-semibold text-success-text">
+              <CheckCircle2 className="h-3 w-3" aria-hidden="true" />
               <span>{t('STATUS_APPROVED')}</span>
             </span>
           );
         }
         return (
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/15 px-2.5 py-0.5 text-xs font-semibold text-rose-400">
-            <XCircle className="h-3 w-3" />
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-danger bg-danger-bg px-2.5 py-0.5 text-xs font-semibold text-danger-text">
+            <XCircle className="h-3 w-3" aria-hidden="true" />
             <span>{t('STATUS_REJECTED')}</span>
           </span>
         );
@@ -168,12 +165,10 @@ export function AdminAccountsExpensesTableSection({
         const name = params.data.requestedBy ?? params.data.paidBy ?? 'Branch Staff';
         return (
           <div className="flex items-center gap-1.5">
-            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-surface-muted text-muted-foreground border border-border shrink-0">
-              <User className="h-3 w-3" />
+            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-surface-highlight text-text-secondary border border-border shrink-0">
+              <User className="h-3 w-3" aria-hidden="true" />
             </div>
-            <span className="text-xs font-medium text-foreground truncate" title={name}>
-              {name}
-            </span>
+            <span className="text-xs font-medium text-text-primary truncate" title={name}>{name}</span>
           </div>
         );
       },
@@ -183,22 +178,20 @@ export function AdminAccountsExpensesTableSection({
       headerName: t('VOUCHER') ?? 'Bill / Slip',
       width: 95,
       sortable: false,
-      cellRenderer: (params: DataGridCellParams<AdminAccountingExpense>) => {
-        return (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onViewVoucher) onViewVoucher(params.data);
-            }}
-            title={t('VIEW_VOUCHER') ?? 'View Expense Voucher'}
-            className="inline-flex items-center gap-1 justify-center rounded-lg border border-border bg-surface px-2 py-1 text-xs font-semibold text-primary hover:bg-surface-hover hover:border-primary/40 transition-colors"
-          >
-            <Eye className="h-3.5 w-3.5" />
-            <span>View</span>
-          </button>
-        );
-      },
+      cellRenderer: (params: DataGridCellParams<AdminAccountingExpense>) => (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (onViewVoucher) onViewVoucher(params.data);
+          }}
+          title={t('VIEW_VOUCHER') ?? 'View Expense Voucher'}
+          className="inline-flex items-center gap-1 justify-center rounded-lg border border-border bg-card px-2 py-1 text-xs font-semibold text-primary hover:bg-surface-hover hover:border-border-focus motion-safe:transition-colors"
+        >
+          <Eye className="h-3.5 w-3.5" aria-hidden="true" />
+          <span>View</span>
+        </button>
+      ),
     },
     {
       headerName: t('ACTIONS'),
@@ -206,46 +199,36 @@ export function AdminAccountsExpensesTableSection({
       sortable: false,
       cellRenderer: (params: DataGridCellParams<AdminAccountingExpense>) => {
         const isPending = params.data.status === 'PENDING_APPROVAL';
-
         return (
           <div className="inline-flex items-center gap-1.5">
             {isPending && onRequestApprove && (
               <button
                 type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onRequestApprove(params.data);
-                }}
+                onClick={(e) => { e.stopPropagation(); onRequestApprove(params.data); }}
                 title={t('APPROVE')}
-                className="inline-flex items-center justify-center rounded-lg bg-emerald-600 hover:bg-emerald-500 p-1.5 text-white shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 min-h-[32px] min-w-[32px] motion-safe:transition-all hover:scale-105"
+                className="inline-flex items-center justify-center rounded-lg bg-success hover:opacity-90 p-1.5 text-on-primary shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success min-h-[32px] min-w-[32px] motion-safe:transition-transform motion-safe:hover:scale-105"
               >
-                <Check className="h-3.5 w-3.5" />
+                <Check className="h-3.5 w-3.5" aria-hidden="true" />
               </button>
             )}
             {isPending && onRequestReject && (
               <button
                 type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onRequestReject(params.data);
-                }}
+                onClick={(e) => { e.stopPropagation(); onRequestReject(params.data); }}
                 title={t('REJECT')}
-                className="inline-flex items-center justify-center rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 p-1.5 text-rose-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 min-h-[32px] min-w-[32px] motion-safe:transition-all hover:scale-105"
+                className="inline-flex items-center justify-center rounded-lg border border-danger bg-danger-bg hover:opacity-90 p-1.5 text-danger-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger min-h-[32px] min-w-[32px] motion-safe:transition-transform motion-safe:hover:scale-105"
               >
-                <X className="h-3.5 w-3.5" />
+                <X className="h-3.5 w-3.5" aria-hidden="true" />
               </button>
             )}
             <button
               type="button"
               data-testid={`admin_accounting-expenses-delete-${params.data.id}`}
               aria-label={t('DELETE_EXPENSE', { description: params.data.description })}
-              className="inline-flex items-center justify-center rounded-lg border border-border p-1.5 text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 hover:border-rose-500/30 min-h-[32px] min-w-[32px] cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-all"
+              className="inline-flex items-center justify-center rounded-lg border border-danger p-1.5 text-danger-text bg-danger-bg hover:opacity-90 min-h-[32px] min-w-[32px] cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-opacity"
               disabled={!canMutate}
               title={!canMutate ? t('DELETE_BLOCKED') : undefined}
-              onClick={(event) => {
-                event.stopPropagation();
-                onRequestDelete(params.data);
-              }}
+              onClick={(event) => { event.stopPropagation(); onRequestDelete(params.data); }}
             >
               <Trash2 size={16} strokeWidth={2} aria-hidden="true" />
             </button>
@@ -258,11 +241,7 @@ export function AdminAccountsExpensesTableSection({
   return (
     <section aria-label={t('TABLE_ARIA')} className="rounded-xl border border-border bg-card shadow-card p-4">
       {expenses.length === 0 ? (
-        <div
-          role="status"
-          aria-live="polite"
-          className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border p-12 text-center"
-        >
+        <div role="status" aria-live="polite" className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border p-12 text-center">
           <p className="font-medium text-text-primary">{t('NO_EXPENSES')}</p>
           <p className="mt-1 text-sm text-text-secondary">{t('EMPTY_DESCRIPTION')}</p>
         </div>

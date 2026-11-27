@@ -4,17 +4,9 @@ import {
   ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_LABEL,
   ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_LABEL,
 } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/config/admin_communication_whatsapp_logs.url_config';
-import type { AdminCommunicationWhatsappLog,AdminCommunicationWhatsappLogStatus } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/types/AdminCommunicationWhatsappLogsTypes';
-import type { DataGridCellParams,DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import {
-  AlertCircle,
-  Clock,
-  Eye,
-  MessageSquare,
-  RotateCcw,
-  Server,
-  Smartphone,
-} from 'lucide-react';
+import type { AdminCommunicationWhatsappLog, AdminCommunicationWhatsappLogStatus } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/types/AdminCommunicationWhatsappLogsTypes';
+import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
+import { AlertCircle, Clock, Eye, MessageSquare, RotateCcw, Server, Smartphone } from 'lucide-react';
 
 const WHATSAPP_TYPE_ICONS: Record<string, string> = {
   welcome: '👋',
@@ -25,21 +17,21 @@ const WHATSAPP_TYPE_ICONS: Record<string, string> = {
 };
 
 const TYPE_CONFIG: Record<string, { bg: string; text: string; border: string }> = {
-  welcome: { bg: 'bg-teal-500/10', text: 'text-teal-300', border: 'border-teal-500/30' },
-  fee_reminder: { bg: 'bg-amber-500/10', text: 'text-amber-300', border: 'border-amber-500/30' },
-  receipt: { bg: 'bg-purple-500/10', text: 'text-purple-300', border: 'border-purple-500/30' },
-  notice: { bg: 'bg-blue-500/10', text: 'text-blue-300', border: 'border-blue-500/30' },
-  renewal: { bg: 'bg-indigo-500/10', text: 'text-indigo-300', border: 'border-indigo-500/30' },
+  welcome: { bg: 'bg-success-bg', text: 'text-success-text', border: 'border-success' },
+  fee_reminder: { bg: 'bg-warning-bg', text: 'text-warning-text', border: 'border-warning' },
+  receipt: { bg: 'bg-purple-bg', text: 'text-purple-text', border: 'border-purple-text' },
+  notice: { bg: 'bg-info-bg', text: 'text-info-text', border: 'border-info' },
+  renewal: { bg: 'bg-info-bg', text: 'text-primary-text', border: 'border-primary' },
 };
 
 const STATUS_CONFIG: Record<
   AdminCommunicationWhatsappLogStatus,
   { bg: string; text: string; border: string; dot: string; icon: string }
 > = {
-  Delivered: { bg: 'bg-emerald-500/10', text: 'text-emerald-300', border: 'border-emerald-500/30', dot: 'bg-emerald-400 shadow-sm shadow-emerald-400/50', icon: '✓✓' },
-  Sent: { bg: 'bg-sky-500/10', text: 'text-sky-300', border: 'border-sky-500/30', dot: 'bg-sky-400 shadow-sm shadow-sky-400/50', icon: '✓✓' },
-  Pending: { bg: 'bg-amber-500/10', text: 'text-amber-300', border: 'border-amber-500/30', dot: 'bg-amber-400 animate-pulse', icon: '⏱' },
-  Failed: { bg: 'bg-rose-500/10', text: 'text-rose-300', border: 'border-rose-500/30', dot: 'bg-rose-400 shadow-sm shadow-rose-400/50', icon: '✕' },
+  Delivered: { bg: 'bg-success-bg', text: 'text-success-text', border: 'border-success', dot: 'bg-success shadow-sm', icon: '✓✓' },
+  Sent: { bg: 'bg-info-bg', text: 'text-info-text', border: 'border-info', dot: 'bg-info shadow-sm', icon: '✓✓' },
+  Pending: { bg: 'bg-warning-bg', text: 'text-warning-text', border: 'border-warning', dot: 'bg-warning motion-safe:animate-pulse', icon: '⏱' },
+  Failed: { bg: 'bg-danger-bg', text: 'text-danger-text', border: 'border-danger', dot: 'bg-danger shadow-sm', icon: '✕' },
 };
 
 function getInitials(name: string): string {
@@ -52,12 +44,11 @@ function getInitials(name: string): string {
 function getSnippet(message: string): string {
   if (!message) return '';
   const lines = message.split('\n').filter((l) => l.trim().length > 0);
-  const headline = lines[0] || '';
-  return headline.replace(/\*/g, '').trim();
+  return (lines[0] || '').replace(/\*/g, '').trim();
 }
 
 export function buildAdminCommunicationWhatsappLogColumns(
-  t: (key: string, values?: any) => string,
+  t: (key: string, values?: Record<string, string | number | Date>) => string,
   onView: (log: AdminCommunicationWhatsappLog) => void,
   onRetry: (id: string) => void
 ): readonly DataGridColumn<AdminCommunicationWhatsappLog>[] {
@@ -69,17 +60,15 @@ export function buildAdminCommunicationWhatsappLogColumns(
       sortable: true,
       cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => {
         const parts = String(p.value ?? '').split(' ');
-        const datePart = parts[0] || '';
-        const timePart = parts.slice(1).join(' ');
         return (
           <div className="flex h-full items-center">
             <div className="flex items-center gap-2">
-              <div className="h-7 w-7 rounded-lg bg-slate-800 border border-slate-700/60 flex items-center justify-center text-slate-400 shrink-0">
+              <div className="h-7 w-7 rounded-lg bg-surface border border-border flex items-center justify-center text-text-secondary shrink-0">
                 <Clock size={13} />
               </div>
               <div className="leading-tight">
-                <span className="font-semibold text-xs text-white block">{datePart}</span>
-                <span className="font-mono text-[11px] text-slate-400 block">{timePart}</span>
+                <span className="font-semibold text-xs text-text-primary block">{parts[0] || ''}</span>
+                <span className="font-mono text-[11px] text-text-secondary block">{parts.slice(1).join(' ')}</span>
               </div>
             </div>
           </div>
@@ -96,15 +85,15 @@ export function buildAdminCommunicationWhatsappLogColumns(
         return (
           <div className="flex h-full items-center">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-br from-emerald-500/25 to-teal-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-300 font-bold text-xs shrink-0 shadow-inner">
+              <div className="h-8 w-8 rounded-full bg-success-bg border border-success flex items-center justify-center text-success-text font-bold text-xs shrink-0 shadow-inner">
                 {initials}
               </div>
               <div className="min-w-0">
-                <span className="font-bold text-xs text-white truncate block">{p.data.student}</span>
+                <span className="font-bold text-xs text-text-primary truncate block">{p.data.student}</span>
                 <div className="flex items-center gap-1.5 mt-0.5">
-                  <span className="font-mono text-[11px] text-emerald-400/90 font-medium">{p.data.phone}</span>
+                  <span className="font-mono text-[11px] text-success-text font-medium">{p.data.phone}</span>
                   {p.data.branch && (
-                    <span className="text-[10px] bg-slate-800 border border-slate-700/60 px-1.5 py-0.2 rounded text-slate-300 truncate max-w-[90px]">
+                    <span className="text-[10px] bg-surface border border-border px-1.5 py-0.5 rounded text-text-secondary truncate max-w-[90px]">
                       {p.data.branch}
                     </span>
                   )}
@@ -123,7 +112,7 @@ export function buildAdminCommunicationWhatsappLogColumns(
       cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => {
         const typeKey = String(p.value ?? 'welcome');
         const icon = WHATSAPP_TYPE_ICONS[typeKey] || '📱';
-        const conf = TYPE_CONFIG[typeKey] || { bg: 'bg-slate-800', text: 'text-slate-300', border: 'border-slate-700' };
+        const conf = TYPE_CONFIG[typeKey] || { bg: 'bg-surface', text: 'text-text-secondary', border: 'border-border' };
         return (
           <div className="flex h-full items-center">
             <span
@@ -147,13 +136,13 @@ export function buildAdminCommunicationWhatsappLogColumns(
         return (
           <div className="flex h-full items-center">
             {isAutoApi ? (
-              <span className="inline-flex items-center gap-1 rounded-full border border-indigo-500/30 bg-indigo-500/15 px-2 py-0.5 text-[11px] font-semibold text-indigo-300">
-                <Server size={11} className="text-indigo-400" />
+              <span className="inline-flex items-center gap-1 rounded-full border border-info bg-info-bg px-2 py-0.5 text-[11px] font-semibold text-info-text">
+                <Server size={11} className="text-info-text" />
                 Server API (1x Auto)
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-300">
-                <Smartphone size={11} className="text-emerald-400" />
+              <span className="inline-flex items-center gap-1 rounded-full border border-success bg-success-bg px-2 py-0.5 text-[11px] font-semibold text-success-text">
+                <Smartphone size={11} className="text-success-text" />
                 WhatsApp Web (Free)
               </span>
             )}
@@ -172,8 +161,8 @@ export function buildAdminCommunicationWhatsappLogColumns(
         return (
           <div className="flex h-full items-center min-w-0 pr-2">
             <div className="flex items-center gap-2 min-w-0">
-              <MessageSquare size={13} className="text-slate-500 shrink-0" />
-              <span className="text-xs text-slate-300 truncate font-sans" title={String(p.value ?? '')}>
+              <MessageSquare size={13} className="text-text-secondary shrink-0" />
+              <span className="text-xs text-text-secondary truncate font-sans" title={String(p.value ?? '')}>
                 {snippet || '—'}
               </span>
             </div>
@@ -213,14 +202,14 @@ export function buildAdminCommunicationWhatsappLogColumns(
         if (err) {
           return (
             <div className="flex h-full items-center">
-              <span className="inline-flex items-center gap-1 rounded-md bg-rose-500/15 border border-rose-500/30 px-2 py-0.5 text-[11px] font-semibold text-rose-300 truncate max-w-[140px]" title={err}>
-                <AlertCircle size={11} className="shrink-0 text-rose-400" />
+              <span className="inline-flex items-center gap-1 rounded-md bg-danger-bg border border-danger px-2 py-0.5 text-[11px] font-semibold text-danger-text truncate max-w-[140px]" title={err}>
+                <AlertCircle size={11} className="shrink-0 text-danger-text" />
                 <span className="truncate">{err}</span>
               </span>
             </div>
           );
         }
-        return <div className="flex h-full items-center"><span className="text-slate-500 text-xs font-mono">—</span></div>;
+        return <div className="flex h-full items-center"><span className="text-text-secondary text-xs font-mono">—</span></div>;
       },
     },
     {
@@ -233,7 +222,7 @@ export function buildAdminCommunicationWhatsappLogColumns(
             data-testid={`admin_communication-whatsapp-view-${params.data.id}`}
             type="button"
             onClick={() => onView(params.data)}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-500/50 hover:text-white transition-all cursor-pointer shadow-xs"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-success bg-success-bg text-success-text hover:opacity-90 motion-safe:transition-all cursor-pointer shadow-xs"
             title={t('WHATSAPP_VIEW_ACTION')}
             aria-label={t('WHATSAPP_VIEW_MESSAGE_FOR', { phone: params.data.phone })}
           >
@@ -244,7 +233,7 @@ export function buildAdminCommunicationWhatsappLogColumns(
               data-testid={`admin_communication-whatsapp-retry-${params.data.id}`}
               type="button"
               onClick={() => onRetry(params.data.id)}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:border-amber-500/50 hover:text-white transition-all cursor-pointer shadow-xs"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-warning bg-warning-bg text-warning-text hover:opacity-90 motion-safe:transition-all cursor-pointer shadow-xs"
               title="Retry / Resend failed message"
               aria-label="Retry dispatch"
             >

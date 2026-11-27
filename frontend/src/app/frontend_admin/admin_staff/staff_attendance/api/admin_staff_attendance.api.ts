@@ -1,30 +1,32 @@
 import {
-ADMIN_STAFF_ATTENDANCE_FIXTURES,
-ADMIN_STAFF_ROSTER_FIXTURES,
-} from '@/app/frontend_admin/admin_staff/staff_attendance/mocks/scenarios/admin_staff_attendance.scenarios';
+  ADMIN_STAFF_ATTENDANCE_DEMO_DATA,
+  ADMIN_STAFF_ROSTER_DEMO_DATA,
+} from '@/app/frontend_admin/admin_staff/staff_attendance/config/admin_staff_attendance.demo_data';
 import type {
-RegularizeAttendanceInput,
-StaffAttendanceRecord,
-StaffRosterSlot,
+  RegularizeAttendanceInput,
+  StaffAttendanceRecord,
+  StaffRosterSlot,
 } from '@/app/frontend_admin/admin_staff/staff_attendance/schemas/AdminStaffAttendanceSchema';
 import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 
 export async function fetchAdminStaffAttendanceList(): Promise<StaffAttendanceRecord[]> {
   if (isFrontendDemoModeEnabled()) {
-    return Promise.resolve([...ADMIN_STAFF_ATTENDANCE_FIXTURES]);
+    return Promise.resolve([...ADMIN_STAFF_ATTENDANCE_DEMO_DATA]);
   }
-  return Promise.resolve([...ADMIN_STAFF_ATTENDANCE_FIXTURES]);
+  return Promise.resolve([...ADMIN_STAFF_ATTENDANCE_DEMO_DATA]);
 }
 
 export async function fetchAdminStaffRosterSlots(): Promise<StaffRosterSlot[]> {
   if (isFrontendDemoModeEnabled()) {
-    return Promise.resolve([...ADMIN_STAFF_ROSTER_FIXTURES]);
+    return Promise.resolve([...ADMIN_STAFF_ROSTER_DEMO_DATA]);
   }
-  return Promise.resolve([...ADMIN_STAFF_ROSTER_FIXTURES]);
+  return Promise.resolve([...ADMIN_STAFF_ROSTER_DEMO_DATA]);
 }
 
-export async function regularizeStaffAttendance(input: RegularizeAttendanceInput): Promise<{ success: boolean; record: StaffAttendanceRecord }> {
-  const existing = ADMIN_STAFF_ATTENDANCE_FIXTURES.find((r) => r.id === input.recordId);
+export async function regularizeStaffAttendance(
+  input: RegularizeAttendanceInput
+): Promise<{ success: boolean; record: StaffAttendanceRecord }> {
+  const existing = ADMIN_STAFF_ATTENDANCE_DEMO_DATA.find((r) => r.id === input.recordId);
   const updated: StaffAttendanceRecord = existing
     ? {
         ...existing,
@@ -52,4 +54,3 @@ export async function regularizeStaffAttendance(input: RegularizeAttendanceInput
 
   return Promise.resolve({ success: true, record: updated });
 }
-

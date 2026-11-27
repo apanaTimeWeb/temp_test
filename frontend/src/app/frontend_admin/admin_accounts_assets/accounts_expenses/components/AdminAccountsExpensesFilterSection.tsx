@@ -3,9 +3,10 @@
 
 import { ADMIN_ACCOUNTING_EXPENSE_CATEGORIES } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/config/admin_accounts_expenses.url_config';
 import type {
-AdminAccountsExpensesCategoryFilter,
-AdminAccountsExpensesFilterSectionProps
+  AdminAccountsExpensesCategoryFilter,
+  AdminAccountsExpensesFilterSectionProps,
 } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/types/AdminAccountsExpensesComponentTypes';
+import type { AdminExpenseTimeRange } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/utils/adminAccountsExpensesExports';
 import { CheckCircle2, Clock, FileSpreadsheet, RotateCcw, Search, XCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -159,7 +160,7 @@ export function AdminAccountsExpensesFilterSection({
                     aria-label="Filter expenses by date range"
                     className="min-h-11 rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-36 text-sm"
                     value={timeRange}
-                    onChange={(e) => onTimeRangeChange(e.target.value as any)}
+                    onChange={(e) => onTimeRangeChange(e.target.value as AdminExpenseTimeRange)}
                   >
                     <option value="all">All Dates</option>
                     <option value="today">Today</option>
@@ -197,10 +198,10 @@ export function AdminAccountsExpensesFilterSection({
               <button
                 type="button"
                 onClick={onExportCsv}
-                className="inline-flex items-center rounded-md border border-border bg-card px-3 py-2 text-xs font-semibold text-text-secondary min-h-11 cursor-pointer gap-1.5 hover:bg-card-hover hover:text-text-primary transition-colors"
+                className="inline-flex items-center rounded-md border border-border bg-card px-3 py-2 text-xs font-semibold text-text-secondary min-h-11 cursor-pointer gap-1.5 hover:bg-surface-hover hover:text-text-primary motion-safe:transition-colors"
                 title="Export Expenses as CSV"
               >
-                <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-500" />
+                <FileSpreadsheet className="h-3.5 w-3.5 text-success-text" aria-hidden="true" />
                 <span>Export CSV</span>
               </button>
             )}
@@ -208,16 +209,16 @@ export function AdminAccountsExpensesFilterSection({
               <button
                 type="button"
                 onClick={onExportExcel}
-                className="inline-flex items-center rounded-md border border-border bg-card px-3 py-2 text-xs font-semibold text-text-secondary min-h-11 cursor-pointer gap-1.5 hover:bg-card-hover hover:text-text-primary transition-colors"
+                className="inline-flex items-center rounded-md border border-border bg-card px-3 py-2 text-xs font-semibold text-text-secondary min-h-11 cursor-pointer gap-1.5 hover:bg-surface-hover hover:text-text-primary motion-safe:transition-colors"
                 title="Export Expenses as Formatted Excel (.xls)"
               >
-                <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600" />
+                <FileSpreadsheet className="h-3.5 w-3.5 text-success-text" aria-hidden="true" />
                 <span>Export Excel</span>
               </button>
             )}
             <button
               type="button"
-              className="inline-flex items-center rounded-md border border-border px-3 py-2 text-sm font-medium bg-card text-text-secondary min-h-11 cursor-pointer gap-1 hover:bg-card-hover"
+              className="inline-flex items-center rounded-md border border-border px-3 py-2 text-sm font-medium bg-card text-text-secondary min-h-11 cursor-pointer gap-1 hover:bg-surface-hover"
               onClick={() => {
                 onChange('all');
                 if (onSearchChange) onSearchChange('');
@@ -227,7 +228,7 @@ export function AdminAccountsExpensesFilterSection({
                 if (onCustomEndDateChange) onCustomEndDateChange('');
               }}
             >
-              <RotateCcw size={14} className="text-rose-400" aria-hidden="true" /> {t('RESET')}
+              <RotateCcw size={14} className="text-danger-text" aria-hidden="true" /> {t('RESET')}
             </button>
           </div>
         </div>

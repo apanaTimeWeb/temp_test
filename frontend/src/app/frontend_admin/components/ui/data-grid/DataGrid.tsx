@@ -4,7 +4,7 @@ import { DataGridMobileCards } from '@/components/ui/data-grid/DataGridMobileCar
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { Inbox } from 'lucide-react';
 import { useEffect,useMemo,useRef,useState,type KeyboardEvent,type MouseEvent,type ReactNode } from 'react';
-import { GRID_LABELS,readColumnValue,uniqueRowIdentities } from './utils/DataGridHelpers';
+import { GRID_LABELS,readColumnValue,uniqueRowIdentities } from '@/app/frontend_admin/components/ui/data-grid/utils/DataGridHelpers';
 
 export function DataGrid<TRow extends object>({
   rowData = [],
@@ -176,7 +176,7 @@ export function DataGrid<TRow extends object>({
                           {sortDirection === 'asc' ? '↑' : '↓'}
                         </span>
                       ) : (
-                        <span className="text-text-secondary opacity-50 group-hover:opacity-100 transition-opacity inline-flex items-center" aria-hidden="true">
+                        <span className="text-text-secondary opacity-50 group-hover:opacity-100 motion-safe:transition-opacity inline-flex items-center" aria-hidden="true">
                           ↕
                         </span>
                       )}

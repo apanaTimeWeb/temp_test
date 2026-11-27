@@ -2,7 +2,7 @@
 
 // RESPONSIBILITY: AdminSettingsProfileSubscriptionPanel component owned by admin_settings/settings_profile.
 
-import { ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION } from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
+import { ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION } from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.demo_data';
 import {
   Armchair,
   Building2,

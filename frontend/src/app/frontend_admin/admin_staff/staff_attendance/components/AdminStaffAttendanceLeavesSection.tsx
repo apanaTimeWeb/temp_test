@@ -79,7 +79,7 @@ export function AdminStaffAttendanceLeavesSection({ leaveRequests, onAction }: L
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 motion-safe:transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -143,7 +143,7 @@ export function AdminStaffAttendanceLeavesSection({ leaveRequests, onAction }: L
                 <button
                   type="button"
                   onClick={() => onAction(req.id, 'APPROVE')}
-                  className="flex-1 inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 text-xs font-semibold text-on-primary hover:bg-primary-hover transition-colors"
+                  className="flex-1 inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 text-xs font-semibold text-on-primary hover:bg-primary-hover motion-safe:transition-colors"
                 >
                   <Check size={14} />
                   {t('ACTION_APPROVE_LEAVE')}
@@ -151,7 +151,7 @@ export function AdminStaffAttendanceLeavesSection({ leaveRequests, onAction }: L
                 <button
                   type="button"
                   onClick={() => onAction(req.id, 'REJECT')}
-                  className="flex-1 inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg border border-destructive-bg bg-destructive-bg px-3 text-xs font-semibold text-destructive hover:opacity-90 transition-colors"
+                  className="flex-1 inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg border border-destructive-bg bg-destructive-bg px-3 text-xs font-semibold text-destructive hover:opacity-90 motion-safe:transition-colors"
                 >
                   <X size={14} />
                   {t('ACTION_REJECT_LEAVE')}
@@ -178,7 +178,7 @@ export function AdminStaffAttendanceLeavesSection({ leaveRequests, onAction }: L
           </thead>
           <tbody className="divide-y divide-border">
             {paginatedRequests.map((req) => (
-              <tr key={req.id} className="hover:bg-surface-hover transition-colors">
+              <tr key={req.id} className="hover:bg-surface-hover motion-safe:transition-colors">
                 <td className="px-4 py-3 font-medium text-text-primary">
                   <div>{req.staffName}</div>
                   <div className="text-xs text-text-secondary">{req.role}</div>
@@ -207,7 +207,7 @@ export function AdminStaffAttendanceLeavesSection({ leaveRequests, onAction }: L
                       <button
                         type="button"
                         onClick={() => onAction(req.id, 'APPROVE')}
-                        className="inline-flex min-h-8 items-center gap-1 rounded-md bg-primary px-2.5 text-xs font-semibold text-on-primary hover:bg-primary-hover transition-colors"
+                        className="inline-flex min-h-8 items-center gap-1 rounded-md bg-primary px-2.5 text-xs font-semibold text-on-primary hover:bg-primary-hover motion-safe:transition-colors"
                       >
                         <Check size={13} />
                         {t('ACTION_APPROVE_LEAVE')}
@@ -215,7 +215,7 @@ export function AdminStaffAttendanceLeavesSection({ leaveRequests, onAction }: L
                       <button
                         type="button"
                         onClick={() => onAction(req.id, 'REJECT')}
-                        className="inline-flex min-h-8 items-center gap-1 rounded-md border border-destructive-bg bg-destructive-bg px-2 text-xs font-semibold text-destructive hover:opacity-90 transition-colors"
+                        className="inline-flex min-h-8 items-center gap-1 rounded-md border border-destructive-bg bg-destructive-bg px-2 text-xs font-semibold text-destructive hover:opacity-90 motion-safe:transition-colors"
                       >
                         <X size={13} />
                         {t('ACTION_REJECT_LEAVE')}

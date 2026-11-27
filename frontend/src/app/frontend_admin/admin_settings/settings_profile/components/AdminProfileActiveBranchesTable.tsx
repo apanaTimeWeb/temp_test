@@ -1,6 +1,6 @@
 'use client';
 
-import type { AdminProfileActiveBranch } from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
+import type { AdminProfileActiveBranch } from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.demo_data';
 import {
   ArrowDown,
   ArrowUp,

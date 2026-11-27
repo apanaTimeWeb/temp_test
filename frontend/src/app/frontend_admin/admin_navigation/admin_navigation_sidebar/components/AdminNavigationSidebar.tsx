@@ -186,7 +186,7 @@ export function AdminNavigationSidebar({
               onClick={mobileOpen ? closeMobile : undefined}
             >
               <span className="admin-sidebar-brand-mark" aria-hidden="true">
-                <BookOpen size={18} strokeWidth={2.2} className="text-on-primary motion-safe:transition-transform motion-safe:duration-slow group-hover:scale-110" />
+                <BookOpen size={18} strokeWidth={2.2} className="text-on-primary motion-safe:transition-transform motion-safe:duration-slow motion-safe:group-hover:scale-110" />
               </span>
               <div className="flex flex-col min-w-0 justify-center">
                 <span className="admin-sidebar-brand-name flex items-center leading-none">

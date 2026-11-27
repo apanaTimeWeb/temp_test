@@ -1,7 +1,7 @@
 'use client';
 
-import { AlertCircle,ArrowDownLeft,IndianRupee,ShieldCheck } from 'lucide-react';
-import type { AdminFinanceSecurityDeposit } from '../types/AdminFinanceSecurityDepositsTypes';
+import type { AdminFinanceSecurityDeposit } from '@/app/frontend_admin/admin_finance/finance_security_deposits/types/AdminFinanceSecurityDepositsTypes';
+import { AlertCircle, ArrowDownLeft, IndianRupee, ShieldCheck } from 'lucide-react';
 
 export interface AdminFinanceSecurityDepositsKpisProps {
   deposits: AdminFinanceSecurityDeposit[];
@@ -37,52 +37,44 @@ export function AdminFinanceSecurityDepositsKpis({
       subtitle: 'Secured caution funds held in vault',
       value: `₹${totalEscrow.toLocaleString('en-IN')}`,
       chip: isScoped ? timeHorizonLabel : 'In Escrow',
-      chipCls: 'bg-indigo-500/15 text-indigo-400 border-indigo-500/30',
+      chipCls: 'bg-primary-subtle text-primary border-border-focus',
       icon: ShieldCheck,
-      iconCls: 'bg-indigo-500/20 text-indigo-400 border-indigo-500/40',
-      cardBg:
-        'border-indigo-500/30 bg-gradient-to-br from-indigo-950/70 via-card to-indigo-900/40 shadow-xs hover:border-indigo-400/50',
-      stroke: '#818cf8',
-      valColor: 'text-primary',
+      iconCls: 'bg-primary-subtle text-primary border-border-focus',
+      stroke: 'var(--chart-primary)',
+      valColor: 'text-text-primary',
     },
     {
       title: 'Forfeited Deposits',
       subtitle: `Policy violation retentions (₹${forfeitedAmount.toLocaleString('en-IN')})`,
       value: `${forfeitedCount} Accounts`,
       chip: 'Forfeited',
-      chipCls: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
+      chipCls: 'bg-warning-bg text-warning-text border-warning',
       icon: AlertCircle,
-      iconCls: 'bg-amber-500/20 text-amber-400 border-amber-500/40',
-      cardBg:
-        'border-amber-500/30 bg-gradient-to-br from-amber-950/70 via-card to-amber-900/40 shadow-xs hover:border-amber-400/50',
-      stroke: '#fbbf24',
-      valColor: 'text-amber-500 dark:text-amber-400',
+      iconCls: 'bg-warning-bg text-warning-text border-warning',
+      stroke: 'var(--chart-warning)',
+      valColor: 'text-warning-text',
     },
     {
       title: 'Damage & Deductions',
       subtitle: 'Key lost, chair/desk damage recovery',
       value: `₹${totalDeductions.toLocaleString('en-IN')}`,
       chip: 'Penalty Recovery',
-      chipCls: 'bg-rose-500/15 text-rose-400 border-rose-500/30',
+      chipCls: 'bg-danger-bg text-danger-text border-danger',
       icon: IndianRupee,
-      iconCls: 'bg-rose-500/20 text-rose-400 border-rose-500/40',
-      cardBg:
-        'border-rose-500/30 bg-gradient-to-br from-rose-950/70 via-card to-rose-900/40 shadow-xs hover:border-rose-400/50',
-      stroke: '#f87171',
-      valColor: 'text-rose-500 dark:text-rose-400',
+      iconCls: 'bg-danger-bg text-danger-text border-danger',
+      stroke: 'var(--chart-danger)',
+      valColor: 'text-danger-text',
     },
     {
       title: 'Disbursed Refunds',
       subtitle: `Returned to checkout students (₹${refundedAmount.toLocaleString('en-IN')})`,
       value: `${refundedCount} Returned`,
       chip: 'Disbursed',
-      chipCls: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+      chipCls: 'bg-success-bg text-success-text border-success',
       icon: ArrowDownLeft,
-      iconCls: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40',
-      cardBg:
-        'border-emerald-500/30 bg-gradient-to-br from-emerald-950/70 via-card to-emerald-900/40 shadow-xs hover:border-emerald-400/50',
-      stroke: '#34d399',
-      valColor: 'text-emerald-500 dark:text-emerald-400',
+      iconCls: 'bg-success-bg text-success-text border-success',
+      stroke: 'var(--chart-success)',
+      valColor: 'text-success-text',
     },
   ];
 
@@ -97,13 +89,12 @@ export function AdminFinanceSecurityDepositsKpis({
           chipCls,
           icon: Icon,
           iconCls,
-          cardBg,
           stroke,
           valColor,
         }) => (
           <div
             key={title}
-            className={`group relative overflow-hidden p-5 rounded-2xl border transition-all duration-300 hover:scale-[1.01] hover:shadow-lg flex flex-col justify-between ${cardBg}`}
+            className="group relative overflow-hidden p-5 rounded-2xl border border-border bg-card shadow-card motion-safe:transition-transform motion-safe:duration-300 motion-safe:hover:scale-[1.01] flex flex-col justify-between"
           >
             <svg
               aria-hidden="true"
@@ -121,9 +112,9 @@ export function AdminFinanceSecurityDepositsKpis({
             <div className="relative z-10">
               <div className="flex justify-between items-start mb-3">
                 <div
-                  className={`p-2.5 rounded-xl border transition-transform group-hover:scale-110 shadow-xs ${iconCls}`}
+                  className={`p-2.5 rounded-xl border motion-safe:transition-transform motion-safe:group-hover:scale-110 shadow-card ${iconCls}`}
                 >
-                  <Icon size={18} />
+                  <Icon size={18} aria-hidden="true" />
                 </div>
                 <span
                   className={`text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border ${chipCls}`}
@@ -132,13 +123,13 @@ export function AdminFinanceSecurityDepositsKpis({
                 </span>
               </div>
               <div>
-                <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">
+                <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-1">
                   {title}
                 </p>
                 <h3 className={`text-2xl sm:text-3xl font-extrabold tracking-tight font-sans ${valColor}`}>
                   {value}
                 </h3>
-                <p className="text-[11px] text-secondary mt-1">{subtitle}</p>
+                <p className="text-[11px] text-text-secondary mt-1">{subtitle}</p>
               </div>
             </div>
           </div>
@@ -147,3 +138,4 @@ export function AdminFinanceSecurityDepositsKpis({
     </div>
   );
 }
+export default AdminFinanceSecurityDepositsKpis;

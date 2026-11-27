@@ -1,19 +1,21 @@
-import { ADMIN_STAFF_PAYROLL_FIXTURES } from '@/app/frontend_admin/admin_staff/staff_payroll/mocks/scenarios/admin_staff_payroll.scenarios';
+import { ADMIN_STAFF_PAYROLL_DEMO_DATA } from '@/app/frontend_admin/admin_staff/staff_payroll/config/admin_staff_payroll.demo_data';
 import type {
-DisburseSalaryInput,
-StaffSalaryRecord,
+  DisburseSalaryInput,
+  StaffSalaryRecord,
 } from '@/app/frontend_admin/admin_staff/staff_payroll/schemas/AdminStaffPayrollSchema';
 import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 
 export async function fetchAdminStaffPayrollList(): Promise<StaffSalaryRecord[]> {
   if (isFrontendDemoModeEnabled()) {
-    return Promise.resolve([...ADMIN_STAFF_PAYROLL_FIXTURES]);
+    return Promise.resolve([...ADMIN_STAFF_PAYROLL_DEMO_DATA]);
   }
-  return Promise.resolve([...ADMIN_STAFF_PAYROLL_FIXTURES]);
+  return Promise.resolve([...ADMIN_STAFF_PAYROLL_DEMO_DATA]);
 }
 
-export async function disburseStaffSalary(input: DisburseSalaryInput): Promise<{ success: boolean; record: StaffSalaryRecord }> {
-  const existing = ADMIN_STAFF_PAYROLL_FIXTURES.find((p) => p.id === input.payrollId);
+export async function disburseStaffSalary(
+  input: DisburseSalaryInput
+): Promise<{ success: boolean; record: StaffSalaryRecord }> {
+  const existing = ADMIN_STAFF_PAYROLL_DEMO_DATA.find((p) => p.id === input.payrollId);
   const updated: StaffSalaryRecord = existing
     ? {
         ...existing,
@@ -39,19 +41,9 @@ export async function disburseStaffSalary(input: DisburseSalaryInput): Promise<{
         disbursedAt: new Date().toISOString(),
         paymentMethod: input.paymentMethod,
         transactionRef: input.transactionRef,
-        bankDetails: {
-          accountNoMasked: '•••• •••• 1234',
-          ifsc: 'HDFC0001234',
-          bankName: 'HDFC Bank',
-        },
-        attendanceStats: {
-          totalWorkingDays: 26,
-          presentDays: 26,
-          absentDays: 0,
-          leavesTaken: 0,
-        },
+        bankDetails: { accountNoMasked: '•••• •••• 1234', ifsc: 'HDFC0001234', bankName: 'HDFC Bank' },
+        attendanceStats: { totalWorkingDays: 26, presentDays: 26, absentDays: 0, leavesTaken: 0 },
       };
 
   return Promise.resolve({ success: true, record: updated });
 }
-

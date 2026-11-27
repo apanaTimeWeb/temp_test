@@ -150,7 +150,7 @@ export function AdminDashboardBranchLeaderboard({
               <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown size={14} className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" aria-hidden="true" />
+            <ArrowUpDown size={14} className="text-text-secondary opacity-40 group-hover:opacity-100 motion-safe:transition-opacity shrink-0" aria-hidden="true" />
           )}
         </button>
       </th>

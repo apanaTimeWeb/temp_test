@@ -117,7 +117,7 @@ export function AdminDashboardOverviewKpis({ kpis, sectionLabel }: AdminDashboar
                     </span>
                   )}
                 </div>
-                <div className={`p-2.5 rounded-xl border shrink-0 motion-safe:transition-transform group-hover:scale-110 shadow-card ${theme.iconBox}`}>
+                <div className={`p-2.5 rounded-xl border shrink-0 motion-safe:transition-transform motion-safe:group-hover:scale-110 shadow-card ${theme.iconBox}`}>
                   <KpiIcon size={18} strokeWidth={2.2} className={theme.iconColor} aria-hidden="true" />
                 </div>
               </div>

@@ -4,7 +4,7 @@
 import { AdminAccountsFinancialReportsCategoryBreakdown } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/components/AdminAccountsFinancialReportsCategoryBreakdown';
 import { AdminAccountsFinancialReportsKpiCards } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/components/AdminAccountsFinancialReportsKpiCards';
 import { AdminAccountsFinancialReportsMonthlyChart } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/components/AdminAccountsFinancialReportsMonthlyChart';
-import { ADMIN_ACCOUNTS_FINANCIAL_REPORTS_MONTHLY_FIXTURES } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/mocks/AdminAccountsFinancialReportsFixtures';
+import { ADMIN_ACCOUNTS_FINANCIAL_REPORTS_MONTHLY_FIXTURES } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/config/admin_accounts_financial_reports.demo_data';
 import type { AdminAccountsFinancialReportsDashboardProps } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/types/AdminAccountsFinancialReportsTypes';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';

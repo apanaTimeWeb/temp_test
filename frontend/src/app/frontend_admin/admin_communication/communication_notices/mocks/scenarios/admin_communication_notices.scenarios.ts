@@ -1,5 +1,6 @@
+import { ADMIN_COMMUNICATION_NOTICE_DEMO_DATA } from '@/app/frontend_admin/admin_communication/communication_notices/config/admin_communication_notices.demo_data';
 import { ADMIN_COMMUNICATION_URLS } from '@/app/frontend_admin/admin_communication/communication_notices/config/admin_communication_notices_communication_url_config_source_routes';
-import type { AdminCommunicationComplaintApiRecord,AdminCommunicationNoticeApiRecord } from '@/app/frontend_admin/admin_communication/communication_notices/schemas/AdminCommunicationNoticesSchema';
+import type { AdminCommunicationComplaintApiRecord } from '@/app/frontend_admin/admin_communication/communication_notices/schemas/AdminCommunicationNoticesSchema';
 import { http,HttpResponse } from 'msw';
 
 /**
@@ -104,6 +105,4 @@ export const ADMIN_COMMUNICATION_MSW_HANDLERS = [
 export const ADMIN_COMMUNICATION_COMPLAINT_API_FIXTURE: AdminCommunicationComplaintApiRecord[] = [
   { id: 'CMP-DEMO-001', subject: 'Demo complaint', description: 'Synthetic test complaint', status: 'Open', createdAt: '2026-10-13T08:00:00.000Z' },
 ];
-export const ADMIN_COMMUNICATION_NOTICE_API_FIXTURE: AdminCommunicationNoticeApiRecord[] = [
-  { id: 'NOTICE-DEMO-001', title: 'Demo notice', message: 'Synthetic test notice', createdAt: '2026-10-13T08:00:00.000Z', validTill: '2026-10-31T23:59:59.000Z' },
-];
+export const ADMIN_COMMUNICATION_NOTICE_API_FIXTURE = ADMIN_COMMUNICATION_NOTICE_DEMO_DATA;

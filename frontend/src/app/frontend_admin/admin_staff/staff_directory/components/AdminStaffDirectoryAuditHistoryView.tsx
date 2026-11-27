@@ -1,7 +1,7 @@
 'use client';
 // Responsibility: AdminStaffDirectoryAuditHistoryView component owned by admin_staff_directory.
 
-import { ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_FIXTURES } from '@/app/frontend_admin/admin_staff/staff_directory/mocks/scenarios/admin_staff_directory.scenarios';
+import { ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_DEMO_DATA } from '@/app/frontend_admin/admin_staff/staff_directory/config/admin_staff_directory.demo_data';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import { ArrowDown,ArrowUp,ArrowUpDown,Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -24,9 +24,9 @@ export function AdminStaffDirectoryAuditHistoryView() {
   };
 
   const filteredHistory = useMemo(() => {
-    if (!historySearchQuery.trim()) return ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_FIXTURES;
+    if (!historySearchQuery.trim()) return ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_DEMO_DATA;
     const q = historySearchQuery.toLowerCase().trim();
-    return ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_FIXTURES.filter(
+    return ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_DEMO_DATA.filter(
       (h) => h.managerName.toLowerCase().includes(q) || h.location.toLowerCase().includes(q)
     );
   }, [historySearchQuery]);
@@ -67,7 +67,7 @@ export function AdminStaffDirectoryAuditHistoryView() {
             <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
           )
         ) : (
-          <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
+          <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 motion-safe:transition-opacity shrink-0" size={14} aria-hidden="true" />
         )}
       </button>
     </th>

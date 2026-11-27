@@ -1,15 +1,17 @@
-// hooks/useAdminAccountsDailySettlementState.ts
 'use client';
-import { ADMIN_DAILY_SETTLEMENT_FIXTURES } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/mocks/fixtures/admin_accounts_daily_settlement.fixtures';
+
+import { ADMIN_DAILY_SETTLEMENT_FIXTURES } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/config/admin_accounts_daily_settlement.demo_data';
 import type {
-DailySettlementRecord,
-SettlementStatus,
+  DailySettlementRecord,
+  SettlementStatus,
 } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/types/AdminAccountsDailySettlementTypes';
-import { useCallback,useMemo,useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 export type TabFilter = 'ALL' | SettlementStatus;
 
-export function useAdminAccountsDailySettlementState(initialRecords: DailySettlementRecord[] = ADMIN_DAILY_SETTLEMENT_FIXTURES) {
+export function useAdminAccountsDailySettlementState(
+  initialRecords: DailySettlementRecord[] = ADMIN_DAILY_SETTLEMENT_FIXTURES
+) {
   const [records, setRecords] = useState<DailySettlementRecord[]>(initialRecords);
   const [tabFilter, setTabFilter] = useState<TabFilter>('ALL');
   const [branchFilter, setBranchFilter] = useState<string>('ALL');
@@ -25,15 +27,14 @@ export function useAdminAccountsDailySettlementState(initialRecords: DailySettle
 
   const filteredRecords = useMemo(() => {
     return records.filter((r) => {
-      // Tab filter
       if (tabFilter !== 'ALL' && r.status !== tabFilter) return false;
-      // Branch filter
       if (
         branchFilter !== 'ALL' &&
         r.branchId.toLowerCase() !== branchFilter.toLowerCase() &&
         !r.branchName.toLowerCase().includes(branchFilter.toLowerCase())
-      ) return false;
-      // Search query
+      ) {
+        return false;
+      }
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase().trim();
         const matchesManager = r.managerName.toLowerCase().includes(query);
@@ -67,4 +68,3 @@ export function useAdminAccountsDailySettlementState(initialRecords: DailySettle
     updateRecordStatus,
   };
 }
-

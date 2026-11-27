@@ -1,7 +1,7 @@
 'use client';
 // RESPONSIBILITY: AdminProfileEditForm component owned by admin_profile; responsibility folder: admin_profile_forms.
 
-import { ADMIN_PROFILE_DEMO_ACCOUNT } from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
+import { ADMIN_PROFILE_DEMO_ACCOUNT } from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.demo_data';
 import { AdminProfileEditSchema,getAdminProfileValidationMessageKey,type AdminProfileEditFormValues } from '@/app/frontend_admin/admin_settings/settings_profile/schemas/AdminSettingsProfileSchema';
 import type { AdminSettingsProfileFormProps } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
 import { zodResolver } from '@hookform/resolvers/zod';

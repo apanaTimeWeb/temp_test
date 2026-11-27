@@ -1,6 +1,6 @@
 'use client';
 
-import { ADMIN_PROFILE_DEMO_LOGIN_HISTORY } from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
+import { ADMIN_PROFILE_DEMO_LOGIN_HISTORY } from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.demo_data';
 import { ArrowDown, ArrowUp, ArrowUpDown, Clock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';

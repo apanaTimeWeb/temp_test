@@ -1,7 +1,7 @@
 import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 
 export const ADMIN_STAFF_ATTENDANCE_ROUTES = {
-  INDEX: (ADMIN_ROUTES as any).STAFF_ATTENDANCE ?? '/admin/admin_staff/staff_attendance',
+  INDEX: ADMIN_ROUTES.STAFF_ATTENDANCE,
 } as const;
 
 export const ADMIN_STAFF_ATTENDANCE_API = {
@@ -22,4 +22,3 @@ export const ATTENDANCE_STATUS_VARIANTS = {
   ABSENT: 'bg-danger-bg text-danger-text border-danger-border',
   ON_LEAVE: 'bg-info-bg text-info-text border-info-bg',
 } as const;
-

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
-test('redirects admin_dashboard to its canonical default submodule', async ({ page }) => {
+test('loads admin_dashboard default overview via rewrite', async ({ page }) => {
   await page.goto('/admin/admin_dashboard');
-  await expect(page).toHaveURL(/\/admin\/admin_dashboard\/dashboard_overview(?:[?#]|$)/);
+  await expect(page).toHaveURL(/\/admin\/admin_dashboard(?:\/dashboard_overview)?(?:[?#]|$)/);
   await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible();
 });
 

@@ -8,8 +8,8 @@ import {
 AdminAccountsSeatGapReportTimeHorizonBar,
 type AdminAccountsSeatGapTimeHorizon,
 } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/components/AdminAccountsSeatGapReportTimeHorizonBar';
-import { ADMIN_ACCOUNTING_SEAT_GAP_STATUS_FILTER_OPTIONS,ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/config/admin_accounts_seat_gap_report.url_config';
-import { ADMIN_ACCOUNTING_SEAT_GAP_FIXTURES } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/mocks/AdminAccountsSeatGapReportSeatGapFixtures';
+import { ADMIN_ACCOUNTING_SEAT_GAP_STATUS_FILTER_OPTIONS, ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/config/admin_accounts_seat_gap_report.url_config';
+import { ADMIN_ACCOUNTING_SEAT_GAP_FIXTURES } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/config/admin_accounts_seat_gap_report.demo_data';
 import type { AdminAccountingSeatGapRow } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/types/AdminAccountsSeatGapReportTypes';
 import { buildAdminAccountsSeatGapReportCsv,downloadAdminAccountingCsv } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/utils/AdminAccountsSeatGapReportExportUtils';
 import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/utils/AdminAccountsSeatGapReportFormatCurrency';
@@ -126,12 +126,12 @@ export function AdminAccountsSeatGapReportPage() {
 
   const exportCsv = () => {
     if (!isDemoMode) {
-      toast.info(t('EXPORT_BLOCKED'), { id: 'admin_accounts_assets-accounts_seat_gap_report-components-AdminAccountsSeatGapReportPage-toast-56-1' });
+      toast.info(t('EXPORT_BLOCKED'), { id: 'admin_accounts_assets-accounts_seat_gap_report-blocked' });
       return;
     }
     const csv = buildAdminAccountsSeatGapReportCsv(visible);
     downloadAdminAccountingCsv('admin-accounting-seat-gap-report.csv', csv);
-    toast.info(t('DEMO_EXPORTED'), { id: 'admin_accounts_assets-accounts_seat_gap_report-components-AdminAccountsSeatGapReportPage-toast-59-2' });
+    toast.info(t('DEMO_EXPORTED'), { id: 'admin_accounts_assets-accounts_seat_gap_report-exported' });
   };
 
   const columns: DataGridColumn<AdminAccountingSeatGapRow>[] = [
@@ -178,8 +178,8 @@ export function AdminAccountsSeatGapReportPage() {
         </p>
       )}
       <div className="flex flex-col gap-2">
-        <div className="inline-flex items-center gap-2 self-start rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-semibold text-text-secondary backdrop-blur-md">
-          <TrendingUp className="h-3.5 w-3.5 text-primary" />
+        <div className="inline-flex items-center gap-2 self-start rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-text-secondary">
+          <TrendingUp className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
           <span>Seat Occupancy Efficiency</span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{t('TITLE')}</h1>

@@ -8,6 +8,6 @@ test('demo support ticket validation produces a local ticket confirmation withou
   await page.getByLabel(/Description/i).fill('This ticket is used to verify local demo creation.');
   await page.getByRole('button', { name: /Create ticket in demo/i }).click();
   await expect(page.getByRole('heading', { name: /Demo ticket created/i })).toBeVisible();
-  await expect(page.getByText(/SUP-DEMO-/)).toBeVisible();
-  await expect(page.getByText(/not sent to a support service/i)).toBeVisible();
+  await expect(page.getByRole('region', { name: /Demo ticket created/i }).getByRole('status')).toContainText(/SUP-DEMO-/);
+  await expect(page.getByRole('region', { name: /Demo ticket created/i }).getByRole('status')).toContainText(/local demo page only/i);
 });

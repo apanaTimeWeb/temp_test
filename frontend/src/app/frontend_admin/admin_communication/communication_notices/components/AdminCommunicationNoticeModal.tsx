@@ -1,6 +1,6 @@
 'use client';
 
-import { applyNoticePreset,type NoticePresetType } from '@/app/frontend_admin/admin_communication/communication_notices/components/AdminCommunicationNoticePresets';
+import { applyNoticePreset, type NoticePresetType } from '@/app/frontend_admin/admin_communication/communication_notices/components/AdminCommunicationNoticePresets';
 import type { AdminCommunicationNoticeFormValues } from '@/app/frontend_admin/admin_communication/communication_notices/schemas/AdminCommunicationNoticesSchema';
 import type { Notice } from '@/app/frontend_admin/admin_communication/communication_notices/types/AdminCommunicationNoticesComponentTypes';
 import type { AdminBranchItem } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBranchConstants';
@@ -9,9 +9,28 @@ import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogConte
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import { AlertTriangle,Building2,Mail,MessageSquare,Radio,Send,ShieldAlert,X } from 'lucide-react';
+import { AlertTriangle, Building2, Mail, MessageSquare, Radio, Send, ShieldAlert, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { UseFormReturn } from 'react-hook-form';
+
+const NOTICE_QUICK_PRESETS: ReadonlyArray<{
+  preset: NoticePresetType;
+  label: string;
+  hindi: string;
+  boxClass: string;
+  titleClass: string;
+}> = [
+  { preset: 'WEATHER', label: '🌧️ Rain Closure', hindi: 'भारी बारिश अवकाश', boxClass: 'border-danger bg-danger-bg hover:opacity-90', titleClass: 'text-danger-text' },
+  { preset: 'HOLIDAY', label: '🎉 Holiday Off', hindi: 'सार्वजनिक अवकाश', boxClass: 'border-warning bg-warning-bg hover:opacity-90', titleClass: 'text-warning-text' },
+  { preset: 'POWER', label: '⚡ Power Work', hindi: 'विद्युत मेंटेनेंस', boxClass: 'border-info bg-info-bg hover:opacity-90', titleClass: 'text-info-text' },
+  { preset: 'SECURITY', label: '🛑 ID Checking', hindi: 'सुरक्षा चेकिंग', boxClass: 'border-purple-text bg-purple-bg hover:opacity-90', titleClass: 'text-purple-text' },
+];
+
+const BROADCAST_CHANNELS = [
+  { name: 'sendWhatsApp' as const, label: 'WhatsApp', aria: 'WhatsApp Broadcast', color: 'text-success-text', Icon: MessageSquare },
+  { name: 'sendEmail' as const, label: 'Email', aria: 'Email Broadcast', color: 'text-info-text', Icon: Mail },
+  { name: 'sendSms' as const, label: 'SMS Alert', aria: 'SMS Flash Alert', color: 'text-warning-text', Icon: Send },
+] as const;
 
 export interface AdminCommunicationNoticeModalProps {
   showAdd: boolean;
@@ -44,15 +63,11 @@ export function AdminCommunicationNoticeModal({
 
   if (!showAdd) return null;
 
-  const handleApplyPreset = (preset: NoticePresetType) => {
-    applyNoticePreset(preset, noticeForm);
-  };
-
   const isEmergency = isEmergencyMode || noticeForm.watch('isEmergency');
 
   return (
     <Dialog open onOpenChange={(nextOpen) => { if (!nextOpen) { if (showDiscardDialog) onStay(); else onRequestClose(); } }}>
-      <DialogContent className={`relative w-full overflow-y-auto rounded-xl border p-6 shadow-dialog max-w-[620px] space-y-4 ${isEmergency ? 'border-rose-500/40 bg-slate-900 text-white' : 'border-border bg-overlay text-text-primary'}`}>
+      <DialogContent className={`relative w-full overflow-y-auto rounded-xl border p-6 shadow-dialog max-w-[620px] space-y-4 bg-overlay text-text-primary ${isEmergency ? 'border-danger' : 'border-border'}`}>
         {showDiscardDialog ? (
           <>
             <DialogTitle>{t('UNSAVED_CHANGES_TITLE')}</DialogTitle>
@@ -67,7 +82,7 @@ export function AdminCommunicationNoticeModal({
               </button>
               <button
                 type="button"
-                className="min-h-11 rounded-md bg-danger px-4 py-2 text-sm font-semibold text-on-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="min-h-11 rounded-md bg-danger px-4 py-2 text-sm font-semibold text-on-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 onClick={onDiscard}
               >
                 {t('UNSAVED_CHANGES_LEAVE')}
@@ -85,10 +100,10 @@ export function AdminCommunicationNoticeModal({
             >
               <X size={18} strokeWidth={2} />
             </button>
-            
+
             <div className="flex items-center gap-2.5 mb-2">
               {isEmergency && (
-                <div className="p-2 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 shrink-0 animate-pulse">
+                <div className="p-2 rounded-xl bg-danger-bg text-danger-text border border-danger shrink-0 motion-safe:animate-pulse">
                   <AlertTriangle size={20} />
                 </div>
               )}
@@ -97,55 +112,33 @@ export function AdminCommunicationNoticeModal({
                   <span>{editItem ? t('NOTICE_EDIT_DIALOG_TITLE') : isEmergency ? '🚨 Emergency Notice Broadcast (आपातकालीन नोटिस प्रसारण)' : t('NOTICE_CREATE_DIALOG_TITLE')}</span>
                 </DialogTitle>
                 {isEmergency && (
-                  <p className="text-xs text-rose-300 mt-0.5">
+                  <p className="text-xs text-danger-text mt-0.5">
                     High-priority blast to all network branches via WhatsApp, SMS & Push Alert
                   </p>
                 )}
               </div>
             </div>
 
-            {/* Quick 1-Click Presets for Emergency Announcements */}
-            <div className="rounded-xl border border-rose-500/30 bg-rose-950/20 p-3.5 space-y-2">
+            <div className="rounded-xl border border-danger bg-danger-bg p-3.5 space-y-2">
               <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-rose-300 flex items-center gap-1.5">
-                  <AlertTriangle size={13} className="text-rose-400" />
+                <span className="text-xs font-bold uppercase tracking-wider text-danger-text flex items-center gap-1.5">
+                  <AlertTriangle size={13} className="text-danger-text" />
                   Quick Broadcast Presets (1-क्लिक टेम्पलेट्स)
                 </span>
-                <span className="text-[11px] text-slate-400">Click to autofill notice</span>
+                <span className="text-[11px] text-text-secondary">Click to autofill notice</span>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleApplyPreset('WEATHER')}
-                  className="rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/25 p-2 text-left transition-colors"
-                >
-                  <span className="text-xs font-bold text-rose-300 block truncate">🌧️ Rain Closure</span>
-                  <span className="text-[10px] text-slate-400 block truncate">भारी बारिश अवकाश</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleApplyPreset('HOLIDAY')}
-                  className="rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/25 p-2 text-left transition-colors"
-                >
-                  <span className="text-xs font-bold text-amber-300 block truncate">🎉 Holiday Off</span>
-                  <span className="text-[10px] text-slate-400 block truncate">सार्वजनिक अवकाश</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleApplyPreset('POWER')}
-                  className="rounded-lg border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/25 p-2 text-left transition-colors"
-                >
-                  <span className="text-xs font-bold text-sky-300 block truncate">⚡ Power Work</span>
-                  <span className="text-[10px] text-slate-400 block truncate">विद्युत मेंटेनेंस</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleApplyPreset('SECURITY')}
-                  className="rounded-lg border border-purple-500/30 bg-purple-500/10 hover:bg-purple-500/25 p-2 text-left transition-colors"
-                >
-                  <span className="text-xs font-bold text-purple-300 block truncate">🛑 ID Checking</span>
-                  <span className="text-[10px] text-slate-400 block truncate">सुरक्षा चेकिंग</span>
-                </button>
+                {NOTICE_QUICK_PRESETS.map((item) => (
+                  <button
+                    key={item.preset}
+                    type="button"
+                    onClick={() => applyNoticePreset(item.preset, noticeForm)}
+                    className={`rounded-lg border p-2 text-left motion-safe:transition-colors ${item.boxClass}`}
+                  >
+                    <span className={`text-xs font-bold block truncate ${item.titleClass}`}>{item.label}</span>
+                    <span className="text-[10px] text-text-secondary block truncate">{item.hindi}</span>
+                  </button>
+                ))}
               </div>
             </div>
 
@@ -155,7 +148,8 @@ export function AdminCommunicationNoticeModal({
                 <label htmlFor="admin-communication-notice-title" className="uppercase tracking-[0.07em] text-sm font-semibold mb-1 block text-text-primary">
                   {t('NOTICE_TITLE_LABEL')} <span className="text-danger-text">*</span>
                 </label>
-                <input maxLength={30}
+                <input
+                  maxLength={30}
                   id="admin-communication-notice-title"
                   className="min-h-11 border-border bg-input text-body text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 py-2 px-3 border rounded w-full"
                   placeholder={t('NOTICE_TITLE_PLACEHOLDER')}
@@ -170,10 +164,9 @@ export function AdminCommunicationNoticeModal({
                 )}
               </div>
 
-              {/* Target Branch Dropdown */}
               <div>
-                <label htmlFor="admin-communication-notice-branch" className="uppercase tracking-[0.07em] text-sm font-semibold mb-1 block text-text-primary flex items-center gap-1.5">
-                  <Building2 size={14} className="text-primary" />
+                <label htmlFor="admin-communication-notice-branch" className="uppercase tracking-[0.07em] text-sm font-semibold mb-1 text-text-primary flex items-center gap-1.5">
+                  <Building2 size={14} className="text-primary-text" />
                   Target Audience / Branch
                 </label>
                 <select
@@ -197,7 +190,8 @@ export function AdminCommunicationNoticeModal({
                 <label htmlFor="admin-communication-notice-message" className="uppercase tracking-[0.07em] text-sm font-semibold mb-1 block text-text-primary">
                   {t('NOTICE_MESSAGE_LABEL')} <span className="text-danger-text">*</span>
                 </label>
-                <textarea maxLength={1000}
+                <textarea
+                  maxLength={1000}
                   id="admin-communication-notice-message"
                   className="min-h-24 resize-y border-border bg-input text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 py-2 px-3 border rounded w-full"
                   rows={5}
@@ -217,7 +211,8 @@ export function AdminCommunicationNoticeModal({
                 <label htmlFor="admin-communication-notice-valid-till" className="uppercase tracking-[0.07em] text-sm font-semibold mb-1 block text-text-primary">
                   {t('NOTICE_VALID_TILL_LABEL')} <span className="text-danger-text">*</span>
                 </label>
-                <input maxLength={30}
+                <input
+                  maxLength={30}
                   id="admin-communication-notice-valid-till"
                   type="date"
                   className="min-h-11 border-border bg-input text-body text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 py-2 px-3 border rounded w-full"
@@ -232,59 +227,31 @@ export function AdminCommunicationNoticeModal({
                 )}
               </div>
 
-              {/* Multi-Channel Broadcast Dispatch with Cost Protection */}
-              <div className="rounded-xl border border-border bg-card/60 p-4 space-y-3">
+              <div className="rounded-xl border border-border bg-card p-4 space-y-3">
                 <div className="flex items-center gap-2">
-                  <Radio className="h-4 w-4 text-primary" />
+                  <Radio className="h-4 w-4 text-primary-text" />
                   <span className="text-xs font-bold uppercase tracking-wider text-text-primary">
                     Multi-Channel Broadcast Dispatch
                   </span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
-                  <label className="flex items-center gap-2.5 rounded-lg border border-border bg-card p-2.5 cursor-pointer hover:bg-card-hover transition-colors">
-                    <input
-                      type="checkbox"
-                      aria-label="WhatsApp Broadcast"
-                      {...noticeForm.register('sendWhatsApp')}
-                      className="rounded border-border text-emerald-600 focus:ring-emerald-500 h-4 w-4"
-                    />
-                    <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400">
-                      <MessageSquare size={13} />
-                      <span>WhatsApp</span>
-                    </div>
-                  </label>
-                  <label className="flex items-center gap-2.5 rounded-lg border border-border bg-card p-2.5 cursor-pointer hover:bg-card-hover transition-colors">
-                    <input
-                      type="checkbox"
-                      aria-label="Email Broadcast"
-                      {...noticeForm.register('sendEmail')}
-                      className="rounded border-border text-sky-600 focus:ring-sky-500 h-4 w-4"
-                    />
-                    <div className="flex items-center gap-1.5 text-xs font-semibold text-sky-400">
-                      <Mail size={13} />
-                      <span>Email</span>
-                    </div>
-                  </label>
-                  <label className="flex items-center gap-2.5 rounded-lg border border-border bg-card p-2.5 cursor-pointer hover:bg-card-hover transition-colors">
-                    <input
-                      type="checkbox"
-                      aria-label="SMS Flash Alert"
-                      {...noticeForm.register('sendSms')}
-                      className="rounded border-border text-amber-600 focus:ring-amber-500 h-4 w-4"
-                    />
-                    <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-400">
-                      <Send size={13} />
-                      <span>SMS Alert</span>
-                    </div>
-                  </label>
+                  {BROADCAST_CHANNELS.map(({ name, label, aria, color, Icon }) => (
+                    <label key={name} className="flex items-center gap-2.5 rounded-lg border border-border bg-surface p-2.5 cursor-pointer hover:bg-card-hover motion-safe:transition-colors">
+                      <input type="checkbox" aria-label={aria} {...noticeForm.register(name)} className={`rounded border-border ${color} focus:ring-primary h-4 w-4`} />
+                      <span className={`flex items-center gap-1.5 text-xs font-semibold ${color}`}>
+                        <Icon size={13} />
+                        <span>{label}</span>
+                      </span>
+                    </label>
+                  ))}
                 </div>
-                <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 px-3 py-2 text-[11px] text-amber-300 flex items-start gap-1.5">
-                  <ShieldAlert size={14} className="shrink-0 text-amber-400 mt-0.5" />
+                <div className="rounded-lg bg-warning-bg border border-warning px-3 py-2 text-[11px] text-warning-text flex items-start gap-1.5">
+                  <ShieldAlert size={14} className="shrink-0 text-warning-text mt-0.5" />
                   <span><strong>Cost Protection Notice:</strong> SMS Flash Alert consumes paid Server API credits. WhatsApp Web and Push Broadcast are recommended for routine notices to keep operational billing minimal.</span>
                 </div>
               </div>
 
-              <p className="rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text" role="status">
+              <p className="rounded-md border border-warning bg-warning-bg p-3 text-warning-text" role="status">
                 {t('NOTICE_PERSISTENCE_BLOCKED')}
               </p>
               <div className="flex-wrap border-border pt-3 mt-4 flex justify-end gap-3">
@@ -292,7 +259,7 @@ export function AdminCommunicationNoticeModal({
                   type="button"
                   data-testid="admin_communication-page-control-006"
                   onClick={onRequestClose}
-                  className="min-h-11 px-4 py-2 border border-border text-primary rounded hover:bg-surface-hover motion-safe:transition-colors"
+                  className="min-h-11 px-4 py-2 border border-border text-text-primary rounded hover:bg-surface-hover motion-safe:transition-colors"
                 >
                   {t('NOTICE_CANCEL')}
                 </button>
@@ -301,7 +268,7 @@ export function AdminCommunicationNoticeModal({
                   data-testid="admin_communication-page-control-007"
                   disabled={!isDemoMode}
                   title={!isDemoMode ? t('NOTICE_PERSISTENCE_BLOCKED') : undefined}
-                  className={`min-h-11 px-4 py-2 font-semibold text-white rounded motion-safe:transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${isEmergency ? 'bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 shadow-lg shadow-rose-600/30' : 'bg-primary text-on-primary hover:bg-primary-hover'}`}
+                  className={`min-h-11 px-4 py-2 font-semibold rounded motion-safe:transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${isEmergency ? 'bg-danger text-on-primary hover:opacity-90 shadow-lg' : 'bg-primary text-on-primary hover:bg-primary-hover'}`}
                 >
                   {isEmergency ? '🚨 Blast Emergency Broadcast (तत्काल प्रसारण करें)' : editItem ? t('NOTICE_EDIT_UNAVAILABLE') : t('NOTICE_CREATE_UNAVAILABLE')}
                 </button>

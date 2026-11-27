@@ -1,29 +1,20 @@
 'use client';
 
-import {
-AlertTriangle,
-Armchair,
-ArrowDown,
-ArrowUp,
-ArrowUpDown,
-Building,
-Calendar,
-ChevronLeft,
-ChevronRight,
-Minus,
-ShieldCheck,
-Undo2
-} from 'lucide-react';
+import { AdminFinanceSecurityDepositsEmptyState } from '@/app/frontend_admin/admin_finance/finance_security_deposits/components/AdminFinanceSecurityDepositsEmptyState';
 import type {
-AdminFinanceSecurityDeposit,
-DepositSortField,
-} from '../types/AdminFinanceSecurityDepositsTypes';
-import { AdminFinanceSecurityDepositsEmptyState } from './AdminFinanceSecurityDepositsEmptyState';
+  AdminFinanceSecurityDeposit,
+  DepositSortField,
+} from '@/app/frontend_admin/admin_finance/finance_security_deposits/types/AdminFinanceSecurityDepositsTypes';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
+import {
+  AlertTriangle, Armchair, ArrowDown, ArrowUp, ArrowUpDown,
+  Building, Calendar, Minus, ShieldCheck, Undo2,
+} from 'lucide-react';
 
 const STATUS_BADGE: Record<string, string> = {
-  held: 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border-indigo-500/30',
-  refunded: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
-  forfeited: 'bg-rose-500/15 text-rose-600 dark:text-rose-400 border-rose-500/30',
+  held: 'bg-primary-subtle text-primary border-border-focus',
+  refunded: 'bg-success-bg text-success-text border-success',
+  forfeited: 'bg-danger-bg text-danger-text border-danger',
 };
 
 const STATUS_LABEL: Record<string, string> = {
@@ -64,20 +55,16 @@ export interface AdminFinanceSecurityDepositsTableProps {
 }
 
 export function AdminFinanceSecurityDepositsTable({
-  filtered,
   paginated,
   sortField,
   sortDirection,
   onToggleSort,
   onOpenRefund,
   onOpenDeduct,
-  startItem,
-  endItem,
   totalRows,
   pageSize,
   onPageSizeChange,
   effectivePage,
-  pageCount,
   onPrevPage,
   onNextPage,
   labels,
@@ -92,14 +79,14 @@ export function AdminFinanceSecurityDepositsTable({
       <th
         scope="col"
         aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
-        className={`py-3.5 px-4 font-semibold text-xs uppercase tracking-wider text-secondary ${
+        className={`py-3.5 px-4 font-semibold text-xs uppercase tracking-wider text-text-secondary ${
           align === 'right' ? 'text-right' : 'text-left'
         }`}
       >
         <button
           type="button"
           onClick={() => onToggleSort(field)}
-          className={`group inline-flex items-center gap-1.5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 transition-colors cursor-pointer ${
+          className={`group inline-flex items-center gap-1.5 hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 motion-safe:transition-colors cursor-pointer ${
             align === 'right' ? 'ml-auto' : ''
           }`}
         >
@@ -111,7 +98,11 @@ export function AdminFinanceSecurityDepositsTable({
               <ArrowDown size={13} className="text-primary font-bold shrink-0" aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown size={13} className="text-secondary opacity-40 group-hover:opacity-100 transition-colors shrink-0" aria-hidden="true" />
+            <ArrowUpDown
+              size={13}
+              className="text-text-secondary opacity-40 group-hover:opacity-100 motion-safe:transition-opacity shrink-0"
+              aria-hidden="true"
+            />
           )}
         </button>
       </th>
@@ -120,12 +111,12 @@ export function AdminFinanceSecurityDepositsTable({
 
   return (
     <div className="space-y-4">
-      <div className="overflow-x-auto rounded-xl border border-border/80">
+      <div className="overflow-x-auto rounded-xl border border-border">
         <table className="w-full min-w-[950px] text-left border-collapse">
           <thead>
-            <tr className="border-b border-border bg-surface-ground">
+            <tr className="border-b border-border bg-surface-highlight">
               {renderSortableHeader('studentName', labels.student, 'left')}
-              <th scope="col" className="text-left py-3.5 px-4 font-semibold text-xs uppercase tracking-wider text-secondary">
+              <th scope="col" className="text-left py-3.5 px-4 font-semibold text-xs uppercase tracking-wider text-text-secondary">
                 {labels.seatBranch}
               </th>
               {renderSortableHeader('depositAmount', labels.deposit, 'right')}
@@ -134,21 +125,21 @@ export function AdminFinanceSecurityDepositsTable({
               {renderSortableHeader('collectedDate', labels.collectedDate, 'left')}
               {renderSortableHeader('deductionAmount', labels.deduction, 'right')}
               {renderSortableHeader('refundedDate', labels.refundedDate, 'left')}
-              <th scope="col" className="text-right py-3.5 px-4 font-semibold text-xs uppercase tracking-wider text-secondary">
+              <th scope="col" className="text-right py-3.5 px-4 font-semibold text-xs uppercase tracking-wider text-text-secondary">
                 {labels.actions}
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border/60 bg-card text-xs">
+          <tbody className="divide-y divide-border bg-card text-xs">
             {paginated.length === 0 ? (
               <tr>
                 <td colSpan={9} className="py-12">
                   <AdminFinanceSecurityDepositsEmptyState>
-                    <div className="p-3 rounded-full bg-surface-ground border border-border w-12 h-12 flex items-center justify-center mx-auto mb-3 text-secondary">
-                      <AlertTriangle size={20} />
+                    <div className="p-3 rounded-full bg-surface-highlight border border-border w-12 h-12 flex items-center justify-center mx-auto mb-3 text-text-secondary">
+                      <AlertTriangle size={20} aria-hidden="true" />
                     </div>
-                    <p className="font-semibold text-primary">{labels.noDeposits}</p>
-                    <p className="text-xs text-secondary mt-1">
+                    <p className="font-semibold text-text-primary">{labels.noDeposits}</p>
+                    <p className="text-xs text-text-secondary mt-1">
                       Try adjusting your search criteria, status filter, or time horizon.
                     </p>
                   </AdminFinanceSecurityDepositsEmptyState>
@@ -161,86 +152,75 @@ export function AdminFinanceSecurityDepositsTable({
                 return (
                   <tr
                     key={d.id}
-                    className="hover:bg-surface-hover/70 transition-colors group"
+                    className="motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra group"
                   >
-                    {/* Student Info */}
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center justify-center shrink-0 font-bold text-xs">
+                        <div className="w-8 h-8 rounded-full bg-primary-subtle text-primary border border-border-focus flex items-center justify-center shrink-0 font-bold text-xs">
                           {d.studentName.charAt(0)}
                         </div>
                         <div>
-                          <div className="font-bold text-primary group-hover:text-primary transition-colors flex items-center gap-2">
+                          <div className="font-bold text-text-primary flex items-center gap-2">
                             <span>{d.studentName}</span>
-                            <span className="font-mono text-[11px] font-semibold text-secondary">
+                            <span className="font-mono text-[11px] font-semibold text-text-secondary">
                               ({d.smartId})
                             </span>
                           </div>
-                          {d.phone && (
-                            <div className="text-[11px] text-secondary mt-0.5">
-                              +91 {d.phone}
-                            </div>
-                          )}
+                          {d.phone && <div className="text-[11px] text-text-secondary mt-0.5">+91 {d.phone}</div>}
                         </div>
                       </div>
                     </td>
 
-                    {/* Seat & Branch */}
                     <td className="py-3.5 px-4">
                       <div className="space-y-1">
-                        <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-mono font-bold text-primary bg-surface-ground border border-border">
-                          <Armchair size={12} className="text-secondary" />
+                        <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-mono font-bold text-text-primary bg-surface-highlight border border-border">
+                          <Armchair size={12} className="text-text-secondary" aria-hidden="true" />
                           <span>Seat {d.seat || 'N/A'}</span>
                         </div>
-                        <div className="text-[11px] text-secondary flex items-center gap-1">
-                          <Building size={11} />
+                        <div className="text-[11px] text-text-secondary flex items-center gap-1">
+                          <Building size={11} aria-hidden="true" />
                           <span>{d.branch || 'Downtown Central'}</span>
                         </div>
                       </div>
                     </td>
 
-                    {/* Deposit Amount */}
                     <td className="py-3.5 px-4 text-right">
-                      <span className="font-bold font-sans text-primary text-sm">
+                      <span className="font-bold font-sans text-text-primary text-sm">
                         ₹{d.depositAmount.toLocaleString('en-IN')}
                       </span>
                     </td>
 
-                    {/* Status */}
                     <td className="py-3.5 px-4">
                       <span
                         className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
-                          STATUS_BADGE[d.status] || 'bg-surface text-secondary border-border'
+                          STATUS_BADGE[d.status] || 'bg-card text-text-secondary border-border'
                         }`}
                       >
-                        <ShieldCheck size={12} />
+                        <ShieldCheck size={12} aria-hidden="true" />
                         <span>{STATUS_LABEL[d.status] || d.status}</span>
                       </span>
                     </td>
 
-                    {/* Collected By */}
                     <td className="py-3.5 px-4">
-                      <span className="text-secondary">{d.collectedBy}</span>
+                      <span className="text-text-secondary">{d.collectedBy}</span>
                     </td>
 
-                    {/* Collected Date */}
                     <td className="py-3.5 px-4">
-                      <div className="flex items-center gap-1 text-secondary">
-                        <Calendar size={12} />
+                      <div className="flex items-center gap-1 text-text-secondary">
+                        <Calendar size={12} aria-hidden="true" />
                         <span>{d.collectedDate}</span>
                       </div>
                     </td>
 
-                    {/* Deduction Amount & Reason */}
                     <td className="py-3.5 px-4 text-right">
                       {d.deductionAmount > 0 ? (
                         <div>
-                          <span className="font-bold text-rose-600 dark:text-rose-400">
+                          <span className="font-bold text-danger-text">
                             - ₹{d.deductionAmount.toLocaleString('en-IN')}
                           </span>
                           {d.deductionReason && (
                             <div
-                              className="text-[10px] text-secondary truncate max-w-[140px] ml-auto"
+                              className="text-[10px] text-text-secondary truncate max-w-[140px] ml-auto"
                               title={d.deductionReason}
                             >
                               {d.deductionReason}
@@ -248,55 +228,49 @@ export function AdminFinanceSecurityDepositsTable({
                           )}
                         </div>
                       ) : (
-                        <span className="text-secondary">—</span>
+                        <span className="text-text-secondary">—</span>
                       )}
                     </td>
 
-                    {/* Refunded Date / Net */}
                     <td className="py-3.5 px-4">
                       {d.status === 'refunded' ? (
                         <div>
-                          <div className="font-semibold text-emerald-600 dark:text-emerald-400">
-                            Disbursed
-                          </div>
-                          <div className="text-[11px] text-secondary">
-                            {d.refundedDate || 'Completed'}
-                          </div>
+                          <div className="font-semibold text-success-text">Disbursed</div>
+                          <div className="text-[11px] text-text-secondary">{d.refundedDate || 'Completed'}</div>
                         </div>
                       ) : d.status === 'held' ? (
-                        <div className="text-secondary">
-                          Net: <strong className="text-primary font-bold">₹{netRefundable.toLocaleString('en-IN')}</strong>
+                        <div className="text-text-secondary">
+                          Net: <strong className="text-text-primary font-bold">₹{netRefundable.toLocaleString('en-IN')}</strong>
                         </div>
                       ) : (
-                        <span className="text-secondary text-[11px]">Retained</span>
+                        <span className="text-text-secondary text-[11px]">Retained</span>
                       )}
                     </td>
 
-                    {/* Actions */}
                     <td className="py-3.5 px-4 text-right">
                       {d.status === 'held' ? (
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             type="button"
                             onClick={() => onOpenRefund(d)}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs cursor-pointer transition-all active:scale-95"
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-success text-on-primary hover:opacity-90 shadow-card cursor-pointer motion-safe:transition-transform motion-safe:active:scale-95"
                             title="Process Exit Clearance & Release Deposit"
                           >
-                            <Undo2 size={12} />
+                            <Undo2 size={12} aria-hidden="true" />
                             <span>Refund</span>
                           </button>
                           <button
                             type="button"
                             onClick={() => onOpenDeduct(d)}
-                            className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-semibold bg-surface hover:bg-surface-hover border border-border text-primary cursor-pointer transition-all"
+                            className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-semibold bg-card hover:bg-surface-hover border border-border text-text-primary cursor-pointer motion-safe:transition-colors"
                             title="Log damage or penalty deduction"
                           >
-                            <Minus size={12} className="text-rose-500" />
+                            <Minus size={12} className="text-danger-text" aria-hidden="true" />
                             <span>Deduct</span>
                           </button>
                         </div>
                       ) : (
-                        <span className="text-secondary text-[11px] italic">Settled</span>
+                        <span className="text-text-secondary text-[11px] italic">Settled</span>
                       )}
                     </td>
                   </tr>
@@ -307,51 +281,18 @@ export function AdminFinanceSecurityDepositsTable({
         </table>
       </div>
 
-      {/* Pagination Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-secondary px-1">
-        <div className="flex items-center gap-2">
-          <span>Rows per page:</span>
-          <select
-            value={pageSize}
-            onChange={(e) => onPageSizeChange(Number(e.target.value))}
-            className="p-1 rounded-lg border border-border bg-input-bg text-primary text-xs cursor-pointer focus:outline-none"
-          >
-            <option value={5}>5</option>
-            <option value={10}>10</option>
-            <option value={20}>20</option>
-            <option value={50}>50</option>
-          </select>
-          <span className="text-secondary ml-2">
-            Showing <strong className="text-primary">{startItem}</strong> - <strong className="text-primary">{endItem}</strong> of <strong className="text-primary">{totalRows}</strong> records
-          </span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="text-secondary">
-            Page {effectivePage + 1} of {pageCount}
-          </span>
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              disabled={effectivePage <= 0}
-              onClick={onPrevPage}
-              className="p-1.5 rounded-lg border border-border bg-surface hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-primary transition-colors"
-              title="Previous Page"
-            >
-              <ChevronLeft size={14} />
-            </button>
-            <button
-              type="button"
-              disabled={effectivePage >= pageCount - 1}
-              onClick={onNextPage}
-              className="p-1.5 rounded-lg border border-border bg-surface hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-primary transition-colors"
-              title="Next Page"
-            >
-              <ChevronRight size={14} />
-            </button>
-          </div>
-        </div>
-      </div>
+      <AdminTablePagination
+        page={effectivePage}
+        pageSize={pageSize}
+        totalRows={totalRows}
+        pageSizeOptions={[5, 10, 20, 50]}
+        onPageChange={(nextPage) => {
+          if (nextPage < effectivePage) onPrevPage();
+          else if (nextPage > effectivePage) onNextPage();
+        }}
+        onPageSizeChange={onPageSizeChange}
+      />
     </div>
   );
 }
+export default AdminFinanceSecurityDepositsTable;

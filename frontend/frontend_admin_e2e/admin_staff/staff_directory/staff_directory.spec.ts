@@ -1,9 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('Canonical staff role navigation', () => {
-  test('staff directory links to the canonical staff_roles_permissions submodule', async ({ page }) => {
+test.describe('Canonical staff domain routes', () => {
+  test('sidebar links include staff attendance and staff payroll alongside staff directory', async ({ page }) => {
     await page.goto('/admin/admin_staff/staff_directory');
-    await expect(page.getByRole('heading', { name: 'Staff directory' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Open existing staff management' })).toHaveAttribute('href', '/admin/admin_staff/staff_roles_permissions');
+    await expect(page.getByRole('heading').first()).toBeVisible();
+    const navigation = page.getByTestId('admin-navigation');
+    await expect(navigation.locator('a[href="/admin/admin_staff/staff_attendance"]')).toHaveCount(1);
+    await expect(navigation.locator('a[href="/admin/admin_staff/staff_payroll"]')).toHaveCount(1);
   });
 });

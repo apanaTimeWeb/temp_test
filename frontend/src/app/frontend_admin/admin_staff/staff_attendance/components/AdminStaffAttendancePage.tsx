@@ -44,7 +44,7 @@ export function AdminStaffAttendancePage() {
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-semibold text-text-secondary backdrop-blur-md">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-text-secondary">
                 <CalendarCheck className="h-3.5 w-3.5 text-primary" />
                 Staff Attendance & Shifts
               </span>
@@ -57,15 +57,14 @@ export function AdminStaffAttendancePage() {
             </p>
           </div>
 
-          {/* Specific Date Navigator */}
-          <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-border bg-surface p-2 shadow-sm backdrop-blur-md">
+          <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-border bg-surface p-2 shadow-sm">
             <div className="flex items-center rounded-lg bg-surface-muted p-1 border border-border">
               <button
                 type="button"
                 onClick={() => handleDateModeChange('today')}
-                className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
+                className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold motion-safe:transition-all ${
                   dateMode === 'today'
-                    ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]'
+                    ? 'bg-primary text-primary-contrast shadow-sm motion-safe:scale-[1.02]'
                     : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'
                 }`}
               >
@@ -74,9 +73,9 @@ export function AdminStaffAttendancePage() {
               <button
                 type="button"
                 onClick={() => handleDateModeChange('yesterday')}
-                className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
+                className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold motion-safe:transition-all ${
                   dateMode === 'yesterday'
-                    ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]'
+                    ? 'bg-primary text-primary-contrast shadow-sm motion-safe:scale-[1.02]'
                     : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'
                 }`}
               >
@@ -85,9 +84,9 @@ export function AdminStaffAttendancePage() {
               <button
                 type="button"
                 onClick={() => handleDateModeChange('custom')}
-                className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
+                className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold motion-safe:transition-all ${
                   dateMode === 'custom'
-                    ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]'
+                    ? 'bg-primary text-primary-contrast shadow-sm motion-safe:scale-[1.02]'
                     : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'
                 }`}
               >

@@ -68,7 +68,7 @@ export function AdminSettingsSupportKpiGrid({
             <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
               {card.label}
             </span>
-            <div className={`p-2.5 rounded-xl border shrink-0 motion-safe:transition-transform group-hover:scale-110 shadow-card ${card.iconBox}`}>
+            <div className={`p-2.5 rounded-xl border shrink-0 motion-safe:transition-transform motion-safe:group-hover:scale-110 shadow-card ${card.iconBox}`}>
               <card.Icon size={18} strokeWidth={2.2} aria-hidden="true" />
             </div>
           </div>

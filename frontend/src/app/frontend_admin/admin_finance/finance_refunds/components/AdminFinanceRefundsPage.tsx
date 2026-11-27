@@ -2,21 +2,17 @@
 // RESPONSIBILITY: AdminFinanceRefundsPage component owned by admin_finance; responsibility folder: components.
 
 import { AdminFinanceRefundDetailModal } from '@/app/frontend_admin/admin_finance/finance_refunds/components/AdminFinanceRefundDetailModal';
-import {
-  AdminFinanceRefundDisburseModal,
-  type RefundDisbursementPayload,
-} from '@/app/frontend_admin/admin_finance/finance_refunds/components/AdminFinanceRefundDisburseModal';
+import { AdminFinanceRefundDisburseModal, type RefundDisbursementPayload } from '@/app/frontend_admin/admin_finance/finance_refunds/components/AdminFinanceRefundDisburseModal';
 import { AdminFinanceRefundsKpiGrid } from '@/app/frontend_admin/admin_finance/finance_refunds/components/AdminFinanceRefundsKpiGrid';
 import { AdminFinanceRefundsTable } from '@/app/frontend_admin/admin_finance/finance_refunds/components/AdminFinanceRefundsTable';
-import {
-  AdminFinanceRefundsTimeHorizonBar,
-  type AdminFinanceRefundsTimeHorizon,
-} from '@/app/frontend_admin/admin_finance/finance_refunds/components/AdminFinanceRefundsTimeHorizonBar';
+import { AdminFinanceRefundsTimeHorizonBar, type AdminFinanceRefundsTimeHorizon } from '@/app/frontend_admin/admin_finance/finance_refunds/components/AdminFinanceRefundsTimeHorizonBar';
 import useAdminFinanceRefundsQuery, { FALLBACK_REFUNDS } from '@/app/frontend_admin/admin_finance/finance_refunds/hooks/useAdminFinanceRefundsQuery';
 import type { AdminFinanceRefund } from '@/app/frontend_admin/admin_finance/finance_refunds/types/AdminFinanceRefundsComponentTypes';
 import {
   exportAdminFinanceRefundsCsv,
   exportAdminFinanceRefundsExcel,
+  filterRefundsByScope,
+  getRefundTimeRangeLabel,
   mapAdminFinanceRefund,
 } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/adminFinanceRefundsExports';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
@@ -43,83 +39,35 @@ export function AdminFinanceRefundsPage() {
   const [timeRange, setTimeRange] = useState<AdminFinanceRefundsTimeHorizon>('all');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
-
-  const timeRangeLabel = useMemo(() => {
-    switch (timeRange) {
-      case 'today':
-        return 'Today';
-      case 'this_week':
-        return 'This Week';
-      case 'this_month':
-        return 'This Month';
-      case 'custom':
-        return 'Custom Range';
-      default:
-        return 'All Time';
-    }
-  }, [timeRange]);
+  const timeRangeLabel = useMemo(() => getRefundTimeRangeLabel(timeRange), [timeRange]);
 
   const refundsQuery = useAdminFinanceRefundsQuery();
-
-  const rawRefundsData = useMemo(() => {
-    if (refundsQuery.data && refundsQuery.data.length > 0) {
-      return refundsQuery.data;
-    }
-    return FALLBACK_REFUNDS;
-  }, [refundsQuery.data]);
+  const rawRefundsData = useMemo(
+    () => (refundsQuery.data && refundsQuery.data.length > 0 ? refundsQuery.data : FALLBACK_REFUNDS),
+    [refundsQuery.data]
+  );
 
   const rawRefunds = useMemo(() => rawRefundsData.map(mapAdminFinanceRefund), [rawRefundsData]);
-  const allRefunds = useMemo(() => {
-    return rawRefunds.map((refund) => {
-      const idStr = String(refund.id);
-      const nextStatus = statusOverrides[idStr];
-      const nextDetails = refundDetailsOverrides[idStr];
-      return {
-        ...refund,
-        ...(nextStatus ? { status: nextStatus } : {}),
-        ...(nextDetails ?? {}),
-      };
-    });
-  }, [rawRefunds, statusOverrides, refundDetailsOverrides]);
+  const allRefunds = useMemo(
+    () =>
+      rawRefunds.map((refund) => {
+        const idStr = String(refund.id);
+        return {
+          ...refund,
+          ...(statusOverrides[idStr] ? { status: statusOverrides[idStr] } : {}),
+          ...(refundDetailsOverrides[idStr] ?? {}),
+        };
+      }),
+    [rawRefunds, statusOverrides, refundDetailsOverrides]
+  );
 
   const isPending = refundsQuery.isPending && !rawRefundsData.length;
   const loadError = refundsQuery.isError && !rawRefundsData.length ? t('REFUND_LOAD_ERROR') : null;
 
-  const branchFiltered = useMemo(() => {
-    if (isAllBranches || selectedBranchId === 'all' || !selectedBranch) return allRefunds;
-    return allRefunds.filter((r) => {
-      if (r.branchId && r.branchId.toLowerCase() === selectedBranchId.toLowerCase()) return true;
-      if (r.branchName) {
-        const bName = r.branchName.toLowerCase().trim();
-        const sName = (selectedBranch.name ?? '').toLowerCase().trim();
-        const sCode = (selectedBranch.code ?? '').toLowerCase().trim();
-        const sId = (selectedBranch.id ?? '').toLowerCase().trim();
-        return bName.includes(sName) || sName.includes(bName) || bName === sCode || bName === sId;
-      }
-      return true;
-    });
-  }, [allRefunds, isAllBranches, selectedBranch, selectedBranchId]);
-
-  const timeFilteredRefunds = useMemo(() => {
-    if (timeRange === 'today') return branchFiltered.slice(0, Math.max(1, Math.ceil(branchFiltered.length * 0.2)));
-    if (timeRange === 'this_week') return branchFiltered.slice(0, Math.max(2, Math.ceil(branchFiltered.length * 0.5)));
-    return branchFiltered;
-  }, [branchFiltered, timeRange]);
-
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    return timeFilteredRefunds.filter((refund) => {
-      const matchesStatus = statusFilter === 'all' || refund.status === statusFilter;
-      if (!matchesStatus) return false;
-      if (!q) return true;
-      return (
-        refund.studentName.toLowerCase().includes(q) ||
-        refund.smartId.toLowerCase().includes(q) ||
-        (refund.branchName ? refund.branchName.toLowerCase().includes(q) : false) ||
-        (refund.paymentMethod ? refund.paymentMethod.toLowerCase().includes(q) : false)
-      );
-    });
-  }, [timeFilteredRefunds, statusFilter, search]);
+  const { timeFiltered: timeFilteredRefunds, filtered } = useMemo(
+    () => filterRefundsByScope(allRefunds, { selectedBranchId, selectedBranch, isAllBranches, timeRange, statusFilter, search }),
+    [allRefunds, selectedBranchId, selectedBranch, isAllBranches, timeRange, statusFilter, search]
+  );
 
   const totalRefunded = useMemo(
     () => timeFilteredRefunds.filter((refund) => refund.status === 'processed').reduce((sum, refund) => sum + refund.netRefund, 0),
@@ -229,11 +177,7 @@ export function AdminFinanceRefundsPage() {
           {(search.trim() !== '' || statusFilter !== 'all' || timeRange !== 'all') && (
             <button
               type="button"
-              onClick={() => {
-                setSearch('');
-                setStatusFilter('all');
-                setTimeRange('all');
-              }}
+              onClick={() => { setSearch(''); setStatusFilter('all'); setTimeRange('all'); }}
               className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-surface-hover motion-safe:transition-colors"
             >
               <RotateCcw size={14} aria-hidden="true" />

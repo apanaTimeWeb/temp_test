@@ -1,7 +1,7 @@
 import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 
 export const ADMIN_STAFF_PAYROLL_ROUTES = {
-  INDEX: (ADMIN_ROUTES as any).STAFF_PAYROLL ?? '/admin/admin_staff/staff_payroll',
+  INDEX: ADMIN_ROUTES.STAFF_PAYROLL,
 } as const;
 
 export const ADMIN_STAFF_PAYROLL_API = {
@@ -21,4 +21,3 @@ export const PAYROLL_MONTHS = [
   { id: '2026-10', label: 'October 2026' },
   { id: '2026-09', label: 'September 2026' },
 ] as const;
-

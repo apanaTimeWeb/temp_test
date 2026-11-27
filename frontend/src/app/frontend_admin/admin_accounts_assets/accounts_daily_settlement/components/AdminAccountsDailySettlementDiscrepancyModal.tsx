@@ -1,6 +1,11 @@
 // components/AdminAccountsDailySettlementDiscrepancyModal.tsx
 'use client';
-import type { DailySettlementRecord,DiscrepancyResolutionAction,FlagDiscrepancyPayload } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/types/AdminAccountsDailySettlementTypes';
+
+import type {
+  DailySettlementRecord,
+  DiscrepancyResolutionAction,
+  FlagDiscrepancyPayload,
+} from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/types/AdminAccountsDailySettlementTypes';
 import { formatPaiseToRupees } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/utils/AdminAccountsDailySettlementFormatters';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
@@ -8,9 +13,9 @@ import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogD
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import { AlertTriangle,ArrowRightCircle,CheckCircle2,CreditCard,Flag,ShieldAlert } from 'lucide-react';
+import { AlertTriangle, ArrowRightCircle, CheckCircle2, CreditCard, Flag, ShieldAlert } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useEffect,useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Props {
   record: DailySettlementRecord | null;
@@ -51,17 +56,13 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
       return;
     }
 
-    const payload: FlagDiscrepancyPayload = {
+    const success = await onConfirm({
       settlementId: record.id,
       discrepancyReason: reason,
       resolutionAction,
       adminNotes: notes.trim(),
-    };
-
-    const success = await onConfirm(payload);
-    if (success) {
-      onClose();
-    }
+    });
+    if (success) onClose();
   };
 
   return (
@@ -70,47 +71,45 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
         <form onSubmit={handleSubmit} className="space-y-4">
           <DialogHeader>
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-destructive" />
+              <AlertTriangle className="h-5 w-5 text-danger-text" aria-hidden="true" />
               <DialogTitle>{t('TITLE')}</DialogTitle>
             </div>
             <DialogDescription>{t('DESCRIPTION')}</DialogDescription>
           </DialogHeader>
 
-          {/* Settlement Context Snapshot */}
-          <div className="rounded-lg border border-destructive-bg bg-destructive-bg p-3 text-xs space-y-2">
+          <div className="rounded-lg border border-danger bg-danger-bg p-3 text-xs space-y-2">
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <span className="text-muted-foreground">Branch:</span>
-                <p className="font-semibold text-foreground">{record.branchName}</p>
+                <span className="text-text-secondary">Branch:</span>
+                <p className="font-semibold text-text-primary">{record.branchName}</p>
               </div>
               <div>
-                <span className="text-muted-foreground">Manager:</span>
-                <p className="font-semibold text-foreground">{record.managerName}</p>
+                <span className="text-text-secondary">Manager:</span>
+                <p className="font-semibold text-text-primary">{record.managerName}</p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-2 border-t border-border pt-2">
               <div>
-                <span className="text-muted-foreground">Expected:</span>
-                <p className="font-mono text-foreground font-medium">{formatPaiseToRupees(record.expectedClosingCash)}</p>
+                <span className="text-text-secondary">Expected:</span>
+                <p className="font-mono text-text-primary font-medium">{formatPaiseToRupees(record.expectedClosingCash)}</p>
               </div>
               <div>
-                <span className="text-muted-foreground">Reported Handover:</span>
-                <p className="font-mono text-foreground font-semibold">{formatPaiseToRupees(record.actualHandoverCash)}</p>
+                <span className="text-text-secondary">Reported Handover:</span>
+                <p className="font-mono text-text-primary font-semibold">{formatPaiseToRupees(record.actualHandoverCash)}</p>
               </div>
             </div>
 
             <div className="border-t border-border pt-2 flex items-center justify-between">
-              <span className="text-muted-foreground">Calculated Variance:</span>
-              <span className={`font-mono font-bold ${record.difference < 0 ? 'text-destructive' : 'text-success'}`}>
+              <span className="text-text-secondary">Calculated Variance:</span>
+              <span className={`font-mono font-bold ${record.difference < 0 ? 'text-danger-text' : 'text-success-text'}`}>
                 {formatPaiseToRupees(record.difference)}
               </span>
             </div>
           </div>
 
-          {/* Form Input: Reason */}
           <div className="space-y-1.5">
-            <label htmlFor="discrepancy-reason" className="block text-xs font-semibold text-foreground">
+            <label htmlFor="discrepancy-reason" className="block text-xs font-semibold text-text-primary">
               {t('REASON_LABEL')}
             </label>
             <select
@@ -118,7 +117,7 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               disabled={isSubmitting}
-              className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+              className="w-full rounded-md border border-border bg-input px-3 py-2 text-sm text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
             >
               <option value="CASH_SHORTAGE">{t('REASONS.CASH_SHORTAGE')}</option>
               <option value="MISSING_SLIP">{t('REASONS.MISSING_SLIP')}</option>
@@ -127,17 +126,16 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
             </select>
           </div>
 
-          {/* Recovery / Adjustment Action Strategy */}
           <div className="space-y-2">
-            <label className="block text-xs font-semibold text-foreground">
-              Recovery & Adjustment Action (शॉर्टेज समाधान) *
+            <label className="block text-xs font-semibold text-text-primary">
+              Recovery &amp; Adjustment Action (शॉर्टेज समाधान) *
             </label>
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
               <label
-                className={`flex cursor-pointer items-start gap-2.5 rounded-lg border p-2.5 transition-all ${
+                className={`flex cursor-pointer items-start gap-2.5 rounded-lg border p-2.5 motion-safe:transition-colors ${
                   resolutionAction === 'DEDUCT_SALARY'
-                    ? 'border-destructive bg-destructive/10 ring-1 ring-destructive'
-                    : 'border-border bg-card hover:bg-card-hover'
+                    ? 'border-danger bg-danger-bg ring-1 ring-danger'
+                    : 'border-border bg-card hover:bg-surface-hover'
                 }`}
               >
                 <input
@@ -146,24 +144,24 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
                   value="DEDUCT_SALARY"
                   checked={resolutionAction === 'DEDUCT_SALARY'}
                   onChange={() => setResolutionAction('DEDUCT_SALARY')}
-                  className="mt-0.5 text-destructive focus:ring-destructive"
+                  className="mt-0.5 text-danger-text focus:ring-danger"
                 />
                 <div className="space-y-0.5">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
-                    <CreditCard className="h-3.5 w-3.5 text-destructive" />
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-text-primary">
+                    <CreditCard className="h-3.5 w-3.5 text-danger-text" aria-hidden="true" />
                     <span>Deduct from Salary</span>
                   </div>
-                  <p className="text-[11px] text-muted-foreground leading-tight">
+                  <p className="text-[11px] text-text-secondary leading-tight">
                     Debit shortage from {record.managerName}&apos;s next monthly payroll disbursement.
                   </p>
                 </div>
               </label>
 
               <label
-                className={`flex cursor-pointer items-start gap-2.5 rounded-lg border p-2.5 transition-all ${
+                className={`flex cursor-pointer items-start gap-2.5 rounded-lg border p-2.5 motion-safe:transition-colors ${
                   resolutionAction === 'CARRY_FORWARD'
-                    ? 'border-amber-500 bg-amber-500/10 ring-1 ring-amber-500'
-                    : 'border-border bg-card hover:bg-card-hover'
+                    ? 'border-warning bg-warning-bg ring-1 ring-warning'
+                    : 'border-border bg-card hover:bg-surface-hover'
                 }`}
               >
                 <input
@@ -172,24 +170,24 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
                   value="CARRY_FORWARD"
                   checked={resolutionAction === 'CARRY_FORWARD'}
                   onChange={() => setResolutionAction('CARRY_FORWARD')}
-                  className="mt-0.5 text-amber-500 focus:ring-amber-500"
+                  className="mt-0.5 text-warning-text focus:ring-warning"
                 />
                 <div className="space-y-0.5">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
-                    <ArrowRightCircle className="h-3.5 w-3.5 text-amber-500" />
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-text-primary">
+                    <ArrowRightCircle className="h-3.5 w-3.5 text-warning-text" aria-hidden="true" />
                     <span>Carry-Forward Deficit</span>
                   </div>
-                  <p className="text-[11px] text-muted-foreground leading-tight">
+                  <p className="text-[11px] text-text-secondary leading-tight">
                     Carry forward liability to tomorrow&apos;s shift opening cash balance.
                   </p>
                 </div>
               </label>
 
               <label
-                className={`flex cursor-pointer items-start gap-2.5 rounded-lg border p-2.5 transition-all ${
+                className={`flex cursor-pointer items-start gap-2.5 rounded-lg border p-2.5 motion-safe:transition-colors ${
                   resolutionAction === 'IMMEDIATE_DEPOSIT'
-                    ? 'border-emerald-500 bg-emerald-500/10 ring-1 ring-emerald-500'
-                    : 'border-border bg-card hover:bg-card-hover'
+                    ? 'border-success bg-success-bg ring-1 ring-success'
+                    : 'border-border bg-card hover:bg-surface-hover'
                 }`}
               >
                 <input
@@ -198,24 +196,24 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
                   value="IMMEDIATE_DEPOSIT"
                   checked={resolutionAction === 'IMMEDIATE_DEPOSIT'}
                   onChange={() => setResolutionAction('IMMEDIATE_DEPOSIT')}
-                  className="mt-0.5 text-emerald-500 focus:ring-emerald-500"
+                  className="mt-0.5 text-success-text focus:ring-success"
                 />
                 <div className="space-y-0.5">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-text-primary">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-success-text" aria-hidden="true" />
                     <span>Immediate Deposit</span>
                   </div>
-                  <p className="text-[11px] text-muted-foreground leading-tight">
+                  <p className="text-[11px] text-text-secondary leading-tight">
                     Manager deposited the cash shortage difference at counter immediately.
                   </p>
                 </div>
               </label>
 
               <label
-                className={`flex cursor-pointer items-start gap-2.5 rounded-lg border p-2.5 transition-all ${
+                className={`flex cursor-pointer items-start gap-2.5 rounded-lg border p-2.5 motion-safe:transition-colors ${
                   resolutionAction === 'WRITE_OFF'
-                    ? 'border-slate-500 bg-slate-500/10 ring-1 ring-slate-500'
-                    : 'border-border bg-card hover:bg-card-hover'
+                    ? 'border-border-focus bg-surface-highlight ring-1 ring-primary'
+                    : 'border-border bg-card hover:bg-surface-hover'
                 }`}
               >
                 <input
@@ -224,14 +222,14 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
                   value="WRITE_OFF"
                   checked={resolutionAction === 'WRITE_OFF'}
                   onChange={() => setResolutionAction('WRITE_OFF')}
-                  className="mt-0.5 text-slate-500 focus:ring-slate-500"
+                  className="mt-0.5 text-primary focus:ring-primary"
                 />
                 <div className="space-y-0.5">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
-                    <ShieldAlert className="h-3.5 w-3.5 text-slate-400" />
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-text-primary">
+                    <ShieldAlert className="h-3.5 w-3.5 text-text-secondary" aria-hidden="true" />
                     <span>Waive / Loss Absorption</span>
                   </div>
-                  <p className="text-[11px] text-muted-foreground leading-tight">
+                  <p className="text-[11px] text-text-secondary leading-tight">
                     Waive deficit as authorized operational variance / library expense.
                   </p>
                 </div>
@@ -239,27 +237,22 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
             </div>
           </div>
 
-          {/* Form Input: Notes */}
           <div className="space-y-1.5">
-            <label htmlFor="discrepancy-notes" className="block text-xs font-semibold text-foreground">
+            <label htmlFor="discrepancy-notes" className="block text-xs font-semibold text-text-primary">
               {t('NOTES_LABEL')}
             </label>
-            <textarea maxLength={1000}
+            <textarea
+              maxLength={1000}
               id="discrepancy-notes"
               rows={3}
               value={notes}
-              onChange={(e) => {
-                setNotes(e.target.value);
-                setError(null);
-              }}
+              onChange={(e) => { setNotes(e.target.value); setError(null); }}
               placeholder={t('NOTES_PLACEHOLDER')}
               disabled={isSubmitting}
               required
-              className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+              className="w-full rounded-md border border-border bg-input px-3 py-2 text-sm text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
             />
-            {error && (
-              <p className="text-xs text-destructive font-medium">{error}</p>
-            )}
+            {error && <p className="text-xs text-danger-text font-medium">{error}</p>}
           </div>
 
           <DialogFooter className="gap-2 pt-2">
@@ -267,16 +260,16 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-foreground hover:bg-card-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+              className="rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
             >
               {t('CANCEL')}
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-1.5 rounded-md bg-destructive px-4 py-2 text-sm font-medium text-white hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive disabled:opacity-50 motion-safe:transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-md bg-danger px-4 py-2 text-sm font-medium text-on-primary hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger disabled:opacity-50 motion-safe:transition-opacity"
             >
-              <Flag className="h-4 w-4" />
+              <Flag className="h-4 w-4" aria-hidden="true" />
               <span>{isSubmitting ? 'Flagging...' : t('SUBMIT')}</span>
             </button>
           </DialogFooter>
@@ -287,4 +280,3 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
 }
 
 export default AdminAccountsDailySettlementDiscrepancyModal;
-

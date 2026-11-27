@@ -6,20 +6,8 @@ import type {
   SuspendSortField,
 } from '@/app/frontend_admin/admin_finance/finance_auto_suspend/types/AdminFinanceAutoSuspendTypes';
 import {
-  AlertTriangle,
-  Armchair,
-  ArrowDown,
-  ArrowUp,
-  ArrowUpDown,
-  Building,
-  Calendar,
-  Check,
-  ChevronLeft,
-  ChevronRight,
-  Clock,
-  MessageCircle,
-  QrCode,
-  RotateCcw,
+  AlertTriangle, Armchair, ArrowDown, ArrowUp, ArrowUpDown, Building,
+  Calendar, Check, ChevronLeft, ChevronRight, Clock, MessageCircle, QrCode, RotateCcw,
 } from 'lucide-react';
 
 export interface AdminFinanceAutoSuspendTableProps {

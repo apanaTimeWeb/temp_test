@@ -5,7 +5,7 @@
 import AdminSupportTicketsPanel from '@/app/frontend_admin/admin_settings/settings_support/components/AdminSettingsSupportTicketsPanel';
 import { ADMIN_SUPPORT_NAVIGATION_ITEMS } from '@/app/frontend_admin/admin_settings/settings_support/config/admin_settings_support.url_config';
 import useAdminSupportTabState from '@/app/frontend_admin/admin_settings/settings_support/hooks/useAdminSettingsSupportTabState';
-import { ADMIN_SUPPORT_ANNOUNCEMENT_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_support/mocks/scenarios/admin_settings_support.scenarios';
+import { ADMIN_SUPPORT_ANNOUNCEMENT_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_support/config/admin_settings_support.demo_data';
 import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { BellRing, Headphones, Info, LifeBuoy, ShieldCheck } from 'lucide-react';
 import { useTranslations } from 'next-intl';

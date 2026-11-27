@@ -1,12 +1,13 @@
 'use client';
 
 import type { StaffSalaryRecord } from '@/app/frontend_admin/admin_staff/staff_payroll/schemas/AdminStaffPayrollSchema';
+import { sharePayrollSlipWhatsApp } from '@/app/frontend_admin/admin_staff/staff_payroll/utils/adminStaffPayrollExports';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import { Building2,CheckCircle2,MessageSquare,Printer } from 'lucide-react';
+import { Building2, CheckCircle2, MessageSquare, Printer } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 interface Props {
@@ -20,36 +21,6 @@ export function AdminStaffPayrollSalarySlipModal({ record, isOpen, onClose }: Pr
 
   if (!record) return null;
 
-  const handlePrint = () => {
-    window.print();
-  };
-
-  const handleShareWhatsApp = () => {
-    const slipText = `*Smart Library - Monthly Salary Slip*\n` +
-      `Employee: ${record.staffName} (${record.staffId})\n` +
-      `Designation: ${record.role}\n` +
-      `Branch: ${record.branchName}\n` +
-      `Month: ${record.month}\n` +
-      `---------------------------\n` +
-      `• Basic Salary: ₹${record.baseSalary.toLocaleString('en-IN')}\n` +
-      `• Allowances / Bonus: +₹${record.allowances.toLocaleString('en-IN')}\n` +
-      `• Deductions: -₹${record.deductions.toLocaleString('en-IN')}\n` +
-      (record.advanceSalaryDeduction && record.advanceSalaryDeduction > 0
-        ? `• Advance Settled: -₹${record.advanceSalaryDeduction.toLocaleString('en-IN')}\n`
-        : '') +
-      `---------------------------\n` +
-      `*Net Take-Home: ₹${record.netPayable.toLocaleString('en-IN')}*\n` +
-      `Status: ${record.status}\n` +
-      `Bank: ${record.bankDetails.bankName} (${record.bankDetails.accountNoMasked})\n` +
-      (record.transactionRef ? `Ref / UTR: ${record.transactionRef}\n` : '') +
-      `---------------------------\n` +
-      `Official system generated salary slip from Smart Library Network Administration.`;
-    const waUrl = `https://wa.me/?text=${encodeURIComponent(slipText)}`;
-    if (typeof window !== 'undefined') {
-      window.open(waUrl, '_blank', 'noopener,noreferrer');
-    }
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
       <DialogContent className="max-w-xl">
@@ -57,12 +28,10 @@ export function AdminStaffPayrollSalarySlipModal({ record, isOpen, onClose }: Pr
           <DialogTitle>{t('MODAL_SLIP_TITLE')}</DialogTitle>
         </DialogHeader>
 
-        {/* Printable Payslip Card */}
         <div id="salary-slip-printable" className="space-y-4 rounded-xl border border-border bg-card p-5 text-sm shadow-sm">
-          {/* Header */}
           <div className="flex items-start justify-between border-b border-border pb-3">
             <div>
-              <div className="flex items-center gap-2 text-primary font-bold">
+              <div className="flex items-center gap-2 text-primary-text font-bold">
                 <Building2 size={18} />
                 <span>{t('SLIP_COMPANY_HEADER')}</span>
               </div>
@@ -76,7 +45,6 @@ export function AdminStaffPayrollSalarySlipModal({ record, isOpen, onClose }: Pr
             </div>
           </div>
 
-          {/* Employee & Bank Info Grid */}
           <div className="grid grid-cols-2 gap-4 rounded-lg bg-surface p-3 text-xs">
             <div className="space-y-1">
               <p><span className="text-text-secondary">Name:</span> <strong className="text-text-primary">{record.staffName}</strong></p>
@@ -90,71 +58,35 @@ export function AdminStaffPayrollSalarySlipModal({ record, isOpen, onClose }: Pr
             </div>
           </div>
 
-          {/* Attendance Breakdown */}
           <div className="grid grid-cols-4 gap-2 rounded-lg border border-border p-2.5 text-center text-xs">
-            <div>
-              <span className="text-text-secondary block text-[10px] uppercase">{t('SLIP_WORKING_DAYS')}</span>
-              <strong className="text-text-primary text-sm">{record.attendanceStats.totalWorkingDays}</strong>
-            </div>
-            <div>
-              <span className="text-text-secondary block text-[10px] uppercase">{t('SLIP_DAYS_WORKED')}</span>
-              <strong className="text-success-text text-sm">{record.attendanceStats.presentDays}</strong>
-            </div>
-            <div>
-              <span className="text-text-secondary block text-[10px] uppercase">{t('SLIP_ABSENT_DAYS')}</span>
-              <strong className="text-danger-text text-sm">{record.attendanceStats.absentDays}</strong>
-            </div>
-            <div>
-              <span className="text-text-secondary block text-[10px] uppercase">Leaves</span>
-              <strong className="text-text-secondary text-sm">{record.attendanceStats.leavesTaken}</strong>
-            </div>
+            <div><span className="text-text-secondary block text-[10px] uppercase">{t('SLIP_WORKING_DAYS')}</span><strong className="text-text-primary text-sm">{record.attendanceStats.totalWorkingDays}</strong></div>
+            <div><span className="text-text-secondary block text-[10px] uppercase">{t('SLIP_DAYS_WORKED')}</span><strong className="text-success-text text-sm">{record.attendanceStats.presentDays}</strong></div>
+            <div><span className="text-text-secondary block text-[10px] uppercase">{t('SLIP_ABSENT_DAYS')}</span><strong className="text-danger-text text-sm">{record.attendanceStats.absentDays}</strong></div>
+            <div><span className="text-text-secondary block text-[10px] uppercase">Leaves</span><strong className="text-text-secondary text-sm">{record.attendanceStats.leavesTaken}</strong></div>
           </div>
 
-          {/* Earnings vs Deductions Table */}
           <div className="grid grid-cols-2 gap-4 border-t border-b border-border py-3 text-xs">
-            {/* Earnings */}
             <div className="space-y-1.5">
               <h4 className="font-bold text-text-primary uppercase tracking-wider text-[11px]">{t('SLIP_EARNINGS')}</h4>
-              <div className="flex justify-between text-text-secondary">
-                <span>Basic Salary</span>
-                <span className="font-mono text-text-primary">₹{record.baseSalary.toLocaleString('en-IN')}</span>
-              </div>
-              <div className="flex justify-between text-text-secondary">
-                <span>Shift / Performance Bonus</span>
-                <span className="font-mono text-success-text">+₹{record.allowances.toLocaleString('en-IN')}</span>
-              </div>
+              <div className="flex justify-between text-text-secondary"><span>Basic Salary</span><span className="font-mono text-text-primary">₹{record.baseSalary.toLocaleString('en-IN')}</span></div>
+              <div className="flex justify-between text-text-secondary"><span>Shift / Performance Bonus</span><span className="font-mono text-success-text">+₹{record.allowances.toLocaleString('en-IN')}</span></div>
             </div>
-
-            {/* Deductions */}
             <div className="space-y-1.5 border-l border-border pl-4">
               <h4 className="font-bold text-text-primary uppercase tracking-wider text-[11px]">{t('SLIP_DEDUCTIONS')}</h4>
-              <div className="flex justify-between text-text-secondary">
-                <span>Unpaid Absence Deductions</span>
-                <span className="font-mono text-danger-text">
-                  {record.deductions > 0 ? `-₹${record.deductions.toLocaleString('en-IN')}` : '₹0'}
-                </span>
-              </div>
+              <div className="flex justify-between text-text-secondary"><span>Unpaid Absence Deductions</span><span className="font-mono text-danger-text">{record.deductions > 0 ? `-₹${record.deductions.toLocaleString('en-IN')}` : '₹0'}</span></div>
               {record.advanceSalaryDeduction > 0 && (
-                <div className="flex justify-between text-text-secondary">
-                  <span>{t('SLIP_ADVANCE_SETTLED')}</span>
-                  <span className="font-mono text-warning-text">
-                    -₹{record.advanceSalaryDeduction.toLocaleString('en-IN')}
-                  </span>
-                </div>
+                <div className="flex justify-between text-text-secondary"><span>{t('SLIP_ADVANCE_SETTLED')}</span><span className="font-mono text-warning-text">-₹{record.advanceSalaryDeduction.toLocaleString('en-IN')}</span></div>
               )}
             </div>
           </div>
 
-          {/* Net Take-Home Highlight */}
           <div className="flex items-center justify-between rounded-xl bg-primary-subtle p-4">
             <div>
               <span className="text-xs font-semibold text-text-secondary block">{t('SLIP_NET_PAY')}</span>
               <span className="text-[11px] text-text-disabled">Net salary transferred to bank</span>
             </div>
             <div className="text-right">
-              <p className="text-2xl font-black text-primary font-mono">
-                ₹{record.netPayable.toLocaleString('en-IN')}
-              </p>
+              <p className="text-2xl font-black text-primary-text font-mono">₹{record.netPayable.toLocaleString('en-IN')}</p>
               {record.status === 'DISBURSED' && (
                 <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-success-text">
                   <CheckCircle2 size={12} />
@@ -166,25 +98,21 @@ export function AdminStaffPayrollSalarySlipModal({ record, isOpen, onClose }: Pr
         </div>
 
         <DialogFooter className="mt-2 flex justify-between border-t border-border pt-3">
-          <button
-            type="button"
-            onClick={onClose}
-            className="min-h-10 rounded-md border border-border px-4 text-xs font-medium text-text-primary hover:bg-surface-hover"
-          >
+          <button type="button" onClick={onClose} className="min-h-10 rounded-md border border-border px-4 text-xs font-medium text-text-primary hover:bg-surface-hover">
             {t('BTN_CLOSE')}
           </button>
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={handleShareWhatsApp}
-              className="inline-flex min-h-10 items-center gap-1.5 rounded-md border border-emerald-500/30 bg-emerald-500/15 px-4 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/25 transition-colors cursor-pointer"
+              onClick={() => sharePayrollSlipWhatsApp(record)}
+              className="inline-flex min-h-10 items-center gap-1.5 rounded-md border border-success bg-success-bg px-4 text-xs font-semibold text-success-text hover:opacity-90 motion-safe:transition-colors cursor-pointer"
             >
               <MessageSquare size={14} />
               <span>WhatsApp Salary Slip</span>
             </button>
             <button
               type="button"
-              onClick={handlePrint}
+              onClick={() => window.print()}
               className="inline-flex min-h-10 items-center gap-1.5 rounded-md bg-primary px-4 text-xs font-semibold text-on-primary hover:bg-primary-hover"
             >
               <Printer size={15} />
@@ -196,6 +124,4 @@ export function AdminStaffPayrollSalarySlipModal({ record, isOpen, onClose }: Pr
     </Dialog>
   );
 }
-
 export default AdminStaffPayrollSalarySlipModal;
-

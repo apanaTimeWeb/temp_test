@@ -122,7 +122,7 @@ export function AdminAccountsDailySettlementTable({
             )
           ) : (
             <ArrowUpDown
-              className="text-muted-foreground opacity-40 group-hover:opacity-100 transition-opacity shrink-0"
+              className="text-muted-foreground opacity-40 group-hover:opacity-100 motion-safe:transition-opacity shrink-0"
               size={14}
               aria-hidden="true"
             />

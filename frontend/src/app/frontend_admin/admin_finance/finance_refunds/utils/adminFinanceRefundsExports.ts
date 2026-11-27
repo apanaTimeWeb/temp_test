@@ -173,6 +173,58 @@ const EXPORT_HEADERS = [
   'Rejection Reason',
 ];
 
+export function getRefundTimeRangeLabel(timeRange: 'all' | 'today' | 'this_week' | 'this_month' | 'custom'): string {
+  switch (timeRange) {
+    case 'today': return 'Today';
+    case 'this_week': return 'This Week';
+    case 'this_month': return 'This Month';
+    case 'custom': return 'Custom Range';
+    default: return 'All Time';
+  }
+}
+
+export function filterRefundsByScope(
+  refunds: AdminFinanceRefund[],
+  opts: {
+    selectedBranchId: string;
+    selectedBranch: { id?: string; name?: string; code?: string } | null;
+    isAllBranches: boolean;
+    timeRange: 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
+    statusFilter: 'all' | AdminFinanceRefund['status'];
+    search: string;
+  }
+): { timeFiltered: AdminFinanceRefund[]; filtered: AdminFinanceRefund[] } {
+  const { selectedBranchId, selectedBranch, isAllBranches, timeRange, statusFilter, search } = opts;
+  const branchFiltered = isAllBranches || selectedBranchId === 'all' || !selectedBranch
+    ? refunds
+    : refunds.filter((r) => {
+        if (r.branchId && r.branchId.toLowerCase() === selectedBranchId.toLowerCase()) return true;
+        if (!r.branchName) return true;
+        const bName = r.branchName.toLowerCase().trim();
+        const sName = (selectedBranch.name ?? '').toLowerCase().trim();
+        const sCode = (selectedBranch.code ?? '').toLowerCase().trim();
+        const sId = (selectedBranch.id ?? '').toLowerCase().trim();
+        return bName.includes(sName) || sName.includes(bName) || bName === sCode || bName === sId;
+      });
+  const timeFiltered = timeRange === 'today'
+    ? branchFiltered.slice(0, Math.max(1, Math.ceil(branchFiltered.length * 0.2)))
+    : timeRange === 'this_week'
+      ? branchFiltered.slice(0, Math.max(2, Math.ceil(branchFiltered.length * 0.5)))
+      : branchFiltered;
+  const q = search.trim().toLowerCase();
+  const filtered = timeFiltered.filter((refund) => {
+    if (statusFilter !== 'all' && refund.status !== statusFilter) return false;
+    if (!q) return true;
+    return (
+      refund.studentName.toLowerCase().includes(q) ||
+      refund.smartId.toLowerCase().includes(q) ||
+      (refund.branchName ? refund.branchName.toLowerCase().includes(q) : false) ||
+      (refund.paymentMethod ? refund.paymentMethod.toLowerCase().includes(q) : false)
+    );
+  });
+  return { timeFiltered, filtered };
+}
+
 export function exportAdminFinanceRefundsCsv(refunds: AdminFinanceRefund[], fallbackBranchName?: string): void {
   const rows = refunds.map((r) => [
     r.id,

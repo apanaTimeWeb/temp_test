@@ -138,11 +138,11 @@ export default function AdminAccountsExpensesAddPage({ onSaveExpense, onCancel }
           <input maxLength={30} id="expense-amount" type="number" min="0.01" step="0.01" required aria-invalid={Boolean(form.formState.errors.amount)} aria-describedby={form.formState.errors.amount ? 'expense-amount-error' : undefined} className="mt-1 min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('amount', { valueAsNumber: true })} />
           {form.formState.errors.amount && <p id="expense-amount-error" role="alert" className="mt-1 text-caption text-danger-text">{form.formState.errors.amount.message}</p>}
           {(form.watch('amount') ?? 0) > 2000 && (
-            <div className="mt-2.5 flex items-start gap-2.5 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-300">
+            <div className="mt-2.5 flex items-start gap-2.5 rounded-lg border border-warning bg-warning-bg p-3 text-xs text-warning-text">
               <span className="text-base leading-none">🛡️</span>
               <div className="space-y-0.5">
-                <p className="font-semibold text-amber-200">High-Value Expense Governance (&gt; ₹2,000)</p>
-                <p className="text-[11px] text-amber-300/85">
+                <p className="font-semibold text-warning-text">High-Value Expense Governance (&gt; ₹2,000)</p>
+                <p className="text-[11px] text-warning-text">
                   Amounts over ₹2,000 (such as electricity bills, major repairs, furniture) are placed in <strong>Pending Approval</strong> and require Admin sign-off before payout.
                 </p>
               </div>

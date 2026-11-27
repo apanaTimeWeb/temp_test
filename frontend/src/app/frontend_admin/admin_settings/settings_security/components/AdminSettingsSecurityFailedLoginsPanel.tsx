@@ -1,7 +1,7 @@
 'use client';
 // RESPONSIBILITY: AdminSecurityFailedLoginsPanel component owned by admin_security; responsibility folder: admin_security_failed_logins_panel.
 
-import { ADMIN_SECURITY_FAILED_LOGIN_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
+import { ADMIN_SECURITY_FAILED_LOGIN_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/config/admin_settings_security.demo_data';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import { ArrowDown,ArrowUp,ArrowUpDown,Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -64,7 +64,7 @@ export default function AdminSecurityFailedLoginsPanel() {
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 motion-safe:transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>

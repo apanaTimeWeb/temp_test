@@ -7,7 +7,7 @@ import { AdminSettingsProfileSubscriptionPanel } from '@/app/frontend_admin/admi
 import {
   ADMIN_PROFILE_DEMO_ACCOUNT,
   ADMIN_PROFILE_DEMO_SESSIONS,
-} from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
+} from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.demo_data';
 import type { AdminSettingsProfileReadOnlyPanelsProps } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
 import {
   Building2,

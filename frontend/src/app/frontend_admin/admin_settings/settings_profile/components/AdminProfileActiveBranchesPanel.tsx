@@ -12,7 +12,7 @@ import {
 import {
   ADMIN_PROFILE_ACTIVE_BRANCHES,
   type AdminProfileActiveBranch,
-} from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
+} from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.demo_data';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import { Building2, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';

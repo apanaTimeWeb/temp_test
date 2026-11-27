@@ -105,7 +105,7 @@ export default function AdminDashboardReportsAnalyticsPrimaryChartsGrid({ data, 
               </svg>
 
               <div className="relative z-10 flex items-start justify-between mb-4">
-                <div className={`p-2.5 rounded-xl border shrink-0 motion-safe:transition-transform group-hover:scale-110 shadow-card ${theme.iconBox}`}>
+                <div className={`p-2.5 rounded-xl border shrink-0 motion-safe:transition-transform motion-safe:group-hover:scale-110 shadow-card ${theme.iconBox}`}>
                   <Icon size={20} strokeWidth={2.2} aria-hidden="true" />
                 </div>
                 <span

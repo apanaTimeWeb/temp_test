@@ -1,14 +1,14 @@
 'use client';
 // RESPONSIBILITY: AdminStaffDirectoryAuditSection component owned by admin_staff_directory; responsibility folder: admin_staff_directory_audit_section.
 
-import { ADMIN_STAFF_DIRECTORY_ACTIVITY_FIXTURES } from '@/app/frontend_admin/admin_staff/staff_directory/mocks/scenarios/admin_staff_directory.scenarios';
+import { ADMIN_STAFF_DIRECTORY_ACTIVITY_DEMO_DATA } from '@/app/frontend_admin/admin_staff/staff_directory/config/admin_staff_directory.demo_data';
 import type { AdminStaffDirectoryAuditSectionProps } from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import { Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo,useState } from 'react';
-import { AdminStaffDirectoryAuditHistoryView } from './AdminStaffDirectoryAuditHistoryView';
-import { AdminStaffDirectoryAuditSessionsView } from './AdminStaffDirectoryAuditSessionsView';
+import { AdminStaffDirectoryAuditHistoryView } from '@/app/frontend_admin/admin_staff/staff_directory/components/AdminStaffDirectoryAuditHistoryView';
+import { AdminStaffDirectoryAuditSessionsView } from '@/app/frontend_admin/admin_staff/staff_directory/components/AdminStaffDirectoryAuditSessionsView';
 
 /** Renders explicitly synthetic audit/activity panels only in demo mode; no API-backed audit endpoint is inferred. */
 export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirectoryAuditSectionProps) {
@@ -19,9 +19,9 @@ export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirec
   const [activityPageSize, setActivityPageSize] = useState(10);
 
   const filteredActivity = useMemo(() => {
-    if (!activitySearchQuery.trim()) return ADMIN_STAFF_DIRECTORY_ACTIVITY_FIXTURES;
+    if (!activitySearchQuery.trim()) return ADMIN_STAFF_DIRECTORY_ACTIVITY_DEMO_DATA;
     const q = activitySearchQuery.toLowerCase().trim();
-    return ADMIN_STAFF_DIRECTORY_ACTIVITY_FIXTURES.filter(
+    return ADMIN_STAFF_DIRECTORY_ACTIVITY_DEMO_DATA.filter(
       (a) => a.managerName.toLowerCase().includes(q) || a.actionKey.toLowerCase().includes(q)
     );
   }, [activitySearchQuery]);

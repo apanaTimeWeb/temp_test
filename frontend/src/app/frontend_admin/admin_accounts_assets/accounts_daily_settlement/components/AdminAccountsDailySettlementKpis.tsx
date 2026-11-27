@@ -1,9 +1,10 @@
 // components/AdminAccountsDailySettlementKpis.tsx
 'use client';
+
 import type { DailySettlementRecord } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/types/AdminAccountsDailySettlementTypes';
 import { formatPaiseToRupees } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/utils/AdminAccountsDailySettlementFormatters';
 import AdminPrimitiveKpiCard from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveKpiCard';
-import { AlertTriangle,CheckCircle2,Clock,Wallet } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Clock, Wallet } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
@@ -53,33 +54,32 @@ export function AdminAccountsDailySettlementKpis({ records }: Props) {
         title={t('EXPECTED_CASH')}
         value={formatPaiseToRupees(expectedCash)}
         subtitle={t('SUB_EXPECTED')}
-        icon={<Wallet className="h-5 w-5 text-indigo-400" />}
-        className="border-indigo-500/20 bg-gradient-to-br from-indigo-500/10 via-surface to-surface hover:border-indigo-500/40"
+        icon={<Wallet className="h-5 w-5 text-primary" aria-hidden="true" />}
+        className="border-border-focus bg-card hover:border-primary"
       />
       <AdminPrimitiveKpiCard
         title={t('CLEARED_CASH')}
         value={formatPaiseToRupees(clearedCash)}
         subtitle={t('SUB_CLEARED')}
-        icon={<CheckCircle2 className="h-5 w-5 text-emerald-400" />}
-        className="border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-surface to-surface hover:border-emerald-500/40"
+        icon={<CheckCircle2 className="h-5 w-5 text-success-text" aria-hidden="true" />}
+        className="border-success bg-card hover:border-success"
       />
       <AdminPrimitiveKpiCard
         title={t('PENDING_HANDOVER')}
         value={formatPaiseToRupees(pendingCash)}
         subtitle={`${pendingCount} shifts · ${t('SUB_PENDING')}`}
-        icon={<Clock className="h-5 w-5 text-amber-400" />}
-        className="border-amber-500/20 bg-gradient-to-br from-amber-500/10 via-surface to-surface hover:border-amber-500/40"
+        icon={<Clock className="h-5 w-5 text-warning-text" aria-hidden="true" />}
+        className="border-warning bg-card hover:border-warning"
       />
       <AdminPrimitiveKpiCard
         title={t('DISCREPANCY_SHORTAGE')}
         value={formatPaiseToRupees(discrepancyCash)}
         subtitle={`${flaggedCount} shifts · ${t('SUB_DISCREPANCY')}`}
-        icon={<AlertTriangle className="h-5 w-5 text-rose-400" />}
-        className="border-rose-500/20 bg-gradient-to-br from-rose-500/10 via-surface to-surface hover:border-rose-500/40"
+        icon={<AlertTriangle className="h-5 w-5 text-danger-text" aria-hidden="true" />}
+        className="border-danger bg-card hover:border-danger"
       />
     </div>
   );
 }
 
 export default AdminAccountsDailySettlementKpis;
-

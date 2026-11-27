@@ -1,7 +1,10 @@
 'use client';
 
-import { CheckCircle,IndianRupee,Minus,X } from 'lucide-react';
-import type { AdminFinanceSecurityDeposit } from '../types/AdminFinanceSecurityDepositsTypes';
+import type { AdminFinanceSecurityDeposit } from '@/app/frontend_admin/admin_finance/finance_security_deposits/types/AdminFinanceSecurityDepositsTypes';
+import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
+import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
+import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
+import { CheckCircle, IndianRupee, Minus, X } from 'lucide-react';
 
 export interface AdminFinanceSecurityDepositsDeductionModalProps {
   deductionTarget: AdminFinanceSecurityDeposit | null;
@@ -24,51 +27,49 @@ export function AdminFinanceSecurityDepositsDeductionModal({
 }: AdminFinanceSecurityDepositsDeductionModalProps) {
   if (!deductionTarget) return null;
 
-  const currentAvailable =
-    deductionTarget.depositAmount - (deductionTarget.deductionAmount || 0);
+  const currentAvailable = deductionTarget.depositAmount - (deductionTarget.deductionAmount || 0);
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in"
-      role="dialog"
-      aria-modal="true"
-    >
-      <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95">
+    <Dialog open={Boolean(deductionTarget)} onOpenChange={(nextOpen) => { if (!nextOpen) onClose(); }}>
+      <DialogContent className="w-full max-w-md rounded-2xl border border-border bg-overlay p-6 shadow-dialog space-y-4 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between border-b border-border pb-3">
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
-              <Minus size={18} />
+            <div className="p-2 rounded-xl bg-danger-bg text-danger-text border border-danger">
+              <Minus size={18} aria-hidden="true" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-primary">Log Penalty / Damage Deduction</h2>
-              <p className="text-xs text-secondary">Apply deduction from student's active deposit.</p>
+              <DialogTitle className="text-base font-bold text-text-primary">
+                Log Penalty / Damage Deduction
+              </DialogTitle>
+              <p className="text-xs text-text-secondary">Apply deduction from student's active deposit.</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-secondary hover:text-primary p-1 rounded-lg hover:bg-surface-hover"
+            aria-label="Close dialog"
+            className="text-text-secondary hover:text-text-primary p-1 rounded-lg hover:bg-surface-hover motion-safe:transition-colors"
           >
-            <X size={18} />
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
 
         <form onSubmit={onConfirmDeduction} className="space-y-4">
-          <div className="p-3.5 bg-surface-ground rounded-xl border border-border text-xs space-y-1">
-            <p className="text-secondary">Student Name</p>
-            <p className="font-bold text-primary text-sm">
+          <div className="p-3.5 bg-surface-highlight rounded-xl border border-border text-xs space-y-1">
+            <p className="text-text-secondary">Student Name</p>
+            <p className="font-bold text-text-primary text-sm">
               {deductionTarget.studentName} ({deductionTarget.smartId})
             </p>
             <div className="flex justify-between pt-1 border-t border-border mt-1">
-              <span className="text-secondary">Available Escrow Deposit:</span>
-              <span className="font-bold text-emerald-600 dark:text-emerald-400">
+              <span className="text-text-secondary">Available Escrow Deposit:</span>
+              <span className="font-bold text-success-text">
                 ₹{currentAvailable.toLocaleString('en-IN')}
               </span>
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="deduction-reason-select" className="text-xs font-semibold text-secondary block">
+            <label htmlFor="deduction-reason-select" className="text-xs font-semibold text-text-secondary block">
               Deduction Reason *
             </label>
             <select
@@ -81,7 +82,7 @@ export function AdminFinanceSecurityDepositsDeductionModal({
                 if (r === 'Desk or Chair Damage') onDeductionAmountChange('300');
                 if (r === 'Lost Library RFID Smart ID') onDeductionAmountChange('100');
               }}
-              className="w-full p-2.5 rounded-xl border border-border bg-input-bg text-primary text-xs focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer"
+              className="w-full p-2.5 rounded-xl border border-border bg-input text-text-primary text-xs focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
             >
               <option value="Locker Key Lost">Locker Key Lost (₹150)</option>
               <option value="Desk or Chair Damage">Desk or Chair Damage (₹300)</option>
@@ -92,15 +93,17 @@ export function AdminFinanceSecurityDepositsDeductionModal({
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="deduction-amount-input" className="text-xs font-semibold text-secondary block">
+            <label htmlFor="deduction-amount-input" className="text-xs font-semibold text-text-secondary block">
               Deduction Amount (INR) *
             </label>
             <div className="relative">
               <IndianRupee
                 size={14}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none"
+                aria-hidden="true"
               />
-              <input maxLength={30}
+              <input
+                maxLength={30}
                 id="deduction-amount-input"
                 type="number"
                 min="1"
@@ -108,7 +111,7 @@ export function AdminFinanceSecurityDepositsDeductionModal({
                 required
                 value={deductionAmount}
                 onChange={(e) => onDeductionAmountChange(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 text-xs font-bold rounded-xl border border-border bg-input-bg text-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
+                className="w-full pl-9 pr-4 py-2.5 text-xs font-bold rounded-xl border border-border bg-input text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
           </div>
@@ -117,20 +120,21 @@ export function AdminFinanceSecurityDepositsDeductionModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+              className="px-4 py-2 rounded-xl text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-surface-hover cursor-pointer motion-safe:transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-xs cursor-pointer active:scale-95 transition-all"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-danger text-on-primary hover:opacity-90 shadow-card cursor-pointer motion-safe:transition-transform motion-safe:active:scale-95"
             >
-              <CheckCircle size={14} />
+              <CheckCircle size={14} aria-hidden="true" />
               <span>Apply ₹{deductionAmount} Deduction</span>
             </button>
           </div>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
+export default AdminFinanceSecurityDepositsDeductionModal;

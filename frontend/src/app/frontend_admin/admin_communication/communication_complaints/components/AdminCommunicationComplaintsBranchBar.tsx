@@ -1,9 +1,9 @@
 'use client';
 
 import { ADMIN_COMMUNICATION_COMPLAINT_STATUS } from '@/app/frontend_admin/admin_communication/communication_complaints/config/admin_communication_complaints.url_config';
-import type { CStatus,Complaint } from '@/app/frontend_admin/admin_communication/communication_complaints/types/AdminCommunicationComplaintsComponentTypes';
+import type { CStatus, Complaint } from '@/app/frontend_admin/admin_communication/communication_complaints/types/AdminCommunicationComplaintsComponentTypes';
 import type { AdminBranchItem } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBranchConstants';
-import { AlertCircle,CheckCircle2,FileSpreadsheet,MessageSquare,Printer,RefreshCw,Search } from 'lucide-react';
+import { AlertCircle, CheckCircle2, FileSpreadsheet, MessageSquare, Printer, RefreshCw, Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
@@ -39,13 +39,9 @@ export function AdminCommunicationComplaintsBranchBar({
 }: AdminCommunicationComplaintsBranchBarProps) {
   const t = useTranslations('ADMIN_COMMUNICATION');
 
-  // Compute status counts for currently filtered branch
   const branchFilteredComplaints = useMemo(() => {
     if (isAllBranches || !selectedBranch) return complaints;
-    return complaints.filter((c) => {
-      if (!c.branchName) return true;
-      return c.branchName.toLowerCase().includes(selectedBranch.name.toLowerCase());
-    });
+    return complaints.filter((c) => !c.branchName || c.branchName.toLowerCase().includes(selectedBranch.name.toLowerCase()));
   }, [isAllBranches, selectedBranch, complaints]);
 
   const statusCounts = useMemo(() => ({
@@ -58,30 +54,29 @@ export function AdminCommunicationComplaintsBranchBar({
   return (
     <div className="space-y-3 mb-6">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-        {/* Filter Tabs with count badges and indicators */}
-        <div className="gap-1.5 rounded-xl border border-border bg-card p-1.5 inline-flex flex-wrap shadow-xs">
+        <div className="gap-1.5 rounded-xl border border-border bg-card p-1.5 inline-flex flex-wrap shadow-card">
           {tabs.map((status) => {
             const isSelected = tab === status;
             let label = t('FILTER_ALL');
             let count = statusCounts.All;
             let Icon = MessageSquare;
-            let badgeColor = 'bg-muted text-muted-foreground';
+            let badgeColor = 'bg-surface-highlight text-text-secondary';
 
             if (status === ADMIN_COMMUNICATION_COMPLAINT_STATUS.OPEN) {
               label = t('COMPLAINT_STATUS_OPEN');
               count = statusCounts.Open;
               Icon = AlertCircle;
-              badgeColor = 'bg-rose-500/20 text-rose-400';
+              badgeColor = 'bg-danger-bg text-danger-text';
             } else if (status === ADMIN_COMMUNICATION_COMPLAINT_STATUS.IN_PROGRESS) {
               label = t('COMPLAINT_STATUS_IN_PROGRESS');
               count = statusCounts.InProgress;
               Icon = RefreshCw;
-              badgeColor = 'bg-amber-500/20 text-amber-400';
+              badgeColor = 'bg-warning-bg text-warning-text';
             } else if (status === ADMIN_COMMUNICATION_COMPLAINT_STATUS.RESOLVED) {
               label = t('COMPLAINT_STATUS_RESOLVED');
               count = statusCounts.Resolved;
               Icon = CheckCircle2;
-              badgeColor = 'bg-emerald-500/20 text-emerald-400';
+              badgeColor = 'bg-success-bg text-success-text';
             }
 
             return (
@@ -91,19 +86,13 @@ export function AdminCommunicationComplaintsBranchBar({
                 key={status}
                 onClick={() => setTab(status)}
                 aria-pressed={isSelected}
-                className={`inline-flex min-h-9 items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
-                  isSelected
-                    ? 'bg-primary text-primary-foreground shadow-xs'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-card-hover'
+                className={`inline-flex min-h-9 items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold motion-safe:transition-colors ${
+                  isSelected ? 'bg-primary text-on-primary shadow-card' : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'
                 }`}
               >
-                <Icon size={13} className={isSelected ? 'text-primary-foreground' : 'text-muted-foreground'} />
+                <Icon size={13} className={isSelected ? 'text-on-primary' : 'text-text-secondary'} aria-hidden="true" />
                 <span>{label}</span>
-                <span
-                  className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-                    isSelected ? 'bg-primary-foreground/20 text-primary-foreground' : badgeColor
-                  }`}
-                >
+                <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${isSelected ? 'bg-card text-primary' : badgeColor}`}>
                   {count}
                 </span>
               </button>
@@ -111,23 +100,23 @@ export function AdminCommunicationComplaintsBranchBar({
           })}
         </div>
 
-        {/* Search Bar & Export / Print Controls */}
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative min-w-[240px] max-w-sm flex-1">
-            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
-            <input maxLength={100}
+            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" aria-hidden="true" />
+            <input
+              maxLength={100}
               type="text"
               value={search}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Search student, seat/room, ticket ID, title..."
               aria-label="Search complaints"
-              className="w-full pl-9 pr-7 py-2 text-xs rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary min-h-[38px]"
+              className="w-full pl-9 pr-7 py-2 text-xs rounded-xl border border-border bg-input text-text-primary placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary min-h-[38px]"
             />
             {search && (
               <button
                 type="button"
                 onClick={() => onSearchChange('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-muted-foreground hover:text-foreground"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-text-secondary hover:text-text-primary"
                 aria-label="Clear complaint search"
               >
                 ✕
@@ -139,34 +128,32 @@ export function AdminCommunicationComplaintsBranchBar({
             <button
               type="button"
               onClick={onPrint}
-              className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-1.5 text-xs font-semibold text-text-secondary hover:text-foreground hover:bg-card-hover transition-colors shadow-xs"
+              className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-1.5 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-surface-hover motion-safe:transition-colors shadow-card"
               title="Print Complaints Summary Report"
             >
-              <Printer size={14} className="text-slate-400" />
+              <Printer size={14} className="text-text-secondary" aria-hidden="true" />
               <span>Print</span>
             </button>
           )}
-
           {onExportCsv && (
             <button
               type="button"
               onClick={onExportCsv}
-              className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-1.5 text-xs font-semibold text-text-secondary hover:text-foreground hover:bg-card-hover transition-colors shadow-xs"
+              className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-1.5 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-surface-hover motion-safe:transition-colors shadow-card"
               title="Export Complaints to CSV"
             >
-              <FileSpreadsheet size={14} className="text-emerald-500" />
+              <FileSpreadsheet size={14} className="text-success-text" aria-hidden="true" />
               <span>CSV</span>
             </button>
           )}
-
           {onExportExcel && (
             <button
               type="button"
               onClick={onExportExcel}
-              className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-1.5 text-xs font-semibold text-text-secondary hover:text-foreground hover:bg-card-hover transition-colors shadow-xs"
+              className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-1.5 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-surface-hover motion-safe:transition-colors shadow-card"
               title="Export Complaints to Formatted Excel (.xls)"
             >
-              <FileSpreadsheet size={14} className="text-sky-500" />
+              <FileSpreadsheet size={14} className="text-info-text" aria-hidden="true" />
               <span>Excel</span>
             </button>
           )}
