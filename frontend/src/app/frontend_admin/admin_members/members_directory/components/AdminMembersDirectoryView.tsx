@@ -4,55 +4,64 @@
 import AdminMembersDirectoryBulkImportModal from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryBulkImportModal';
 import AdminMembersDirectoryBulkWhatsAppModal from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryBulkWhatsAppModal';
 import AdminMembersDirectoryDataToolsView from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryDataToolsView';
+import { AdminMembersDirectoryKpiGrid } from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryKpiGrid';
 import { AdminMembersDirectoryMemberDetailCard } from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryMemberDetailCard';
 import AdminMembersDirectoryMemberForm from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryMemberForm';
 import AdminMembersMemberTable from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryMemberTable';
 import AdminMembersDirectorySecondaryViews from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectorySecondaryViews';
 import { ADMIN_MEMBERS_STATUS_VALUES } from '@/app/frontend_admin/admin_members/members_directory/config/admin_members_directory.url_config';
-import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
-import type { AdminMembersDirectoryDataToolsViewProps,AdminMembersDirectoryViewMAINDASHBOARDVIEWSSectionProps,AdminMembersDirectoryViewProps } from '@/app/frontend_admin/admin_members/members_directory/types/AdminMembersDirectoryComponentTypes';
+import type { AdminMembersDetailTab } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
+import type {
+  AdminMembersDirectoryDataToolsViewProps,
+  AdminMembersDirectoryViewMAINDASHBOARDVIEWSSectionProps,
+  AdminMembersDirectoryViewProps,
+} from '@/app/frontend_admin/admin_members/members_directory/types/AdminMembersDirectoryComponentTypes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { AlertTriangle,ArrowLeft,CheckCircle,MessageSquare,RotateCcw,Upload,UserPlus,Users } from 'lucide-react';
-import { useLocale,useTranslations } from 'next-intl';
-import { useMemo,useState } from 'react';
+import { ArrowLeft, MessageSquare, RotateCcw, Upload } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo, useState } from 'react';
 
 const TAB_ICON_COLORS: Record<string, string> = {
-  all: 'text-sky-400',
-  categories: 'text-purple-400',
-  departments: 'text-indigo-400',
-  active: 'text-emerald-400',
-  expired: 'text-rose-400',
-  suspended: 'text-amber-400',
-  blocked: 'text-red-400',
-  import: 'text-blue-400',
-  export: 'text-teal-400',
-  documents: 'text-fuchsia-400',
-  plans: 'text-cyan-400',
-  renewal: 'text-orange-400',
-  profile: 'text-sky-400',
-  attendance: 'text-emerald-400',
-  membership: 'text-purple-400',
-  renewalHistory: 'text-amber-400',
-  paymentHistory: 'text-teal-400',
-  lostHistory: 'text-rose-400',
-  activityHistory: 'text-blue-400',
+  all: 'text-info-text',
+  categories: 'text-purple',
+  departments: 'text-primary',
+  active: 'text-success-text',
+  expired: 'text-danger-text',
+  suspended: 'text-warning-text',
+  blocked: 'text-danger-text',
+  import: 'text-info-text',
+  export: 'text-success-text',
+  documents: 'text-purple',
+  plans: 'text-primary',
+  renewal: 'text-warning-text',
+  profile: 'text-info-text',
+  attendance: 'text-success-text',
+  membership: 'text-purple',
+  renewalHistory: 'text-warning-text',
+  paymentHistory: 'text-success-text',
+  lostHistory: 'text-danger-text',
+  activityHistory: 'text-primary',
 };
+
+const VALID_DETAIL_TABS: readonly AdminMembersDetailTab[] = [
+  'profile', 'attendance', 'membership', 'renewalHistory', 'paymentHistory', 'lostHistory', 'activityHistory', 'documents',
+];
 
 export default function AdminMembersDirectoryView({ model }: AdminMembersDirectoryViewProps) {
   const t = useTranslations('ADMIN_MEMBERS');
   const { activeTab, setActiveTab, viewingMember, setViewingMember, detailTab, setDetailTab, mainNav, detailNav, isDemoMode, dummyMembers, demoRenewals } = model;
+
   return (
     <div className="w-full space-y-6 text-text-primary">
-      {!isDemoMode && <p role="status" className="mb-4 rounded-xl border border-warning-bg bg-warning-bg p-3 text-warning-text">{t('LIVE_RECORDS_UNAVAILABLE')}</p>}
+      {!isDemoMode && <p role="status" className="mb-4 rounded-xl border border-warning bg-warning-bg p-3 text-warning-text">{t('LIVE_RECORDS_UNAVAILABLE')}</p>}
 
-      {/* EXECUTIVE HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-3">
           {viewingMember && (
             <button
               type="button"
               data-testid="admin_members-AdminMembersDirectoryView-control-001"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-700/60 bg-slate-850/80 text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-text-secondary hover:text-text-primary hover:bg-surface-hover motion-safe:transition-colors"
               aria-label={t('BACK_TO_LIST')}
               title={t('BACK_TO_LIST')}
               onClick={() => setViewingMember(null)}
@@ -62,97 +71,37 @@ export default function AdminMembersDirectoryView({ model }: AdminMembersDirecto
           )}
           <div>
             <div className="flex items-center gap-2.5">
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-text-primary">
                 {viewingMember ? t('MEMBER_DETAIL_TITLE', { name: viewingMember.name }) : t('PAGE_TITLE')}
               </h1>
               {!viewingMember && (
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-success bg-success-bg px-2.5 py-0.5 text-[11px] font-semibold text-success-text">
+                  <span className="h-1.5 w-1.5 rounded-full bg-success motion-safe:animate-pulse" />
                   Live Directory
                 </span>
               )}
             </div>
-            <p className="mt-1 text-xs sm:text-sm text-slate-400">
-              {viewingMember ? t('MEMBER_DETAIL_SUMMARY', { id: viewingMember.id, status: t(viewingMember.status === 'Active' ? 'STATUS_ACTIVE' : viewingMember.status === 'Expired' ? 'STATUS_EXPIRED' : viewingMember.status === 'Suspended' ? 'STATUS_SUSPENDED' : viewingMember.status === 'Blocked' ? 'STATUS_BLOCKED' : 'STATUS_UNKNOWN') }) : t('PAGE_SUBTITLE')}
+            <p className="mt-1 text-xs sm:text-sm text-text-secondary">
+              {viewingMember
+                ? t('MEMBER_DETAIL_SUMMARY', {
+                    id: viewingMember.id,
+                    status: t(
+                      viewingMember.status === 'Active' ? 'STATUS_ACTIVE'
+                        : viewingMember.status === 'Expired' ? 'STATUS_EXPIRED'
+                        : viewingMember.status === 'Suspended' ? 'STATUS_SUSPENDED'
+                        : viewingMember.status === 'Blocked' ? 'STATUS_BLOCKED'
+                        : 'STATUS_UNKNOWN',
+                    ),
+                  })
+                : t('PAGE_SUBTITLE')}
             </p>
           </div>
         </div>
       </div>
 
-      {/* TOP KPI CARDS */}
-      {isDemoMode && !viewingMember && (
-        <section aria-label={t('DEMO_METRICS_NOTICE')} className="space-y-2">
-          <p className="sr-only" role="note">{t('DEMO_METRICS_NOTICE')}</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              {
-                label: t('KPI_TOTAL_MEMBERS'),
-                value: String(dummyMembers.length),
-                icon: Users,
-                cardBorderBg: 'border-sky-500/25 bg-gradient-to-br from-[#0c1828]/95 via-[#0c1828]/90 to-[#122238]/80 shadow-sky-950/30',
-                iconBox: 'bg-sky-500/15 border-sky-500/30 text-sky-400',
-                strokeColor: '#38bdf8',
-                badgeBg: 'bg-sky-500/15 border-sky-500/30 text-sky-400',
-                trend: 'All Registered',
-              },
-              {
-                label: t('KPI_ACTIVE_MEMBERS'),
-                value: String(dummyMembers.filter((member) => member.status === 'Active').length),
-                icon: CheckCircle,
-                cardBorderBg: 'border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-emerald-950/30',
-                iconBox: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400',
-                strokeColor: '#34d399',
-                badgeBg: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400',
-                trend: 'In Good Standing',
-              },
-              {
-                label: t('KPI_NEW_THIS_MONTH'),
-                value: String(Math.max(1, Math.ceil(dummyMembers.length * 0.25))),
-                icon: UserPlus,
-                cardBorderBg: 'border-purple-500/25 bg-gradient-to-br from-[#180c28]/95 via-[#180c28]/90 to-[#221238]/80 shadow-purple-950/30',
-                iconBox: 'bg-purple-500/15 border-purple-500/30 text-purple-400',
-                strokeColor: '#c084fc',
-                badgeBg: 'bg-purple-500/15 border-purple-500/30 text-purple-400',
-                trend: 'Current Cycle',
-              },
-              {
-                label: t('KPI_PENDING_RENEWALS'),
-                value: String(demoRenewals.filter((renewal) => !renewal.reminderRecorded).length),
-                icon: AlertTriangle,
-                cardBorderBg: 'border-rose-500/25 bg-gradient-to-br from-[#1f0a10]/95 via-[#1f0a10]/90 to-[#2d0e17]/80 shadow-rose-950/30',
-                iconBox: 'bg-rose-500/15 border-rose-500/30 text-rose-400',
-                strokeColor: '#f87171',
-                badgeBg: 'bg-rose-500/15 border-rose-500/30 text-rose-400',
-                trend: 'Action Required',
-              }
-            ].map((kpi) => (
-              <div
-                key={kpi.label}
-                className={`group relative overflow-hidden rounded-2xl border p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl ${kpi.cardBorderBg}`}
-              >
-                <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
-                  <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke={kpi.strokeColor} strokeWidth="3" strokeLinecap="round" />
-                </svg>
-                <div className="relative z-10 flex items-start justify-between gap-2">
-                  <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">{kpi.label}</span>
-                  <div className={`p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs ${kpi.iconBox}`}>
-                    <kpi.icon size={18} strokeWidth={2.2} />
-                  </div>
-                </div>
-                <div className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white tabular-nums">{kpi.value}</div>
-                <div className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 flex items-center gap-1.5">
-                  <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold shadow-xs ${kpi.badgeBg}`}>
-                    {kpi.trend}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      {isDemoMode && !viewingMember && <AdminMembersDirectoryKpiGrid dummyMembers={dummyMembers} demoRenewals={demoRenewals} />}
 
-      {/* TOP SCROLLABLE NAVIGATION TABS */}
-      <div className="rounded-2xl border border-slate-800/80 bg-slate-900/50 backdrop-blur-xl p-1.5 flex gap-1.5 overflow-x-auto whitespace-nowrap shadow-inner">
+      <div className="rounded-2xl border border-border bg-card p-1.5 flex gap-1.5 overflow-x-auto whitespace-nowrap shadow-card">
         {!viewingMember ? (
           mainNav.map((item) => {
             const isActive = activeTab === item.id;
@@ -164,12 +113,11 @@ export default function AdminMembersDirectoryView({ model }: AdminMembersDirecto
                 aria-current={isActive ? 'page' : undefined}
                 aria-pressed={isActive}
                 onClick={() => setActiveTab(item.id)}
-                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition-all duration-200 ${isActive
-                    ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-md shadow-indigo-500/25'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-                  }`}
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold motion-safe:transition-colors ${
+                  isActive ? 'bg-primary text-on-primary shadow-card' : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'
+                }`}
               >
-                <item.icon size={16} aria-hidden="true" className={`${isActive ? 'text-white' : (TAB_ICON_COLORS[item.id] || 'text-indigo-400')} shrink-0 transition-transform group-hover:scale-110`} />
+                <item.icon size={16} aria-hidden="true" className={`${isActive ? 'text-on-primary' : (TAB_ICON_COLORS[item.id] || 'text-primary')} shrink-0`} />
                 <span>{t(item.labelKey)}</span>
               </button>
             );
@@ -185,12 +133,11 @@ export default function AdminMembersDirectoryView({ model }: AdminMembersDirecto
                 aria-current={isActive ? 'page' : undefined}
                 aria-pressed={isActive}
                 onClick={() => setDetailTab(item.id)}
-                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition-all duration-200 ${isActive
-                    ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-md shadow-indigo-500/25'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-                  }`}
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold motion-safe:transition-colors ${
+                  isActive ? 'bg-primary text-on-primary shadow-card' : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'
+                }`}
               >
-                <item.icon size={16} aria-hidden="true" className={`${isActive ? 'text-white' : (TAB_ICON_COLORS[item.id] || 'text-indigo-400')} shrink-0 transition-transform group-hover:scale-110`} />
+                <item.icon size={16} aria-hidden="true" className={`${isActive ? 'text-on-primary' : (TAB_ICON_COLORS[item.id] || 'text-primary')} shrink-0`} />
                 <span>{t(item.labelKey)}</span>
               </button>
             );
@@ -198,7 +145,6 @@ export default function AdminMembersDirectoryView({ model }: AdminMembersDirecto
         )}
       </div>
 
-      {/* CONTENT AREA */}
       <AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection model={model} />
     </div>
   );
@@ -206,8 +152,7 @@ export default function AdminMembersDirectoryView({ model }: AdminMembersDirecto
 
 export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: AdminMembersDirectoryViewMAINDASHBOARDVIEWSSectionProps) {
   const t = useTranslations('ADMIN_MEMBERS');
-  const locale = useLocale();
-  const { activeTab, setActiveTab, viewingMember, dummyMembers, isDemoMode, handleAction, openMemberDetails, handleBulkAddMembers } = model as any;
+  const { activeTab, setActiveTab, viewingMember, dummyMembers, isDemoMode, handleAction, openMemberDetails, handleBulkAddMembers } = model;
   const { selectedBranch, isAllBranches } = useAdminBranch();
   const [selectedMemberIds, setSelectedMemberIds] = useState<string[]>([]);
   const [isBulkWhatsAppOpen, setIsBulkWhatsAppOpen] = useState(false);
@@ -216,8 +161,8 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
   const branchFilteredMembers = useMemo(() => {
     if (isAllBranches || !selectedBranch) return dummyMembers;
     const branchNameLower = selectedBranch.name.toLowerCase().trim();
-    return dummyMembers.filter((m: AdminMembersMember) =>
-      m.branch ? m.branch.toLowerCase().trim() === branchNameLower || m.branch.toLowerCase().includes(branchNameLower) : false
+    return dummyMembers.filter((m) =>
+      m.branch ? m.branch.toLowerCase().trim() === branchNameLower || m.branch.toLowerCase().includes(branchNameLower) : false,
     );
   }, [isAllBranches, selectedBranch, dummyMembers]);
 
@@ -225,10 +170,9 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
     setSelectedMemberIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   };
   const toggleSelectAll = () => {
-    const allIds = branchFilteredMembers.map((m: AdminMembersMember) => m.id);
+    const allIds = branchFilteredMembers.map((m) => m.id);
     setSelectedMemberIds((prev) => (prev.length === allIds.length ? [] : allIds));
   };
-  const clearSelection = () => setSelectedMemberIds([]);
 
   const memberListConfig = {
     all: { titleKey: 'NAV_ALL_MEMBERS', filterStatus: undefined },
@@ -237,37 +181,22 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
     suspended: { titleKey: 'NAV_SUSPENDED', filterStatus: ADMIN_MEMBERS_STATUS_VALUES[2] },
     blocked: { titleKey: 'NAV_BLOCKED', filterStatus: ADMIN_MEMBERS_STATUS_VALUES[3] },
   }[activeTab as 'all' | 'active' | 'expired' | 'suspended' | 'blocked'];
+
   return (
     <div className="space-y-6">
-      {/* -------------------- MAIN DASHBOARD VIEWS -------------------- */}
       {!viewingMember && memberListConfig && (
-        <section className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-5 md:p-6 shadow-xl space-y-4" aria-labelledby="admin-members-list-title">
+        <section className="rounded-2xl border border-border bg-card p-5 md:p-6 shadow-card space-y-4" aria-labelledby="admin-members-list-title">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 id="admin-members-list-title" className="text-base sm:text-lg font-bold text-white tracking-tight">{t(memberListConfig.titleKey)}</h2>
+            <h2 id="admin-members-list-title" className="text-base sm:text-lg font-bold text-text-primary tracking-tight">{t(memberListConfig.titleKey)}</h2>
             <div className="flex flex-wrap items-center gap-2.5">
-              <button
-                type="button"
-                onClick={() => setIsBulkImportOpen(true)}
-                className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-indigo-500/40 bg-indigo-500/15 px-3.5 py-1.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/25 hover:text-white transition-all shadow-sm shadow-indigo-500/10"
-                title="Bulk Import Students from CSV/Excel"
-              >
-                <Upload size={14} className="text-indigo-400" /> Bulk Import CSV
+              <button type="button" onClick={() => setIsBulkImportOpen(true)} className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-border-focus bg-primary-subtle px-3.5 py-1.5 text-xs font-semibold text-primary hover:opacity-90 motion-safe:transition-opacity shadow-card" title="Bulk Import Students from CSV/Excel">
+                <Upload size={14} aria-hidden="true" /> Bulk Import CSV
               </button>
-              <button
-                type="button"
-                onClick={() => setIsBulkWhatsAppOpen(true)}
-                disabled={branchFilteredMembers.length === 0}
-                className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-3.5 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/25 transition-all disabled:opacity-40 shadow-sm shadow-emerald-500/10"
-              >
-                <MessageSquare size={14} className="text-emerald-400" /> Bulk WhatsApp ({branchFilteredMembers.length})
+              <button type="button" onClick={() => setIsBulkWhatsAppOpen(true)} disabled={branchFilteredMembers.length === 0} className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-success bg-success-bg px-3.5 py-1.5 text-xs font-semibold text-success-text hover:opacity-90 motion-safe:transition-opacity disabled:opacity-40 shadow-card">
+                <MessageSquare size={14} aria-hidden="true" /> Bulk WhatsApp ({branchFilteredMembers.length})
               </button>
-              <button
-                type="button"
-                className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-amber-500/40 bg-amber-500/15 px-3.5 py-1.5 text-xs font-semibold text-amber-300 hover:text-white hover:bg-amber-500/25 transition-colors shadow-sm shadow-amber-500/10"
-                onClick={() => setActiveTab('renewal')}
-              >
-                <RotateCcw size={15} className="text-amber-400" aria-hidden="true" />
-                <span>{t('NAV_RENEWAL')}</span>
+              <button type="button" className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-warning bg-warning-bg px-3.5 py-1.5 text-xs font-semibold text-warning-text hover:opacity-90 motion-safe:transition-opacity shadow-card" onClick={() => setActiveTab('renewal')}>
+                <RotateCcw size={15} aria-hidden="true" /> <span>{t('NAV_RENEWAL')}</span>
               </button>
             </div>
           </div>
@@ -285,47 +214,40 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
         </section>
       )}
 
-      {/* Bulk Import CSV Modal */}
       <AdminMembersDirectoryBulkImportModal
         isOpen={isBulkImportOpen}
         onClose={() => setIsBulkImportOpen(false)}
-        onImport={(newMembers) => {
-          if (handleBulkAddMembers) {
-            handleBulkAddMembers(newMembers);
-          }
-        }}
+        onImport={(newMembers) => handleBulkAddMembers(newMembers)}
         defaultBranch={selectedBranch?.name || 'Main Branch'}
       />
 
-      {/* Bulk WhatsApp Modal */}
       <AdminMembersDirectoryBulkWhatsAppModal
         isOpen={isBulkWhatsAppOpen}
         onClose={() => setIsBulkWhatsAppOpen(false)}
-        members={selectedMemberIds.length > 0 ? branchFilteredMembers.filter((m: AdminMembersMember) => selectedMemberIds.includes(m.id)) : branchFilteredMembers}
+        members={selectedMemberIds.length > 0 ? branchFilteredMembers.filter((m) => selectedMemberIds.includes(m.id)) : branchFilteredMembers}
       />
 
-      {/* MEMBER EDIT MODAL */}
       <AdminMembersDirectoryMemberForm model={model} />
-
-      {/* SECONDARY TAB VIEWS share the parent active-tab lifecycle. */}
       <AdminMembersDirectorySecondaryViews model={model} />
       {isDemoMode && !viewingMember && activeTab === 'export' && <AdminMembersDirectoryDataToolsView key={activeTab} mode="export" members={dummyMembers} />}
       {isDemoMode && !viewingMember && activeTab === 'documents' && <AdminMembersDirectoryDataToolsView key={activeTab} mode="documents" members={dummyMembers} />}
 
       {!isDemoMode && !viewingMember && ['categories', 'departments', 'renewal', 'import', 'export', 'documents'].includes(activeTab) && (
-        <section className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-5" role="status">
-          <h2 className="text-lg font-semibold text-white">{t('FEATURE_DATA_UNAVAILABLE')}</h2>
-          <p className="mt-2 text-slate-400">{t('FEATURE_DATA_UNAVAILABLE_DESCRIPTION')}</p>
+        <section className="rounded-2xl border border-border bg-card p-5" role="status">
+          <h2 className="text-lg font-semibold text-text-primary">{t('FEATURE_DATA_UNAVAILABLE')}</h2>
+          <p className="mt-2 text-text-secondary">{t('FEATURE_DATA_UNAVAILABLE_DESCRIPTION')}</p>
         </section>
       )}
 
-      {/* -------------------- DETAILED MEMBER VIEW -------------------- */}
       {model.viewingMember && (
         <AdminMembersDirectoryMemberDetailCard
           member={model.viewingMember}
           detailTab={model.detailTab}
           isDemoMode={isDemoMode}
-          onSelectTab={(tab) => model.setDetailTab(tab as any)}
+          onSelectTab={(tab) => {
+            const matched = VALID_DETAIL_TABS.find((candidate) => candidate === tab);
+            if (matched) model.setDetailTab(matched);
+          }}
         />
       )}
     </div>
@@ -333,4 +255,4 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
 }
 
 export { AdminMembersDirectoryDataToolsView };
-export type { AdminMembersDirectoryDataToolsViewProps,AdminMembersDirectoryViewMAINDASHBOARDVIEWSSectionProps,AdminMembersDirectoryViewProps };
+export type { AdminMembersDirectoryDataToolsViewProps, AdminMembersDirectoryViewMAINDASHBOARDVIEWSSectionProps, AdminMembersDirectoryViewProps };

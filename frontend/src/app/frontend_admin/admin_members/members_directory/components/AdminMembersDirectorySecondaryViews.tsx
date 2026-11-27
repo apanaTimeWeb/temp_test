@@ -1,17 +1,17 @@
 'use client';
 // RESPONSIBILITY: Owns the secondary member-directory tab views and their demo-only local forms.
 
-import type { AdminMembersCategory,AdminMembersDemoMutationResult,AdminMembersDepartment,AdminMembersRenewal } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
+import { AdminMembersDirectoryRenewalsTabView } from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryRenewalsTabView';
+import type { AdminMembersCategory, AdminMembersDemoMutationResult, AdminMembersDepartment } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import type { AdminMembersDirectorySecondaryViewsProps } from '@/app/frontend_admin/admin_members/members_directory/types/AdminMembersDirectoryComponentTypes';
 import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
-import { ArrowDown,ArrowRight,ArrowUp,ArrowUpDown,Building,DownloadCloud,RotateCcw,Tags,UploadCloud } from 'lucide-react';
+import { ArrowDown, ArrowRight, ArrowUp, ArrowUpDown, Building, DownloadCloud, Tags, UploadCloud } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useEffect,useState,type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { toast } from 'sonner';
 
-
-/** The tab content is co-located here because the five views share the same active-tab lifecycle and demo-only mutation contract. */
+/** The tab content shares the active-tab lifecycle and demo-only mutation contract. */
 export default function AdminMembersDirectorySecondaryViews({ model }: AdminMembersDirectorySecondaryViewsProps) {
   const t = useTranslations('ADMIN_MEMBERS');
   const [categoryCreating, setCategoryCreating] = useState(false);
@@ -26,41 +26,60 @@ export default function AdminMembersDirectorySecondaryViews({ model }: AdminMemb
   const [deptSortField, setDeptSortField] = useState<DeptSortField | null>(null);
   const [deptSortDirection, setDeptSortDirection] = useState<'asc' | 'desc'>('asc');
 
-  type RenewalSortField = 'member' | 'plan' | 'expiresIn';
-  const [renewalSortField, setRenewalSortField] = useState<RenewalSortField | null>(null);
-  const [renewalSortDirection, setRenewalSortDirection] = useState<'asc' | 'desc'>('asc');
-
   const toggleDeptSort = (field: DeptSortField) => {
     if (deptSortField === field) setDeptSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
     else { setDeptSortField(field); setDeptSortDirection('asc'); }
   };
 
-  const toggleRenewalSort = (field: RenewalSortField) => {
-    if (renewalSortField === field) setRenewalSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-    else { setRenewalSortField(field); setRenewalSortDirection('asc'); }
-  };
   useEffect(() => {
     setCategoryCreating(false); setCategoryName(''); setCategoryError(null);
     setDepartmentCreating(false); setDepartmentName(''); setDepartmentHead(''); setDepartmentError(null);
   }, [model.activeTab]);
+
   const submitCategory = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result: AdminMembersDemoMutationResult = model.createDemoCategory(categoryName);
-    if (result === 'created') { toast.success(t('CATEGORY_CREATED', { name: categoryName.trim() }), { id: 'admin_members-members_directory-components-AdminMembersDirectoryCategoriesView-toast-26-1' }); setCategoryName(''); setCategoryError(null); setCategoryCreating(false); return; }
+    if (result === 'created') {
+      toast.success(t('CATEGORY_CREATED', { name: categoryName.trim() }), { id: 'admin_members-members_directory-components-AdminMembersDirectoryCategoriesView-toast-26-1' });
+      setCategoryName(''); setCategoryError(null); setCategoryCreating(false);
+      return;
+    }
     const key = result === 'duplicate' ? 'CATEGORY_NAME_DUPLICATE' : result === 'blocked' ? 'CATEGORY_CREATE_BLOCKED' : 'CATEGORY_NAME_REQUIRED';
-    if (result === 'blocked') toast.info(t(key), { id: 'admin_members-members_directory-components-AdminMembersDirectoryCategoriesView-toast-33-2' }); else setCategoryError(t(key));
+    if (result === 'blocked') toast.info(t(key), { id: 'admin_members-members_directory-components-AdminMembersDirectoryCategoriesView-toast-33-2' });
+    else setCategoryError(t(key));
   };
+
   const submitDepartment = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result: AdminMembersDemoMutationResult = model.createDemoDepartment(departmentName, departmentHead);
-    if (result === 'created') { toast.success(t('DEPARTMENT_CREATED', { name: departmentName.trim() }), { id: 'admin_members-members_directory-components-AdminMembersDirectoryDepartmentsView-toast-26-1' }); setDepartmentName(''); setDepartmentHead(''); setDepartmentError(null); setDepartmentCreating(false); return; }
+    if (result === 'created') {
+      toast.success(t('DEPARTMENT_CREATED', { name: departmentName.trim() }), { id: 'admin_members-members_directory-components-AdminMembersDirectoryDepartmentsView-toast-26-1' });
+      setDepartmentName(''); setDepartmentHead(''); setDepartmentError(null); setDepartmentCreating(false);
+      return;
+    }
     const key = result === 'duplicate' ? 'DEPARTMENT_NAME_DUPLICATE' : result === 'blocked' ? 'DEPARTMENT_CREATE_BLOCKED' : 'DEPARTMENT_NAME_REQUIRED';
-    if (result === 'blocked') toast.info(t(key), { id: 'admin_members-members_directory-components-AdminMembersDirectoryDepartmentsView-toast-30-2' }); else setDepartmentError(t(key));
+    if (result === 'blocked') toast.info(t(key), { id: 'admin_members-members_directory-components-AdminMembersDirectoryDepartmentsView-toast-30-2' });
+    else setDepartmentError(t(key));
   };
-  const recordReminder = (memberName: string) => { if (model.recordDemoRenewalReminder(memberName)) toast.info(t('RENEWAL_REMINDER_RECORDED'), { id: 'admin_members-members_directory-components-AdminMembersDirectoryRenewalsView-toast-17-1' }); };
-  const expiryLabel = (expiry: AdminMembersRenewal['expiresIn']) => expiry.unit === 'week' ? t('RENEWAL_EXPIRY_WEEKS', { count: expiry.value }) : t('RENEWAL_EXPIRY_DAYS', { count: expiry.value });
+
+  const recordReminder = (memberName: string) => {
+    if (model.recordDemoRenewalReminder(memberName)) {
+      toast.info(t('RENEWAL_REMINDER_RECORDED'), { id: 'admin_members-members_directory-components-AdminMembersDirectoryRenewalsView-toast-17-1' });
+    }
+  };
+
   if (model.viewingMember) return null;
-  if (model.activeTab === 'plans') return <section className="admin-card admin-shared-card-padding" aria-labelledby="admin-members-plans-canonical-title"><h2 id="admin-members-plans-canonical-title" className="admin-shared-card-heading">{t('PLANS_TITLE')}</h2><p className="mt-2 text-sm text-text-secondary">{t('PLANS_CANONICAL_DESCRIPTION')}</p><Link href={ADMIN_ROUTES.MEMBERS_PLANS} className="admin-btn-primary mt-4 inline-flex min-h-11 items-center gap-2">{t('OPEN_MEMBERSHIP_PLANS')} <ArrowRight size={18} aria-hidden="true" /></Link></section>;
+  if (model.activeTab === 'plans') {
+    return (
+      <section className="admin-card admin-shared-card-padding" aria-labelledby="admin-members-plans-canonical-title">
+        <h2 id="admin-members-plans-canonical-title" className="admin-shared-card-heading">{t('PLANS_TITLE')}</h2>
+        <p className="mt-2 text-sm text-text-secondary">{t('PLANS_CANONICAL_DESCRIPTION')}</p>
+        <Link href={ADMIN_ROUTES.MEMBERS_PLANS} className="admin-btn-primary mt-4 inline-flex min-h-11 items-center gap-2">
+          {t('OPEN_MEMBERSHIP_PLANS')} <ArrowRight size={18} aria-hidden="true" />
+        </Link>
+      </section>
+    );
+  }
   if (!model.isDemoMode) return null;
 
   if (model.activeTab === 'categories') {
@@ -69,23 +88,22 @@ export default function AdminMembersDirectorySecondaryViews({ model }: AdminMemb
       <section className="admin-card admin-shared-card-padding" aria-labelledby="admin-members-categories-title">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
           <h2 id="admin-members-categories-title" className="admin-shared-card-heading flex items-center gap-2">
-            <Tags size={20} className="text-purple-400" />
+            <Tags size={20} className="text-purple" aria-hidden="true" />
             <span>{t('CATEGORY_TITLE')}</span>
           </h2>
           <button
             type="button"
             data-testid="admin_members-AdminMembersCategoriesView-control-001"
-            className="inline-flex items-center gap-2 rounded-xl border border-purple-500/40 bg-purple-500/15 px-4 py-2 text-xs font-semibold text-purple-300 hover:bg-purple-500/25 transition-all shadow-sm"
+            className="inline-flex items-center gap-2 rounded-xl border border-border bg-purple-bg px-4 py-2 text-xs font-semibold text-purple hover:opacity-90 motion-safe:transition-opacity shadow-card"
             aria-expanded={categoryCreating}
             aria-controls="admin-members-category-create"
             onClick={() => { setCategoryCreating((current) => !current); setCategoryError(null); }}
           >
-            <Tags size={16} className="text-purple-400" aria-hidden="true" />
-            <span>{t('CATEGORY_ADD')}</span>
+            <Tags size={16} aria-hidden="true" /> <span>{t('CATEGORY_ADD')}</span>
           </button>
         </div>
         {categoryCreating && (
-          <form id="admin-members-category-create" className="my-4 grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto_auto] p-4 rounded-xl border border-slate-800 bg-slate-900/60" onSubmit={submitCategory}>
+          <form id="admin-members-category-create" className="my-4 grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto_auto] p-4 rounded-xl border border-border bg-surface-highlight" onSubmit={submitCategory}>
             <div className="grid gap-1">
               <label htmlFor="admin-members-category-name" className="admin-label">{t('CATEGORY_NAME_LABEL')}</label>
               <input id="admin-members-category-name" className="admin-input" value={categoryName} onChange={(event) => setCategoryName(event.target.value)} required maxLength={80} aria-invalid={Boolean(categoryError)} aria-describedby={categoryError ? 'admin-members-category-name-error' : undefined} />
@@ -98,18 +116,18 @@ export default function AdminMembersDirectorySecondaryViews({ model }: AdminMemb
         <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 admin-shared-card-grid">
           {categories.map((category) => {
             const colorClass = category.color === 'primary'
-              ? 'bg-sky-500/15 text-sky-400 border border-sky-500/30'
+              ? 'bg-info-bg text-info-text border border-info'
               : category.color === 'purple'
-              ? 'bg-purple-500/15 text-purple-400 border border-purple-500/30'
-              : 'bg-amber-500/15 text-amber-400 border border-amber-500/30';
+                ? 'bg-purple-bg text-purple border border-border'
+                : 'bg-warning-bg text-warning-text border border-warning';
             return (
-              <li key={category.name} className="flex items-center gap-4 rounded-xl border border-slate-800 bg-slate-900/60 p-4 shadow-sm hover:border-slate-700 transition-colors">
+              <li key={category.name} className="flex items-center gap-4 rounded-xl border border-border bg-surface-highlight p-4 shadow-card hover:border-border-focus motion-safe:transition-colors">
                 <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${colorClass}`} data-admin-bg={category.color} data-admin-color={category.color}>
                   <Tags size={18} aria-hidden="true" />
                 </span>
                 <span className="min-w-0">
-                  <span className="block font-semibold text-white">{category.name}</span>
-                  <span className="block text-xs text-slate-400">{t('SAMPLE_MEMBERS_COUNT', { count: category.members })}</span>
+                  <span className="block font-semibold text-text-primary">{category.name}</span>
+                  <span className="block text-xs text-text-secondary">{t('SAMPLE_MEMBERS_COUNT', { count: category.members })}</span>
                 </span>
               </li>
             );
@@ -118,44 +136,29 @@ export default function AdminMembersDirectorySecondaryViews({ model }: AdminMemb
       </section>
     );
   }
+
   if (model.activeTab === 'departments') {
     const rawDepartments: readonly AdminMembersDepartment[] = model.demoDepartments;
     const departments = [...rawDepartments].sort((a, b) => {
       if (!deptSortField) return 0;
-      if (deptSortField === 'name') {
-        const cmp = a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
-        return deptSortDirection === 'asc' ? cmp : -cmp;
-      }
-      if (deptSortField === 'head') {
-        const cmp = a.head.localeCompare(b.head, undefined, { numeric: true, sensitivity: 'base' });
-        return deptSortDirection === 'asc' ? cmp : -cmp;
-      }
       if (deptSortField === 'members') {
         const diff = a.members - b.members;
         return deptSortDirection === 'asc' ? diff : -diff;
       }
-      return 0;
+      const cmp = a[deptSortField].localeCompare(b[deptSortField], undefined, { numeric: true, sensitivity: 'base' });
+      return deptSortDirection === 'asc' ? cmp : -cmp;
     });
 
     const renderDeptHeader = (field: DeptSortField, label: string) => {
       const isActive = deptSortField === field;
       return (
         <th scope="col" aria-sort={isActive ? (deptSortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="p-3">
-          <button
-            type="button"
-            onClick={() => toggleDeptSort(field)}
-            className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
-            aria-label={`${label}, sort ${isActive ? (deptSortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
-          >
+          <button type="button" onClick={() => toggleDeptSort(field)} className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1" aria-label={`${label}, sort ${isActive ? (deptSortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}>
             <span>{label}</span>
             {isActive ? (
-              deptSortDirection === 'asc' ? (
-                <ArrowUp className="text-indigo-400 font-bold shrink-0" size={14} aria-hidden="true" />
-              ) : (
-                <ArrowDown className="text-indigo-400 font-bold shrink-0" size={14} aria-hidden="true" />
-              )
+              deptSortDirection === 'asc' ? <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" /> : <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             ) : (
-              <ArrowUpDown className="text-slate-500 opacity-60 group-hover:opacity-100 group-hover:text-indigo-400 transition-opacity shrink-0" size={14} aria-hidden="true" />
+              <ArrowUpDown className="text-text-secondary opacity-60 group-hover:opacity-100 group-hover:text-primary motion-safe:transition-opacity shrink-0" size={14} aria-hidden="true" />
             )}
           </button>
         </th>
@@ -166,23 +169,14 @@ export default function AdminMembersDirectorySecondaryViews({ model }: AdminMemb
       <section className="admin-card admin-shared-card-padding" aria-labelledby="admin-members-departments-title">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
           <h2 id="admin-members-departments-title" className="admin-shared-card-heading flex items-center gap-2">
-            <Building size={20} className="text-sky-400" />
-            <span>{t('DEPARTMENTS_TITLE')}</span>
+            <Building size={20} className="text-info-text" aria-hidden="true" /> <span>{t('DEPARTMENTS_TITLE')}</span>
           </h2>
-          <button
-            type="button"
-            data-testid="admin_members-AdminMembersDepartmentsView-control-001"
-            className="inline-flex items-center gap-2 rounded-xl border border-sky-500/40 bg-sky-500/15 px-4 py-2 text-xs font-semibold text-sky-300 hover:bg-sky-500/25 transition-all shadow-sm"
-            aria-expanded={departmentCreating}
-            aria-controls="admin-members-department-create"
-            onClick={() => { setDepartmentCreating((current) => !current); setDepartmentError(null); }}
-          >
-            <Building size={16} className="text-sky-400" aria-hidden="true" />
-            <span>{t('DEPARTMENT_ADD')}</span>
+          <button type="button" data-testid="admin_members-AdminMembersDepartmentsView-control-001" className="inline-flex items-center gap-2 rounded-xl border border-info bg-info-bg px-4 py-2 text-xs font-semibold text-info-text hover:opacity-90 motion-safe:transition-opacity shadow-card" aria-expanded={departmentCreating} aria-controls="admin-members-department-create" onClick={() => { setDepartmentCreating((current) => !current); setDepartmentError(null); }}>
+            <Building size={16} aria-hidden="true" /> <span>{t('DEPARTMENT_ADD')}</span>
           </button>
         </div>
         {departmentCreating && (
-          <form id="admin-members-department-create" className="my-4 grid gap-3 sm:grid-cols-2 p-4 rounded-xl border border-slate-800 bg-slate-900/60" onSubmit={submitDepartment}>
+          <form id="admin-members-department-create" className="my-4 grid gap-3 sm:grid-cols-2 p-4 rounded-xl border border-border bg-surface-highlight" onSubmit={submitDepartment}>
             <div className="grid gap-1">
               <label htmlFor="admin-members-department-name" className="admin-label">{t('DEPARTMENT_NAME_LABEL')}</label>
               <input id="admin-members-department-name" className="admin-input" value={departmentName} onChange={(event) => setDepartmentName(event.target.value)} required maxLength={100} />
@@ -210,12 +204,9 @@ export default function AdminMembersDirectorySecondaryViews({ model }: AdminMemb
             <tbody>
               {departments.map((department) => (
                 <tr key={department.name} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra">
-                  <th scope="row" className="p-3 text-left font-medium text-text-primary flex items-center gap-2">
-                    <Building size={14} className="text-sky-400 shrink-0" />
-                    <span>{department.name}</span>
-                  </th>
+                  <th scope="row" className="p-3 text-left font-medium text-text-primary flex items-center gap-2"><Building size={14} className="text-info-text shrink-0" aria-hidden="true" /> <span>{department.name}</span></th>
                   <td className="p-3">{department.head}</td>
-                  <td className="p-3 font-semibold text-sky-400">{department.members}</td>
+                  <td className="p-3 font-semibold text-info-text">{department.members}</td>
                 </tr>
               ))}
             </tbody>
@@ -224,117 +215,23 @@ export default function AdminMembersDirectorySecondaryViews({ model }: AdminMemb
       </section>
     );
   }
+
   if (model.activeTab === 'renewal') {
-    const rawRenewals: readonly AdminMembersRenewal[] = model.demoRenewals;
-    const renewals = [...rawRenewals].sort((a, b) => {
-      if (!renewalSortField) return 0;
-      if (renewalSortField === 'member') {
-        const cmp = a.member.localeCompare(b.member, undefined, { numeric: true, sensitivity: 'base' });
-        return renewalSortDirection === 'asc' ? cmp : -cmp;
-      }
-      if (renewalSortField === 'plan') {
-        const cmp = a.plan.localeCompare(b.plan, undefined, { numeric: true, sensitivity: 'base' });
-        return renewalSortDirection === 'asc' ? cmp : -cmp;
-      }
-      if (renewalSortField === 'expiresIn') {
-        const aDays = a.expiresIn.unit === 'week' ? a.expiresIn.value * 7 : a.expiresIn.value;
-        const bDays = b.expiresIn.unit === 'week' ? b.expiresIn.value * 7 : b.expiresIn.value;
-        return renewalSortDirection === 'asc' ? aDays - bDays : bDays - aDays;
-      }
-      return 0;
-    });
+    return <AdminMembersDirectoryRenewalsTabView demoRenewals={model.demoRenewals} onRecordReminder={recordReminder} />;
+  }
 
-    const renderRenewalHeader = (field: RenewalSortField, label: string) => {
-      const isActive = renewalSortField === field;
-      return (
-        <th scope="col" aria-sort={isActive ? (renewalSortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="p-3">
-          <button
-            type="button"
-            onClick={() => toggleRenewalSort(field)}
-            className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
-            aria-label={`${label}, sort ${isActive ? (renewalSortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
-          >
-            <span>{label}</span>
-            {isActive ? (
-              renewalSortDirection === 'asc' ? (
-                <ArrowUp className="text-amber-400 font-bold shrink-0" size={14} aria-hidden="true" />
-              ) : (
-                <ArrowDown className="text-amber-400 font-bold shrink-0" size={14} aria-hidden="true" />
-              )
-            ) : (
-              <ArrowUpDown className="text-slate-500 opacity-60 group-hover:opacity-100 group-hover:text-amber-400 transition-opacity shrink-0" size={14} aria-hidden="true" />
-            )}
-          </button>
-        </th>
-      );
-    };
-
+  if (model.activeTab === 'import') {
     return (
-      <section className="admin-card admin-shared-card-padding" aria-labelledby="admin-members-renewals-title">
-        <h2 id="admin-members-renewals-title" className="admin-shared-section-heading flex items-center gap-2">
-          <RotateCcw size={20} className="text-amber-400" />
-          <span>{t('RENEWALS_TITLE')}</span>
-        </h2>
-        <div className="mt-4 grid gap-3 md:hidden" aria-label={t('RENEWALS_TITLE')}>
-          {renewals.map((renewal) => (
-            <article key={`mobile-${renewal.member}`} className="rounded-xl border border-slate-800 bg-slate-900/60 p-4 shadow-sm">
-              <h3 className="font-semibold text-white">{renewal.member}</h3>
-              <dl className="mt-2 grid gap-2 text-sm">
-                <div><dt className="text-slate-400">{t('RENEWALS_CURRENT_PLAN')}</dt><dd className="text-purple-300 font-medium">{renewal.plan}</dd></div>
-                <div><dt className="text-slate-400">{t('RENEWALS_EXPIRY_IN')}</dt><dd className="text-rose-400 font-medium">{expiryLabel(renewal.expiresIn)}</dd></div>
-              </dl>
-              <button
-                type="button"
-                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-amber-500/40 bg-amber-500/15 px-3 py-1.5 text-xs font-semibold text-amber-300 hover:bg-amber-500/25 transition-all disabled:opacity-50 mt-3"
-                disabled={renewal.reminderRecorded}
-                title={renewal.reminderRecorded ? t('RENEWAL_REMINDER_DISABLED_TITLE') : undefined}
-                onClick={() => recordReminder(renewal.member)}
-              >
-                <RotateCcw size={14} className="text-amber-400" />
-                <span>{renewal.reminderRecorded ? t('RENEWAL_REMINDER_RECORDED_LABEL') : t('RENEWAL_SEND_REMINDER')}</span>
-              </button>
-            </article>
-          ))}
-        </div>
-        <div className="mt-4 hidden overflow-x-auto md:block">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
-                {renderRenewalHeader('member', t('RENEWALS_MEMBER'))}
-                {renderRenewalHeader('plan', t('RENEWALS_CURRENT_PLAN'))}
-                {renderRenewalHeader('expiresIn', t('RENEWALS_EXPIRY_IN'))}
-                <th scope="col" className="p-3">{t('RENEWALS_ACTION')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {renewals.map((renewal) => (
-                <tr key={renewal.member} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra">
-                  <th scope="row" className="p-3 text-left font-medium text-white">{renewal.member}</th>
-                  <td className="p-3 text-purple-300 font-medium">{renewal.plan}</td>
-                  <td className="p-3 text-rose-400 font-medium">{expiryLabel(renewal.expiresIn)}</td>
-                  <td className="p-3">
-                    <button
-                      type="button"
-                      className="inline-flex min-h-9 items-center gap-1.5 rounded-xl border border-amber-500/40 bg-amber-500/15 px-3 py-1.5 text-xs font-semibold text-amber-300 hover:bg-amber-500/25 transition-all disabled:opacity-50"
-                      disabled={renewal.reminderRecorded}
-                      title={renewal.reminderRecorded ? t('RENEWAL_REMINDER_DISABLED_TITLE') : undefined}
-                      onClick={() => recordReminder(renewal.member)}
-                    >
-                      <RotateCcw size={13} className="text-amber-400" />
-                      <span>{renewal.reminderRecorded ? t('RENEWAL_REMINDER_RECORDED_LABEL') : t('RENEWAL_SEND_REMINDER')}</span>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <section className="admin-card p-10 text-center" aria-labelledby="admin-members-import-title">
+        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary-subtle text-primary" aria-hidden="true"><UploadCloud size={22} /></div>
+        <h2 id="admin-members-import-title" className="mb-3 text-2xl font-bold text-text-primary">{t('IMPORT_TITLE')}</h2>
+        <p className="mt-2 text-text-secondary">{t('IMPORT_DESCRIPTION')}</p>
+        <p className="mt-3 rounded-md border border-warning bg-warning-bg p-4 text-warning-text" role="status">{t('IMPORT_UNAVAILABLE')}</p>
+        <button type="button" className="admin-btn-ghost mt-3 min-h-11" disabled title={t('IMPORT_TEMPLATE_BLOCKED')}><DownloadCloud size={18} aria-hidden="true" /> {t('IMPORT_TEMPLATE')}</button>
       </section>
     );
   }
-  if (model.activeTab === 'import') return <section className="admin-card p-10 text-center" aria-labelledby="admin-members-import-title"><div className="mb-3 mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary-subtle text-primary" aria-hidden="true"><UploadCloud size={22} /></div><h2 id="admin-members-import-title" className="mb-3 text-2xl font-bold text-text-primary">{t('IMPORT_TITLE')}</h2><p className="mt-2 text-text-secondary">{t('IMPORT_DESCRIPTION')}</p><p className="mt-3 rounded-md border border-warning-bg bg-warning-bg p-4 text-warning-text" role="status">{t('IMPORT_UNAVAILABLE')}</p><button type="button" className="admin-btn-ghost mt-3 min-h-11" disabled title={t('IMPORT_TEMPLATE_BLOCKED')}><DownloadCloud size={18} aria-hidden="true" /> {t('IMPORT_TEMPLATE')}</button></section>;
   return null;
 }
-
 
 export type { AdminMembersDirectorySecondaryViewsProps };

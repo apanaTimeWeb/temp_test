@@ -18,14 +18,14 @@ export default function AdminMembersLayout({ children }: { children: ReactNode }
   const t = useTranslations('ADMIN_NAVIGATION');
   return (
     <div className="w-full space-y-4">
-      <nav aria-label={t('DOMAIN_MEMBERS_SECTIONS')} className="border-b border-indigo-500/20 bg-card rounded-2xl p-1 block md:hidden mb-4">
+      <nav aria-label={t('DOMAIN_MEMBERS_SECTIONS')} className="border-b border-border bg-card rounded-2xl p-1 block md:hidden mb-4">
         <div className="flex min-w-0 gap-1.5 overflow-x-auto p-1 scrollbar-none">
           {SUBMODULE_NAVIGATION.map((item) => {
             const active = pathname === item.href || pathname.startsWith(item.href + '/');
             return (
               <Link key={item.href} href={item.href} aria-current={active ? 'page' : undefined}
-                className={`inline-flex min-h-10 shrink-0 items-center rounded-xl px-3.5 py-1.5 text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
-                  active ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white font-bold shadow-md shadow-indigo-950/50' : 'text-slate-400 hover:text-white hover:bg-white/5'
+                className={`inline-flex min-h-10 shrink-0 items-center rounded-xl px-3.5 py-1.5 text-xs font-semibold motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                  active ? 'bg-primary text-on-primary font-bold shadow-card' : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'
                 }`}>
                 {t(item.labelKey)}
               </Link>

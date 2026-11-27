@@ -1,7 +1,12 @@
 'use client';
 // DATA FLOW: members_directory route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
-import { ADMIN_MEMBERS_DETAIL_NAVIGATION,ADMIN_MEMBERS_DIRECTORY_NAVIGATION,resolveAdminMembersDirectoryView } from '@/app/frontend_admin/admin_members/members_directory/config/admin_members_directory.url_config';
-import { ADMIN_MEMBERS_CATEGORY_FIXTURES,ADMIN_MEMBERS_DEPARTMENT_FIXTURES,ADMIN_MEMBERS_FIXTURES,ADMIN_MEMBERS_RENEWAL_FIXTURES } from '@/app/frontend_admin/admin_members/members_directory/mocks/AdminMembersDirectoryFixtures';
+import {
+  ADMIN_MEMBERS_CATEGORY_FIXTURES,
+  ADMIN_MEMBERS_DEPARTMENT_FIXTURES,
+  ADMIN_MEMBERS_FIXTURES,
+  ADMIN_MEMBERS_RENEWAL_FIXTURES,
+} from '@/app/frontend_admin/admin_members/members_directory/config/admin_members_directory.demo_data';
+import { ADMIN_MEMBERS_DETAIL_NAVIGATION, ADMIN_MEMBERS_DIRECTORY_NAVIGATION, resolveAdminMembersDirectoryView } from '@/app/frontend_admin/admin_members/members_directory/config/admin_members_directory.url_config';
 import type { AdminMembersCategory,AdminMembersCreateFormValues,AdminMembersDemoMutationResult,AdminMembersDepartment,AdminMembersDetailTab,AdminMembersDirectoryTab,AdminMembersMember,AdminMembersRenewal } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { useTranslations } from 'next-intl';
@@ -130,7 +135,7 @@ export default function useAdminMembersDirectoryMain() {
     setDemoMembers((current) => [...created, ...current]);
     setNextDemoMemberSequence(seq);
     setActiveTab('all');
-    toast.success(`Successfully imported ${created.length} students into directory.`);
+    toast.success(`Successfully imported ${created.length} students into directory.`, { id: 'admin-members-bulk-imported' });
   };
   const openMemberDetails = (member: AdminMembersMember) => { setViewingMember(member); setDetailTab('profile'); };
   return { activeTab, setActiveTab, viewingMember, setViewingMember, detailTab, setDetailTab, mainNav: ADMIN_MEMBERS_DIRECTORY_NAVIGATION, detailNav: ADMIN_MEMBERS_DETAIL_NAVIGATION, dummyMembers: isDemoMode ? demoMembers : [], editingMember, setEditingMember, handleSaveDemoMember, demoCategories, demoDepartments, demoRenewals, createDemoCategory, createDemoDepartment, recordDemoRenewalReminder, isDemoMode, handleAction, handleAddMember, handleBulkAddMembers, openMemberDetails } as const;

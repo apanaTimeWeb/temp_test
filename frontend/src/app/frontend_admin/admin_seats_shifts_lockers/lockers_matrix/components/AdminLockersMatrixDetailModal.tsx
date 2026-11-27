@@ -1,17 +1,19 @@
 'use client';
 // Responsibility: Modal dialog for inspecting, allocating, vacating, and maintaining library lockers.
 
+import { AdminLockersMatrixOccupiedPanel } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/components/AdminLockersMatrixOccupiedPanel';
 import type { AdminLockersLockerMatrixViewModel } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/types/AdminLockersMatrixTypes';
-import { displayValue } from '@/lib/display_value';
-import { CheckCircle2,IndianRupee,Info,KeyRound,ShieldCheck,User,Wrench,X } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { useEffect,useRef,useState } from 'react';
+import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
+import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
+import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
+import { CheckCircle2, Info, KeyRound, ShieldCheck, Wrench, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export const ADMIN_LOCKER_MATRIX_STATUS_CLASS = {
-  free: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400',
-  occupied: 'border-rose-500/40 bg-rose-500/10 text-rose-400',
-  maintenance: 'border-amber-500/40 bg-amber-500/10 text-amber-400',
-  unknown: 'border-slate-700 bg-slate-900 text-slate-400',
+  free: 'border-success bg-success-bg text-success-text',
+  occupied: 'border-danger bg-danger-bg text-danger-text',
+  maintenance: 'border-warning bg-warning-bg text-warning-text',
+  unknown: 'border-border bg-surface-highlight text-text-secondary',
 } as const;
 
 interface AdminLockersMatrixDetailModalProps {
@@ -40,10 +42,6 @@ export function AdminLockersMatrixDetailModal({
   onVacate,
   onSetMaintenance,
 }: AdminLockersMatrixDetailModalProps) {
-  const t = useTranslations('ADMIN_LOCKERS');
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  // Form State for Free Locker Allocation
   const [studentName, setStudentName] = useState('');
   const [smartId, setSmartId] = useState('');
   const [phone, setPhone] = useState('');
@@ -57,15 +55,6 @@ export function AdminLockersMatrixDetailModal({
   const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!locker) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [locker, onClose]);
-
-  useEffect(() => {
     if (locker) {
       setStudentName('');
       setSmartId(`SL-${locker.id}-${Math.floor(1000 + Math.random() * 9000)}`);
@@ -75,8 +64,6 @@ export function AdminLockersMatrixDetailModal({
       setFormError(null);
     }
   }, [locker]);
-
-  if (!locker) return null;
 
   const handleAllocateSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,36 +81,23 @@ export function AdminLockersMatrixDetailModal({
     });
   };
 
+  if (!locker) return null;
+
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-md"
-      role="presentation"
-      onClick={onClose}
-    >
-      <div
-        ref={modalRef}
-        className="relative my-8 w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-2xl border border-slate-800 bg-slate-900 p-6 text-white shadow-2xl"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="locker-inspect-title"
-        tabIndex={-1}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+    <Dialog open={Boolean(locker)} onOpenChange={(nextOpen) => { if (!nextOpen) onClose(); }}>
+      <DialogContent className="relative w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-2xl border border-border bg-overlay p-6 text-text-primary shadow-dialog">
+        <div className="flex items-center justify-between border-b border-border pb-4">
           <div className="flex items-center gap-3">
-            <div className="rounded-xl border border-indigo-500/30 bg-indigo-500/15 p-2.5 text-indigo-400">
-              <KeyRound size={22} />
+            <div className="rounded-xl border border-border-focus bg-primary-subtle p-2.5 text-primary">
+              <KeyRound size={22} aria-hidden="true" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2 py-0.5 text-[10px] font-semibold text-indigo-300">
-                  <ShieldCheck size={11} /> Admin Locker Desk
-                </span>
-              </div>
-              <h3 id="locker-inspect-title" className="text-lg font-bold tracking-tight text-white mt-0.5">
+              <span className="inline-flex items-center gap-1 rounded-full border border-border-focus bg-primary-subtle px-2 py-0.5 text-[10px] font-semibold text-primary">
+                <ShieldCheck size={11} aria-hidden="true" /> Admin Locker Desk
+              </span>
+              <DialogTitle className="text-lg font-bold tracking-tight text-text-primary mt-0.5">
                 Locker #{locker.id} — {locker.branchName ?? branchName ?? 'Branch Asset'}
-              </h3>
+              </DialogTitle>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -133,262 +107,172 @@ export function AdminLockersMatrixDetailModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
+              className="rounded-xl p-1.5 text-text-secondary hover:bg-surface-hover hover:text-text-primary motion-safe:transition-colors"
               aria-label="Close"
             >
-              <X size={18} />
+              <X size={18} aria-hidden="true" />
             </button>
           </div>
         </div>
 
-        {/* Modal Body */}
         <div className="mt-4 space-y-4 text-xs">
           {formError && (
-            <p role="alert" className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-400 font-semibold">
+            <p role="alert" className="rounded-xl border border-danger bg-danger-bg p-3 text-xs text-danger-text font-semibold">
               {formError}
             </p>
           )}
 
-          {/* SCENARIO 1: FREE LOCKER -> ALLOCATION FORM */}
           {locker.status === 'free' ? (
             <form onSubmit={handleAllocateSubmit} className="space-y-3.5">
-              <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-emerald-300">
+              <div className="rounded-xl border border-success bg-success-bg p-3 text-success-text">
                 <div className="flex items-center gap-2 font-bold text-xs">
-                  <CheckCircle2 size={15} />
-                  <span>Locker #{locker.id} is Vacant & Ready for Allocation</span>
+                  <CheckCircle2 size={15} aria-hidden="true" />
+                  <span>Locker #{locker.id} is Vacant &amp; Ready for Allocation</span>
                 </div>
-                <p className="mt-1 text-[11px] text-emerald-200/80">
+                <p className="mt-1 text-[11px] opacity-90">
                   Assign this locker to a student, issue physical key tag, and record monthly rental fee.
                 </p>
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">
-                  Student Full Name <span className="text-rose-400">*</span>
+                <label htmlFor="locker-alloc-student" className="block text-[11px] font-semibold uppercase tracking-wider text-text-secondary mb-1">
+                  Student Full Name <span className="text-danger-text">*</span>
                 </label>
-                <input maxLength={100}
+                <input
+                  id="locker-alloc-student"
+                  maxLength={100}
                   type="text"
                   required
                   placeholder="e.g. Aarav Sharma"
                   value={studentName}
                   onChange={(e) => setStudentName(e.target.value)}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-xl border border-border bg-input px-3.5 py-2 text-xs text-text-primary placeholder:text-text-secondary focus:border-border-focus focus:outline-none"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">
+                  <label htmlFor="locker-alloc-smartid" className="block text-[11px] font-semibold uppercase tracking-wider text-text-secondary mb-1">
                     Smart Card / Student ID
                   </label>
-                  <input maxLength={30}
+                  <input
+                    id="locker-alloc-smartid"
+                    maxLength={30}
                     type="text"
                     value={smartId}
                     onChange={(e) => setSmartId(e.target.value)}
-                    className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-2 text-xs text-white font-mono focus:border-indigo-500 focus:outline-none"
+                    className="w-full rounded-xl border border-border bg-input px-3 py-2 text-xs text-text-primary font-mono focus:border-border-focus focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">
+                  <label htmlFor="locker-alloc-phone" className="block text-[11px] font-semibold uppercase tracking-wider text-text-secondary mb-1">
                     Contact Phone
                   </label>
-                  <input maxLength={15}
+                  <input
+                    id="locker-alloc-phone"
+                    maxLength={15}
                     type="tel"
                     placeholder="9876543210"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-2 text-xs text-white font-mono focus:border-indigo-500 focus:outline-none"
+                    className="w-full rounded-xl border border-border bg-input px-3 py-2 text-xs text-text-primary font-mono focus:border-border-focus focus:outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">
+                  <label htmlFor="locker-alloc-shift" className="block text-[11px] font-semibold uppercase tracking-wider text-text-secondary mb-1">
                     Student Shift
                   </label>
                   <select
+                    id="locker-alloc-shift"
                     value={shift}
                     onChange={(e) => setShift(e.target.value)}
-                    className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-2 text-xs text-white focus:border-indigo-500 focus:outline-none cursor-pointer"
+                    className="w-full rounded-xl border border-border bg-input px-3 py-2 text-xs text-text-primary focus:border-border-focus focus:outline-none cursor-pointer"
                   >
                     {SHIFT_OPTIONS.map((s) => (
-                      <option key={s} value={s} className="bg-slate-900 text-white">
+                      <option key={s} value={s} className="bg-card text-text-primary">
                         {s}
                       </option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">
+                  <label htmlFor="locker-alloc-fee" className="block text-[11px] font-semibold uppercase tracking-wider text-text-secondary mb-1">
                     Monthly Locker Fee (₹)
                   </label>
                   <input
+                    id="locker-alloc-fee"
                     type="number"
                     min="0"
                     step="50"
                     value={monthlyFee}
                     onChange={(e) => setMonthlyFee(Number(e.target.value))}
-                    className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-2 text-xs text-white font-mono focus:border-indigo-500 focus:outline-none"
+                    className="w-full rounded-xl border border-border bg-input px-3 py-2 text-xs text-text-primary font-mono focus:border-border-focus focus:outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-1">
+                <label htmlFor="locker-alloc-expiry" className="block text-[11px] font-semibold uppercase tracking-wider text-text-secondary mb-1">
                   Validity Expiry Date
                 </label>
-                <input maxLength={100}
+                <input
+                  id="locker-alloc-expiry"
+                  maxLength={100}
                   type="date"
                   value={expiryDate}
                   onChange={(e) => setExpiryDate(e.target.value)}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-2 text-xs text-white font-mono focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-xl border border-border bg-input px-3 py-2 text-xs text-text-primary font-mono focus:border-border-focus focus:outline-none"
                 />
               </div>
 
-              {/* Form Action Buttons */}
-              <div className="flex items-center justify-between border-t border-slate-800 pt-4 mt-2">
+              <div className="flex items-center justify-between border-t border-border pt-4 mt-2">
                 <button
                   type="button"
                   onClick={() => onSetMaintenance?.(true)}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs font-semibold text-amber-300 hover:bg-amber-500/20 transition-all cursor-pointer"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-warning bg-warning-bg px-3 py-2 text-xs font-semibold text-warning-text hover:opacity-90 motion-safe:transition-opacity cursor-pointer"
                 >
-                  <Wrench size={13} />
+                  <Wrench size={13} aria-hidden="true" />
                   Mark Maintenance
                 </button>
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
                     onClick={onClose}
-                    className="rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
+                    className="rounded-xl border border-border bg-surface-highlight px-4 py-2 text-xs font-semibold text-text-secondary hover:bg-surface-hover hover:text-text-primary motion-safe:transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-5 py-2 text-xs font-semibold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-500 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-2 text-xs font-semibold text-on-primary shadow-card hover:bg-primary-hover motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
                   >
-                    <CheckCircle2 size={15} />
+                    <CheckCircle2 size={15} aria-hidden="true" />
                     Allocate Locker
                   </button>
                 </div>
               </div>
             </form>
-          ) : locker.status === 'occupied' ? (
-            /* SCENARIO 2: OCCUPIED LOCKER -> STUDENT PROFILE & RELEASE */
-            <div className="space-y-3.5">
-              {/* Student Profile Card */}
-              <div className="flex items-center gap-3.5 rounded-xl border border-slate-800 bg-slate-950/60 p-3.5">
-                <div className="rounded-xl border border-indigo-500/30 bg-indigo-500/15 p-3 text-indigo-400 shrink-0">
-                  <User size={22} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-bold text-sm text-white truncate">
-                    {displayValue(locker.student, 'Assigned Student')}
-                  </h4>
-                  <p className="font-mono text-[11px] text-indigo-300 mt-0.5">
-                    ID: {displayValue(locker.smartId, 'SL-DT-1000')}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <span className="inline-flex items-center gap-0.5 rounded-md border border-emerald-500/30 bg-emerald-500/15 px-2 py-0.5 text-xs font-bold text-emerald-300">
-                    <IndianRupee size={11} /> ₹300/mo
-                  </span>
-                </div>
-              </div>
+          ) : (
+            <AdminLockersMatrixOccupiedPanel
+              locker={locker}
+              onClose={onClose}
+              onVacate={onVacate}
+              onSetMaintenance={onSetMaintenance}
+            />
+          )}
 
-              {/* Detail Grid */}
-              <div className="grid grid-cols-2 gap-2.5 text-xs">
-                <div className="rounded-xl border border-slate-800 bg-slate-950/40 p-2.5">
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Contact Phone</span>
-                  <p className="mt-1 font-mono font-medium text-white">{displayValue(locker.phone, '—')}</p>
-                </div>
-                <div className="rounded-xl border border-slate-800 bg-slate-950/40 p-2.5">
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Library Shift</span>
-                  <p className="mt-1 font-medium text-white">{displayValue(locker.shift, 'Full Day Dedicated')}</p>
-                </div>
-                <div className="rounded-xl border border-slate-800 bg-slate-950/40 p-2.5">
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Allotted By</span>
-                  <p className="mt-1 font-medium text-slate-300">{displayValue(locker.allottedByManager, 'Branch Desk Manager')}</p>
-                </div>
-                <div className="rounded-xl border border-slate-800 bg-slate-950/40 p-2.5">
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Key Tag & Expiry</span>
-                  <p className="mt-1 font-mono text-emerald-400 font-semibold">{displayValue(locker.expiry, 'Active (Valid)')}</p>
-                </div>
-              </div>
-
-              {/* Administrative Actions */}
-              <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-800 pt-4 mt-2">
-                <button
-                  type="button"
-                  onClick={() => onSetMaintenance?.(true)}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs font-semibold text-amber-300 hover:bg-amber-500/20 transition-all cursor-pointer"
-                >
-                  <Wrench size={13} />
-                  Mark Maintenance
-                </button>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    className="rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
-                  >
-                    Close
-                  </button>
-                  <button
-                    type="button"
-                    onClick={onVacate}
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/40 bg-rose-500/15 px-4 py-2 text-xs font-bold text-rose-300 hover:bg-rose-500/25 transition-all shadow-xs cursor-pointer"
-                  >
-                    <X size={14} />
-                    Release Locker (Vacate)
-                  </button>
-                </div>
-              </div>
-            </div>
-          ) : locker.status === 'maintenance' ? (
-            /* SCENARIO 3: MAINTENANCE LOCKER -> REPAIR TOGGLE */
-            <div className="space-y-4">
-              <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-amber-300 space-y-1.5">
-                <div className="flex items-center gap-2 font-bold text-sm">
-                  <Wrench size={16} />
-                  <span>Locker #{locker.id} Under Maintenance</span>
-                </div>
-                <p className="text-xs text-amber-200/80">
-                  Key lock mechanism or door hinge inspection logged. Physical unit is blocked from student allocation until repaired.
-                </p>
-              </div>
-
-              <div className="flex items-center justify-end gap-2.5 border-t border-slate-800 pt-4">
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
-                >
-                  Close
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onSetMaintenance?.(false)}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-5 py-2 text-xs font-semibold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-500 transition-all cursor-pointer"
-                >
-                  <CheckCircle2 size={15} />
-                  Mark Repaired & Available
-                </button>
-              </div>
-            </div>
-          ) : null}
-
-          {/* Admin Policy Footer */}
-          <div className="flex items-start gap-2 rounded-xl border border-slate-800 bg-slate-950/40 p-3 text-[11px] text-slate-400">
-            <Info size={14} className="mt-0.5 shrink-0 text-indigo-400" />
+          <div className="flex items-start gap-2 rounded-xl border border-border bg-surface-highlight p-3 text-[11px] text-text-secondary">
+            <Info size={14} className="mt-0.5 shrink-0 text-primary" aria-hidden="true" />
             <span>
               <strong>Central Key Custody:</strong> Keys are tagged at the branch desk. Central Admin changes sync instantaneously across student audit logs.
             </span>
           </div>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

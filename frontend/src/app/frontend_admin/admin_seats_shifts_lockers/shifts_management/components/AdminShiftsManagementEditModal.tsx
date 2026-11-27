@@ -2,8 +2,11 @@
 // RESPONSIBILITY: Edit shift details, timings, monthly fee, and active state for shifts management.
 
 import type { AdminShiftsShift } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/types/AdminShiftsManagementTypes';
-import { Building2,Clock,IndianRupee,Moon,Power,Save,Sun,X } from 'lucide-react';
-import { useEffect,useMemo,useState } from 'react';
+import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
+import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
+import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
+import { Building2, Clock, IndianRupee, Moon, Power, Save, Sun, X } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 export interface AdminShiftsManagementEditModalProps {
@@ -62,7 +65,7 @@ export function AdminShiftsManagementEditModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      toast.error('Shift name is required.');
+      toast.error('Shift name is required.', { id: 'admin-shifts-edit-invalid' });
       return;
     }
 
@@ -78,138 +81,143 @@ export function AdminShiftsManagementEditModal({
     };
 
     onSaveShift(updated);
-    toast.success(`Shift "${updated.name}" updated successfully!`);
+    toast.success(`Shift "${updated.name}" updated successfully!`, { id: 'admin-shifts-edit-saved' });
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl max-h-[92vh] flex flex-col rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl shadow-black/70 overflow-hidden">
-        {/* HEADER */}
-        <div className="flex items-center justify-between border-b border-slate-800/80 bg-slate-900/90 px-6 py-4.5">
+    <Dialog open={isOpen} onOpenChange={(nextOpen) => { if (!nextOpen) onClose(); }}>
+      <DialogContent className="relative w-full max-w-xl max-h-[92vh] flex flex-col rounded-2xl border border-border bg-overlay shadow-dialog overflow-hidden p-0">
+        <div className="flex items-center justify-between border-b border-border bg-card px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-400">
-              <Clock size={20} />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-border-focus bg-primary-subtle text-primary">
+              <Clock size={20} aria-hidden="true" />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg font-bold text-white tracking-tight">Edit Study Shift & Pricing</h2>
-              <p className="text-xs text-slate-400">Configure timetable hours, desk fee, and operational status</p>
+              <DialogTitle className="text-base sm:text-lg font-bold text-text-primary tracking-tight">
+                Edit Study Shift &amp; Pricing
+              </DialogTitle>
+              <p className="text-xs text-text-secondary">Configure timetable hours, desk fee, and operational status</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-700/60 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            aria-label="Close modal"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-text-secondary hover:text-text-primary hover:bg-surface-hover motion-safe:transition-colors"
             title="Close modal"
           >
-            <X size={16} />
+            <X size={16} aria-hidden="true" />
           </button>
         </div>
 
-        {/* BODY */}
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-5">
-          {/* Shift Name */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-300">
+            <label htmlFor="edit-shift-name" className="text-xs font-semibold text-text-secondary">
               Shift Title / Slot Name
             </label>
-            <input maxLength={100}
+            <input
+              id="edit-shift-name"
+              maxLength={100}
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Morning Shift (6 AM - 2 PM)"
-              className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-xs sm:text-sm text-text-primary placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary"
               required
             />
           </div>
 
-          {/* Timings Grid */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                <Sun size={13} className="text-amber-400" />
+              <label htmlFor="edit-shift-start" className="text-xs font-semibold text-text-secondary flex items-center gap-1.5">
+                <Sun size={13} className="text-warning-text" aria-hidden="true" />
                 <span>Start Time</span>
               </label>
-              <input maxLength={100}
+              <input
+                id="edit-shift-start"
                 type="time"
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
-                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 font-mono"
+                className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary font-mono"
                 required
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                <Moon size={13} className="text-indigo-400" />
+              <label htmlFor="edit-shift-end" className="text-xs font-semibold text-text-secondary flex items-center gap-1.5">
+                <Moon size={13} className="text-primary" aria-hidden="true" />
                 <span>End Time</span>
               </label>
-              <input maxLength={100}
+              <input
+                id="edit-shift-end"
                 type="time"
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
-                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 font-mono"
+                className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary font-mono"
                 required
               />
             </div>
           </div>
 
-          {/* Timing Info Pill */}
-          <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/70 p-3 text-xs">
+          <div className="flex items-center justify-between rounded-xl border border-border bg-surface-highlight p-3 text-xs">
             <div className="flex items-center gap-2">
-              <Clock size={14} className="text-indigo-400" />
-              <span className="text-slate-300 font-medium">Slot Duration: <strong>{durationHours} Hours</strong></span>
+              <Clock size={14} className="text-primary" aria-hidden="true" />
+              <span className="text-text-secondary font-medium">
+                Slot Duration: <strong className="text-text-primary">{durationHours} Hours</strong>
+              </span>
             </div>
             {isOvernight && (
-              <span className="inline-flex items-center gap-1 rounded-full border border-purple-500/40 bg-purple-500/15 px-2 py-0.5 text-[10px] font-semibold text-purple-300">
-                <Moon size={10} /> Crosses Midnight
+              <span className="inline-flex items-center gap-1 rounded-full border border-purple-text bg-purple-bg px-2 py-0.5 text-[10px] font-semibold text-purple-text">
+                <Moon size={10} aria-hidden="true" /> Crosses Midnight
               </span>
             )}
           </div>
 
-          {/* Pricing & Capacity Grid */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300 flex items-center gap-1">
-                <IndianRupee size={13} className="text-emerald-400" />
+              <label htmlFor="edit-shift-fee" className="text-xs font-semibold text-text-secondary flex items-center gap-1">
+                <IndianRupee size={13} className="text-success-text" aria-hidden="true" />
                 <span>Monthly Fee (₹)</span>
               </label>
               <input
+                id="edit-shift-fee"
                 type="number"
                 min={100}
                 max={50000}
                 value={monthlyPrice}
                 onChange={(e) => setMonthlyPrice(Number(e.target.value))}
-                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 font-mono"
+                className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary font-mono"
                 required
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">
+              <label htmlFor="edit-shift-capacity" className="text-xs font-semibold text-text-secondary">
                 Desk Capacity (Seats)
               </label>
               <input
+                id="edit-shift-capacity"
                 type="number"
                 min={1}
                 max={500}
                 value={capacity}
                 onChange={(e) => setCapacity(Number(e.target.value))}
-                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 font-mono"
+                className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary font-mono"
                 required
               />
             </div>
           </div>
 
-          {/* Branch & Status */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                <Building2 size={13} className="text-indigo-400" />
+              <label htmlFor="edit-shift-branch" className="text-xs font-semibold text-text-secondary flex items-center gap-1.5">
+                <Building2 size={13} className="text-primary" aria-hidden="true" />
                 <span>Applicable Branch</span>
               </label>
               <select
+                id="edit-shift-branch"
                 value={branchName}
                 onChange={(e) => setBranchName(e.target.value)}
-                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {BRANCHES.map((b) => (
                   <option key={b} value={b}>{b}</option>
@@ -218,14 +226,15 @@ export function AdminShiftsManagementEditModal({
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                <Power size={13} className="text-slate-400" />
+              <label htmlFor="edit-shift-status" className="text-xs font-semibold text-text-secondary flex items-center gap-1.5">
+                <Power size={13} className="text-text-secondary" aria-hidden="true" />
                 <span>Active Status</span>
               </label>
               <select
+                id="edit-shift-status"
                 value={active ? 'true' : 'false'}
                 onChange={(e) => setActive(e.target.value === 'true')}
-                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="true">Active (Accepting Bookings)</option>
                 <option value="false">Inactive (Suspended)</option>
@@ -233,26 +242,25 @@ export function AdminShiftsManagementEditModal({
             </div>
           </div>
 
-          {/* FOOTER ACTIONS */}
-          <div className="flex items-center justify-end gap-2.5 border-t border-slate-800 pt-4">
+          <div className="flex items-center justify-end gap-2.5 border-t border-border pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-slate-700/60 bg-slate-800/60 px-4 py-2 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+              className="rounded-xl border border-border bg-surface-highlight px-4 py-2 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-surface-hover motion-safe:transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 px-5 py-2 text-xs font-semibold text-white shadow-md shadow-indigo-500/25 hover:from-indigo-600 hover:to-indigo-700 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2 text-xs font-semibold text-on-primary shadow-card hover:bg-primary-hover motion-safe:transition-colors cursor-pointer"
             >
-              <Save size={15} />
+              <Save size={15} aria-hidden="true" />
               <span>Save Changes</span>
             </button>
           </div>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

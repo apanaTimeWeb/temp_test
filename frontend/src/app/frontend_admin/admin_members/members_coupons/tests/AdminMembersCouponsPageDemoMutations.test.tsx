@@ -83,7 +83,7 @@ describe('AdminCouponsPage demo mutations', () => {
 
       expect(await screen.findByText('SAVE20')).toBeTruthy();
       expect(screen.getByText('DEMO10')).toBeTruthy();
-      expect(toastSuccessMock).toHaveBeenCalledWith('Demo coupon SAVE20 created in memory.');
+      expect(toastSuccessMock).toHaveBeenCalledWith('Demo coupon SAVE20 created in memory.', { id: 'admin-coupons-created' });
     } finally {
       unmount();
       queryClient.clear();
@@ -99,7 +99,7 @@ describe('AdminCouponsPage demo mutations', () => {
       expect(screen.getByText('DEMO10')).toBeTruthy();
       fireEvent.click(within(confirmDialog).getByRole('button', { name: 'Remove Demo Coupon' }));
       await waitFor(() => expect(screen.queryByText('DEMO10')).toBeNull());
-      expect(toastSuccessMock).toHaveBeenCalledWith('Demo coupon DEMO10 removed from memory.');
+      expect(toastSuccessMock).toHaveBeenCalledWith('Demo coupon DEMO10 removed from memory.', { id: 'admin-coupons-deleted' });
     } finally {
       unmount();
       queryClient.clear();
@@ -115,7 +115,7 @@ describe('AdminCouponsPage demo mutations', () => {
       fireEvent.click(within(confirmDialog).getByRole('button', { name: 'Cancel' }));
       await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
       expect(screen.getByText('DEMO10')).toBeTruthy();
-      expect(toastSuccessMock).not.toHaveBeenCalledWith('Demo coupon DEMO10 removed from memory.');
+      expect(toastSuccessMock).not.toHaveBeenCalledWith('Demo coupon DEMO10 removed from memory.', { id: 'admin-coupons-deleted' });
     } finally {
       unmount();
       queryClient.clear();
@@ -161,7 +161,7 @@ describe('AdminCouponsCreateDialog validation and non-persistence', () => {
     fireEvent.change(screen.getByLabelText('Expiry Date'), { target: { value: '2027-01-01' } });
     fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Validate Draft' }));
 
-    await waitFor(() => expect(toastInfoMock).toHaveBeenCalledWith('Draft validation passed. No coupon was created or saved.'));
+    await waitFor(() => expect(toastInfoMock).toHaveBeenCalledWith('Draft validation passed. No coupon was created or saved.', { id: 'admin-coupons-validate-draft' }));
   });
 
   it('submits validated values to the demo mutation owner in create intent', async () => {

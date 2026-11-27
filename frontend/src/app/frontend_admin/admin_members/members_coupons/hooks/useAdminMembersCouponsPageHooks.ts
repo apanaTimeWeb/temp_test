@@ -2,7 +2,7 @@
 // DATA FLOW: coupons route -> page-scoped client state and query hooks; no unverified live mutation is implied.
 import { ADMIN_COUPONS_QUERY_KEYS } from '@/app/frontend_admin/admin_members/members_coupons/api/admin_members_coupons.query_keys';
 import { fetchAdminCoupons,mapAdminCouponsApiRecords } from '@/app/frontend_admin/admin_members/members_coupons/api/admin_members_coupons_api';
-import { ADMIN_COUPONS_API_FIXTURE } from '@/app/frontend_admin/admin_members/members_coupons/mocks/scenarios/admin_members_coupons.scenarios';
+import { ADMIN_COUPONS_API_FIXTURE } from '@/app/frontend_admin/admin_members/members_coupons/config/admin_members_coupons.demo_data';
 import { AdminCouponsApiResponseSchema } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
 import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { useQuery } from '@tanstack/react-query';

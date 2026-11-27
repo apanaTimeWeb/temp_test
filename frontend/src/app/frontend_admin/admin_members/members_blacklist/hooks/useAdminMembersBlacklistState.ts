@@ -3,8 +3,8 @@
 
 import { ADMIN_BLACKLIST_QUERY_KEYS } from '@/app/frontend_admin/admin_members/members_blacklist/api/admin_members_blacklist.query_keys';
 import { fetchAdminBlacklist } from '@/app/frontend_admin/admin_members/members_blacklist/api/admin_members_blacklist_api';
+import { ADMIN_BLACKLIST_DEMO_FIXTURES } from '@/app/frontend_admin/admin_members/members_blacklist/config/admin_members_blacklist.demo_data';
 import { ADMIN_BLACKLIST_STATUS_VALUES } from '@/app/frontend_admin/admin_members/members_blacklist/config/admin_members_blacklist.url_config';
-import { ADMIN_BLACKLIST_DEMO_FIXTURES } from '@/app/frontend_admin/admin_members/members_blacklist/mocks/scenarios/admin_members_blacklist.scenarios';
 import type { AdminBlacklistFormSchemaType } from '@/app/frontend_admin/admin_members/members_blacklist/schemas/AdminMembersBlacklistSchema';
 import type { AdminBlacklistRecord } from '@/app/frontend_admin/admin_members/members_blacklist/types/AdminMembersBlacklistTypes';
 import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
@@ -58,13 +58,13 @@ export default function useAdminMembersBlacklistState() {
     };
     setDemoRecordsOverride([newRecord, ...records]);
     const scopeMsg = newRecord.banScope === 'NETWORK_WIDE' ? 'Network-Wide Ban Enforced across all branches' : 'Branch Ban Enforced';
-    toast.success(`Student blacklisted successfully. ${scopeMsg}. Active seat revoked.`);
+    toast.success(`Student blacklisted successfully. ${scopeMsg}. Active seat revoked.`, { id: 'admin-blacklist-submit' });
     setShowForm(false);
   };
 
   const pardonStudent = (id: string, reason: string) => {
     if (!isDemoMode) {
-      toast.info(t('MUTATION_BLOCKED'));
+      toast.info(t('MUTATION_BLOCKED'), { id: 'admin-blacklist-pardon-blocked' });
       return;
     }
     const today = format(new Date(), 'yyyy-MM-dd');
@@ -92,7 +92,7 @@ export default function useAdminMembersBlacklistState() {
           }
         : cur
     );
-    toast.success(`Ban revoked for student. Member access reinstated.`);
+    toast.success(`Ban revoked for student. Member access reinstated.`, { id: `admin-blacklist-pardon-${id}` });
   };
 
   const confirmRemove = () => {

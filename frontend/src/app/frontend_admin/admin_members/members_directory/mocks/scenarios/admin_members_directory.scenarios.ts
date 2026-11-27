@@ -6,8 +6,9 @@
  * descriptors/envelopes for a module-owned test adapter. They are not wired to production APIs.
  */
 /** Canonical five-state UI harness vocabulary; kept outside the test-only bootstrap so source types stay self-contained. */
-export const AdminMembersDirectoryScenarios = ['ACTIVE', 'EMPTY', 'SERVER_500', 'TIMEOUT', 'UNAUTHORIZED'] as const;
-export type AdminMembersDirectoryScenario = (typeof AdminMembersDirectoryScenarios)[number];
+import { AdminMembersDirectoryScenarios, type AdminMembersDirectoryScenario } from '@/app/frontend_admin/admin_members/members_directory/config/admin_members_directory.demo_data';
+
+export { AdminMembersDirectoryScenarios, type AdminMembersDirectoryScenario };
 
 export const createAdminMembersDirectoryScenarioCatalog = (activeRecords: unknown) => ({
   ACTIVE_RECORDS: {

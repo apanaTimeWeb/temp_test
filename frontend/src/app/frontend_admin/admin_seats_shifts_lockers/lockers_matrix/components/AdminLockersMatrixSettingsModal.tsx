@@ -1,8 +1,11 @@
 'use client';
 // RESPONSIBILITY: Locker monthly rent, refundable caution deposit, and key replacement policy configuration modal.
 
-import { AlertCircle,IndianRupee,KeyRound,Save,ShieldCheck,X } from 'lucide-react';
-import { useEffect,useState } from 'react';
+import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
+import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
+import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
+import { AlertCircle, IndianRupee, KeyRound, Save, ShieldCheck, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 export interface LockerPricingPolicy {
@@ -42,8 +45,6 @@ export function AdminLockersMatrixSettingsModal({
     }
   }, [isOpen, currentPolicy]);
 
-  if (!isOpen) return null;
-
   const applyPreset = (rent: number, deposit: number, lostKey: number, late: number) => {
     setMonthlyRent(rent);
     setSecurityDeposit(deposit);
@@ -54,187 +55,182 @@ export function AdminLockersMatrixSettingsModal({
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (monthlyRent < 0 || securityDeposit < 0) {
-      toast.error('Fees cannot be negative.');
+      toast.error('Fees cannot be negative.', { id: 'admin-lockers-settings-invalid' });
       return;
     }
 
-    const updated: LockerPricingPolicy = {
+    onSavePolicy({
       monthlyRent: Number(monthlyRent),
       securityDeposit: Number(securityDeposit),
       lostKeyFee: Number(lostKeyFee),
       lateFeePerDay: Number(lateFeePerDay),
       branchName,
-    };
-
-    onSavePolicy(updated);
-    toast.success('Locker rent & caution deposit settings saved successfully!');
+    });
+    toast.success('Locker rent & caution deposit settings saved successfully!', { id: 'admin-lockers-settings-saved' });
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl max-h-[92vh] flex flex-col rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl shadow-black/70 overflow-hidden">
-        {/* HEADER */}
-        <div className="flex items-center justify-between border-b border-slate-800/80 bg-slate-900/90 px-6 py-4.5">
+    <Dialog open={isOpen} onOpenChange={(nextOpen) => { if (!nextOpen) onClose(); }}>
+      <DialogContent className="relative w-full max-w-xl max-h-[92vh] flex flex-col rounded-2xl border border-border bg-overlay shadow-dialog overflow-hidden p-0">
+        <div className="flex items-center justify-between border-b border-border bg-card px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-400">
-              <KeyRound size={20} />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-border-focus bg-primary-subtle text-primary">
+              <KeyRound size={20} aria-hidden="true" />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg font-bold text-white tracking-tight">Locker Rent & Caution Deposit Settings</h2>
-              <p className="text-xs text-slate-400">Set monthly subscription fees, refundable security deposit, and lost key charges</p>
+              <DialogTitle className="text-base sm:text-lg font-bold text-text-primary tracking-tight">
+                Locker Rent &amp; Caution Deposit Settings
+              </DialogTitle>
+              <p className="text-xs text-text-secondary">
+                Set monthly subscription fees, refundable security deposit, and lost key charges
+              </p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-700/60 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            aria-label="Close"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-text-secondary hover:text-text-primary hover:bg-surface-hover motion-safe:transition-colors"
           >
-            <X size={16} />
+            <X size={16} aria-hidden="true" />
           </button>
         </div>
 
-        {/* BODY */}
         <form onSubmit={handleSave} className="flex-1 overflow-y-auto p-6 space-y-5">
-          {/* Presets */}
           <div className="space-y-1.5">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Quick Pricing Presets</span>
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Quick Pricing Presets</span>
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={() => applyPreset(200, 500, 150, 20)}
-                className="rounded-lg border border-slate-700 bg-slate-800/80 px-2.5 py-1 text-xs text-slate-300 hover:text-white hover:border-indigo-500 transition-colors"
+                className="rounded-lg border border-border bg-card px-2.5 py-1 text-xs text-text-secondary hover:text-text-primary hover:border-border-focus motion-safe:transition-colors"
               >
                 Standard (₹200/mo · ₹500 Dep)
               </button>
               <button
                 type="button"
                 onClick={() => applyPreset(350, 750, 200, 30)}
-                className="rounded-lg border border-slate-700 bg-slate-800/80 px-2.5 py-1 text-xs text-slate-300 hover:text-white hover:border-indigo-500 transition-colors"
+                className="rounded-lg border border-border bg-card px-2.5 py-1 text-xs text-text-secondary hover:text-text-primary hover:border-border-focus motion-safe:transition-colors"
               >
                 Pro Metal Box (₹350/mo · ₹750 Dep)
               </button>
               <button
                 type="button"
                 onClick={() => applyPreset(150, 300, 100, 15)}
-                className="rounded-lg border border-slate-700 bg-slate-800/80 px-2.5 py-1 text-xs text-slate-300 hover:text-white hover:border-emerald-500 transition-colors"
+                className="rounded-lg border border-border bg-card px-2.5 py-1 text-xs text-text-secondary hover:text-text-primary hover:border-success motion-safe:transition-colors"
               >
                 Exam Special (₹150/mo · ₹300 Dep)
               </button>
             </div>
           </div>
 
-          {/* Pricing Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Monthly Rent */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                <IndianRupee size={13} className="text-indigo-400" />
+              <label htmlFor="locker-monthly-rent" className="text-xs font-semibold text-text-secondary flex items-center gap-1.5">
+                <IndianRupee size={13} className="text-primary" aria-hidden="true" />
                 <span>Monthly Locker Rent (₹)</span>
               </label>
               <input
+                id="locker-monthly-rent"
                 type="number"
                 min={0}
                 max={10000}
                 value={monthlyRent}
                 onChange={(e) => setMonthlyRent(Number(e.target.value))}
-                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 font-mono"
+                className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary font-mono"
                 required
               />
-              <span className="text-[10px] text-slate-400">Added to student's monthly desk subscription</span>
+              <span className="text-[10px] text-text-secondary">Added to student&apos;s monthly desk subscription</span>
             </div>
 
-            {/* Refundable Deposit */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                <ShieldCheck size={13} className="text-emerald-400" />
+              <label htmlFor="locker-security-deposit" className="text-xs font-semibold text-text-secondary flex items-center gap-1.5">
+                <ShieldCheck size={13} className="text-success-text" aria-hidden="true" />
                 <span>Refundable Caution Deposit (₹)</span>
               </label>
               <input
+                id="locker-security-deposit"
                 type="number"
                 min={0}
                 max={10000}
                 value={securityDeposit}
                 onChange={(e) => setSecurityDeposit(Number(e.target.value))}
-                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 font-mono"
+                className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary font-mono"
                 required
               />
-              <span className="text-[10px] text-slate-400">Returned upon locker key surrender at exit</span>
+              <span className="text-[10px] text-text-secondary">Returned upon locker key surrender at exit</span>
             </div>
 
-            {/* Lost Key Fee */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                <KeyRound size={13} className="text-amber-400" />
+              <label htmlFor="locker-lost-key-fee" className="text-xs font-semibold text-text-secondary flex items-center gap-1.5">
+                <KeyRound size={13} className="text-warning-text" aria-hidden="true" />
                 <span>Lost Key Replacement Charge (₹)</span>
               </label>
               <input
+                id="locker-lost-key-fee"
                 type="number"
                 min={0}
                 max={5000}
                 value={lostKeyFee}
                 onChange={(e) => setLostKeyFee(Number(e.target.value))}
-                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:ring-2 focus:ring-amber-400 font-mono"
+                className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary font-mono"
                 required
               />
-              <span className="text-[10px] text-slate-400">Deducted if key is damaged or mislaid</span>
+              <span className="text-[10px] text-text-secondary">Deducted if key is damaged or mislaid</span>
             </div>
 
-            {/* Overstay penalty */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                <AlertCircle size={13} className="text-rose-400" />
+              <label htmlFor="locker-late-fee" className="text-xs font-semibold text-text-secondary flex items-center gap-1.5">
+                <AlertCircle size={13} className="text-danger-text" aria-hidden="true" />
                 <span>Late Key Return Daily Fee (₹)</span>
               </label>
               <input
+                id="locker-late-fee"
                 type="number"
                 min={0}
                 max={1000}
                 value={lateFeePerDay}
                 onChange={(e) => setLateFeePerDay(Number(e.target.value))}
-                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:ring-2 focus:ring-rose-400 font-mono"
+                className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary font-mono"
                 required
               />
-              <span className="text-[10px] text-slate-400">Charged per day after membership expiry</span>
+              <span className="text-[10px] text-text-secondary">Charged per day after membership expiry</span>
             </div>
           </div>
 
-          {/* Policy Summary Card */}
-          <div className="rounded-xl border border-indigo-500/30 bg-indigo-500/5 p-4 space-y-2">
-            <span className="text-xs font-semibold text-indigo-300 flex items-center gap-1.5">
-              <KeyRound size={13} /> Admission Receipt Formula
+          <div className="rounded-xl border border-border-focus bg-primary-subtle p-4 space-y-2">
+            <span className="text-xs font-semibold text-primary flex items-center gap-1.5">
+              <KeyRound size={13} aria-hidden="true" /> Admission Receipt Formula
             </span>
-            <div className="text-xs text-slate-300 flex items-center justify-between border-t border-indigo-500/20 pt-2">
+            <div className="text-xs text-text-primary flex items-center justify-between border-t border-border pt-2">
               <span>First Allotment Due (Rent + Security Deposit):</span>
-              <strong className="text-emerald-400 font-mono text-sm">
-                ₹{monthlyRent + securityDeposit}
-              </strong>
+              <strong className="text-success-text font-mono text-sm">₹{monthlyRent + securityDeposit}</strong>
             </div>
-            <div className="text-[11px] text-slate-400">
+            <div className="text-[11px] text-text-secondary">
               * ₹{securityDeposit} caution money is tracked in Security Deposits Ledger and refunded at exit.
             </div>
           </div>
 
-          {/* FOOTER ACTIONS */}
-          <div className="flex items-center justify-end gap-2.5 border-t border-slate-800 pt-4">
+          <div className="flex items-center justify-end gap-2.5 border-t border-border pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-slate-700/60 bg-slate-800/60 px-4 py-2 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+              className="rounded-xl border border-border bg-surface-highlight px-4 py-2 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-surface-hover motion-safe:transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 px-5 py-2 text-xs font-semibold text-white shadow-md shadow-indigo-500/25 hover:from-indigo-600 hover:to-indigo-700 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2 text-xs font-semibold text-on-primary shadow-card hover:bg-primary-hover motion-safe:transition-colors cursor-pointer"
             >
-              <Save size={15} />
+              <Save size={15} aria-hidden="true" />
               <span>Save Policy Settings</span>
             </button>
           </div>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

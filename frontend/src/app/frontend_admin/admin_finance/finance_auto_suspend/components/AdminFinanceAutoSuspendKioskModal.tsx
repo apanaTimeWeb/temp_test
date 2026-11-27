@@ -1,8 +1,11 @@
 'use client';
 
-import { AlertOctagon,CheckCircle2,Lock,QrCode,Unlock,X } from 'lucide-react';
+import type { AdminFinanceAutoSuspendSuspendedStudent } from '@/app/frontend_admin/admin_finance/finance_auto_suspend/types/AdminFinanceAutoSuspendTypes';
+import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
+import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
+import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
+import { AlertOctagon, CheckCircle2, Lock, QrCode, Unlock, X } from 'lucide-react';
 import { useState } from 'react';
-import type { AdminFinanceAutoSuspendSuspendedStudent } from '../types/AdminFinanceAutoSuspendTypes';
 
 export interface AdminFinanceAutoSuspendKioskModalProps {
   isOpen: boolean;
@@ -18,14 +21,11 @@ export function AdminFinanceAutoSuspendKioskModal({
   initialStudent,
 }: AdminFinanceAutoSuspendKioskModalProps) {
   const [selectedStudentId, setSelectedStudentId] = useState<number | string>(
-    initialStudent ? initialStudent.id : (suspendedStudents[0]?.id || '')
+    initialStudent ? initialStudent.id : suspendedStudents[0]?.id || '',
   );
   const [scanResult, setScanResult] = useState<'idle' | 'denied' | 'granted'>('idle');
   const [scannedStudent, setScannedStudent] = useState<AdminFinanceAutoSuspendSuspendedStudent | null>(null);
 
-  if (!isOpen) return null;
-
-  // Web Audio buzzer alert simulator
   const playAlertBuzzer = () => {
     try {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
@@ -68,23 +68,21 @@ export function AdminFinanceAutoSuspendKioskModal({
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4 animate-in fade-in"
-      role="dialog"
-      aria-modal="true"
-      data-testid="gate-qr-kiosk-modal"
-    >
-      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-5 animate-in zoom-in-95">
+    <Dialog open={isOpen} onOpenChange={(nextOpen) => { if (!nextOpen) onClose(); }}>
+      <DialogContent
+        data-testid="gate-qr-kiosk-modal"
+        className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-border bg-overlay p-6 shadow-dialog space-y-5 text-text-primary"
+      >
         <div className="flex items-center justify-between border-b border-border pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="p-2.5 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
-              <QrCode size={20} />
+            <div className="p-2.5 rounded-xl bg-danger-bg text-danger-text border border-danger">
+              <QrCode size={20} aria-hidden="true" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-primary">
+              <DialogTitle className="text-base font-bold text-text-primary">
                 Entrance Turnstile QR Kiosk Simulator
-              </h2>
-              <p className="text-xs text-secondary">
+              </DialogTitle>
+              <p className="text-xs text-text-secondary">
                 Simulate gate scanner behavior when a suspended defaulter scans their Smart Card / QR.
               </p>
             </div>
@@ -92,15 +90,16 @@ export function AdminFinanceAutoSuspendKioskModal({
           <button
             type="button"
             onClick={onClose}
-            className="text-secondary hover:text-primary p-1.5 rounded-lg hover:bg-surface-hover cursor-pointer transition-colors"
+            aria-label="Close simulator"
+            className="text-text-secondary hover:text-text-primary p-1.5 rounded-lg hover:bg-surface-hover cursor-pointer motion-safe:transition-colors"
           >
-            <X size={18} />
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
 
         <div className="space-y-4">
           <div className="space-y-1.5">
-            <label htmlFor="student-scan-select" className="text-xs font-semibold text-secondary">
+            <label htmlFor="student-scan-select" className="text-xs font-semibold text-text-secondary">
               Select Student to Simulate at Gate Scanner
             </label>
             <select
@@ -110,7 +109,7 @@ export function AdminFinanceAutoSuspendKioskModal({
                 setSelectedStudentId(e.target.value);
                 setScanResult('idle');
               }}
-              className="w-full p-2.5 rounded-xl border border-border bg-input-bg text-primary text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer"
+              className="w-full p-2.5 rounded-xl border border-border bg-input text-text-primary text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
             >
               <optgroup label="Suspended Defaulters">
                 {suspendedStudents.map((s) => (
@@ -120,9 +119,7 @@ export function AdminFinanceAutoSuspendKioskModal({
                 ))}
               </optgroup>
               <optgroup label="Active Students (Normal Access)">
-                <option value="active-student-test">
-                  ✅ Regular Active Member (Dues Cleared)
-                </option>
+                <option value="active-student-test">✅ Regular Active Member (Dues Cleared)</option>
               </optgroup>
             </select>
           </div>
@@ -130,99 +127,67 @@ export function AdminFinanceAutoSuspendKioskModal({
           <button
             type="button"
             onClick={handleSimulateScan}
-            className="w-full py-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition-all shadow-xs cursor-pointer flex items-center justify-center gap-2 active:scale-95"
+            className="w-full py-2.5 rounded-xl text-xs font-bold text-on-primary bg-primary hover:bg-primary-hover motion-safe:transition-colors shadow-card cursor-pointer flex items-center justify-center gap-2"
           >
-            <QrCode size={15} />
+            <QrCode size={15} aria-hidden="true" />
             <span>Simulate Gate QR Scan</span>
           </button>
 
-          {/* Scanner Visual Screen */}
           {scanResult === 'denied' && scannedStudent && (
-            <div
-              data-testid="kiosk-access-denied-box"
-              className="p-5 rounded-2xl bg-rose-500/10 border-2 border-rose-500/50 text-center space-y-3 animate-in zoom-in-95"
-            >
-              <div className="w-14 h-14 mx-auto rounded-full bg-rose-500/20 text-rose-500 flex items-center justify-center border border-rose-500/40">
-                <Lock size={28} />
+            <div data-testid="kiosk-access-denied-box" className="p-5 rounded-2xl bg-danger-bg border-2 border-danger text-center space-y-3">
+              <div className="w-14 h-14 mx-auto rounded-full bg-card text-danger-text flex items-center justify-center border border-danger">
+                <Lock size={28} aria-hidden="true" />
               </div>
               <div>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-rose-600 text-white shadow-xs">
-                  <AlertOctagon size={13} />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-danger-text text-card shadow-card">
+                  <AlertOctagon size={13} aria-hidden="true" />
                   Access Denied • Turnstile Locked
                 </span>
-                <h3 className="text-lg font-black text-rose-600 dark:text-rose-400 mt-2">
-                  SEAT ACCESS SUSPENDED
-                </h3>
-                <p className="text-xs text-secondary mt-1">
+                <h3 className="text-lg font-black text-danger-text mt-2">SEAT ACCESS SUSPENDED</h3>
+                <p className="text-xs text-text-secondary mt-1">
                   Dear <strong>{scannedStudent.studentName}</strong> ({scannedStudent.smartId}), your library seat{' '}
-                  <strong className="text-primary font-bold">{scannedStudent.seat}</strong> is locked due to{' '}
-                  <span className="text-rose-600 font-bold">{scannedStudent.daysOverdue} days unpaid overdue fee</span>.
+                  <strong className="text-text-primary font-bold">{scannedStudent.seat}</strong> is locked due to{' '}
+                  <span className="text-danger-text font-bold">{scannedStudent.daysOverdue} days unpaid overdue fee</span>.
                 </p>
               </div>
 
-              <div className="bg-card/70 border border-border/80 p-3 rounded-xl text-xs space-y-1 text-left">
-                <div className="flex justify-between">
-                  <span className="text-secondary">Student Name:</span>
-                  <span className="font-bold text-primary">{scannedStudent.studentName}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-secondary">Smart ID:</span>
-                  <span className="font-mono text-primary">{scannedStudent.smartId}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-secondary">Allotted Seat:</span>
-                  <span className="font-bold text-primary">{scannedStudent.seat} ({scannedStudent.shift})</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-secondary">Pending Amount:</span>
-                  <span className="font-bold text-rose-600">₹{(scannedStudent.duesAmount || 1500).toLocaleString('en-IN')}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-secondary">Branch:</span>
-                  <span className="text-primary">{scannedStudent.branch}</span>
-                </div>
+              <div className="bg-card border border-border p-3 rounded-xl text-xs space-y-1 text-left">
+                <div className="flex justify-between"><span className="text-text-secondary">Student Name:</span><span className="font-bold text-text-primary">{scannedStudent.studentName}</span></div>
+                <div className="flex justify-between"><span className="text-text-secondary">Smart ID:</span><span className="font-mono text-text-primary">{scannedStudent.smartId}</span></div>
+                <div className="flex justify-between"><span className="text-text-secondary">Allotted Seat:</span><span className="font-bold text-text-primary">{scannedStudent.seat} ({scannedStudent.shift})</span></div>
+                <div className="flex justify-between"><span className="text-text-secondary">Pending Amount:</span><span className="font-bold text-danger-text">₹{(scannedStudent.duesAmount || 1500).toLocaleString('en-IN')}</span></div>
+                <div className="flex justify-between"><span className="text-text-secondary">Branch:</span><span className="text-text-primary">{scannedStudent.branch}</span></div>
               </div>
 
-              <p className="text-[11px] text-rose-500/80 font-medium italic">
+              <p className="text-[11px] text-danger-text font-medium italic">
                 * Turnstile gate buzzer sounding. Please visit front desk to clear dues and restore access.
               </p>
             </div>
           )}
 
           {scanResult === 'granted' && (
-            <div
-              data-testid="kiosk-access-granted-box"
-              className="p-5 rounded-2xl bg-emerald-500/10 border-2 border-emerald-500/50 text-center space-y-3 animate-in zoom-in-95"
-            >
-              <div className="w-14 h-14 mx-auto rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center border border-emerald-500/40">
-                <Unlock size={28} />
+            <div data-testid="kiosk-access-granted-box" className="p-5 rounded-2xl bg-success-bg border-2 border-success text-center space-y-3">
+              <div className="w-14 h-14 mx-auto rounded-full bg-card text-success-text flex items-center justify-center border border-success">
+                <Unlock size={28} aria-hidden="true" />
               </div>
               <div>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-emerald-600 text-white shadow-xs">
-                  <CheckCircle2 size={13} />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-success-text text-card shadow-card">
+                  <CheckCircle2 size={13} aria-hidden="true" />
                   Access Granted • Turnstile Unlocked
                 </span>
-                <h3 className="text-lg font-black text-emerald-600 dark:text-emerald-400 mt-2">
-                  WELCOME TO THE LIBRARY
-                </h3>
-                <p className="text-xs text-secondary mt-1">
-                  Active subscription verified. Turnstile gate opened successfully.
-                </p>
+                <h3 className="text-lg font-black text-success-text mt-2">WELCOME TO THE LIBRARY</h3>
+                <p className="text-xs text-text-secondary mt-1">Active subscription verified. Turnstile gate opened successfully.</p>
               </div>
             </div>
           )}
         </div>
 
         <div className="flex justify-end pt-2 border-t border-border">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 rounded-xl text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
-          >
+          <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-surface-hover cursor-pointer">
             Close Simulator
           </button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

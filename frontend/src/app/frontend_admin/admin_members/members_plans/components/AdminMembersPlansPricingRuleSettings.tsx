@@ -1,12 +1,12 @@
 'use client';
 
 import {
-getLibraryPricingConfig,
-saveLibraryPricingConfig,
-type LibraryPricingConfig,
+  getLibraryPricingConfig,
+  saveLibraryPricingConfig,
+  type LibraryPricingConfig,
 } from '@/lib/pricing/libraryPricingEngine';
-import { Armchair,Layers,Lock,Percent } from 'lucide-react';
-import { useEffect,useState } from 'react';
+import { Armchair, Layers, Lock, Percent } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 export function AdminMembersPlansPricingRuleSettings() {
@@ -28,7 +28,7 @@ export function AdminMembersPlansPricingRuleSettings() {
     saveLibraryPricingConfig(draftConfig);
     setConfig(draftConfig);
     setIsEditing(false);
-    toast.success('Dynamic Shift Pricing & Tenure rules updated successfully.');
+    toast.success('Dynamic Shift Pricing & Tenure rules updated successfully.', { id: 'admin-plans-pricing-rules-updated' });
   };
 
   const handleCancel = () => {
@@ -37,21 +37,21 @@ export function AdminMembersPlansPricingRuleSettings() {
   };
 
   return (
-    <div className="mb-6 rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl p-5 shadow-lg shadow-black/20">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-slate-800/80 pb-4">
+    <div className="mb-6 rounded-2xl border border-border bg-card p-5 shadow-card">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-border pb-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-400">
-              <Percent size={16} />
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-subtle text-primary">
+              <Percent size={16} aria-hidden="true" />
             </div>
-            <h2 className="text-base font-bold text-white tracking-tight">
+            <h2 className="text-base font-bold text-text-primary tracking-tight">
               Shift Multiplier & Tenure Discount Engine
             </h2>
-            <span className="rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-indigo-400">
+            <span className="rounded-full border border-border-focus bg-primary-subtle px-2.5 py-0.5 text-[11px] font-semibold text-primary">
               Auto-Applied in New Admission
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-text-secondary mt-1">
             Manager New Admission auto-calculates plan rates based on these shift rules, tenure tiers, and add-on surcharges.
           </p>
         </div>
@@ -61,14 +61,14 @@ export function AdminMembersPlansPricingRuleSettings() {
               <button
                 type="button"
                 onClick={handleCancel}
-                className="rounded-xl border border-slate-700 bg-slate-800/60 px-3.5 py-1.5 text-xs font-medium text-slate-300 hover:bg-slate-700 transition-colors"
+                className="rounded-xl border border-border bg-card px-3.5 py-1.5 text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-surface-hover motion-safe:transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleSave}
-                className="rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white hover:from-indigo-600 hover:to-indigo-700 shadow-sm transition-all"
+                className="rounded-xl bg-primary px-3.5 py-1.5 text-xs font-semibold text-on-primary hover:bg-primary-hover shadow-card motion-safe:transition-colors"
               >
                 Save Pricing Rules
               </button>
@@ -77,7 +77,7 @@ export function AdminMembersPlansPricingRuleSettings() {
             <button
               type="button"
               onClick={() => setIsEditing(true)}
-              className="rounded-xl border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-1.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 hover:text-white transition-all shadow-xs"
+              className="rounded-xl border border-border-focus bg-primary-subtle px-3.5 py-1.5 text-xs font-semibold text-primary hover:opacity-90 motion-safe:transition-opacity shadow-card"
             >
               Configure Rates & Discounts
             </button>
@@ -87,16 +87,16 @@ export function AdminMembersPlansPricingRuleSettings() {
 
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {draftConfig.durationTiers.map((tier, idx) => (
-          <div key={tier.id} className="rounded-xl border border-slate-800/90 bg-slate-950/50 p-3.5 hover:border-slate-700/80 transition-all">
+          <div key={tier.id} className="rounded-xl border border-border bg-surface-highlight p-3.5 hover:border-border-focus motion-safe:transition-colors">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-white">{tier.name}</span>
-              <span className="text-xs font-semibold text-indigo-400 font-mono">
+              <span className="text-xs font-bold text-text-primary">{tier.name}</span>
+              <span className="text-xs font-semibold text-primary font-mono">
                 {tier.months} {tier.months === 1 ? 'Month' : 'Months'}
               </span>
             </div>
             <div className="mt-2.5 flex items-center justify-between">
-              <span className="text-xs text-slate-400 flex items-center gap-1">
-                <Percent size={12} className="text-slate-500" /> Discount Rate
+              <span className="text-xs text-text-secondary flex items-center gap-1">
+                <Percent size={12} className="text-text-secondary" aria-hidden="true" /> Discount Rate
               </span>
               {isEditing ? (
                 <div className="flex items-center gap-1">
@@ -114,16 +114,18 @@ export function AdminMembersPlansPricingRuleSettings() {
                         setDraftConfig({ ...draftConfig, durationTiers: nextTiers });
                       }
                     }}
-                    className="w-16 rounded-lg border border-slate-700 bg-slate-900 px-2 py-0.5 text-right text-xs font-bold text-white focus:outline-none focus:border-indigo-500"
+                    className="w-16 rounded-lg border border-border bg-input px-2 py-0.5 text-right text-xs font-bold text-text-primary focus:outline-none focus:border-border-focus"
                   />
-                  <span className="text-xs text-slate-400">%</span>
+                  <span className="text-xs text-text-secondary">%</span>
                 </div>
               ) : (
-                <span className={`rounded-lg px-2 py-0.5 text-xs font-bold border ${
-                  tier.discountPercent > 0
-                    ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
-                    : 'border-slate-700/60 bg-slate-800/60 text-slate-300'
-                }`}>
+                <span
+                  className={`rounded-lg px-2 py-0.5 text-xs font-bold border ${
+                    tier.discountPercent > 0
+                      ? 'border-success bg-success-bg text-success-text'
+                      : 'border-border bg-card text-text-secondary'
+                  }`}
+                >
                   {tier.discountPercent > 0 ? `${tier.discountPercent}% Off` : 'Standard Rate'}
                 </span>
               )}
@@ -132,69 +134,69 @@ export function AdminMembersPlansPricingRuleSettings() {
         ))}
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3 border-t border-slate-800/80 pt-4">
-        <div className="flex items-center justify-between rounded-xl border border-slate-800/90 bg-slate-950/50 p-3.5 hover:border-slate-700/80 transition-all">
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3 border-t border-border pt-4">
+        <div className="flex items-center justify-between rounded-xl border border-border bg-surface-highlight p-3.5 hover:border-border-focus motion-safe:transition-colors">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-400">
-              <Lock size={16} />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-info-bg text-info-text border border-info">
+              <Lock size={16} aria-hidden="true" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-white">Locker Monthly Fee</p>
-              <p className="text-[11px] text-slate-400">Added to monthly shift rate</p>
+              <p className="text-xs font-semibold text-text-primary">Locker Monthly Fee</p>
+              <p className="text-[11px] text-text-secondary">Added to monthly shift rate</p>
             </div>
           </div>
           {isEditing ? (
             <div className="flex items-center gap-1">
-              <span className="text-xs text-slate-400">₹</span>
+              <span className="text-xs text-text-secondary">₹</span>
               <input
                 type="number"
                 min="0"
                 step="50"
                 value={draftConfig.lockerMonthlyFee}
                 onChange={(e) => setDraftConfig({ ...draftConfig, lockerMonthlyFee: Number(e.target.value) || 0 })}
-                className="w-20 rounded-lg border border-slate-700 bg-slate-900 px-2 py-1 text-right text-xs font-bold text-white focus:outline-none focus:border-indigo-500"
+                className="w-20 rounded-lg border border-border bg-input px-2 py-1 text-right text-xs font-bold text-text-primary focus:outline-none focus:border-border-focus"
               />
             </div>
           ) : (
-            <span className="text-xs font-bold text-white font-mono">₹{config.lockerMonthlyFee} / mo</span>
+            <span className="text-xs font-bold text-text-primary font-mono">₹{config.lockerMonthlyFee} / mo</span>
           )}
         </div>
 
-        <div className="flex items-center justify-between rounded-xl border border-slate-800/90 bg-slate-950/50 p-3.5 hover:border-slate-700/80 transition-all">
+        <div className="flex items-center justify-between rounded-xl border border-border bg-surface-highlight p-3.5 hover:border-border-focus motion-safe:transition-colors">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/15 text-purple-400">
-              <Armchair size={16} />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-bg text-purple border border-border">
+              <Armchair size={16} aria-hidden="true" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-white">Reserved Desk Surcharge</p>
-              <p className="text-[11px] text-slate-400">Floor 3 / Private Cabin</p>
+              <p className="text-xs font-semibold text-text-primary">Reserved Desk Surcharge</p>
+              <p className="text-[11px] text-text-secondary">Floor 3 / Private Cabin</p>
             </div>
           </div>
           {isEditing ? (
             <div className="flex items-center gap-1">
-              <span className="text-xs text-slate-400">₹</span>
+              <span className="text-xs text-text-secondary">₹</span>
               <input
                 type="number"
                 min="0"
                 step="50"
                 value={draftConfig.reservedSeatMonthlyFee}
                 onChange={(e) => setDraftConfig({ ...draftConfig, reservedSeatMonthlyFee: Number(e.target.value) || 0 })}
-                className="w-20 rounded-lg border border-slate-700 bg-slate-900 px-2 py-1 text-right text-xs font-bold text-white focus:outline-none focus:border-indigo-500"
+                className="w-20 rounded-lg border border-border bg-input px-2 py-1 text-right text-xs font-bold text-text-primary focus:outline-none focus:border-border-focus"
               />
             </div>
           ) : (
-            <span className="text-xs font-bold text-white font-mono">₹{config.reservedSeatMonthlyFee} / mo</span>
+            <span className="text-xs font-bold text-text-primary font-mono">₹{config.reservedSeatMonthlyFee} / mo</span>
           )}
         </div>
 
-        <div className="flex items-center justify-between rounded-xl border border-slate-800/90 bg-slate-950/50 p-3.5 hover:border-slate-700/80 transition-all">
+        <div className="flex items-center justify-between rounded-xl border border-border bg-surface-highlight p-3.5 hover:border-border-focus motion-safe:transition-colors">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-400">
-              <Layers size={16} />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-subtle text-primary border border-border-focus">
+              <Layers size={16} aria-hidden="true" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-white">Multi-Shift Combo Discount</p>
-              <p className="text-[11px] text-slate-400">When 2+ shifts selected</p>
+              <p className="text-xs font-semibold text-text-primary">Multi-Shift Combo Discount</p>
+              <p className="text-[11px] text-text-secondary">When 2+ shifts selected</p>
             </div>
           </div>
           {isEditing ? (
@@ -205,12 +207,12 @@ export function AdminMembersPlansPricingRuleSettings() {
                 max="50"
                 value={draftConfig.multiShiftDiscountPercent}
                 onChange={(e) => setDraftConfig({ ...draftConfig, multiShiftDiscountPercent: Number(e.target.value) || 0 })}
-                className="w-16 rounded-lg border border-slate-700 bg-slate-900 px-2 py-1 text-right text-xs font-bold text-white focus:outline-none focus:border-indigo-500"
+                className="w-16 rounded-lg border border-border bg-input px-2 py-1 text-right text-xs font-bold text-text-primary focus:outline-none focus:border-border-focus"
               />
-              <span className="text-xs text-slate-400">%</span>
+              <span className="text-xs text-text-secondary">%</span>
             </div>
           ) : (
-            <span className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-xs font-bold text-emerald-400">
+            <span className="rounded-lg border border-success bg-success-bg px-2.5 py-1 text-xs font-bold text-success-text">
               {config.multiShiftDiscountPercent}% Combo Off
             </span>
           )}
