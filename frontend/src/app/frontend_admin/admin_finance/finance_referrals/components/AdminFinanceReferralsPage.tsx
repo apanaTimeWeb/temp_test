@@ -15,7 +15,7 @@ type AdminFinanceReferralsTimeHorizon,
 import { ADMIN_FINANCE_DEMO_REFERRERS } from '@/app/frontend_admin/admin_finance/finance_referrals/mocks/AdminFinanceReferralsDemoFixtures';
 import type { AdminFinanceDemoReferrer,ReferralPayoutVoucher } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsTypes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { Download,FileSpreadsheet,Printer,RotateCcw,Search,Users2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect,useMemo,useState } from 'react';

@@ -13,7 +13,7 @@ exportFinancialReportCsv,
 exportFinancialReportExcel,
 printFinancialReport,
 } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/utils/AdminAccountsFinancialReportsExporter';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { BarChart3,Calendar,Download,FileSpreadsheet,Printer } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo,useState } from 'react';

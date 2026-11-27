@@ -10,7 +10,7 @@ import { useAdminAssetsRegisterMutations } from '@/app/frontend_admin/admin_acco
 import { useAdminAssetsRegisterState } from '@/app/frontend_admin/admin_accounts_assets/assets_register/hooks/useAdminAssetsRegisterState';
 import type { AdminAssetRecord } from '@/app/frontend_admin/admin_accounts_assets/assets_register/types/AdminAssetsRegisterTypes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { Building,FileSpreadsheet,PlusCircle,RotateCcw,Search,ShieldCheck } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect,useState } from 'react';

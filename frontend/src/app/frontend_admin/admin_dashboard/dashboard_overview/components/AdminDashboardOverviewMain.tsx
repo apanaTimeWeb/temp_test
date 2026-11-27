@@ -48,7 +48,7 @@ export default function AdminDashboardOverviewMain() {
     setIsSyncing(true);
     setTimeout(() => {
       setIsSyncing(false);
-      toast.success('Central network dashboard metrics synchronized');
+      toast.success('Central network dashboard metrics synchronized', { id: 'admin-dashboard-sync-overview' });
     }, 600);
   };
 
@@ -76,7 +76,7 @@ export default function AdminDashboardOverviewMain() {
       subtext: rawMetrics.branchesSub,
       Icon: Building2,
       trend: selectedBranchId === 'all' ? '+1 this quarter' : 'Branch Active',
-      theme: 'bg-sky-500/15 text-sky-400 border border-sky-500/30',
+      theme: 'bg-info-bg text-info-text border border-info',
     },
     {
       id: 'kpi-members',
@@ -86,7 +86,7 @@ export default function AdminDashboardOverviewMain() {
       subtext: rawMetrics.membersSub,
       Icon: Users,
       trend: '+12% vs last month',
-      theme: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30',
+      theme: 'bg-success-bg text-success-text border border-success',
     },
     {
       id: 'kpi-occupancy',
@@ -96,7 +96,7 @@ export default function AdminDashboardOverviewMain() {
       subtext: rawMetrics.occupancySub,
       Icon: Armchair,
       trend: 'Optimal capacity',
-      theme: 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30',
+      theme: 'bg-primary-subtle text-primary border border-border-focus',
     },
     {
       id: 'kpi-revenue',
@@ -106,7 +106,7 @@ export default function AdminDashboardOverviewMain() {
       subtext: dynamicRevenue.subtext,
       Icon: WalletCards,
       trend: '96% on-time fee recovery',
-      theme: 'bg-amber-500/15 text-amber-400 border border-amber-500/30',
+      theme: 'bg-warning-bg text-warning-text border border-warning',
     },
   ];
 
@@ -120,10 +120,10 @@ export default function AdminDashboardOverviewMain() {
   return (
     <div className="w-full space-y-6 text-text-primary">
       {/* ── Executive Header Banner ── */}
-      <div className="rounded-2xl border border-indigo-500/20 bg-card p-5 sm:p-6 shadow-card transition-all space-y-5">
+      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card motion-safe:transition-colors space-y-5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-text-primary">
               {t('LIBRARY_OVERVIEW_TITLE')}
             </h1>
           </div>
@@ -134,47 +134,47 @@ export default function AdminDashboardOverviewMain() {
               type="button"
               onClick={handleSyncOverview}
               disabled={isSyncing}
-              className="inline-flex items-center gap-2 min-h-10 px-4 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-xs font-bold text-indigo-300 hover:bg-indigo-500/20 hover:text-white transition-all shadow-sm active:scale-95 disabled:opacity-60 cursor-pointer"
+              className="inline-flex items-center gap-2 min-h-10 px-4 rounded-xl border border-border bg-primary-subtle text-xs font-bold text-primary hover:bg-surface-hover motion-safe:transition-colors shadow-sm disabled:opacity-60 cursor-pointer"
               title="Sync Central Analytics"
             >
-              <RefreshCw size={14} className={isSyncing ? 'animate-spin text-indigo-400' : 'text-indigo-400'} />
+              <RefreshCw size={14} className={isSyncing ? 'motion-safe:animate-spin text-primary' : 'text-primary'} aria-hidden="true" />
               <span>{isSyncing ? 'Syncing...' : 'Sync Central'}</span>
             </button>
           </div>
         </div>
 
         {/* ── Quick Administrative Actions Strip (Matching Manager Design) ── */}
-        <div className="pt-4 border-t border-indigo-500/15 flex flex-wrap items-center justify-between gap-3">
+        <div className="pt-4 border-t border-border flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 mr-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-text-secondary mr-1">
               Quick Actions:
             </span>
             <Link
               href={ADMIN_ROUTES.MEMBERS_DIRECTORY}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white text-xs font-bold shadow-md shadow-indigo-950/40 transition-all hover:scale-[1.02] cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary hover:bg-primary-hover text-on-primary text-xs font-bold shadow-card motion-safe:transition-colors cursor-pointer"
             >
-              <Users size={13} />
+              <Users size={13} aria-hidden="true" />
               <span>Members Directory</span>
             </Link>
             <Link
               href={ADMIN_ROUTES.SEATS_MATRIX}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/25 text-xs font-semibold transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-info-bg text-info-text border border-info hover:opacity-90 text-xs font-semibold motion-safe:transition-opacity cursor-pointer"
             >
-              <LayoutGrid size={13} />
+              <LayoutGrid size={13} aria-hidden="true" />
               <span>Seat Matrix</span>
             </Link>
             <Link
               href={ADMIN_ROUTES.FINANCE_PAYMENTS}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25 text-xs font-semibold transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-success-bg text-success-text border border-success hover:opacity-90 text-xs font-semibold motion-safe:transition-opacity cursor-pointer"
             >
-              <CreditCard size={13} />
+              <CreditCard size={13} aria-hidden="true" />
               <span>Finance Collections</span>
             </Link>
             <Link
               href={ADMIN_ROUTES.ACCOUNTS_DAILY_SETTLEMENT}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/15 text-purple-300 border border-purple-500/30 hover:bg-purple-500/25 text-xs font-semibold transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-bg text-purple border border-border hover:opacity-90 text-xs font-semibold motion-safe:transition-opacity cursor-pointer"
             >
-              <Receipt size={13} />
+              <Receipt size={13} aria-hidden="true" />
               <span>Daily Settlement</span>
             </Link>
           </div>
@@ -182,26 +182,26 @@ export default function AdminDashboardOverviewMain() {
       </div>
 
       {/* ── Main Global Time Horizon Segmented Pill Bar ── */}
-      <div className="rounded-2xl border border-indigo-500/20 bg-card p-3.5 sm:p-4 shadow-card flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="rounded-2xl border border-border bg-card p-3.5 sm:p-4 shadow-card flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <Clock size={16} className="text-indigo-400 shrink-0" />
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
+          <Clock size={16} className="text-primary shrink-0" aria-hidden="true" />
+          <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">
             Analytics Time Horizon:
           </span>
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Segmented Time Horizon Pills */}
-          <div className="inline-flex bg-slate-900/70 p-1 rounded-xl border border-indigo-500/20 flex-wrap gap-1">
+          <div className="inline-flex bg-input p-1 rounded-xl border border-border flex-wrap gap-1">
             {timeHorizonOptions.map((opt) => (
               <button
                 key={opt.id}
                 type="button"
                 onClick={() => setTimeRange(opt.id)}
-                className={`min-h-8 px-3.5 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                className={`min-h-8 px-3.5 py-1 text-xs font-bold rounded-lg motion-safe:transition-colors cursor-pointer ${
                   timeRange === opt.id
-                    ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md shadow-indigo-950/50'
-                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                    ? 'bg-primary text-on-primary shadow-card'
+                    : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'
                 }`}
               >
                 {opt.label}
@@ -211,23 +211,23 @@ export default function AdminDashboardOverviewMain() {
 
           {/* Custom Date Range Picker */}
           {timeRange === 'custom' && (
-            <div className="flex items-center gap-2 flex-wrap text-xs bg-slate-900/80 p-1.5 rounded-xl border border-indigo-500/30">
-              <label className="flex items-center gap-1.5 text-slate-300">
+            <div className="flex items-center gap-2 flex-wrap text-xs bg-card p-1.5 rounded-xl border border-border">
+              <label className="flex items-center gap-1.5 text-text-secondary">
                 <span className="text-xs font-semibold">From:</span>
                 <input maxLength={100}
                   type="date"
                   value={customStartDate}
                   onChange={(e) => setCustomStartDate(e.target.value)}
-                  className="px-2.5 py-1 bg-[#0b0c20] border border-indigo-500/30 rounded-lg text-xs text-white outline-none focus:border-indigo-400"
+                  className="px-2.5 py-1 bg-input border border-border rounded-lg text-xs text-text-primary outline-none focus:border-border-focus"
                 />
               </label>
-              <label className="flex items-center gap-1.5 text-slate-300">
+              <label className="flex items-center gap-1.5 text-text-secondary">
                 <span className="text-xs font-semibold">To:</span>
                 <input maxLength={100}
                   type="date"
                   value={customEndDate}
                   onChange={(e) => setCustomEndDate(e.target.value)}
-                  className="px-2.5 py-1 bg-[#0b0c20] border border-indigo-500/30 rounded-lg text-xs text-white outline-none focus:border-indigo-400"
+                  className="px-2.5 py-1 bg-input border border-border rounded-lg text-xs text-text-primary outline-none focus:border-border-focus"
                 />
               </label>
               {(customStartDate || customEndDate) && (
@@ -237,10 +237,10 @@ export default function AdminDashboardOverviewMain() {
                     setCustomStartDate('');
                     setCustomEndDate('');
                   }}
-                  className="p-1 text-slate-400 hover:text-red-400 rounded transition-colors"
+                  className="p-1 text-text-secondary hover:text-danger-text rounded motion-safe:transition-colors"
                   title="Clear custom dates"
                 >
-                  <X size={13} />
+                  <X size={13} aria-hidden="true" />
                 </button>
               )}
             </div>

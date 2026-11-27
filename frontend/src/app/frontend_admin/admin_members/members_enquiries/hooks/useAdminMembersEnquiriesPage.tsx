@@ -5,7 +5,7 @@ import { ADMIN_ENQUIRIES_ENQUIRY_STORAGE_EXPECTED_VERSION,AdminEnquiriesEnquiryS
 import { matchesAdminEnquiriesEnquirySearch } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { useEffect,useMemo,useState } from 'react';

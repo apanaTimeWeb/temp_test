@@ -18,7 +18,7 @@ AdminAccountsExpensesRouteView,
 AdminAccountsExpensesStatusFilter,
 } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/types/AdminAccountsExpensesComponentTypes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { Calendar } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';

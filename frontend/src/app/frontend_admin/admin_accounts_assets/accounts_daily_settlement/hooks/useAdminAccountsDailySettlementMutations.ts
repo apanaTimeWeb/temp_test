@@ -9,7 +9,7 @@ ApproveSettlementPayload,
 DailySettlementRecord,
 FlagDiscrepancyPayload,
 } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/types/AdminAccountsDailySettlementTypes';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { useTranslations } from 'next-intl';
 import { useCallback,useState } from 'react';
 import { toast } from 'sonner';

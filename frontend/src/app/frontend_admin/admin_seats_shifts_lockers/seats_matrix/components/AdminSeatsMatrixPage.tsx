@@ -9,7 +9,7 @@ import type { AdminSeatMatrixSeatMatrixViewModel } from '@/app/frontend_admin/ad
 import { buildAdminSeatMatrixSeatMatrixCsv,downloadAdminSeatMatrixCsv } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/utils/AdminSeatsMatrixExportUtils';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { DataGrid,type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { useQueryClient } from '@tanstack/react-query';
 import { addDays,format } from 'date-fns';
 import {

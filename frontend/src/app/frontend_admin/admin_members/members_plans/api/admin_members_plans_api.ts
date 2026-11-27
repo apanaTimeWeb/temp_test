@@ -2,7 +2,7 @@ import { ADMIN_MEMBERS_PLANS_API,ADMIN_PLANS_STATUS_VALUES } from '@/app/fronten
 import type { AdminPlansPlan } from '@/app/frontend_admin/admin_members/members_plans/schemas/AdminMembersPlansSchema';
 import { AdminPlansApiResponseSchema } from '@/app/frontend_admin/admin_members/members_plans/schemas/AdminMembersPlansSchema';
 import { apiFetch } from '@/app/frontend_admin/lib/api';
-import { parseApiResponseData } from '@/app/frontend_admin/lib/apiSchema';
+import { parseApiResponseData } from '@/lib/apiSchema';
 
 export class AdminPlansApiContractMissingError extends Error {
   constructor() {

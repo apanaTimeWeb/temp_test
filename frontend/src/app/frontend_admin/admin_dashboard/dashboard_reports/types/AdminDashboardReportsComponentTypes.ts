@@ -1,5 +1,18 @@
-import type { AdminDashboardReportsAnalyticsScenario } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/mocks/scenarios/admin_dashboard_reports.scenarios';
 import type { ReactNode } from 'react';
+
+export const ADMIN_DASHBOARD_REPORTS_SCENARIO_NAMES = [
+  'ACTIVE_RECORDS',
+  'EMPTY_DATA',
+  'SERVER_500_ERROR',
+  'NETWORK_TIMEOUT',
+  'UNAUTHORIZED_401',
+  'FORBIDDEN_403',
+  'NETWORK_ERROR',
+  'INVALID_RESPONSE',
+] as const;
+
+export type AdminDashboardReportsScenarioName = (typeof ADMIN_DASHBOARD_REPORTS_SCENARIO_NAMES)[number];
+export type AdminDashboardReportsAnalyticsScenario = AdminDashboardReportsScenarioName;
 
 export type AdminDashboardReportsReportCategory = 'members' | 'finance' | 'seats_shifts' | 'accounts_assets' | 'staff';
 export type AdminDashboardReportsAnalyticsKpiValueKind = 'currency' | 'count';

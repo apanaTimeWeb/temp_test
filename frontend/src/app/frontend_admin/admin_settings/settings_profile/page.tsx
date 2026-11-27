@@ -11,7 +11,7 @@ import AdminSettingsProfileUnsavedChangesDialog from '@/app/frontend_admin/admin
 import { ADMIN_PROFILE_NAVIGATION_ITEMS } from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.url_config';
 import useAdminSettingsProfileUnsavedChangesGuard from '@/app/frontend_admin/admin_settings/settings_profile/hooks/useAdminSettingsProfileUnsavedChangesGuard';
 import type { AdminProfileNavigationItem,AdminProfileTab } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { BellRing,Lock,ShieldAlert,User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { usePathname,useRouter,useSearchParams } from 'next/navigation';
@@ -71,22 +71,22 @@ export default function AdminProfilePage() {
   return (
     <div className="mx-auto w-full max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
       {!isDemoMode && (
-        <p data-testid="admin_profile-AdminProfilePage-state-api-unavailable" className="rounded-xl border border-warning-bg bg-warning-bg/15 p-4 text-sm font-medium text-warning-text" role="status">
+        <p data-testid="admin_profile-AdminProfilePage-state-api-unavailable" className="rounded-xl border border-warning bg-warning-bg p-4 text-sm font-medium text-warning-text" role="status">
           <span data-testid="admin_profile-AdminSettingsProfileMain-state-api-unavailable" className="sr-only" />
           {t('LIVE_UNAVAILABLE_NOTICE')}
         </p>
       )}
 
       {/* Executive Header */}
-      <header className="relative flex flex-col gap-3 rounded-2xl border border-border bg-card p-6 shadow-xs backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
+      <header className="relative flex flex-col gap-3 rounded-2xl border border-border bg-card p-6 shadow-card backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1.5">
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-              <User className="h-3.5 w-3.5" />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border-focus bg-primary-subtle px-3 py-1 text-xs font-semibold text-primary">
+              <User className="h-3.5 w-3.5" aria-hidden="true" />
               Admin Profile & Preferences
             </span>
-            <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="inline-flex items-center gap-1 text-micro font-medium text-success-text bg-success-bg border border-success px-2.5 py-0.5 rounded-full">
+              <span className="h-1.5 w-1.5 rounded-full bg-success motion-safe:animate-pulse" />
               Live Workspace
             </span>
           </div>
@@ -100,7 +100,7 @@ export default function AdminProfilePage() {
         {/* Navigation Sidebar */}
         <aside>
           <nav
-            className="rounded-2xl border border-border bg-card p-2 shadow-xs flex gap-1.5 overflow-x-auto lg:flex-col lg:gap-1"
+            className="rounded-2xl border border-border bg-card p-2 shadow-card flex gap-1.5 overflow-x-auto lg:flex-col lg:gap-1"
             aria-label={t('NAV_LABEL')}
           >
             {ADMIN_PROFILE_NAVIGATION_ITEMS.map((item) => {
@@ -114,9 +114,9 @@ export default function AdminProfilePage() {
                   onClick={() => requestTabNavigation(item.id)}
                   aria-current={selected ? 'page' : undefined}
                   aria-pressed={selected}
-                  className={`admin-tab-button group flex min-h-11 shrink-0 items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all lg:w-full ${
+                  className={`admin-tab-button group flex min-h-11 shrink-0 items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold motion-safe:transition-colors lg:w-full ${
                     selected
-                      ? 'admin-tab-button-active bg-primary text-primary-contrast shadow-sm shadow-primary/20 hover:bg-primary-hover hover:text-primary-contrast'
+                      ? 'admin-tab-button-active bg-primary text-on-primary shadow-card hover:bg-primary-hover'
                       : 'text-text-secondary hover:bg-surface-hover hover:text-text-primary'
                   }`}
                 >
@@ -124,7 +124,7 @@ export default function AdminProfilePage() {
                     <Icon
                       size={17}
                       strokeWidth={2}
-                      className={`shrink-0 transition-colors ${selected ? 'text-primary-contrast' : 'text-text-tertiary group-hover:text-primary'}`}
+                      className={`shrink-0 motion-safe:transition-colors ${selected ? 'text-on-primary' : 'text-text-secondary group-hover:text-primary'}`}
                       aria-hidden="true"
                     />
                     <span className="truncate">{getTabLabel(item)}</span>
@@ -166,10 +166,10 @@ export default function AdminProfilePage() {
                   <AdminProfilePasswordForm onDirtyChange={setProfileDraftDirty} />
                   
                   {/* Password Expiry & Policy Card */}
-                  <section className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-xs sm:p-8" aria-labelledby="admin-profile-password-policy-title">
+                  <section className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8" aria-labelledby="admin-profile-password-policy-title">
                     <div className="flex items-center gap-3 border-b border-border pb-5">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary">
-                        <Lock size={18} />
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border-focus bg-primary-subtle text-primary">
+                        <Lock size={18} aria-hidden="true" />
                       </div>
                       <div>
                         <h2 id="admin-profile-password-policy-title" className="text-base font-bold text-text-primary sm:text-lg">
@@ -181,10 +181,10 @@ export default function AdminProfilePage() {
                       </div>
                     </div>
 
-                    <div className="mt-5 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-surface/50 p-4">
+                    <div className="mt-5 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-surface-highlight p-4">
                       <div className="flex items-center gap-3">
                         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-input text-text-secondary">
-                          <BellRing size={16} />
+                          <BellRing size={16} aria-hidden="true" />
                         </div>
                         <div>
                           <h3 className="text-sm font-semibold text-text-primary">{t('NEW_LOGIN_ALERTS')}</h3>
@@ -201,10 +201,10 @@ export default function AdminProfilePage() {
               {activeTab === 'sessions' && <AdminSettingsProfileReadOnlyPanels view="sessions" />}
               {activeTab === 'history' && <AdminSettingsProfileReadOnlyPanels view="history" />}
               {activeTab === 'security' && (
-                <section className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-xs sm:p-8" aria-labelledby="admin-profile-security-settings-title">
+                <section className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8" aria-labelledby="admin-profile-security-settings-title">
                   <div className="flex items-center gap-3 border-b border-border pb-5">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary">
-                      <ShieldAlert size={18} />
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border-focus bg-primary-subtle text-primary">
+                      <ShieldAlert size={18} aria-hidden="true" />
                     </div>
                     <div>
                       <h2 id="admin-profile-security-settings-title" className="text-base font-bold text-text-primary sm:text-lg">
@@ -216,7 +216,7 @@ export default function AdminProfilePage() {
                     </div>
                   </div>
                   <div className="mt-5 space-y-4">
-                    <article className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-surface/50 p-4">
+                    <article className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-surface-highlight p-4">
                       <span data-testid="admin_profile-AdminSettingsProfileMain-state-010" className="admin-badge admin-badge-success text-xs font-semibold px-3 py-1 rounded-full">
                         {t('SECURITY_STATUS_ILLUSTRATIVE')}
                       </span>

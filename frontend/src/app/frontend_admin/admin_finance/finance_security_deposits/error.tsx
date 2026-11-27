@@ -1,6 +1,6 @@
 'use client';
 
-import { reportAdminError } from '@/app/frontend_admin/lib/errorMonitoring';
+import { reportAdminError } from '@/lib/errorMonitoring';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 

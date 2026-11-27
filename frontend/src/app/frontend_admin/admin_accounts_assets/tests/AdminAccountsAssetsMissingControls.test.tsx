@@ -56,7 +56,7 @@ vi.mock('@/app/frontend_admin/application_infrastructure/application_infrastruct
 }));
 
 // Mock runtime features
-vi.mock('@/app/frontend_admin/lib/runtimeFeatures', () => ({
+vi.mock('@/lib/runtimeFeatures', () => ({
   isFrontendDemoModeEnabled: () => true,
 }));
 

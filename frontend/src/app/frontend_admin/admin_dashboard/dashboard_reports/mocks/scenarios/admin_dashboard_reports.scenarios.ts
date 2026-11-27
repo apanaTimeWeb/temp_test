@@ -5,19 +5,14 @@
  * business records, endpoints, permission rules, or DTOs. The returned values are scenario
  * descriptors/envelopes for a module-owned test adapter. They are not wired to production APIs.
  */
-export const ADMIN_DASHBOARD_REPORTS_SCENARIO_NAMES = [
-  'ACTIVE_RECORDS',
-  'EMPTY_DATA',
-  'SERVER_500_ERROR',
-  'NETWORK_TIMEOUT',
-  'UNAUTHORIZED_401',
-  'FORBIDDEN_403',
-  'NETWORK_ERROR',
-  'INVALID_RESPONSE',
-] as const;
+import {
+  ADMIN_DASHBOARD_REPORTS_SCENARIO_NAMES,
+  type AdminDashboardReportsAnalyticsScenario,
+  type AdminDashboardReportsScenarioName,
+} from '@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes';
 
-export type AdminDashboardReportsScenarioName = (typeof ADMIN_DASHBOARD_REPORTS_SCENARIO_NAMES)[number];
-export type AdminDashboardReportsAnalyticsScenario = AdminDashboardReportsScenarioName;
+export { ADMIN_DASHBOARD_REPORTS_SCENARIO_NAMES };
+export type { AdminDashboardReportsScenarioName, AdminDashboardReportsAnalyticsScenario };
 export const AdminDashboardReportsAnalyticsScenarios = ADMIN_DASHBOARD_REPORTS_SCENARIO_NAMES;
 
 export const createAdminDashboardReportsScenarioCatalog = (activeRecords: unknown) => ({

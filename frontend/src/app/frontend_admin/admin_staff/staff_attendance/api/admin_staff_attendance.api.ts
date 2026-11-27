@@ -7,7 +7,7 @@ RegularizeAttendanceInput,
 StaffAttendanceRecord,
 StaffRosterSlot,
 } from '@/app/frontend_admin/admin_staff/staff_attendance/schemas/AdminStaffAttendanceSchema';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 
 export async function fetchAdminStaffAttendanceList(): Promise<StaffAttendanceRecord[]> {
   if (isFrontendDemoModeEnabled()) {

@@ -5,7 +5,7 @@ import { fireEvent,render,screen } from '@testing-library/react';
 import { beforeEach,describe,expect,it,vi } from 'vitest';
 
 // Mock runtimeFeatures so demo mode is active
-vi.mock('@/app/frontend_admin/lib/runtimeFeatures', () => ({
+vi.mock('@/lib/runtimeFeatures', () => ({
   isFrontendDemoModeEnabled: () => true,
 }));
 

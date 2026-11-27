@@ -92,14 +92,10 @@ export const createAdminSettingsProfileScenarioCatalog = (activeRecords: unknown
 
 
 /** Canonical names exposed by the local standalone harness. These labels do not claim live API support. */
-export const AdminSettingsProfileScenarios = [
-  'ACTIVE_RECORDS',
-  'EMPTY_DATA',
-  'SERVER_500_ERROR',
-  'NETWORK_TIMEOUT',
-  'UNAUTHORIZED_401',
-  'FORBIDDEN_403',
-  'NETWORK_ERROR',
-  'INVALID_RESPONSE',
-] as const;
-export type AdminSettingsProfileScenario = (typeof AdminSettingsProfileScenarios)[number];
+import {
+  AdminSettingsProfileScenarios,
+  type AdminSettingsProfileScenario,
+} from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
+
+export { AdminSettingsProfileScenarios };
+export type { AdminSettingsProfileScenario };

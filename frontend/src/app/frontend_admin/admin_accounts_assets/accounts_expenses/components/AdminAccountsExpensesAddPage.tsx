@@ -11,7 +11,7 @@ import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogConte
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';

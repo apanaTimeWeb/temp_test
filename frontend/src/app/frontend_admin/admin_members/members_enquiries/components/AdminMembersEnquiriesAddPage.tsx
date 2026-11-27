@@ -7,7 +7,7 @@ import useAdminMembersEnquiriesUnsavedChangesGuard from '@/app/frontend_admin/ad
 import { ADMIN_MEMBERS_ENQUIRIES_HARDCODED_FIXTURE as adminEnquiriesFixtureData } from '@/app/frontend_admin/admin_members/members_enquiries/mocks/scenarios/admin_members_enquiries.scenarios';
 import { createAdminEnquiriesAddEnquirySchema,type AddEnquiryFormData } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { SearchableCombobox,type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PhoneCall,Save,X } from 'lucide-react';

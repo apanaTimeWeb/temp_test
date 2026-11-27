@@ -15,7 +15,7 @@ import { buildAdminAccountsSeatGapReportCsv,downloadAdminAccountingCsv } from '@
 import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/utils/AdminAccountsSeatGapReportFormatCurrency';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import type { DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { TrendingUp } from 'lucide-react';
 import { useLocale,useTranslations } from 'next-intl';
 import { usePathname,useRouter,useSearchParams } from 'next/navigation';

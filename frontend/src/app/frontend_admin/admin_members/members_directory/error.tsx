@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Provides localized route-segment recovery for Admin Members.
 // DATA FLOW: Next.js error boundary -> reportAdminError -> user-triggered reset().
 
-import { reportAdminError } from '@/app/frontend_admin/lib/errorMonitoring';
+import { reportAdminError } from '@/lib/errorMonitoring';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 

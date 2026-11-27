@@ -16,7 +16,7 @@ ADMIN_SEATS_DEMO_SEATS
 import type { Seat,SeatStatus } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/types/AdminSeatsManagementComponentTypes';
 import { matchesAdminSeatsFilter } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/utils/AdminSeatsManagementFilterUtils';
 import { DataGrid,type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { AlertOctagon,Armchair,CheckCircle2,ChevronDown,Download,FileSpreadsheet,Printer,Search,Wrench } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect,useMemo,useState } from 'react';

@@ -8,7 +8,7 @@ import AdminAccountsDailySettlementTable from '@/app/frontend_admin/admin_accoun
 import { useAdminAccountsDailySettlementMutations } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/hooks/useAdminAccountsDailySettlementMutations';
 import { useAdminAccountsDailySettlementState } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/hooks/useAdminAccountsDailySettlementState';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { format } from 'date-fns';
 import { Download,FileSpreadsheet,Printer,RotateCcw,Search,ShieldCheck } from 'lucide-react';
 import { useTranslations } from 'next-intl';

@@ -6,7 +6,7 @@ import AdminMembersEnquiriesImportModal from '@/app/frontend_admin/admin_members
 import AdminEnquiriesTable from '@/app/frontend_admin/admin_members/members_enquiries/components/AdminMembersEnquiriesTable';
 import { ADMIN_ENQUIRIES_ENQUIRY_DOT_CLASSES,ADMIN_ENQUIRIES_ENQUIRY_KANBAN_COLUMNS,ADMIN_ENQUIRIES_ENQUIRY_STATUS_FILTERS,ADMIN_ENQUIRIES_URLS } from '@/app/frontend_admin/admin_members/members_enquiries/config/admin_members_enquiries.url_config';
 import useEnquiriesPage from '@/app/frontend_admin/admin_members/members_enquiries/hooks/useAdminMembersEnquiriesPage';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { Smartphone, Calendar,Download,FileSpreadsheet,LayoutGrid,List,Mail,MessageSquare,MoreHorizontal,Phone,PhoneCall,Printer,Search,Send,Target,Trash2,TrendingUp,Upload,UserCheck,Users,XCircle  } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo,useState } from 'react';

@@ -27,27 +27,27 @@ const ADMIN_DASHBOARD_REPORTS_KPI_ICONS: readonly LucideIcon[] = [IndianRupee, W
 
 const REPORT_KPI_THEMES = [
   {
-    cardBorderBg: 'border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-emerald-950/30',
-    iconBox: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400',
-    strokeColor: '#34d399',
+    cardBorderBg: 'border-border bg-card',
+    iconBox: 'bg-success-bg border-success text-success-text',
+    strokeColor: 'var(--chart-success)',
     sparkline: 'M0,32 Q15,22 55,26 T95,14 T130,18 T150,6',
   },
   {
-    cardBorderBg: 'border-rose-500/25 bg-gradient-to-br from-[#1f0a10]/95 via-[#1f0a10]/90 to-[#2d0e17]/80 shadow-rose-950/30',
-    iconBox: 'bg-rose-500/15 border-rose-500/30 text-rose-400',
-    strokeColor: '#f87171',
+    cardBorderBg: 'border-border bg-card',
+    iconBox: 'bg-danger-bg border-danger text-danger-text',
+    strokeColor: 'var(--chart-danger)',
     sparkline: 'M0,15 Q25,28 65,22 T105,32 T135,24 T150,35',
   },
   {
-    cardBorderBg: 'border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 shadow-indigo-950/30',
-    iconBox: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-400',
-    strokeColor: '#818cf8',
+    cardBorderBg: 'border-border bg-card',
+    iconBox: 'bg-primary-subtle border-border-focus text-primary',
+    strokeColor: 'var(--chart-primary)',
     sparkline: 'M0,32 Q15,18 55,24 T95,14 T130,20 T150,8',
   },
   {
-    cardBorderBg: 'border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 shadow-cyan-950/30',
-    iconBox: 'bg-cyan-500/15 border-cyan-500/30 text-cyan-400',
-    strokeColor: '#22d3ee',
+    cardBorderBg: 'border-border bg-card',
+    iconBox: 'bg-info-bg border-info text-info-text',
+    strokeColor: 'var(--chart-info)',
     sparkline: 'M0,30 Q20,16 60,20 T100,12 T130,16 T150,8',
   },
 ];
@@ -97,23 +97,23 @@ export default function AdminDashboardReportsAnalyticsPrimaryChartsGrid({ data, 
           return (
             <article
               key={card.label}
-              className={`group relative overflow-hidden rounded-2xl border p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between h-full ${theme.cardBorderBg}`}
+              className={`group relative overflow-hidden rounded-2xl border p-5 sm:p-6 shadow-card motion-safe:transition-shadow motion-safe:duration-slow hover:shadow-popover flex flex-col justify-between h-full ${theme.cardBorderBg}`}
             >
-              <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-white/5 blur-2xl transition-all duration-500 group-hover:bg-white/10" />
-              <svg aria-hidden="true" className="pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible transition-opacity duration-300 group-hover:opacity-40" viewBox="0 0 150 40" fill="none">
+              <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-surface-highlight blur-2xl motion-safe:transition-colors motion-safe:duration-xslow group-hover:bg-surface-hover" />
+              <svg aria-hidden="true" className="pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible motion-safe:transition-opacity motion-safe:duration-slow group-hover:opacity-40" viewBox="0 0 150 40" fill="none">
                 <path d={theme.sparkline} fill="none" stroke={theme.strokeColor} strokeWidth="2.5" strokeLinecap="round" />
               </svg>
 
               <div className="relative z-10 flex items-start justify-between mb-4">
-                <div className={`p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs ${theme.iconBox}`}>
+                <div className={`p-2.5 rounded-xl border shrink-0 motion-safe:transition-transform group-hover:scale-110 shadow-card ${theme.iconBox}`}>
                   <Icon size={20} strokeWidth={2.2} aria-hidden="true" />
                 </div>
                 <span
                   data-testid="admin_dashboard_reports-AdminDashboardReportsAnalyticsKpiCard-state-001"
-                  className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full border ${
+                  className={`inline-flex items-center gap-1 text-badge font-bold px-2.5 py-1 rounded-full border ${
                     card.trend.up
-                      ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                      : 'bg-rose-500/15 text-rose-300 border-rose-500/30'
+                      ? 'bg-success-bg text-success-text border-success'
+                      : 'bg-danger-bg text-danger-text border-danger'
                   }`}
                 >
                   {card.trend.up ? <TrendingUp size={13} strokeWidth={2.5} aria-hidden="true" /> : <TrendingDown size={13} strokeWidth={2.5} aria-hidden="true" />}
@@ -121,10 +121,10 @@ export default function AdminDashboardReportsAnalyticsPrimaryChartsGrid({ data, 
                 </span>
               </div>
               <div className="relative z-10">
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{labelKey ? t(labelKey) : card.label}</p>
-                <p className="text-2xl sm:text-3xl font-black text-white tabular-nums tracking-tight mt-1">{value}</p>
-                <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-400">
-                  <span className="inline-flex items-center gap-1 font-semibold rounded-full px-2 py-0.5 border text-slate-300 bg-white/5 border-white/10">
+                <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider">{labelKey ? t(labelKey) : card.label}</p>
+                <p className="text-2xl sm:text-3xl font-black text-text-primary tabular-nums tracking-tight mt-1">{value}</p>
+                <div className="mt-2.5 flex items-center gap-1.5 text-xs text-text-secondary">
+                  <span className="inline-flex items-center gap-1 font-semibold rounded-full px-2 py-0.5 border text-text-secondary bg-surface-highlight border-border">
                     {subKey ? t(subKey) : card.sub}
                   </span>
                 </div>
@@ -135,12 +135,12 @@ export default function AdminDashboardReportsAnalyticsPrimaryChartsGrid({ data, 
       </section>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <section className="rounded-2xl border border-indigo-500/20 bg-card p-5 sm:p-6 shadow-card min-w-0" aria-labelledby="admin-reports-income-expense-title">
+        <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card min-w-0" aria-labelledby="admin-reports-income-expense-title">
           <div className="mb-4 flex items-center gap-2.5">
-            <div className="grid h-9 w-9 place-items-center rounded-xl bg-indigo-500/15 border border-indigo-500/25 text-indigo-400">
+            <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary-subtle border border-border-focus text-primary">
               <BarChart2 size={18} strokeWidth={2.2} aria-hidden="true" />
             </div>
-            <h2 id="admin-reports-income-expense-title" className="text-base font-bold text-white tracking-tight">{t('INCOME_EXPENSE_TITLE')}</h2>
+            <h2 id="admin-reports-income-expense-title" className="text-base font-bold text-text-primary tracking-tight">{t('INCOME_EXPENSE_TITLE')}</h2>
           </div>
           <figure className="min-h-64" aria-labelledby="admin-reports-income-expense-chart-caption">
             <AdminDashboardReportsPrimaryApexChart type="bar" options={incomeExpenseOptions} series={incomeExpenseSeries} height={260} width="100%" />
@@ -148,12 +148,12 @@ export default function AdminDashboardReportsAnalyticsPrimaryChartsGrid({ data, 
           </figure>
         </section>
 
-        <section className="rounded-2xl border border-indigo-500/20 bg-card p-5 sm:p-6 shadow-card min-w-0" aria-labelledby="admin-reports-occupancy-title">
+        <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card min-w-0" aria-labelledby="admin-reports-occupancy-title">
           <div className="mb-4 flex items-center gap-2.5">
-            <div className="grid h-9 w-9 place-items-center rounded-xl bg-cyan-500/15 border border-cyan-500/25 text-cyan-400">
+            <div className="grid h-9 w-9 place-items-center rounded-xl bg-info-bg border border-info text-info-text">
               <PieChart size={18} strokeWidth={2.2} aria-hidden="true" />
             </div>
-            <h2 id="admin-reports-occupancy-title" className="text-base font-bold text-white tracking-tight">{t('OCCUPANCY_TITLE')}</h2>
+            <h2 id="admin-reports-occupancy-title" className="text-base font-bold text-text-primary tracking-tight">{t('OCCUPANCY_TITLE')}</h2>
           </div>
           <figure className="min-h-64" aria-labelledby="admin-reports-occupancy-chart-caption">
             <AdminDashboardReportsPrimaryApexChart type="bar" options={occupancyOptions} series={occupancySeries} height={Math.max(180, data.shiftOccupancy.length * 44)} width="100%" />

@@ -3,7 +3,7 @@ import type {
 DisburseSalaryInput,
 StaffSalaryRecord,
 } from '@/app/frontend_admin/admin_staff/staff_payroll/schemas/AdminStaffPayrollSchema';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 
 export async function fetchAdminStaffPayrollList(): Promise<StaffSalaryRecord[]> {
   if (isFrontendDemoModeEnabled()) {

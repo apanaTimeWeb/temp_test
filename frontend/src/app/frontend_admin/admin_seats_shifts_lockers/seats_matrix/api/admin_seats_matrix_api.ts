@@ -1,7 +1,7 @@
 import { ADMIN_SEAT_MATRIX_URLS } from "@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/config/admin_seats_matrix.url_config";
 import { AdminSeatMatrixLockerListSchema,AdminSeatMatrixSeatListSchema } from "@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/schemas/AdminSeatsMatrixApiSchema";
 import { apiFetch } from "@/app/frontend_admin/lib/api";
-import { parseApiResponseData } from "@/app/frontend_admin/lib/apiSchema";
+import { parseApiResponseData } from "@/lib/apiSchema";
 
 export async function fetchAdminSeatMatrixLockers() {
   const payload = await apiFetch<unknown>(ADMIN_SEAT_MATRIX_URLS.LOCKERS);

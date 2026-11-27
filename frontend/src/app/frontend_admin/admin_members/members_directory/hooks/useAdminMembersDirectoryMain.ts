@@ -3,7 +3,7 @@
 import { ADMIN_MEMBERS_DETAIL_NAVIGATION,ADMIN_MEMBERS_DIRECTORY_NAVIGATION,resolveAdminMembersDirectoryView } from '@/app/frontend_admin/admin_members/members_directory/config/admin_members_directory.url_config';
 import { ADMIN_MEMBERS_CATEGORY_FIXTURES,ADMIN_MEMBERS_DEPARTMENT_FIXTURES,ADMIN_MEMBERS_FIXTURES,ADMIN_MEMBERS_RENEWAL_FIXTURES } from '@/app/frontend_admin/admin_members/members_directory/mocks/AdminMembersDirectoryFixtures';
 import type { AdminMembersCategory,AdminMembersCreateFormValues,AdminMembersDemoMutationResult,AdminMembersDepartment,AdminMembersDetailTab,AdminMembersDirectoryTab,AdminMembersMember,AdminMembersRenewal } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { useTranslations } from 'next-intl';
 import { usePathname,useRouter,useSearchParams } from 'next/navigation';
 import { useCallback,useEffect,useState } from 'react';

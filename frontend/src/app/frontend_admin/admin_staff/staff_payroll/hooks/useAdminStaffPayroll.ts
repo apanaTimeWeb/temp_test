@@ -11,7 +11,7 @@ StaffPayrollFilterState,
 StaffPayrollKpiSummary,
 } from '@/app/frontend_admin/admin_staff/staff_payroll/types/AdminStaffPayrollTypes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { useTranslations } from 'next-intl';
 import { useCallback,useEffect,useMemo,useState } from 'react';
 import { toast } from 'sonner';

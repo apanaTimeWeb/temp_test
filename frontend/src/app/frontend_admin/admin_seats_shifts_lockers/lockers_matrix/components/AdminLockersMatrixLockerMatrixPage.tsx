@@ -10,7 +10,7 @@ import AdminLockersLockerMatrixStats from '@/app/frontend_admin/admin_seats_shif
 import { useAdminLockersLockerMatrix } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/hooks/useAdminLockersMatrixLockerMatrix';
 import type { AdminLockersLockerMatrixViewModel } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/types/AdminLockersMatrixTypes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { useQueryClient } from '@tanstack/react-query';
 import { Download,FileSpreadsheet,KeyRound,LayoutGrid,List,Printer,Search,Settings,ShieldAlert,Unlock,User,Wrench } from 'lucide-react';
 import { useTranslations } from 'next-intl';

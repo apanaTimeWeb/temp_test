@@ -9,7 +9,7 @@ AdminAssetRecord,
 CreateAssetPayload,
 UpdateAmcPayload,
 } from '@/app/frontend_admin/admin_accounts_assets/assets_register/types/AdminAssetsRegisterTypes';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { useTranslations } from 'next-intl';
 import { useCallback,useState } from 'react';
 import { toast } from 'sonner';

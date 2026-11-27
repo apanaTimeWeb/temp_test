@@ -9,7 +9,7 @@ import useAdminCommunicationComplaintsQuery from '@/app/frontend_admin/admin_com
 import { createAdminCommunicationComplaintSchema,type AdminCommunicationComplaintFormValues } from '@/app/frontend_admin/admin_communication/communication_complaints/schemas/AdminCommunicationComplaintsSchema';
 import type { CStatus,Complaint } from '@/app/frontend_admin/admin_communication/communication_complaints/types/AdminCommunicationComplaintsComponentTypes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format,isValid,parseISO } from 'date-fns';
 import { enUS,hi } from 'date-fns/locale';

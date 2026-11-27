@@ -3,7 +3,7 @@
 import { ArrowDown,ArrowUp,ArrowUpDown,Trophy } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo,useState } from 'react';
-import { AdminDashboardBranchLeaderboardRow } from './AdminDashboardBranchLeaderboardRow';
+import { AdminDashboardBranchLeaderboardRow } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/components/AdminDashboardBranchLeaderboardRow';
 
 export type AdminDashboardTimeRange = 'today' | 'this_week' | 'this_month' | 'custom';
 
@@ -158,36 +158,36 @@ export function AdminDashboardBranchLeaderboard({
   };
 
   return (
-    <section aria-labelledby="branch-leaderboard-title" className="rounded-2xl border border-indigo-500/20 bg-card p-5 sm:p-6 shadow-card space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-indigo-500/15 pb-4">
+    <section aria-labelledby="branch-leaderboard-title" className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <Trophy className="text-amber-400" size={20} />
-            <h2 id="branch-leaderboard-title" className="text-base sm:text-lg font-bold text-white">
+            <Trophy className="text-warning-text" size={20} aria-hidden="true" />
+            <h2 id="branch-leaderboard-title" className="text-base sm:text-lg font-bold text-text-primary">
               Multi-Branch Performance & Benchmarking
             </h2>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-text-secondary mt-1">
             Comparative revenue, occupancy, and bottleneck diagnostics ({periodLabel} Horizon)
           </p>
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-indigo-500/15">
+      <div className="overflow-x-auto rounded-xl border border-border">
         <table className="w-full text-left text-xs border-collapse">
           <thead>
-            <tr className="border-b border-indigo-500/20 bg-slate-900/60">
-              <th scope="col" className="p-3.5 uppercase font-bold text-slate-400">Rank</th>
+            <tr className="border-b border-border bg-surface-highlight">
+              <th scope="col" className="p-3.5 uppercase font-bold text-text-secondary">Rank</th>
               {renderSortableHeader('branch', 'Branch & Manager')}
               {renderSortableHeader('occupancy', 'Occupancy')}
               {renderSortableHeader('revenue', `Revenue (${periodLabel})`, 'right')}
               {renderSortableHeader('expenses', `Expenses (${periodLabel})`, 'right')}
               {renderSortableHeader('profit', `Net Profit (${periodLabel})`, 'right')}
               {renderSortableHeader('renewal', 'Renewal %', 'center')}
-              <th scope="col" className="p-3.5 uppercase font-bold text-slate-400">Key Bottleneck / Alert</th>
+              <th scope="col" className="p-3.5 uppercase font-bold text-text-secondary">Key Bottleneck / Alert</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-indigo-500/10">
+          <tbody className="divide-y divide-border">
             {sortedBranches.map((item, index) => (
               <AdminDashboardBranchLeaderboardRow
                 key={item.id}

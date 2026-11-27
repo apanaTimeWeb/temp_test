@@ -33,13 +33,13 @@ export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsPro
   return (
     <section className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8" aria-labelledby="admin-profile-edit-title">
       {/* Decorative ambient background accent */}
-      <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-primary/5 blur-3xl" aria-hidden="true" />
+      <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-primary-subtle blur-3xl" aria-hidden="true" />
 
       {/* Header section */}
       <div className="flex flex-col gap-2 border-b border-border pb-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary shadow-xs">
-            <UserCog size={20} />
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border-focus bg-primary-subtle text-primary shadow-card">
+            <UserCog size={20} aria-hidden="true" />
           </div>
           <div>
             <h2 id="admin-profile-edit-title" className="text-lg font-bold tracking-tight text-text-primary sm:text-xl">
@@ -51,8 +51,8 @@ export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsPro
           </div>
         </div>
         {isDirty && (
-          <span className="inline-flex items-center gap-1.5 self-start rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-400 sm:self-auto">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+          <span className="inline-flex items-center gap-1.5 self-start rounded-full border border-warning bg-warning-bg px-3 py-1 text-xs font-semibold text-warning-text sm:self-auto">
+            <span className="h-1.5 w-1.5 rounded-full bg-warning motion-safe:animate-pulse" />
             Unsaved Changes
           </span>
         )}
@@ -75,10 +75,10 @@ export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsPro
                 id="admin-profile-edit-name"
                 type="text"
                 autoComplete="name"
-                className={`w-full rounded-xl border bg-surface px-4 py-2.5 text-sm font-medium text-text-primary placeholder:text-text-tertiary transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                className={`w-full rounded-xl border bg-input px-4 py-2.5 text-sm font-medium text-text-primary placeholder:text-text-secondary motion-safe:transition-colors focus:outline-none focus:ring-2 focus:ring-focus-ring ${
                   errors.fullName
-                    ? 'border-danger-bg ring-1 ring-danger-bg'
-                    : 'border-border hover:border-border-strong focus:border-primary'
+                    ? 'border-danger ring-1 ring-danger'
+                    : 'border-border hover:border-border-focus focus:border-primary'
                 }`}
                 placeholder="Enter full name"
                 {...register('fullName')}
@@ -108,10 +108,10 @@ export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsPro
                 type="tel"
                 autoComplete="tel"
                 placeholder="Enter contact phone number"
-                className={`w-full rounded-xl border bg-surface px-4 py-2.5 text-sm font-mono text-text-primary placeholder:text-text-tertiary transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                className={`w-full rounded-xl border bg-input px-4 py-2.5 text-sm font-mono text-text-primary placeholder:text-text-secondary motion-safe:transition-colors focus:outline-none focus:ring-2 focus:ring-focus-ring ${
                   errors.phone
-                    ? 'border-danger-bg ring-1 ring-danger-bg'
-                    : 'border-border hover:border-border-strong focus:border-primary'
+                    ? 'border-danger ring-1 ring-danger'
+                    : 'border-border hover:border-border-focus focus:border-primary'
                 }`}
                 {...register('phone')}
                 aria-invalid={Boolean(errors.phone)}
@@ -136,7 +136,7 @@ export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsPro
               </label>
               <span className="text-danger-text" aria-hidden="true">*</span>
             </div>
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded-full">
+            <span className="inline-flex items-center gap-1 text-micro font-semibold text-success-text bg-success-bg border border-success px-2 py-0.5 rounded-full">
               Primary System Email
             </span>
           </div>
@@ -145,10 +145,10 @@ export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsPro
               id="admin-profile-edit-email"
               type="email"
               autoComplete="email"
-              className={`w-full rounded-xl border bg-surface px-4 py-2.5 text-sm font-medium text-text-primary placeholder:text-text-tertiary transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+              className={`w-full rounded-xl border bg-input px-4 py-2.5 text-sm font-medium text-text-primary placeholder:text-text-secondary motion-safe:transition-colors focus:outline-none focus:ring-2 focus:ring-focus-ring ${
                 errors.email
-                  ? 'border-danger-bg ring-1 ring-danger-bg'
-                  : 'border-border hover:border-border-strong focus:border-primary'
+                  ? 'border-danger ring-1 ring-danger'
+                  : 'border-border hover:border-border-focus focus:border-primary'
               }`}
               placeholder="admin@example.com"
               {...register('email')}
@@ -172,15 +172,15 @@ export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsPro
                 {t('FIELD_BIO')}
               </label>
             </div>
-            <span className="text-xs text-text-tertiary">Optional</span>
+            <span className="text-xs text-text-secondary">Optional</span>
           </div>
           <textarea maxLength={1000}
             id="admin-profile-edit-bio"
             rows={4}
-            className={`w-full rounded-xl border bg-surface p-4 text-sm font-medium text-text-primary placeholder:text-text-tertiary transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+            className={`w-full rounded-xl border bg-input p-4 text-sm font-medium text-text-primary placeholder:text-text-secondary motion-safe:transition-colors focus:outline-none focus:ring-2 focus:ring-focus-ring ${
               errors.bio
-                ? 'border-danger-bg ring-1 ring-danger-bg'
-                : 'border-border hover:border-border-strong focus:border-primary'
+                ? 'border-danger ring-1 ring-danger'
+                : 'border-border hover:border-border-focus focus:border-primary'
             }`}
             placeholder="Tell us a little about your role and responsibilities..."
             {...register('bio')}
@@ -196,7 +196,7 @@ export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsPro
 
         {/* Action Controls Toolbar */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
-          <p className="text-xs text-text-tertiary">
+          <p className="text-xs text-text-secondary">
             Changes will update your system display and operational notification preferences.
           </p>
           <div className="flex items-center gap-3">
@@ -204,7 +204,7 @@ export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsPro
               <button
                 type="button"
                 onClick={() => reset()}
-                className="inline-flex min-h-11 items-center justify-center rounded-xl border border-border bg-surface px-4 py-2.5 text-xs font-semibold text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-all"
+                className="inline-flex min-h-11 items-center justify-center rounded-xl border border-border bg-card px-4 py-2.5 text-xs font-semibold text-text-secondary hover:bg-surface-hover hover:text-text-primary motion-safe:transition-colors"
               >
                 Reset Draft
               </button>
@@ -212,7 +212,7 @@ export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsPro
             <button
               data-testid="admin_profile-AdminProfileEditForm-control-submit"
               type="submit"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-xs sm:text-sm font-semibold text-primary-contrast shadow-sm hover:bg-primary-hover active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-xs sm:text-sm font-semibold text-on-primary shadow-card hover:bg-primary-hover motion-safe:transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isSubmitting}
             >
               <CheckCircle2 size={16} strokeWidth={2.2} />

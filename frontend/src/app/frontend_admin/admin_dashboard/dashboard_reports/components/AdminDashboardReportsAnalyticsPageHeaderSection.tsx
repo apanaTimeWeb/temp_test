@@ -32,15 +32,15 @@ export default function AdminDashboardReportsAnalyticsPageHeaderSection(props: A
         <span>{props.isDemoMode ? t('DEMO_BANNER') : t('LIVE_UNAVAILABLE_BANNER')}</span>
       </div>
 
-      {/* Clean Executive Header Card (Styled after Manager layout) */}
-      <div className="rounded-2xl border border-indigo-500/20 bg-card p-5 sm:p-6 shadow-card transition-all">
+      {/* Clean Executive Header Card */}
+      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card motion-safe:transition-colors">
         {/* Top Row: Clean Title + Action Buttons */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-1">
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-text-primary">
               {t('PAGE_TITLE')}
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400">
+            <p className="text-xs sm:text-sm text-text-secondary">
               {t('PAGE_SUBTITLE')}
             </p>
           </div>
@@ -53,9 +53,9 @@ export default function AdminDashboardReportsAnalyticsPageHeaderSection(props: A
               disabled={!props.isDemoMode}
               title={props.isDemoMode ? t('CSV_DEMO_TITLE') : t('CSV_LIVE_UNAVAILABLE_TITLE')}
               onClick={props.onExportCsv}
-              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/80 border border-indigo-500/30 hover:border-indigo-400 text-slate-200 text-xs font-bold hover:bg-indigo-500/10 shadow-xs transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex-1 sm:flex-initial"
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-input border border-border hover:border-border-focus text-text-primary text-xs font-bold hover:bg-surface-hover shadow-card motion-safe:transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex-1 sm:flex-initial"
             >
-              <Download size={14} className="text-indigo-400" />
+              <Download size={14} className="text-primary" aria-hidden="true" />
               <span>{t('CSV_EXPORT')}</span>
             </button>
 
@@ -63,25 +63,25 @@ export default function AdminDashboardReportsAnalyticsPageHeaderSection(props: A
               type="button"
               data-testid="admin_dashboard_reports-AdminDashboardReportsAnalytics-control-004"
               onClick={props.onPrint}
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white text-xs font-bold shadow-sm shadow-indigo-950/40 transition-all cursor-pointer flex-1 sm:flex-initial"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-primary hover:bg-primary-hover text-on-primary text-xs font-bold shadow-card motion-safe:transition-colors cursor-pointer flex-1 sm:flex-initial"
               title={t('PRINT_SAVE_PDF')}
             >
-              <Printer size={14} />
+              <Printer size={14} aria-hidden="true" />
               <span>{t('PRINT_SAVE_PDF')}</span>
             </button>
           </div>
         </div>
 
         {/* Bottom Row: Global Time Horizon Segmented Filter Bar + Branch Filter */}
-        <div className="mt-5 pt-4 border-t border-indigo-500/15 flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="mt-5 pt-4 border-t border-border flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-              <Calendar size={13} className="text-indigo-400" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary flex items-center gap-1.5">
+              <Calendar size={13} className="text-primary" aria-hidden="true" />
               {t('REPORT_RANGE_LABEL')}:
             </span>
             <div
               data-testid="admin_dashboard_reports-AdminDashboardReportsAnalytics-control-001"
-              className="inline-flex flex-wrap items-center rounded-xl bg-[#0b0c20] border border-indigo-500/20 p-1 gap-1"
+              className="inline-flex flex-wrap items-center rounded-xl bg-input border border-border p-1 gap-1"
               role="tablist"
               aria-label={t('REPORT_RANGE_LABEL')}
               aria-orientation="horizontal"
@@ -99,10 +99,10 @@ export default function AdminDashboardReportsAnalyticsPageHeaderSection(props: A
                   tabIndex={props.range === option.key ? 0 : -1}
                   disabled={!props.isDemoMode}
                   onClick={() => props.onRangeChange(option.key)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold motion-safe:transition-colors cursor-pointer ${
                     props.range === option.key
-                      ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-xs font-bold'
-                      : 'text-slate-400 hover:text-white hover:bg-white/5'
+                      ? 'bg-primary text-on-primary shadow-card font-bold'
+                      : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'
                   }`}
                 >
                   {t(ADMIN_DASHBOARD_REPORTS_ANALYTICS_RANGE_LABEL_KEYS[option.key])}

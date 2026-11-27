@@ -14,7 +14,7 @@ import { ADMIN_COUPONS_EMPTY_FORM,ADMIN_COUPONS_STATUS_VALUES,ADMIN_COUPONS_UNKN
 import { useAdminCouponsListQuery,useAdminMembersCouponsState } from '@/app/frontend_admin/admin_members/members_coupons/hooks/useAdminMembersCouponsPageHooks';
 import type { AdminCouponsCreateDialogIntent,AdminCouponsCreateDialogProps } from '@/app/frontend_admin/admin_members/members_coupons/types/AdminMembersCouponsComponentTypes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { displayValue } from '@/lib/display_value';
 
 import { zodResolver } from '@hookform/resolvers/zod';

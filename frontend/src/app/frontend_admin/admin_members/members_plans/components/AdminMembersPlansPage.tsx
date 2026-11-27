@@ -5,7 +5,7 @@ import { ADMIN_PLANS_STATUS_VALUES } from '@/app/frontend_admin/admin_members/me
 import { useAdminPlans } from '@/app/frontend_admin/admin_members/members_plans/hooks/useAdminMembersPlansMain';
 import type { AdminPlansFormValues,AdminPlansPlan } from '@/app/frontend_admin/admin_members/members_plans/schemas/AdminMembersPlansSchema';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { Building2,CheckCircle,Clock,Download,FileSpreadsheet,Layers,Pencil,Plus,Printer,Search,Trash2,Users } from 'lucide-react';
 import { useLocale,useTranslations } from 'next-intl';
 import { useCallback,useMemo,useState } from 'react';

@@ -1,7 +1,7 @@
 'use client';
 
+import type { BranchBenchmarkItem } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/components/AdminDashboardBranchLeaderboard';
 import { ShieldAlert } from 'lucide-react';
-import type { BranchBenchmarkItem } from './AdminDashboardBranchLeaderboard';
 
 interface AdminDashboardBranchLeaderboardRowProps {
   item: BranchBenchmarkItem;
@@ -19,26 +19,26 @@ export function AdminDashboardBranchLeaderboardRow({
   const clampedOccupancy = Math.min(100, Math.max(0, Math.round(item.occupancyRate)));
 
   return (
-    <tr className="hover:bg-indigo-500/5 transition-colors">
+    <tr className="hover:bg-surface-hover motion-safe:transition-colors">
       {/* Rank Badge */}
       <td className="px-3.5 py-3.5 text-center whitespace-nowrap">
         {rank === 1 && (
-          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold shadow-xs">
+          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-warning-bg text-warning-text border border-warning text-xs font-bold shadow-card">
             1
           </span>
         )}
         {rank === 2 && (
-          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-700/60 text-slate-200 border border-slate-600/50 text-xs font-bold">
+          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-surface-highlight text-text-primary border border-border text-xs font-bold">
             2
           </span>
         )}
         {rank === 3 && (
-          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 text-xs font-bold">
+          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary-subtle text-primary border border-border-focus text-xs font-bold">
             3
           </span>
         )}
         {rank > 3 && (
-          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-800 text-slate-400 text-xs font-medium">
+          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-surface-highlight text-text-secondary text-xs font-medium">
             {rank}
           </span>
         )}
@@ -46,42 +46,42 @@ export function AdminDashboardBranchLeaderboardRow({
 
       {/* Branch & Manager */}
       <td className="px-3.5 py-3.5 whitespace-nowrap">
-        <p className="font-bold text-white text-xs sm:text-sm">{item.name}</p>
-        <p className="text-xs text-slate-400 mt-0.5">
-          {item.city} · Mgr: <span className="font-medium text-slate-300">{item.managerName}</span>
+        <p className="font-bold text-text-primary text-xs sm:text-sm">{item.name}</p>
+        <p className="text-xs text-text-secondary mt-0.5">
+          {item.city} · Mgr: <span className="font-medium text-text-primary">{item.managerName}</span>
         </p>
       </td>
 
       {/* Capacity & Occupancy Bar */}
       <td className="px-3.5 py-3.5 whitespace-nowrap min-w-[160px]">
         <div className="flex items-center justify-between text-xs mb-1">
-          <span className="font-medium text-slate-300">{item.occupiedSeats}/{item.totalSeats} seats</span>
-          <span className={`font-bold ${item.occupancyRate >= 80 ? 'text-emerald-400' : item.occupancyRate >= 60 ? 'text-amber-400' : 'text-rose-400'}`}>
+          <span className="font-medium text-text-secondary">{item.occupiedSeats}/{item.totalSeats} seats</span>
+          <span className={`font-bold ${item.occupancyRate >= 80 ? 'text-success-text' : item.occupancyRate >= 60 ? 'text-warning-text' : 'text-danger-text'}`}>
             {item.occupancyRate}%
           </span>
         </div>
-        <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
+        <div className="h-2 w-full rounded-full bg-surface-highlight overflow-hidden">
           <div
             className={`h-full rounded-full admin-dynamic-width-${clampedOccupancy} ${
-              item.occupancyRate >= 80 ? 'bg-gradient-to-r from-emerald-500 to-teal-400' : item.occupancyRate >= 60 ? 'bg-gradient-to-r from-amber-500 to-yellow-400' : 'bg-gradient-to-r from-rose-500 to-red-400'
+              item.occupancyRate >= 80 ? 'bg-success' : item.occupancyRate >= 60 ? 'bg-warning' : 'bg-danger'
             }`}
           />
         </div>
       </td>
 
       {/* Revenue */}
-      <td className="px-3.5 py-3.5 text-right font-mono font-semibold text-slate-200 whitespace-nowrap">
+      <td className="px-3.5 py-3.5 text-right font-mono font-semibold text-text-primary whitespace-nowrap">
         {formatRupees(item.revenueDisplay ?? item.revenueMtdRupees)}
       </td>
 
       {/* Expenses */}
-      <td className="px-3.5 py-3.5 text-right font-mono text-slate-400 whitespace-nowrap">
+      <td className="px-3.5 py-3.5 text-right font-mono text-text-secondary whitespace-nowrap">
         {formatRupees(item.expensesDisplay ?? item.expensesMtdRupees)}
       </td>
 
       {/* Net Profit */}
       <td className="px-3.5 py-3.5 text-right font-mono font-bold whitespace-nowrap">
-        <span className={isProfitPositive ? 'text-emerald-400' : 'text-rose-400'}>
+        <span className={isProfitPositive ? 'text-success-text' : 'text-danger-text'}>
           {isProfitPositive ? `+${formatRupees(currentProfit)}` : formatRupees(currentProfit)}
         </span>
       </td>
@@ -91,10 +91,10 @@ export function AdminDashboardBranchLeaderboardRow({
         <span
           className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
             item.renewalRate >= 80
-              ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+              ? 'bg-success-bg text-success-text border border-success'
               : item.renewalRate >= 60
-              ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
-              : 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
+              ? 'bg-warning-bg text-warning-text border border-warning'
+              : 'bg-danger-bg text-danger-text border border-danger'
           }`}
         >
           {item.renewalRate}%
@@ -103,9 +103,9 @@ export function AdminDashboardBranchLeaderboardRow({
 
       {/* Top Loss Reason / Growth Bottleneck */}
       <td className="px-3.5 py-3.5 whitespace-nowrap">
-        <div className="flex items-center gap-1.5 text-xs text-slate-300">
-          <ShieldAlert className="h-3.5 w-3.5 text-amber-400 shrink-0" />
-          <span className="font-medium text-slate-200">{item.topBottleneck}</span>
+        <div className="flex items-center gap-1.5 text-xs text-text-secondary">
+          <ShieldAlert className="h-3.5 w-3.5 text-warning-text shrink-0" aria-hidden="true" />
+          <span className="font-medium text-text-primary">{item.topBottleneck}</span>
         </div>
       </td>
     </tr>

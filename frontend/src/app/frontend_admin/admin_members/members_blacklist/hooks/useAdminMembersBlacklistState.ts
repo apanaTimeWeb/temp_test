@@ -7,7 +7,7 @@ import { ADMIN_BLACKLIST_STATUS_VALUES } from '@/app/frontend_admin/admin_member
 import { ADMIN_BLACKLIST_DEMO_FIXTURES } from '@/app/frontend_admin/admin_members/members_blacklist/mocks/scenarios/admin_members_blacklist.scenarios';
 import type { AdminBlacklistFormSchemaType } from '@/app/frontend_admin/admin_members/members_blacklist/schemas/AdminMembersBlacklistSchema';
 import type { AdminBlacklistRecord } from '@/app/frontend_admin/admin_members/members_blacklist/types/AdminMembersBlacklistTypes';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { useTranslations } from 'next-intl';

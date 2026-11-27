@@ -2,7 +2,7 @@ import { ADMIN_COUPONS_STATUS_VALUES,ADMIN_COUPONS_UNKNOWN_STATUS,ADMIN_MEMBERS_
 import type { AdminCouponsCoupon,AdminCouponsStatus } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
 import { AdminCouponsApiRecordSchema,AdminCouponsApiResponseSchema } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
 import { apiFetch } from '@/app/frontend_admin/lib/api';
-import { parseApiResponseData } from '@/app/frontend_admin/lib/apiSchema';
+import { parseApiResponseData } from '@/lib/apiSchema';
 import type { z } from 'zod';
 
 export class AdminCouponsApiContractMissingError extends Error {

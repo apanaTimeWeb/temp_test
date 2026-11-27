@@ -5,7 +5,7 @@ import useAdminEnquiriesEnquiryDetailPage from '@/app/frontend_admin/admin_membe
 import type { FollowUp } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
 import type { AdminEnquiriesEnquiryDetailPageViewProps } from '@/app/frontend_admin/admin_members/members_enquiries/types/AdminMembersEnquiriesComponentTypes';
 import { formatAdminEnquiriesDate,getInitials,maskPhone } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import {
 AlertCircle,
 ArrowLeft,

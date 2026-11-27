@@ -10,7 +10,7 @@ import { filterAdminCommunicationWhatsappLogs } from '@/app/frontend_admin/admin
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import {
   CheckCircle2,
   Download,

@@ -12,7 +12,7 @@ import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import type { DataGridCellParams,DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertTriangle,Building2,CheckCircle2,Clock,Edit2,Plus,Radio,SearchX,Send,Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';

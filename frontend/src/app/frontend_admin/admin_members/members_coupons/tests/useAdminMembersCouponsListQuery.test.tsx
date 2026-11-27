@@ -14,7 +14,7 @@ vi.mock('@/app/frontend_admin/admin_members/members_coupons/api/admin_members_co
   fetchAdminCoupons: fetchAdminCouponsMock,
   mapAdminCouponsApiRecords: mapAdminCouponsApiRecordsMock,
 }));
-vi.mock('@/app/frontend_admin/lib/runtimeFeatures', () => ({ isFrontendDemoModeEnabled: demoModeMock }));
+vi.mock('@/lib/runtimeFeatures', () => ({ isFrontendDemoModeEnabled: demoModeMock }));
 
 function createWrapper() {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });

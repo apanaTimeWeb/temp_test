@@ -42,14 +42,14 @@ export default function AdminSecurityDeviceSessionsPanel() {
 
   const handleRevokeSession = (sessionId: string, deviceName: string, ip: string) => {
     setDeviceSessions((prev) => prev.filter((d) => d.id !== sessionId));
-    toast.success(`Session for ${deviceName} (${ip}) terminated and forced logout successfully`);
+    toast.success(`Session for ${deviceName} (${ip}) terminated and forced logout successfully`, { id: `admin-security-device-revoke-${sessionId}` });
   };
 
   const handleRevokeAllSessions = () => {
     if (deviceSessions.length === 0) return;
     const count = deviceSessions.length;
     setDeviceSessions([]);
-    toast.success(`All ${count} active device sessions terminated immediately`);
+    toast.success(`All ${count} active device sessions terminated immediately`, { id: 'admin-security-device-revoke-all' });
   };
 
   const renderSortableHeader = (field: DeviceSortField, label: string) => {
@@ -91,9 +91,9 @@ export default function AdminSecurityDeviceSessionsPanel() {
             type="button"
             onClick={handleRevokeAllSessions}
             data-testid="admin-security-revoke-all-sessions-btn"
-            className="inline-flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3.5 py-2 text-xs font-semibold text-rose-400 hover:bg-rose-500/20 active:scale-95 transition-all shadow-xs"
+            className="inline-flex items-center gap-2 rounded-xl border border-danger bg-danger-bg px-3.5 py-2 text-xs font-semibold text-danger-text hover:opacity-90 motion-safe:transition-opacity shadow-card"
           >
-            <ShieldAlert size={15} />
+            <ShieldAlert size={15} aria-hidden="true" />
             <span>Revoke All Devices ({deviceSessions.length})</span>
           </button>
         )}
@@ -119,7 +119,7 @@ export default function AdminSecurityDeviceSessionsPanel() {
                     <dd className="pt-1">
                       <button
                         type="button"
-                        className="admin-btn-ghost-danger min-h-11 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 active:scale-95 transition-all"
+                        className="admin-btn-ghost-danger min-h-11 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-danger bg-danger-bg text-danger-text hover:opacity-90 motion-safe:transition-opacity"
                         onClick={() => handleRevokeSession(device.id, t(device.deviceKey), device.ip)}
                         data-testid={`admin_security-control-revoke-mobile-${device.id}`}
                       >
@@ -136,7 +136,7 @@ export default function AdminSecurityDeviceSessionsPanel() {
           <div className="mt-4 hidden overflow-x-auto md:block">
             <table className="w-full min-w-190 text-left text-sm">
               <thead>
-                <tr className="h-12 bg-muted/60 uppercase text-xs text-text-secondary font-semibold border-b border-border">
+                <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
                   {renderSortableHeader('managerKey', t('COLUMN_MANAGER'))}
                   {renderSortableHeader('deviceKey', t('COLUMN_DEVICE'))}
                   {renderSortableHeader('ip', t('COLUMN_LOCATION_IP'))}
@@ -155,7 +155,7 @@ export default function AdminSecurityDeviceSessionsPanel() {
                       <button
                         type="button"
                         data-testid={`admin_security-AdminSettingsSecurityMain-control-revoke-${device.id}`}
-                        className="admin-btn-ghost-danger min-h-11 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 active:scale-95 transition-all"
+                        className="admin-btn-ghost-danger min-h-11 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-danger bg-danger-bg text-danger-text hover:opacity-90 motion-safe:transition-opacity"
                         onClick={() => handleRevokeSession(device.id, t(device.deviceKey), device.ip)}
                         title="Force logout this device session"
                       >

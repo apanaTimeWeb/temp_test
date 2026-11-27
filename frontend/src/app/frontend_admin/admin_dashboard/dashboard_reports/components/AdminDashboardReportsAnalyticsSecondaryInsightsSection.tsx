@@ -83,18 +83,18 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
         <button
           type="button"
           onClick={() => toggleSort(field)}
-          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded px-1 -mx-1 transition-colors cursor-pointer"
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 motion-safe:transition-colors cursor-pointer"
           aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
         >
           <span>{label}</span>
           {isActive ? (
             sortDirection === 'asc' ? (
-              <ArrowUp className="text-indigo-400 font-bold shrink-0" size={14} aria-hidden="true" />
+              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             ) : (
-              <ArrowDown className="text-indigo-400 font-bold shrink-0" size={14} aria-hidden="true" />
+              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-slate-400 opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 motion-safe:transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -104,12 +104,12 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <section className="rounded-2xl border border-indigo-500/20 bg-card p-5 sm:p-6 shadow-card min-w-0" aria-labelledby="admin-reports-revenue-trend-title">
+        <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card min-w-0" aria-labelledby="admin-reports-revenue-trend-title">
           <div className="mb-4 flex items-center gap-2.5">
-            <div className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-500/15 border border-emerald-500/25 text-emerald-400">
+            <div className="grid h-9 w-9 place-items-center rounded-xl bg-success-bg border border-success text-success-text">
               <Activity size={18} strokeWidth={2.2} aria-hidden="true" />
             </div>
-            <h2 id="admin-reports-revenue-trend-title" className="text-base font-bold text-white tracking-tight">{t('REVENUE_TREND_TITLE', { range: selectedRangeLabel })}</h2>
+            <h2 id="admin-reports-revenue-trend-title" className="text-base font-bold text-text-primary tracking-tight">{t('REVENUE_TREND_TITLE', { range: selectedRangeLabel })}</h2>
           </div>
           <figure className="min-h-64" aria-labelledby="admin-reports-revenue-chart-caption">
             <AdminDashboardReportsSecondaryInsightsApexChart type="line" options={revenueOptions} series={revenueSeries} height={260} width="100%" />
@@ -117,12 +117,12 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
           </figure>
         </section>
 
-        <section className="rounded-2xl border border-indigo-500/20 bg-card p-5 sm:p-6 shadow-card min-w-0" aria-labelledby="admin-reports-student-growth-title">
+        <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card min-w-0" aria-labelledby="admin-reports-student-growth-title">
           <div className="mb-4 flex items-center gap-2.5">
-            <div className="grid h-9 w-9 place-items-center rounded-xl bg-purple-500/15 border border-purple-500/25 text-purple-400">
+            <div className="grid h-9 w-9 place-items-center rounded-xl bg-purple-bg border border-border text-purple">
               <Users size={18} strokeWidth={2.2} aria-hidden="true" />
             </div>
-            <h2 id="admin-reports-student-growth-title" className="text-base font-bold text-white tracking-tight">{t('STUDENT_GROWTH_TITLE')}</h2>
+            <h2 id="admin-reports-student-growth-title" className="text-base font-bold text-text-primary tracking-tight">{t('STUDENT_GROWTH_TITLE')}</h2>
           </div>
           <figure className="min-h-64" aria-labelledby="admin-reports-student-growth-chart-caption">
             <AdminDashboardReportsSecondaryInsightsApexChart type="bar" options={growthOptions} series={growthSeries} height={260} width="100%" />
@@ -131,52 +131,52 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
         </section>
       </div>
 
-      <section className="rounded-2xl border border-indigo-500/20 bg-card p-5 sm:p-6 shadow-card" aria-labelledby="admin-reports-branch-summary-title">
-        <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-indigo-500/15">
+      <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card" aria-labelledby="admin-reports-branch-summary-title">
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-border">
           <div className="flex items-center gap-2.5">
-            <div className="grid h-9 w-9 place-items-center rounded-xl bg-indigo-500/15 border border-indigo-500/25 text-indigo-400">
-              <Building2 size={18} strokeWidth={2.2} />
+            <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary-subtle border border-border-focus text-primary">
+              <Building2 size={18} strokeWidth={2.2} aria-hidden="true" />
             </div>
-            <h2 id="admin-reports-branch-summary-title" className="text-base font-bold text-white tracking-tight">{t('BRANCH_SUMMARY_TITLE')}</h2>
+            <h2 id="admin-reports-branch-summary-title" className="text-base font-bold text-text-primary tracking-tight">{t('BRANCH_SUMMARY_TITLE')}</h2>
           </div>
-          <span className="text-xs font-semibold text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 rounded-lg px-2.5 py-1 w-fit">Cross-Branch Executive Leaderboard</span>
+          <span className="text-xs font-semibold text-primary bg-primary-subtle border border-border-focus rounded-lg px-2.5 py-1 w-fit">Cross-Branch Executive Leaderboard</span>
         </div>
 
         {branches.length === 0 ? <AdminEmptyState title={t('BRANCH_SUMMARY_EMPTY_TITLE')} description={t('BRANCH_SUMMARY_EMPTY_DESCRIPTION')} /> : (
           <>
             <div className="grid gap-3 md:hidden">
               {sortedBranches.map((row: AdminDashboardReportsAnalyticsBranchSummaryRow, index: number) => (
-                <article key={`mobile-${row.branch}`} className="rounded-xl border border-indigo-500/20 bg-slate-900/50 p-4 shadow-sm">
+                <article key={`mobile-${row.branch}`} className="rounded-xl border border-border bg-surface-highlight p-4 shadow-card">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-bold text-white">{row.branch}</h3>
+                    <h3 className="font-bold text-text-primary">{row.branch}</h3>
                     <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-bold border ${
                       index === 0
-                        ? 'bg-amber-400/20 text-amber-300 border-amber-400/40'
+                        ? 'bg-warning-bg text-warning-text border-warning'
                         : index === 1
-                        ? 'bg-slate-300/20 text-slate-200 border-slate-300/40'
+                        ? 'bg-surface-highlight text-text-primary border-border'
                         : index === 2
-                        ? 'bg-amber-600/20 text-amber-400 border-amber-600/40'
-                        : 'bg-slate-800 text-slate-400 border-slate-700'
+                        ? 'bg-primary-subtle text-primary border-border-focus'
+                        : 'bg-card text-text-secondary border-border'
                     }`}>
-                      {index === 0 ? <Trophy size={11} className="text-amber-300" /> : null}
+                      {index === 0 ? <Trophy size={11} className="text-warning-text" aria-hidden="true" /> : null}
                       #{index + 1}
                     </span>
                   </div>
                   <dl className="mt-3 grid grid-cols-1 gap-2 text-xs sm:grid-cols-2">
-                    <div><dt className="text-slate-400 font-medium">{t('TABLE_REVENUE')}</dt><dd className="font-semibold text-white mt-0.5">{adminDashboardReportsAnalyticsFormatCurrency(row.revenueMinor, data.currencyCode, locale)}</dd></div>
-                    <div><dt className="text-slate-400 font-medium">{t('TABLE_EXPENSES')}</dt><dd className="font-semibold text-slate-300 mt-0.5">{adminDashboardReportsAnalyticsFormatCurrency(row.expenseMinor, data.currencyCode, locale)}</dd></div>
-                    <div><dt className="text-slate-400 font-medium">{t('TABLE_NET_PROFIT')}</dt><dd className="font-bold text-emerald-400 mt-0.5">{adminDashboardReportsAnalyticsFormatCurrency(row.revenueMinor - row.expenseMinor, data.currencyCode, locale)}</dd></div>
-                    <div><dt className="text-slate-400 font-medium">{t('TABLE_STUDENTS')}</dt><dd className="font-semibold text-white mt-0.5">{adminDashboardReportsAnalyticsFormatNumber(row.students, locale)}</dd></div>
-                    <div className="sm:col-span-2"><dt className="text-slate-400 font-medium">{t('TABLE_OCCUPANCY')}</dt><dd className="font-bold text-cyan-300 mt-0.5">{adminDashboardReportsAnalyticsFormatNumber(row.occupancy, locale)}%</dd></div>
+                    <div><dt className="text-text-secondary font-medium">{t('TABLE_REVENUE')}</dt><dd className="font-semibold text-text-primary mt-0.5">{adminDashboardReportsAnalyticsFormatCurrency(row.revenueMinor, data.currencyCode, locale)}</dd></div>
+                    <div><dt className="text-text-secondary font-medium">{t('TABLE_EXPENSES')}</dt><dd className="font-semibold text-text-secondary mt-0.5">{adminDashboardReportsAnalyticsFormatCurrency(row.expenseMinor, data.currencyCode, locale)}</dd></div>
+                    <div><dt className="text-text-secondary font-medium">{t('TABLE_NET_PROFIT')}</dt><dd className="font-bold text-success-text mt-0.5">{adminDashboardReportsAnalyticsFormatCurrency(row.revenueMinor - row.expenseMinor, data.currencyCode, locale)}</dd></div>
+                    <div><dt className="text-text-secondary font-medium">{t('TABLE_STUDENTS')}</dt><dd className="font-semibold text-text-primary mt-0.5">{adminDashboardReportsAnalyticsFormatNumber(row.students, locale)}</dd></div>
+                    <div className="sm:col-span-2"><dt className="text-text-secondary font-medium">{t('TABLE_OCCUPANCY')}</dt><dd className="font-bold text-info-text mt-0.5">{adminDashboardReportsAnalyticsFormatNumber(row.occupancy, locale)}%</dd></div>
                   </dl>
                 </article>
               ))}
             </div>
 
-            <div className="hidden overflow-x-auto md:block rounded-xl border border-indigo-500/15">
+            <div className="hidden overflow-x-auto md:block rounded-xl border border-border">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="h-11 bg-slate-900/70 uppercase text-[11px] text-slate-300 font-bold border-b border-indigo-500/20">
+                  <tr className="h-11 bg-surface-highlight uppercase text-badge text-text-secondary font-bold border-b border-border">
                     {renderSortableHeader('branch', t('TABLE_BRANCH'))}
                     {renderSortableHeader('revenueMinor', t('TABLE_REVENUE'))}
                     {renderSortableHeader('expenseMinor', t('TABLE_EXPENSES'))}
@@ -188,37 +188,37 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
                 <tbody>{sortedBranches.map((row: AdminDashboardReportsAnalyticsBranchSummaryRow, index: number) => {
                   const profit = row.revenueMinor - row.expenseMinor;
                   return (
-                    <tr key={row.branch} className="h-12 border-b border-indigo-500/10 text-slate-200 hover:bg-indigo-500/10 transition-colors">
-                      <th scope="row" className="p-3 font-medium text-white">
+                    <tr key={row.branch} className="h-12 border-b border-border text-text-primary hover:bg-surface-hover motion-safe:transition-colors">
+                      <th scope="row" className="p-3 font-medium text-text-primary">
                         <div className="flex items-center gap-2.5">
                           <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-bold border ${
                             index === 0
-                              ? 'bg-amber-400/20 text-amber-300 border-amber-400/40 shadow-sm'
+                              ? 'bg-warning-bg text-warning-text border-warning shadow-card'
                               : index === 1
-                              ? 'bg-slate-300/20 text-slate-200 border-slate-300/40'
+                              ? 'bg-surface-highlight text-text-primary border-border'
                               : index === 2
-                              ? 'bg-amber-600/20 text-amber-400 border-amber-600/40'
-                              : 'bg-slate-800/80 text-slate-400 border-slate-700/60'
+                              ? 'bg-primary-subtle text-primary border-border-focus'
+                              : 'bg-card text-text-secondary border-border'
                           }`}>
-                            {index === 0 ? <Trophy size={11} className="text-amber-300" /> : null}
+                            {index === 0 ? <Trophy size={11} className="text-warning-text" aria-hidden="true" /> : null}
                             #{index + 1}
                           </span>
-                          <span className="font-bold text-white">{row.branch}</span>
+                          <span className="font-bold text-text-primary">{row.branch}</span>
                         </div>
                       </th>
-                      <td className="p-3 font-semibold text-slate-200">{adminDashboardReportsAnalyticsFormatCurrency(row.revenueMinor, data.currencyCode, locale)}</td>
-                      <td className="p-3 font-medium text-slate-400">{adminDashboardReportsAnalyticsFormatCurrency(row.expenseMinor, data.currencyCode, locale)}</td>
-                      <td className="p-3 font-bold text-emerald-400">{adminDashboardReportsAnalyticsFormatCurrency(profit, data.currencyCode, locale)}</td>
-                      <td className="p-3 font-semibold text-white">{adminDashboardReportsAnalyticsFormatNumber(row.students, locale)}</td>
+                      <td className="p-3 font-semibold text-text-primary">{adminDashboardReportsAnalyticsFormatCurrency(row.revenueMinor, data.currencyCode, locale)}</td>
+                      <td className="p-3 font-medium text-text-secondary">{adminDashboardReportsAnalyticsFormatCurrency(row.expenseMinor, data.currencyCode, locale)}</td>
+                      <td className="p-3 font-bold text-success-text">{adminDashboardReportsAnalyticsFormatCurrency(profit, data.currencyCode, locale)}</td>
+                      <td className="p-3 font-semibold text-text-primary">{adminDashboardReportsAnalyticsFormatNumber(row.students, locale)}</td>
                       <td className="p-3">
                         <div className="flex items-center gap-2">
-                          <div className="h-2 min-w-24 flex-1 overflow-hidden rounded-full bg-slate-800">
+                          <div className="h-2 min-w-24 flex-1 overflow-hidden rounded-full bg-surface-highlight">
                             <div
-                              className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-cyan-400"
+                              className="h-full rounded-full bg-primary"
                               style={{ width: `${Math.min(100, Math.max(0, Math.round(row.occupancy)))}%` }}
                             />
                           </div>
-                          <span className="text-xs font-bold text-cyan-300 tabular-nums">{adminDashboardReportsAnalyticsFormatNumber(row.occupancy, locale)}%</span>
+                          <span className="text-xs font-bold text-info-text tabular-nums">{adminDashboardReportsAnalyticsFormatNumber(row.occupancy, locale)}%</span>
                         </div>
                       </td>
                     </tr>

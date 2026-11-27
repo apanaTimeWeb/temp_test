@@ -1,7 +1,7 @@
 import { ADMIN_COMMUNICATION_COMPLAINTS_API } from '@/app/frontend_admin/admin_communication/communication_complaints/config/admin_communication_complaints.url_config';
 import { AdminCommunicationComplaintListSchema,AdminCommunicationNoticeListSchema } from "@/app/frontend_admin/admin_communication/communication_complaints/schemas/AdminCommunicationComplaintsSchema";
 import { apiFetch } from "@/app/frontend_admin/lib/api";
-import { parseApiResponseData } from "@/app/frontend_admin/lib/apiSchema";
+import { parseApiResponseData } from "@/lib/apiSchema";
 
 export async function fetchAdminCommunicationComplaints() {
   const payload = await apiFetch<unknown>(ADMIN_COMMUNICATION_COMPLAINTS_API.COMPLAINTS);

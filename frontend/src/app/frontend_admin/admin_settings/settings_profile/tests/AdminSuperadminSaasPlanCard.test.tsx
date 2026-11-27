@@ -47,7 +47,8 @@ describe('AdminSettingsProfileReadOnlyPanels SuperAdmin SaaS Plan & Branch Entit
     expect(upgradeBtn).toBeTruthy();
     fireEvent.click(upgradeBtn);
     expect(toastMock.success).toHaveBeenCalledWith(
-      'Upgrade request sent to SuperAdmin! Our team will contact you shortly.'
+      'Upgrade request sent to SuperAdmin! Our team will contact you shortly.',
+      { id: 'admin-profile-upgrade-request' },
     );
 
     // Download invoice triggers toast
@@ -55,7 +56,8 @@ describe('AdminSettingsProfileReadOnlyPanels SuperAdmin SaaS Plan & Branch Entit
     expect(invoiceBtn).toBeTruthy();
     fireEvent.click(invoiceBtn);
     expect(toastMock.success).toHaveBeenCalledWith(
-      'Downloading SuperAdmin SaaS Invoice #INV-2026-092...'
+      'Downloading SuperAdmin SaaS Invoice #INV-2026-092...',
+      { id: 'admin-profile-download-invoice' },
     );
   });
 

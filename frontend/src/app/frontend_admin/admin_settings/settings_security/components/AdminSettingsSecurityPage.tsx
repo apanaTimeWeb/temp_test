@@ -8,7 +8,7 @@ import { ADMIN_SECURITY_ACTIVE_SESSION_FIXTURES,ADMIN_SECURITY_BLOCKED_ACCOUNT_F
 import type { AdminSecurityEventFilter } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
 import { filterAdminSecurityEvents } from '@/app/frontend_admin/admin_settings/settings_security/utils/AdminSettingsSecurityEventUtils';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
-import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { Lock,LogOut,MonitorSmartphone,Unlock,UserRoundCheck,UserRoundX } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -30,7 +30,7 @@ export default function AdminSecurityPage() {
 
   const handleForceLogoutSession = (sessionId: string, nameKey: string, ip: string) => {
     setActiveSessions((prev) => prev.filter((s) => s.id !== sessionId));
-    toast.success(`Session for ${t(nameKey)} (${ip}) revoked and logged out successfully`);
+    toast.success(`Session for ${t(nameKey)} (${ip}) revoked and logged out successfully`, { id: `admin-security-revoke-${sessionId}` });
   };
   return (
     <div className="mx-auto w-full max-w-7xl space-y-4 p-6">
@@ -66,19 +66,19 @@ export default function AdminSecurityPage() {
                   type="button"
                   onClick={() => {
                     setActiveSessions((prev) => prev.filter((s) => s.current));
-                    toast.success('All other active sessions have been terminated successfully');
+                    toast.success('All other active sessions have been terminated successfully', { id: 'admin-security-revoke-all-other' });
                   }}
                   data-testid="admin-security-revoke-all-other-sessions-btn"
-                  className="inline-flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3.5 py-2 text-xs font-semibold text-rose-400 hover:bg-rose-500/20 active:scale-95 transition-all shadow-xs"
+                  className="inline-flex items-center gap-2 rounded-xl border border-danger bg-danger-bg px-3.5 py-2 text-xs font-semibold text-danger-text hover:opacity-90 motion-safe:transition-opacity shadow-card"
                 >
-                  <LogOut size={14} />
+                  <LogOut size={14} aria-hidden="true" />
                   <span>Terminate All Other Sessions</span>
                 </button>
               )}
             </div>
             <div className="mt-4 space-y-3">{activeSessions.map((session) => <article key={session.id} className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border bg-card p-4">
               <div className="flex min-w-0 items-start gap-3"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary-subtle text-primary" aria-hidden="true"><MonitorSmartphone size={18} strokeWidth={2} /></div><div className="min-w-0"><h3 className="font-semibold text-text-primary">{t(session.nameKey)} <span className="admin-badge">{t(session.roleKey)}</span></h3><p className="mt-1 break-words text-sm text-text-secondary">{t(session.deviceKey)} · {t('IP_LABEL')}: {session.ip}</p>{session.current && <span className="mt-2 inline-block admin-badge admin-badge-success">{t('CURRENT_SESSION')}</span>}</div></div>
-              {!session.current && <button type="button" data-testid={`admin_security-AdminSettingsSecurityMain-control-revoke-${session.id}`} className="admin-btn-ghost-danger min-h-11 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 active:scale-95 transition-all" onClick={() => handleForceLogoutSession(session.id, session.nameKey, session.ip)} title="Force logout this active session"><LogOut size={16} strokeWidth={2} aria-hidden="true" /> {t('FORCE_LOGOUT')}</button>}
+              {!session.current && <button type="button" data-testid={`admin_security-AdminSettingsSecurityMain-control-revoke-${session.id}`} className="admin-btn-ghost-danger min-h-11 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-danger bg-danger-bg text-danger-text hover:opacity-90 motion-safe:transition-opacity" onClick={() => handleForceLogoutSession(session.id, session.nameKey, session.ip)} title="Force logout this active session"><LogOut size={16} strokeWidth={2} aria-hidden="true" /> {t('FORCE_LOGOUT')}</button>}
             </article>)}</div>
           </section>}
           {activeTab === 'failed-logins' && <AdminSecurityFailedLoginsPanel />}

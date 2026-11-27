@@ -30,13 +30,13 @@ export default function AdminProfilePasswordForm({ onDirtyChange }: AdminSetting
   return (
     <section className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8" aria-labelledby="admin-profile-password-title">
       {/* Decorative ambient background accent */}
-      <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-primary/5 blur-3xl" aria-hidden="true" />
+      <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-primary-subtle blur-3xl" aria-hidden="true" />
 
       {/* Header section */}
       <div className="flex flex-col gap-2 border-b border-border pb-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary shadow-xs">
-            <KeyRound size={20} />
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border-focus bg-primary-subtle text-primary shadow-card">
+            <KeyRound size={20} aria-hidden="true" />
           </div>
           <div>
             <h2 id="admin-profile-password-title" className="text-lg font-bold tracking-tight text-text-primary sm:text-xl">
@@ -47,8 +47,8 @@ export default function AdminProfilePasswordForm({ onDirtyChange }: AdminSetting
             </p>
           </div>
         </div>
-        <span className="inline-flex items-center gap-1.5 self-start rounded-full border border-border bg-surface px-3 py-1 text-xs font-semibold text-text-secondary sm:self-auto">
-          <ShieldCheck size={14} className="text-primary" />
+        <span className="inline-flex items-center gap-1.5 self-start rounded-full border border-border bg-surface-highlight px-3 py-1 text-xs font-semibold text-text-secondary sm:self-auto">
+          <ShieldCheck size={14} className="text-primary" aria-hidden="true" />
           End-to-End Encrypted
         </span>
       </div>
@@ -68,10 +68,10 @@ export default function AdminProfilePasswordForm({ onDirtyChange }: AdminSetting
               id="admin-profile-current-password"
               type={showCurrentPassword ? 'text' : 'password'}
               autoComplete="current-password"
-              className={`w-full rounded-xl border bg-surface px-4 py-2.5 pr-12 text-sm font-medium text-text-primary placeholder:text-text-tertiary transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+              className={`w-full rounded-xl border bg-input px-4 py-2.5 pr-12 text-sm font-medium text-text-primary placeholder:text-text-secondary motion-safe:transition-colors focus:outline-none focus:ring-2 focus:ring-focus-ring ${
                 errors.currentPassword
-                  ? 'border-danger-bg ring-1 ring-danger-bg'
-                  : 'border-border hover:border-border-strong focus:border-primary'
+                  ? 'border-danger ring-1 ring-danger'
+                  : 'border-border hover:border-border-focus focus:border-primary'
               }`}
               placeholder="Enter existing account password"
               {...register('currentPassword')}
@@ -80,7 +80,7 @@ export default function AdminProfilePasswordForm({ onDirtyChange }: AdminSetting
             />
             <button
               type="button"
-              className="absolute right-1.5 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-text-tertiary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all"
+              className="absolute right-1.5 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-text-secondary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-colors"
               aria-label={showCurrentPassword ? t('ARIA_HIDE_CURRENT_PASSWORD') : t('ARIA_SHOW_CURRENT_PASSWORD')}
               aria-controls="admin-profile-current-password"
               onClick={() => setShowCurrentPassword((visible) => !visible)}
@@ -111,10 +111,10 @@ export default function AdminProfilePasswordForm({ onDirtyChange }: AdminSetting
                 id="admin-profile-new-password"
                 type={showNewPassword ? 'text' : 'password'}
                 autoComplete="new-password"
-                className={`w-full rounded-xl border bg-surface px-4 py-2.5 pr-12 text-sm font-medium text-text-primary placeholder:text-text-tertiary transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                className={`w-full rounded-xl border bg-input px-4 py-2.5 pr-12 text-sm font-medium text-text-primary placeholder:text-text-secondary motion-safe:transition-colors focus:outline-none focus:ring-2 focus:ring-focus-ring ${
                   errors.newPassword
-                    ? 'border-danger-bg ring-1 ring-danger-bg'
-                    : 'border-border hover:border-border-strong focus:border-primary'
+                    ? 'border-danger ring-1 ring-danger'
+                    : 'border-border hover:border-border-focus focus:border-primary'
                 }`}
                 placeholder="Choose new strong password"
                 {...register('newPassword')}
@@ -123,7 +123,7 @@ export default function AdminProfilePasswordForm({ onDirtyChange }: AdminSetting
               />
               <button
                 type="button"
-                className="absolute right-1.5 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-text-tertiary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all"
+                className="absolute right-1.5 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-text-secondary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-colors"
                 aria-label={showNewPassword ? t('ARIA_HIDE_NEW_PASSWORD') : t('ARIA_SHOW_NEW_PASSWORD')}
                 aria-controls="admin-profile-new-password"
                 onClick={() => setShowNewPassword((visible) => !visible)}
@@ -152,10 +152,10 @@ export default function AdminProfilePasswordForm({ onDirtyChange }: AdminSetting
                 id="admin-profile-confirm-password"
                 type={showConfirmPassword ? 'text' : 'password'}
                 autoComplete="new-password"
-                className={`w-full rounded-xl border bg-surface px-4 py-2.5 pr-12 text-sm font-medium text-text-primary placeholder:text-text-tertiary transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                className={`w-full rounded-xl border bg-input px-4 py-2.5 pr-12 text-sm font-medium text-text-primary placeholder:text-text-secondary motion-safe:transition-colors focus:outline-none focus:ring-2 focus:ring-focus-ring ${
                   errors.confirmPassword
-                    ? 'border-danger-bg ring-1 ring-danger-bg'
-                    : 'border-border hover:border-border-strong focus:border-primary'
+                    ? 'border-danger ring-1 ring-danger'
+                    : 'border-border hover:border-border-focus focus:border-primary'
                 }`}
                 placeholder="Re-enter new password"
                 {...register('confirmPassword')}
@@ -164,7 +164,7 @@ export default function AdminProfilePasswordForm({ onDirtyChange }: AdminSetting
               />
               <button
                 type="button"
-                className="absolute right-1.5 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-text-tertiary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all"
+                className="absolute right-1.5 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-text-secondary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-colors"
                 aria-label={showConfirmPassword ? t('ARIA_HIDE_CONFIRM_PASSWORD') : t('ARIA_SHOW_CONFIRM_PASSWORD')}
                 aria-controls="admin-profile-confirm-password"
                 onClick={() => setShowConfirmPassword((visible) => !visible)}
@@ -181,7 +181,7 @@ export default function AdminProfilePasswordForm({ onDirtyChange }: AdminSetting
         </div>
 
         {/* Security Guidelines Box */}
-        <div className="rounded-xl border border-border bg-surface/50 p-4">
+        <div className="rounded-xl border border-border bg-surface-highlight p-4">
           <p className="text-xs font-semibold text-text-primary">Password Security Recommendations:</p>
           <ul className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-text-secondary">
             <li className="flex items-center gap-2">
@@ -205,7 +205,7 @@ export default function AdminProfilePasswordForm({ onDirtyChange }: AdminSetting
 
         {/* Action Controls Toolbar */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
-          <p className="text-xs text-text-tertiary">
+          <p className="text-xs text-text-secondary">
             Ensure you store your password in a secure password manager.
           </p>
           <div className="flex items-center gap-3">
@@ -213,7 +213,7 @@ export default function AdminProfilePasswordForm({ onDirtyChange }: AdminSetting
               <button
                 type="button"
                 onClick={() => reset()}
-                className="inline-flex min-h-11 items-center justify-center rounded-xl border border-border bg-surface px-4 py-2.5 text-xs font-semibold text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-all"
+                className="inline-flex min-h-11 items-center justify-center rounded-xl border border-border bg-card px-4 py-2.5 text-xs font-semibold text-text-secondary hover:bg-surface-hover hover:text-text-primary motion-safe:transition-colors"
               >
                 Clear Fields
               </button>
@@ -221,7 +221,7 @@ export default function AdminProfilePasswordForm({ onDirtyChange }: AdminSetting
             <button
               data-testid="admin_profile-AdminProfilePasswordForm-control-submit"
               type="submit"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-xs sm:text-sm font-semibold text-primary-contrast shadow-sm hover:bg-primary-hover active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-xs sm:text-sm font-semibold text-on-primary shadow-card hover:bg-primary-hover motion-safe:transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isSubmitting}
             >
               <CheckCircle2 size={16} strokeWidth={2.2} />

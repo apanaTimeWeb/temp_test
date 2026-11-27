@@ -18,7 +18,7 @@ import { NextIntlClientProvider as Suite0_NextIntlClientProvider } from "next-in
 import * as Suite0_HarnessVitest from "vitest";
 import { describe as suite0_describe,expect as suite0_expect,it as suite0_it,afterEach as suite1_afterEach,describe as suite1_describe,expect as suite1_expect,it as suite1_it,vi as suite1_vi,vi } from 'vitest';
 
-vi.mock('@/app/frontend_admin/lib/runtimeFeatures', () => ({ isFrontendDemoModeEnabled: () => true }));
+vi.mock('@/lib/runtimeFeatures', () => ({ isFrontendDemoModeEnabled: () => true }));
 
 describe("Consolidated from AdminSettingsProfileNonMockRegressionSuite.test.tsx", () => {
 
