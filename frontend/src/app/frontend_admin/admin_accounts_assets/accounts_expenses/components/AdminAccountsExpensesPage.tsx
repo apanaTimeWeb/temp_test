@@ -112,8 +112,8 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
           onExportCsv={() => exportAdminExpensesCsv(visibleExpenses)}
           onExportExcel={() => exportAdminExpensesExcel(visibleExpenses)}
         />
-        <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-border bg-surface-highlight p-2 shadow-card self-start">
-          <div className="flex items-center rounded-lg bg-card p-1 border border-border">
+        <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-border bg-surface-highlight p-2 shadow-card self-start max-w-full">
+          <div className="flex flex-wrap items-center gap-1 rounded-lg bg-card p-1 border border-border max-w-full">
             {(['all', 'today', 'this_week', 'this_month', 'last_month', 'custom'] as const).map((r) => (
               <button
                 key={r}

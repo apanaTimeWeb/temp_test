@@ -1,7 +1,5 @@
-import type { AdminCommunicationComplaintFormValues } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/schemas/AdminCommunicationWhatsappLogsSchema';
 import type { AdminCommunicationWhatsappLogsScenario } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/tests/harness/bootstrap';
 import type { ReactNode } from 'react';
-import type { SubmitHandler,UseFormReturn } from 'react-hook-form';
 
 export type AdminCommunicationWhatsappLogType = 'welcome' | 'fee_reminder' | 'receipt' | 'notice' | 'renewal';
 export type AdminCommunicationWhatsappLogStatus = 'Pending' | 'Sent' | 'Delivered' | 'Failed';
@@ -18,13 +16,6 @@ export interface AdminCommunicationWhatsappLog {
   message: string;
   branch?: string;
   dispatchMode?: 'auto_api_single' | 'manual_free_web';
-}
-
-export interface AdminCommunicationComplaintAddModalProps {
-  form: UseFormReturn<AdminCommunicationComplaintFormValues>;
-  onClose: () => void;
-  onSubmit: SubmitHandler<AdminCommunicationComplaintFormValues>;
-  isDemoMode: boolean;
 }
 
 export interface AdminCommunicationWhatsappLogsHarnessProps {

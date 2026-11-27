@@ -1,1 +1,0 @@
-export { ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_DEMO_DATA as ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_FIXTURES } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/config/admin_communication_whatsapp_templates.demo_data';

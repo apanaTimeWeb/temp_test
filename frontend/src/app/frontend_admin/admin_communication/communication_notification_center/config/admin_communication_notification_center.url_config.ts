@@ -15,12 +15,6 @@ export const ADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES = {
   SEAT_MAINTENANCE: '/admin/admin_seats_shifts_lockers/seats_management',
 } as const;
 
-/** Existing API adapter paths only; these do not establish a notification-service contract. */
-export const ADMIN_COMMUNICATION_NOTIFICATION_CENTER_API = {
-  COMPLAINTS: '/communication/complaints',
-  NOTICES: '/communication/notices',
-} as const;
-
 export const ADMIN_COMMUNICATION_NOTIFICATION_CATEGORIES: ReadonlyArray<{ id: AdminCommunicationNotificationCategory; labelKey: string; icon: string }> = [
   { id: 'All', labelKey: 'FILTER_ALL_NOTIFICATIONS', icon: '🔔' },
   { id: 'Finance', labelKey: 'FILTER_FINANCE', icon: '💰' },

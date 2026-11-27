@@ -47,11 +47,11 @@ export function AdminTablePagination({
   const txtPage = labels?.page ?? 'Page';
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-text-secondary">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-3 sm:px-4 py-3 text-sm text-text-secondary">
       <span>
         {txtShowing} {startItem}–{endItem} {txtOf} {total}{txtResults ? ` ${txtResults}` : ''}
       </span>
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
         {onPageSizeChange && (
           <div className="flex items-center gap-1.5">
             <label htmlFor={id} className="text-xs text-text-secondary whitespace-nowrap">
@@ -74,7 +74,7 @@ export function AdminTablePagination({
             </select>
           </div>
         )}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-center gap-2">
           <button
             type="button"
             className="min-h-9 rounded-md border border-border bg-card px-3 py-1.5 text-xs font-medium text-text-primary hover:bg-surface-hover disabled:cursor-not-allowed disabled:text-text-disabled"
