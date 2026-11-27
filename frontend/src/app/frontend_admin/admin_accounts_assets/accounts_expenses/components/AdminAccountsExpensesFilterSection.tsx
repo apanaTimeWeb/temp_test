@@ -115,7 +115,7 @@ export function AdminAccountsExpensesFilterSection({
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-4 flex-1">
             {onSearchChange && (
-              <div className="relative flex-1 min-w-[200px] max-w-xs">
+              <div className="relative flex-1 min-w-0 w-full sm:min-w-[200px] sm:max-w-xs">
                 <label htmlFor="admin-expense-search" className="sr-only">
                   Search Expenses
                 </label>
@@ -154,7 +154,7 @@ export function AdminAccountsExpensesFilterSection({
                 <label className="block text-xs font-medium text-text-secondary mb-1" htmlFor="expense-timerange-filter">
                   Date Range
                 </label>
-                <div className="flex items-center gap-1.5">
+                <div className="flex flex-wrap items-center gap-1.5">
                   <select
                     id="expense-timerange-filter"
                     aria-label="Filter expenses by date range"
@@ -193,7 +193,7 @@ export function AdminAccountsExpensesFilterSection({
             )}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {onExportCsv && (
               <button
                 type="button"

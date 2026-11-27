@@ -33,7 +33,7 @@ export function AdminFinanceRefundsTimeHorizonBar({
           <Calendar size={14} className="text-primary shrink-0" aria-hidden="true" />
           Period:
         </span>
-        <div className="flex items-center rounded-lg bg-surface-highlight p-1 border border-border">
+        <div className="flex flex-wrap items-center gap-1 rounded-lg bg-surface-highlight p-1 border border-border">
           {(
             [
               { id: 'all', label: 'All Time' },

@@ -112,9 +112,9 @@ export function AdminShiftsShiftGapPage() {
               key={shift.id}
               className="rounded-2xl border border-border bg-card p-5 shadow-card space-y-4"
             >
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
+              <div className="flex flex-col gap-3 border-b border-border pb-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <h2 className="text-lg font-bold text-text-primary">{shift.name} Shift</h2>
                     <span className="inline-flex items-center gap-1 rounded-md border border-info bg-info-bg px-2 py-0.5 text-[11px] font-semibold text-info-text">
                       <Clock size={11} aria-hidden="true" />
@@ -149,7 +149,7 @@ export function AdminShiftsShiftGapPage() {
               </div>
 
               <div className="space-y-1.5">
-                <div className="flex items-center justify-between text-[11px] text-text-secondary font-medium">
+                <div className="flex flex-wrap items-center justify-between gap-1 text-[11px] text-text-secondary font-medium">
                   <span className="flex items-center gap-1.5">
                     <span className="h-2 w-2 rounded-full bg-success-text" />
                     <strong>Booked Desks:</strong> {shift.occupied} ({utilPct}%)
@@ -174,7 +174,7 @@ export function AdminShiftsShiftGapPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-                <div className="rounded-xl border border-border bg-surface-highlight p-3 space-y-2">
+                <div className="min-w-0 rounded-xl border border-border bg-surface-highlight p-3 space-y-2">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
                     <CheckCircle2 size={13} className="text-success-text" aria-hidden="true" />
                     Active Student Batches
@@ -183,7 +183,7 @@ export function AdminShiftsShiftGapPage() {
                     {shift.booked.map((b) => (
                       <div
                         key={`${b.startH}-${b.endH}`}
-                        className="flex items-center justify-between rounded-lg border border-border-focus bg-primary-subtle px-2.5 py-1.5 text-xs"
+                        className="flex flex-wrap items-center justify-between gap-1 rounded-lg border border-border-focus bg-primary-subtle px-2.5 py-1.5 text-xs"
                       >
                         <span className="font-semibold text-text-primary">{b.label}</span>
                         <span className="font-mono text-[11px] text-primary">
@@ -194,7 +194,7 @@ export function AdminShiftsShiftGapPage() {
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-border bg-surface-highlight p-3 space-y-2">
+                <div className="min-w-0 rounded-xl border border-border bg-surface-highlight p-3 space-y-2">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-warning-text flex items-center gap-1.5">
                     <AlertCircle size={13} className="text-warning-text" aria-hidden="true" />
                     Detected Gap Windows &amp; Opportunity
@@ -206,9 +206,9 @@ export function AdminShiftsShiftGapPage() {
                       shift.gaps.map((g) => (
                         <div
                           key={`${g.startH}-${g.endH}`}
-                          className="flex items-center justify-between rounded-lg border border-warning bg-warning-bg px-2.5 py-1.5 text-xs"
+                          className="flex flex-wrap items-center justify-between gap-1.5 rounded-lg border border-warning bg-warning-bg px-2.5 py-1.5 text-xs"
                         >
-                          <div className="flex items-center gap-2">
+                          <div className="flex flex-wrap items-center gap-1.5">
                             <span
                               data-testid="admin_shifts-page-state-003"
                               className="rounded-md border border-warning bg-card px-1.5 py-0.5 text-[10px] font-bold text-warning-text"

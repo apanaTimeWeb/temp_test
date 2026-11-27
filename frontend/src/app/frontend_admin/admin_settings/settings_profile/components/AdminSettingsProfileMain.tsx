@@ -97,7 +97,7 @@ export default function AdminSettingsProfileMain() {
       </header>
 
       <div className="grid gap-6 lg:grid-cols-[250px_minmax(0,1fr)]">
-        <aside>
+        <aside className="min-w-0">
           <nav
             className="rounded-2xl border border-border bg-card p-2 shadow-card flex gap-1.5 overflow-x-auto lg:flex-col lg:gap-1"
             aria-label={t('NAV_LABEL')}

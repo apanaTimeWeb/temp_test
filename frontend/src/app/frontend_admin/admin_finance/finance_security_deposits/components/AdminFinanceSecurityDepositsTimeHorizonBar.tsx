@@ -37,7 +37,7 @@ export function AdminFinanceSecurityDepositsTimeHorizonBar({
           <Clock size={13} className="text-primary" aria-hidden="true" />
           <span>Horizon:</span>
         </span>
-        <div className="inline-flex rounded-xl bg-surface-highlight p-1 border border-border">
+        <div className="flex flex-wrap gap-1 rounded-xl bg-surface-highlight p-1 border border-border">
           {options.map((opt) => (
             <button
               key={opt.id}
