@@ -1,8 +1,10 @@
 import { expect, test } from '@playwright/test';
+import { expectCanonicalAdminSubmoduleLoaded } from '../../helpers/adminSubmoduleRouteCheck';
 
-test('demo plans support local create and delete operations', async ({ page }) => {
-  test.skip(process.env.PLAYWRIGHT_APP_MODE !== 'demo', 'Requires PLAYWRIGHT_APP_MODE=demo and a server built with NEXT_PUBLIC_FRONTEND_DEMO_MODE=true.');
-  await page.goto('/admin/admin_members/members_plans');
+test('demo plans support local create, status filter, search, and delete operations', async ({ page }) => {
+  test.skip(process.env.PLAYWRIGHT_APP_MODE === 'live', 'Skipped in strict live-only mode; runs by default when NEXT_PUBLIC_FRONTEND_DEMO_MODE=true.');
+  await expectCanonicalAdminSubmoduleLoaded(page, '/admin/admin_members/members_plans', { checkSearchInput: true });
+
   await page.getByRole('button', { name: /Create Plan/i }).click();
   await page.getByLabel('Plan Name').fill('Demo QA Plan');
   await page.getByRole('spinbutton', { name: /Price/i }).fill('1499');

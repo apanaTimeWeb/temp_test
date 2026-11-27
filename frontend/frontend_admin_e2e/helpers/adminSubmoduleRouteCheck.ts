@@ -30,9 +30,10 @@ export async function expectCanonicalAdminSubmoduleLoaded(
     if (options?.checkSearchInput) {
       const searchBox = page.locator('input[type="search"], input[placeholder*="Search" i]').first();
       if ((await searchBox.count()) > 0 && (await searchBox.isVisible())) {
-        await searchBox.fill('test');
-        await expect(searchBox).toHaveValue('test');
+        await searchBox.fill('__NO_MATCH_999__');
+        await expect(searchBox).toHaveValue('__NO_MATCH_999__');
         await searchBox.fill('');
+        await expect(searchBox).toHaveValue('');
       }
     }
 

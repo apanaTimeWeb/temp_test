@@ -1,12 +1,21 @@
 import { expect, test } from '@playwright/test';
-test('loads the canonical shifts_management submodule route', async ({ page }) => {
-  await page.goto('/admin/admin_seats_shifts_lockers/shifts_management');
-  await expect(page).toHaveURL(new RegExp('\\/admin\\/admin_seats_shifts_lockers\\/shifts_management(?:[?#]|$)'));
-  await expect(page.getByRole('heading').first()).toBeVisible();
+import { expectCanonicalAdminSubmoduleLoaded } from '../../helpers/adminSubmoduleRouteCheck';
+
+test('loads shifts_management, switches status filters, and opens Add Shift dialog', async ({ page }) => {
+  await expectCanonicalAdminSubmoduleLoaded(page, '/admin/admin_seats_shifts_lockers/shifts_management', { checkSearchInput: true });
+
+  const main = page.getByRole('main');
+  await main.getByRole('button', { name: 'Active', exact: true }).click();
+  await main.getByRole('button', { name: 'Inactive', exact: true }).click();
+  await main.getByRole('button', { name: 'All Shifts', exact: true }).click();
+
+  await page.getByTestId('admin_shifts-page-control-add-shift').click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await page.keyboard.press('Escape');
 });
 
 test('demo shifts_management CSV export downloads a file', async ({ page }) => {
-  test.skip(process.env.PLAYWRIGHT_APP_MODE !== 'demo', 'Requires PLAYWRIGHT_APP_MODE=demo and a server built with NEXT_PUBLIC_FRONTEND_DEMO_MODE=true.');
+  test.skip(process.env.PLAYWRIGHT_APP_MODE === 'live', 'Skipped in strict live-only mode; runs by default when NEXT_PUBLIC_FRONTEND_DEMO_MODE=true.');
   await page.goto('/admin/admin_seats_shifts_lockers/shifts_management');
   await expect(page.getByRole('heading', { name: /shifts/i }).first()).toBeVisible();
   const downloadPromise = page.waitForEvent('download');

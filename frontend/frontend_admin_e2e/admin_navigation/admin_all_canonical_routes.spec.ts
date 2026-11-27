@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-/** Route-level regression sweep for all 33 canonical Admin leaves across the 8 active domains. */
+/** Route-level regression sweep for all 34 canonical Admin leaves across the 8 active domains. */
 const canonicalRoutes = [
   { domain: 'admin_dashboard', submodule: 'dashboard_overview', route: '/admin/admin_dashboard/dashboard_overview' },
   { domain: 'admin_dashboard', submodule: 'dashboard_reports', route: '/admin/admin_dashboard/dashboard_reports' },
