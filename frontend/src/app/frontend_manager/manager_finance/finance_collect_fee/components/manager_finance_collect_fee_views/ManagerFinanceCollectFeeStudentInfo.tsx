@@ -1,12 +1,15 @@
 'use client';
 
 import type { ManagerFinanceCollectionType } from '@/app/frontend_manager/manager_finance/finance_collect_fee/constants/ManagerFinanceCollectFeeConstants';
-import type { MANAGER_FINANCE_COLLECT_FEE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/mocks/manager_finance_collect_fee_fixtures/ManagerFinanceCollectFeeMocks';
-import { maskManagerCollectFeePhone } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
-import { AlertCircle,AlertTriangle,ArrowRight,Check,CheckCircle } from 'lucide-react';
+import type { ManagerFinanceCollectFeeStudent } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
+import {
+  formatCollectFeeInr,
+  maskManagerCollectFeePhone,
+} from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
+import { AlertCircle, AlertTriangle, ArrowRight, Check, CheckCircle } from 'lucide-react';
 
 export interface ManagerFinanceCollectFeeStudentInfoProps {
-  selectedStudent: (typeof MANAGER_FINANCE_COLLECT_FEE_STUDENTS)[number] | null;
+  selectedStudent: ManagerFinanceCollectFeeStudent | null;
   dueAmountText: string;
   formatCurrency: (n: number) => string;
   onAutofillDue?: (dueAmountInMajorUnits: number) => void;
@@ -40,18 +43,15 @@ export default function ManagerFinanceCollectFeeStudentInfo({
               <span className="fin-cell-subtext font-mono text-xs text-secondary">({selectedStudent.smartId})</span>
               <span
                 className={`fin-badge text-xs px-2 py-0.5 rounded-full ${
-                  isActive
-                    ? 'fin-badge--success'
-                    : isSuspended
-                    ? 'fin-badge--danger'
-                    : 'fin-badge--warning'
+                  isActive ? 'fin-badge--success' : isSuspended ? 'fin-badge--danger' : 'fin-badge--warning'
                 }`}
               >
                 {selectedStudent.status.toUpperCase()}
               </span>
             </div>
             <div className="fin-cell-subtext text-xs text-secondary mt-0.5">
-              +91-{maskManagerCollectFeePhone(selectedStudent.phone)} · {selectedStudent.plan} · {selectedStudent.shift} Shift (Seat: {selectedStudent.seat})
+              +91-{maskManagerCollectFeePhone(selectedStudent.phone)} · {selectedStudent.plan} · {selectedStudent.shift} Shift (Seat:{' '}
+              {selectedStudent.seat})
             </div>
             <div className="text-xs text-secondary mt-0.5">
               Current Validity: <span className="font-medium text-text-primary">{selectedStudent.validUpto}</span>
@@ -85,7 +85,9 @@ export default function ManagerFinanceCollectFeeStudentInfo({
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-danger flex items-center gap-1.5">
               <AlertTriangle size={14} />
-              <span>{dueAmountText} {formatCurrency(selectedStudent.dueAmount)}</span>
+              <span>
+                {dueAmountText} {formatCurrency(selectedStudent.dueAmount)}
+              </span>
             </span>
             <span className="text-[11px] text-secondary">Unpaid backlog</span>
           </div>
@@ -95,7 +97,7 @@ export default function ManagerFinanceCollectFeeStudentInfo({
                 <button
                   type="button"
                   onClick={() => onSelectCollectionType('dues')}
-                  className={`text-xs px-2.5 py-1 rounded-md font-medium cursor-pointer transition-colors flex items-center gap-1 ${
+                  className={`text-xs px-2.5 py-1 rounded-md font-medium cursor-pointer motion-safe:transition-colors flex items-center gap-1 ${
                     activeCollectionType === 'dues'
                       ? 'bg-danger text-on-danger font-semibold shadow-xs'
                       : 'bg-card border border-border hover:bg-muted text-text-primary'
@@ -103,12 +105,12 @@ export default function ManagerFinanceCollectFeeStudentInfo({
                   title="Auto-fetch and clear the full pending due amount"
                 >
                   {activeCollectionType === 'dues' && <Check size={12} />}
-                  <span>Clear Full Due (₹{dueMajorUnits})</span>
+                  <span>Clear Full Due ({formatCollectFeeInr(dueMajorUnits)})</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => onSelectCollectionType('partial')}
-                  className={`text-xs px-2.5 py-1 rounded-md font-medium cursor-pointer transition-colors flex items-center gap-1 ${
+                  className={`text-xs px-2.5 py-1 rounded-md font-medium cursor-pointer motion-safe:transition-colors flex items-center gap-1 ${
                     activeCollectionType === 'partial'
                       ? 'bg-amber-600 text-white font-semibold shadow-xs'
                       : 'bg-card border border-border hover:bg-muted text-text-primary'
@@ -121,15 +123,15 @@ export default function ManagerFinanceCollectFeeStudentInfo({
                 <button
                   type="button"
                   onClick={() => onSelectCollectionType('monthly')}
-                  className={`text-xs px-2.5 py-1 rounded-md font-medium cursor-pointer transition-colors flex items-center gap-1 ${
+                  className={`text-xs px-2.5 py-1 rounded-md font-medium cursor-pointer motion-safe:transition-colors flex items-center gap-1 ${
                     activeCollectionType === 'monthly'
                       ? 'bg-primary text-on-primary font-semibold shadow-xs'
                       : 'bg-card border border-border hover:bg-muted text-text-primary'
                   }`}
-                  title="Pay for next month renewal (₹1,200)"
+                  title={`Pay for next month renewal (${formatCollectFeeInr(1200)})`}
                 >
                   {activeCollectionType === 'monthly' && <Check size={12} />}
-                  <span>1-Month Renewal (₹1,200)</span>
+                  <span>1-Month Renewal ({formatCollectFeeInr(1200)})</span>
                 </button>
               </>
             )}
@@ -137,10 +139,10 @@ export default function ManagerFinanceCollectFeeStudentInfo({
               <button
                 type="button"
                 onClick={() => onAutofillDue(dueMajorUnits)}
-                className="text-xs bg-danger text-on-danger hover:bg-danger/90 px-2.5 py-1 rounded-md font-semibold cursor-pointer inline-flex items-center gap-1 transition-colors"
+                className="text-xs bg-danger text-on-danger hover:opacity-90 px-2.5 py-1 rounded-md font-semibold cursor-pointer inline-flex items-center gap-1 motion-safe:transition-colors"
                 title="Click to autofill this outstanding due into the payment amount"
               >
-                <span>Pay Full Due (₹{dueMajorUnits})</span>
+                <span>Pay Full Due ({formatCollectFeeInr(dueMajorUnits)})</span>
                 <ArrowRight size={12} />
               </button>
             )}
@@ -150,7 +152,7 @@ export default function ManagerFinanceCollectFeeStudentInfo({
         <div className="p-2.5 rounded-lg border border-emerald-500/30 bg-emerald-500/5 flex items-center justify-between text-xs text-emerald-700 dark:text-emerald-400">
           <span className="font-medium flex items-center gap-1.5">
             <CheckCircle size={14} />
-            <span>All past dues cleared (Dues: ₹0.00)</span>
+            <span>All past dues cleared (Dues: {formatCollectFeeInr(0, true)})</span>
           </span>
           {onSelectCollectionType && activeCollectionType !== 'monthly' && (
             <button
@@ -158,7 +160,7 @@ export default function ManagerFinanceCollectFeeStudentInfo({
               onClick={() => onSelectCollectionType('monthly')}
               className="font-semibold underline cursor-pointer hover:opacity-80"
             >
-              Collect Monthly Renewal (₹1,200)
+              Collect Monthly Renewal ({formatCollectFeeInr(1200)})
             </button>
           )}
         </div>

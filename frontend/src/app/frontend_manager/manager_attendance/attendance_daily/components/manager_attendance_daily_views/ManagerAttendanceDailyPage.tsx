@@ -1,20 +1,20 @@
 'use client';
 
-import { Download,Printer,RefreshCw,Save } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { useMemo,useState } from 'react';
-import { toast } from 'sonner';
-
-import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { ManagerAttendanceDailyHeaderBanner } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyHeaderBanner';
+import { ManagerAttendanceDailyKpis } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyKpis';
+import { ManagerAttendanceDailyMemberMonthlyHistoryModal } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyMemberMonthlyHistoryModal';
+import { ManagerAttendanceDailyMonthlyRegister } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyMonthlyRegister';
+import { ManagerAttendanceDailyTable } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyTable';
+import { ManagerAttendanceDailyToolbar } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyToolbar';
 import { ManagerAttendanceDailyFloorTurnoverQueue } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_widgets/ManagerAttendanceDailyFloorTurnoverQueue';
 import { MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE } from '@/app/frontend_manager/manager_attendance/attendance_daily/hooks/ManagerAttendanceDailyDemoRepository';
-import type { AttStatus,ManagerAttendanceDailyTimeField,Student } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
+import type { AttStatus, ManagerAttendanceDailyTimeField, Student } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
 import type { ManagerAttendanceDailyMainProps } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyMainTypes';
-import { ManagerAttendanceDailyKpis } from './ManagerAttendanceDailyKpis';
-import { ManagerAttendanceDailyMemberMonthlyHistoryModal } from './ManagerAttendanceDailyMemberMonthlyHistoryModal';
-import { ManagerAttendanceDailyMonthlyRegister } from './ManagerAttendanceDailyMonthlyRegister';
-import { ManagerAttendanceDailyTable } from './ManagerAttendanceDailyTable';
-import { ManagerAttendanceDailyToolbar } from './ManagerAttendanceDailyToolbar';
+import { exportManagerAttendanceDailyCsv } from '@/app/frontend_manager/manager_attendance/attendance_daily/utils/ManagerAttendanceDailyCsv';
+import { Save } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
 const INIT_STUDENTS: Student[] = MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE.map((student) => ({ ...student }));
 
@@ -53,7 +53,9 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
     setIsSyncing(true);
     setTimeout(() => {
       setIsSyncing(false);
-      toast.success('Biometric turnstile entry logs synchronized');
+      toast.success('Biometric turnstile entry logs synchronized', {
+        id: 'attendance-daily-sync',
+      });
     }, 600);
   };
 
@@ -85,7 +87,10 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
     setStudents((p) => p.map((s) => (s.id === studentId ? { ...s, [field]: val } : s)));
 
   const handleSendAlert = (student: Student) => {
-    toast.success(`Absentee warning notice dispatched to ${student.name} (${student.smartId}) for ${student.consecutiveAbsent} consecutive days!`);
+    toast.success(
+      `Absentee warning notice dispatched to ${student.name} (${student.smartId}) for ${student.consecutiveAbsent} consecutive days!`,
+      { id: `attendance-absent-alert-${student.id}` }
+    );
   };
 
   const handleEvictOverstay = (student: Student) => {
@@ -97,7 +102,8 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
       )
     );
     toast.success(
-      `Overstay alert dispatched to ${student.name} (${student.seat || 'Assigned Seat'}). Vacate request issued for incoming evening shift student.`
+      `Overstay alert dispatched to ${student.name} (${student.seat || 'Assigned Seat'}). Vacate request issued for incoming evening shift student.`,
+      { id: `attendance-overstay-alert-${student.id}` }
     );
   };
 
@@ -107,37 +113,20 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
     return date;
   }, [date, todayStr, yesterdayStr]);
 
-  const escapeCsvCell = (val: unknown) => {
-    let str = String(val ?? '');
-    if (/^[\u0000-\u0020]*[=+\-@]/.test(str)) str = `'${str}`;
-    return `"${str.replace(/"/g, '""')}"`;
-  };
-
   const handleExportCsv = () => {
-    const headers = ['Smart ID', 'Name', 'Shift', 'Status', 'In Time', 'Out Time'].map(escapeCsvCell).join(',');
-    const rows = filtered
-      .map((s) => [s.smartId, s.name, s.shift, s.status ?? 'unmarked', s.inTime || '', s.outTime || ''].map(escapeCsvCell).join(','))
-      .join('\r\n');
-    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `attendance_register_${dateLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
-    anchor.hidden = true;
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    toast.success('Attendance register exported to CSV');
+    exportManagerAttendanceDailyCsv(filtered, dateLabel);
+    toast.success('Attendance register exported to CSV', { id: 'attendance-daily-export-csv' });
   };
 
   const handlePrint = () => {
     if (typeof window !== 'undefined') window.print();
-    toast.success('Daily attendance register sent to printer / PDF');
+    toast.success('Daily attendance register sent to printer / PDF', { id: 'attendance-daily-print' });
   };
 
   const handleSaveAttendance = () => {
-    toast.success(`Attendance for ${dateLabel} (${marked} students recorded) saved successfully.`);
+    toast.success(`Attendance for ${dateLabel} (${marked} students recorded) saved successfully.`, {
+      id: 'attendance-daily-save',
+    });
   };
 
   return (
@@ -152,56 +141,14 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
         {tManagerUi('sample_attendance_only_status_edits_are_an_in_page_previ_f63093')}
       </p>
 
-      {/* ── Executive ERP Header Banner ── */}
-      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-xs">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">
-                {tManagerUi('daily_attendance')}
-              </h1>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Live Attendance Desk
-              </span>
-            </div>
-            <p className="text-sm text-secondary mt-1">
-              {tManagerUi('mark_attendance_for_all_enrolled_students_by_shift')}
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
-            <button
-              type="button"
-              onClick={handleSyncAttendance}
-              disabled={isSyncing}
-              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-primary hover:bg-surface-hover motion-safe:transition-all shadow-2xs active:scale-95 disabled:opacity-60 cursor-pointer flex-1 sm:flex-initial"
-              title="Sync Biometric Turnstiles"
-            >
-              {isSyncing ? <ButtonLoader icon="calendar-check" /> : <RefreshCw size={14} className="text-primary" />}
-              <span>{isSyncing ? 'Syncing...' : 'Sync Turnstiles'}</span>
-            </button>
-            <button
-              type="button"
-              onClick={handleExportCsv}
-              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover hover:border-primary text-secondary hover:text-primary border border-border shadow-2xs cursor-pointer transition-all active:scale-95 flex-1 sm:flex-initial"
-              title="Export Attendance Register CSV"
-            >
-              <Download size={14} className="text-secondary" />
-              <span>Export CSV</span>
-            </button>
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover hover:border-primary text-secondary hover:text-primary border border-border shadow-2xs cursor-pointer transition-all active:scale-95 flex-1 sm:flex-initial"
-              title="Print Daily Attendance Register"
-            >
-              <Printer size={14} className="text-secondary" />
-              <span>Print / PDF</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      <ManagerAttendanceDailyHeaderBanner
+        title={tManagerUi('daily_attendance')}
+        subtitle={tManagerUi('mark_attendance_for_all_enrolled_students_by_shift')}
+        isSyncing={isSyncing}
+        onSync={handleSyncAttendance}
+        onExportCsv={handleExportCsv}
+        onPrint={handlePrint}
+      />
 
       {/* ── View Mode Tabs ── */}
       <div className="flex items-center gap-3 border-b border-border">

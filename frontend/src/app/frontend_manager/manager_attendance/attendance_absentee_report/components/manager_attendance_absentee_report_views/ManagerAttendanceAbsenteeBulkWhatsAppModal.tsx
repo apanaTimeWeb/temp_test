@@ -1,9 +1,9 @@
 'use client';
 
-import { CheckCircle2,MessageSquare,Send,ShieldCheck,X } from 'lucide-react';
-import { useEffect,useState } from 'react';
+import type { ManagerAttendanceAbsenteeReportSampleAbsentee } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/hooks/ManagerAttendanceAbsenteeReportDemoRepository';
+import { CheckCircle2, MessageSquare, Send, ShieldCheck, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import type { ManagerAttendanceAbsenteeReportSampleAbsentee } from '../../hooks/ManagerAttendanceAbsenteeReportDemoRepository';
 
 interface ManagerAttendanceAbsenteeBulkWhatsAppModalProps {
   isOpen: boolean;
@@ -75,7 +75,9 @@ export function ManagerAttendanceAbsenteeBulkWhatsAppModal({
       return next;
     });
 
-    toast.success(`Absentee WhatsApp alert opened for ${item.name} (+91 ${cleanPhone})`);
+    toast.success(`Absentee WhatsApp alert opened for ${item.name} (+91 ${cleanPhone})`, {
+      id: `absentee-whatsapp-single-${item.smartId}`,
+    });
   };
 
   const openedCount = openedKeys.size;

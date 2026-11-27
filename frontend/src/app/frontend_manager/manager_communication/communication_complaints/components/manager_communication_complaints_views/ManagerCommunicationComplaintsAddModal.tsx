@@ -1,11 +1,11 @@
 'use client';
 
 import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { MANAGER_COMPLAINTS_DEMO_MEMBERS } from '@/app/frontend_manager/manager_communication/communication_complaints/config/manager_communication_complaints.demo_data';
 import type { ManagerCommunicationComplaintsComplaint } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
-import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
-import { SearchableCombobox,type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
-import { Armchair,MessageSquarePlus,X } from 'lucide-react';
-import { useMemo,useState } from 'react';
+import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
+import { Armchair, MessageSquarePlus, X } from 'lucide-react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 export interface ManagerCommunicationComplaintsAddModalProps {
@@ -40,7 +40,7 @@ export default function ManagerCommunicationComplaintsAddModal({
   onSubmit,
 }: ManagerCommunicationComplaintsAddModalProps) {
   const [selectedStudentId, setSelectedStudentId] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting] = useState(false);
   const [studentName, setStudentName] = useState('');
   const [seatNumber, setSeatNumber] = useState('');
   const [seatTag, setSeatTag] = useState('');
@@ -50,18 +50,20 @@ export default function ManagerCommunicationComplaintsAddModal({
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<'Normal' | 'Urgent'>('Normal');
 
-  const studentOptions: ComboboxOption[] = useMemo(() => {
-    return MANAGER_MEMBERS_DEMO_RECORDS.map((s) => ({
-      value: s.id,
-      label: `${s.name} (${s.id})`,
-      subLabel: `Seat: ${s.seat || 'General'} · Shift: ${s.shift || 'Morning'}`,
-      badge: s.status,
-    }));
-  }, []);
+  const studentOptions: ComboboxOption[] = useMemo(
+    () =>
+      MANAGER_COMPLAINTS_DEMO_MEMBERS.map((s) => ({
+        value: s.id,
+        label: `${s.name} (${s.id})`,
+        subLabel: `Seat: ${s.seat || 'General'} · Shift: ${s.shift || 'Morning'}`,
+        badge: s.status,
+      })),
+    []
+  );
 
   const handleSelectStudent = (studentId: string) => {
     setSelectedStudentId(studentId);
-    const found = MANAGER_MEMBERS_DEMO_RECORDS.find((s) => s.id === studentId);
+    const found = MANAGER_COMPLAINTS_DEMO_MEMBERS.find((s) => s.id === studentId);
     if (found) {
       setStudentName(`${found.name} (${found.id})`);
       setSeatNumber(found.seat || 'S-14');
@@ -75,7 +77,9 @@ export default function ManagerCommunicationComplaintsAddModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!studentName.trim() || !title.trim() || !description.trim()) {
-      toast.error('Please select Student and fill in Issue Title & Description.');
+      toast.error('Please select Student and fill in Issue Title & Description.', {
+        id: 'manager-complaints-add-validation-error',
+      });
       return;
     }
 
@@ -88,7 +92,7 @@ export default function ManagerCommunicationComplaintsAddModal({
       student: studentName.trim(),
       phone: studentPhone,
       seatTag: assignedTag,
-      priority: priority,
+      priority,
       description: description.trim(),
       status: 'Open',
       date: new Date().toISOString().slice(0, 10),
@@ -98,7 +102,9 @@ export default function ManagerCommunicationComplaintsAddModal({
     };
 
     onSubmit(complaint);
-    toast.success(`Complaint registered for ${studentName} at ${assignedTag}`);
+    toast.success(`Complaint registered for ${studentName} at ${assignedTag}`, {
+      id: 'manager-complaints-add-success',
+    });
     onClose();
   };
 
@@ -122,7 +128,7 @@ export default function ManagerCommunicationComplaintsAddModal({
           <button
             type="button"
             onClick={onClose}
-            className="text-secondary hover:text-primary transition-colors p-1"
+            className="text-secondary hover:text-primary motion-safe:transition-colors p-1"
             aria-label="Close"
           >
             <X size={18} />
@@ -130,7 +136,6 @@ export default function ManagerCommunicationComplaintsAddModal({
         </div>
 
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto space-y-3.5 pr-1 text-xs">
-          {/* Select Member from Directory */}
           <div className="space-y-1">
             <label className="font-semibold text-primary block">Select Student from Directory *</label>
             <SearchableCombobox
@@ -145,7 +150,8 @@ export default function ManagerCommunicationComplaintsAddModal({
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="font-semibold text-primary block mb-1">Student Identifier *</label>
-              <input maxLength={100}
+              <input
+                maxLength={100}
                 type="text"
                 required
                 className="mgr-input text-xs"
@@ -156,7 +162,8 @@ export default function ManagerCommunicationComplaintsAddModal({
             </div>
             <div>
               <label className="font-semibold text-primary block mb-1">Student WhatsApp Phone</label>
-              <input maxLength={100}
+              <input
+                maxLength={100}
                 type="text"
                 className="mgr-input text-xs font-mono"
                 placeholder="e.g. 9876543210"
@@ -166,16 +173,16 @@ export default function ManagerCommunicationComplaintsAddModal({
             </div>
           </div>
 
-          {/* Seat / Hall Tagging Section */}
           <div className="p-3 rounded-xl bg-amber-500/5 border border-amber-500/20 space-y-2">
             <div className="flex items-center justify-between">
               <label className="font-bold text-amber-300 flex items-center gap-1.5">
                 <Armchair size={13} className="text-amber-400" />
                 <span>Seat / Hall / Cabin Location Tag *</span>
               </label>
-              <span className="text-[10px] text-amber-200/80">e.g. Seat S-14 (Hall A)</span>
+              <span className="text-[10px] text-amber-200">e.g. Seat S-14 (Hall A)</span>
             </div>
-            <input maxLength={100}
+            <input
+              maxLength={100}
               type="text"
               required
               className="mgr-input text-xs font-semibold border-amber-500/30 focus:border-amber-400"
@@ -190,7 +197,7 @@ export default function ManagerCommunicationComplaintsAddModal({
                   key={tag}
                   type="button"
                   onClick={() => setSeatTag(tag)}
-                  className={`text-[10px] px-2 py-0.5 rounded-md border font-mono transition-colors cursor-pointer ${
+                  className={`text-[10px] px-2 py-0.5 rounded-md border font-mono motion-safe:transition-colors cursor-pointer ${
                     seatTag === tag
                       ? 'bg-amber-500/25 text-amber-200 border-amber-500/50 font-bold'
                       : 'bg-card text-secondary border-border hover:border-amber-500/30 hover:text-primary'
@@ -208,64 +215,36 @@ export default function ManagerCommunicationComplaintsAddModal({
               <button
                 type="button"
                 onClick={() => setPriority('Normal')}
-                style={
+                className={`p-2.5 rounded-xl border text-left cursor-pointer motion-safe:transition-all flex items-center gap-2 ${
                   priority === 'Normal'
-                    ? {
-                        backgroundColor: 'rgba(16, 185, 129, 0.25)',
-                        borderColor: '#10b981',
-                        color: '#d1fae5',
-                        boxShadow: '0 0 14px rgba(16, 185, 129, 0.45)',
-                      }
-                    : undefined
-                }
-                className={`p-2.5 rounded-xl border text-left cursor-pointer transition-all flex items-center justify-between ${
-                  priority === 'Normal'
-                    ? 'font-bold'
-                    : 'bg-card/60 border-border text-secondary hover:border-border-focus hover:text-primary'
+                    ? 'font-bold bg-emerald-500/20 border-emerald-500 text-emerald-200 shadow-sm'
+                    : 'bg-card border-border text-secondary hover:border-border-focus hover:text-primary'
                 }`}
                 aria-pressed={priority === 'Normal'}
               >
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                  <span className="font-bold text-xs">Normal Priority</span>
-                </div>
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                <span className="font-bold text-xs">Normal Priority</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setPriority('Urgent')}
-                style={
+                className={`p-2.5 rounded-xl border text-left cursor-pointer motion-safe:transition-all flex items-center gap-2 ${
                   priority === 'Urgent'
-                    ? {
-                        backgroundColor: 'rgba(244, 63, 94, 0.25)',
-                        borderColor: '#f43f5e',
-                        color: '#ffe4e6',
-                        boxShadow: '0 0 14px rgba(244, 63, 94, 0.45)',
-                      }
-                    : undefined
-                }
-                className={`p-2.5 rounded-xl border text-left cursor-pointer transition-all flex items-center justify-between ${
-                  priority === 'Urgent'
-                    ? 'font-bold'
-                    : 'bg-card/60 border-border text-secondary hover:border-border-focus hover:text-primary'
+                    ? 'font-bold bg-rose-500/20 border-rose-500 text-rose-200 shadow-sm'
+                    : 'bg-card border-border text-secondary hover:border-border-focus hover:text-primary'
                 }`}
                 aria-pressed={priority === 'Urgent'}
               >
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
-                  <span className="font-bold text-xs">Urgent Priority</span>
-                </div>
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 motion-safe:animate-pulse" />
+                <span className="font-bold text-xs">Urgent Priority</span>
               </button>
             </div>
           </div>
 
           <div className="space-y-1">
             <label className="font-semibold text-primary block">Issue Category *</label>
-            <select
-              className="mgr-select text-xs w-full"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
+            <select className="mgr-select text-xs w-full" value={category} onChange={(e) => setCategory(e.target.value)}>
               {CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
                   {cat}
@@ -276,7 +255,8 @@ export default function ManagerCommunicationComplaintsAddModal({
 
           <div>
             <label className="font-semibold text-primary block mb-1">Issue Title / Summary *</label>
-            <input maxLength={100}
+            <input
+              maxLength={100}
               type="text"
               required
               className="mgr-input text-xs"
@@ -288,7 +268,8 @@ export default function ManagerCommunicationComplaintsAddModal({
 
           <div>
             <label className="font-semibold text-primary block mb-1">Detailed Description *</label>
-            <textarea maxLength={1000}
+            <textarea
+              maxLength={1000}
               required
               rows={3}
               className="mgr-input text-xs resize-none"
@@ -302,15 +283,11 @@ export default function ManagerCommunicationComplaintsAddModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-3 py-1.5 rounded-lg border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
+              className="px-3 py-1.5 rounded-lg border border-border text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer"
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="mc-btn-primary flex items-center gap-2 cursor-pointer"
-            >
+            <button type="submit" disabled={isSubmitting} className="mc-btn-primary flex items-center gap-2 cursor-pointer">
               {isSubmitting ? <ButtonLoader icon="message-square-warning" /> : null}
               <span>Submit Complaint</span>
             </button>

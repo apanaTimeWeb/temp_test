@@ -2,12 +2,29 @@
  * Module-owned, sample-only repository implementation. Each exported collection/object is a defensive
  * snapshot of the authored fixture data; these values are not a persistence or API contract.
  */
-import type { ManagerAccountsExpensesAsset as ManagerAccountsExpensesAssetFixture } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/mocks/manager_accounts_expenses_fixtures/ManagerAccountsExpensesAssetSampleFixtures';
-import { MANAGER_ACCOUNTING_SAMPLE_ASSETS as MANAGER_ACCOUNTING_SAMPLE_ASSETSFixture } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/mocks/manager_accounts_expenses_fixtures/ManagerAccountsExpensesAssetSampleFixtures';
-import type { ManagerAccountsExpensesExpenseSample as ManagerAccountsExpensesExpenseSampleFixture } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/mocks/manager_accounts_expenses_fixtures/ManagerAccountsExpensesExpenseSampleFixtures';
-import { MANAGER_ACCOUNTING_SAMPLE_EXPENSES as MANAGER_ACCOUNTING_SAMPLE_EXPENSESFixture } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/mocks/manager_accounts_expenses_fixtures/ManagerAccountsExpensesExpenseSampleFixtures';
-import type { Category as CategoryFixture,CategoryTone as CategoryToneFixture,DayGap as DayGapFixture,Entry as EntryFixture,GapRow as GapRowFixture,MaintenanceLog as MaintenanceLogFixture,ShiftGap as ShiftGapFixture } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/mocks/manager_accounts_expenses_fixtures/ManagerAccountsExpensesOperationalSampleFixtures';
-import { MANAGER_ACCOUNTING_SAMPLE_CATEGORY_BREAKDOWN as MANAGER_ACCOUNTING_SAMPLE_CATEGORY_BREAKDOWNFixture,MANAGER_ACCOUNTING_SAMPLE_DAILY_SETTLEMENTS as MANAGER_ACCOUNTING_SAMPLE_DAILY_SETTLEMENTSFixture,MANAGER_ACCOUNTING_SAMPLE_EXPENSE_CATEGORIES as MANAGER_ACCOUNTING_SAMPLE_EXPENSE_CATEGORIESFixture,MANAGER_ACCOUNTING_SAMPLE_MAINTENANCE_LOGS as MANAGER_ACCOUNTING_SAMPLE_MAINTENANCE_LOGSFixture,MANAGER_ACCOUNTING_SAMPLE_MONTHLY_FINANCIALS as MANAGER_ACCOUNTING_SAMPLE_MONTHLY_FINANCIALSFixture,MANAGER_ACCOUNTING_SAMPLE_SEAT_GAPS as MANAGER_ACCOUNTING_SAMPLE_SEAT_GAPSFixture,MANAGER_ACCOUNTING_SAMPLE_SHIFT_GAP_DAYS as MANAGER_ACCOUNTING_SAMPLE_SHIFT_GAP_DAYSFixture,MANAGER_ACCOUNTING_SAMPLE_SHIFT_GAPS as MANAGER_ACCOUNTING_SAMPLE_SHIFT_GAPSFixture } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/mocks/manager_accounts_expenses_fixtures/ManagerAccountsExpensesOperationalSampleFixtures';
+import type {
+  Category as CategoryFixture,
+  CategoryTone as CategoryToneFixture,
+  DayGap as DayGapFixture,
+  Entry as EntryFixture,
+  GapRow as GapRowFixture,
+  MaintenanceLog as MaintenanceLogFixture,
+  ManagerAccountsExpensesAsset as ManagerAccountsExpensesAssetFixture,
+  ManagerAccountsExpensesExpenseSample as ManagerAccountsExpensesExpenseSampleFixture,
+  ShiftGap as ShiftGapFixture,
+} from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/config/manager_accounts_expenses.demo_data';
+import {
+  MANAGER_ACCOUNTING_SAMPLE_ASSETS as MANAGER_ACCOUNTING_SAMPLE_ASSETSFixture,
+  MANAGER_ACCOUNTING_SAMPLE_CATEGORY_BREAKDOWN as MANAGER_ACCOUNTING_SAMPLE_CATEGORY_BREAKDOWNFixture,
+  MANAGER_ACCOUNTING_SAMPLE_DAILY_SETTLEMENTS as MANAGER_ACCOUNTING_SAMPLE_DAILY_SETTLEMENTSFixture,
+  MANAGER_ACCOUNTING_SAMPLE_EXPENSE_CATEGORIES as MANAGER_ACCOUNTING_SAMPLE_EXPENSE_CATEGORIESFixture,
+  MANAGER_ACCOUNTING_SAMPLE_EXPENSES as MANAGER_ACCOUNTING_SAMPLE_EXPENSESFixture,
+  MANAGER_ACCOUNTING_SAMPLE_MAINTENANCE_LOGS as MANAGER_ACCOUNTING_SAMPLE_MAINTENANCE_LOGSFixture,
+  MANAGER_ACCOUNTING_SAMPLE_MONTHLY_FINANCIALS as MANAGER_ACCOUNTING_SAMPLE_MONTHLY_FINANCIALSFixture,
+  MANAGER_ACCOUNTING_SAMPLE_SEAT_GAPS as MANAGER_ACCOUNTING_SAMPLE_SEAT_GAPSFixture,
+  MANAGER_ACCOUNTING_SAMPLE_SHIFT_GAP_DAYS as MANAGER_ACCOUNTING_SAMPLE_SHIFT_GAP_DAYSFixture,
+  MANAGER_ACCOUNTING_SAMPLE_SHIFT_GAPS as MANAGER_ACCOUNTING_SAMPLE_SHIFT_GAPSFixture,
+} from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/config/manager_accounts_expenses.demo_data';
 
 /** DATA FLOW: Module-owned sample fixtures -> defensive demo repository exports -> feature preview; sample data is not persistence. */
 

@@ -52,7 +52,9 @@ describe('Manager Members Group Admission - Smart Adjacent Seat Allocation', () 
   });
 
   it('renders smart adjacent seat allocation panel in Manual Modal', () => {
-    const modalSource = readSource('components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionManualModal.tsx');
+    const modalSource =
+      readSource('components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionManualModal.tsx') +
+      readSource('components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionAdjacentClusterPanel.tsx');
     expect(modalSource).toContain('Smart Adjacent Seat Allocation');
     expect(modalSource).toContain('1-Click Auto Assign Adjacent Seats');
     expect(modalSource).toContain('Auto-allocate contiguous desks so friends and batchmates sit side-by-side');

@@ -8,10 +8,10 @@ import { useRef,useState } from 'react';
 import { useManagerSeatMatrixDialogFocus } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/hooks/ManagerSeatsMatrixDialogFocus';
 import type { ManagerSeatsMatrixModalProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixComponentTypes';
 import type { ShiftType } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
-import { REGISTERED_STUDENT_CANDIDATES } from '../../constants/ManagerSeatsMatrixConstants';
-import { ManagerSeatsMatrixModalActionsTab } from './ManagerSeatsMatrixModalActionsTab';
-import { ManagerSeatsMatrixModalConfigTab } from './ManagerSeatsMatrixModalConfigTab';
-import { ManagerSeatsMatrixModalHistoryTab } from './ManagerSeatsMatrixModalHistoryTab';
+import { REGISTERED_STUDENT_CANDIDATES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/constants/ManagerSeatsMatrixConstants';
+import { ManagerSeatsMatrixModalActionsTab } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_dialogs/ManagerSeatsMatrixModalActionsTab';
+import { ManagerSeatsMatrixModalConfigTab } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_dialogs/ManagerSeatsMatrixModalConfigTab';
+import { ManagerSeatsMatrixModalHistoryTab } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_dialogs/ManagerSeatsMatrixModalHistoryTab';
 
 export function ManagerSeatsMatrixModal({
   selectedSeat,
@@ -151,7 +151,7 @@ export function ManagerSeatsMatrixModal({
                       ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
                       : selectedSeat.status === 'expiring'
                       ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
-                      : 'bg-secondary/15 text-secondary border border-border'
+                      : 'bg-surface text-secondary border border-border'
                   }`}
                 >
                   {selectedSeat.status}
@@ -215,7 +215,7 @@ export function ManagerSeatsMatrixModal({
         <div className="flex-1 overflow-y-auto pr-1 space-y-4">
           {feedback && (
             <div
-              className="p-3 bg-success-bg border border-success/30 text-success text-xs font-semibold rounded-xl flex items-center gap-2"
+              className="p-3 bg-success-bg border border-success text-success text-xs font-semibold rounded-xl flex items-center gap-2"
               role="status"
             >
               <CheckCircle size={16} className="text-success shrink-0" />

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback,useMemo,useState } from 'react';
-import type { ManagerMembersDirectoryRecord } from '../types/ManagerMembersDirectoryTypes';
+import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 
 export function useManagerMembersDirectoryBulkWhatsApp(
   allMembers: ManagerMembersDirectoryRecord[],

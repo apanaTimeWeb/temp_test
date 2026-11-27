@@ -17,7 +17,7 @@ export function ManagerSeatsMatrixModalHistoryTab({
         <div className="p-3 rounded-xl bg-surface border border-border">
           <div className="flex items-center justify-between font-semibold text-primary mb-1">
             <span>Current Allotment</span>
-            <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-success-bg text-success border border-success/30 font-mono">
+            <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-success-bg text-success border border-success font-mono">
               Active
             </span>
           </div>
@@ -38,7 +38,7 @@ export function ManagerSeatsMatrixModalHistoryTab({
         <div className="p-3 rounded-xl bg-surface border border-border">
           <div className="flex items-center justify-between font-semibold text-primary mb-1">
             <span>Previous Occupant (Priya Verma)</span>
-            <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-warning-bg text-warning border border-warning/30 font-mono">
+            <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-warning-bg text-warning border border-warning font-mono">
               Expired
             </span>
           </div>

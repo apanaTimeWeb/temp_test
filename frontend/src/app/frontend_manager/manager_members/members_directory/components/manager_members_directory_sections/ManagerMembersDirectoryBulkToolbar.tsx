@@ -1,6 +1,7 @@
 'use client';
 
-import { MessageCircle,X } from 'lucide-react';
+import '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_styles/ManagerMembersDirectoryStyles.css';
+import { MessageCircle, X } from 'lucide-react';
 
 interface ManagerMembersDirectoryBulkToolbarProps {
   selectedCount: number;
@@ -21,7 +22,7 @@ export function ManagerMembersDirectoryBulkToolbar({
 
   return (
     <div
-      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-auto min-w-[280px] sm:min-w-[340px] max-w-[95vw] px-4 py-3 bg-[#0c0f28]/95 border border-indigo-500/30 shadow-2xl rounded-2xl flex items-center justify-between gap-4 transition-all duration-200"
+      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-auto min-w-[280px] sm:min-w-[340px] max-w-[95vw] px-4 py-3 md-surface-panel border border-indigo-500/30 shadow-2xl rounded-2xl flex items-center justify-between gap-4 motion-safe:transition-all motion-safe:duration-200"
       role="region"
       aria-label="Bulk actions toolbar"
     >

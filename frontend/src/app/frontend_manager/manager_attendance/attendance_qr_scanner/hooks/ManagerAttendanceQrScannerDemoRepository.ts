@@ -1,13 +1,11 @@
-/**
- * Module-owned, sample-only repository implementation. Each exported collection/object is a defensive
- * snapshot of the authored fixture data; these values are not a persistence or API contract.
- */
-import type { ManagerAttendanceQrScannerSampleAbsentee as ManagerAttendanceQrScannerSampleAbsenteeFixture,ManagerAttendanceQrScannerSampleAttendanceStudent as ManagerAttendanceQrScannerSampleAttendanceStudentFixture } from '@/app/frontend_manager/manager_attendance/attendance_qr_scanner/mocks/manager_attendance_qr_scanner_fixtures/ManagerAttendanceQrScannerSampleFixtures';
-import { MANAGER_ENGAGEMENT_SAMPLE_ABSENTEES as MANAGER_ENGAGEMENT_SAMPLE_ABSENTEESFixture,MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE as MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCEFixture } from '@/app/frontend_manager/manager_attendance/attendance_qr_scanner/mocks/manager_attendance_qr_scanner_fixtures/ManagerAttendanceQrScannerSampleFixtures';
+import {
+  MANAGER_ENGAGEMENT_DEMO_ABSENTEES,
+  MANAGER_ENGAGEMENT_DEMO_ATTENDANCE,
+  type ManagerAttendanceQrScannerDemoAbsentee,
+  type ManagerAttendanceQrScannerDemoStudent,
+} from '@/app/frontend_manager/manager_attendance/attendance_qr_scanner/config/manager_attendance_qr_scanner.demo_data';
 
-/** DATA FLOW: Module-owned sample fixtures -> defensive demo repository exports -> feature preview; sample data is not persistence. */
-
-export type ManagerAttendanceQrScannerSampleAttendanceStudent = ManagerAttendanceQrScannerSampleAttendanceStudentFixture;
-export type ManagerAttendanceQrScannerSampleAbsentee = ManagerAttendanceQrScannerSampleAbsenteeFixture;
-export const MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE = MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCEFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
-export const MANAGER_ENGAGEMENT_SAMPLE_ABSENTEES = MANAGER_ENGAGEMENT_SAMPLE_ABSENTEESFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
+export type ManagerAttendanceQrScannerSampleAttendanceStudent = ManagerAttendanceQrScannerDemoStudent;
+export type ManagerAttendanceQrScannerSampleAbsentee = ManagerAttendanceQrScannerDemoAbsentee;
+export const MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE = MANAGER_ENGAGEMENT_DEMO_ATTENDANCE.map((record) => ({ ...record }));
+export const MANAGER_ENGAGEMENT_SAMPLE_ABSENTEES = MANAGER_ENGAGEMENT_DEMO_ABSENTEES.map((record) => ({ ...record }));

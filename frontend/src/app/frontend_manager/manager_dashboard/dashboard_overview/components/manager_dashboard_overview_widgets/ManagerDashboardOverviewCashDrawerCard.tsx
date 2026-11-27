@@ -1,7 +1,8 @@
 'use client';
 
 import type { ManagerDashboardOverviewCashDrawerCardProps } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewComponentTypes';
-import { AlertCircle,ArrowUpRight,CheckCircle2,QrCode,Wallet } from 'lucide-react';
+import { formatManagerDashboardOverviewCurrency } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/utils/ManagerDashboardOverviewCurrency';
+import { AlertCircle, ArrowUpRight, CheckCircle2, QrCode, Wallet } from 'lucide-react';
 import Link from 'next/link';
 
 export function ManagerDashboardOverviewCashDrawerCard({
@@ -14,11 +15,11 @@ export function ManagerDashboardOverviewCashDrawerCard({
   return (
     <section
       aria-labelledby="manager-cash-drawer-heading"
-      className="group relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-950/50 via-[#0d1e1c] to-[#0c0f24] p-5 sm:p-6 shadow-lg shadow-emerald-950/20 transition-all flex flex-col justify-between h-full hover:border-emerald-400/50"
+      className="mgr-cash-drawer-surface group relative overflow-hidden rounded-2xl border border-emerald-500/30 p-5 sm:p-6 shadow-lg shadow-emerald-950/20 motion-safe:transition-all flex flex-col justify-between h-full hover:border-emerald-400/50"
     >
       {/* Decorative background sparkline */}
-      <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-15 group-hover:opacity-25 transition-opacity pointer-events-none" viewBox="0 0 150 45">
-        <path d="M0,32 Q25,12 55,26 T105,10 T150,5" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
+      <svg aria-hidden="true" className="text-emerald-400 absolute bottom-0 right-0 w-36 h-20 opacity-15 group-hover:opacity-25 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+        <path d="M0,32 Q25,12 55,26 T105,10 T150,5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
       </svg>
       <div>
         {/* Card Header */}
@@ -71,7 +72,7 @@ export function ManagerDashboardOverviewCashDrawerCard({
               <Wallet size={14} className="text-emerald-400" />
             </div>
             <div className="text-lg sm:text-xl font-extrabold text-white tracking-tight">
-              ₹{cashInDrawer.toLocaleString('en-IN')}
+              {formatManagerDashboardOverviewCurrency(cashInDrawer)}
             </div>
             <p className="text-[11px] text-emerald-300/60 mt-0.5">In register drawer</p>
           </div>
@@ -82,7 +83,7 @@ export function ManagerDashboardOverviewCashDrawerCard({
               <QrCode size={14} className="text-cyan-400" />
             </div>
             <div className="text-lg sm:text-xl font-extrabold text-white tracking-tight">
-              ₹{digitalCollections.toLocaleString('en-IN')}
+              {formatManagerDashboardOverviewCurrency(digitalCollections)}
             </div>
             <p className="text-[11px] text-cyan-300/60 mt-0.5">Instant gateway inflow</p>
           </div>
@@ -92,7 +93,7 @@ export function ManagerDashboardOverviewCashDrawerCard({
         <div className="p-3 rounded-xl bg-amber-950/40 border border-amber-500/30 flex items-center justify-between text-xs mb-4">
           <span className="font-semibold text-amber-200/80">Total Inflow Recorded:</span>
           <span className="font-extrabold text-amber-400 text-sm">
-            ₹{totalCollections.toLocaleString('en-IN')}
+            {formatManagerDashboardOverviewCurrency(totalCollections)}
           </span>
         </div>
       </div>

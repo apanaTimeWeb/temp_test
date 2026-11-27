@@ -1,6 +1,7 @@
 'use client';
 
-import { Calendar,X } from 'lucide-react';
+import '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_styles/ManagerMembersDirectoryStyles.css';
+import { Calendar, X } from 'lucide-react';
 
 export type ManagerMembersTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
 
@@ -32,7 +33,7 @@ export function ManagerMembersDirectoryTimeHorizonBar({
   activeCount,
 }: ManagerMembersDirectoryTimeHorizonBarProps) {
   return (
-    <div className="w-full max-w-full min-w-0 rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-3.5 sm:p-4 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6">
+    <div className="w-full max-w-full min-w-0 rounded-2xl border border-indigo-500/25 md-surface-panel p-3.5 sm:p-4 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6">
       <div className="flex items-center gap-2">
         <Calendar size={16} className="text-indigo-400 shrink-0" />
         <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
@@ -41,7 +42,7 @@ export function ManagerMembersDirectoryTimeHorizonBar({
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <div className="inline-flex bg-[#060818] p-1 rounded-xl border border-indigo-500/25 flex-wrap gap-1">
+        <div className="inline-flex md-surface-sub p-1 rounded-xl border border-indigo-500/25 flex-wrap gap-1">
           {timeHorizonOptions.map((opt) => (
             <button
               key={opt.id}

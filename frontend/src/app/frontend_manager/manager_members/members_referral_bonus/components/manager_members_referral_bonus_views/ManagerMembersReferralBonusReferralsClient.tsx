@@ -1,29 +1,29 @@
 'use client';
 // RESPONSIBILITY: Orchestrate client-side view and local interactions for referral bonus management.
-import { getInitialReferrals } from '@/app/frontend_manager/manager_members/members_referral_bonus/mocks/manager_members_referral_bonus_fixtures/ManagerMembersReferralBonusFixtures';
+import { ManagerMembersReferralBonusAddModal } from '@/app/frontend_manager/manager_members/members_referral_bonus/components/manager_members_referral_bonus_dialogs/ManagerMembersReferralBonusAddModal';
+import { ManagerMembersReferralBonusApplyRenewalModal } from '@/app/frontend_manager/manager_members/members_referral_bonus/components/manager_members_referral_bonus_dialogs/ManagerMembersReferralBonusApplyRenewalModal';
+import ManagerMembersReferralBonusKpis from '@/app/frontend_manager/manager_members/members_referral_bonus/components/manager_members_referral_bonus_views/ManagerMembersReferralBonusKpis';
+import { ManagerMembersReferralBonusTable, type ReferralSortField } from '@/app/frontend_manager/manager_members/members_referral_bonus/components/manager_members_referral_bonus_views/ManagerMembersReferralBonusTable';
+import { ManagerMembersReferralBonusDeleteModal } from '@/app/frontend_manager/manager_members/members_referral_bonus/components/manager_members_referral_bonus_views/ManagerMembersReferralBonusTableRowAndDeleteModal';
+import ManagerMembersReferralBonusTimeHorizonBar, { type ManagerReferralTimeHorizon } from '@/app/frontend_manager/manager_members/members_referral_bonus/components/manager_members_referral_bonus_views/ManagerMembersReferralBonusTimeHorizonBar';
+import { getInitialDemoReferrals } from '@/app/frontend_manager/manager_members/members_referral_bonus/config/manager_members_referral_bonus.demo_data';
 import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
-import { CheckCircle2,Download,Plus,Trash2,X } from 'lucide-react';
+import { readBrowserStorageItem, writeBrowserStorageItem } from '@/lib/browserStorage';
+import { CheckCircle2, Download, Plus, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useEffect,useMemo,useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { ManagerMembersReferralBonusAddModal } from '../manager_members_referral_bonus_dialogs/ManagerMembersReferralBonusAddModal';
-import { ManagerMembersReferralBonusApplyRenewalModal } from '../manager_members_referral_bonus_dialogs/ManagerMembersReferralBonusApplyRenewalModal';
-import ManagerMembersReferralBonusKpis from './ManagerMembersReferralBonusKpis';
-import { ManagerMembersReferralBonusTable,type ReferralSortField } from './ManagerMembersReferralBonusTable';
-import ManagerMembersReferralBonusTimeHorizonBar,{ type ManagerReferralTimeHorizon } from './ManagerMembersReferralBonusTimeHorizonBar';
 
 export function ManagerMembersReferralBonusReferralsClient() {
   const tManagerUi = useTranslations('manager.manager_referral_bonus.ui');
-
-  // Hydration-safe initial state: Server & Client start with identical fixtures
-  const [records, setRecords] = useState<ReferralRow[]>(getInitialReferrals);
+  const [records, setRecords] = useState<ReferralRow[]>(getInitialDemoReferrals);
   const [deleteTarget, setDeleteTarget] = useState<ReferralRow | null>(null);
 
   const updateRecords = (updater: (prev: ReferralRow[]) => ReferralRow[]) => {
     setRecords((prev) => {
       const next = updater(prev);
       try {
-        localStorage.setItem('manager_members_referral_records', JSON.stringify(next));
+        writeBrowserStorageItem('manager_members_referral_records', JSON.stringify(next));
       } catch {
         // Safe storage fallback
       }
@@ -32,35 +32,23 @@ export function ManagerMembersReferralBonusReferralsClient() {
   };
 
   useEffect(() => {
-    // Sync with localStorage on client mount after hydration is complete
-    try {
-      const stored = localStorage.getItem('manager_members_referral_records');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setRecords(parsed);
-        }
-      }
-    } catch {
-      // Safe storage fallback
-    }
-
-    const handleSync = () => {
+    const syncStoredReferrals = () => {
       try {
-        const stored = localStorage.getItem('manager_members_referral_records');
-        if (stored) {
-          const parsed = JSON.parse(stored);
+        const stored = readBrowserStorageItem('manager_members_referral_records');
+        if (stored.available && stored.value) {
+          const parsed = JSON.parse(stored.value);
           if (Array.isArray(parsed) && parsed.length > 0) setRecords(parsed);
         }
       } catch {
         // Safe storage fallback
       }
     };
-    window.addEventListener('manager_referral_created', handleSync);
-    window.addEventListener('storage', handleSync);
+    syncStoredReferrals();
+    window.addEventListener('manager_referral_created', syncStoredReferrals);
+    window.addEventListener('storage', syncStoredReferrals);
     return () => {
-      window.removeEventListener('manager_referral_created', handleSync);
-      window.removeEventListener('storage', handleSync);
+      window.removeEventListener('manager_referral_created', syncStoredReferrals);
+      window.removeEventListener('storage', syncStoredReferrals);
     };
   }, []);
 
@@ -81,10 +69,7 @@ export function ManagerMembersReferralBonusReferralsClient() {
   const toggleSort = (field: ReferralSortField) => {
     if (sortField === field) {
       if (sortDirection === 'asc') setSortDirection('desc');
-      else {
-        setSortField(null);
-        setSortDirection('asc');
-      }
+      else { setSortField(null); setSortDirection('asc'); }
     } else {
       setSortField(field);
       setSortDirection('asc');
@@ -114,22 +99,18 @@ export function ManagerMembersReferralBonusReferralsClient() {
   }, [records, timeHorizon, customStartDate, customEndDate]);
 
   const timeHorizonLabel = useMemo(() => {
-    switch (timeHorizon) {
-      case 'today': return 'Today';
-      case 'this_week': return 'This Week';
-      case 'this_month': return 'This Month';
-      case 'custom': return customStartDate && customEndDate ? `${customStartDate} - ${customEndDate}` : 'Custom Range';
-      default: return 'All Time';
-    }
+    if (timeHorizon === 'today') return 'Today';
+    if (timeHorizon === 'this_week') return 'This Week';
+    if (timeHorizon === 'this_month') return 'This Month';
+    if (timeHorizon === 'custom') return customStartDate && customEndDate ? `${customStartDate} - ${customEndDate}` : 'Custom Range';
+    return 'All Time';
   }, [timeHorizon, customStartDate, customEndDate]);
 
   const filteredRows = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim();
     return timeFilteredRecords.filter((r) => {
-      const q = searchQuery.toLowerCase().trim();
       const matchQ = !q || r.referrer.toLowerCase().includes(q) || r.referred.toLowerCase().includes(q) || r.id.toLowerCase().includes(q);
-      const matchS = statusFilter === 'All' || r.status === statusFilter;
-      const matchM = methodFilter === 'All' || r.method.toLowerCase() === methodFilter.toLowerCase();
-      return matchQ && matchS && matchM;
+      return matchQ && (statusFilter === 'All' || r.status === statusFilter) && (methodFilter === 'All' || r.method.toLowerCase() === methodFilter.toLowerCase());
     });
   }, [timeFilteredRecords, searchQuery, statusFilter, methodFilter]);
 
@@ -138,9 +119,7 @@ export function ManagerMembersReferralBonusReferralsClient() {
   const sortedRows = useMemo(() => {
     if (!sortField) return filteredRows;
     return [...filteredRows].sort((a, b) => {
-      const aVal = a[sortField];
-      const bVal = b[sortField];
-      const cmp = String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      const cmp = String(a[sortField] ?? '').localeCompare(String(b[sortField] ?? ''), undefined, { numeric: true, sensitivity: 'base' });
       return sortDirection === 'asc' ? cmp : -cmp;
     });
   }, [filteredRows, sortField, sortDirection]);
@@ -152,26 +131,19 @@ export function ManagerMembersReferralBonusReferralsClient() {
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
-  const handleApprove = (id: string) => {
-    updateRecords((prev) => prev.map((r) => (r.id === id ? { ...r, status: 'Credited' } : r)));
-    setToastMsg(`Referral ${id} approved and bonus credited!`);
+  const showTempToastMsg = (msg: string) => {
+    setToastMsg(msg);
     setTimeout(() => setToastMsg(null), 3500);
   };
 
-  const handleApplyToRenewal = (referral: ReferralRow) => {
-    setApplyRenewalTarget(referral);
+  const handleApprove = (id: string) => {
+    updateRecords((prev) => prev.map((r) => (r.id === id ? { ...r, status: 'Credited' } : r)));
+    showTempToastMsg(`Referral ${id} approved and bonus credited!`);
   };
 
   const handleRenewalApplied = (updatedRow: ReferralRow) => {
     updateRecords((prev) => prev.map((r) => (r.id === updatedRow.id ? updatedRow : r)));
-    setToastMsg(`Referral ${updatedRow.id} bonus applied to ${updatedRow.referrer}'s next renewal!`);
-    setTimeout(() => setToastMsg(null), 3500);
-  };
-
-  const handleDeleteReferral = (id: string) => {
-    const target = records.find((r) => r.id === id);
-    if (!target) return;
-    setDeleteTarget(target);
+    showTempToastMsg(`Referral ${updatedRow.id} bonus applied to ${updatedRow.referrer}'s next renewal!`);
   };
 
   const handleConfirmDelete = () => {
@@ -179,8 +151,7 @@ export function ManagerMembersReferralBonusReferralsClient() {
     const { id, referred } = deleteTarget;
     setDeleteTarget(null);
     updateRecords((prev) => prev.filter((r) => r.id !== id));
-    setToastMsg(`Referral record ${id} (${referred}) removed successfully.`);
-    setTimeout(() => setToastMsg(null), 3500);
+    showTempToastMsg(`Referral record ${id} (${referred}) removed successfully.`);
   };
 
   const escapeCsvCell = (val: unknown) => {
@@ -191,11 +162,8 @@ export function ManagerMembersReferralBonusReferralsClient() {
 
   const handleExportCsv = () => {
     const headers = ['Ref ID', 'Referrer (Existing Student)', 'Referred Student (New)', 'Date', 'Bonus Amount', 'Payout Method', 'Status'].map(escapeCsvCell).join(',');
-    const rows = filteredRows
-      .map((r) => [r.id, r.referrer, r.referred, r.date, r.bonus, r.method, r.status].map(escapeCsvCell).join(','))
-      .join('\r\n');
-    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
+    const rows = filteredRows.map((r) => [r.id, r.referrer, r.referred, r.date, r.bonus, r.method, r.status].map(escapeCsvCell).join(',')).join('\r\n');
+    const url = URL.createObjectURL(new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' }));
     const anchor = document.createElement('a');
     anchor.href = url;
     anchor.download = `referrals_${new Date().toISOString().slice(0, 10)}.csv`;
@@ -208,182 +176,52 @@ export function ManagerMembersReferralBonusReferralsClient() {
 
   const handleAddReferral = (newRow: ReferralRow) => {
     updateRecords((prev) => [newRow, ...prev]);
-    toast.success(`Referral added for ${newRow.referred}`);
-    setToastMsg(`Referral ${newRow.id} created successfully.`);
-    setTimeout(() => setToastMsg(null), 3500);
+    toast.success(`Referral added for ${newRow.referred}`, { id: 'referral-add-success' });
+    showTempToastMsg(`Referral ${newRow.id} created successfully.`);
   };
 
   return (
     <div className="mgr-page">
-      {/* Header section with uniform buttons and colorful icons */}
       <div className="mgr-page-header flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="mgr-page-title text-xl sm:text-2xl font-bold text-primary">{tManagerUi('referral_program')}</h1>
-          <p className="mgr-page-subtitle text-xs sm:text-sm text-secondary mt-1">
-            Track student referrals, approve rewards, and disburse peer invite bonuses.
-          </p>
+          <p className="mgr-page-subtitle text-xs sm:text-sm text-secondary mt-1">Track student referrals, approve rewards, and disburse peer invite bonuses.</p>
         </div>
         <div className="mgr-page-actions flex flex-wrap items-center gap-2.5">
-          <button
-            type="button"
-            onClick={() => setIsAddModalOpen(true)}
-            className="mgr-btn-primary inline-flex items-center justify-center gap-2 text-xs h-9 px-4 rounded-lg font-semibold w-full sm:w-auto transition-colors"
-          >
-            <Plus size={16} className="shrink-0 text-on-primary" />
-            <span>Add Referral</span>
+          <button type="button" onClick={() => setIsAddModalOpen(true)} className="mgr-btn-primary inline-flex items-center justify-center gap-2 text-xs h-9 px-4 rounded-lg font-semibold w-full sm:w-auto motion-safe:transition-colors">
+            <Plus size={16} className="shrink-0 text-on-primary" /><span>Add Referral</span>
           </button>
-          <button
-            type="button"
-            onClick={handleExportCsv}
-            className="mgr-btn mgr-btn-secondary inline-flex items-center justify-center gap-2 text-xs h-9 px-4 rounded-lg font-semibold w-full sm:w-auto transition-colors"
-          >
-            <Download size={16} className="shrink-0 text-primary" />
-            <span>Export CSV</span>
+          <button type="button" onClick={handleExportCsv} className="mgr-btn mgr-btn-secondary inline-flex items-center justify-center gap-2 text-xs h-9 px-4 rounded-lg font-semibold w-full sm:w-auto motion-safe:transition-colors">
+            <Download size={16} className="shrink-0 text-primary" /><span>Export CSV</span>
           </button>
         </div>
       </div>
 
       {toastMsg && (
         <div className="mb-4 p-3 rounded-xl bg-success-bg border border-border text-success text-xs font-semibold flex items-center justify-between gap-2" role="status">
-          <span className="flex items-center gap-2">
-            <CheckCircle2 size={16} className="text-success shrink-0" />
-            <span>{toastMsg}</span>
-          </span>
-          <button
-            type="button"
-            onClick={() => setToastMsg(null)}
-            className="p-1 text-danger hover:opacity-80 rounded-lg transition-colors cursor-pointer"
-            aria-label="Dismiss message"
-          >
-            <X size={14} className="shrink-0 text-danger" />
-          </button>
+          <span className="flex items-center gap-2"><CheckCircle2 size={16} className="text-success shrink-0" /><span>{toastMsg}</span></span>
+          <button type="button" onClick={() => setToastMsg(null)} className="p-1 text-danger hover:opacity-80 rounded-lg motion-safe:transition-colors cursor-pointer" aria-label="Dismiss message"><X size={14} className="shrink-0 text-danger" /></button>
         </div>
       )}
 
-      {/* Global Time Horizon Filter Bar */}
-      <ManagerMembersReferralBonusTimeHorizonBar
-        timeHorizon={timeHorizon}
-        onChangeTimeHorizon={setTimeHorizon}
-        customStartDate={customStartDate}
-        onCustomStartDateChange={setCustomStartDate}
-        customEndDate={customEndDate}
-        onCustomEndDateChange={setCustomEndDate}
-        activeCount={filteredRows.length}
-      />
-
-      {/* KPI Summary Cards */}
-      <ManagerMembersReferralBonusKpis
-        records={timeFilteredRecords}
-        timeHorizonLabel={timeHorizonLabel}
-        statusFilter={statusFilter}
-        onSelectStatusFilter={(status) => {
-          setStatusFilter(status);
-          setPage(0);
-        }}
-      />
-
-      {/* Referrals Table Section */}
+      <ManagerMembersReferralBonusTimeHorizonBar timeHorizon={timeHorizon} onChangeTimeHorizon={setTimeHorizon} customStartDate={customStartDate} onCustomStartDateChange={setCustomStartDate} customEndDate={customEndDate} onCustomEndDateChange={setCustomEndDate} activeCount={filteredRows.length} />
+      <ManagerMembersReferralBonusKpis records={timeFilteredRecords} timeHorizonLabel={timeHorizonLabel} statusFilter={statusFilter} onSelectStatusFilter={(status) => { setStatusFilter(status); setPage(0); }} />
       <ManagerMembersReferralBonusTable
-        filteredRows={filteredRows}
-        paginatedRows={paginatedRows}
-        totalRows={totalRows}
-        searchQuery={searchQuery}
-        setSearchQuery={(val) => {
-          setSearchQuery(val);
-          setPage(0);
-        }}
-        statusFilter={statusFilter}
-        setStatusFilter={(val) => {
-          setStatusFilter(val);
-          setPage(0);
-        }}
-        methodFilter={methodFilter}
-        setMethodFilter={(val) => {
-          setMethodFilter(val);
-          setPage(0);
-        }}
+        filteredRows={filteredRows} paginatedRows={paginatedRows} totalRows={totalRows}
+        searchQuery={searchQuery} setSearchQuery={(val) => { setSearchQuery(val); setPage(0); }}
+        statusFilter={statusFilter} setStatusFilter={(val) => { setStatusFilter(val); setPage(0); }}
+        methodFilter={methodFilter} setMethodFilter={(val) => { setMethodFilter(val); setPage(0); }}
         hasActiveFilters={hasActiveFilters}
-        onResetFilters={() => {
-          setSearchQuery('');
-          setStatusFilter('All');
-          setMethodFilter('All');
-          setTimeHorizon('all');
-          setPage(0);
-        }}
-        sortField={sortField}
-        sortDirection={sortDirection}
-        onToggleSort={toggleSort}
-        onApprove={handleApprove}
-        onApplyToRenewal={handleApplyToRenewal}
-        onDeleteReferral={handleDeleteReferral}
-        onExportCsv={handleExportCsv}
-        page={page}
-        pageSize={pageSize}
-        pageCount={pageCount}
-        startItem={startItem}
-        endItem={endItem}
-        onPageChange={setPage}
-        onPageSizeChange={(newSize) => {
-          setPageSize(newSize);
-          setPage(0);
-        }}
+        onResetFilters={() => { setSearchQuery(''); setStatusFilter('All'); setMethodFilter('All'); setTimeHorizon('all'); setPage(0); }}
+        sortField={sortField} sortDirection={sortDirection} onToggleSort={toggleSort}
+        onApprove={handleApprove} onApplyToRenewal={setApplyRenewalTarget}
+        onDeleteReferral={(id) => { const t = records.find((r) => r.id === id); if (t) setDeleteTarget(t); }}
+        onExportCsv={handleExportCsv} page={page} pageSize={pageSize} pageCount={pageCount} startItem={startItem} endItem={endItem}
+        onPageChange={setPage} onPageSizeChange={(newSize) => { setPageSize(newSize); setPage(0); }}
       />
-
-      {/* Add Referral Modal */}
-      <ManagerMembersReferralBonusAddModal
-        isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
-        onAddReferral={handleAddReferral}
-        nextId={`REF-${100 + records.length + 1}`}
-      />
-
-      {/* Apply to Next Renewal Modal */}
-      <ManagerMembersReferralBonusApplyRenewalModal
-        isOpen={Boolean(applyRenewalTarget)}
-        onClose={() => setApplyRenewalTarget(null)}
-        referral={applyRenewalTarget}
-        onApplied={handleRenewalApplied}
-      />
-
-      {/* Centered Professional Mini Delete Confirmation Modal */}
-      {deleteTarget && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="delete-referral-dialog-title"
-        >
-          <div className="w-full max-w-sm bg-card border border-border rounded-2xl p-5 sm:p-6 shadow-2xl animate-in zoom-in-95 flex flex-col items-center text-center">
-            <div className="w-12 h-12 rounded-full bg-danger-bg text-danger border border-border flex items-center justify-center mb-3.5 shrink-0">
-              <Trash2 size={22} className="text-danger shrink-0" />
-            </div>
-            <h3 id="delete-referral-dialog-title" className="text-base font-bold text-primary">
-              Remove Referral Record?
-            </h3>
-            <p className="text-xs text-secondary mt-1.5 leading-relaxed">
-              Are you sure you want to remove referral <strong className="text-primary font-semibold">{deleteTarget.id}</strong> for <strong className="text-primary font-semibold">{deleteTarget.referred}</strong>? This action cannot be undone.
-            </p>
-            <div className="grid grid-cols-2 gap-2.5 w-full mt-5">
-              <button
-                type="button"
-                onClick={() => setDeleteTarget(null)}
-                className="mgr-btn mgr-btn-secondary text-xs h-9 px-3 rounded-lg font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <X size={14} className="text-secondary shrink-0" />
-                <span>Cancel</span>
-              </button>
-              <button
-                type="button"
-                onClick={handleConfirmDelete}
-                className="inline-flex items-center justify-center gap-1.5 text-xs h-9 px-3 rounded-lg font-semibold bg-danger text-white hover:bg-danger/90 transition-colors shadow-sm cursor-pointer"
-              >
-                <Trash2 size={14} className="text-white shrink-0" />
-                <span>Delete</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ManagerMembersReferralBonusAddModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onAddReferral={handleAddReferral} nextId={`REF-${100 + records.length + 1}`} />
+      <ManagerMembersReferralBonusApplyRenewalModal isOpen={Boolean(applyRenewalTarget)} onClose={() => setApplyRenewalTarget(null)} referral={applyRenewalTarget} onApplied={handleRenewalApplied} />
+      <ManagerMembersReferralBonusDeleteModal deleteTarget={deleteTarget} onCancel={() => setDeleteTarget(null)} onConfirm={handleConfirmDelete} />
     </div>
   );
 }

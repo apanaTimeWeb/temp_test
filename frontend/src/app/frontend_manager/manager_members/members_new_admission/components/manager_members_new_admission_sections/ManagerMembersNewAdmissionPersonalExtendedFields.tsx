@@ -1,0 +1,220 @@
+'use client';
+
+import {
+  MANAGER_ADMISSION_BLOOD_GROUP_OPTIONS,
+  MANAGER_ADMISSION_GENDER_OPTIONS,
+  MANAGER_ADMISSION_PREPARATION_OPTIONS,
+  MANAGER_ADMISSION_REFERRAL_OPTIONS,
+} from '@/app/frontend_manager/manager_members/members_new_admission/config/manager_members_new_admission_options';
+import type { ManagerMembersNewAdmissionAdmissionFormValues } from '@/app/frontend_manager/manager_members/members_new_admission/schemas/ManagerMembersNewAdmissionAdmissionSchema';
+import { SearchableCombobox } from '@/components/ui/combobox/SearchableCombobox';
+import { Accessibility, Activity, Building, Calendar, GraduationCap, MapPin, ShieldAlert, User } from 'lucide-react';
+import type { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form';
+
+interface ManagerMembersNewAdmissionPersonalExtendedFieldsProps {
+  register: UseFormRegister<ManagerMembersNewAdmissionAdmissionFormValues>;
+  errors: FieldErrors<ManagerMembersNewAdmissionAdmissionFormValues>;
+  setValue?: UseFormSetValue<ManagerMembersNewAdmissionAdmissionFormValues>;
+  watchedGender: string;
+  watchedPrep: string;
+  watchedBloodGroup: string;
+  watchedReferredBy: string;
+}
+
+export function ManagerMembersNewAdmissionPersonalExtendedFields({
+  register,
+  errors,
+  setValue,
+  watchedGender,
+  watchedPrep,
+  watchedBloodGroup,
+  watchedReferredBy,
+}: ManagerMembersNewAdmissionPersonalExtendedFieldsProps) {
+  return (
+    <>
+      {/* Gender */}
+      <div className="mgr-form-field">
+        <label className="mgr-label mgr-label-required" htmlFor="admission-gender">
+          Gender
+        </label>
+        <SearchableCombobox
+          id="admission-gender"
+          options={MANAGER_ADMISSION_GENDER_OPTIONS}
+          value={watchedGender}
+          onChange={(val) => {
+            if (setValue) setValue('gender', val, { shouldValidate: true, shouldDirty: true });
+          }}
+          placeholder="Select Gender..."
+          searchPlaceholder="Search gender..."
+        />
+        {errors.gender && <p id="admission-gender-error" className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.gender.message}</p>}
+      </div>
+
+      {/* Date of Birth */}
+      <div className="mgr-form-field">
+        <label className="mgr-label" htmlFor="admission-dob">
+          Date of Birth <span className="text-secondary font-normal text-xs">(Optional)</span>
+        </label>
+        <div className="mgr-input-icon-wrap">
+          <Calendar size={18} strokeWidth={2} className="mgr-input-icon" />
+          <input
+            maxLength={30}
+            id="admission-dob"
+            {...register('dob')}
+            type="date"
+            max={new Date().toISOString().split('T')[0]}
+            className={`mgr-input mgr-input-with-icon${errors.dob ? ' mgr-input-error' : ''}`}
+          />
+        </div>
+        {errors.dob && <p className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.dob.message}</p>}
+      </div>
+
+      {/* Full Address */}
+      <div className="mgr-form-field mgr-form-field-full">
+        <label className="mgr-label" htmlFor="admission-address">Permanent / Local Address</label>
+        <div className="mgr-input-icon-wrap">
+          <MapPin size={18} strokeWidth={2} className="mgr-input-icon" />
+          <input maxLength={250} id="admission-address" {...register('address')} type="text" className="mgr-input mgr-input-with-icon" placeholder="House/Flat No, Street, Landmark, City, Pincode" />
+        </div>
+      </div>
+
+      {/* Guardian / Parent Name */}
+      <div className="mgr-form-field">
+        <label className="mgr-label" htmlFor="admission-parent-name">Parent / Guardian Name</label>
+        <div className="mgr-input-icon-wrap">
+          <User size={18} strokeWidth={2} className="mgr-input-icon" />
+          <input maxLength={30} id="admission-parent-name" {...register('parentName')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Guardian Full Name (Father/Mother)" />
+        </div>
+      </div>
+
+      {/* Guardian Phone */}
+      <div className="mgr-form-field">
+        <label className="mgr-label" htmlFor="admission-parent-phone">
+          Parent / Guardian Phone <span className="text-secondary font-normal text-xs">(Optional)</span>
+        </label>
+        <div className="mgr-input-icon-wrap">
+          <ShieldAlert size={18} strokeWidth={2} className="mgr-input-icon" />
+          <input
+            id="admission-parent-phone"
+            {...register('parentPhone', {
+              onChange: (e) => {
+                const clean = e.target.value.replace(/\D/g, '').slice(0, 10);
+                e.target.value = clean;
+                if (setValue) setValue('parentPhone', clean, { shouldValidate: true, shouldDirty: true });
+              },
+            })}
+            onKeyDown={(e) => {
+              if (['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Enter', 'Home', 'End'].includes(e.key)) return;
+              if (e.ctrlKey || e.metaKey) return;
+              if (!/^\d$/.test(e.key)) e.preventDefault();
+            }}
+            inputMode="numeric"
+            type="tel"
+            maxLength={10}
+            className={`mgr-input mgr-input-with-icon${errors.parentPhone ? ' mgr-input-error' : ''}`}
+            aria-invalid={Boolean(errors.parentPhone)}
+            placeholder="10-digit emergency number"
+          />
+        </div>
+        {errors.parentPhone && <p className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.parentPhone.message}</p>}
+      </div>
+
+      {/* College / University (Optional) */}
+      <div className="mgr-form-field">
+        <label className="mgr-label" htmlFor="admission-college">
+          College / Institute Name <span className="text-secondary font-normal text-xs">(Optional)</span>
+        </label>
+        <div className="mgr-input-icon-wrap">
+          <GraduationCap size={18} strokeWidth={2} className="mgr-input-icon" />
+          <input maxLength={30} id="admission-college" {...register('college')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Delhi University / Self-Study" />
+        </div>
+      </div>
+
+      {/* Preparation For */}
+      <div className="mgr-form-field">
+        <label className="mgr-label" htmlFor="admission-preparation">Preparation For (Target Exam)</label>
+        <SearchableCombobox
+          id="admission-preparation"
+          options={MANAGER_ADMISSION_PREPARATION_OPTIONS}
+          value={watchedPrep || 'UPSC Civil Services'}
+          onChange={(val) => {
+            if (setValue) setValue('preparationFor', val, { shouldValidate: true, shouldDirty: true });
+          }}
+          placeholder="Search target exam..."
+          searchPlaceholder="Type exam name (UPSC, NEET, SSC)..."
+        />
+      </div>
+
+      {/* Library Branch (Locked to Manager's Assigned Branch) */}
+      <div className="mgr-form-field">
+        <label className="mgr-label" htmlFor="admission-branch">
+          Library Branch <span className="text-xs font-semibold text-success">(Current Branch)</span>
+        </label>
+        <div className="mgr-input-icon-wrap">
+          <Building size={18} strokeWidth={2} className="mgr-input-icon text-primary" />
+          <input
+            maxLength={30}
+            id="admission-branch"
+            type="text"
+            readOnly
+            value="Main Central Branch (Sector 14)"
+            className="mgr-input mgr-input-with-icon bg-surface font-semibold text-primary cursor-not-allowed"
+            title="Branch is fixed to manager's authorized branch"
+          />
+          <input type="hidden" {...register('branch')} value="Main Central Branch" />
+        </div>
+      </div>
+
+      {/* Blood Group */}
+      <div className="mgr-form-field">
+        <label className="mgr-label" htmlFor="admission-blood-group">Blood Group</label>
+        <SearchableCombobox
+          id="admission-blood-group"
+          options={MANAGER_ADMISSION_BLOOD_GROUP_OPTIONS}
+          value={watchedBloodGroup}
+          onChange={(val) => {
+            if (setValue) setValue('bloodGroup', val, { shouldValidate: true, shouldDirty: true });
+          }}
+          placeholder="Select Blood Group..."
+          searchPlaceholder="Search blood group (e.g. B+, O+)..."
+        />
+      </div>
+
+      {/* Medical Issues (Optional) */}
+      <div className="mgr-form-field">
+        <label className="mgr-label" htmlFor="admission-medical-issues">Medical Issues / Allergies (Optional)</label>
+        <div className="mgr-input-icon-wrap">
+          <Activity size={18} strokeWidth={2} className="mgr-input-icon text-warning" />
+          <input maxLength={30} id="admission-medical-issues" {...register('medicalIssues')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Asthma, Dust Allergy, None" />
+        </div>
+      </div>
+
+      {/* Disability / Special Needs (Optional) */}
+      <div className="mgr-form-field">
+        <label className="mgr-label" htmlFor="admission-disability">Disability / Special Needs (Optional)</label>
+        <div className="mgr-input-icon-wrap">
+          <Accessibility size={18} strokeWidth={2} className="mgr-input-icon" />
+          <input maxLength={30} id="admission-disability" {...register('disability')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Wheelchair access, None" />
+        </div>
+      </div>
+
+      {/* Referred By (Optional + Searchable Combobox) */}
+      <div className="mgr-form-field mgr-form-field-full">
+        <label className="mgr-label" htmlFor="admission-referred-by">
+          Referred By (Student ID / Name) <span className="text-secondary font-normal text-xs">(Optional)</span>
+        </label>
+        <SearchableCombobox
+          id="admission-referred-by"
+          options={MANAGER_ADMISSION_REFERRAL_OPTIONS}
+          value={watchedReferredBy || 'Direct Walk-in'}
+          onChange={(val) => {
+            if (setValue) setValue('referredBy', val, { shouldDirty: true, shouldValidate: true });
+          }}
+          placeholder="Search student referrer by name or smart ID..."
+          searchPlaceholder="Type name or LIB-ID..."
+          aria-label="Referred by student selector"
+        />
+      </div>
+    </>
+  );
+}

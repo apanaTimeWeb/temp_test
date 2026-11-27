@@ -1,6 +1,6 @@
+import { ManagerSettingsSecurityMain } from '@/app/frontend_manager/manager_settings/settings_security/components/ManagerSettingsSecurityMain';
+import ManagerSettingsSecurityLoading from '@/app/frontend_manager/manager_settings/settings_security/loading';
 import { Suspense } from 'react';
-import { ManagerSettingsSecurityMain } from './components/ManagerSettingsSecurityMain';
-import ManagerSettingsSecurityLoading from './loading';
 
 export default function ManagerSettingsSecurityPage() {
   return (

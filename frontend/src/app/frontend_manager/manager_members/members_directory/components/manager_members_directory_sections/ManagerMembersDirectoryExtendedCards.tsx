@@ -2,7 +2,7 @@
 
 import { Armchair,CalendarCheck,Clock,ExternalLink,GraduationCap,Layers,Lock,Pencil,User } from 'lucide-react';
 import Link from 'next/link';
-import type { ManagerMembersDirectoryRecord } from '../../types/ManagerMembersDirectoryTypes';
+import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 
 interface ManagerMembersDirectoryExtendedCardsProps {
   member: ManagerMembersDirectoryRecord;

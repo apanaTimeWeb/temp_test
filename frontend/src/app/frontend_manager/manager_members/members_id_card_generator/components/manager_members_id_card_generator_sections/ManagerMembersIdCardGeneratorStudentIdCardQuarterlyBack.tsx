@@ -149,8 +149,8 @@ export function ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack({
         <div className="qtr-back-card">
           <div className="qtr-back-card-title">📋 Library Rules</div>
           <ul className="qtr-rules-list">
-            {rules.slice(0, 5).map((rule, idx) => (
-              <li key={idx}>{rule}</li>
+            {rules.slice(0, 5).map((rule) => (
+              <li key={rule}>{rule}</li>
             ))}
           </ul>
         </div>

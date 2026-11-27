@@ -1,5 +1,5 @@
+import { MANAGER_COMPLAINTS_DEMO_API_FIXTURES } from '@/app/frontend_manager/manager_communication/communication_complaints/config/manager_communication_complaints.demo_data';
 import { MANAGER_COMMUNICATION_COMPLAINTS_URL } from '@/app/frontend_manager/manager_communication/communication_complaints/config/manager_communication_complaints.url_config';
-import { MANAGER_COMPLAINTS_API_FIXTURES } from '@/app/frontend_manager/manager_communication/communication_complaints/mocks/manager_communication_complaints_fixtures/ManagerCommunicationComplaintsApiFixtures';
 import { managerComplaintsComplaintResponseListSchema } from '@/app/frontend_manager/manager_communication/communication_complaints/schemas/ManagerCommunicationComplaintsSchema';
 import type { ManagerCommunicationComplaintsComplaint } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
 import { apiFetch } from '@/lib/api';
@@ -22,7 +22,7 @@ export async function fetchManagerCommunicationComplaints(): Promise<ManagerComm
     }
     data = response.data;
   } catch {
-    data = MANAGER_COMPLAINTS_API_FIXTURES;
+    data = MANAGER_COMPLAINTS_DEMO_API_FIXTURES;
   }
 
   const raw = managerComplaintsComplaintResponseListSchema.parse(data);

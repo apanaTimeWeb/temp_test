@@ -1,21 +1,7 @@
 'use client';
+import { ManagerMembersReferralBonusTableRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/components/manager_members_referral_bonus_views/ManagerMembersReferralBonusTableRowAndDeleteModal';
 import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
-import {
-ArrowDown,
-ArrowUp,
-ArrowUpDown,
-Calendar,
-CheckCircle2,
-ChevronLeft,
-ChevronRight,
-Clock,
-Download,
-Gift,
-Receipt,
-Search,
-Trash2,
-X,
-} from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, ChevronLeft, ChevronRight, Download, Gift, Search, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 export type ReferralSortField = 'id' | 'referrer' | 'referred' | 'date' | 'bonus' | 'method' | 'status';
@@ -100,7 +86,7 @@ export function ManagerMembersReferralBonusTable({
               <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown size={14} className="text-primary/70 group-hover:text-primary transition-colors shrink-0" aria-hidden="true" />
+            <ArrowUpDown size={14} className="text-secondary group-hover:text-primary motion-safe:transition-colors shrink-0" aria-hidden="true" />
           )}
         </button>
       </th>
@@ -226,113 +212,13 @@ export function ManagerMembersReferralBonusTable({
                 </tr>
               ) : (
                 paginatedRows.map((r) => (
-                  <tr key={r.id} className="border-b border-border last:border-0 hover:bg-surface-hover transition-colors">
-                    {/* Column 1: Referral ID */}
-                    <td className="py-3 px-4 font-mono font-bold text-primary text-xs align-middle whitespace-nowrap">
-                      {r.id}
-                    </td>
-
-                    {/* Column 2: Referrer (Existing Student) */}
-                    <td className="py-3 px-4 font-semibold text-primary text-xs align-middle whitespace-nowrap">
-                      {r.referrer}
-                    </td>
-
-                    {/* Column 3: Referred Student (New) */}
-                    <td className="py-3 px-4 text-primary text-xs align-middle whitespace-nowrap">
-                      {r.referred}
-                    </td>
-
-                    {/* Column 4: Date */}
-                    <td className="py-3 px-4 text-secondary text-xs align-middle whitespace-nowrap">
-                      <span className="inline-flex items-center gap-1.5">
-                        <Calendar size={13} className="text-primary shrink-0" />
-                        <span>{r.date}</span>
-                      </span>
-                    </td>
-
-                    {/* Column 5: Bonus Amount */}
-                    <td className="py-3 px-4 font-bold text-success text-xs font-mono align-middle whitespace-nowrap">
-                      {r.bonus}
-                    </td>
-
-                    {/* Column 6: Payout Method */}
-                    <td className="py-3 px-4 text-secondary text-xs align-middle whitespace-nowrap">
-                      <span className="inline-flex items-center gap-1.5">
-                        <Gift size={13} className="text-warning shrink-0" />
-                        <span>{r.method}</span>
-                      </span>
-                    </td>
-
-                    {/* Column 7: Status Badge */}
-                    <td className="py-3 px-4 align-middle whitespace-nowrap">
-                      <span
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                          r.status === 'Adjusted in Renewal'
-                            ? 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/30'
-                            : r.status === 'Credited'
-                              ? 'bg-success-bg text-success'
-                              : 'bg-warning-bg text-warning'
-                        }`}
-                      >
-                        {r.status === 'Adjusted in Renewal' ? (
-                          <Receipt size={12} className="shrink-0 text-indigo-400" />
-                        ) : r.status === 'Credited' ? (
-                          <CheckCircle2 size={12} className="shrink-0 text-success" />
-                        ) : (
-                          <Clock size={12} className="shrink-0 text-warning" />
-                        )}
-                        <span>{r.status}</span>
-                      </span>
-                    </td>
-
-                    {/* Column 8: Actions (Approve + Apply to Renewal + Delete) */}
-                    <td className="py-3 px-4 text-right align-middle whitespace-nowrap">
-                      <div className="inline-flex items-center gap-1.5 justify-end">
-                        {r.status === 'Adjusted in Renewal' ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
-                            <CheckCircle2 size={12} className="shrink-0 text-indigo-400" />
-                            <span>Adjusted (-{r.bonus})</span>
-                          </span>
-                        ) : (
-                          <>
-                            {r.status === 'Pending' && (
-                              <button
-                                type="button"
-                                onClick={() => onApprove(r.id)}
-                                className="mgr-btn-primary text-xs h-8 px-2.5 inline-flex items-center gap-1.5 rounded-lg font-semibold transition-colors"
-                                title="Approve referral"
-                              >
-                                <CheckCircle2 size={13} className="shrink-0 text-on-primary" />
-                                <span>Approve</span>
-                              </button>
-                            )}
-                            <button
-                              type="button"
-                              onClick={() => onApplyToRenewal(r)}
-                              className="inline-flex items-center gap-1.5 text-xs h-8 px-2.5 rounded-lg font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
-                              title={`Apply ${r.bonus} referral discount to ${r.referrer}'s next monthly fee renewal`}
-                              data-testid={`apply-renewal-btn-${r.id}`}
-                            >
-                              <Receipt size={13} className="shrink-0 text-white" />
-                              <span>Apply to Renewal</span>
-                            </button>
-                          </>
-                        )}
-
-                        {onDeleteReferral && (
-                          <button
-                            type="button"
-                            onClick={() => onDeleteReferral(r.id)}
-                            className="inline-flex items-center justify-center p-1.5 h-8 w-8 rounded-lg border border-border text-danger hover:border-danger hover:bg-danger-bg transition-colors"
-                            title={`Remove referral ${r.id}`}
-                            aria-label={`Remove referral ${r.id}`}
-                          >
-                            <Trash2 size={14} className="shrink-0 text-danger" />
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
+                  <ManagerMembersReferralBonusTableRow
+                    key={r.id}
+                    row={r}
+                    onApprove={onApprove}
+                    onApplyToRenewal={onApplyToRenewal}
+                    onDeleteReferral={onDeleteReferral}
+                  />
                 ))
               )}
             </tbody>

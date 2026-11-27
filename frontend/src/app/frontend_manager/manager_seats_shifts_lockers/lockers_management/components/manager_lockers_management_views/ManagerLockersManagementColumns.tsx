@@ -1,15 +1,13 @@
 'use client';
 
-import { format,isValid,parseISO } from 'date-fns';
-import { enUS,hi } from 'date-fns/locale';
-import { Key,KeyRound,Unlock,UserPlus } from 'lucide-react';
-import { useLocale,useTranslations } from 'next-intl';
-import type { ManagerLockersManagementSampleLocker as Locker } from '../../mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
-import type { LockerStatus } from '../../types/ManagerLockersManagementComponentTypes';
-import type {
-ManagerLockersManagementNativeColumn as ColDef,
-ManagerLockersManagementNativeCellParams as ICellRendererParams,
-} from '../manager_lockers_management_table_parts/ManagerLockersManagementNativeTable';
+import type { ManagerLockersManagementNativeColumn as ColDef, ManagerLockersManagementNativeCellParams as ICellRendererParams } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/components/manager_lockers_management_table_parts/ManagerLockersManagementNativeTable';
+import type { ManagerLockersManagementSampleLocker as Locker } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/config/manager_lockers_management.demo_data';
+import type { LockerStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/types/ManagerLockersManagementComponentTypes';
+import { formatManagerLockerInr } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementCurrency';
+import { format, isValid, parseISO } from 'date-fns';
+import { enUS, hi } from 'date-fns/locale';
+import { Key, KeyRound, Unlock, UserPlus } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 
 const STATUS_CLASS: Record<LockerStatus, string> = {
   Free: 'ss-badge ss-badge--success',
@@ -71,7 +69,7 @@ export function KeyNumberCell(props: { data?: any }) {
       </span>
       {data.lostKeyReported && (
         <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-rose-500/15 text-rose-500 border border-rose-500/30">
-          Lost (-₹{data.lostKeyFine || 150})
+          Lost (-{formatManagerLockerInr(data.lostKeyFine || 150)})
         </span>
       )}
     </div>

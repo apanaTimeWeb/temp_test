@@ -23,7 +23,7 @@ export function ManagerMembersEnquiriesEnquiryProfileCard({
   yesterdayLabel,
 }: ManagerMembersEnquiriesEnquiryProfileCardProps) {
   return (
-    <section className="crm-card rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 p-5 shadow-lg" aria-labelledby="crm-enquiry-profile-title">
+    <section className="crm-card menq-surface-card rounded-2xl border p-5 shadow-lg" aria-labelledby="crm-enquiry-profile-title">
       <div className="crm-lead-header flex items-center gap-4 mb-5 pb-4 border-b border-indigo-500/15">
         <div className="crm-avatar crm-avatar--lg w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-black text-xl flex items-center justify-center shadow-md shadow-indigo-950/50" aria-hidden="true">
           {getManagerEnquiriesInitials(enquiry.name)}

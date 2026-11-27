@@ -1,6 +1,7 @@
 'use client';
 
-import { AlertCircle,CheckCircle2,IdCard,MessageSquare,UserPlus } from 'lucide-react';
+import { formatAdmissionInr } from '@/app/frontend_manager/manager_members/members_new_admission/utils/ManagerMembersNewAdmissionStorageAndFormat';
+import { AlertCircle, CheckCircle2, IdCard, MessageSquare, UserPlus } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -39,13 +40,13 @@ export function ManagerMembersNewAdmissionSuccessBanner({
     setShowWhatsAppConfirm(false);
     const isPartial = student.isPartialPayment && Number(student.balanceDue) > 0;
     const depositText = student.securityDeposit && Number(student.securityDeposit) > 0
-      ? `• Refundable Security Deposit: ₹${Number(student.securityDeposit).toLocaleString('en-IN')} (Held securely in student account)\n`
+      ? `• Refundable Security Deposit: ${formatAdmissionInr(Number(student.securityDeposit))} (Held securely in student account)\n`
       : '';
     const paymentBreakdown = isPartial
-      ? `• Total Fees: ₹${(Number(student.totalPayable) || (Number(student.amountPaid) + Number(student.balanceDue))).toLocaleString('en-IN')}\n` +
-        `• Amount Paid Today (Token): ₹${Number(student.amountPaid).toLocaleString('en-IN')} (${student.paymentMode})\n` +
-        `• Remaining Balance Due: ₹${Number(student.balanceDue).toLocaleString('en-IN')}${student.promiseDueDate ? ` (Promised Due Date: ${student.promiseDueDate})` : ''}\n`
-      : `• Total Fees Paid: ₹${Number(student.amountPaid).toLocaleString('en-IN')} (${student.paymentMode})\n`;
+      ? `• Total Fees: ${formatAdmissionInr(Number(student.totalPayable) || (Number(student.amountPaid) + Number(student.balanceDue)))}\n` +
+        `• Amount Paid Today (Token): ${formatAdmissionInr(Number(student.amountPaid))} (${student.paymentMode})\n` +
+        `• Remaining Balance Due: ${formatAdmissionInr(Number(student.balanceDue))}${student.promiseDueDate ? ` (Promised Due Date: ${student.promiseDueDate})` : ''}\n`
+      : `• Total Fees Paid: ${formatAdmissionInr(Number(student.amountPaid))} (${student.paymentMode})\n`;
 
     const text = encodeURIComponent(
       `Hello ${student.fullName}, welcome to Central Library! 🎓\n\n` +
@@ -66,7 +67,7 @@ export function ManagerMembersNewAdmissionSuccessBanner({
     if (popup) {
       popup.opener = null;
     }
-    toast.success(`WhatsApp message opened for ${student.fullName} (+91 ${cleanPhone})`);
+    toast.success(`WhatsApp message opened for ${student.fullName} (+91 ${cleanPhone})`, { id: 'admission-wa-success' });
   };
 
   const handleConfirmReset = () => {
@@ -77,7 +78,7 @@ export function ManagerMembersNewAdmissionSuccessBanner({
   return (
     <>
       <div
-        className="mt-4 p-5 rounded-2xl bg-success-bg border border-success text-card-foreground shadow-sm animate-in fade-in slide-in-from-top-2 space-y-3"
+        className="mt-4 p-5 rounded-2xl bg-success-bg border border-success text-card-foreground shadow-sm motion-safe:animate-in fade-in slide-in-from-top-2 space-y-3"
         role="status"
         data-testid="manager-admission-success-banner"
       >
@@ -94,7 +95,7 @@ export function ManagerMembersNewAdmissionSuccessBanner({
                 Smart ID: <strong className="text-foreground font-mono">{student.smartId}</strong> • Seat: <strong className="text-foreground">{student.seat || 'General'}</strong> • Shift: <strong className="text-foreground">{student.shift}</strong> • Plan: <strong className="text-foreground">{student.plan}</strong>
               </p>
               <div className="flex items-center gap-1.5 mt-1.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 motion-safe:animate-pulse" />
                 <span>System API: Auto-dispatched 1x Welcome SMS & Digital ID Link to +91 {cleanPhone}</span>
               </div>
             </div>
@@ -142,7 +143,7 @@ export function ManagerMembersNewAdmissionSuccessBanner({
             <div className="flex items-center gap-2">
               <AlertCircle size={16} className="text-amber-400 shrink-0" />
               <span>
-                Token advance of <strong>₹{Number(student.amountPaid).toLocaleString('en-IN')}</strong> received. Balance of <strong>₹{Number(student.balanceDue).toLocaleString('en-IN')}</strong> auto-scheduled in Payment Promises for <strong>{student.promiseDueDate || '7 days'}</strong>.
+                Token advance of <strong>{formatAdmissionInr(Number(student.amountPaid))}</strong> received. Balance of <strong>{formatAdmissionInr(Number(student.balanceDue))}</strong> auto-scheduled in Payment Promises for <strong>{student.promiseDueDate || '7 days'}</strong>.
               </span>
             </div>
             <Link
@@ -159,7 +160,7 @@ export function ManagerMembersNewAdmissionSuccessBanner({
           <div className="text-xs text-indigo-300 flex items-center gap-2 px-1">
             <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shrink-0" />
             <span>
-              Refundable Security Deposit of <strong>₹{Number(student.securityDeposit).toLocaleString('en-IN')}</strong> recorded in Security Deposits ledger.
+              Refundable Security Deposit of <strong>{formatAdmissionInr(Number(student.securityDeposit))}</strong> recorded in Security Deposits ledger.
             </span>
           </div>
         )}

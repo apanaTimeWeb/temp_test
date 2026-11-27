@@ -1,6 +1,10 @@
-import { settleAndRefundDepositInLedger } from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniDepositSettlement';
 import type { ManagerGraduateAlumniDetails } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryGraduateAlumniModal';
 import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
+import {
+  formatDirectoryInrRupees,
+  settleAndRefundDepositInLedger,
+} from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDepositSettlement';
+import { readBrowserStorageItem, writeBrowserStorageItem } from '@/lib/browserStorage';
 import { toast } from 'sonner';
 
 export function graduateMemberToAlumni(
@@ -23,12 +27,11 @@ export function graduateMemberToAlumni(
     depositAmount: details.depositAmount,
   };
 
-  // If deposit marked as refunded upon graduation, sync with finance deposits ledger
   if (details.depositSettlementStatus === 'Refunded' && details.depositAmount) {
     settleAndRefundDepositInLedger(
       {
         id: targetMember.id,
-        smartId: (targetMember as any).smartId || targetMember.id,
+        smartId: targetMember.smartId || targetMember.id,
         name: targetMember.name,
         phone: targetMember.phone,
         joinDate: targetMember.joinDate,
@@ -40,15 +43,15 @@ export function graduateMemberToAlumni(
   }
 
   try {
-    const raw = typeof window !== 'undefined' ? localStorage.getItem('manager_alumni_records') : null;
-    const existing = raw ? JSON.parse(raw) : [];
+    const raw = readBrowserStorageItem('manager_alumni_records');
+    const existing = raw.available && raw.value ? JSON.parse(raw.value) : [];
     const list = Array.isArray(existing) ? existing : [];
     const updated = [
       alumniItem,
       ...list.filter((x: { id?: string; phone?: string }) => x.id !== alumniItem.id && x.phone !== alumniItem.phone),
     ];
+    writeBrowserStorageItem('manager_alumni_records', JSON.stringify(updated));
     if (typeof window !== 'undefined') {
-      localStorage.setItem('manager_alumni_records', JSON.stringify(updated));
       window.dispatchEvent(new CustomEvent('manager_alumni_created', { detail: alumniItem }));
     }
   } catch {
@@ -56,7 +59,7 @@ export function graduateMemberToAlumni(
   }
 
   const depositRemarksSuffix = details.depositSettlementStatus
-    ? ` | Deposit: ${details.depositSettlementStatus}${details.depositAmount ? ` (₹${details.depositAmount})` : ''}`
+    ? ` | Deposit: ${details.depositSettlementStatus}${details.depositAmount ? ` (${formatDirectoryInrRupees(details.depositAmount)})` : ''}`
     : '';
 
   const updatedMember: ManagerMembersDirectoryRecord = {
@@ -70,16 +73,17 @@ export function graduateMemberToAlumni(
 
   onUpdateMember?.(updatedMember);
 
-  const depositToastNotice = details.depositSettlementStatus === 'Refunded' && details.depositAmount
-    ? ` Deposit ₹${details.depositAmount} refunded.`
-    : details.depositSettlementStatus === 'Held'
-      ? ` Note: Deposit (₹${details.depositAmount || 500}) pending clearance.`
+  const depositToastNotice =
+    details.depositSettlementStatus === 'Refunded' && details.depositAmount
+      ? ` Deposit ${formatDirectoryInrRupees(details.depositAmount)} refunded.`
+      : details.depositSettlementStatus === 'Held'
+      ? ` Note: Deposit (${formatDirectoryInrRupees(details.depositAmount || 500)}) pending clearance.`
       : '';
 
   toast.success(
-    `🎉 ${targetMember.name} graduated to Alumni!${depositToastNotice} ${details.releaseSeat && targetMember.seat ? `Seat ${targetMember.seat} released.` : ''}`
+    `🎉 ${targetMember.name} graduated to Alumni!${depositToastNotice} ${details.releaseSeat && targetMember.seat ? `Seat ${targetMember.seat} released.` : ''}`,
+    { id: `manager-members-graduate-${targetMember.id}` }
   );
 
   return updatedMember;
 }
-

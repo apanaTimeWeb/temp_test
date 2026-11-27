@@ -1,5 +1,5 @@
 /** Module-local component props and UI/state types extracted from component files. */
-import type { ManagerLockersManagementSampleLocker as Locker } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
+import type { ManagerLockersManagementSampleLocker as Locker } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/config/manager_lockers_management.demo_data';
 import type { ManagerLockersManagementSearchParams } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/types/ManagerLockersManagementMainTypes';
 import type { ComponentType,ReactNode } from 'react';
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { Building2,KeyRound,MonitorSmartphone,ShieldAlert,ShieldCheck,User } from 'lucide-react';
-import type { ManagerActiveSession,ManagerProfileInfo,ManagerTwoFactorConfig } from '../types/ManagerSettingsSecurityTypes';
+import type { ManagerActiveSession, ManagerProfileInfo, ManagerTwoFactorConfig } from '@/app/frontend_manager/manager_settings/settings_security/types/ManagerSettingsSecurityTypes';
 
 interface ManagerSettingsSecurityHeaderProps {
   profile: ManagerProfileInfo;
@@ -15,7 +15,7 @@ export function ManagerSettingsSecurityHeader({
   activeSessions,
 }: ManagerSettingsSecurityHeaderProps) {
   return (
-    <div className="rounded-xl border border-white/10 bg-gradient-to-r from-[#0c0d24] via-[#0e1133] to-[#0a0c20] p-4 sm:p-5 shadow-lg relative overflow-hidden">
+    <div className="mgr-sec-hero-surface rounded-xl border p-4 sm:p-5 shadow-lg relative overflow-hidden">
       {/* Subtle accent glow */}
       <div className="absolute -top-16 -right-16 w-48 h-48 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
 
@@ -68,14 +68,12 @@ export function ManagerSettingsSecurityHeader({
             <span>{twoFactor.enabled ? '2FA Active' : '2FA Off'}</span>
           </div>
 
-          {/* Active Sessions count */}
-          <div className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-slate-300">
+          <div className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-300">
             <MonitorSmartphone className="h-3.5 w-3.5 text-indigo-400" />
             <span>{activeSessions.length} Devices Online</span>
           </div>
 
-          {/* Password Age */}
-          <div className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-slate-400">
+          <div className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-400">
             <KeyRound className="h-3.5 w-3.5 text-slate-400" />
             <span>Pass changed {profile.lastPasswordChanged}</span>
           </div>

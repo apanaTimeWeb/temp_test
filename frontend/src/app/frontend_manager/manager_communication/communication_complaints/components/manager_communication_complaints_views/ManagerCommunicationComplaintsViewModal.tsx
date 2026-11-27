@@ -5,9 +5,9 @@ import { useTranslations } from 'next-intl';
 import React from 'react';
 import { toast } from 'sonner';
 import type {
-ManagerCommunicationComplaintsComplaint,
-ManagerCommunicationComplaintsComplaintStatus,
-} from '../../types/ManagerCommunicationComplaintsTypes';
+  ManagerCommunicationComplaintsComplaint,
+  ManagerCommunicationComplaintsComplaintStatus,
+} from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
 
 interface ManagerCommunicationComplaintsViewModalProps {
   viewItem: ManagerCommunicationComplaintsComplaint;
@@ -45,7 +45,9 @@ export function ManagerCommunicationComplaintsViewModal({
     );
     const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
     if (popup) popup.opener = null;
-    toast.success(`WhatsApp opened for ${studentName} (+91 ${cleanPhone})`);
+    toast.success(`WhatsApp opened for ${studentName} (+91 ${cleanPhone})`, {
+      id: 'manager-complaints-view-wa-opened',
+    });
   };
 
   const handleCopyDetails = () => {
@@ -54,7 +56,9 @@ export function ManagerCommunicationComplaintsViewModal({
         `Complaint #${viewItem.id}\nTitle: ${viewItem.title}\nSeat / Hall: ${locationTag}\nStudent: ${viewItem.student || 'Anonymous'}\nStatus: ${viewItem.status}\nDate: ${viewItem.date}\nDescription: ${viewItem.description}`
       );
     }
-    toast.success('Complaint summary copied to clipboard');
+    toast.success('Complaint summary copied to clipboard', {
+      id: 'manager-complaints-view-copy-success',
+    });
   };
 
   const handlePrint = () => {
@@ -77,7 +81,7 @@ export function ManagerCommunicationComplaintsViewModal({
         <div className="flex items-start justify-between pb-3 border-b border-border">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+              <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary-subtle text-primary border border-border">
                 Ticket #{viewItem.id}
               </span>
               {statusBadge(viewItem.status)}

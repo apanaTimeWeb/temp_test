@@ -1,11 +1,11 @@
 'use client';
 
 import { AlertCircle,CheckCircle2,Clock,Download,FileSpreadsheet,Layers,Printer,Search,X } from 'lucide-react';
-import { MANAGER_COMMUNICATION_COMPLAINT_TABS } from '../../constants/ManagerCommunicationComplaintsComplaintConstants';
+import { MANAGER_COMMUNICATION_COMPLAINT_TABS } from '@/app/frontend_manager/manager_communication/communication_complaints/constants/ManagerCommunicationComplaintsComplaintConstants';
 import type {
-ManagerCommunicationComplaintsComplaint,
-ManagerCommunicationComplaintsComplaintStatus,
-} from '../../types/ManagerCommunicationComplaintsTypes';
+  ManagerCommunicationComplaintsComplaint,
+  ManagerCommunicationComplaintsComplaintStatus,
+} from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
 
 interface ManagerCommunicationComplaintsToolbarProps {
   tab: ManagerCommunicationComplaintsComplaintStatus | 'All';

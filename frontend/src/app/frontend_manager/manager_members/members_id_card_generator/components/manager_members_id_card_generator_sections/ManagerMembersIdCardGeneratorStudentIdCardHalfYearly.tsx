@@ -1,12 +1,10 @@
 'use client';
 // RESPONSIBILITY: Render the HALF-YEARLY plan front ID card — Signature Edition with mini-chip, guilloche, and inline holo seal.
-import type {
-IdCardSide,
-ManagerMembersIdCardGeneratorStudentIdCardProps
-} from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorComponentTypes';
-import { CreditCard,RotateCw } from 'lucide-react';
-import { useEffect,useState } from 'react';
-import { ManagerMembersIdCardGeneratorStudentIdCardHalfYearlyBack } from './ManagerMembersIdCardGeneratorStudentIdCardHalfYearlyBack';
+import { ManagerMembersIdCardGeneratorBarcodeStripes, ManagerMembersIdCardGeneratorQrSvg } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorQrSvgs';
+import { ManagerMembersIdCardGeneratorStudentIdCardHalfYearlyBack } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCardHalfYearlyBack';
+import type { IdCardSide, ManagerMembersIdCardGeneratorStudentIdCardProps } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorComponentTypes';
+import { CreditCard, RotateCw } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 function maskPhone(phone?: string | null): string {
   if (!phone) return '—';
@@ -15,84 +13,8 @@ function maskPhone(phone?: string | null): string {
   return '•••••• ' + digits.slice(-4);
 }
 
-function HyQrSvg({ code }: { code: string }) {
-  const safeCode = code || 'LIB-0000';
-  return (
-    <svg
-      width="100%"
-      height="100%"
-      viewBox="0 0 25 25"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      preserveAspectRatio="xMidYMid meet"
-      aria-label={`QR for ${safeCode}`}
-      className="w-full h-full block"
-    >
-      <rect width="25" height="25" rx="2" fill="#FFFFFF" />
-      <rect x="2" y="2" width="7" height="7" fill="#05080F" rx="1.2" />
-      <rect x="3" y="3" width="5" height="5" fill="#FFFFFF" rx="0.5" />
-      <rect x="4" y="4" width="3" height="3" fill="#05080F" rx="0.6" />
-      <rect x="16" y="2" width="7" height="7" fill="#05080F" rx="1.2" />
-      <rect x="17" y="3" width="5" height="5" fill="#FFFFFF" rx="0.5" />
-      <rect x="18" y="4" width="3" height="3" fill="#05080F" rx="0.6" />
-      <rect x="2" y="16" width="7" height="7" fill="#05080F" rx="1.2" />
-      <rect x="3" y="17" width="5" height="5" fill="#FFFFFF" rx="0.5" />
-      <rect x="4" y="18" width="3" height="3" fill="#05080F" rx="0.6" />
-      <rect x="10" y="10" width="2" height="2" fill="#05080F" rx="0.3" />
-      <rect x="13" y="10" width="2" height="1" fill="#05080F" rx="0.3" />
-      <rect x="16" y="10" width="1" height="2" fill="#05080F" rx="0.3" />
-      <rect x="18" y="10" width="2" height="2" fill="#05080F" rx="0.3" />
-      <rect x="21" y="10" width="2" height="1" fill="#05080F" rx="0.3" />
-      <rect x="10" y="13" width="2" height="1" fill="#05080F" rx="0.3" />
-      <rect x="13" y="12" width="2" height="2" fill="#05080F" rx="0.3" />
-      <rect x="16" y="13" width="2" height="1" fill="#05080F" rx="0.3" />
-      <rect x="19" y="13" width="1" height="2" fill="#05080F" rx="0.3" />
-      <rect x="21" y="12" width="2" height="2" fill="#05080F" rx="0.3" />
-      <rect x="10" y="15" width="1" height="2" fill="#05080F" rx="0.3" />
-      <rect x="12" y="15" width="2" height="2" fill="#05080F" rx="0.3" />
-      <rect x="15" y="15" width="2" height="2" fill="#05080F" rx="0.3" />
-      <rect x="18" y="16" width="2" height="1" fill="#05080F" rx="0.3" />
-      <rect x="21" y="15" width="2" height="2" fill="#05080F" rx="0.3" />
-      <rect x="10" y="18" width="2" height="2" fill="#05080F" rx="0.3" />
-      <rect x="13" y="18" width="2" height="1" fill="#05080F" rx="0.3" />
-      <rect x="16" y="17" width="2" height="2" fill="#05080F" rx="0.3" />
-      <rect x="19" y="18" width="4" height="4" fill="#05080F" rx="0.8" />
-      <rect x="20" y="19" width="2" height="2" fill="#FFFFFF" rx="0.3" />
-      <rect x="10" y="21" width="1" height="2" fill="#05080F" rx="0.3" />
-      <rect x="12" y="21" width="2" height="1" fill="#05080F" rx="0.3" />
-      <rect x="15" y="20" width="2" height="2" fill="#05080F" rx="0.3" />
-      <rect x="18" y="21" width="1" height="2" fill="#05080F" rx="0.3" />
-    </svg>
-  );
-}
-
-function HyBarcode({ id }: { id: string }) {
-  const safeId = id && id.length > 0 ? id : 'LIB-DEFAULT';
-  const bars: { w: number; g: number }[] = [];
-  for (let i = 0; i < 36; i++) {
-    const c = safeId.charCodeAt(i % safeId.length) + i * 7;
-    bars.push({ w: (c % 3) + 1, g: (c % 2) + 1 });
-  }
-  let totalWidth = 0;
-  for (const b of bars) totalWidth += b.w + b.g;
-  let currentX = 0;
-  return (
-    <svg
-      viewBox={`0 0 ${totalWidth} 36`}
-      preserveAspectRatio="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-label={`Barcode for ${safeId}`}
-      className="w-full h-full block"
-    >
-      {bars.map((bar, i) => {
-        const fill = i % 5 === 0 ? '#f4d35e' : i % 3 === 0 ? '#a78bfa' : '#e8eaed';
-        const xPos = currentX;
-        currentX += bar.w + bar.g;
-        return <rect key={`${safeId}-hy-bar-${i}`} x={xPos} y="0" width={bar.w} height="36" fill={fill} />;
-      })}
-    </svg>
-  );
-}
+const HyQrSvg = ({ code }: { code: string }) => <ManagerMembersIdCardGeneratorQrSvg code={code} darkColor="#05080F" />;
+const HyBarcode = ({ id }: { id: string }) => <ManagerMembersIdCardGeneratorBarcodeStripes id={id} count={36} palette={['#f4d35e', '#a78bfa', '#e8eaed']} prefix="hy-bar" />;
 
 export default function ManagerMembersIdCardGeneratorStudentIdCardHalfYearly({
   data,

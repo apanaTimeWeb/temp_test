@@ -1,6 +1,6 @@
 import React from 'react';
 import { Coins, Handshake, Megaphone, Receipt, RotateCcw, UserX } from 'lucide-react';
-import type { TemplateMeta } from './ManagerCommunicationWhatsappTemplatesSidebar';
+import type { TemplateMeta } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/components/manager_communication_whatsapp_templates_views/ManagerCommunicationWhatsappTemplatesSidebar';
 
 export const VARIABLE_CHIP_CONFIGS: Record<string, { bg: string; text: string; border: string; hover: string; title: string }> = {
   '{name}': { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30', hover: 'hover:bg-emerald-500/20 hover:border-emerald-500/50', title: 'Student Full Name' },

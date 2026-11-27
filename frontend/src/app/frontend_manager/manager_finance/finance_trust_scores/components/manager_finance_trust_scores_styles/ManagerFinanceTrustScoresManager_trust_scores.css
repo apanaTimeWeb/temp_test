@@ -1528,3 +1528,29 @@
 
 /* Keyboard users retain a visible focus indicator even when the native outline is removed. */
 .fin-select:focus-visible { outline: 2px solid theme(--color-focus-ring); outline-offset: 2px; }
+
+/* Trust score KPI card themes extracted from inline JSX gradients */
+.fin-trust-kpi-card--indigo {
+  border-color: rgba(99, 102, 241, 0.4);
+  background: linear-gradient(135deg, rgba(30, 27, 75, 0.8), #181c4b, rgba(49, 46, 129, 0.6));
+  box-shadow: 0 10px 15px -3px rgba(30, 27, 75, 0.4);
+}
+.fin-trust-kpi-card--indigo .fin-trust-kpi-icon { background: rgba(99, 102, 241, 0.2); border-color: rgba(99, 102, 241, 0.4); color: #818cf8; }
+.fin-trust-kpi-card--indigo .fin-trust-kpi-spark path { stroke: #818cf8; }
+
+.fin-trust-kpi-card--rose {
+  border-color: rgba(244, 63, 94, 0.4);
+  background: linear-gradient(135deg, rgba(76, 5, 25, 0.8), #260e19, rgba(136, 19, 55, 0.6));
+  box-shadow: 0 10px 15px -3px rgba(76, 5, 25, 0.4);
+}
+.fin-trust-kpi-card--rose .fin-trust-kpi-icon { background: rgba(244, 63, 94, 0.2); border-color: rgba(244, 63, 94, 0.4); color: #fb7185; }
+.fin-trust-kpi-card--rose .fin-trust-kpi-spark path { stroke: #f87171; }
+
+.fin-trust-kpi-card--emerald {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, rgba(2, 44, 34, 0.8), #0e2c21, rgba(6, 78, 59, 0.6));
+  box-shadow: 0 10px 15px -3px rgba(2, 44, 34, 0.4);
+}
+.fin-trust-kpi-card--emerald .fin-trust-kpi-icon { background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: #34d399; }
+.fin-trust-kpi-card--emerald .fin-trust-kpi-spark path { stroke: #34d399; }
+

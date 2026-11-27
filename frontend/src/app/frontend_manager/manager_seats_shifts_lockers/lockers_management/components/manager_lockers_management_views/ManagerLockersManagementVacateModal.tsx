@@ -1,9 +1,10 @@
 'use client';
 
+import type { ManagerLockersManagementSampleLocker as Locker } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/config/manager_lockers_management.demo_data';
+import { formatManagerLockerInr } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementCurrency';
 import { Key } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React from 'react';
-import type { ManagerLockersManagementSampleLocker as Locker } from '../../mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
 
 interface ManagerLockersManagementVacateModalProps {
   freeTarget: Locker;
@@ -54,7 +55,7 @@ export function ManagerLockersManagementVacateModal({
           {/* Escrow deposit card */}
           <div className="flex items-center justify-between rounded-lg border border-border bg-card p-3 text-sm">
             <span className="text-secondary">{tManagerUi('security_deposit_held')}</span>
-            <span className="font-bold text-primary">₹500.00</span>
+            <span className="font-bold text-primary">{formatManagerLockerInr(500, true)}</span>
           </div>
 
           {/* Physical Key inspection options */}
@@ -108,7 +109,7 @@ export function ManagerLockersManagementVacateModal({
                   {tManagerUi('key_lost_option')}
                 </p>
                 <p className="text-xs text-secondary">
-                  Lock must be re-keyed. ₹150 penalty deducted from deposit.
+                  Lock must be re-keyed. {formatManagerLockerInr(150)} penalty deducted from deposit.
                 </p>
               </div>
             </label>
@@ -119,12 +120,12 @@ export function ManagerLockersManagementVacateModal({
             <div className="flex justify-between text-secondary">
               <span>{tManagerUi('deduction_amount')}</span>
               <span className={keyStatus === 'lost' ? 'font-bold text-danger' : 'font-medium'}>
-                - ₹{keyStatus === 'lost' ? '150.00' : '0.00'}
+                - {formatManagerLockerInr(keyStatus === 'lost' ? 150 : 0, true)}
               </span>
             </div>
             <div className="flex justify-between font-bold text-sm text-primary pt-1.5 border-t border-border">
               <span>{tManagerUi('net_refund_payable')}</span>
-              <span className="text-success">₹{keyStatus === 'lost' ? '350.00' : '500.00'}</span>
+              <span className="text-success">{formatManagerLockerInr(keyStatus === 'lost' ? 350 : 500, true)}</span>
             </div>
           </div>
 

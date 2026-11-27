@@ -2,7 +2,7 @@
 
 import { AlertCircle,Calendar,Layers,Megaphone,Wrench } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { formatManagerHelpSupportCalendarDate } from '../../utils/ManagerSettingsHelpSupportDateFormatting';
+import { formatManagerHelpSupportCalendarDate } from '@/app/frontend_manager/manager_settings/settings_help_support/utils/ManagerSettingsHelpSupportDateFormatting';
 
 interface AnnouncementItem {
   id: string;
@@ -60,7 +60,7 @@ export function ManagerSettingsHelpSupportAnnouncements({
       {/* Announcements Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-border">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+          <div className="w-8 h-8 rounded-lg bg-primary-subtle border border-border flex items-center justify-center text-primary">
             <Megaphone size={16} />
           </div>
           <div>
@@ -94,14 +94,14 @@ export function ManagerSettingsHelpSupportAnnouncements({
                     <span>{tManagerUi(ann.tagKey)}</span>
                   </span>
                   {idx === 0 && (
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/25">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary-subtle text-primary border border-border">
                       Latest
                     </span>
                   )}
                 </div>
 
                 <div className="flex items-center gap-1.5 text-xs text-secondary font-mono">
-                  <Calendar size={13} className="text-secondary/70" />
+                  <Calendar size={13} className="text-secondary" />
                   <span>{formatManagerHelpSupportCalendarDate(ann.date, locale)}</span>
                 </div>
               </div>

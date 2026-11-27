@@ -1,10 +1,10 @@
 'use client';
 
 import { useManagerPaymentPromisesDialogFocus } from '@/app/frontend_manager/manager_finance/finance_payment_promises/hooks/ManagerFinancePaymentPromisesDialogFocus';
-import type { ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
+import { MANAGER_PAYMENT_PROMISE_STUDENT_CANDIDATES } from '@/app/frontend_manager/manager_finance/finance_payment_promises/hooks/ManagerFinancePaymentPromisesDemoRepository';
 import { managerFinancePaymentPromiseAddSchema } from '@/app/frontend_manager/manager_finance/finance_payment_promises/schemas/ManagerFinancePaymentPromisesSchema';
-import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
-import { SearchableCombobox,type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
+import type { ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/types/ManagerFinancePaymentPromisesTypes';
+import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import { AlertCircle,CheckCircle,IndianRupee,Plus,X } from 'lucide-react';
 import React,{ useEffect,useMemo,useRef,useState } from 'react';
 
@@ -42,7 +42,7 @@ export function ManagerFinancePaymentPromisesAddModal({
   }, [isOpen]);
 
   const studentOptions: ComboboxOption[] = useMemo(() => {
-    return MANAGER_MEMBERS_DEMO_RECORDS.map((s) => ({
+    return MANAGER_PAYMENT_PROMISE_STUDENT_CANDIDATES.map((s) => ({
       value: s.id,
       label: `${s.name} (${s.id})`,
       subLabel: s.seat ? `Seat ${s.seat} · ${s.phone}` : s.phone,
@@ -60,7 +60,7 @@ export function ManagerFinancePaymentPromisesAddModal({
       setPhone('');
       return;
     }
-    const student = MANAGER_MEMBERS_DEMO_RECORDS.find((s) => s.id === val);
+    const student = MANAGER_PAYMENT_PROMISE_STUDENT_CANDIDATES.find((s) => s.id === val);
     if (student) {
       setSelectedStudentId(student.id);
       setStudentName(student.name);
@@ -172,7 +172,7 @@ export function ManagerFinancePaymentPromisesAddModal({
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label htmlFor="add-promised-amount" className="text-xs font-semibold text-primary block mb-1">
-                Promised Amount (₹) *
+                Promised Amount (INR) *
               </label>
               <div className="relative">
                 <IndianRupee size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />

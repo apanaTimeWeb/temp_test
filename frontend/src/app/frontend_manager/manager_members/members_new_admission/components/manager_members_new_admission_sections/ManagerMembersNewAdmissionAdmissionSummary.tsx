@@ -49,8 +49,8 @@ export function ManagerMembersNewAdmissionAdmissionSummary({
               {breakdown && breakdown.length > 0 ? (
                 <div className="space-y-1.5 py-1">
                   <p className="text-[11px] font-bold uppercase tracking-wider text-secondary">Itemized Invoice</p>
-                  {breakdown.map((item, idx) => (
-                    <div key={idx} className="flex items-center justify-between text-xs">
+                  {breakdown.map((item) => (
+                    <div key={`${item.label}-${item.amount}`} className="flex items-center justify-between text-xs">
                       <span className="text-secondary">{item.label}</span>
                       <span className={item.isNegative ? 'mgr-text-warning font-semibold' : 'font-semibold text-primary'}>
                         {item.isNegative ? '− ' : ''}{formatCurrency(item.amount * 100, currency)}

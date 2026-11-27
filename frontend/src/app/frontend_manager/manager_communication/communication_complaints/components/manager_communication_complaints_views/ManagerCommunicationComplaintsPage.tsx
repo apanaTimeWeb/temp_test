@@ -1,57 +1,40 @@
 'use client';
 
-import { ButtonLoader,LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
-import {
-AlertCircle,
-CheckCircle,
-CheckCircle2,
-Clock,
-Layers,
-MessageSquare,
-MessageSquarePlus,
-Printer,
-X
-} from 'lucide-react';
-import { useLocale,useTranslations } from 'next-intl';
-import { useCallback,useMemo,useRef,useState } from 'react';
-import { toast } from 'sonner';
-
+import { ButtonLoader, LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { ManagerCommunicationComplaintsEmptyState } from '@/app/frontend_manager/manager_communication/communication_complaints/components/manager_communication_complaints_empty_states/ManagerCommunicationComplaintsEmptyState';
+import '@/app/frontend_manager/manager_communication/communication_complaints/components/manager_communication_complaints_styles/ManagerCommunicationComplaintsManager_complaints.css';
 import ManagerCommunicationComplaintsAddModal from '@/app/frontend_manager/manager_communication/communication_complaints/components/manager_communication_complaints_views/ManagerCommunicationComplaintsAddModal';
+import { ManagerCommunicationComplaintsKpis } from '@/app/frontend_manager/manager_communication/communication_complaints/components/manager_communication_complaints_views/ManagerCommunicationComplaintsKpis';
+import { ManagerCommunicationComplaintsResolveModal } from '@/app/frontend_manager/manager_communication/communication_complaints/components/manager_communication_complaints_views/ManagerCommunicationComplaintsResolveModal';
+import {
+  ManagerCommunicationComplaintsTable,
+  type ComplaintSortField,
+} from '@/app/frontend_manager/manager_communication/communication_complaints/components/manager_communication_complaints_views/ManagerCommunicationComplaintsTable';
+import { ManagerCommunicationComplaintsToolbar } from '@/app/frontend_manager/manager_communication/communication_complaints/components/manager_communication_complaints_views/ManagerCommunicationComplaintsToolbar';
+import { ManagerCommunicationComplaintsViewModal } from '@/app/frontend_manager/manager_communication/communication_complaints/components/manager_communication_complaints_views/ManagerCommunicationComplaintsViewModal';
 import { useManagerComplaintsDialogFocus } from '@/app/frontend_manager/manager_communication/communication_complaints/hooks/ManagerCommunicationComplaintsDialogFocus';
 import { useManagerCommunicationComplaints } from '@/app/frontend_manager/manager_communication/communication_complaints/hooks/useManagerCommunicationComplaintsComplaints';
 import type { ManagerCommunicationComplaintsMainProps } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsMainTypes';
 import type {
-ManagerCommunicationComplaintsComplaint,
-ManagerCommunicationComplaintsComplaintStatus,
+  ManagerCommunicationComplaintsComplaint,
+  ManagerCommunicationComplaintsComplaintStatus,
 } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
-import { ManagerCommunicationComplaintsResolveModal } from './ManagerCommunicationComplaintsResolveModal';
 import {
-ManagerCommunicationComplaintsTable,
-type ComplaintSortField,
-} from './ManagerCommunicationComplaintsTable';
-import { ManagerCommunicationComplaintsToolbar } from './ManagerCommunicationComplaintsToolbar';
-import { ManagerCommunicationComplaintsViewModal } from './ManagerCommunicationComplaintsViewModal';
-
-function formatKnownIsoCalendarDate(value: string, locale: string): string {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
-  if (!match) return value;
-  const year = Number(match[1]);
-  const month = Number(match[2]);
-  const day = Number(match[3]);
-  const date = new Date(year, month - 1, day);
-  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) return value;
-  return new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(date);
-}
+  computeComplaintStats,
+  exportComplaintsToCsv,
+  exportComplaintsToExcel,
+  filterComplaintsList,
+  formatComplaintCalendarDate,
+} from '@/app/frontend_manager/manager_communication/communication_complaints/utils/ManagerCommunicationComplaintsExport';
+import { CheckCircle, CheckCircle2, Clock, MessageSquare, MessageSquarePlus, Printer, X } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { toast } from 'sonner';
 
 // RESPONSIBILITY: Render the communication_complaints feature while preserving supported deep-link query state.
-// DATA FLOW: Route searchParams -> Main props -> this view's route context.
 export default function ManagerCommunicationComplaintsPage({
   view,
   id,
-  name,
-  phone,
-  smartId,
 }: ManagerCommunicationComplaintsMainProps) {
   const tManagerUi = useTranslations('manager.manager_complaints.ui');
   const locale = useLocale();
@@ -69,7 +52,6 @@ export default function ManagerCommunicationComplaintsPage({
   const closeComplaintDialog = useCallback(() => setViewItem(null), []);
   useManagerComplaintsDialogFocus(dialogRef, closeComplaintDialog, Boolean(viewItem));
   const [expandedDesc, setExpandedDesc] = useState<string[]>([]);
-
   const [sortField, setSortField] = useState<ComplaintSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [statusOverrides, setStatusOverrides] = useState<Record<string, ManagerCommunicationComplaintsComplaintStatus>>({});
@@ -80,18 +62,12 @@ export default function ManagerCommunicationComplaintsPage({
   }, []);
 
   const handleConfirmResolve = useCallback(
-    (complaintId: string, resolvedNote: string, _shouldSendWhatsApp: boolean, _openBrowserWhatsApp: boolean) => {
+    (complaintId: string, resolvedNote: string) => {
       setStatusOverrides((prev) => ({ ...prev, [complaintId]: 'Resolved' }));
       setLocalComplaints((prev) =>
         prev.map((c) =>
           c.id === complaintId
-            ? {
-                ...c,
-                status: 'Resolved',
-                resolvedNote,
-                resolvedDate: new Date().toISOString().slice(0, 10),
-                resolvedBy: 'Facility Manager',
-              }
+            ? { ...c, status: 'Resolved', resolvedNote, resolvedDate: new Date().toISOString().slice(0, 10), resolvedBy: 'Facility Manager' }
             : c
         )
       );
@@ -101,7 +77,7 @@ export default function ManagerCommunicationComplaintsPage({
 
   const handleStatusChange = useCallback((cid: string, newStatus: ManagerCommunicationComplaintsComplaintStatus) => {
     setStatusOverrides((prev) => ({ ...prev, [cid]: newStatus }));
-    toast.success(`Complaint #${cid} marked as ${newStatus}`);
+    toast.success(`Complaint #${cid} marked as ${newStatus}`, { id: `manager-complaints-status-${cid}` });
   }, []);
 
   const allComplaints = useMemo(() => {
@@ -109,45 +85,21 @@ export default function ManagerCommunicationComplaintsPage({
     return Object.keys(statusOverrides).length === 0 ? list : list.map((c) => (statusOverrides[c.id] ? { ...c, status: statusOverrides[c.id] } : c));
   }, [localComplaints, complaints, statusOverrides]);
 
-  const stats = useMemo(() => {
-    const total = allComplaints.length;
-    const openCount = allComplaints.filter((c) => c.status === 'Open').length;
-    const inProgressCount = allComplaints.filter((c) => c.status === 'In-Progress').length;
-    const resolvedCount = allComplaints.filter((c) => c.status === 'Resolved').length;
-    const resolutionRate = total > 0 ? Math.round((resolvedCount / total) * 100) : 0;
-    return { total, openCount, inProgressCount, resolvedCount, resolutionRate };
-  }, [allComplaints]);
+  const stats = useMemo(() => computeComplaintStats(allComplaints), [allComplaints]);
 
-  const filtered = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    const base = tab === 'All' ? allComplaints : allComplaints.filter((c) => c.status === tab);
-    return base.filter((c) => {
-      const matchCat =
-        categoryFilter === 'all' ||
-        c.title.toLowerCase().includes(categoryFilter.toLowerCase()) ||
-        c.description.toLowerCase().includes(categoryFilter.toLowerCase());
-      const matchQ =
-        !q ||
-        c.title.toLowerCase().includes(q) ||
-        (c.student && c.student.toLowerCase().includes(q)) ||
-        (c.seatTag && c.seatTag.toLowerCase().includes(q)) ||
-        c.description.toLowerCase().includes(q) ||
-        (c.resolvedBy && c.resolvedBy.toLowerCase().includes(q));
-      return matchCat && matchQ;
-    });
-  }, [allComplaints, tab, searchQuery, categoryFilter]);
+  const filtered = useMemo(
+    () => filterComplaintsList(allComplaints, tab, categoryFilter, searchQuery),
+    [allComplaints, tab, searchQuery, categoryFilter]
+  );
 
   const hasActiveFilters = Boolean(tab !== 'All' || searchQuery.trim() !== '' || categoryFilter !== 'all');
-
   const toggleDesc = (complaintId: string) =>
-    setExpandedDesc((current) =>
-      current.includes(complaintId) ? current.filter((item) => item !== complaintId) : [...current, complaintId]
-    );
+    setExpandedDesc((current) => (current.includes(complaintId) ? current.filter((item) => item !== complaintId) : [...current, complaintId]));
 
   const statusBadge = (status: ManagerCommunicationComplaintsComplaintStatus) =>
     status === 'Open' ? (
       <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30">
-        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 motion-safe:animate-pulse" />
         <span>{tManagerUi('open')}</span>
       </span>
     ) : status === 'In-Progress' ? (
@@ -175,9 +127,7 @@ export default function ManagerCommunicationComplaintsPage({
   const sortedComplaints = useMemo(() => {
     if (!sortField) return filtered;
     return [...filtered].sort((a, b) => {
-      const aVal = String(a[sortField] ?? '');
-      const bVal = String(b[sortField] ?? '');
-      const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+      const cmp = String(a[sortField] ?? '').localeCompare(String(b[sortField] ?? ''), undefined, { numeric: true, sensitivity: 'base' });
       return sortDirection === 'asc' ? cmp : -cmp;
     });
   }, [filtered, sortField, sortDirection]);
@@ -189,76 +139,24 @@ export default function ManagerCommunicationComplaintsPage({
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
-  const escapeCsvCell = (val: unknown) => {
-    let str = String(val ?? '');
-    if (/^[\u0000-\u0020]*[=+\-@]/.test(str)) str = `'${str}`;
-    return `"${str.replace(/"/g, '""')}"`;
-  };
-
   const handleExportCsv = () => {
-    const headers = ['ID', 'Title', 'Student', 'Description', 'Status', 'Date', 'Resolved By'].map(escapeCsvCell).join(',');
-    const rows = sortedComplaints
-      .map((c) =>
-        [c.id, c.title, c.student || 'Anonymous', c.description, c.status, c.date, c.resolvedBy || ''].map(escapeCsvCell).join(',')
-      )
-      .join('\r\n');
-    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `complaints_${new Date().toISOString().slice(0, 10)}.csv`;
-    anchor.hidden = true;
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    toast.success('Complaints list exported to CSV successfully');
+    exportComplaintsToCsv(sortedComplaints);
+    toast.success('Complaints list exported to CSV successfully', { id: 'manager-complaints-export-csv' });
   };
 
-  
   const handleExportExcel = () => {
-    const headers = ['ID', 'Title', 'Student', 'Phone', 'Description', 'Location/Seat', 'Status', 'Date', 'Resolved By'];
-    const rows = sortedComplaints.map((c) => [
-      c.id,
-      c.title,
-      c.student || 'Anonymous',
-      c.phone || '—',
-      c.description,
-      c.seatTag || 'General Area',
-      c.status,
-      c.date,
-      c.resolvedBy || '—',
-    ]);
-    const html = `
-      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-      <head><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head>
-      <body><table><thead><tr>${headers.map((h) => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((cell) => `<td>${String(cell ?? '')}</td>`).join('')}</tr>`).join('')}</tbody></table></body></html>
-    `.trim();
-    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `complaints_${new Date().toISOString().slice(0, 10)}.xls`;
-    anchor.click();
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    toast.success('Complaints list exported to Excel successfully');
+    exportComplaintsToExcel(sortedComplaints);
+    toast.success('Complaints list exported to Excel successfully', { id: 'manager-complaints-export-excel' });
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
+  const handlePrint = () => window.print();
 
   return (
-    <div
-      className="mc-page space-y-6"
-      data-route-view={view}
-      data-route-id={id}
-    >
-      {/* Page Header */}
+    <div className="mc-page space-y-6" data-route-view={view} data-route-id={id}>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-primary tracking-tight flex items-center gap-2.5">
-            <span className="w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
+            <span className="w-9 h-9 rounded-xl bg-primary-subtle border border-border text-primary flex items-center justify-center shrink-0">
               <MessageSquare size={20} />
             </span>
             <span>{tManagerUi('complaints')}</span>
@@ -272,7 +170,7 @@ export default function ManagerCommunicationComplaintsPage({
           <button
             type="button"
             onClick={handlePrint}
-            className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-3.5 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer"
+            className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-3.5 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer"
             title="Print complaints summary"
           >
             <Printer size={14} />
@@ -282,7 +180,7 @@ export default function ManagerCommunicationComplaintsPage({
           <button
             type="button"
             onClick={() => setIsAddModalOpen(true)}
-            className="mgr-btn-primary inline-flex items-center gap-2 text-xs sm:text-sm font-semibold py-2 px-4 rounded-xl shadow-md cursor-pointer transition-all bg-primary text-primary-foreground hover:opacity-95"
+            className="mgr-btn-primary inline-flex items-center gap-2 text-xs sm:text-sm font-semibold py-2 px-4 rounded-xl shadow-md cursor-pointer motion-safe:transition-all bg-primary text-primary-foreground hover:opacity-95"
           >
             <MessageSquarePlus size={16} />
             <span>Lodge Complaint</span>
@@ -290,81 +188,7 @@ export default function ManagerCommunicationComplaintsPage({
         </div>
       </div>
 
-      {/* 4 KPI Metric Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        {/* Card 1: Total Complaints */}
-        <div className="mgr-card group relative overflow-hidden p-4 rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex items-center gap-3.5 select-none">
-          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" />
-          </svg>
-          <div className="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
-            <Layers size={20} />
-          </div>
-          <div className="relative z-10">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-300 block">
-              Total Lodged
-            </span>
-            <span className="text-xl sm:text-2xl font-extrabold text-white tracking-tight font-sans">
-              {stats.total}
-            </span>
-          </div>
-        </div>
-
-        {/* Card 2: Open / Unresolved */}
-        <div className="mgr-card group relative overflow-hidden p-4 rounded-2xl border border-rose-500/40 bg-gradient-to-br from-rose-950/80 via-[#260e19] to-rose-900/60 shadow-lg shadow-rose-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-rose-400/60 hover:shadow-xl flex items-center gap-3.5 select-none">
-          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#f87171" strokeWidth="2.5" strokeLinecap="round" />
-          </svg>
-          <div className="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
-            <AlertCircle size={20} />
-          </div>
-          <div className="relative z-10">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-rose-400 block flex items-center gap-1.5">
-              <span>Pending Open</span>
-              {stats.openCount > 0 && <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />}
-            </span>
-            <span className="text-xl sm:text-2xl font-extrabold text-rose-400 tracking-tight font-sans">
-              {stats.openCount}
-            </span>
-          </div>
-        </div>
-
-        {/* Card 3: In-Progress */}
-        <div className="mgr-card group relative overflow-hidden p-4 rounded-2xl border border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261708] to-amber-900/60 shadow-lg shadow-amber-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex items-center gap-3.5 select-none">
-          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
-          </svg>
-          <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
-            <Clock size={20} />
-          </div>
-          <div className="relative z-10">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-amber-400 block">
-              In-Progress
-            </span>
-            <span className="text-xl sm:text-2xl font-extrabold text-amber-400 tracking-tight font-sans">
-              {stats.inProgressCount}
-            </span>
-          </div>
-        </div>
-
-        {/* Card 4: Resolved */}
-        <div className="mgr-card group relative overflow-hidden p-4 rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex items-center gap-3.5 select-none">
-          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-            <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
-          </svg>
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
-            <CheckCircle2 size={20} />
-          </div>
-          <div className="relative z-10">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-emerald-400 block">
-              Resolved ({stats.resolutionRate}%)
-            </span>
-            <span className="text-xl sm:text-2xl font-extrabold text-emerald-400 tracking-tight font-sans">
-              {stats.resolvedCount}
-            </span>
-          </div>
-        </div>
-      </div>
+      <ManagerCommunicationComplaintsKpis stats={stats} />
 
       {toastMessage && (
         <div className="mb-4 flex items-center justify-between rounded-xl bg-success-bg border border-border p-3 text-xs text-success">
@@ -372,11 +196,7 @@ export default function ManagerCommunicationComplaintsPage({
             <CheckCircle size={15} />
             <span className="font-medium">{toastMessage}</span>
           </div>
-          <button
-            type="button"
-            onClick={() => setToastMessage(null)}
-            className="text-success hover:text-primary"
-          >
+          <button type="button" onClick={() => setToastMessage(null)} className="text-success hover:text-primary">
             <X size={14} />
           </button>
         </div>
@@ -391,12 +211,7 @@ export default function ManagerCommunicationComplaintsPage({
         categoryFilter={categoryFilter}
         setCategoryFilter={setCategoryFilter}
         hasActiveFilters={hasActiveFilters}
-        onResetFilters={() => {
-          setTab('All');
-          setSearchQuery('');
-          setCategoryFilter('all');
-          setPage(0);
-        }}
+        onResetFilters={() => { setTab('All'); setSearchQuery(''); setCategoryFilter('all'); setPage(0); }}
         onExportCsv={handleExportCsv}
         onExportExcel={handleExportExcel}
         onPrint={handlePrint}
@@ -436,7 +251,7 @@ export default function ManagerCommunicationComplaintsPage({
             expandedDesc={expandedDesc}
             toggleDesc={toggleDesc}
             statusBadge={statusBadge}
-            formatDate={(val) => formatKnownIsoCalendarDate(val, locale)}
+            formatDate={(val) => formatComplaintCalendarDate(val, locale)}
             onViewItem={setViewItem}
             sortField={sortField}
             sortDirection={sortDirection}
@@ -453,7 +268,7 @@ export default function ManagerCommunicationComplaintsPage({
           dialogRef={dialogRef}
           locale={locale}
           onClose={closeComplaintDialog}
-          formatKnownIsoCalendarDate={formatKnownIsoCalendarDate}
+          formatKnownIsoCalendarDate={formatComplaintCalendarDate}
           statusBadge={statusBadge}
           onResolveClick={handleOpenResolveModal}
         />

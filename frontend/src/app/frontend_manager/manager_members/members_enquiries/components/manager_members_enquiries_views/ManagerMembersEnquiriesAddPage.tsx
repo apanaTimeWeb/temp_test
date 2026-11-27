@@ -9,7 +9,11 @@ import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager
 
 import { useManagerMembersEnquiriesConfirm } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesConfirm';
 import { useManagerMembersEnquiriesUnsavedChangesGuard } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesUnsavedChangesGuard';
-import { MANAGER_CRM_SAMPLE_SHIFT_OPTIONS,MANAGER_CRM_SAMPLE_SOURCE_OPTIONS,MANAGER_CRM_SAMPLE_STAFF_OPTIONS } from '@/app/frontend_manager/manager_members/members_enquiries/mocks/manager_members_enquiries_fixtures/ManagerMembersEnquiriesFixtures';
+import {
+  MANAGER_CRM_DEMO_SHIFT_OPTIONS,
+  MANAGER_CRM_DEMO_SOURCE_OPTIONS,
+  MANAGER_CRM_DEMO_STAFF_OPTIONS,
+} from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.demo_data';
 import { managerCrmAddEnquirySchema,type ManagerMembersEnquiriesAddEnquiryFormData } from '@/app/frontend_manager/manager_members/members_enquiries/schemas/ManagerMembersEnquiriesSchema';
 import type { ManagerMembersEnquiriesAddPageRouteProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -55,8 +59,7 @@ export default function ManagerMembersEnquiriesAddPage(_routeQuery: ManagerMembe
   useManagerEnquiriesDialogFocus(dialogRef, handleClose);
 
   return <>
-    {unsavedConfirmDialog}
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" onClick={handleClose} aria-hidden="true">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" onClick={handleClose}>
       <div
         ref={dialogRef as unknown as React.RefObject<HTMLDivElement>}
         tabIndex={-1}
@@ -116,21 +119,21 @@ export default function ManagerMembersEnquiriesAddPage(_routeQuery: ManagerMembe
               <label htmlFor="enq-shift" className="crm-label font-semibold block mb-1">{tManagerUi('preferred_shift')} <span className="text-secondary font-normal">({tManagerUi('optional')})</span></label>
               <select id="enq-shift" className="mgr-select w-full" {...register('preferredShift')}>
                 <option value="">{tManagerUi('select_a_shift')}</option>
-                {MANAGER_CRM_SAMPLE_SHIFT_OPTIONS.map((shift) => <option key={shift.id} value={shift.name}>{shiftLabel(shift.name)} ({shiftTimeLabel(shift.time)})</option>)}
+                {MANAGER_CRM_DEMO_SHIFT_OPTIONS.map((shift) => <option key={shift.id} value={shift.name}>{shiftLabel(shift.name)} ({shiftTimeLabel(shift.time)})</option>)}
               </select>
             </div>
             <div className="crm-field">
               <label htmlFor="enq-source" className="crm-label font-semibold block mb-1">{tManagerUi('source')} <span className="text-secondary font-normal">({tManagerUi('optional')})</span></label>
               <select id="enq-source" className="mgr-select w-full" {...register('source')}>
                 <option value="">{tManagerUi('how_did_they_find_us')}</option>
-                {MANAGER_CRM_SAMPLE_SOURCE_OPTIONS.map((source) => <option key={source} value={source}>{sourceLabel(source)}</option>)}
+                {MANAGER_CRM_DEMO_SOURCE_OPTIONS.map((source) => <option key={source} value={source}>{sourceLabel(source)}</option>)}
               </select>
             </div>
             <div className="crm-field">
               <label htmlFor="enq-handled-by" className="crm-label font-semibold block mb-1">{tManagerUi('handled_by')} <span className="text-secondary font-normal">({tManagerUi('optional')})</span></label>
               <select id="enq-handled-by" className="mgr-select w-full" {...register('handledBy')}>
                 <option value="">{tManagerUi('assign_a_staff_member')}</option>
-                {MANAGER_CRM_SAMPLE_STAFF_OPTIONS.map((staff) => <option key={staff.id} value={staff.name}>{staff.name}</option>)}
+                {MANAGER_CRM_DEMO_STAFF_OPTIONS.map((staff) => <option key={staff.id} value={staff.name}>{staff.name}</option>)}
               </select>
             </div>
             <div className="crm-field">
@@ -139,7 +142,7 @@ export default function ManagerMembersEnquiriesAddPage(_routeQuery: ManagerMembe
             </div>
           </div>
           <div className="flex items-center justify-end gap-2 pt-3 border-t border-border shrink-0">
-            <button type="button" className="px-4 py-2 text-xs font-semibold rounded-xl border border-border text-secondary hover:text-primary hover:bg-surface-zebra transition-colors cursor-pointer" onClick={handleClose}>{tManagerUi('cancel')}</button>
+            <button type="button" className="px-4 py-2 text-xs font-semibold rounded-xl border border-border text-secondary hover:text-primary hover:bg-surface-zebra motion-safe:transition-colors cursor-pointer" onClick={handleClose}>{tManagerUi('cancel')}</button>
             <button type="submit" className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-primary text-primary-foreground cursor-not-allowed opacity-60" disabled title={tManagerUi('crm_mutations_unavailable_host_contract')}>
               <Save size={14} />{tManagerUi('crm_creation_unavailable')}
             </button>
@@ -147,5 +150,6 @@ export default function ManagerMembersEnquiriesAddPage(_routeQuery: ManagerMembe
         </form>
       </div>
     </div>
+    {unsavedConfirmDialog}
   </>;
 }

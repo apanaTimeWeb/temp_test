@@ -23,7 +23,7 @@ describe('Manager Members Referral Bonus - Audit Regression Suite (Section H)', 
   it('H-M3: preserves module boundary without importing sibling directory fixtures', () => {
     const addModalSource = readSource('components/manager_members_referral_bonus_dialogs/ManagerMembersReferralBonusAddModal.tsx');
     expect(addModalSource).not.toContain('members_directory');
-    expect(addModalSource).toContain('ManagerMembersReferralBonusFixtures');
+    expect(addModalSource).toContain('manager_members_referral_bonus.demo_data');
   });
 
   it('H-M4: uses dynamic Date.now() / new Date() instead of hardcoded 2026-04-15 anchor date', () => {
@@ -59,8 +59,8 @@ describe('Manager Members Referral Bonus - Audit Regression Suite (Section H)', 
   it('H-C1 & H-M1: provides local browser persistence for referral records and approvals', () => {
     const clientSource = readSource('components/manager_members_referral_bonus_views/ManagerMembersReferralBonusReferralsClient.tsx');
     expect(clientSource).toContain('manager_members_referral_records');
-    expect(clientSource).toContain('localStorage.getItem');
-    expect(clientSource).toContain('localStorage.setItem');
+    expect(clientSource).toContain('readBrowserStorageItem');
+    expect(clientSource).toContain('writeBrowserStorageItem');
   });
 
   it('H-L1: stylesheet exists in module styles directory matching theme contract', () => {

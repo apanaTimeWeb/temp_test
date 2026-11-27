@@ -519,3 +519,21 @@
     transition-delay: 0ms !important;
   }
 }
+
+.mwl-wa-canvas {
+  background-color: #0b141a;
+}
+
+.mwl-wa-bubble {
+  background-color: #005c4b;
+  border-color: color-mix(in srgb, #005c4b 50%, transparent);
+  color: #f1f5f9;
+}
+
+.mwl-wa-meta {
+  color: rgba(167, 243, 208, 0.8);
+}
+
+.mwl-wa-read-icon {
+  color: #53bdeb;
+}

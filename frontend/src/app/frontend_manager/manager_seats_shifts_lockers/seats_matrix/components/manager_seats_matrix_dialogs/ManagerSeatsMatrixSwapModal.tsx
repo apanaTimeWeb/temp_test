@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Modal dialog for directly swapping or exchanging seats between students without vacating or losing allocation data.
 import { ArrowLeftRight,CheckCircle2,User,X } from 'lucide-react';
 import { useMemo,useState } from 'react';
-import type { SeatData } from '../../types/ManagerSeatsMatrixTypes';
+import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
 
 export interface ManagerSeatsMatrixSwapModalProps {
   isOpen: boolean;
@@ -74,7 +74,7 @@ export function ManagerSeatsMatrixSwapModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-3 sm:p-4 overflow-y-auto backdrop-blur-xs animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-3 sm:p-4 overflow-y-auto backdrop-blur-xs motion-safe:animate-in fade-in"
       role="dialog"
       aria-modal="true"
       aria-labelledby="manager-seat-swap-modal-title"
@@ -112,12 +112,12 @@ export function ManagerSeatsMatrixSwapModal({
         {/* 2-Side Visual Comparison Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 relative">
           {/* Source Seat Card */}
-          <div className="p-3.5 rounded-xl border border-primary/30 bg-primary-subtle space-y-2">
+          <div className="p-3.5 rounded-xl border border-primary bg-primary-subtle space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
                 Source Seat (Current)
               </span>
-              <span className="font-mono text-xs font-black px-2 py-0.5 rounded bg-card text-primary border border-primary/20">
+              <span className="font-mono text-xs font-black px-2 py-0.5 rounded bg-card text-primary border border-border">
                 Seat {sourceSeat.id}
               </span>
             </div>

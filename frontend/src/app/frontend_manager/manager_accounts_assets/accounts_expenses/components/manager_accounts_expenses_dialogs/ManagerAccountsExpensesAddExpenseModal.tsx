@@ -1,69 +1,23 @@
 'use client';
 
 import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { ManagerAccountsExpensesPaymentModeSelector } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_dialogs/ManagerAccountsExpensesPaymentModeSelector';
 import { MANAGER_ACCOUNTING_EXPENSE_CATEGORIES as CATEGORIES } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/constants/ManagerAccountsExpensesConstants';
 import {
-managerAccountsExpensesAddExpenseModalSchema,
-type ManagerAccountsExpensesAddExpenseModalFormData,
+  managerAccountsExpensesAddExpenseModalSchema,
+  type ManagerAccountsExpensesAddExpenseModalFormData,
 } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/schemas/ManagerAccountsExpensesExpenseDraftSchema';
 import type { Expense } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/types/ManagerAccountsExpensesComponentTypes';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Building,CheckCircle,CreditCard,Receipt,Smartphone,Wallet,X } from 'lucide-react';
+import { CheckCircle, IndianRupee, Receipt, X } from 'lucide-react';
 import { useEffect } from 'react';
-import { useForm,useWatch } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 
 interface ManagerAccountsExpensesAddExpenseModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddExpense: (expense: Expense, amount: number) => void;
 }
-
-const PAYMENT_MODES = [
-  {
-    id: 'cash',
-    label: 'Cash (Counter)',
-    icon: Wallet,
-    activeStyle: {
-      boxShadow: '0 0 14px rgba(16, 185, 129, 0.45)',
-      backgroundColor: '#10b981',
-      borderColor: '#34d399',
-      color: '#ffffff',
-    },
-  },
-  {
-    id: 'upi',
-    label: 'UPI / QR',
-    icon: Smartphone,
-    activeStyle: {
-      boxShadow: '0 0 14px rgba(14, 165, 233, 0.45)',
-      backgroundColor: '#0ea5e9',
-      borderColor: '#38bdf8',
-      color: '#ffffff',
-    },
-  },
-  {
-    id: 'card',
-    label: 'Card (POS)',
-    icon: CreditCard,
-    activeStyle: {
-      boxShadow: '0 0 14px rgba(168, 85, 247, 0.45)',
-      backgroundColor: '#a855f7',
-      borderColor: '#c084fc',
-      color: '#ffffff',
-    },
-  },
-  {
-    id: 'bank',
-    label: 'Bank Transfer',
-    icon: Building,
-    activeStyle: {
-      boxShadow: '0 0 14px rgba(245, 158, 11, 0.45)',
-      backgroundColor: '#f59e0b',
-      borderColor: '#fbbf24',
-      color: '#000000',
-    },
-  },
-];
 
 export function ManagerAccountsExpensesAddExpenseModal({
   isOpen,
@@ -121,7 +75,7 @@ export function ManagerAccountsExpensesAddExpenseModal({
         : data.description.trim(),
       amount: Math.round(amt * 100),
       mode: data.mode,
-      source: (data as any).source || (data.mode === 'cash' ? 'petty_cash' : 'bank_direct'),
+      source: data.source || (data.mode === 'cash' ? 'petty_cash' : 'bank_direct'),
       paidBy: data.paidBy?.trim() || 'Manager Counter',
     };
 
@@ -135,15 +89,15 @@ export function ManagerAccountsExpensesAddExpenseModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-add-expense-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 motion-safe:animate-in fade-in motion-safe:duration-150"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="bg-card border border-border rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-150">
-        <div className="flex items-center justify-between p-5 border-b border-border bg-surface-highlight/70">
+      <div className="bg-card border border-border rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto motion-safe:animate-in zoom-in-95 motion-safe:duration-150">
+        <div className="flex items-center justify-between p-5 border-b border-border bg-surface-highlight">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-primary/15 text-primary border border-primary/25 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-primary-subtle text-primary border border-border flex items-center justify-center">
               <Receipt size={18} />
             </div>
             <div>
@@ -156,7 +110,7 @@ export function ManagerAccountsExpensesAddExpenseModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer transition-colors"
+            className="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer motion-safe:transition-colors"
             aria-label="Close dialog"
           >
             <X size={18} />
@@ -190,7 +144,8 @@ export function ManagerAccountsExpensesAddExpenseModal({
             <label htmlFor="expense-description-input" className="text-xs font-semibold text-secondary block mb-1">
               Description / Purpose <span className="text-destructive">*</span>
             </label>
-            <input maxLength={250}
+            <input
+              maxLength={250}
               id="expense-description-input"
               type="text"
               placeholder="e.g. Broadband recharge, RO filter service, Study hall cleaning..."
@@ -211,8 +166,9 @@ export function ManagerAccountsExpensesAddExpenseModal({
                 Amount (INR) <span className="text-destructive">*</span>
               </label>
               <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-secondary">₹</span>
-                <input maxLength={30}
+                <IndianRupee size={13} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary" aria-hidden="true" />
+                <input
+                  maxLength={30}
                   id="expense-amount-input"
                   type="number"
                   step="any"
@@ -234,7 +190,8 @@ export function ManagerAccountsExpensesAddExpenseModal({
               <label htmlFor="expense-voucher-input" className="text-xs font-semibold text-secondary block mb-1">
                 Bill / Voucher # <span className="font-normal text-xs text-secondary">(Optional)</span>
               </label>
-              <input maxLength={30}
+              <input
+                maxLength={30}
                 id="expense-voucher-input"
                 type="text"
                 placeholder="e.g. V-9901, REC-441"
@@ -244,100 +201,18 @@ export function ManagerAccountsExpensesAddExpenseModal({
             </div>
           </div>
 
-          {/* Expense Fund Source: Petty Cash Float vs Bank Expense */}
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="text-xs font-semibold text-secondary">
-                Expense Fund Source <span className="text-destructive">*</span>
-              </label>
-              <span className="text-[11px] text-secondary">Separates counter cash float from bank</span>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setValue('source', 'petty_cash');
-                  if (selectedMode !== 'cash') setValue('mode', 'cash');
-                }}
-                className={`flex items-center gap-2.5 p-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer text-left ${
-                  selectedSource === 'petty_cash'
-                    ? 'border-emerald-500/50 bg-emerald-500/15 text-emerald-400 shadow-sm'
-                    : 'border-border bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover'
-                }`}
-              >
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
-                  <Wallet size={16} />
-                </div>
-                <div>
-                  <p className="font-bold">Petty Cash Float</p>
-                  <p className="text-[10px] opacity-80">Counter cash drawer spend</p>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setValue('source', 'bank_direct');
-                  if (selectedMode === 'cash') setValue('mode', 'bank');
-                }}
-                className={`flex items-center gap-2.5 p-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer text-left ${
-                  selectedSource === 'bank_direct'
-                    ? 'border-sky-500/50 bg-sky-500/15 text-sky-400 shadow-sm'
-                    : 'border-border bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover'
-                }`}
-              >
-                <div className="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center shrink-0">
-                  <Building size={16} />
-                </div>
-                <div>
-                  <p className="font-bold">Bank / Owner Account</p>
-                  <p className="text-[10px] opacity-80">Direct bank/UPI/Owner outflow</p>
-                </div>
-              </button>
-            </div>
-          </div>
-
-          {/* Interactive Payment Mode Selection Tiles (Glowing on Click) */}
-          <div>
-            <label className="text-xs font-semibold text-secondary block mb-1.5">
-              Payment Mode <span className="text-destructive">*</span>
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {PAYMENT_MODES.map((mode) => {
-                const Icon = mode.icon;
-                const isSelected = selectedMode === mode.id;
-                return (
-                  <button
-                    key={mode.id}
-                    type="button"
-                    onClick={() => {
-                      setValue('mode', mode.id as any, { shouldValidate: true });
-                      if (mode.id === 'cash') {
-                        setValue('source', 'petty_cash');
-                      } else {
-                        setValue('source', 'bank_direct');
-                      }
-                    }}
-                    style={isSelected ? mode.activeStyle : undefined}
-                    className={`flex flex-col items-center justify-center p-2.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
-                      isSelected
-                        ? 'border shadow-sm font-bold'
-                        : 'bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover border-border/80'
-                    }`}
-                  >
-                    <Icon size={16} className="mb-1" />
-                    <span>{mode.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          <ManagerAccountsExpensesPaymentModeSelector
+            selectedMode={selectedMode}
+            selectedSource={selectedSource}
+            setValue={setValue}
+          />
 
           <div>
             <label htmlFor="expense-paidby-input" className="text-xs font-semibold text-secondary block mb-1">
               Disbursed By (Staff / Manager Name)
             </label>
-            <input maxLength={30}
+            <input
+              maxLength={30}
               id="expense-paidby-input"
               type="text"
               placeholder="e.g. Branch Manager Satyam"
@@ -350,14 +225,14 @@ export function ManagerAccountsExpensesAddExpenseModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-secondary hover:text-primary cursor-pointer shadow-xs transition-colors"
+              className="px-4 py-2 rounded-xl border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-secondary hover:text-primary cursor-pointer shadow-xs motion-safe:transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary-hover shadow-xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary-hover shadow-xs motion-safe:transition-all cursor-pointer"
             >
               {isSubmitting ? <ButtonLoader icon="receipt" /> : <CheckCircle size={14} />}
               <span>{isSubmitting ? 'Recording...' : 'Record Expense'}</span>

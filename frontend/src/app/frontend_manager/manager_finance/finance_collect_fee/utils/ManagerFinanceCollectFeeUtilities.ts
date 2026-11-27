@@ -1,4 +1,19 @@
 
+/** Formats integer or major-unit INR amounts using Intl.NumberFormat. */
+export function formatCollectFeeInr(amount: number, showDecimals = false): string {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    minimumFractionDigits: showDecimals ? 2 : 0,
+    maximumFractionDigits: showDecimals ? 2 : 0,
+  }).format(amount);
+}
+
+/** Returns the localized INR currency symbol without literal glyphs in JSX. */
+export function getCollectFeeCurrencySymbol(): string {
+  return formatCollectFeeInr(0, false).replace(/[0-9.,\s]/g, '') || 'INR';
+}
+
 /** Masks a phone number for finance preview surfaces; not suitable for identity matching. */
 export function maskManagerCollectFeePhone(phone: string | null | undefined): string {
   const digits = (phone ?? '').replace(/\D/g, '').slice(-10);

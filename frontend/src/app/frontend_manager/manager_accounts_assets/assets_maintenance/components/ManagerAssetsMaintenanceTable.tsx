@@ -1,19 +1,9 @@
 'use client';
 
 import ManagerAssetsMaintenanceEmptyState from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/components/ManagerAssetsMaintenanceEmptyState';
-import {
-AlertTriangle,
-ArrowDown,
-ArrowUp,
-ArrowUpDown,
-Building2,
-Calendar,
-CheckCircle2,
-Clock,
-Eye,
-Trash2,
-Wrench,
-} from 'lucide-react';
+import { ManagerAssetsMaintenanceTablePagination } from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/components/ManagerAssetsMaintenanceTablePagination';
+import { ManagerAssetsMaintenanceTableRow } from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/components/ManagerAssetsMaintenanceTableRow';
+import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 export type MaintenanceSortField =
@@ -160,237 +150,37 @@ export function ManagerAssetsMaintenanceTable({
                 </td>
               </tr>
             ) : (
-              paginated.map((l) => {
-                const priorityBadge =
-                  l.priority === 'emergency'
-                    ? { bg: 'bg-rose-500/15', text: 'text-rose-400', border: 'border-rose-500/30' }
-                    : l.priority === 'urgent'
-                    ? { bg: 'bg-amber-500/15', text: 'text-amber-400', border: 'border-amber-500/30' }
-                    : { bg: 'bg-emerald-500/15', text: 'text-emerald-400', border: 'border-emerald-500/30' };
-
-                return (
-                  <tr
-                    key={l.id}
-                    className="hover:bg-surface-hover/70 transition-colors group h-14"
-                  >
-                    {/* Asset Name + Priority */}
-                    <td className="py-3 px-4">
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-primary text-xs">{l.assetName}</span>
-                        {l.priority && (
-                          <span
-                            className={`inline-flex items-center gap-1 w-fit mt-1 px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase border ${priorityBadge.bg} ${priorityBadge.text} ${priorityBadge.border}`}
-                          >
-                            {l.priority === 'emergency' ? (
-                              <AlertTriangle size={9} />
-                            ) : (
-                              <Clock size={9} />
-                            )}
-                            {l.priority}
-                          </span>
-                        )}
-                      </div>
-                    </td>
-
-                    {/* Issue Description + Type */}
-                    <td className="py-3 px-4 max-w-[220px]">
-                      <div className="flex flex-col">
-                        <span className="text-xs text-primary font-medium line-clamp-1" title={l.issue}>
-                          {l.issue}
-                        </span>
-                        {l.type && (
-                          <span className="text-[10px] text-secondary capitalize mt-0.5">
-                            {l.type} maintenance
-                          </span>
-                        )}
-                      </div>
-                    </td>
-
-                    {/* Reported Date */}
-                    <td className="py-3 px-4 text-xs text-secondary whitespace-nowrap">
-                      <div className="flex items-center gap-1.5">
-                        <Calendar size={12} className="text-secondary/70 shrink-0" />
-                        <span>{l.reportedDate}</span>
-                      </div>
-                    </td>
-
-                    {/* Scheduled Date */}
-                    <td className="py-3 px-4 text-xs text-secondary whitespace-nowrap">
-                      <div className="flex items-center gap-1.5">
-                        <Clock size={12} className="text-secondary/70 shrink-0" />
-                        <span>{l.scheduledDate}</span>
-                      </div>
-                    </td>
-
-                    {/* Vendor */}
-                    <td className="py-3 px-4 text-xs text-secondary">
-                      <div className="flex items-center gap-1.5">
-                        <Building2 size={12} className="text-secondary/70 shrink-0" />
-                        <span className="truncate max-w-[120px]" title={l.vendor}>
-                          {l.vendor}
-                        </span>
-                      </div>
-                    </td>
-
-                    {/* Cost & Auto-Expense Badge */}
-                    <td className="py-3 px-4 text-right font-semibold text-xs whitespace-nowrap">
-                      <span className="text-emerald-400 font-mono font-bold">{formatCurrency(l.cost)}</span>
-                      {l.cost > 0 && (
-                        <span className="text-[10px] text-emerald-400/80 font-medium block">
-                          ✓ Auto-Expense
-                        </span>
-                      )}
-                    </td>
-
-                    {/* Status Badge */}
-                    <td className="py-3 px-4 whitespace-nowrap">
-                      <span
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${
-                          l.status === 'pending'
-                            ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
-                            : l.status === 'in-progress'
-                            ? 'bg-sky-500/15 text-sky-400 border border-sky-500/30'
-                            : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                        }`}
-                      >
-                        {l.status === 'pending' ? (
-                          <>
-                            <Clock size={12} aria-hidden="true" />
-                            <span>{tManagerUi('pending')}</span>
-                          </>
-                        ) : l.status === 'in-progress' ? (
-                          <>
-                            <Wrench size={12} aria-hidden="true" />
-                            <span>{tManagerUi('in_progress')}</span>
-                          </>
-                        ) : (
-                          <>
-                            <CheckCircle2 size={12} aria-hidden="true" />
-                            <span>{tManagerUi('completed')}</span>
-                          </>
-                        )}
-                      </span>
-                    </td>
-
-                    {/* Action Buttons */}
-                    <td className="py-3 px-4 text-right whitespace-nowrap">
-                      <div className="inline-flex items-center justify-end gap-1.5">
-                        {/* View Details Icon Button */}
-                        {onViewDetails && (
-                          <button
-                            type="button"
-                            onClick={() => onViewDetails(l)}
-                            className="p-1.5 rounded-lg text-sky-400 hover:text-sky-300 hover:bg-sky-500/15 transition-colors cursor-pointer"
-                            title="View Ticket Details"
-                            aria-label={`View details for ${l.assetName}`}
-                          >
-                            <Eye size={15} />
-                          </button>
-                        )}
-
-                        {/* Advance Status Button */}
-                        {l.status !== 'completed' && (
-                          <button
-                            type="button"
-                            onClick={() => onUpdateStatus(l.id, l.status)}
-                            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-xs transition-all cursor-pointer ${
-                              l.status === 'pending'
-                                ? 'border border-amber-500/40 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25'
-                                : 'border border-emerald-500/40 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25'
-                            }`}
-                            title={
-                              l.status === 'pending'
-                                ? 'Start work on maintenance order'
-                                : 'Mark maintenance order as completed'
-                            }
-                          >
-                            {l.status === 'pending' ? (
-                              <>
-                                <Wrench size={12} />
-                                <span>Start Work</span>
-                              </>
-                            ) : (
-                              <>
-                                <CheckCircle2 size={12} />
-                                <span>Complete</span>
-                              </>
-                            )}
-                          </button>
-                        )}
-
-                        {/* Delete Button */}
-                        {onDeleteLog && (
-                          <button
-                            type="button"
-                            onClick={() => onDeleteLog(l.id)}
-                            className="p-1.5 rounded-lg text-rose-400 hover:text-rose-300 hover:bg-rose-500/15 transition-colors cursor-pointer"
-                            title="Delete maintenance record"
-                            aria-label={`Delete record for ${l.assetName}`}
-                          >
-                            <Trash2 size={15} />
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })
+              paginated.map((l) => (
+                <ManagerAssetsMaintenanceTableRow
+                  key={l.id}
+                  logItem={l}
+                  formatCurrency={formatCurrency}
+                  onUpdateStatus={onUpdateStatus}
+                  onViewDetails={onViewDetails}
+                  onDeleteLog={onDeleteLog}
+                  statusLabels={{
+                    pending: tManagerUi('pending'),
+                    inProgress: tManagerUi('in_progress'),
+                    completed: tManagerUi('completed'),
+                  }}
+                />
+              ))
             )}
           </tbody>
         </table>
       </div>
 
       {/* Pagination Footer */}
-      {totalRows > 0 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-xs text-secondary bg-surface-highlight/30">
-          <span>
-            Showing <strong className="text-primary font-semibold">{startItem}</strong>–
-            <strong className="text-primary font-semibold">{endItem}</strong> of{' '}
-            <strong className="text-primary font-semibold">{totalRows}</strong> results
-          </span>
-
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5">
-              <label htmlFor="rows-per-page-assets-maintenance" className="text-xs text-secondary whitespace-nowrap">
-                Rows per page:
-              </label>
-              <select
-                id="rows-per-page-assets-maintenance"
-                value={pageSize}
-                onChange={(e) => onPageSizeChange(Number(e.target.value))}
-                className="rounded-lg border border-border bg-card px-2 py-1 text-xs text-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-              >
-                <option value={10}>10</option>
-                <option value={25}>25</option>
-                <option value={50}>50</option>
-              </select>
-            </div>
-
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                className="px-2.5 py-1 rounded-lg border border-border text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                disabled={effectivePage <= 0}
-                onClick={() => onPageChange(Math.max(0, effectivePage - 1))}
-              >
-                Previous
-              </button>
-              <span className="text-xs text-secondary px-1.5">
-                Page <strong className="text-primary font-semibold">{effectivePage + 1}</strong> of{' '}
-                <strong className="text-primary font-semibold">{pageCount}</strong>
-              </span>
-              <button
-                type="button"
-                className="px-2.5 py-1 rounded-lg border border-border text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                disabled={effectivePage >= pageCount - 1}
-                onClick={() => onPageChange(Math.min(pageCount - 1, effectivePage + 1))}
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ManagerAssetsMaintenanceTablePagination
+        totalRows={totalRows}
+        startItem={startItem}
+        endItem={endItem}
+        effectivePage={effectivePage}
+        pageCount={pageCount}
+        pageSize={pageSize}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+      />
     </div>
   );
 }

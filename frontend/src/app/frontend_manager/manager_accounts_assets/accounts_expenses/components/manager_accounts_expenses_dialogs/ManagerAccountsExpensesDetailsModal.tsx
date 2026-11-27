@@ -55,7 +55,7 @@ export function ManagerAccountsExpensesDetailsModal({
                 <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-surface-highlight border border-border text-secondary">
                   VOUCHER #{expense.id}
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-primary-subtle text-primary border border-primary/20">
+                <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-primary-subtle text-primary border border-border">
                   {expense.category}
                 </span>
               </div>
@@ -163,7 +163,7 @@ export function ManagerAccountsExpensesDetailsModal({
                   onClose();
                   onDeleteExpense(expense.id);
                 }}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-danger/15 text-danger border border-danger/30 hover:bg-danger/25 text-xs font-semibold shadow-xs cursor-pointer transition-all"
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-danger-bg text-danger border border-danger hover:bg-danger-bg text-xs font-semibold shadow-xs cursor-pointer motion-safe:transition-all"
               >
                 Delete Record
               </button>

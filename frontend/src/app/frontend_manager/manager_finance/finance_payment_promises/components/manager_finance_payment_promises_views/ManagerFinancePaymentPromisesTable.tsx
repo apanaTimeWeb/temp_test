@@ -1,10 +1,11 @@
 'use client';
 
 import { ManagerFinancePaymentPromisesEmptyState } from '@/app/frontend_manager/manager_finance/finance_payment_promises/components/manager_finance_payment_promises_empty_states/ManagerFinancePaymentPromisesEmptyState';
+import { ManagerFinancePaymentPromisesPagination } from '@/app/frontend_manager/manager_finance/finance_payment_promises/components/manager_finance_payment_promises_views/ManagerFinancePaymentPromisesPagination';
 import { MANAGER_FINANCE_PAYMENT_PROMISE_STATUS_BADGE } from '@/app/frontend_manager/manager_finance/finance_payment_promises/constants/ManagerFinancePaymentPromisesPaymentPromiseConstants';
-import type { ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
-import { ManagerFinancePaymentPromisesPagination } from './ManagerFinancePaymentPromisesPagination';
-import { ArrowDown,ArrowUp,ArrowUpDown,CheckCircle,Edit3,Eye,IndianRupee,MessageCircle,PhoneCall } from 'lucide-react';
+import type { ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/types/ManagerFinancePaymentPromisesTypes';
+import { formatPromiseInr, getPromiseMajorUnits } from '@/app/frontend_manager/manager_finance/finance_payment_promises/utils/ManagerFinancePaymentPromisesHelpers';
+import { ArrowDown, ArrowUp, ArrowUpDown, CheckCircle, Edit3, Eye, IndianRupee, MessageCircle, PhoneCall } from 'lucide-react';
 
 export type PromiseSortField = 'studentName' | 'promisedAmount' | 'expectedDate' | 'daysUntilDue' | 'status' | 'timesChanged';
 
@@ -209,8 +210,8 @@ export default function ManagerFinancePaymentPromisesTable({
                             type="button"
                             data-testid={`collect-amount-btn-${p.id}`}
                             onClick={() => onCollectAmount(p)}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg bg-primary text-on-primary hover:opacity-90 shadow-xs transition-opacity cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
-                            title={`Open Fee Counter pre-filled with ${p.studentName} and ₹${p.promisedAmount / 100}`}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg bg-primary text-on-primary hover:opacity-90 shadow-xs motion-safe:transition-opacity cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
+                            title={`Open Fee Counter pre-filled with ${p.studentName} and ${formatPromiseInr(getPromiseMajorUnits(p.promisedAmount))}`}
                           >
                             <IndianRupee size={11} /> Collect
                           </button>

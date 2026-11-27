@@ -60,15 +60,17 @@ export function ManagerDashboardOverviewBirthdayWidget() {
     const popup = window.open(`https://wa.me/${targetPhone}?text=${greeting}`, '_blank', 'noopener,noreferrer');
     if (popup) popup.opener = null;
     setWishedIds((prev) => ({ ...prev, [student.id]: true }));
-    toast.success(`Birthday greeting dispatched to ${student.name}!`);
+    toast.success(`Birthday greeting dispatched to ${student.name}!`, {
+      id: `manager-birthday-wish-${student.id}`,
+    });
   };
 
   return (
-    <div className="rounded-2xl border border-border bg-linear-to-r from-card via-card to-primary-subtle p-5 sm:p-6 shadow-card transition-all">
+    <div className="rounded-2xl border border-border bg-linear-to-r from-card via-card to-primary-subtle p-5 sm:p-6 shadow-card motion-safe:transition-all">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 border-b border-border pb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-warning-bg border border-border text-warning flex items-center justify-center font-bold">
-            <Cake size={22} className="text-primary animate-bounce" />
+            <Cake size={22} className="text-primary motion-safe:animate-bounce" />
           </div>
           <div>
             <h3 className="font-bold text-foreground text-base sm:text-lg flex items-center gap-2">

@@ -112,3 +112,19 @@
     grid-template-columns: minmax(0, 1fr) !important;
   }
 }
+
+.mgr-reports-kpi-surface--indigo {
+  background-image: linear-gradient(to bottom right, rgba(30, 27, 75, 0.8), #181c4b, rgba(49, 46, 129, 0.6));
+}
+
+.mgr-reports-kpi-surface--emerald {
+  background-image: linear-gradient(to bottom right, rgba(6, 78, 59, 0.8), #0e2c21, rgba(6, 95, 70, 0.6));
+}
+
+.mgr-reports-kpi-surface--cyan {
+  background-image: linear-gradient(to bottom right, rgba(8, 51, 68, 0.8), #0e2540, rgba(22, 78, 99, 0.6));
+}
+
+.mgr-reports-kpi-surface--amber {
+  background-image: linear-gradient(to bottom right, rgba(69, 26, 3, 0.8), #261708, rgba(120, 53, 15, 0.6));
+}

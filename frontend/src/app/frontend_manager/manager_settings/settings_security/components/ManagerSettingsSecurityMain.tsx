@@ -2,26 +2,26 @@
 
 import { ShieldCheck } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import { useEffect,useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import { ManagerSettingsSecurityActiveSessionsPanel } from '@/app/frontend_manager/manager_settings/settings_security/components/ManagerSettingsSecurityActiveSessionsPanel';
+import { ManagerSettingsSecurityHeader } from '@/app/frontend_manager/manager_settings/settings_security/components/ManagerSettingsSecurityHeader';
+import { ManagerSettingsSecurityLoginHistoryPanel } from '@/app/frontend_manager/manager_settings/settings_security/components/ManagerSettingsSecurityLoginHistoryPanel';
+import { ManagerSettingsSecurityPasswordForm } from '@/app/frontend_manager/manager_settings/settings_security/components/ManagerSettingsSecurityPasswordForm';
+import '@/app/frontend_manager/manager_settings/settings_security/components/ManagerSettingsSecurityStyles.css';
+import { ManagerSettingsSecurityTabs } from '@/app/frontend_manager/manager_settings/settings_security/components/ManagerSettingsSecurityTabs';
+import { ManagerSettingsSecurityTwoFactorPanel } from '@/app/frontend_manager/manager_settings/settings_security/components/ManagerSettingsSecurityTwoFactorPanel';
 import {
-INITIAL_ACTIVE_SESSIONS,
-INITIAL_LOGIN_HISTORY,
-INITIAL_MANAGER_PROFILE,
-INITIAL_TWO_FACTOR_CONFIG,
-} from '../constants/ManagerSettingsSecurityConstants';
+  INITIAL_ACTIVE_SESSIONS,
+  INITIAL_LOGIN_HISTORY,
+  INITIAL_MANAGER_PROFILE,
+  INITIAL_TWO_FACTOR_CONFIG,
+} from '@/app/frontend_manager/manager_settings/settings_security/constants/ManagerSettingsSecurityConstants';
 import type {
-ManagerActiveSession,
-ManagerSecurityTab,
-ManagerTwoFactorConfig,
-} from '../types/ManagerSettingsSecurityTypes';
-
-import { ManagerSettingsSecurityActiveSessionsPanel } from './ManagerSettingsSecurityActiveSessionsPanel';
-import { ManagerSettingsSecurityHeader } from './ManagerSettingsSecurityHeader';
-import { ManagerSettingsSecurityLoginHistoryPanel } from './ManagerSettingsSecurityLoginHistoryPanel';
-import { ManagerSettingsSecurityPasswordForm } from './ManagerSettingsSecurityPasswordForm';
-import { ManagerSettingsSecurityTabs } from './ManagerSettingsSecurityTabs';
-import { ManagerSettingsSecurityTwoFactorPanel } from './ManagerSettingsSecurityTwoFactorPanel';
+  ManagerActiveSession,
+  ManagerSecurityTab,
+  ManagerTwoFactorConfig,
+} from '@/app/frontend_manager/manager_settings/settings_security/types/ManagerSettingsSecurityTypes';
 
 interface ManagerSettingsSecurityMainProps {
   initialTab?: ManagerSecurityTab;

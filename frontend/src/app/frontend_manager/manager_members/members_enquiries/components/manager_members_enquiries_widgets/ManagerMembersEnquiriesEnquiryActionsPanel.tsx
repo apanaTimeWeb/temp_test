@@ -21,13 +21,13 @@ export function ManagerMembersEnquiriesEnquiryActionsPanel({
 }: ManagerMembersEnquiriesEnquiryActionsPanelProps) {
   return (
     <>
-      <section className="crm-card rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 p-5 shadow-lg mb-4" aria-labelledby="crm-detail-current-status-title">
+      <section className="crm-card menq-surface-card rounded-2xl border p-5 shadow-lg mb-4" aria-labelledby="crm-detail-current-status-title">
         <h2 id="crm-detail-current-status-title" className="crm-section-label text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">{currentStatusLabel}</h2>
         <div className="crm-status-row flex items-center gap-3">
           <div className="crm-select-wrap flex-1">
-            <select className="crm-select w-full bg-[#060818] border border-indigo-500/25 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 outline-none cursor-pointer" value={status} disabled aria-label={currentStatusLabel}>
+            <select className="crm-select menq-dark-select w-full border rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 outline-none cursor-pointer" value={status} disabled aria-label={currentStatusLabel}>
               {statusOptions.map((option) => (
-                <option key={option} value={option} className="bg-[#0b0c20]">
+                <option key={option} value={option} className="menq-dark-option">
                   {statusLabels[option]}
                 </option>
               ))}
@@ -40,7 +40,7 @@ export function ManagerMembersEnquiriesEnquiryActionsPanel({
         </div>
       </section>
 
-      <section className="crm-card crm-form-stack rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 p-5 shadow-lg flex flex-col gap-3" aria-labelledby="crm-detail-actions-title">
+      <section className="crm-card menq-surface-card crm-form-stack rounded-2xl border p-5 shadow-lg flex flex-col gap-3" aria-labelledby="crm-detail-actions-title">
         <h2 id="crm-detail-actions-title" className="crm-section-label text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">{actionsLabel}</h2>
         
         {/* 1. Convert to Admission */}

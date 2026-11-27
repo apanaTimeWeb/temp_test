@@ -57,7 +57,11 @@ describe('Manager Members Alumni Audit Regression Tests', () => {
       __dirname,
       '../components/manager_members_alumni_views/ManagerMembersAlumniClient.tsx'
     );
-    const content = readFileSync(clientPath, 'utf8');
+    const kpisPath = join(
+      __dirname,
+      '../components/manager_members_alumni_views/ManagerMembersAlumniKpisAndDeleteModal.tsx'
+    );
+    const content = readFileSync(clientPath, 'utf8') + readFileSync(kpisPath, 'utf8');
     expect(content).toContain('kpis.successRate');
     expect(content).toContain('kpis.officersPercent');
     expect(content).toContain('kpis.avgTenure');

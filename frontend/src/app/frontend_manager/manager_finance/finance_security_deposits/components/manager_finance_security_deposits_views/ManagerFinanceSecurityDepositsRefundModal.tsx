@@ -1,7 +1,8 @@
 'use client';
 
 import type { ManagerFinanceSecurityDepositsSampleDeposit } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
-import { AlertTriangle,CheckCircle,ShieldCheck,Undo2,X } from 'lucide-react';
+import { formatDepositInr, getDepositCurrencySymbol } from '@/app/frontend_manager/manager_finance/finance_security_deposits/utils/ManagerFinanceSecurityDepositsHelpers';
+import { AlertTriangle, CheckCircle, ShieldCheck, Undo2, X } from 'lucide-react';
 import React,{ useState } from 'react';
 
 export interface ManagerFinanceSecurityDepositsRefundModalProps {
@@ -58,16 +59,16 @@ export default function ManagerFinanceSecurityDepositsRefundModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 motion-safe:animate-in fade-in"
       role="dialog"
       aria-modal="true"
       data-testid="manager-finance-exit-clearance-modal"
     >
-      <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95">
+      <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4 max-h-[90vh] overflow-y-auto motion-safe:animate-in zoom-in-95">
         <div className="flex items-center justify-between border-b border-border pb-3">
           <div className="flex items-center gap-2">
             <Undo2 size={18} className="text-success" />
-            <h2 className="text-base font-bold text-primary">Exit Clearance & Deposit Refund</h2>
+            <h2 className="text-base font-bold text-primary">Exit Clearance &amp; Deposit Refund</h2>
           </div>
           <button type="button" onClick={onClose} className="text-secondary hover:text-primary">
             <X size={18} />
@@ -80,23 +81,23 @@ export default function ManagerFinanceSecurityDepositsRefundModal({
             <p className="text-sm font-bold text-primary">{refundTarget.studentName} ({refundTarget.smartId})</p>
             <div className="flex justify-between text-xs pt-1 border-t border-border mt-1">
               <span className="text-secondary">Gross Deposit Held:</span>
-              <span className="font-semibold text-primary">₹{refundTarget.depositAmount}</span>
+              <span className="font-semibold text-primary">{formatDepositInr(refundTarget.depositAmount)}</span>
             </div>
             {refundTarget.deductionAmount > 0 && (
               <div className="flex justify-between text-xs text-danger">
                 <span>Previous Deductions ({refundTarget.deductionReason}):</span>
-                <span>- ₹{refundTarget.deductionAmount}</span>
+                <span>- {formatDepositInr(refundTarget.deductionAmount)}</span>
               </div>
             )}
             {hasDamageDeduction && (
               <div className="flex justify-between text-xs text-danger">
                 <span>Inspection Damage Deduction:</span>
-                <span>- ₹{damageAmount}</span>
+                <span>- {formatDepositInr(damageAmount)}</span>
               </div>
             )}
             <div className="flex justify-between text-sm font-bold text-success pt-1 border-t border-border">
               <span>Net Refund Payable:</span>
-              <span data-testid="net-refund-payable-amount">₹{netRefundAmount}</span>
+              <span data-testid="net-refund-payable-amount">{formatDepositInr(netRefundAmount)}</span>
             </div>
           </div>
 
@@ -195,7 +196,7 @@ export default function ManagerFinanceSecurityDepositsRefundModal({
             {hasDamageDeduction && (
               <div className="space-y-2 pt-2 border-t border-border/70 text-xs">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-secondary">Deduction Amount (₹):</span>
+                  <span className="text-secondary">{`Deduction Amount (${getDepositCurrencySymbol()}):`}</span>
                   <input
                     type="number"
                     min="0"
@@ -222,7 +223,7 @@ export default function ManagerFinanceSecurityDepositsRefundModal({
               <button
                 type="button"
                 onClick={() => onRefundModeChange('upi')}
-                className={`py-2 text-xs font-semibold rounded-lg border text-center transition-colors ${refundMode === 'upi' ? 'bg-primary text-on-primary border-primary' : 'bg-card text-secondary border-border'
+                className={`py-2 text-xs font-semibold rounded-lg border text-center motion-safe:transition-colors ${refundMode === 'upi' ? 'bg-primary text-on-primary border-primary' : 'bg-card text-secondary border-border'
                   }`}
               >
                 UPI Transfer
@@ -230,7 +231,7 @@ export default function ManagerFinanceSecurityDepositsRefundModal({
               <button
                 type="button"
                 onClick={() => onRefundModeChange('cash')}
-                className={`py-2 text-xs font-semibold rounded-lg border text-center transition-colors ${refundMode === 'cash' ? 'bg-primary text-on-primary border-primary' : 'bg-card text-secondary border-border'
+                className={`py-2 text-xs font-semibold rounded-lg border text-center motion-safe:transition-colors ${refundMode === 'cash' ? 'bg-primary text-on-primary border-primary' : 'bg-card text-secondary border-border'
                   }`}
               >
                 Cash from Counter

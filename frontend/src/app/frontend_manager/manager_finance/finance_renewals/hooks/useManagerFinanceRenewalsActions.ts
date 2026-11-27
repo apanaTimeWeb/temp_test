@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { RenewalRecord } from '../components/manager_finance_renewals_views/ManagerFinanceRenewalsBulkWhatsAppModal';
+import type { RenewalRecord } from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_views/ManagerFinanceRenewalsBulkWhatsAppModal';
 
 interface UseRenewalsActionsParams {
   renewalsList: any[];

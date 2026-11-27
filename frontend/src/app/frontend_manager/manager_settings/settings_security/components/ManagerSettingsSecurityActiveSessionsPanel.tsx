@@ -14,7 +14,7 @@ Smartphone,
 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import type { ManagerActiveSession } from '../types/ManagerSettingsSecurityTypes';
+import type { ManagerActiveSession } from '@/app/frontend_manager/manager_settings/settings_security/types/ManagerSettingsSecurityTypes';
 
 interface ManagerSettingsSecurityActiveSessionsPanelProps {
   sessions: ManagerActiveSession[];
@@ -45,14 +45,14 @@ export function ManagerSettingsSecurityActiveSessionsPanel({
     setTimeout(() => {
       onRevokeSession(id);
       setRevokingId(null);
-      toast.success(`Session ended for ${deviceName}`);
+      toast.success(`Session ended for ${deviceName}`, { id: `revoke-session-${id}` });
     }, 250);
   };
 
   const handleConfirmLogoutAll = () => {
     onLogoutAllOtherSessions();
     setShowLogoutAllModal(false);
-    toast.success('All other devices have been logged out.');
+    toast.success('All other devices have been logged out.', { id: 'logout-all-sessions' });
   };
 
   const otherSessionsCount = sessions.filter((s) => !s.isCurrent).length;
@@ -88,10 +88,10 @@ export function ManagerSettingsSecurityActiveSessionsPanel({
         {sessions.map((session) => (
           <div
             key={session.id}
-            className={`rounded-xl border p-3.5 sm:p-4 transition-all ${
+            className={`rounded-xl border p-3.5 sm:p-4 motion-safe:transition-all ${
               session.isCurrent
                 ? 'border-emerald-500/30 bg-emerald-500/5 shadow-xs'
-                : 'border-white/10 bg-[#0c0d24]/60 hover:bg-[#0c0d24]'
+                : 'mgr-sec-session-card'
             }`}
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -170,8 +170,8 @@ export function ManagerSettingsSecurityActiveSessionsPanel({
 
       {/* Log Out All Modal */}
       {showLogoutAllModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4">
-          <div className="w-full max-w-sm rounded-xl border border-white/10 bg-[#0e1133] p-5 space-y-4 shadow-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop backdrop-blur-xs p-4">
+          <div className="mgr-sec-modal-surface w-full max-w-sm rounded-xl border p-5 space-y-4 shadow-xl">
             <div className="flex items-center gap-2.5 text-rose-400">
               <AlertTriangle size={20} />
               <h4 className="text-sm font-bold text-white">Log out all other devices?</h4>

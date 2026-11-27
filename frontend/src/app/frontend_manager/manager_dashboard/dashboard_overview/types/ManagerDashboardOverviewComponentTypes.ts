@@ -15,18 +15,6 @@ export interface ManagerDashboardOverviewKpiGridProps {
   timeRangeLabel?: string;
 }
 
-export type ManagerDashboardOverviewQuickLinkTitleKey =
-  | 'quick_all_students'
-  | 'quick_enquiries'
-  | 'quick_collect_fee'
-  | 'quick_add_complaint'
-  | 'quick_mark_attendance'
-  | 'quick_qr_scanner';
-
-export interface ManagerDashboardOverviewQuickLink { titleKey: ManagerDashboardOverviewQuickLinkTitleKey; href: string; }
-
-export interface ManagerDashboardOverviewQuickLinksProps { links: ManagerDashboardOverviewQuickLink[]; }
-
 export interface ManagerDashboardOverviewRecentActivityProps {
   admissions: ManagerDashboardOverviewRecentAdmission[];
   enquiries: ManagerDashboardOverviewRecentEnquiry[];

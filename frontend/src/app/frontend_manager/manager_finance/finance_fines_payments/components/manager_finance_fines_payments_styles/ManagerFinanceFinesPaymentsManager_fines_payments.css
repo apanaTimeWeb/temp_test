@@ -1528,3 +1528,65 @@
 
 /* Keyboard users retain a visible focus indicator even when the native outline is removed. */
 .fin-select:focus-visible { outline: 2px solid theme(--color-focus-ring); outline-offset: 2px; }
+
+/* Fines & payments KPI cards extracted out of TSX */
+.fin-fines-kpi-card--emerald {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, rgba(2, 44, 34, 0.8), #0e2c21, rgba(6, 78, 59, 0.6));
+  box-shadow: 0 10px 15px -3px rgba(2, 44, 34, 0.4);
+}
+.fin-fines-kpi-card--emerald .fin-fines-kpi-icon { background: rgba(16, 185, 129, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.4); }
+.fin-fines-kpi-card--emerald .fin-fines-kpi-chip { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.3); }
+.fin-fines-kpi-card--emerald .fin-fines-kpi-spark path { stroke: #34d399; }
+.fin-fines-kpi-card--emerald .fin-fines-kpi-val { color: #34d399; }
+
+.fin-fines-kpi-card--rose {
+  border-color: rgba(244, 63, 94, 0.4);
+  background: linear-gradient(135deg, rgba(76, 5, 25, 0.8), #260e19, rgba(136, 19, 55, 0.6));
+  box-shadow: 0 10px 15px -3px rgba(76, 5, 25, 0.4);
+}
+.fin-fines-kpi-card--rose .fin-fines-kpi-icon { background: rgba(244, 63, 94, 0.2); color: #fb7185; border-color: rgba(244, 63, 94, 0.4); }
+.fin-fines-kpi-card--rose .fin-fines-kpi-chip { background: rgba(244, 63, 94, 0.15); color: #fda4af; border-color: rgba(244, 63, 94, 0.3); }
+.fin-fines-kpi-card--rose .fin-fines-kpi-spark path { stroke: #f87171; }
+.fin-fines-kpi-card--rose .fin-fines-kpi-val { color: #fb7185; }
+
+.fin-fines-kpi-card--amber {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: linear-gradient(135deg, rgba(69, 26, 3, 0.8), #261708, rgba(120, 53, 15, 0.6));
+  box-shadow: 0 10px 15px -3px rgba(69, 26, 3, 0.4);
+}
+.fin-fines-kpi-card--amber .fin-fines-kpi-icon { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border-color: rgba(245, 158, 11, 0.4); }
+.fin-fines-kpi-card--amber .fin-fines-kpi-chip { background: rgba(245, 158, 11, 0.15); color: #fcd34d; border-color: rgba(245, 158, 11, 0.3); }
+.fin-fines-kpi-card--amber .fin-fines-kpi-spark path { stroke: #fbbf24; }
+.fin-fines-kpi-card--amber .fin-fines-kpi-val { color: #fbbf24; }
+
+.fin-fines-kpi-card--cyan {
+  border-color: rgba(6, 182, 212, 0.4);
+  background: linear-gradient(135deg, rgba(8, 51, 68, 0.8), #0a282f, rgba(22, 78, 99, 0.6));
+  box-shadow: 0 10px 15px -3px rgba(8, 51, 68, 0.4);
+}
+.fin-fines-kpi-card--cyan .fin-fines-kpi-icon { background: rgba(6, 182, 212, 0.2); color: #22d3ee; border-color: rgba(6, 182, 212, 0.4); }
+.fin-fines-kpi-card--cyan .fin-fines-kpi-chip { background: rgba(6, 182, 212, 0.15); color: #67e8f9; border-color: rgba(6, 182, 212, 0.3); }
+.fin-fines-kpi-card--cyan .fin-fines-kpi-spark path { stroke: #22d3ee; }
+.fin-fines-kpi-card--cyan .fin-fines-kpi-val { color: #22d3ee; }
+
+.fin-fines-kpi-card--purple {
+  border-color: rgba(168, 85, 247, 0.4);
+  background: linear-gradient(135deg, rgba(59, 7, 100, 0.8), #24133f, rgba(88, 28, 135, 0.6));
+  box-shadow: 0 10px 15px -3px rgba(59, 7, 100, 0.4);
+}
+.fin-fines-kpi-card--purple .fin-fines-kpi-icon { background: rgba(168, 85, 247, 0.2); color: #c084fc; border-color: rgba(168, 85, 247, 0.4); }
+.fin-fines-kpi-card--purple .fin-fines-kpi-chip { background: rgba(168, 85, 247, 0.15); color: #d8b4fe; border-color: rgba(168, 85, 247, 0.3); }
+.fin-fines-kpi-card--purple .fin-fines-kpi-spark path { stroke: #c084fc; }
+.fin-fines-kpi-card--purple .fin-fines-kpi-val { color: #c084fc; }
+
+.fin-fines-kpi-card--indigo {
+  border-color: rgba(99, 102, 241, 0.4);
+  background: linear-gradient(135deg, rgba(30, 27, 75, 0.8), #181c4b, rgba(49, 46, 129, 0.6));
+  box-shadow: 0 10px 15px -3px rgba(30, 27, 75, 0.4);
+}
+.fin-fines-kpi-card--indigo .fin-fines-kpi-icon { background: rgba(99, 102, 241, 0.2); color: #818cf8; border-color: rgba(99, 102, 241, 0.4); }
+.fin-fines-kpi-card--indigo .fin-fines-kpi-chip { background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border-color: rgba(99, 102, 241, 0.3); }
+.fin-fines-kpi-card--indigo .fin-fines-kpi-spark path { stroke: #818cf8; }
+.fin-fines-kpi-card--indigo .fin-fines-kpi-val { color: #ffffff; }
+

@@ -1,23 +1,23 @@
 'use client';
 
 import ManagerFinanceRenewalsNativeTable from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_table_parts/ManagerFinanceRenewalsNativeTable';
+import ManagerFinanceRenewalsAlertBanner from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_views/ManagerFinanceRenewalsAlertBanner';
+import { ManagerFinanceRenewalsBulkWhatsAppModal } from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_views/ManagerFinanceRenewalsBulkWhatsAppModal';
+import ManagerFinanceRenewalsFilterBar from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_views/ManagerFinanceRenewalsFilterBar';
+import ManagerFinanceRenewalsHeader from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_views/ManagerFinanceRenewalsHeader';
+import { buildRenewalColumns } from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_views/ManagerFinanceRenewalsTableColumns';
+import ManagerFinanceRenewalsTimeHorizonBar, { type ManagerRenewalsTimeHorizon } from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_views/ManagerFinanceRenewalsTimeHorizonBar';
 import { MANAGER_FINANCE_SAMPLE_RENEWALS } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/ManagerFinanceRenewalsDemoRepository';
 import { useManagerRenewalsFormatting } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/ManagerFinanceRenewalsFormattingHook';
-import { useManagerFinanceRenewalsConfirm } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsConfirm';
 import { useManagerFinanceRenewalsActions } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsActions';
+import { useManagerFinanceRenewalsConfirm } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsConfirm';
 import { useManagerRenewalsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsUrlFilters';
-import type { FilterType,ManagerFinanceRenewalsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
+import type { FilterType, ManagerFinanceRenewalsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
+import { formatRenewalInr } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsActionHelpers';
 import { exportManagerRenewalsCsv } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsCsv';
-import { handleRenewalsExport, handleRenewalsPrint, handleRenewalsFileImport } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsActionHelpers';
 import { CheckCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useMemo,useRef,useState } from 'react';
-import ManagerFinanceRenewalsAlertBanner from './ManagerFinanceRenewalsAlertBanner';
-import { ManagerFinanceRenewalsBulkWhatsAppModal } from './ManagerFinanceRenewalsBulkWhatsAppModal';
-import ManagerFinanceRenewalsFilterBar from './ManagerFinanceRenewalsFilterBar';
-import ManagerFinanceRenewalsHeader from './ManagerFinanceRenewalsHeader';
-import { buildRenewalColumns } from './ManagerFinanceRenewalsTableColumns';
-import ManagerFinanceRenewalsTimeHorizonBar,{ type ManagerRenewalsTimeHorizon } from './ManagerFinanceRenewalsTimeHorizonBar';
+import { useMemo, useRef, useState } from 'react';
 
 const URL_FILTERS = { filter: { defaultValue: 'expiring_7', allowedValues: ['expired', 'expiring_7', 'expiring_15'] } } as const;
 
@@ -154,7 +154,7 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
       const text = encodeURIComponent(
         `Hello ${student.studentName}, your Library subscription (${student.smartId} • ${student.plan}) ${
           student.daysLeft < 0 ? `expired ${Math.abs(student.daysLeft)} days ago` : `expires in ${student.daysLeft} days`
-        }. Amount due: ₹${Math.round(student.due / 100)}. Please renew to maintain your seat access. — Library Administration`
+        }. Amount due: ${formatRenewalInr(Math.round(student.due / 100))}. Please renew to maintain your seat access. — Library Administration`
       );
       const rawPhone = (student as { phone?: string }).phone || cleanPhone;
       let digits = rawPhone.replace(/\D/g, '');

@@ -4,9 +4,10 @@ import type {
 IdCardSide,
 ManagerMembersIdCardGeneratorStudentIdCardProps
 } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorComponentTypes';
+import { ManagerMembersIdCardGeneratorBarcodeStripes, ManagerMembersIdCardGeneratorQrSvg } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorQrSvgs';
+import { ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack';
 import { CreditCard,RotateCw } from 'lucide-react';
 import { useEffect,useState } from 'react';
-import { ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack } from './ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack';
 
 function maskPhone(phone?: string | null): string {
   if (!phone) return '—';
@@ -15,97 +16,13 @@ function maskPhone(phone?: string | null): string {
   return '••••••' + digits.slice(-4);
 }
 
-function QtrQrSvg({ code }: { code: string }) {
-  const safeCode = code || 'LIB-0000';
-  return (
-    <svg
-      width="100%"
-      height="100%"
-      viewBox="0 0 25 25"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-label={`QR for ${safeCode}`}
-      className="w-full h-full block"
-    >
-      <rect width="25" height="25" rx="2" fill="#FFFFFF" />
-      <rect x="2" y="2" width="7" height="7" fill="#0F172A" rx="1.2" />
-      <rect x="3" y="3" width="5" height="5" fill="#FFFFFF" rx="0.5" />
-      <rect x="4" y="4" width="3" height="3" fill="#0F172A" rx="0.6" />
-      <rect x="16" y="2" width="7" height="7" fill="#0F172A" rx="1.2" />
-      <rect x="17" y="3" width="5" height="5" fill="#FFFFFF" rx="0.5" />
-      <rect x="18" y="4" width="3" height="3" fill="#0F172A" rx="0.6" />
-      <rect x="2" y="16" width="7" height="7" fill="#0F172A" rx="1.2" />
-      <rect x="3" y="17" width="5" height="5" fill="#FFFFFF" rx="0.5" />
-      <rect x="4" y="18" width="3" height="3" fill="#0F172A" rx="0.6" />
-      <rect x="10" y="4" width="1" height="1" fill="#0F172A" />
-      <rect x="12" y="4" width="1" height="1" fill="#0F172A" />
-      <rect x="14" y="4" width="1" height="1" fill="#0F172A" />
-      <rect x="4" y="10" width="1" height="1" fill="#0F172A" />
-      <rect x="4" y="12" width="1" height="1" fill="#0F172A" />
-      <rect x="4" y="14" width="1" height="1" fill="#0F172A" />
-      <rect x="10" y="2" width="1" height="1" fill="#0F172A" />
-      <rect x="10" y="6" width="1" height="1" fill="#0F172A" />
-      <rect x="14" y="2" width="1" height="1" fill="#0F172A" />
-      <rect x="14" y="6" width="1" height="1" fill="#0F172A" />
-      <rect x="2" y="10" width="1" height="1" fill="#0F172A" />
-      <rect x="6" y="10" width="1" height="1" fill="#0F172A" />
-      <rect x="2" y="14" width="1" height="1" fill="#0F172A" />
-      <rect x="6" y="14" width="1" height="1" fill="#0F172A" />
-      <rect x="10" y="10" width="2" height="2" fill="#0F172A" rx="0.3" />
-      <rect x="13" y="10" width="2" height="1" fill="#0F172A" rx="0.3" />
-      <rect x="16" y="10" width="1" height="2" fill="#0F172A" rx="0.3" />
-      <rect x="18" y="10" width="2" height="2" fill="#0F172A" rx="0.3" />
-      <rect x="21" y="10" width="2" height="1" fill="#0F172A" rx="0.3" />
-      <rect x="10" y="13" width="2" height="1" fill="#0F172A" rx="0.3" />
-      <rect x="13" y="12" width="2" height="2" fill="#0F172A" rx="0.3" />
-      <rect x="16" y="13" width="2" height="1" fill="#0F172A" rx="0.3" />
-      <rect x="19" y="13" width="1" height="2" fill="#0F172A" rx="0.3" />
-      <rect x="21" y="12" width="2" height="2" fill="#0F172A" rx="0.3" />
-      <rect x="10" y="15" width="1" height="2" fill="#0F172A" rx="0.3" />
-      <rect x="12" y="15" width="2" height="2" fill="#0F172A" rx="0.3" />
-      <rect x="15" y="15" width="2" height="2" fill="#0F172A" rx="0.3" />
-      <rect x="18" y="16" width="2" height="1" fill="#0F172A" rx="0.3" />
-      <rect x="21" y="15" width="2" height="2" fill="#0F172A" rx="0.3" />
-      <rect x="10" y="18" width="2" height="2" fill="#0F172A" rx="0.3" />
-      <rect x="13" y="18" width="2" height="1" fill="#0F172A" rx="0.3" />
-      <rect x="16" y="17" width="2" height="2" fill="#0F172A" rx="0.3" />
-      <rect x="19" y="18" width="4" height="4" fill="#0F172A" rx="0.8" />
-      <rect x="20" y="19" width="2" height="2" fill="#FFFFFF" rx="0.3" />
-      <rect x="10" y="21" width="1" height="2" fill="#0F172A" rx="0.3" />
-      <rect x="12" y="21" width="2" height="1" fill="#0F172A" rx="0.3" />
-      <rect x="15" y="20" width="2" height="2" fill="#0F172A" rx="0.3" />
-      <rect x="18" y="21" width="1" height="2" fill="#0F172A" rx="0.3" />
-    </svg>
-  );
-}
+const QtrQrSvg = ({ code }: { code: string }) => (
+  <ManagerMembersIdCardGeneratorQrSvg code={code} darkColor="#0F172A" />
+);
 
-function QtrBarcode({ id }: { id: string }) {
-  const safeId = id && id.length > 0 ? id : 'LIB-DEFAULT';
-  const bars: { width: number; gap: number }[] = [];
-  for (let i = 0; i < 28; i++) {
-    const c = safeId.charCodeAt(i % safeId.length) + i * 3;
-    bars.push({ width: (c % 3) + 1, gap: (c % 2) + 1 });
-  }
-  let totalWidth = 0;
-  for (const bar of bars) totalWidth += bar.width + bar.gap;
-  let currentX = 0;
-  return (
-    <svg
-      viewBox={`0 0 ${totalWidth} 36`}
-      preserveAspectRatio="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-label={`Barcode for ${safeId}`}
-      className="w-full h-full block"
-    >
-      {bars.map((bar, i) => {
-        const fill = i % 5 === 0 ? '#fbbf24' : i % 3 === 0 ? '#a78bfa' : '#e2e8f0';
-        const xPos = currentX;
-        currentX += bar.width + bar.gap;
-        return <rect key={`${safeId}-qtr-bar-${i}`} x={xPos} y="0" width={bar.width} height="36" fill={fill} rx="0.5" />;
-      })}
-    </svg>
-  );
-}
+const QtrBarcode = ({ id }: { id: string }) => (
+  <ManagerMembersIdCardGeneratorBarcodeStripes id={id} count={28} palette={['#fbbf24', '#a78bfa', '#e2e8f0']} prefix="qtr-bar" />
+);
 
 export default function ManagerMembersIdCardGeneratorStudentIdCardQuarterly({
   data,

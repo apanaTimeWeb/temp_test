@@ -33,7 +33,7 @@ export function ManagerMembersEnquiriesBulkToolbar({
   return (
     <div
       aria-label="Bulk Lead Actions Toolbar"
-      className="p-3.5 sm:p-4 rounded-2xl bg-[#0c0f28]/98 border border-emerald-500/40 shadow-xl shadow-black/40 flex flex-col md:flex-row md:items-center justify-between gap-3 animate-in fade-in slide-in-from-top-2 duration-200"
+      className="menq-bulk-bar p-3.5 sm:p-4 rounded-2xl border border-emerald-500/40 shadow-xl shadow-black/40 flex flex-col md:flex-row md:items-center justify-between gap-3 motion-safe:animate-in fade-in slide-in-from-top-2 motion-safe:duration-200"
     >
       {/* Left: Selection Counter & Quick Filter Chips */}
       <div className="flex flex-wrap items-center gap-2">
@@ -49,7 +49,7 @@ export function ManagerMembersEnquiriesBulkToolbar({
           <button
             type="button"
             onClick={onSelectAllFiltered}
-            className="px-2.5 py-1 rounded-lg border border-indigo-500/25 bg-[#060818] hover:bg-indigo-500/15 text-slate-200 font-medium transition-colors cursor-pointer"
+            className="menq-chip-btn px-2.5 py-1 rounded-lg border border-indigo-500/25 hover:bg-indigo-500/15 text-slate-200 font-medium motion-safe:transition-colors cursor-pointer"
             title="Select all current filtered leads"
           >
             <span className="flex items-center gap-1.5">
@@ -62,7 +62,7 @@ export function ManagerMembersEnquiriesBulkToolbar({
             <button
               type="button"
               onClick={() => onSelectByStatus('Visited')}
-              className="px-2.5 py-1 rounded-lg border border-cyan-500/25 bg-[#060818] hover:bg-cyan-500/15 text-slate-200 font-medium transition-colors cursor-pointer"
+              className="menq-chip-btn px-2.5 py-1 rounded-lg border border-cyan-500/25 hover:bg-cyan-500/15 text-slate-200 font-medium motion-safe:transition-colors cursor-pointer"
               title="Select all leads who visited"
             >
               <span className="flex items-center gap-1.5">
@@ -76,7 +76,7 @@ export function ManagerMembersEnquiriesBulkToolbar({
             <button
               type="button"
               onClick={() => onSelectByStatus('New')}
-              className="px-2.5 py-1 rounded-lg border border-sky-500/25 bg-[#060818] hover:bg-sky-500/15 text-slate-200 font-medium transition-colors cursor-pointer"
+              className="menq-chip-btn px-2.5 py-1 rounded-lg border border-sky-500/25 hover:bg-sky-500/15 text-slate-200 font-medium motion-safe:transition-colors cursor-pointer"
               title="Select all new leads"
             >
               <span className="flex items-center gap-1.5">
@@ -90,7 +90,7 @@ export function ManagerMembersEnquiriesBulkToolbar({
             <button
               type="button"
               onClick={() => onSelectByStatus('Interested')}
-              className="px-2.5 py-1 rounded-lg border border-purple-500/25 bg-[#060818] hover:bg-purple-500/15 text-slate-200 font-medium transition-colors cursor-pointer"
+              className="menq-chip-btn px-2.5 py-1 rounded-lg border border-purple-500/25 hover:bg-purple-500/15 text-slate-200 font-medium motion-safe:transition-colors cursor-pointer"
               title="Select all interested leads"
             >
               <span className="flex items-center gap-1.5">

@@ -3,11 +3,11 @@
 import { Armchair, ArrowDown, ArrowUp, ArrowUpDown, CheckCircle, Eye, MessageSquare, RefreshCw} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React from 'react';
-import { ManagerCommunicationComplaintsPagination } from './ManagerCommunicationComplaintsPagination';
+import { ManagerCommunicationComplaintsPagination } from '@/app/frontend_manager/manager_communication/communication_complaints/components/manager_communication_complaints_views/ManagerCommunicationComplaintsPagination';
 import type {
-ManagerCommunicationComplaintsComplaint,
-ManagerCommunicationComplaintsComplaintStatus,
-} from '../../types/ManagerCommunicationComplaintsTypes';
+  ManagerCommunicationComplaintsComplaint,
+  ManagerCommunicationComplaintsComplaintStatus,
+} from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
 
 export type ComplaintSortField = 'title' | 'student' | 'description' | 'status' | 'date' | 'resolvedBy';
 

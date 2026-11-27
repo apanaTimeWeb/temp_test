@@ -1,43 +1,31 @@
 'use client';
 // RESPONSIBILITY: Render the canonical group-admission feature view with incoming route context.
 // DATA FLOW: Next.js route page -> Main -> GroupPage.
-import { ManagerMembersGroupAdmissionManualModal,type GroupStudentEntry } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionManualModal';
+import { ManagerMembersGroupAdmissionBulkModal } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_dialogs/ManagerMembersGroupAdmissionBulkModal';
+import { ManagerMembersGroupAdmissionManualModal, type GroupStudentEntry } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionManualModal';
+import {
+  ManagerMembersGroupAdmissionRecentGroupsTable,
+  type GroupSortField,
+  type RecentGroupAdmission,
+} from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_tables/ManagerMembersGroupAdmissionRecentGroupsTable';
 import { MANAGER_MEMBERS_GROUP_ADMISSION_ROUTES } from '@/app/frontend_manager/manager_members/members_group_admission/config/manager_members_group_admission.url_config';
 import type { ManagerMembersGroupAdmissionGroupPageRouteProps } from '@/app/frontend_manager/manager_members/members_group_admission/types/ManagerMembersGroupAdmissionComponentTypes';
 import { sanitizeManagerGroupAdmissionCsvCell } from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionCsv';
-import { Download,FileSpreadsheet,Plus,Upload,Users2 } from 'lucide-react';
+import {
+  formatGroupAdmissionInr,
+  loadStoredGroupAdmissions,
+  persistGroupAdmissions,
+} from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionFormatAndStorage';
+import { Download, FileSpreadsheet, Plus, Upload, Users2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useMemo,useState } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { ManagerMembersGroupAdmissionBulkModal } from '../manager_members_group_admission_dialogs/ManagerMembersGroupAdmissionBulkModal';
-import {
-ManagerMembersGroupAdmissionRecentGroupsTable,
-type GroupSortField,
-type RecentGroupAdmission,
-} from '../manager_members_group_admission_tables/ManagerMembersGroupAdmissionRecentGroupsTable';
-
-const INITIAL_RECENT_GROUPS: RecentGroupAdmission[] = [
-  { batchId: 'GRP-2026-001', batchName: 'UPSC Aspirants Study Circle', date: '2026-10-25', count: 6, shift: 'Morning', status: 'Active' },
-  { batchId: 'GRP-2026-002', batchName: 'Engineering Batch Semester Prep', date: '2026-10-20', count: 4, shift: 'Evening', status: 'Processed' },
-];
 
 export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: ManagerMembersGroupAdmissionGroupPageRouteProps) {
   const tManagerUi = useTranslations('manager.manager_group_admission.ui');
 
-  const [recentGroups, setRecentGroups] = useState<RecentGroupAdmission[]>(() => {
-    if (typeof window === 'undefined') return INITIAL_RECENT_GROUPS;
-    try {
-      const stored = localStorage.getItem('manager_group_admissions');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch {
-      // storage fallback
-    }
-    return INITIAL_RECENT_GROUPS;
-  });
+  const [recentGroups, setRecentGroups] = useState<RecentGroupAdmission[]>(loadStoredGroupAdmissions);
   const [showBulkModal, setShowBulkModal] = useState(false);
   const [showManualModal, setShowManualModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -87,8 +75,8 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
 
   const downloadTemplate = () => {
     const headers = ['Name', 'Phone', 'Email', 'Plan', 'Shift'].map(sanitizeManagerGroupAdmissionCsvCell).join(',');
-    const sampleRow1 = ['Rahul Sharma', '9876543210', 'rahul@example.com', 'Pro Monthly (₹1,500/mo)', 'Morning (06:00 AM – 02:00 PM)'].map(sanitizeManagerGroupAdmissionCsvCell).join(',');
-    const sampleRow2 = ['Priya Verma', '9876543211', 'priya@example.com', 'Basic Monthly (₹1,000/mo)', 'Evening (02:00 PM – 10:00 PM)'].map(sanitizeManagerGroupAdmissionCsvCell).join(',');
+    const sampleRow1 = ['Rahul Sharma', '9876543210', 'rahul@example.com', `Pro Monthly (${formatGroupAdmissionInr(1500)}/mo)`, 'Morning (06:00 AM – 02:00 PM)'].map(sanitizeManagerGroupAdmissionCsvCell).join(',');
+    const sampleRow2 = ['Priya Verma', '9876543211', 'priya@example.com', `Basic Monthly (${formatGroupAdmissionInr(1000)}/mo)`, 'Evening (02:00 PM – 10:00 PM)'].map(sanitizeManagerGroupAdmissionCsvCell).join(',');
     const csv = `${headers}\n${sampleRow1}\n${sampleRow2}\n`;
     const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
     const anchor = document.createElement('a');
@@ -96,21 +84,16 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
     anchor.download = 'student-group-admission-template.csv';
     anchor.click();
     URL.revokeObjectURL(url);
-    toast.success('Sample CSV template downloaded successfully.');
+    toast.success('Sample CSV template downloaded successfully.', { id: 'group-csv-template' });
   };
 
   const handleBulkConfirmBatch = (newBatch: RecentGroupAdmission) => {
     setRecentGroups((prev) => {
       const updated = [newBatch, ...prev];
-      try {
-        localStorage.setItem('manager_group_admissions', JSON.stringify(updated));
-        window.dispatchEvent(new CustomEvent('manager_group_batch_created', { detail: newBatch }));
-      } catch {
-        // storage fallback
-      }
+      persistGroupAdmissions(updated, newBatch);
       return updated;
     });
-    toast.success(`Bulk admission successful! Enrolled ${newBatch.count} members in batch ${newBatch.batchId}.`);
+    toast.success(`Bulk admission successful! Enrolled ${newBatch.count} members in batch ${newBatch.batchId}.`, { id: 'group-bulk-confirm' });
   };
 
   const handleManualConfirm = (confirmedBatchName: string, students: GroupStudentEntry[]) => {
@@ -124,16 +107,11 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
     };
     setRecentGroups((prev) => {
       const updated = [newBatch, ...prev];
-      try {
-        localStorage.setItem('manager_group_admissions', JSON.stringify(updated));
-        window.dispatchEvent(new CustomEvent('manager_group_batch_created', { detail: newBatch }));
-      } catch {
-        // storage fallback
-      }
+      persistGroupAdmissions(updated, newBatch);
       return updated;
     });
     setShowManualModal(false);
-    toast.success(`Group admission registered successfully! Enrolled ${students.length} members in batch ${newBatch.batchId}.`);
+    toast.success(`Group admission registered successfully! Enrolled ${students.length} members in batch ${newBatch.batchId}.`, { id: 'group-manual-confirm' });
   };
 
   return (

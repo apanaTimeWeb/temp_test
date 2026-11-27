@@ -5,16 +5,21 @@ import { useTranslations } from 'next-intl';
 import React, { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
+import '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/components/manager_communication_whatsapp_templates_styles/ManagerCommunicationWhatsappTemplatesManager_whatsapp_templates.css';
+import { DEMO_PREVIEW_AMOUNT } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/config/manager_communication_whatsapp_templates.demo_data';
+import {
+  TEMPLATE_CONFIGS,
+  VARIABLE_CHIP_CONFIGS,
+} from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/components/manager_communication_whatsapp_templates_views/ManagerCommunicationWhatsappTemplatesConfig';
+import { ManagerCommunicationWhatsappTemplatesSidebar } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/components/manager_communication_whatsapp_templates_views/ManagerCommunicationWhatsappTemplatesSidebar';
+import { ManagerCommunicationWhatsappTemplatesTestModal } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/components/manager_communication_whatsapp_templates_views/ManagerCommunicationWhatsappTemplatesTestModal';
+import { ManagerCommunicationWhatsappTemplatesVariablePreview } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/components/manager_communication_whatsapp_templates_views/ManagerCommunicationWhatsappTemplatesVariablePreview';
 import { MANAGER_COMMUNICATION_TEMPLATE_VARIABLES } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/constants/ManagerCommunicationWhatsappTemplatesConstants';
 import {
   MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_TEMPLATES,
   type Template,
 } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/hooks/ManagerCommunicationWhatsappTemplatesDemoRepository';
 import type { ManagerCommunicationWhatsappTemplatesRouteQueryProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/types/ManagerCommunicationWhatsappTemplatesComponentTypes';
-import { ManagerCommunicationWhatsappTemplatesVariablePreview } from './ManagerCommunicationWhatsappTemplatesVariablePreview';
-import { ManagerCommunicationWhatsappTemplatesSidebar } from './ManagerCommunicationWhatsappTemplatesSidebar';
-import { VARIABLE_CHIP_CONFIGS, TEMPLATE_CONFIGS } from './ManagerCommunicationWhatsappTemplatesConfig';
-import { ManagerCommunicationWhatsappTemplatesTestModal } from './ManagerCommunicationWhatsappTemplatesTestModal';
 
 const VARS = MANAGER_COMMUNICATION_TEMPLATE_VARIABLES;
 const INIT = MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_TEMPLATES;
@@ -70,7 +75,7 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
   const [toastFeedback, setToastFeedback] = useState<string | null>(null);
 
   const handleSave = () => {
-    toast.success(`Template "${templateLabel(active)}" saved successfully!`);
+    toast.success(`Template "${templateLabel(active)}" saved successfully!`, { id: 'manager-wa-tpl-save' });
     setToastFeedback(`Template "${templateLabel(active)}" saved successfully!`);
     setTimeout(() => setToastFeedback(null), 4000);
   };
@@ -78,17 +83,17 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
   const handleTest = () => {
     const clean = testPhone.replace(/\D/g, '');
     if (clean.length !== 10 || !/^[6-9]\d{9}$/.test(clean)) {
-      toast.error('Please enter a valid 10-digit mobile number.');
+      toast.error('Please enter a valid 10-digit mobile number.', { id: 'manager-wa-tpl-test-err' });
       return;
     }
-    toast.success(`Test WhatsApp template message dispatched to +91 ${clean}!`);
+    toast.success(`Test WhatsApp template message dispatched to +91 ${clean}!`, { id: 'manager-wa-tpl-test-ok' });
     setShowTest(false);
     setTestPhone('');
   };
 
   const preview = active.body
     .replace(/{(?:name|student_name|student)}/g, 'Rahul Sharma')
-    .replace(/{(?:amount|fee|fees)}/g, '₹1,000')
+    .replace(/{(?:amount|fee|fees)}/g, DEMO_PREVIEW_AMOUNT)
     .replace(/{(?:duedate|due_date|date)}/g, '15-Apr-2026')
     .replace(/{(?:planname|plan)}/g, 'Monthly Plan')
     .replace(/{(?:libraryname|branch)}/g, 'Library OS')
@@ -213,7 +218,7 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
               <div className="flex flex-wrap gap-2">
                 {VARS.map((v) => {
                   const style = VARIABLE_CHIP_CONFIGS[v] || {
-                    bg: 'bg-primary/10', text: 'text-primary', border: 'border-primary/25', hover: 'hover:bg-primary/20 hover:border-primary/40', title: v,
+                    bg: 'bg-primary-subtle', text: 'text-primary', border: 'border-border', hover: 'hover:bg-surface-hover hover:border-primary', title: v,
                   };
                   return (
                     <button

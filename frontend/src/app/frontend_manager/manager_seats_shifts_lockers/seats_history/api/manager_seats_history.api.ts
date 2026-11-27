@@ -25,11 +25,11 @@ function statusLabel(value: unknown): string {
 }
 
 import {
-MANAGER_SEATS_SHIFTS_LOCKERS_ALLOCATIONS_FIXTURE,
-MANAGER_SEATS_SHIFTS_LOCKERS_HISTORY_FIXTURE,
-MANAGER_SEATS_SHIFTS_LOCKERS_LOCKERS_FIXTURE,
-MANAGER_SEATS_SHIFTS_LOCKERS_SEAT_MATRIX_FIXTURE,
-} from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/mocks/manager_seats_history_fixtures/ManagerSeatsHistoryApiFixtures';
+  MANAGER_SEATS_HISTORY_DEMO_ALLOCATIONS,
+  MANAGER_SEATS_HISTORY_DEMO_HISTORY,
+  MANAGER_SEATS_HISTORY_DEMO_LOCKERS,
+  MANAGER_SEATS_HISTORY_DEMO_SEAT_MATRIX,
+} from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/config/manager_seats_history.demo_data';
 
 async function fetchValidatedRecords(endpoint: string): Promise<Record<string, unknown>[]> {
   try {
@@ -46,16 +46,16 @@ async function fetchValidatedRecords(endpoint: string): Promise<Record<string, u
     return recordArraySchema.parse(response.data);
   } catch (error) {
     if (endpoint === MANAGER_SEATS_HISTORY_API.SEAT_MATRIX) {
-      return MANAGER_SEATS_SHIFTS_LOCKERS_SEAT_MATRIX_FIXTURE as unknown as Record<string, unknown>[];
+      return MANAGER_SEATS_HISTORY_DEMO_SEAT_MATRIX as unknown as Record<string, unknown>[];
     }
     if (endpoint === MANAGER_SEATS_HISTORY_API.LOCKERS) {
-      return MANAGER_SEATS_SHIFTS_LOCKERS_LOCKERS_FIXTURE as unknown as Record<string, unknown>[];
+      return MANAGER_SEATS_HISTORY_DEMO_LOCKERS as unknown as Record<string, unknown>[];
     }
     if (endpoint === MANAGER_SEATS_HISTORY_API.ALLOCATIONS) {
-      return MANAGER_SEATS_SHIFTS_LOCKERS_ALLOCATIONS_FIXTURE as unknown as Record<string, unknown>[];
+      return MANAGER_SEATS_HISTORY_DEMO_ALLOCATIONS as unknown as Record<string, unknown>[];
     }
     if (endpoint === MANAGER_SEATS_HISTORY_API.HISTORY) {
-      return MANAGER_SEATS_SHIFTS_LOCKERS_HISTORY_FIXTURE as unknown as Record<string, unknown>[];
+      return MANAGER_SEATS_HISTORY_DEMO_HISTORY as unknown as Record<string, unknown>[];
     }
     throw error;
   }

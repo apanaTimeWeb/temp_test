@@ -1,8 +1,9 @@
 'use client';
 // RESPONSIBILITY: Modal dialog for reporting lost locker keys and imposing fine/penalties, directly resolving situations where students leave seat but keep or lose the locker key.
-import { AlertTriangle,KeyRound,X } from 'lucide-react';
-import React,{ useState } from 'react';
-import type { ManagerLockersManagementSampleLocker as Locker } from '../../mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
+import type { ManagerLockersManagementSampleLocker as Locker } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/config/manager_lockers_management.demo_data';
+import { formatManagerLockerInr, getManagerLockerCurrencySymbol } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementCurrency';
+import { AlertTriangle, KeyRound, X } from 'lucide-react';
+import React, { useState } from 'react';
 
 export interface ManagerLockersManagementLostKeyModalProps {
   isOpen: boolean;
@@ -96,7 +97,7 @@ export function ManagerLockersManagementLostKeyModal({
           </div>
           <div>
             <span className="text-[10px] text-secondary uppercase font-semibold block">Escrow Deposit</span>
-            <span className="font-bold text-emerald-400">₹{depositHeld}.00</span>
+            <span className="font-bold text-emerald-400">{formatManagerLockerInr(depositHeld, true)}</span>
           </div>
         </div>
 
@@ -104,10 +105,12 @@ export function ManagerLockersManagementLostKeyModal({
           {/* Fine Penalty Input */}
           <div className="space-y-1.5">
             <label htmlFor="lost-key-fine-input" className="text-xs font-bold text-secondary uppercase tracking-wider block">
-              Lost Key Fine Amount (₹)
+              Lost Key Fine Amount ({getManagerLockerCurrencySymbol()})
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-secondary">₹</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-secondary">
+                {getManagerLockerCurrencySymbol()}
+              </span>
               <input maxLength={30}
                 id="lost-key-fine-input"
                 data-testid="manager-lost-key-fine-input"
@@ -121,7 +124,7 @@ export function ManagerLockersManagementLostKeyModal({
               />
             </div>
             <p className="text-[11px] text-secondary">
-              Standard replacement cylinder and duplicate master key cost is ₹150.
+              Standard replacement cylinder and duplicate master key cost is {formatManagerLockerInr(150)}.
             </p>
           </div>
 
@@ -140,10 +143,10 @@ export function ManagerLockersManagementLostKeyModal({
               />
               <div>
                 <span className="font-bold text-primary block">
-                  Deduct from Held Security Deposit (₹{depositHeld} held)
+                  Deduct from Held Security Deposit ({formatManagerLockerInr(depositHeld)} held)
                 </span>
                 <span className="text-[11px] text-secondary">
-                  ₹{fineAmount} penalty deducted directly. Net refund payable to student: <strong>₹{netRefund}.00</strong>.
+                  {formatManagerLockerInr(fineAmount)} penalty deducted directly. Net refund payable to student: <strong>{formatManagerLockerInr(netRefund, true)}</strong>.
                 </span>
               </div>
             </label>
@@ -158,10 +161,10 @@ export function ManagerLockersManagementLostKeyModal({
               />
               <div>
                 <span className="font-bold text-primary block">
-                  Add Lost Key Fine to Student's Pending Dues
+                  Add Lost Key Fine to Student&apos;s Pending Dues
                 </span>
                 <span className="text-[11px] text-secondary">
-                  Charge ₹{fineAmount} penalty directly to student profile. Full deposit remains unaffected.
+                  Charge {formatManagerLockerInr(fineAmount)} penalty directly to student profile. Full deposit remains unaffected.
                 </span>
               </div>
             </label>

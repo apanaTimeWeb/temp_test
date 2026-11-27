@@ -104,7 +104,7 @@ export function ManagerDashboardOverviewClient() {
   if (!data) return <ManagerDashboardOverviewErrorState message={tManagerUi('dashboard_data_unavailable')} />;
 
   return (
-    <div className="mgr-page space-y-6">
+    <div className="mgr-page mgr-dashboard-theme space-y-6">
       {/* Top Header Card with Meta Badges & Global Time Range Filter */}
       <ManagerDashboardOverviewHeaderBar
         currentDateStr={currentDateStr}

@@ -103,7 +103,7 @@ export default function ManagerFinanceRenewalsHeader({
             type="button"
             onClick={onWhatsAppAll}
             disabled={!hasVisibleRows}
-            className="p-2 rounded-xl border border-border bg-card hover:bg-emerald-500/10 text-[#25D366] transition-colors cursor-pointer shadow-xs disabled:opacity-40 disabled:cursor-not-allowed"
+            className="p-2 rounded-xl border border-border bg-card hover:bg-emerald-500/10 fin-renewals-wa-icon motion-safe:transition-colors cursor-pointer shadow-xs disabled:opacity-40 disabled:cursor-not-allowed"
             title="Send WhatsApp to All (WhatsApp All)"
             aria-label="Send WhatsApp to All"
           >

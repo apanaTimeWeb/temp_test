@@ -107,24 +107,24 @@ export function ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog({
               type="button"
               onClick={() => {
                 void navigator.clipboard?.writeText(log.message);
-                toast.success('Message content copied to clipboard');
+                toast.success('Message content copied to clipboard', { id: 'manager-wa-logs-copy-msg' });
               }}
-              className="inline-flex items-center gap-1 text-[11px] font-semibold text-secondary hover:text-primary transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 text-[11px] font-semibold text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer"
               title="Copy message to clipboard"
             >
               <Copy size={12} />
               <span>Copy</span>
             </button>
           </div>
-          <div className="rounded-xl border border-border bg-[#0b141a] p-3.5 sm:p-4">
-            <div className="max-w-md ml-auto bg-[#005c4b] text-slate-100 p-3.5 rounded-2xl rounded-tr-xs shadow-md space-y-1.5 border border-[#005c4b]/50">
+          <div className="rounded-xl border border-border mwl-wa-canvas p-3.5 sm:p-4">
+            <div className="max-w-md ml-auto mwl-wa-bubble p-3.5 rounded-2xl rounded-tr-xs shadow-md space-y-1.5 border">
               <p className="text-xs sm:text-sm whitespace-pre-wrap break-words leading-relaxed select-text font-normal">
                 {log.message}
               </p>
-              <div className="flex items-center justify-end gap-1 text-[10px] text-emerald-200/80 pt-0.5">
+              <div className="flex items-center justify-end gap-1 text-[10px] mwl-wa-meta pt-0.5">
                 <span>{log.dateTime.slice(-8)}</span>
                 {log.status === 'Delivered' ? (
-                  <CheckCheck size={14} className="text-[#53bdeb]" />
+                  <CheckCheck size={14} className="mwl-wa-read-icon" />
                 ) : log.status === 'Sent' ? (
                   <Check size={14} className="text-slate-300" />
                 ) : (

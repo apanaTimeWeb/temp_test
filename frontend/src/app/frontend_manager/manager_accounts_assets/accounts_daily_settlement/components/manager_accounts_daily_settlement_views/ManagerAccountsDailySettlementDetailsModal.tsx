@@ -167,7 +167,7 @@ export function ManagerAccountsDailySettlementDetailsModal({
         </div>
 
         {/* Vault Closing Net */}
-        <div className="p-3.5 rounded-xl bg-primary-subtle/50 border border-primary/20 flex items-center justify-between">
+        <div className="p-3.5 rounded-xl bg-primary-subtle border border-border flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-primary block">Final Shift Closing Balance</span>
             <span className="text-[11px] text-secondary">Opening + Cash + UPI - Expenses</span>

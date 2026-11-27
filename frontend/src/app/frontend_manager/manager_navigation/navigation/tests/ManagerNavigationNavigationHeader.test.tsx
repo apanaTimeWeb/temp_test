@@ -77,7 +77,9 @@ describe('ManagerNavigationNavigationHeader notification dropdown contract', () 
     fireEvent.click(markAllBtn);
 
     expect(screen.getByText('All caught up')).toBeTruthy();
-    expect(toastMock.success).toHaveBeenCalledWith('All notifications marked as read');
+    expect(toastMock.success).toHaveBeenCalledWith('All notifications marked as read', {
+      id: 'manager-header-mark-all-read',
+    });
   });
 
   it('marks single notification as read when clicked', () => {

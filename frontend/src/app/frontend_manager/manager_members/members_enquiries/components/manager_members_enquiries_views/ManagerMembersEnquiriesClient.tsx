@@ -231,7 +231,7 @@ export function ManagerMembersEnquiriesClient() {
           }}
           onMarkLost={(id, reason, notes) => {
             markEnquiryAsLost(id, reason, notes);
-            toast.success('Enquiry marked as Lost');
+            toast.success('Enquiry marked as Lost', { id: 'enquiry-mark-lost' });
           }}
         />
       )}

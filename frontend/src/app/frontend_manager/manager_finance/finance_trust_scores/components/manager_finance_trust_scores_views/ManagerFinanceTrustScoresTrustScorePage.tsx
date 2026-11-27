@@ -1,12 +1,13 @@
 'use client';
+import ManagerFinanceTrustScoresKpiGrid from '@/app/frontend_manager/manager_finance/finance_trust_scores/components/manager_finance_trust_scores_views/ManagerFinanceTrustScoresKpiGrid';
+import { ManagerFinanceTrustScoresTable, type TrustSortField } from '@/app/frontend_manager/manager_finance/finance_trust_scores/components/manager_finance_trust_scores_views/ManagerFinanceTrustScoresTable';
 import { MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_trust_scores/hooks/ManagerFinanceTrustScoresDemoRepository';
 import { useManagerTrustScoresUrlFilters } from '@/app/frontend_manager/manager_finance/finance_trust_scores/hooks/useManagerFinanceTrustScoresUrlFilters';
 import type { ManagerFinanceTrustScoresRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_trust_scores/types/ManagerFinanceTrustScoresComponentTypes';
-import { sanitizeManagerTrustScoresCsvCell } from '@/app/frontend_manager/manager_finance/finance_trust_scores/utils/ManagerFinanceTrustScoresCsv';
-import { Download,Printer,Search,ShieldCheck,ShieldX,Users,X } from 'lucide-react';
+import { exportTrustScoresCsv } from '@/app/frontend_manager/manager_finance/finance_trust_scores/utils/ManagerFinanceTrustScoresHelpers';
+import { Download, Printer, Search, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useMemo,useState } from 'react';
-import { ManagerFinanceTrustScoresTable,type TrustSortField } from './ManagerFinanceTrustScoresTable';
+import { useMemo, useState } from 'react';
 
 // RESPONSIBILITY: Entry page for the manager_trust_scores module.
 // DATA FLOW: Next.js Router -> Page -> Components
@@ -80,33 +81,6 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
     ? Math.round(MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS.reduce((a, s) => a + s.trustScore, 0) / MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS.length)
     : 0;
 
-  const handleExportCsv = () => {
-    const headers = ['Rank', 'Student Name', 'Smart ID', 'Shift', 'Trust Score', 'Total Promises', 'Times Changed', 'Fulfilled Count', 'Reliability Badge'];
-    const csvLines = [headers.join(',')];
-    for (const s of sortedRows) {
-      csvLines.push([
-        sanitizeManagerTrustScoresCsvCell(String(s.rank)),
-        sanitizeManagerTrustScoresCsvCell(s.studentName),
-        sanitizeManagerTrustScoresCsvCell(s.smartId),
-        sanitizeManagerTrustScoresCsvCell(shiftLabels[s.shift] ?? s.shift),
-        sanitizeManagerTrustScoresCsvCell(String(s.trustScore)),
-        sanitizeManagerTrustScoresCsvCell(String(s.totalPromises)),
-        sanitizeManagerTrustScoresCsvCell(String(s.timesChanged)),
-        sanitizeManagerTrustScoresCsvCell(String(s.fulfilledCount)),
-        sanitizeManagerTrustScoresCsvCell(s.badge),
-      ].join(','));
-    }
-    const blob = new Blob([csvLines.join('\n')], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `trust_scores_${Date.now()}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
   const handlePrint = () => {
     if (typeof window !== 'undefined') window.print();
   };
@@ -123,7 +97,7 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
           <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
             <h1 className="fin-page-title">{tManagerUi('trust_scores')}</h1>
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-emerald-500 motion-safe:animate-pulse" />
               Active Reliability Desk
             </span>
           </div>
@@ -132,8 +106,8 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
         <div className="flex items-center gap-2 flex-wrap">
           <button
             type="button"
-            onClick={handleExportCsv}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-primary outline-none"
+            onClick={() => exportTrustScoresCsv(sortedRows, shiftLabels)}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer motion-safe:transition-all focus-visible:ring-2 focus-visible:ring-primary outline-none"
             title="Export trust rankings to CSV spreadsheet"
           >
             <Download size={13} className="text-secondary" />
@@ -142,7 +116,7 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
           <button
             type="button"
             onClick={handlePrint}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-primary outline-none"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer motion-safe:transition-all focus-visible:ring-2 focus-visible:ring-primary outline-none"
             title="Print or Save as PDF"
           >
             <Printer size={13} className="text-secondary" />
@@ -165,88 +139,20 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
         </button>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
-        <div className="fin-kpi-card group relative overflow-hidden rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 p-4 sm:p-5 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex flex-col justify-between">
-          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" />
-          </svg>
-          <div className="relative z-10">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">{tManagerUi('scored_students')}</span>
-              <div className="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 flex items-center justify-center transition-transform group-hover:scale-110 shadow-xs">
-                <Users size={20} />
-              </div>
-            </div>
-            <div className="mt-3">
-              <div className="flex items-center justify-between gap-2">
-                <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white font-sans">
-                  {MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS.length}
-                </div>
-                <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
-                  Total Ranked
-                </span>
-              </div>
-              <p className="mt-1 text-xs text-slate-400">Student profiles with reliability tracking</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="fin-kpi-card fin-kpi-card--danger group relative overflow-hidden rounded-2xl border border-rose-500/40 bg-gradient-to-br from-rose-950/80 via-[#260e19] to-rose-900/60 p-4 sm:p-5 shadow-lg shadow-rose-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-rose-400/60 hover:shadow-xl flex flex-col justify-between">
-          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#f87171" strokeWidth="2.5" strokeLinecap="round" />
-          </svg>
-          <div className="relative z-10">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">{tManagerUi('low_trust_less_than_40')}</span>
-              <div className="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/40 flex items-center justify-center transition-transform group-hover:scale-110 shadow-xs">
-                <ShieldX size={20} />
-              </div>
-            </div>
-            <div className="mt-3">
-              <div className="flex items-center justify-between gap-2">
-                <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-rose-400 font-sans">
-                  {lowTrust}
-                </div>
-                <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30">
-                  High Risk
-                </span>
-              </div>
-              <p className="mt-1 text-xs text-slate-400">Low reliability profiles · Requires advance deposit</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="fin-kpi-card group relative overflow-hidden rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 p-4 sm:p-5 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex flex-col justify-between">
-          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-            <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
-          </svg>
-          <div className="relative z-10">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">{tManagerUi('average_trust_score')}</span>
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center transition-transform group-hover:scale-110 shadow-xs">
-                <ShieldCheck size={20} />
-              </div>
-            </div>
-            <div className="mt-3">
-              <div className="flex items-center justify-between gap-2">
-                <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-emerald-400 font-sans">
-                  {avg}<span className="text-sm font-normal text-emerald-300/60">/100</span>
-                </div>
-                <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                  Campus Standing
-                </span>
-              </div>
-              <p className="mt-1 text-xs text-slate-400">Campus-wide reliability benchmark</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ManagerFinanceTrustScoresKpiGrid
+        scoredCount={MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS.length}
+        lowTrustCount={lowTrust}
+        avgTrustScore={avg}
+        scoredLabel={tManagerUi('scored_students')}
+        lowTrustLabel={tManagerUi('low_trust_less_than_40')}
+        avgLabel={tManagerUi('average_trust_score')}
+      />
 
       <div className="flex flex-wrap items-center gap-2.5 p-3 rounded-xl bg-surface border border-border">
         <div className="relative w-full sm:w-72">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
-          <input maxLength={30}
+          <input
+            maxLength={30}
             id="trust-scores-search-input"
             name="searchQuery"
             type="search"
@@ -266,7 +172,7 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
                 setSearchQuery('');
                 setPage(0);
               }}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-primary p-0.5 rounded-full hover:bg-surface-hover transition-colors"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-primary p-0.5 rounded-full hover:bg-surface-hover motion-safe:transition-colors"
               title="Clear search"
               aria-label="Clear search"
             >
@@ -317,7 +223,7 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
               setUrlFilter('shift', 'all');
               setPage(0);
             }}
-            className="w-full sm:w-auto justify-center inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer focus-visible:ring-2 focus-visible:ring-primary shadow-xs outline-none transition-colors"
+            className="w-full sm:w-auto justify-center inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer focus-visible:ring-2 focus-visible:ring-primary shadow-xs outline-none motion-safe:transition-colors"
           >
             <X size={13} /> Reset Filters
           </button>

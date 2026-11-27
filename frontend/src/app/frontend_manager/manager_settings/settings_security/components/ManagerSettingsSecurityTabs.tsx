@@ -2,7 +2,7 @@
 
 import { History,KeyRound,MonitorSmartphone,Shield } from 'lucide-react';
 import React from 'react';
-import type { ManagerSecurityTab } from '../types/ManagerSettingsSecurityTypes';
+import type { ManagerSecurityTab } from '@/app/frontend_manager/manager_settings/settings_security/types/ManagerSettingsSecurityTypes';
 
 interface ManagerSettingsSecurityTabsProps {
   activeTab: ManagerSecurityTab;
@@ -51,7 +51,7 @@ export function ManagerSettingsSecurityTabs({
   ];
 
   return (
-    <div className="border-b border-white/10 bg-[#0a0c20]/60 px-3 sm:px-5">
+    <div className="mgr-sec-tabs-surface border-b px-3 sm:px-5">
       <nav className="flex space-x-1 sm:space-x-2 overflow-x-auto no-scrollbar" aria-label="Security Tabs">
         {tabs.map((tab) => {
           const Icon = tab.icon;

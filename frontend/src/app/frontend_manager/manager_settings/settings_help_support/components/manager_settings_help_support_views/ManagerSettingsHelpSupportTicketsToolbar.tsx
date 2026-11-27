@@ -40,7 +40,7 @@ export function ManagerSettingsHelpSupportTicketsToolbar({
     (priorityFilter !== 'all' ? 1 : 0);
 
   return (
-    <div className="p-4 border-b border-border bg-card/60 flex flex-col gap-3.5">
+    <div className="p-4 border-b border-border bg-card flex flex-col gap-3.5">
       {/* Top Header Row: Title, Counter & Action Buttons */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
@@ -56,7 +56,7 @@ export function ManagerSettingsHelpSupportTicketsToolbar({
           </span>
 
           {hasActiveFilters && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-primary/10 text-primary border border-primary/20">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-primary-subtle text-primary border border-border">
               <Filter size={10} />
               <span>{activeFiltersCount} Active</span>
             </span>
@@ -69,7 +69,7 @@ export function ManagerSettingsHelpSupportTicketsToolbar({
             <button
               type="button"
               onClick={onResetFilters}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-danger hover:border-danger/30 hover:bg-danger-bg transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-danger hover:border-danger hover:bg-danger-bg motion-safe:transition-colors cursor-pointer"
               title="Reset all filters"
             >
               <RotateCcw size={12} />
@@ -126,9 +126,9 @@ export function ManagerSettingsHelpSupportTicketsToolbar({
               aria-label="Filter by Category"
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className={`mgr-select text-xs !py-2 px-3 h-9 w-full md:min-w-[135px] rounded-lg transition-all cursor-pointer ${
+              className={`mgr-select text-xs !py-2 px-3 h-9 w-full md:min-w-[135px] rounded-lg motion-safe:transition-all cursor-pointer ${
                 categoryFilter !== 'all'
-                  ? '!border-primary !text-primary bg-primary/10 font-semibold ring-1 ring-primary/20'
+                  ? '!border-primary !text-primary bg-primary-subtle font-semibold ring-1 ring-border'
                   : 'text-secondary bg-surface'
               }`}
             >
@@ -146,9 +146,9 @@ export function ManagerSettingsHelpSupportTicketsToolbar({
               aria-label="Filter by Status"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className={`mgr-select text-xs !py-2 px-3 h-9 w-full md:min-w-[120px] rounded-lg transition-all cursor-pointer ${
+              className={`mgr-select text-xs !py-2 px-3 h-9 w-full md:min-w-[120px] rounded-lg motion-safe:transition-all cursor-pointer ${
                 statusFilter !== 'all'
-                  ? '!border-primary !text-primary bg-primary/10 font-semibold ring-1 ring-primary/20'
+                  ? '!border-primary !text-primary bg-primary-subtle font-semibold ring-1 ring-border'
                   : 'text-secondary bg-surface'
               }`}
             >
@@ -166,9 +166,9 @@ export function ManagerSettingsHelpSupportTicketsToolbar({
               aria-label="Filter by Priority"
               value={priorityFilter}
               onChange={(e) => setPriorityFilter(e.target.value)}
-              className={`mgr-select text-xs !py-2 px-3 h-9 w-full md:min-w-[125px] rounded-lg transition-all cursor-pointer ${
+              className={`mgr-select text-xs !py-2 px-3 h-9 w-full md:min-w-[125px] rounded-lg motion-safe:transition-all cursor-pointer ${
                 priorityFilter !== 'all'
-                  ? '!border-primary !text-primary bg-primary/10 font-semibold ring-1 ring-primary/20'
+                  ? '!border-primary !text-primary bg-primary-subtle font-semibold ring-1 ring-border'
                   : 'text-secondary bg-surface'
               }`}
             >

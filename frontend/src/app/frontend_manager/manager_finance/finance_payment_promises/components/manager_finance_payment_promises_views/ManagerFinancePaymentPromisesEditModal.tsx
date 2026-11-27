@@ -1,9 +1,10 @@
 'use client';
 
 import { useManagerPaymentPromisesDialogFocus } from '@/app/frontend_manager/manager_finance/finance_payment_promises/hooks/ManagerFinancePaymentPromisesDialogFocus';
-import type { ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
 import { managerFinancePaymentPromiseEditSchema } from '@/app/frontend_manager/manager_finance/finance_payment_promises/schemas/ManagerFinancePaymentPromisesSchema';
-import { AlertCircle,Calendar,CheckCircle,Clock,Edit3,Eye,IndianRupee,X } from 'lucide-react';
+import type { ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/types/ManagerFinancePaymentPromisesTypes';
+import { formatPromiseInr, getPromiseMajorUnits } from '@/app/frontend_manager/manager_finance/finance_payment_promises/utils/ManagerFinancePaymentPromisesHelpers';
+import { AlertCircle, Calendar, CheckCircle, Clock, Edit3, Eye, IndianRupee, X } from 'lucide-react';
 import React,{ useEffect,useRef,useState } from 'react';
 
 export interface ManagerFinancePaymentPromisesEditModalProps {
@@ -136,7 +137,7 @@ export default function ManagerFinancePaymentPromisesEditModal({
                 <span className="text-sm font-bold text-primary mt-0.5 block">
                   {formatCurrency
                     ? formatCurrency(promise.promisedAmount)
-                    : `₹${Math.round(promise.promisedAmount / 100).toLocaleString('en-IN')}`}
+                    : formatPromiseInr(getPromiseMajorUnits(promise.promisedAmount))}
                 </span>
               </div>
               <div className="p-3 bg-surface rounded-xl border border-border">

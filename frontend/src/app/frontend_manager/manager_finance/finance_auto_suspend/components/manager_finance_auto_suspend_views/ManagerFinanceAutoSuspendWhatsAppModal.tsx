@@ -42,7 +42,7 @@ export default function ManagerFinanceAutoSuspendWhatsAppModal({
   const handleCopy = () => {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(message);
-      toast.success('Reminder message copied to clipboard!');
+      toast.success('Reminder message copied to clipboard!', { id: 'autosuspend-wa-copy-success' });
     }
   };
 
@@ -59,7 +59,7 @@ export default function ManagerFinanceAutoSuspendWhatsAppModal({
     if (popup) popup.opener = null;
 
     onSentSuccess(student.id);
-    toast.success(`WhatsApp reminder opened for ${student.studentName} (+91 ${clean})`);
+    toast.success(`WhatsApp reminder opened for ${student.studentName} (+91 ${clean})`, { id: 'autosuspend-wa-send-success' });
     onClose();
   };
 
@@ -68,7 +68,7 @@ export default function ManagerFinanceAutoSuspendWhatsAppModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="whatsapp-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs motion-safe:animate-in fade-in"
       onClick={onClose}
     >
       <div

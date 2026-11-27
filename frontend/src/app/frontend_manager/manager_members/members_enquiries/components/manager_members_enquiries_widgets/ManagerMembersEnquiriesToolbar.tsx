@@ -34,14 +34,14 @@ export function ManagerMembersEnquiriesToolbar({
   const tManagerUi = useTranslations('manager.manager_enquiries.ui');
 
   return (
-    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3.5 p-3.5 sm:p-4 rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 backdrop-blur-md shadow-lg shadow-black/30 w-full max-w-full min-w-0">
+    <div className="menq-surface-card flex flex-col md:flex-row md:items-center justify-between gap-3.5 p-3.5 sm:p-4 rounded-2xl border backdrop-blur-md shadow-lg shadow-black/30 w-full max-w-full min-w-0">
       <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 flex-1 min-w-0 w-full">
         {/* Search Input */}
-        <div className="relative flex-1 min-w-0 w-full sm:min-w-[200px]">
+        <div className="relative flex-1 min-w-0 w-full">
           <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none z-10" />
           <input maxLength={100}
             type="text"
-            className="w-full !pl-10 pr-8 py-2 bg-[#060818] border border-indigo-500/25 rounded-xl text-sm text-slate-100 placeholder:text-slate-400 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/30 transition-all"
+            className="menq-dark-input w-full !pl-10 pr-8 py-2 border rounded-xl text-sm text-slate-100 placeholder:text-slate-400 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/30 motion-safe:transition-all"
             style={{ paddingLeft: '2.5rem' }}
             placeholder={tManagerUi('search_by_name_or_phone')}
             aria-label={tManagerUi('search_by_name_or_phone')}
@@ -52,7 +52,7 @@ export function ManagerMembersEnquiriesToolbar({
             <button
               type="button"
               onClick={() => setSearch('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-400 p-0.5 rounded transition-colors cursor-pointer"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-400 p-0.5 rounded motion-safe:transition-colors cursor-pointer"
               title="Clear search"
             >
               <X size={14} />
@@ -65,7 +65,7 @@ export function ManagerMembersEnquiriesToolbar({
           <div className="flex items-center gap-1.5 flex-1 sm:flex-initial">
             <Filter size={14} className="text-indigo-400 shrink-0" />
             <select
-              className="w-full sm:w-auto min-h-10 py-1.5 px-3 bg-[#060818] border border-indigo-500/25 rounded-xl text-xs font-semibold text-slate-200 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/30 transition-all cursor-pointer"
+              className="menq-dark-select w-full sm:w-auto min-h-10 py-1.5 px-3 border rounded-xl text-xs font-semibold text-slate-200 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/30 motion-safe:transition-all cursor-pointer"
               aria-label={tManagerUi('status')}
               value={statusFilter}
               onChange={(event) => {
@@ -78,9 +78,9 @@ export function ManagerMembersEnquiriesToolbar({
                 }
               }}
             >
-              <option value="All" className="bg-[#0b0c20] text-slate-200">{tManagerUi('all_statuses')}</option>
+              <option value="All" className="menq-dark-option text-slate-200">{tManagerUi('all_statuses')}</option>
               {MANAGER_CRM_STATUS_OPTIONS.map((status) => (
-                <option key={status} value={status} className="bg-[#0b0c20] text-slate-200">
+                <option key={status} value={status} className="menq-dark-option text-slate-200">
                   {statusLabels[status]}
                 </option>
               ))}

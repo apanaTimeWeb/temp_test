@@ -125,8 +125,8 @@ export function ManagerMembersIdCardGeneratorStudentIdCardBack({
                 </span>
               </div>
               <ol className="space-y-0.5 text-[6.5px] text-slate-300 leading-snug pl-3 list-decimal font-medium">
-                {rules.slice(0, 5).map((rule, idx) => (
-                  <li key={idx} className="marker:text-sky-400 marker:font-bold">
+                {rules.slice(0, 5).map((rule) => (
+                  <li key={rule} className="marker:text-sky-400 marker:font-bold">
                     {rule}
                   </li>
                 ))}

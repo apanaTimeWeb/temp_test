@@ -1,24 +1,24 @@
 'use client';
 
-import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { ManagerSettingsSecurityTwoFactorSetup } from '@/app/frontend_manager/manager_settings/settings_security/components/ManagerSettingsSecurityTwoFactorSetup';
+import { INITIAL_BACKUP_CODES } from '@/app/frontend_manager/manager_settings/settings_security/constants/ManagerSettingsSecurityConstants';
+import type { ManagerTwoFactorConfig } from '@/app/frontend_manager/manager_settings/settings_security/types/ManagerSettingsSecurityTypes';
 import {
-generateQrMatrix,
-generateQrSvgPath,
-} from '@/app/frontend_manager/manager_settings/settings_branch_info/utils/ManagerSettingsBranchInfoWifiQr';
+  generateSecurityQrMatrix,
+  generateSecurityQrSvgPath,
+} from '@/app/frontend_manager/manager_settings/settings_security/utils/ManagerSettingsSecurityQr';
 import {
-AlertTriangle,
-Check,
-Copy,
-Lock,
-RefreshCw,
-ShieldAlert,
-ShieldCheck,
-Smartphone
+  AlertTriangle,
+  Check,
+  Copy,
+  Lock,
+  RefreshCw,
+  ShieldAlert,
+  ShieldCheck,
+  Smartphone,
 } from 'lucide-react';
-import React,{ useMemo,useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { INITIAL_BACKUP_CODES } from '../constants/ManagerSettingsSecurityConstants';
-import type { ManagerTwoFactorConfig } from '../types/ManagerSettingsSecurityTypes';
 
 interface ManagerSettingsSecurityTwoFactorPanelProps {
   twoFactor: ManagerTwoFactorConfig;
@@ -37,11 +37,10 @@ export function ManagerSettingsSecurityTwoFactorPanel({
   const [backupCodes, setBackupCodes] = useState<string[]>(INITIAL_BACKUP_CODES);
   const [showDisableModal, setShowDisableModal] = useState(false);
 
-  // Generate SVG QR Code path for TOTP URI
   const qrSvg = useMemo(() => {
     try {
-      const matrix = generateQrMatrix(twoFactor.qrPayload, 'M');
-      return generateQrSvgPath(matrix, 2);
+      const matrix = generateSecurityQrMatrix(twoFactor.qrPayload, 'M');
+      return generateSecurityQrSvgPath(matrix, 2);
     } catch {
       return null;
     }
@@ -52,7 +51,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
       navigator.clipboard.writeText(twoFactor.secretKey);
     }
     setCopiedSecret(true);
-    toast.success('2FA Secret Key copied!');
+    toast.success('2FA Secret Key copied!', { id: 'manager-security-copy-secret' });
     setTimeout(() => setCopiedSecret(false), 2000);
   };
 
@@ -62,7 +61,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
       navigator.clipboard.writeText(text);
     }
     setCopiedCodes(true);
-    toast.success('Backup codes copied!');
+    toast.success('Backup codes copied!', { id: 'manager-security-copy-backup-codes' });
     setTimeout(() => setCopiedCodes(false), 2000);
   };
 
@@ -73,7 +72,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
       return `${rand1}-${rand2}`;
     });
     setBackupCodes(newCodes);
-    toast.success('8 fresh backup codes generated!');
+    toast.success('8 fresh backup codes generated!', { id: 'manager-security-regen-backup-codes' });
   };
 
   const handleVerifyAndEnable = (e: React.FormEvent) => {
@@ -99,7 +98,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
 
     setIsSettingUp(false);
     setVerificationCode('');
-    toast.success('Two-Factor Authentication enabled!');
+    toast.success('Two-Factor Authentication enabled!', { id: 'manager-security-2fa-enabled' });
   };
 
   const handleConfirmDisable = () => {
@@ -109,13 +108,12 @@ export function ManagerSettingsSecurityTwoFactorPanel({
       lastVerified: undefined,
     });
     setShowDisableModal(false);
-    toast.success('Two-Factor Authentication disabled.');
+    toast.success('Two-Factor Authentication disabled.', { id: 'manager-security-2fa-disabled' });
   };
 
   return (
     <div className="max-w-2xl mx-auto space-y-5">
-      {/* Status Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-slate-700 bg-slate-900 p-4">
         <div className="flex items-center gap-3">
           <div
             className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
@@ -134,7 +132,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
             </div>
             <p className="text-xs text-slate-400">
               {twoFactor.enabled
-                ? `Protected via Google / Microsoft Authenticator app.`
+                ? 'Protected via Google / Microsoft Authenticator app.'
                 : 'Add a 6-digit TOTP code layer for login protection.'}
             </p>
           </div>
@@ -145,7 +143,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
             <button
               type="button"
               onClick={() => setShowDisableModal(true)}
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-rose-500/40 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 transition-all cursor-pointer"
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-rose-500/40 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 motion-safe:transition-all cursor-pointer"
             >
               Disable 2FA
             </button>
@@ -153,7 +151,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
             <button
               type="button"
               onClick={() => setIsSettingUp(true)}
-              className="inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 border border-indigo-500/40 text-white transition-all cursor-pointer shadow-md shadow-indigo-950/40"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 border border-indigo-500 text-white motion-safe:transition-all cursor-pointer shadow-md"
             >
               <Smartphone size={13} />
               <span>Enable 2FA Now</span>
@@ -162,7 +160,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
             <button
               type="button"
               onClick={() => setIsSettingUp(false)}
-              className="text-xs font-medium px-3 py-1.5 rounded-lg border border-white/10 text-slate-400 hover:text-white transition-all cursor-pointer"
+              className="text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-700 text-slate-400 hover:text-white motion-safe:transition-all cursor-pointer"
             >
               Cancel
             </button>
@@ -170,98 +168,25 @@ export function ManagerSettingsSecurityTwoFactorPanel({
         </div>
       </div>
 
-      {/* Setup View */}
       {!twoFactor.enabled && isSettingUp && (
-        <div className="rounded-xl border border-white/10 bg-[#0c0d24] p-4 sm:p-5 space-y-5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 items-center">
-            {/* QR Code */}
-            <div className="flex flex-col items-center text-center space-y-3">
-              <div className="w-36 h-36 bg-white p-2.5 rounded-xl border border-white/20 shadow-md flex items-center justify-center">
-                {qrSvg ? (
-                  <svg
-                    viewBox={qrSvg.viewBox}
-                    className="w-full h-full shape-rendering-crispEdges"
-                    aria-label="2FA QR Code"
-                  >
-                    <path d={qrSvg.path} fill="#0f172a" />
-                  </svg>
-                ) : (
-                  <div className="flex items-center justify-center w-full h-full" role="status">
-                    <LibraryLoader size="sm" icon="key-round" variant="contra" />
-                  </div>
-                )}
-              </div>
-              <p className="text-[11px] text-slate-400">
-                Scan with <strong>Google Authenticator</strong> or <strong>Microsoft Authenticator</strong>
-              </p>
-            </div>
-
-            {/* Secret & Code Input */}
-            <div className="space-y-3">
-              {/* Manual Secret Key */}
-              <div>
-                <label className="text-[11px] font-semibold text-slate-400 block mb-1">
-                  Or enter Secret Key manually:
-                </label>
-                <div className="flex items-center gap-1.5">
-                  <div className="flex-1 rounded-lg border border-white/10 bg-slate-900/60 px-2.5 py-1.5 font-mono text-xs font-bold tracking-wider text-indigo-300">
-                    {twoFactor.secretKey}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handleCopySecret}
-                    title="Copy Secret Key"
-                    aria-label="Copy Secret Key"
-                    className="rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 px-2.5 py-1.5 text-xs text-slate-300 transition-colors cursor-pointer"
-                  >
-                    {copiedSecret ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
-                  </button>
-                </div>
-              </div>
-
-              {/* 6-digit Code Entry */}
-              <form onSubmit={handleVerifyAndEnable} className="space-y-3 pt-1">
-                <div>
-                  <label htmlFor="twoFactorCode" className="text-xs font-semibold text-slate-300 block mb-1">
-                    Enter 6-digit Code from App:
-                  </label>
-                  <input
-                    id="twoFactorCode"
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={6}
-                    value={verificationCode}
-                    onChange={(e) => {
-                      setVerificationCode(e.target.value);
-                      setVerificationError('');
-                    }}
-                    placeholder="000000"
-                    className="w-full rounded-lg border border-white/10 bg-slate-900/60 px-3 py-2 text-center font-mono text-base font-bold tracking-widest text-white placeholder:text-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                    required
-                  />
-                  {verificationError && (
-                    <p className="text-xs text-rose-400 mt-1">{verificationError}</p>
-                  )}
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={verificationCode.trim().length !== 6}
-                  className="w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 border border-indigo-500/40 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 text-xs font-bold text-white transition-all cursor-pointer shadow-md shadow-indigo-950/40"
-                >
-                  <ShieldCheck size={14} />
-                  Verify and Enable 2FA
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
+        <ManagerSettingsSecurityTwoFactorSetup
+          qrSvg={qrSvg}
+          secretKey={twoFactor.secretKey}
+          copiedSecret={copiedSecret}
+          onCopySecret={handleCopySecret}
+          verificationCode={verificationCode}
+          onVerificationCodeChange={(val) => {
+            setVerificationCode(val);
+            setVerificationError('');
+          }}
+          verificationError={verificationError}
+          onSubmitVerify={handleVerifyAndEnable}
+        />
       )}
 
-      {/* Emergency Backup Codes (When 2FA is active) */}
       {twoFactor.enabled && (
-        <div className="rounded-xl border border-white/10 bg-[#0c0d24] p-4 sm:p-5 space-y-3">
-          <div className="flex items-center justify-between border-b border-white/5 pb-2.5">
+        <div className="mgr-sec-panel-surface rounded-xl border p-4 sm:p-5 space-y-3">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
             <div className="flex items-center gap-2">
               <Lock size={15} className="text-emerald-400" />
               <h4 className="text-xs sm:text-sm font-bold text-white">
@@ -273,7 +198,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
               <button
                 type="button"
                 onClick={handleCopyBackupCodes}
-                className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-md border border-white/10 bg-white/5 hover:bg-white/10 text-slate-300 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-md border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 motion-safe:transition-colors cursor-pointer"
               >
                 {copiedCodes ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
                 <span>Copy All</span>
@@ -281,7 +206,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
               <button
                 type="button"
                 onClick={handleRegenerateCodes}
-                className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-md border border-white/10 bg-white/5 hover:bg-white/10 text-slate-300 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-md border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 motion-safe:transition-colors cursor-pointer"
               >
                 <RefreshCw size={11} />
                 <span>Regenerate</span>
@@ -292,8 +217,8 @@ export function ManagerSettingsSecurityTwoFactorPanel({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
             {backupCodes.map((code, index) => (
               <div
-                key={index}
-                className="flex items-center justify-between rounded-lg border border-white/5 bg-slate-900/40 px-2.5 py-1.5 font-mono text-xs font-semibold text-slate-200"
+                key={`backup-code-${code}`}
+                className="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-1.5 font-mono text-xs font-semibold text-slate-200"
               >
                 <span>{code}</span>
                 <span className="text-[10px] text-slate-500">#{index + 1}</span>
@@ -303,10 +228,9 @@ export function ManagerSettingsSecurityTwoFactorPanel({
         </div>
       )}
 
-      {/* Disable Modal */}
       {showDisableModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4">
-          <div className="w-full max-w-sm rounded-xl border border-white/10 bg-[#0e1133] p-5 space-y-4 shadow-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop backdrop-blur-xs p-4">
+          <div className="mgr-sec-modal-surface w-full max-w-sm rounded-xl border p-5 space-y-4 shadow-xl">
             <div className="flex items-center gap-2.5 text-rose-400">
               <AlertTriangle size={20} />
               <h4 className="text-sm font-bold text-white">Disable Two-Factor Authentication?</h4>
@@ -318,7 +242,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
               <button
                 type="button"
                 onClick={() => setShowDisableModal(false)}
-                className="px-3 py-1.5 rounded-lg border border-white/10 text-xs text-slate-300 hover:bg-white/5"
+                className="px-3 py-1.5 rounded-lg border border-slate-700 text-xs text-slate-300 hover:bg-slate-800"
               >
                 Cancel
               </button>

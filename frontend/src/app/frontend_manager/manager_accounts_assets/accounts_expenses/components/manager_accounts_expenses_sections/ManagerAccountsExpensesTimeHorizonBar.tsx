@@ -126,7 +126,7 @@ export function ManagerAccountsExpensesTimeHorizonBar({
                   setCustomStartDate('');
                   setCustomEndDate('');
                 }}
-                className="p-1 rounded-md text-secondary hover:text-danger hover:bg-danger/10 transition-colors cursor-pointer"
+                className="p-1 rounded-md text-secondary hover:text-danger hover:bg-danger-bg motion-safe:transition-colors cursor-pointer"
                 title="Clear custom dates"
               >
                 <X size={14} />

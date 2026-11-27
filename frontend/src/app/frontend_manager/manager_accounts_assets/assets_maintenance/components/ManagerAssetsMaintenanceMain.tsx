@@ -1,7 +1,7 @@
 'use client';
 
-import type { ManagerAssetsMaintenanceMainProps } from '../types/ManagerAssetsMaintenanceTypes';
-import ManagerAssetsMaintenancePage from './ManagerAssetsMaintenancePage';
+import ManagerAssetsMaintenancePage from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/components/ManagerAssetsMaintenancePage';
+import type { ManagerAssetsMaintenanceMainProps } from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/types/ManagerAssetsMaintenanceTypes';
 
 /** This canonical domain owns maintenance only; legacy view query values never dispatch sibling workflows. */
 export function ManagerAssetsMaintenanceMain(props: ManagerAssetsMaintenanceMainProps) {

@@ -1,5 +1,6 @@
 // RESPONSIBILITY: Render the members directory kpi section section of the components feature. It does not own backend persistence or cross-feature business logic.
-import type { ManagerMembersDirectoryKpiSectionProps,ManagerMembersDirectoryTab } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
+import '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_styles/ManagerMembersDirectoryStyles.css';
+import type { ManagerMembersDirectoryKpiSectionProps, ManagerMembersDirectoryTab } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 import { UserCheck,UserMinus,Users,UserX } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -29,9 +30,9 @@ export function ManagerMembersDirectoryKpiSection({
       badgeStyle: 'bg-indigo-500/15 text-indigo-300 border border-indigo-500/30',
       subtext: 'All registered members',
       stroke: '#818cf8',
-      unselectedBg: 'border-indigo-500/30 bg-gradient-to-br from-indigo-950/60 via-[#141842]/70 to-indigo-900/40 hover:border-indigo-400/60 shadow-lg shadow-indigo-950/30',
-      activeBorder: 'border-2 border-indigo-400 shadow-xl shadow-indigo-500/40 bg-gradient-to-br from-indigo-950/90 via-[#191d52] to-indigo-900/70',
-      activeTopBar: 'bg-indigo-400 shadow-[0_0_14px_rgba(99,102,241,1)]',
+      unselectedBg: 'border-indigo-500/30 md-kpi-total-idle hover:border-indigo-400/60 shadow-lg shadow-indigo-950/30',
+      activeBorder: 'border-2 border-indigo-400 shadow-xl shadow-indigo-500/40 md-kpi-total-active',
+      activeTopBar: 'bg-indigo-400 md-kpi-total-bar',
       activeTag: 'bg-indigo-500/30 text-indigo-300 border border-indigo-400/50',
     },
     {
@@ -47,9 +48,9 @@ export function ManagerMembersDirectoryKpiSection({
       badgeStyle: 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30',
       subtext: 'Valid subscriptions',
       stroke: '#34d399',
-      unselectedBg: 'border-emerald-500/30 bg-gradient-to-br from-emerald-950/60 via-[#0a241b]/70 to-emerald-900/40 hover:border-emerald-400/60 shadow-lg shadow-emerald-950/30',
-      activeBorder: 'border-2 border-emerald-400 shadow-xl shadow-emerald-500/40 bg-gradient-to-br from-emerald-950/90 via-[#0e3326] to-emerald-900/70',
-      activeTopBar: 'bg-emerald-400 shadow-[0_0_14px_rgba(16,185,129,1)]',
+      unselectedBg: 'border-emerald-500/30 md-kpi-active-idle hover:border-emerald-400/60 shadow-lg shadow-emerald-950/30',
+      activeBorder: 'border-2 border-emerald-400 shadow-xl shadow-emerald-500/40 md-kpi-active-sel',
+      activeTopBar: 'bg-emerald-400 md-kpi-active-bar',
       activeTag: 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/50',
     },
     {
@@ -65,9 +66,9 @@ export function ManagerMembersDirectoryKpiSection({
       badgeStyle: 'bg-rose-500/15 text-rose-300 border border-rose-500/30',
       subtext: 'Needs renewal',
       stroke: '#f87171',
-      unselectedBg: 'border-rose-500/30 bg-gradient-to-br from-rose-950/60 via-[#260e19]/70 to-rose-900/40 hover:border-rose-400/60 shadow-lg shadow-rose-950/30',
-      activeBorder: 'border-2 border-rose-400 shadow-xl shadow-rose-500/40 bg-gradient-to-br from-rose-950/90 via-[#361324] to-rose-900/70',
-      activeTopBar: 'bg-rose-400 shadow-[0_0_14px_rgba(244,63,94,1)]',
+      unselectedBg: 'border-rose-500/30 md-kpi-expired-idle hover:border-rose-400/60 shadow-lg shadow-rose-950/30',
+      activeBorder: 'border-2 border-rose-400 shadow-xl shadow-rose-500/40 md-kpi-expired-sel',
+      activeTopBar: 'bg-rose-400 md-kpi-expired-bar',
       activeTag: 'bg-rose-500/30 text-rose-300 border border-rose-400/50',
     },
     {
@@ -83,9 +84,9 @@ export function ManagerMembersDirectoryKpiSection({
       badgeStyle: 'bg-amber-500/15 text-amber-300 border border-amber-500/30',
       subtext: 'Account on hold',
       stroke: '#fbbf24',
-      unselectedBg: 'border-amber-500/30 bg-gradient-to-br from-amber-950/60 via-[#261708]/70 to-amber-900/40 hover:border-amber-400/60 shadow-lg shadow-amber-950/30',
-      activeBorder: 'border-2 border-amber-400 shadow-xl shadow-amber-500/40 bg-gradient-to-br from-amber-950/90 via-[#36210b] to-amber-900/70',
-      activeTopBar: 'bg-amber-400 shadow-[0_0_14px_rgba(245,158,11,1)]',
+      unselectedBg: 'border-amber-500/30 md-kpi-suspended-idle hover:border-amber-400/60 shadow-lg shadow-amber-950/30',
+      activeBorder: 'border-2 border-amber-400 shadow-xl shadow-amber-500/40 md-kpi-suspended-sel',
+      activeTopBar: 'bg-amber-400 md-kpi-suspended-bar',
       activeTag: 'bg-amber-500/30 text-amber-300 border border-amber-400/50',
     },
   ];

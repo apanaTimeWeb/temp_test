@@ -1,9 +1,10 @@
-import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
+import { MANAGER_MEMBERS_NEW_ADMISSION_DEMO_REFERRERS } from '@/app/frontend_manager/manager_members/members_new_admission/config/manager_members_new_admission.demo_data';
+import { formatAdmissionInr } from '@/app/frontend_manager/manager_members/members_new_admission/utils/ManagerMembersNewAdmissionStorageAndFormat';
 import type { ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 
 export const MANAGER_ADMISSION_REFERRAL_OPTIONS: ComboboxOption[] = [
   { value: 'Direct Walk-in', label: 'Direct Walk-in / Self (No Referral)', badge: 'Default' },
-  ...MANAGER_MEMBERS_DEMO_RECORDS.map((r) => ({
+  ...MANAGER_MEMBERS_NEW_ADMISSION_DEMO_REFERRERS.map((r) => ({
     value: `${r.id} (${r.name})`,
     label: `${r.name} (${r.id})`,
     subLabel: `Phone: ${r.phone} · Seat: ${r.seat || 'General'}`,
@@ -57,7 +58,8 @@ export const MANAGER_ADMISSION_LOCKER_OPTIONS: ComboboxOption[] = [
   { value: '', label: 'No Locker Required' },
   ...Array.from({ length: 12 }, (_, i) => {
     const code = `L-${String(i + 1).padStart(2, '0')}`;
-    return { value: code, label: `${code} (Available - ₹200/mo)`, badge: '₹200/mo' };
+    const rateLabel = `${formatAdmissionInr(200)}/mo`;
+    return { value: code, label: `${code} (Available - ${rateLabel})`, badge: rateLabel };
   }),
 ];
 

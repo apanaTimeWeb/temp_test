@@ -22,7 +22,7 @@ export function ManagerMembersEnquiriesTimeHorizonBar({
   setCustomEndDate,
 }: ManagerMembersEnquiriesTimeHorizonBarProps) {
   return (
-    <div className="w-full max-w-full min-w-0 rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-3.5 sm:p-4 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-3">
+    <div className="menq-surface-card w-full max-w-full min-w-0 rounded-2xl border p-3.5 sm:p-4 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-3">
       <div className="flex items-center gap-2">
         <Calendar size={16} className="text-indigo-400 shrink-0" />
         <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
@@ -32,7 +32,7 @@ export function ManagerMembersEnquiriesTimeHorizonBar({
 
       <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
         {/* Segmented Time Horizon Pills */}
-        <div className="inline-flex flex-wrap bg-[#060818] p-1 rounded-xl border border-indigo-500/25 gap-1 w-full sm:w-auto">
+        <div className="menq-inset-bar inline-flex flex-wrap p-1 rounded-xl border gap-1 w-full sm:w-auto">
           {timeHorizonOptions.map((opt) => (
             <button
               key={opt.id}
@@ -51,14 +51,14 @@ export function ManagerMembersEnquiriesTimeHorizonBar({
 
         {/* Inline Custom Date Inputs if Custom Range is active */}
         {timeHorizon === 'custom' && (
-          <div className="flex items-center gap-2 flex-wrap text-xs bg-[#060818] p-1.5 rounded-xl border border-indigo-500/25">
+          <div className="menq-inset-bar flex items-center gap-2 flex-wrap text-xs p-1.5 rounded-xl border">
             <label className="flex items-center gap-1.5 text-slate-300">
               <span className="text-[11px] font-medium text-slate-400">From:</span>
               <input maxLength={100}
                 type="date"
                 value={customStartDate}
                 onChange={(e) => setCustomStartDate(e.target.value)}
-                className="px-2 py-1 bg-[#0c0f28] border border-indigo-500/30 rounded-lg text-xs text-slate-100 outline-none focus:border-indigo-400"
+                className="menq-date-input px-2 py-1 border rounded-lg text-xs text-slate-100 outline-none focus:border-indigo-400"
               />
             </label>
             <label className="flex items-center gap-1.5 text-slate-300">
@@ -67,7 +67,7 @@ export function ManagerMembersEnquiriesTimeHorizonBar({
                 type="date"
                 value={customEndDate}
                 onChange={(e) => setCustomEndDate(e.target.value)}
-                className="px-2 py-1 bg-[#0c0f28] border border-indigo-500/30 rounded-lg text-xs text-slate-100 outline-none focus:border-indigo-400"
+                className="menq-date-input px-2 py-1 border rounded-lg text-xs text-slate-100 outline-none focus:border-indigo-400"
               />
             </label>
             {(customStartDate || customEndDate) && (

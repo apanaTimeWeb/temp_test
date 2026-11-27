@@ -1,7 +1,8 @@
 'use client';
 
-import { MANAGER_REFERRAL_MEMBER_CANDIDATES } from '@/app/frontend_manager/manager_members/members_referral_bonus/mocks/manager_members_referral_bonus_fixtures/ManagerMembersReferralBonusFixtures';
+import { MANAGER_REFERRAL_DEMO_CANDIDATES } from '@/app/frontend_manager/manager_members/members_referral_bonus/config/manager_members_referral_bonus.demo_data';
 import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
+import { formatReferralInr } from '@/app/frontend_manager/manager_members/members_referral_bonus/utils/ManagerMembersReferralBonusRenewalAdjustment';
 import { SearchableCombobox,type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import { AlertCircle,CheckCircle2,Gift,IndianRupee } from 'lucide-react';
 import { useEffect,useMemo,useState } from 'react';
@@ -35,7 +36,7 @@ export function ManagerMembersReferralBonusAddModal({
   }, [isOpen, onClose]);
 
   const studentOptions: ComboboxOption[] = useMemo(() => {
-    return MANAGER_REFERRAL_MEMBER_CANDIDATES.map((s) => ({
+    return MANAGER_REFERRAL_DEMO_CANDIDATES.map((s) => ({
       value: `${s.name} (${s.id})`,
       label: `${s.name} (${s.id})`,
       subLabel: `Phone: ${s.phone} · Seat: ${s.seat || 'General'}`,
@@ -48,15 +49,15 @@ export function ManagerMembersReferralBonusAddModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!referrer.trim()) {
-      toast.error('Please select the Referrer Student.');
+      toast.error('Please select the Referrer Student.', { id: 'referral-add-missing-referrer' });
       return;
     }
     if (!referred.trim()) {
-      toast.error('Please select the Referred New Student.');
+      toast.error('Please select the Referred New Student.', { id: 'referral-add-missing-referred' });
       return;
     }
     if (referrer.trim() === referred.trim()) {
-      toast.error('Referrer and Referred student cannot be the same person.');
+      toast.error('Referrer and Referred student cannot be the same person.', { id: 'referral-add-same-person' });
       return;
     }
 
@@ -68,11 +69,11 @@ export function ManagerMembersReferralBonusAddModal({
       referred: referred.trim(),
       date: new Date().toISOString().slice(0, 10),
       status: 'Pending',
-      bonus: `₹${cleanBonus}`,
+      bonus: formatReferralInr(cleanBonus),
       method,
     };
     onAddReferral(newRecord);
-    toast.success(`Referral recorded: ${referrer} referred ${referred}!`);
+    toast.success(`Referral recorded: ${referrer} referred ${referred}!`, { id: 'referral-add-recorded' });
     setReferrer('');
     setReferred('');
     onClose();
@@ -152,7 +153,7 @@ export function ManagerMembersReferralBonusAddModal({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
-              <label className="font-semibold text-primary block mb-1">Bonus Amount (₹)</label>
+              <label className="font-semibold text-primary block mb-1">Bonus Amount (INR)</label>
               <div className="mgr-input-icon-wrap relative">
                 <IndianRupee size={15} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-success pointer-events-none" />
                 <input maxLength={100}
@@ -187,14 +188,14 @@ export function ManagerMembersReferralBonusAddModal({
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex items-center justify-center text-xs h-9 px-4 w-full sm:w-auto font-semibold rounded-xl bg-danger-bg text-danger border border-danger/40 hover:bg-danger/25 hover:border-danger transition-colors cursor-pointer"
+              className="inline-flex items-center justify-center text-xs h-9 px-4 w-full sm:w-auto font-semibold rounded-xl bg-danger-bg text-danger border border-border hover:opacity-90 motion-safe:transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={Boolean(referrer && referred && referrer === referred)}
-              className="mgr-btn-primary inline-flex items-center justify-center gap-2 text-xs h-9 px-5 w-full sm:w-auto font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mgr-btn-primary inline-flex items-center justify-center gap-2 text-xs h-9 px-5 w-full sm:w-auto font-semibold motion-safe:transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <CheckCircle2 size={16} className="text-on-primary shrink-0" />
               <span>Confirm Referral</span>

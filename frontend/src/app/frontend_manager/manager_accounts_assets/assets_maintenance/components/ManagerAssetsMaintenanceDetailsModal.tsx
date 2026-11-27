@@ -13,7 +13,7 @@ Wrench,
 X,
 } from 'lucide-react';
 import { useEffect } from 'react';
-import type { MaintenanceLogItem } from './ManagerAssetsMaintenanceTable';
+import type { MaintenanceLogItem } from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/components/ManagerAssetsMaintenanceTable';
 
 interface ManagerAssetsMaintenanceDetailsModalProps {
   isOpen: boolean;
@@ -69,7 +69,7 @@ export function ManagerAssetsMaintenanceDetailsModal({
         {/* Header */}
         <div className="flex items-start justify-between border-b border-border pb-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-primary-subtle border border-border text-primary flex items-center justify-center shrink-0">
               <Wrench size={20} />
             </div>
             <div>

@@ -1,23 +1,13 @@
 'use client';
 
-import {
-Armchair,
-Calendar,
-CheckCircle2,
-Clock,
-Download,
-Printer,
-X,
-XCircle
-} from 'lucide-react';
-import { useEffect,useMemo,useState } from 'react';
+import { ManagerAttendanceDailyCalendarGrid } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyCalendarGrid';
+import { MONTH_OPTIONS } from '@/app/frontend_manager/manager_attendance/attendance_daily/constants/ManagerAttendanceDailyMonthlyConstants';
+import type { Student } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
+import { exportManagerMemberMonthlyHistoryCsv } from '@/app/frontend_manager/manager_attendance/attendance_daily/utils/ManagerAttendanceDailyCsv';
+import { getStudentMonthlyAttendance } from '@/app/frontend_manager/manager_attendance/attendance_daily/utils/ManagerAttendanceDailyMonthlyHistoryUtils';
+import { Armchair, Calendar, Download, Printer, X } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import type { Student } from '../../types/ManagerAttendanceDailyComponentTypes';
-import {
-getStudentMonthlyAttendance,
-MONTH_OPTIONS,
-type AttendanceDailyMonthStatus,
-} from '../../utils/ManagerAttendanceDailyMonthlyHistoryUtils';
 
 export interface ManagerAttendanceDailyMemberMonthlyHistoryModalProps {
   isOpen: boolean;
@@ -60,63 +50,16 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
 
   const handlePrintSlip = () => {
     window.print();
-    toast.success(`Monthly attendance slip sent to printer for ${student.name}`);
+    toast.success(`Monthly attendance slip sent to printer for ${student.name}`, {
+      id: `monthly-slip-print-${student.id}`,
+    });
   };
 
   const handleExportCsv = () => {
-    const headers = ['Day', 'Date', 'Day of Week', 'Status', 'In Time', 'Out Time', 'Study Hours', 'Punch Method'];
-    const rows = summary.dailyLogs.map((log) => [
-      log.dayNumber,
-      log.dateStr,
-      log.dayOfWeek,
-      log.status.toUpperCase(),
-      log.inTime,
-      log.outTime,
-      `${log.studyHours} hrs`,
-      `"${log.verificationMethod}"`,
-    ]);
-
-    const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
-    const blob = new Blob([`\uFEFF${csvContent}`], { type: 'text/csv;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `monthly_attendance_${student.smartId}_${selectedMonth}.csv`;
-    anchor.hidden = true;
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    toast.success(`Exported ${summary.monthLabel} attendance register for ${student.name}`);
-  };
-
-  const statusBadge = (status: AttendanceDailyMonthStatus) => {
-    switch (status) {
-      case 'present':
-        return (
-          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
-            <CheckCircle2 size={10} /> Present
-          </span>
-        );
-      case 'absent':
-        return (
-          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30">
-            <XCircle size={10} /> Absent
-          </span>
-        );
-      case 'late':
-        return (
-          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30">
-            <Clock size={10} /> Late
-          </span>
-        );
-      case 'holiday':
-        return (
-          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-500/10 text-slate-500 border border-border">
-            Sunday / Off
-          </span>
-        );
-    }
+    exportManagerMemberMonthlyHistoryCsv(summary, student.smartId, selectedMonth);
+    toast.success(`Exported ${summary.monthLabel} attendance register for ${student.name}`, {
+      id: `monthly-history-csv-${student.id}`,
+    });
   };
 
   return (
@@ -144,7 +87,7 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
                 <span className="font-mono text-xs px-2 py-0.5 rounded bg-surface-highlight border border-border text-secondary">
                   {student.smartId}
                 </span>
-                <span className="text-xs px-2 py-0.5 rounded-full font-bold bg-primary-subtle text-primary border border-primary/20">
+                <span className="text-xs px-2 py-0.5 rounded-full font-bold bg-primary-subtle text-primary border border-border">
                   {student.shift} Shift
                 </span>
                 {student.seat && (
@@ -282,16 +225,13 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
           </div>
         </div>
 
-        {/* View Switcher & Status Filter Toolbar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
           <div className="inline-flex bg-muted p-1 rounded-xl border border-border self-start">
             <button
               type="button"
               onClick={() => setActiveView('calendar')}
-              className={`px-3 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
-                activeView === 'calendar'
-                  ? 'bg-card text-primary shadow-xs font-bold'
-                  : 'text-secondary hover:text-primary'
+              className={`px-3 py-1 text-xs font-semibold rounded-lg motion-safe:transition-all cursor-pointer ${
+                activeView === 'calendar' ? 'bg-card text-primary shadow-xs font-bold' : 'text-secondary hover:text-primary'
               }`}
             >
               📅 Month Calendar Grid
@@ -299,17 +239,13 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
             <button
               type="button"
               onClick={() => setActiveView('table')}
-              className={`px-3 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
-                activeView === 'table'
-                  ? 'bg-card text-primary shadow-xs font-bold'
-                  : 'text-secondary hover:text-primary'
+              className={`px-3 py-1 text-xs font-semibold rounded-lg motion-safe:transition-all cursor-pointer ${
+                activeView === 'table' ? 'bg-card text-primary shadow-xs font-bold' : 'text-secondary hover:text-primary'
               }`}
             >
               📋 Punch Ledger Log
             </button>
           </div>
-
-          {/* Status Filter Pills */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
             <span className="text-xs font-semibold text-secondary mr-1">Filter:</span>
             {[
@@ -323,11 +259,9 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
                 <button
                   key={f.id}
                   type="button"
-                  onClick={() => setStatusFilter(f.id as any)}
-                  className={`px-2.5 py-1 text-xs rounded-lg font-medium transition-all cursor-pointer ${
-                    isFActive
-                      ? 'bg-primary-subtle text-primary border border-primary/30 font-bold'
-                      : 'bg-card text-secondary hover:text-primary border border-border'
+                  onClick={() => setStatusFilter(f.id as 'all' | 'present' | 'absent' | 'late')}
+                  className={`px-2.5 py-1 text-xs rounded-lg font-medium motion-safe:transition-all cursor-pointer ${
+                    isFActive ? 'bg-primary-subtle text-primary border border-primary font-bold' : 'bg-card text-secondary hover:text-primary border border-border'
                   }`}
                 >
                   {f.label}
@@ -337,81 +271,12 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
           </div>
         </div>
 
-        {/* View 1: Calendar Grid View */}
-        {activeView === 'calendar' ? (
-          <div className="border border-border rounded-xl bg-card overflow-hidden">
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-1.5 p-3 sm:p-4 bg-muted/40">
-              {summary.dailyLogs.map((log) => {
-                const isFilteredOut = statusFilter !== 'all' && log.status !== statusFilter;
-                return (
-                  <div
-                    key={log.dayNumber}
-                    className={`p-2.5 rounded-xl border transition-all flex flex-col justify-between gap-1.5 ${
-                      isFilteredOut
-                        ? 'opacity-30 border-border bg-card'
-                        : log.status === 'present'
-                        ? 'border-emerald-500/30 bg-emerald-500/5 hover:border-emerald-500'
-                        : log.status === 'absent'
-                        ? 'border-rose-500/30 bg-rose-500/5 hover:border-rose-500'
-                        : log.status === 'late'
-                        ? 'border-amber-500/30 bg-amber-500/5 hover:border-amber-500'
-                        : 'border-border bg-card/60 opacity-60'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-xs font-bold text-primary">
-                        Day {log.dayNumber}
-                      </span>
-                      <span className="text-[10px] uppercase font-semibold text-secondary">
-                        {log.dayOfWeek}
-                      </span>
-                    </div>
-
-                    <div className="my-0.5">{statusBadge(log.status)}</div>
-
-                    <div className="text-[10px] font-mono text-secondary pt-1 border-t border-border/50 flex items-center justify-between">
-                      <span>{log.inTime !== '—' ? `${log.inTime}` : 'No Punch'}</span>
-                      {log.studyHours > 0 && <span className="font-semibold text-primary">{log.studyHours}h</span>}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ) : (
-          /* View 2: Detailed Punch Table Log */
-          <div className="border border-border rounded-xl bg-card overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr className="bg-muted text-secondary uppercase tracking-wider text-[11px] border-b border-border">
-                  <th className="py-2.5 px-3 font-semibold">Date & Day</th>
-                  <th className="py-2.5 px-3 font-semibold">Status</th>
-                  <th className="py-2.5 px-3 font-semibold">In Time</th>
-                  <th className="py-2.5 px-3 font-semibold">Out Time</th>
-                  <th className="py-2.5 px-3 font-semibold">Study Duration</th>
-                  <th className="py-2.5 px-3 font-semibold">Verification Punch</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {filteredLogs.map((log) => (
-                  <tr key={log.dayNumber} className="hover:bg-surface-hover transition-colors">
-                    <td className="py-2.5 px-3 font-medium text-primary">
-                      {log.dateStr}{' '}
-                      <span className="text-secondary font-normal font-mono">({log.dayOfWeek})</span>
-                    </td>
-                    <td className="py-2.5 px-3">{statusBadge(log.status)}</td>
-                    <td className="py-2.5 px-3 font-mono text-primary">{log.inTime}</td>
-                    <td className="py-2.5 px-3 font-mono text-primary">{log.outTime}</td>
-                    <td className="py-2.5 px-3 font-mono text-primary">
-                      {log.studyHours > 0 ? `${log.studyHours} hrs` : '—'}
-                    </td>
-                    <td className="py-2.5 px-3 text-secondary text-[11px]">{log.verificationMethod}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <ManagerAttendanceDailyCalendarGrid
+          activeView={activeView}
+          dailyLogs={summary.dailyLogs}
+          filteredLogs={filteredLogs}
+          statusFilter={statusFilter}
+        />
 
         {/* Footer info & close button */}
         <div className="flex items-center justify-between pt-3 border-t border-border">

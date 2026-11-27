@@ -2,7 +2,7 @@
 
 import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
-import type { MANAGER_NAVIGATION_ITEMS } from '../constants/ManagerNavigationNavigationConstants';
+import type { MANAGER_NAVIGATION_ITEMS } from '@/app/frontend_manager/manager_navigation/navigation/constants/ManagerNavigationNavigationConstants';
 
 type NavigationLinkItem = Extract<(typeof MANAGER_NAVIGATION_ITEMS)[number], { kind: 'link' }>;
 

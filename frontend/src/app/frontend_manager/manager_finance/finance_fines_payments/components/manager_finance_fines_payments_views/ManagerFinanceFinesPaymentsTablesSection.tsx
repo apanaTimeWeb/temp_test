@@ -1,8 +1,9 @@
 'use client';
 
-import ManagerFinanceFinesPaymentsNativeTable,{ type NativeColumn } from '@/app/frontend_manager/manager_finance/finance_fines_payments/components/manager_finance_fines_payments_table_parts/ManagerFinanceFinesPaymentsNativeTable';
-import { Download,Search,X } from 'lucide-react';
-import type { ManagerReceiptRecord } from './ManagerFinanceFinesPaymentsFinesAndPaymentsPage';
+import ManagerFinanceFinesPaymentsNativeTable, { type NativeColumn } from '@/app/frontend_manager/manager_finance/finance_fines_payments/components/manager_finance_fines_payments_table_parts/ManagerFinanceFinesPaymentsNativeTable';
+import type { ManagerReceiptRecord } from '@/app/frontend_manager/manager_finance/finance_fines_payments/components/manager_finance_fines_payments_views/ManagerFinanceFinesPaymentsFinesAndPaymentsPage';
+import ManagerFinanceFinesPaymentsTableFilterBar from '@/app/frontend_manager/manager_finance/finance_fines_payments/components/manager_finance_fines_payments_views/ManagerFinanceFinesPaymentsTableFilterBar';
+import { Download } from 'lucide-react';
 
 export interface ManagerFinanceFinesPaymentsTablesSectionProps {
   activeTab: string;
@@ -33,6 +34,30 @@ export interface ManagerFinanceFinesPaymentsTablesSectionProps {
   nextPageLabel: string;
 }
 
+const FINE_TYPE_OPTIONS = [
+  { value: 'all', label: 'All Fine Types' },
+  { value: 'Overdue Book', label: 'Overdue Book' },
+  { value: 'Lost Book Charge', label: 'Lost Book Charge' },
+  { value: 'Damage Charge', label: 'Damage Charge' },
+  { value: 'Late Fee', label: 'Late Fee' },
+];
+
+const HISTORY_MODE_OPTIONS = [
+  { value: 'all', label: 'All Modes' },
+  { value: 'cash', label: 'Cash' },
+  { value: 'upi', label: 'UPI' },
+  { value: 'card', label: 'Card' },
+  { value: 'bank', label: 'Bank Transfer' },
+];
+
+const RECEIPT_MODE_OPTIONS = [
+  { value: 'all', label: 'All Modes' },
+  { value: 'Cash', label: 'Cash' },
+  { value: 'UPI', label: 'UPI' },
+  { value: 'Card', label: 'Card' },
+  { value: 'Bank Transfer', label: 'Bank Transfer' },
+];
+
 export default function ManagerFinanceFinesPaymentsTablesSection({
   activeTab,
   tableSearchQuery,
@@ -61,98 +86,77 @@ export default function ManagerFinanceFinesPaymentsTablesSection({
   prevPageLabel,
   nextPageLabel,
 }: ManagerFinanceFinesPaymentsTablesSectionProps) {
-  if (activeTab === 'pending' || activeTab === 'partiallyPaid') {
-    const isPending = activeTab === 'pending';
-    return (
-      <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col space-y-4">
-        {/* Table Header Row: Title & Subtitle + Fast Export Action */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
-          <div>
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <h2 className="text-xl font-bold text-primary tracking-tight">{tabLabel}</h2>
-              <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
-                isPending
-                  ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20'
-                  : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
-              }`}>
-                <span className={`w-1.5 h-1.5 rounded-full ${isPending ? 'bg-rose-500' : 'bg-amber-500'}`} />
-                {filteredPendingFines.length} {isPending ? 'Pending Dues' : 'Partial Dues'}
-              </span>
-            </div>
-            <p className="text-xs text-secondary mt-1">
-              Filter, inspect, and export {isPending ? 'pending' : 'partially paid'} student fine records.
-            </p>
-          </div>
+  const isPendingTab = activeTab === 'pending' || activeTab === 'partiallyPaid';
+  const isPaidTab = activeTab === 'paid';
+  const isReceiptsTab = activeTab === 'receipts';
+  if (!isPendingTab && !isPaidTab && !isReceiptsTab) return null;
 
-          <button
-            type="button"
-            onClick={onExportPendingFinesCsv}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-3.5 rounded-xl border border-border bg-card hover:bg-surface-hover hover:border-primary text-secondary hover:text-primary transition-all cursor-pointer shadow-xs active:scale-95 shrink-0 self-start sm:self-center"
-            title="Export Fines CSV"
-          >
-            <Download size={14} className="text-secondary" />
-            <span>Export CSV</span>
-          </button>
+  const isPending = activeTab === 'pending';
+  const badgeTone = isPendingTab
+    ? isPending
+      ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20'
+      : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+    : isPaidTab
+      ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+      : 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20';
+  const dotTone = isPendingTab ? (isPending ? 'bg-rose-500' : 'bg-amber-500') : isPaidTab ? 'bg-emerald-500' : 'bg-blue-500';
+  const subtitle = isPendingTab
+    ? `Filter, inspect, and export ${isPending ? 'pending' : 'partially paid'} student fine records.`
+    : isPaidTab
+      ? 'Historical ledger of cleared fine collections and penalty settlements.'
+      : 'Official transaction receipts with late fees, plan details, and multi-channel dispatch.';
+  const countText = isPendingTab
+    ? `${filteredPendingFines.length} ${isPending ? 'Pending Dues' : 'Partial Dues'}`
+    : isPaidTab
+      ? `${filteredHistoryRows.length} Settled Payments`
+      : `${filteredReceiptRows.length} of ${totalReceiptsCount} Receipts`;
+
+  return (
+    <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
+        <div>
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <h2 className="text-xl font-bold text-primary tracking-tight">{tabLabel}</h2>
+            <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${badgeTone}`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${dotTone}`} />
+              {countText}
+            </span>
+          </div>
+          <p className="text-xs text-secondary mt-1">{subtitle}</p>
         </div>
 
-        {/* Dedicated Search & Filter Strip */}
-        <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-surface border border-border">
-          <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-0">
-            <div className="relative w-full sm:w-72">
-              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
-              <input maxLength={30}
-                type="text"
-                placeholder="Search fine ID, member, or type..."
-                className="mgr-input !pl-10 !pr-9 text-xs w-full outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                value={tableSearchQuery}
-                onChange={(e) => onTableSearchQueryChange(e.target.value)}
-              />
-              {tableSearchQuery && (
-                <button
-                  type="button"
-                  onClick={() => onTableSearchQueryChange('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-primary cursor-pointer p-0.5"
-                  title="Clear search"
-                >
-                  <X size={13} />
-                </button>
-              )}
-            </div>
+        <button
+          type="button"
+          onClick={isPendingTab ? onExportPendingFinesCsv : isPaidTab ? onExportHistoryCsv : onExportReceiptsCsv}
+          className="inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-3.5 rounded-xl border border-border bg-card hover:bg-surface-hover hover:border-primary text-secondary hover:text-primary motion-safe:transition-all cursor-pointer shadow-xs active:scale-95 shrink-0 self-start sm:self-center"
+          title={isPendingTab ? 'Export Fines CSV' : isPaidTab ? 'Export Payment History CSV' : 'Export Receipts CSV'}
+        >
+          <Download size={14} className="text-secondary" />
+          <span>Export CSV</span>
+        </button>
+      </div>
 
-            <select
-              aria-label="Filter by Fine Type"
-              value={fineTypeFilter}
-              onChange={(e) => onFineTypeFilterChange(e.target.value)}
-              className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-primary hover:border-primary shadow-xs cursor-pointer w-full sm:w-auto min-w-[140px] outline-none"
-            >
-              <option value="all">All Fine Types</option>
-              <option value="Overdue Book">Overdue Book</option>
-              <option value="Lost Book Charge">Lost Book Charge</option>
-              <option value="Damage Charge">Damage Charge</option>
-              <option value="Late Fee">Late Fee</option>
-            </select>
+      <ManagerFinanceFinesPaymentsTableFilterBar
+        searchQuery={tableSearchQuery}
+        searchPlaceholder={isPendingTab ? 'Search fine ID, member, or type...' : isPaidTab ? 'Search receipt, member, or collector...' : 'Search txn ID, receipt, member, plan...'}
+        maxLength={isPaidTab ? 100 : 30}
+        selectAriaLabel={isPendingTab ? 'Filter by Fine Type' : isPaidTab ? 'Filter by Payment Mode' : 'Filter Receipts by Mode'}
+        selectValue={isPendingTab ? fineTypeFilter : isPaidTab ? historyModeFilter : receiptModeFilter}
+        selectOptions={isPendingTab ? FINE_TYPE_OPTIONS : isPaidTab ? HISTORY_MODE_OPTIONS : RECEIPT_MODE_OPTIONS}
+        hasActiveFilter={
+          tableSearchQuery.trim() !== '' ||
+          timeHorizon !== 'all' ||
+          (isPendingTab ? fineTypeFilter !== 'all' : isPaidTab ? historyModeFilter !== 'all' : receiptModeFilter !== 'all')
+        }
+        filteredCount={isPendingTab ? filteredPendingFines.length : isPaidTab ? filteredHistoryRows.length : filteredReceiptRows.length}
+        summaryText={isPendingTab ? `records (${timeHorizonLabel})` : isPaidTab ? `settled records (${timeHorizonLabel})` : `of ${totalReceiptsCount} receipts (${timeHorizonLabel})`}
+        onSearchChange={onTableSearchQueryChange}
+        onSelectChange={isPendingTab ? onFineTypeFilterChange : isPaidTab ? onHistoryModeFilterChange : onReceiptModeFilterChange}
+        onReset={onResetFilters}
+      />
 
-            {(tableSearchQuery.trim() !== '' || fineTypeFilter !== 'all' || timeHorizon !== 'all') && (
-              <button
-                type="button"
-                onClick={onResetFilters}
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer transition-colors"
-                title="Reset filters"
-              >
-                <X size={13} /> Reset
-              </button>
-            )}
-          </div>
-
-          <div className="text-xs text-secondary font-medium shrink-0 flex items-center gap-1.5">
-            <span>Showing</span>
-            <span className="font-bold text-primary">{filteredPendingFines.length}</span>
-            <span>records ({timeHorizonLabel})</span>
-          </div>
-        </div>
-
-        {/* Table View */}
-        <div className="flex-1 w-full min-h-80">
+      <div className="flex-1 w-full min-h-80">
+        {isPendingTab && (
           <ManagerFinanceFinesPaymentsNativeTable
             getRowKey={(row) => String(row.id)}
             emptyMessage={tableSearchQuery ? emptySearchMessage : `No ${isPending ? 'pending' : 'partially paid'} fines found for ${timeHorizonLabel}.`}
@@ -160,98 +164,8 @@ export default function ManagerFinanceFinesPaymentsTablesSection({
             columns={pendingCols}
             labels={{ previous: prevPageLabel, next: nextPageLabel }}
           />
-        </div>
-      </div>
-    );
-  }
-
-  if (activeTab === 'paid') {
-    return (
-      <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col space-y-4">
-        {/* Table Header Row: Title & Subtitle + Fast Export Action */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
-          <div>
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <h2 className="text-xl font-bold text-primary tracking-tight">{tabLabel}</h2>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                {filteredHistoryRows.length} Settled Payments
-              </span>
-            </div>
-            <p className="text-xs text-secondary mt-1">
-              Historical ledger of cleared fine collections and penalty settlements.
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={onExportHistoryCsv}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-3.5 rounded-xl border border-border bg-card hover:bg-surface-hover hover:border-primary text-secondary hover:text-primary transition-all cursor-pointer shadow-xs active:scale-95 shrink-0 self-start sm:self-center"
-            title="Export Payment History CSV"
-          >
-            <Download size={14} className="text-secondary" />
-            <span>Export CSV</span>
-          </button>
-        </div>
-
-        {/* Dedicated Search & Filter Strip */}
-        <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-surface border border-border">
-          <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-0">
-            <div className="relative w-full sm:w-72">
-              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
-              <input maxLength={100}
-                type="text"
-                placeholder="Search receipt, member, or collector..."
-                className="mgr-input !pl-10 !pr-9 text-xs w-full outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                value={tableSearchQuery}
-                onChange={(e) => onTableSearchQueryChange(e.target.value)}
-              />
-              {tableSearchQuery && (
-                <button
-                  type="button"
-                  onClick={() => onTableSearchQueryChange('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-primary cursor-pointer p-0.5"
-                  title="Clear search"
-                >
-                  <X size={13} />
-                </button>
-              )}
-            </div>
-
-            <select
-              aria-label="Filter by Payment Mode"
-              value={historyModeFilter}
-              onChange={(e) => onHistoryModeFilterChange(e.target.value)}
-              className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-primary hover:border-primary shadow-xs cursor-pointer w-full sm:w-auto min-w-[130px] outline-none"
-            >
-              <option value="all">All Modes</option>
-              <option value="cash">Cash</option>
-              <option value="upi">UPI</option>
-              <option value="card">Card</option>
-              <option value="bank">Bank Transfer</option>
-            </select>
-
-            {(tableSearchQuery.trim() !== '' || historyModeFilter !== 'all' || timeHorizon !== 'all') && (
-              <button
-                type="button"
-                onClick={onResetFilters}
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer transition-colors"
-                title="Reset filters"
-              >
-                <X size={13} /> Reset
-              </button>
-            )}
-          </div>
-
-          <div className="text-xs text-secondary font-medium shrink-0 flex items-center gap-1.5">
-            <span>Showing</span>
-            <span className="font-bold text-primary">{filteredHistoryRows.length}</span>
-            <span>settled records ({timeHorizonLabel})</span>
-          </div>
-        </div>
-
-        {/* Table View */}
-        <div className="flex-1 w-full min-h-80">
+        )}
+        {isPaidTab && (
           <ManagerFinanceFinesPaymentsNativeTable
             getRowKey={(row) => String(row.id)}
             emptyMessage={tableSearchQuery ? emptySearchMessage : `No payment history records found for ${timeHorizonLabel}.`}
@@ -259,98 +173,8 @@ export default function ManagerFinanceFinesPaymentsTablesSection({
             columns={historyCols}
             labels={{ previous: prevPageLabel, next: nextPageLabel }}
           />
-        </div>
-      </div>
-    );
-  }
-
-  if (activeTab === 'receipts') {
-    return (
-      <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col space-y-4">
-        {/* Table Header Row: Title & Subtitle + Fast Export Action */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
-          <div>
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <h2 className="text-xl font-bold text-primary tracking-tight">{tabLabel}</h2>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                {filteredReceiptRows.length} of {totalReceiptsCount} Receipts
-              </span>
-            </div>
-            <p className="text-xs text-secondary mt-1">
-              Official transaction receipts with late fees, plan details, and multi-channel dispatch.
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={onExportReceiptsCsv}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-3.5 rounded-xl border border-border bg-card hover:bg-surface-hover hover:border-primary text-secondary hover:text-primary transition-all cursor-pointer shadow-xs active:scale-95 shrink-0 self-start sm:self-center"
-            title="Export Receipts CSV"
-          >
-            <Download size={14} className="text-secondary" />
-            <span>Export CSV</span>
-          </button>
-        </div>
-
-        {/* Dedicated Search & Filter Strip */}
-        <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-surface border border-border">
-          <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-0">
-            <div className="relative w-full sm:w-72">
-              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
-              <input maxLength={30}
-                type="text"
-                placeholder="Search txn ID, receipt, member, plan..."
-                className="mgr-input !pl-10 !pr-9 text-xs w-full outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                value={tableSearchQuery}
-                onChange={(e) => onTableSearchQueryChange(e.target.value)}
-              />
-              {tableSearchQuery && (
-                <button
-                  type="button"
-                  onClick={() => onTableSearchQueryChange('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-primary cursor-pointer p-0.5"
-                  title="Clear search"
-                >
-                  <X size={13} />
-                </button>
-              )}
-            </div>
-
-            <select
-              aria-label="Filter Receipts by Mode"
-              value={receiptModeFilter}
-              onChange={(e) => onReceiptModeFilterChange(e.target.value)}
-              className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-primary hover:border-primary shadow-xs cursor-pointer w-full sm:w-auto min-w-[130px] outline-none"
-            >
-              <option value="all">All Modes</option>
-              <option value="Cash">Cash</option>
-              <option value="UPI">UPI</option>
-              <option value="Card">Card</option>
-              <option value="Bank Transfer">Bank Transfer</option>
-            </select>
-
-            {(tableSearchQuery.trim() !== '' || receiptModeFilter !== 'all' || timeHorizon !== 'all') && (
-              <button
-                type="button"
-                onClick={onResetFilters}
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer transition-colors"
-                title="Reset filters"
-              >
-                <X size={13} /> Reset
-              </button>
-            )}
-          </div>
-
-          <div className="text-xs text-secondary font-medium shrink-0 flex items-center gap-1.5">
-            <span>Showing</span>
-            <span className="font-bold text-primary">{filteredReceiptRows.length}</span>
-            <span>of {totalReceiptsCount} receipts ({timeHorizonLabel})</span>
-          </div>
-        </div>
-
-        {/* Table View */}
-        <div className="flex-1 w-full min-h-80">
+        )}
+        {isReceiptsTab && (
           <ManagerFinanceFinesPaymentsNativeTable
             getRowKey={(row) => String(row.id)}
             emptyMessage={tableSearchQuery ? emptySearchMessage : `No receipts found for ${timeHorizonLabel}.`}
@@ -358,11 +182,8 @@ export default function ManagerFinanceFinesPaymentsTablesSection({
             columns={receiptsCols}
             labels={{ previous: prevPageLabel, next: nextPageLabel }}
           />
-        </div>
+        )}
       </div>
-    );
-  }
-
-  return null;
+    </div>
+  );
 }
-

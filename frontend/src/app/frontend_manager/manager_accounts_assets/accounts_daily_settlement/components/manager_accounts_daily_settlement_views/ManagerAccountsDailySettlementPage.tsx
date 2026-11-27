@@ -1,22 +1,27 @@
 'use client';
 
-import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import ManagerAccountsDailySettlementConfirmModal from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/components/manager_accounts_daily_settlement_dialogs/ManagerAccountsDailySettlementConfirmModal';
+import { ManagerAccountsDailySettlementDenominationAndHandoverModal } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/components/manager_accounts_daily_settlement_dialogs/ManagerAccountsDailySettlementDenominationAndHandoverModal';
 import { createManagerAccountsDailySettlementColumns } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/components/manager_accounts_daily_settlement_table_parts/ManagerAccountsDailySettlementColumns';
 import ManagerAccountsDailySettlementNativeTable from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/components/manager_accounts_daily_settlement_table_parts/ManagerAccountsDailySettlementNativeTable';
-import type { Entry } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
-import { MANAGER_ACCOUNTING_SAMPLE_DAILY_SETTLEMENTS } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
+import { ManagerAccountsDailySettlementDetailsModal } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/components/manager_accounts_daily_settlement_views/ManagerAccountsDailySettlementDetailsModal';
+import { ManagerAccountsDailySettlementHeader } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/components/manager_accounts_daily_settlement_views/ManagerAccountsDailySettlementHeader';
+import { ManagerAccountsDailySettlementKpis } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/components/manager_accounts_daily_settlement_views/ManagerAccountsDailySettlementKpis';
+import ManagerAccountsDailySettlementTimeHorizonBar, {
+  type ManagerDailySettlementTimeHorizon,
+} from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/components/manager_accounts_daily_settlement_views/ManagerAccountsDailySettlementTimeHorizonBar';
+import { ManagerAccountsDailySettlementToolbar } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/components/manager_accounts_daily_settlement_views/ManagerAccountsDailySettlementToolbar';
+import {
+  MANAGER_ACCOUNTING_SAMPLE_DAILY_SETTLEMENTS,
+  type Entry,
+} from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
 import { useManagerDailySettlementCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementFormattingHook';
 import type { ManagerAccountsDailySettlementMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/types/ManagerAccountsDailySettlementMainTypes';
-import { Coins,Download,Printer,RefreshCw } from 'lucide-react';
+import { formatInrRupees } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/utils/ManagerAccountsDailySettlementDenominationHelpers';
+import { exportDailySettlementsCsv } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/utils/ManagerAccountsDailySettlementExport';
 import { useTranslations } from 'next-intl';
-import { useMemo,useState } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import ManagerAccountsDailySettlementConfirmModal from '../manager_accounts_daily_settlement_dialogs/ManagerAccountsDailySettlementConfirmModal';
-import { ManagerAccountsDailySettlementDenominationAndHandoverModal } from '../manager_accounts_daily_settlement_dialogs/ManagerAccountsDailySettlementDenominationAndHandoverModal';
-import { ManagerAccountsDailySettlementDetailsModal } from './ManagerAccountsDailySettlementDetailsModal';
-import { ManagerAccountsDailySettlementKpis } from './ManagerAccountsDailySettlementKpis';
-import ManagerAccountsDailySettlementTimeHorizonBar,{ type ManagerDailySettlementTimeHorizon } from './ManagerAccountsDailySettlementTimeHorizonBar';
-import { ManagerAccountsDailySettlementToolbar } from './ManagerAccountsDailySettlementToolbar';
 
 function toLocalDateInputValue(date: Date): string {
   const year = date.getFullYear();
@@ -31,12 +36,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   const tManagerUi = useTranslations('manager.manager_daily_settlement.ui');
   const formatManagerDailySettlementCurrency = useManagerDailySettlementCurrencyFormatter();
 
-  const todayStr = toLocalDateInputValue(new Date());
-  const yesterdayDate = new Date();
-  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
-  const yesterdayStr = toLocalDateInputValue(yesterdayDate);
-
-  const [settlementDate, setSettlementDate] = useState(todayStr);
+  const [settlementDate, setSettlementDate] = useState(() => toLocalDateInputValue(new Date()));
   const [timeHorizon, setTimeHorizon] = useState<ManagerDailySettlementTimeHorizon>('today');
   const [entries, setEntries] = useState<Entry[]>([...MOCK]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -64,7 +64,9 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
     setIsSyncing(true);
     setTimeout(() => {
       setIsSyncing(false);
-      toast.success('Shift balances and physical drawer cash synchronized (₹0 discrepancy)');
+      toast.success(`Shift balances and physical drawer cash synchronized (${formatInrRupees(0)} discrepancy)`, {
+        id: 'manager-settlement-sync-balances',
+      });
     }, 600);
   };
 
@@ -83,78 +85,29 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   }, [entries, searchQuery, statusFilter, shiftFilter]);
 
   const hasActiveFilters = Boolean(searchQuery.trim() !== '' || statusFilter !== 'all' || shiftFilter !== 'all');
-
   const settledCount = entries.filter((e) => e.status.toLowerCase() === 'settled').length;
   const pendingCount = entries.filter((e) => e.status.toLowerCase() === 'pending').length;
 
-  const handleRequestSettleShift = (shiftName: string) => {
-    setPendingSettlementShift(shiftName);
-  };
+  const handleRequestSettleShift = (shiftName: string) => setPendingSettlementShift(shiftName);
 
   const handleConfirmSettleShift = () => {
     if (!pendingSettlementShift) return;
     const shiftToSettle = pendingSettlementShift;
     setEntries((prev) =>
-      prev.map((e) =>
-        e.shift === shiftToSettle ? { ...e, status: 'settled', settledBy: 'Branch Manager Satyam' } : e
-      )
+      prev.map((e) => (e.shift === shiftToSettle ? { ...e, status: 'settled', settledBy: 'Branch Manager Satyam' } : e))
     );
     if (selectedAuditEntry && selectedAuditEntry.shift === shiftToSettle) {
       setSelectedAuditEntry({ ...selectedAuditEntry, status: 'settled', settledBy: 'Branch Manager Satyam' });
     }
-    toast.success(`Shift "${shiftToSettle}" settlement confirmed successfully! (Physical cash verified)`);
+    toast.success(`Shift "${shiftToSettle}" settlement confirmed successfully! (Physical cash verified)`, {
+      id: 'manager-settlement-confirm-shift',
+    });
     setPendingSettlementShift(null);
   };
 
-  const escapeCsvCell = (val: unknown) => {
-    let str = String(val ?? '');
-    if (/^[\u0000-\u0020]*[=+\-@]/.test(str)) str = `'${str}`;
-    return `"${str.replace(/"/g, '""')}"`;
-  };
-
   const handleExportCsv = () => {
-    const headers = [
-      'Shift',
-      'Opening (INR)',
-      'Cash (INR)',
-      'UPI (INR)',
-      'Expenses (INR)',
-      'Closing (INR)',
-      'Settled By',
-      'Status',
-    ]
-      .map(escapeCsvCell)
-      .join(',');
-
-    const rows = filteredEntries
-      .map((e) =>
-        [
-          e.shift,
-          (e.openingBalance / 100).toFixed(2),
-          (e.cashCollected / 100).toFixed(2),
-          (e.upiCollected / 100).toFixed(2),
-          (e.expenses / 100).toFixed(2),
-          (e.closingBalance / 100).toFixed(2),
-          e.settledBy || '',
-          e.status,
-        ]
-          .map(escapeCsvCell)
-          .join(',')
-      )
-      .join('\r\n');
-
-    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    const safeScope = dateScopeLabel.toLowerCase().replace(/[^a-z0-9_-]+/g, '_');
-    anchor.download = `daily_settlement_${safeScope}_${new Date().toISOString().slice(0, 10)}.csv`;
-    anchor.hidden = true;
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    toast.success('Daily settlement exported to CSV successfully');
+    exportDailySettlementsCsv(filteredEntries, dateScopeLabel);
+    toast.success('Daily settlement exported to CSV successfully', { id: 'manager-settlement-export-csv' });
   };
 
   const totalCash = entries.reduce((s, e) => s + e.cashCollected, 0);
@@ -187,74 +140,20 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
 
   return (
     <div className="space-y-6" data-route-view={view} data-route-id={id}>
-      {/* ── Executive Header Banner ── */}
-      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-          <div className="space-y-1.5">
-            <div className="flex items-baseline gap-3 flex-wrap">
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">
-                {tManagerUi('daily_settlement')}
-              </h1>
-              <span className="text-xs px-2.5 py-1 rounded-md bg-primary-subtle text-primary font-bold">
-                {filteredEntries.length} Shifts • Scope: {dateScopeLabel}
-              </span>
-            </div>
+      <ManagerAccountsDailySettlementHeader
+        title={tManagerUi('daily_settlement')}
+        subtitle={tManagerUi('shift_wise_cash_upi_reconciliation')}
+        filteredCount={filteredEntries.length}
+        dateScopeLabel={dateScopeLabel}
+        isSyncing={isSyncing}
+        onSyncBalances={handleSyncBalances}
+        onExportCsv={handleExportCsv}
+        onOpenDenomination={() => {
+          setActiveDenominationEntry(filteredEntries[0] || entries[0] || null);
+          setIsDenominationModalOpen(true);
+        }}
+      />
 
-            <p className="text-sm text-secondary">
-              {tManagerUi('shift_wise_cash_upi_reconciliation')} • Date: {dateScopeLabel}
-            </p>
-          </div>
-
-          {/* Header Action Buttons in One Professional Single-Line Row */}
-          <div className="flex items-center gap-2 flex-nowrap overflow-x-auto shrink-0 max-w-full py-1">
-            <button
-              type="button"
-              onClick={() => window.print()}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-all cursor-pointer shadow-xs whitespace-nowrap shrink-0"
-              title="Print Daily Settlement Report"
-            >
-              <Printer size={14} />
-              <span>Print Report</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={handleSyncBalances}
-              disabled={isSyncing}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-60 whitespace-nowrap shrink-0"
-              title="Sync Drawer Balances"
-            >
-              {isSyncing ? <ButtonLoader icon="scale" /> : <RefreshCw size={14} />}
-              <span>{isSyncing ? 'Syncing...' : 'Sync Balances'}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={handleExportCsv}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all shadow-xs cursor-pointer whitespace-nowrap shrink-0"
-              title="Export Daily Settlement as CSV"
-            >
-              <Download size={14} />
-              <span>Export CSV</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setActiveDenominationEntry(filteredEntries[0] || entries[0] || null);
-                setIsDenominationModalOpen(true);
-              }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm hover:shadow-emerald-500/25 transition-all cursor-pointer whitespace-nowrap shrink-0"
-              title="Currency Denomination Counter & Owner Handover Receipt"
-            >
-              <Coins size={14} />
-              <span>Denomination & Owner Handover</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Specific Date Navigator Bar with Glowing Halos ── */}
       <ManagerAccountsDailySettlementTimeHorizonBar
         timeHorizon={timeHorizon}
         onChangeTimeHorizon={setTimeHorizon}
@@ -263,7 +162,6 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
         sampleDateLabel={tManagerUi('sample_settlement_date')}
       />
 
-      {/* ── Executive Reconciliation KPI Summary Cards (Clean Display Cards, NOT Interlinked Toggle Buttons) ── */}
       <ManagerAccountsDailySettlementKpis
         totalCash={totalCash}
         totalUpi={totalUpi}
@@ -279,7 +177,6 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
         }}
       />
 
-      {/* ── Table Container with Multi-Filter Toolbar ── */}
       <div className="fin-card p-4 sm:p-5 space-y-4 rounded-2xl border border-border bg-card shadow-sm">
         <ManagerAccountsDailySettlementToolbar
           filteredCount={filteredEntries.length}
@@ -298,22 +195,16 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
             setShiftFilter('all');
           }}
           onExportCsv={handleExportCsv}
-          counts={{
-            all: entries.length,
-            settled: settledCount,
-            pending: pendingCount,
-          }}
+          counts={{ all: entries.length, settled: settledCount, pending: pendingCount }}
         />
 
         {filteredEntries.length === 0 ? (
           <div className="fin-empty-state py-12 text-center space-y-2">
             <div className="text-3xl" aria-hidden="true">📋</div>
             <p className="font-semibold text-primary text-sm">
-              {searchQuery
-                ? 'No settlement entries matching your search query.'
-                : `No settlement entries recorded for ${dateScopeLabel}.`}
+              {searchQuery ? 'No settlement entries matching your search query.' : `No settlement entries recorded for ${dateScopeLabel}.`}
             </p>
-            {hasActiveFilters || timeHorizon !== 'all' ? (
+            {(hasActiveFilters || timeHorizon !== 'all') && (
               <button
                 type="button"
                 onClick={() => {
@@ -322,11 +213,11 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
                   setShiftFilter('all');
                   setTimeHorizon('all');
                 }}
-                className="mt-2 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary-hover shadow-xs transition-all cursor-pointer"
+                className="mt-2 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary-hover shadow-xs motion-safe:transition-all cursor-pointer"
               >
                 Reset All Filters
               </button>
-            ) : null}
+            )}
           </div>
         ) : (
           <div className="mgr-table-wrapper">
@@ -340,7 +231,6 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
         )}
       </div>
 
-      {/* ── Confirm Shift Settlement Modal ── */}
       <ManagerAccountsDailySettlementConfirmModal
         isOpen={Boolean(pendingSettlementShift)}
         shiftName={pendingSettlementShift}
@@ -348,7 +238,6 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
         onCancel={() => setPendingSettlementShift(null)}
       />
 
-      {/* ── Shift Reconciliation Audit Details Modal ── */}
       <ManagerAccountsDailySettlementDetailsModal
         isOpen={Boolean(selectedAuditEntry)}
         entry={selectedAuditEntry}
@@ -358,7 +247,6 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
         onSettleShift={handleRequestSettleShift}
       />
 
-      {/* ── Currency Denomination Counter & Owner Handover Receipt Modal ── */}
       <ManagerAccountsDailySettlementDenominationAndHandoverModal
         isOpen={isDenominationModalOpen}
         entry={activeDenominationEntry}
@@ -368,13 +256,13 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
           if (activeDenominationEntry) {
             setEntries((prev) =>
               prev.map((e) =>
-                e.shift === activeDenominationEntry.shift
-                  ? { ...e, status: 'settled', settledBy: 'Branch Manager Satyam' }
-                  : e
+                e.shift === activeDenominationEntry.shift ? { ...e, status: 'settled', settledBy: 'Branch Manager Satyam' } : e
               )
             );
           }
-          toast.success(`Handover of ₹${handoverToOwner.toLocaleString('en-IN')} to ${ownerName} confirmed!`);
+          toast.success(`Handover of ${formatInrRupees(handoverToOwner)} to ${ownerName} confirmed!`, {
+            id: 'manager-settlement-handover-modal-confirm',
+          });
           setIsDenominationModalOpen(false);
         }}
       />

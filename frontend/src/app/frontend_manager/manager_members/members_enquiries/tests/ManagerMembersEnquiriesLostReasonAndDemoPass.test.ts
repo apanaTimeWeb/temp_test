@@ -44,9 +44,9 @@ describe('Manager Members Enquiries - Lost Reason & WhatsApp Demo Pass Enhanceme
     const tableSource = readSource(
       'components/manager_members_enquiries_table_parts/ManagerMembersEnquiriesTable.tsx'
     );
-    expect(tableSource).toContain("sessionStorage.setItem('manager_pending_enquiry_conversion'");
-    expect(tableSource).toContain("sessionStorage.setItem('enquiry_conversion_prefill'");
-    expect(tableSource).toContain("localStorage.setItem('manager_pending_enquiry_conversion'");
+    expect(tableSource).toContain("writeBrowserSessionStorageItem('manager_pending_enquiry_conversion'");
+    expect(tableSource).toContain("writeBrowserSessionStorageItem('enquiry_conversion_prefill'");
+    expect(tableSource).toContain("writeBrowserStorageItem('manager_pending_enquiry_conversion'");
     expect(tableSource).toContain('onQuickConvert={(e, enq) => handleQuickConvert(e, enq)}');
 
     const mobileSource = readSource(

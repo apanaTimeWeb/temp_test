@@ -11,7 +11,8 @@ ManagerDashboardReportsSeatRow,
 ManagerDashboardReportsShiftProfitabilityRow,
 ManagerDashboardReportsTableAbsenteeRow,
 } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
-import { formatManagerReportsCalendarDate,formatManagerReportsMonth } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/utils/ManagerDashboardReportsDateFormatting';
+import { formatManagerDashboardReportsCurrency } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/utils/ManagerDashboardReportsCurrency';
+import { formatManagerReportsCalendarDate, formatManagerReportsMonth } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/utils/ManagerDashboardReportsDateFormatting';
 import { useLocale,useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
@@ -103,13 +104,13 @@ export function ManagerDashboardReportsTablesGrid({
       {
         field: 'monthlyRate',
         headerName: 'Monthly Fee',
-        cellRenderer: (p) => `₹${Number(p.value).toLocaleString('en-IN')}`,
+        cellRenderer: (p) => formatManagerDashboardReportsCurrency(Number(p.value)),
       },
       {
         field: 'grossRevenue',
         headerName: 'Gross Monthly Revenue',
         cellClass: 'mgr-cell-success font-extrabold',
-        cellRenderer: (p) => `₹${Number(p.value).toLocaleString('en-IN')}`,
+        cellRenderer: (p) => formatManagerDashboardReportsCurrency(Number(p.value)),
       },
       {
         field: 'collectionRate',

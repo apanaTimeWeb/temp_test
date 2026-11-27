@@ -1557,3 +1557,11 @@
   transform: translateY(-1px);
 }
 
+.mgr-logout-dialog-surface {
+  background-color: #0b0c20;
+}
+
+.mgr-nav-brand-icon-shadow {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+}
+

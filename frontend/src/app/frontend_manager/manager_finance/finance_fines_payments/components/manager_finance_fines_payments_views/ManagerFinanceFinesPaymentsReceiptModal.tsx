@@ -1,7 +1,7 @@
 'use client';
 
-import { Mail,MessageSquare,Printer,Receipt,Smartphone,X } from 'lucide-react';
-import type { ManagerReceiptRecord } from './ManagerFinanceFinesPaymentsFinesAndPaymentsPage';
+import type { ManagerReceiptRecord } from '@/app/frontend_manager/manager_finance/finance_fines_payments/components/manager_finance_fines_payments_views/ManagerFinanceFinesPaymentsFinesAndPaymentsPage';
+import { Mail, MessageSquare, Printer, Receipt, Smartphone, X } from 'lucide-react';
 
 export interface ManagerFinanceFinesPaymentsReceiptModalProps {
   receipt: ManagerReceiptRecord | null;
@@ -35,7 +35,7 @@ export default function ManagerFinanceFinesPaymentsReceiptModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg hover:bg-card text-secondary hover:text-primary transition-colors cursor-pointer"
+            className="p-1 rounded-lg hover:bg-card text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer"
           >
             <X size={18} />
           </button>

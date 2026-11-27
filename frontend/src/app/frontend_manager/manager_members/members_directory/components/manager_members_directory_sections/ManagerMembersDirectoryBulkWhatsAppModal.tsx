@@ -3,7 +3,7 @@
 import { CheckCircle2,MessageSquare,Send,ShieldCheck,X } from 'lucide-react';
 import { useEffect,useState } from 'react';
 import { toast } from 'sonner';
-import type { ManagerMembersDirectoryRecord } from '../../types/ManagerMembersDirectoryTypes';
+import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 
 interface ManagerMembersDirectoryBulkWhatsAppModalProps {
   isOpen: boolean;
@@ -77,7 +77,9 @@ export function ManagerMembersDirectoryBulkWhatsAppModal({
       return next;
     });
 
-    toast.success(`WhatsApp message opened for ${member.name} (+91 ${cleanPhone})`);
+    toast.success(`WhatsApp message opened for ${member.name} (+91 ${cleanPhone})`, {
+      id: `manager-members-bulk-wa-single-${member.id}`,
+    });
   };
 
   const openedCount = openedKeys.size;
@@ -246,7 +248,7 @@ export function ManagerMembersDirectoryBulkWhatsAppModal({
                 onClick={() => {
                   const count = members.length;
                   onComplete();
-                  toast.success(`Cleared selection of ${count} members.`);
+                  toast.success(`Cleared selection of ${count} members.`, { id: 'manager-members-bulk-wa-clear' });
                 }}
                 className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
               >

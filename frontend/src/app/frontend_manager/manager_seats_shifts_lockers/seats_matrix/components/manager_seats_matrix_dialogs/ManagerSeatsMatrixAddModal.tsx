@@ -53,7 +53,7 @@ export function ManagerSeatsMatrixAddModal({
       >
         <h3 className="text-base sm:text-lg font-bold text-primary">Add New Library Desk / Seat</h3>
         {addFeedback && (
-          <div className="p-3 bg-success-bg border border-success/30 text-success text-xs font-semibold rounded-xl flex items-center gap-2">
+          <div className="p-3 bg-success-bg border border-success text-success text-xs font-semibold rounded-xl flex items-center gap-2">
             <CheckCircle size={16} className="text-success shrink-0" />
             <span>{addFeedback}</span>
           </div>
@@ -95,7 +95,7 @@ export function ManagerSeatsMatrixAddModal({
           <div className="flex gap-2.5 pt-2">
             <button
               type="button"
-              className="mgr-btn-ghost flex-1 h-9 text-xs font-semibold rounded-xl border border-danger/30 bg-danger-bg text-danger hover:bg-danger/20 transition-colors cursor-pointer"
+              className="mgr-btn-ghost flex-1 h-9 text-xs font-semibold rounded-xl border border-danger bg-danger-bg text-danger hover:opacity-90 motion-safe:transition-opacity cursor-pointer"
               onClick={onClose}
             >
               Cancel

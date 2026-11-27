@@ -31,13 +31,13 @@ export function ManagerMembersEnquiriesHeaderBanner({
   const tManagerUi = useTranslations('manager.manager_enquiries.ui');
 
   return (
-    <div className="w-full max-w-full min-w-0 rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-4 sm:p-6 shadow-md transition-all">
+    <div className="menq-surface-card w-full max-w-full min-w-0 rounded-2xl border p-4 sm:p-6 shadow-md motion-safe:transition-all">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         {/* Left: Titles & Meta Chips */}
         <div className="space-y-1.5">
           <div className="flex items-center gap-2 flex-wrap text-xs">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
               Active Enquiries
             </span>
           </div>
@@ -63,7 +63,7 @@ export function ManagerMembersEnquiriesHeaderBanner({
             <button
               type="button"
               onClick={onOpenBulkWhatsApp}
-              className="inline-flex items-center gap-1.5 min-h-11 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-950/50 transition-all hover:scale-[1.02] cursor-pointer"
+              className="inline-flex items-center gap-1.5 min-h-11 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-950/50 motion-safe:transition-all hover:scale-[1.02] cursor-pointer"
               title="Dispatch WhatsApp Queue to filtered leads"
             >
               <MessageCircle size={15} />
@@ -84,7 +84,7 @@ export function ManagerMembersEnquiriesHeaderBanner({
           </button>
 
           {/* View Mode Toggle */}
-          <div className="inline-flex bg-[#060818] p-1 rounded-xl border border-indigo-500/25">
+          <div className="menq-inset-bar inline-flex p-1 rounded-xl border">
             <button
               type="button"
               className={`min-h-9 min-w-9 px-3 py-1.5 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 motion-safe:transition-all cursor-pointer ${

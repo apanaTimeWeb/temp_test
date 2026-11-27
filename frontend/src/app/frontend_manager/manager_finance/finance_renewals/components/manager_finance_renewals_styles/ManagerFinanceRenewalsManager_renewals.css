@@ -1528,3 +1528,9 @@
 
 /* Keyboard users retain a visible focus indicator even when the native outline is removed. */
 .fin-select:focus-visible { outline: 2px solid theme(--color-focus-ring); outline-offset: 2px; }
+
+/* Renewals WhatsApp actions extracted out of TSX */
+.fin-renewals-wa-icon { color: #25D366; }
+.fin-renewals-wa-btn { background-color: #25D366; color: #ffffff; }
+.fin-renewals-wa-btn:hover { background-color: #20ba5a; }
+

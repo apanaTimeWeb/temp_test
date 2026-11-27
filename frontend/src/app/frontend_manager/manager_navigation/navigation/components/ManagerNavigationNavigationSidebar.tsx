@@ -8,10 +8,10 @@ import { usePathname,useSearchParams } from 'next/navigation';
 import { useEffect,useRef,useState } from 'react';
 
 import { MANAGER_NAVIGATION_NAVIGATION_ROUTES } from '@/app/frontend_manager/manager_navigation/navigation/config/manager_navigation_navigation.url_config';
-import { MANAGER_NAVIGATION_HREFS,MANAGER_NAVIGATION_ITEMS } from '@/app/frontend_manager/manager_navigation/navigation/constants/ManagerNavigationNavigationConstants';
+import { MANAGER_NAVIGATION_HREFS, MANAGER_NAVIGATION_ITEMS } from '@/app/frontend_manager/manager_navigation/navigation/constants/ManagerNavigationNavigationConstants';
+import { ManagerNavigationSidebarNavSection } from '@/app/frontend_manager/manager_navigation/navigation/components/ManagerNavigationSidebarNavSection';
+import { ManagerNavigationSidebarSearch } from '@/app/frontend_manager/manager_navigation/navigation/components/ManagerNavigationSidebarSearch';
 import type { ManagerNavigationSidebarProps } from '@/app/frontend_manager/manager_navigation/navigation/types/ManagerNavigationNavigationComponentTypes';
-import { ManagerNavigationSidebarNavSection } from './ManagerNavigationSidebarNavSection';
-import { ManagerNavigationSidebarSearch } from './ManagerNavigationSidebarSearch';
 
 export type { ManagerNavigationSidebarProps };
 
@@ -202,7 +202,7 @@ export default function ManagerNavigationSidebar({
               onClick={mobileOpen ? onMobileClose : undefined}
             >
               <span className="mgr-sidebar-brand-mark" aria-hidden="true">
-                <BookOpen size={18} strokeWidth={2.2} className="text-white transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]" />
+                <BookOpen size={18} strokeWidth={2.2} className="mgr-nav-brand-icon-shadow text-white motion-safe:transition-transform motion-safe:duration-300 group-hover:scale-110" />
               </span>
               <div className="flex flex-col min-w-0 justify-center">
                 <span className="mgr-sidebar-brand-name flex items-center leading-none">

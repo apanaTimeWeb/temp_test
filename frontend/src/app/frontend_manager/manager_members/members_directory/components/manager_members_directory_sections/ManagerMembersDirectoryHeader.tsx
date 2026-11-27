@@ -1,5 +1,6 @@
 // RESPONSIBILITY: Render the components header and its navigation context. It does not own backend persistence or cross-feature business logic.
 
+import '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_styles/ManagerMembersDirectoryStyles.css';
 import { MANAGER_MEMBERS_DIRECTORY_ROUTES } from '@/app/frontend_manager/manager_members/members_directory/config/manager_members_directory.url_config';
 import { Download,UserPlus,Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -15,7 +16,7 @@ export function ManagerMembersDirectoryHeader({
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
 
   return (
-    <div className="w-full max-w-full min-w-0 rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-5 sm:p-6 shadow-md transition-all mb-6">
+    <div className="w-full max-w-full min-w-0 rounded-2xl border border-indigo-500/25 md-surface-panel p-5 sm:p-6 shadow-md motion-safe:transition-all mb-6">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         {/* Left: Titles & Meta Chips */}
         <div className="space-y-1.5">

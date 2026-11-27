@@ -17,6 +17,7 @@ import { managerCrmFollowUpDraftSchema,type ManagerMembersEnquiriesFollowUpFormD
 import type { ManagerMembersEnquiriesDetailPageProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
 import type { ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
 import { getManagerEnquiriesDemoPassWhatsAppUrl,getManagerEnquiriesLocalDateInputMinimum,getManagerEnquiriesLocationWhatsAppUrl } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
+import { readBrowserSessionStorageItem, writeBrowserSessionStorageItem, writeBrowserStorageItem } from '@/lib/browserStorage';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft,XCircle } from 'lucide-react';
@@ -51,8 +52,8 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
   const [localFollowUps, setLocalFollowUps] = useState<Array<{ id: string; date: string; time: string; remark: string; by: string }>>(() => {
     if (typeof window === 'undefined') return [];
     try {
-      const stored = sessionStorage.getItem(`manager_crm_followups_${id}`);
-      return stored ? JSON.parse(stored) : [];
+      const stored = readBrowserSessionStorageItem(`manager_crm_followups_${id}`);
+      return stored.available && stored.value ? JSON.parse(stored.value) : [];
     } catch {
       return [];
     }
@@ -69,7 +70,7 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
     setLocalFollowUps((prev) => {
       const updated = [newEntry, ...prev];
       try {
-        sessionStorage.setItem(`manager_crm_followups_${id}`, JSON.stringify(updated));
+        writeBrowserSessionStorageItem(`manager_crm_followups_${id}`, JSON.stringify(updated));
       } catch {
         // Safe storage fallback
       }
@@ -105,11 +106,11 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
         source: enquiry.source,
         preferredBranch: enquiry.preferredBranch,
       });
-      sessionStorage.setItem('manager_pending_enquiry_conversion', payload);
-      sessionStorage.setItem('enquiry_conversion_prefill', payload);
-      sessionStorage.setItem('new_admission_prefill', payload);
-      localStorage.setItem('manager_pending_enquiry_conversion', payload);
-      localStorage.setItem('enquiry_conversion_prefill', payload);
+      writeBrowserSessionStorageItem('manager_pending_enquiry_conversion', payload);
+      writeBrowserSessionStorageItem('enquiry_conversion_prefill', payload);
+      writeBrowserSessionStorageItem('new_admission_prefill', payload);
+      writeBrowserStorageItem('manager_pending_enquiry_conversion', payload);
+      writeBrowserStorageItem('enquiry_conversion_prefill', payload);
     } catch {
       // Storage fallback
     }
@@ -125,7 +126,7 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
     setCurrentStatus('Lost');
     setLostInfo({ reason, date: todayStr });
     try {
-      sessionStorage.setItem(`manager_crm_lost_${id}`, JSON.stringify({ reason, notes, date: todayStr }));
+      writeBrowserSessionStorageItem(`manager_crm_lost_${id}`, JSON.stringify({ reason, notes, date: todayStr }));
     } catch {
       // Storage fallback
     }

@@ -519,3 +519,26 @@
     transition-delay: 0ms !important;
   }
 }
+
+.mwt-wa-canvas {
+  background-color: #0b141a;
+}
+
+.mwt-wa-header {
+  background-color: #202c33;
+  border-bottom: 1px solid #2a3942;
+}
+
+.mwt-wa-bubble {
+  background-color: #005c4b;
+  border-color: color-mix(in srgb, #005c4b 50%, transparent);
+  color: #f1f5f9;
+}
+
+.mwt-wa-meta {
+  color: rgba(167, 243, 208, 0.8);
+}
+
+.mwt-wa-read-icon {
+  color: #53bdeb;
+}

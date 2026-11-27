@@ -47,6 +47,8 @@ export interface ManagerMembersDirectoryRecord {
   }[];
 }
 
+export type ManagerMembersDirectoryDocumentRecord = NonNullable<ManagerMembersDirectoryRecord['documents']>[number];
+
 export type ManagerMembersDirectoryStatusLabelKey =
   | 'member_status_active'
   | 'member_status_expired'

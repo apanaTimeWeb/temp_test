@@ -1,7 +1,7 @@
 'use client';
+import type { GroupStudentEntry } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionManualModal';
 import { ALL_SEAT_OPTIONS } from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionAdjacentSeats';
 import { Trash2 } from 'lucide-react';
-import type { GroupStudentEntry } from './ManagerMembersGroupAdmissionManualModal';
 
 interface ManagerMembersGroupAdmissionTableViewProps {
   manualRows: GroupStudentEntry[];

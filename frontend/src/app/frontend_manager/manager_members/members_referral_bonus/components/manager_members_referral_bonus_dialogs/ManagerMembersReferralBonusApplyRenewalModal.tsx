@@ -2,10 +2,11 @@
 
 import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
 import {
-applyReferralBonusToNextRenewal,
-getReferralRenewalFinanceUrl,
-parseBonusNumber,
-parseReferrerInfo,
+  applyReferralBonusToNextRenewal,
+  formatReferralInr,
+  getReferralRenewalFinanceUrl,
+  parseBonusNumber,
+  parseReferrerInfo,
 } from '@/app/frontend_manager/manager_members/members_referral_bonus/utils/ManagerMembersReferralBonusRenewalAdjustment';
 import {
 Calendar,
@@ -63,7 +64,7 @@ export function ManagerMembersReferralBonusApplyRenewalModal({
     e.preventDefault();
 
     if (discountAmount <= 0) {
-      toast.error('Discount amount must be greater than ₹0.');
+      toast.error(`Discount amount must be greater than ${formatReferralInr(0)}.`, { id: 'referral-apply-bad-amount' });
       return;
     }
 
@@ -78,13 +79,13 @@ export function ManagerMembersReferralBonusApplyRenewalModal({
       ...referral,
       status: 'Adjusted in Renewal',
       method: 'Fee Discount',
-      bonus: `₹${discountAmount}`,
+      bonus: formatReferralInr(discountAmount),
       appliedDiscountAmount: discountAmount,
       appliedRenewalDate: new Date().toISOString().slice(0, 10),
     };
 
     onApplied(updatedReferral);
-    toast.success(`🎉 ${result.message}`);
+    toast.success(`🎉 ${result.message}`, { id: 'referral-apply-success' });
     onClose();
   };
 
@@ -144,7 +145,7 @@ export function ManagerMembersReferralBonusApplyRenewalModal({
 
             <div className="flex items-start justify-between gap-3 pt-1">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-primary-subtle text-primary flex items-center justify-center shrink-0">
                   <User size={16} />
                 </div>
                 <div>
@@ -174,9 +175,9 @@ export function ManagerMembersReferralBonusApplyRenewalModal({
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label htmlFor="renewal-discount-input" className="font-semibold text-primary block">
-                Renewal Discount Amount (₹) *
+                Renewal Discount Amount (INR) *
               </label>
-              <span className="text-[11px] text-secondary">Presets: ₹200 - ₹500</span>
+              <span className="text-[11px] text-secondary">{`Presets: ${formatReferralInr(200)} - ${formatReferralInr(500)}`}</span>
             </div>
 
             {/* Quick Preset Chips */}
@@ -186,13 +187,13 @@ export function ManagerMembersReferralBonusApplyRenewalModal({
                   key={preset}
                   type="button"
                   onClick={() => setDiscountAmount(preset)}
-                  className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                  className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold border motion-safe:transition-all cursor-pointer ${
                     discountAmount === preset
                       ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50 shadow-sm'
                       : 'bg-surface border-border text-secondary hover:text-primary hover:bg-surface-zebra'
                   }`}
                 >
-                  ₹{preset}
+                  {formatReferralInr(preset)}
                 </button>
               ))}
             </div>
@@ -218,7 +219,7 @@ export function ManagerMembersReferralBonusApplyRenewalModal({
           <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 space-y-2">
             <div className="flex items-center justify-between text-xs text-secondary">
               <span>Standard Monthly Renewal Fee</span>
-              <span className="font-mono text-primary font-semibold">₹{standardFee.toLocaleString('en-IN')}</span>
+              <span className="font-mono text-primary font-semibold">{formatReferralInr(standardFee)}</span>
             </div>
 
             <div className="flex items-center justify-between text-xs text-emerald-400 font-semibold">
@@ -226,7 +227,7 @@ export function ManagerMembersReferralBonusApplyRenewalModal({
                 <Gift size={13} className="text-emerald-400" />
                 <span>Referral Bonus Deduction</span>
               </span>
-              <span className="font-mono">-₹{discountAmount.toLocaleString('en-IN')}</span>
+              <span className="font-mono">{`-${formatReferralInr(discountAmount)}`}</span>
             </div>
 
             <div className="pt-2 border-t border-emerald-500/30 flex items-center justify-between">
@@ -239,7 +240,7 @@ export function ManagerMembersReferralBonusApplyRenewalModal({
                 </span>
               </div>
               <span className="text-base font-extrabold font-mono text-emerald-400">
-                ₹{netPayable.toLocaleString('en-IN')}
+                {formatReferralInr(netPayable)}
               </span>
             </div>
           </div>

@@ -1,8 +1,8 @@
+import { getManagerReportsDemoData } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/config/manager_dashboard_reports.demo_data';
 import { MANAGER_DASHBOARD_REPORTS_API } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/config/manager_dashboard_reports.url_config';
-import { getManagerReportsFixture } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/mocks/manager_dashboard_reports_fixtures/ManagerDashboardReportsFixtures';
 import { managerReportsSchema } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/schemas/ManagerDashboardReportsSchema';
-import type { ManagerDashboardReportsData,ManagerDashboardReportsDateRange } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
-import { apiFetch,type ApiResponse } from '@/lib/api';
+import type { ManagerDashboardReportsData, ManagerDashboardReportsDateRange } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
+import { apiFetch, type ApiResponse } from '@/lib/api';
 
 function unwrapManagerApiResponse<T>(response: ApiResponse<T>, fallbackMessage: string): T {
   if (!response.success) {
@@ -25,13 +25,13 @@ export class ManagerDashboardReportsContractBlockedError extends Error {
 
 export async function fetchManagerReports(dateRange: ManagerDashboardReportsDateRange): Promise<ManagerDashboardReportsData> {
   const endpoint = MANAGER_DASHBOARD_REPORTS_API.REPORTS;
-  if (!endpoint) return getManagerReportsFixture(dateRange);
+  if (!endpoint) return getManagerReportsDemoData(dateRange);
   try {
     const params = new URLSearchParams({ range: dateRange });
     const response = await apiFetch<unknown>(`${endpoint}?${params.toString()}`);
     const data = unwrapManagerApiResponse(response, 'Unable to load manager reports.');
     return managerReportsSchema.parse(data);
   } catch {
-    return getManagerReportsFixture(dateRange);
+    return getManagerReportsDemoData(dateRange);
   }
 }

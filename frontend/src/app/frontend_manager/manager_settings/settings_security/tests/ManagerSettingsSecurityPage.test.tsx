@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { fireEvent,render,screen,waitFor } from '@testing-library/react';
 import { beforeEach,describe,expect,it,vi } from 'vitest';
-import { ManagerSettingsSecurityMain } from '../components/ManagerSettingsSecurityMain';
+import { ManagerSettingsSecurityMain } from '@/app/frontend_manager/manager_settings/settings_security/components/ManagerSettingsSecurityMain';
 
 // Mock next/navigation
 vi.mock('next/navigation', () => ({

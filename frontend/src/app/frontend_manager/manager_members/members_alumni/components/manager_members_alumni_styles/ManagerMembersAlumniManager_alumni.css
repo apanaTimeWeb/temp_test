@@ -314,3 +314,20 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+.malm-kpi-indigo {
+  border-color: rgba(99, 102, 241, 0.4);
+  background: linear-gradient(135deg, rgba(30, 27, 75, 0.8), #181c4b, rgba(49, 46, 129, 0.6));
+}
+.malm-kpi-emerald {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, rgba(2, 44, 34, 0.8), #0e2c21, rgba(6, 78, 59, 0.6));
+}
+.malm-kpi-sky {
+  border-color: rgba(14, 165, 233, 0.4);
+  background: linear-gradient(135deg, rgba(8, 47, 73, 0.8), #0e2540, rgba(12, 74, 110, 0.6));
+}
+.malm-kpi-amber {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: linear-gradient(135deg, rgba(69, 26, 3, 0.8), #261c0c, rgba(120, 53, 15, 0.6));
+}

@@ -133,7 +133,7 @@ export function ManagerAccountsSeatGapReportToolbar({
           <button
             type="button"
             onClick={onResetFilters}
-            className="self-end sm:self-auto inline-flex items-center gap-1.5 text-xs text-secondary hover:text-danger hover:bg-danger/10 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer"
+            className="self-end sm:self-auto inline-flex items-center gap-1.5 text-xs text-secondary hover:text-danger hover:bg-danger-bg px-2.5 py-1.5 rounded-lg motion-safe:transition-colors cursor-pointer"
             title="Reset all active filters"
           >
             <RotateCcw size={12} />
@@ -152,7 +152,7 @@ export function ManagerAccountsSeatGapReportToolbar({
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search seat number, floor, or shift..."
             style={{ paddingLeft: '2.5rem', paddingRight: '2.25rem' }}
-            className="w-full text-xs rounded-xl bg-card border border-border py-2 text-primary placeholder:text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+            className="w-full text-xs rounded-xl bg-card border border-border py-2 text-primary placeholder:text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary motion-safe:transition-all"
           />
           <Search
             size={16}

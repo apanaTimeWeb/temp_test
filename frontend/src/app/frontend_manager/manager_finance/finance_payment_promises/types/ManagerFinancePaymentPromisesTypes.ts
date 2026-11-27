@@ -6,3 +6,26 @@ export type ManagerFinancePaymentPromisesRefundStatus = 'pending' | 'approved' |
 /** Monetary values remain absent when the supplied API contract does not identify their meaning or currency. */
 export interface ManagerFinancePaymentPromisesRefund { id: string; studentName: string; smartId: string; exitDate?: string; depositHeld?: number; deductionAmount?: number; netRefund?: number; status: ManagerFinancePaymentPromisesRefundStatus; requestedDate?: string; processedDate?: string; paymentMethod?: string; rejectionReason?: string; currency?: string; }
 
+export type ManagerFinancePaymentPromisesPaymentPromiseSample = {
+  id: number;
+  studentName: string;
+  smartId: string;
+  phone?: string;
+  promisedAmount: number;
+  expectedDate: string;
+  daysUntilDue: number;
+  timesChanged: number;
+  status: 'pending' | 'fulfilled' | 'overdue';
+  fulfilledDate?: string;
+  remarks?: string;
+};
+
+export interface ManagerFinancePaymentPromiseCandidate {
+  id: string;
+  name: string;
+  seat?: string;
+  phone: string;
+  status: string;
+}
+
+

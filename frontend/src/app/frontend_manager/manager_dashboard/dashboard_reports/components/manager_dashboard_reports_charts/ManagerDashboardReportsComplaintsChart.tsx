@@ -3,6 +3,7 @@
 import { ManagerDashboardReportsChartDataTable } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_table_parts/ManagerDashboardReportsChartDataTable';
 import { useManagerDashboardReportsChartTheme } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/hooks/useManagerDashboardReportsChartTheme';
 import type { ManagerDashboardReportsComplaintPoint } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
+import { formatManagerDashboardReportsPercent } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/utils/ManagerDashboardReportsCurrency';
 import type { ApexOptions } from 'apexcharts';
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
@@ -47,7 +48,7 @@ export function ManagerDashboardReportsComplaintsChart({ data }: { data: Manager
     },
     dataLabels: {
       enabled: true,
-      formatter: (val) => `${Number(val).toFixed(1)}%`,
+      formatter: (val) => formatManagerDashboardReportsPercent(Number(val)),
     },
   };
 

@@ -1,29 +1,45 @@
 /**
  * Module-owned, sample-only repository implementation. Each exported collection/object is a defensive
- * snapshot of the authored fixture data; these values are not a persistence or API contract.
+ * snapshot of the authored demo data; these values are not a persistence or API contract.
  */
-import { MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIG as MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIGFixture,MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS as MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTSFixture,MANAGER_FINANCE_SAMPLE_INVOICES as MANAGER_FINANCE_SAMPLE_INVOICESFixture,MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY as MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORYFixture,MANAGER_FINANCE_SAMPLE_PENDING_FINES as MANAGER_FINANCE_SAMPLE_PENDING_FINESFixture,MANAGER_FINANCE_SAMPLE_RECEIPTS as MANAGER_FINANCE_SAMPLE_RECEIPTSFixture,MANAGER_FINANCE_SAMPLE_REFERRERS as MANAGER_FINANCE_SAMPLE_REFERRERSFixture,MANAGER_FINANCE_SAMPLE_RENEWALS as MANAGER_FINANCE_SAMPLE_RENEWALSFixture,MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS as MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONSFixture,MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS as MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTSFixture,MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS as MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTSFixture } from '@/app/frontend_manager/manager_finance/finance_subscriptions/mocks/manager_finance_subscriptions_fixtures/ManagerFinanceSubscriptionsComponentSampleFixtures';
-import type { ManagerFinanceSubscriptionsLateFeeConfig as ManagerFinanceSubscriptionsLateFeeConfigFixture,ManagerFinanceSubscriptionsOverdueStudent as ManagerFinanceSubscriptionsOverdueStudentFixture,ManagerFinanceSubscriptionsSampleDashboardStats as ManagerFinanceSubscriptionsSampleDashboardStatsFixture,ManagerFinanceSubscriptionsSampleDeposit as ManagerFinanceSubscriptionsSampleDepositFixture,ManagerFinanceSubscriptionsSampleRecentPayment as ManagerFinanceSubscriptionsSampleRecentPaymentFixture } from '@/app/frontend_manager/manager_finance/finance_subscriptions/mocks/manager_finance_subscriptions_fixtures/ManagerFinanceSubscriptionsOperationalSampleFixtures';
-import { MANAGER_FINANCE_SAMPLE_DASHBOARD_STATS as MANAGER_FINANCE_SAMPLE_DASHBOARD_STATSFixture,MANAGER_FINANCE_SAMPLE_DEPOSITS as MANAGER_FINANCE_SAMPLE_DEPOSITSFixture,MANAGER_FINANCE_SAMPLE_LATE_FEE_CONFIG as MANAGER_FINANCE_SAMPLE_LATE_FEE_CONFIGFixture,MANAGER_FINANCE_SAMPLE_OVERDUE_STUDENTS as MANAGER_FINANCE_SAMPLE_OVERDUE_STUDENTSFixture,MANAGER_FINANCE_SAMPLE_RECENT_PAYMENTS as MANAGER_FINANCE_SAMPLE_RECENT_PAYMENTSFixture } from '@/app/frontend_manager/manager_finance/finance_subscriptions/mocks/manager_finance_subscriptions_fixtures/ManagerFinanceSubscriptionsOperationalSampleFixtures';
+import type { ManagerFinanceSubscriptionsLateFeeConfig as ManagerFinanceSubscriptionsLateFeeConfigDemo, ManagerFinanceSubscriptionsOverdueStudent as ManagerFinanceSubscriptionsOverdueStudentDemo, ManagerFinanceSubscriptionsSampleDashboardStats as ManagerFinanceSubscriptionsSampleDashboardStatsDemo, ManagerFinanceSubscriptionsSampleDeposit as ManagerFinanceSubscriptionsSampleDepositDemo, ManagerFinanceSubscriptionsSampleRecentPayment as ManagerFinanceSubscriptionsSampleRecentPaymentDemo } from '@/app/frontend_manager/manager_finance/finance_subscriptions/config/manager_finance_subscriptions.demo_data';
+import {
+  MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIG as MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIG_DEMO,
+  MANAGER_FINANCE_SAMPLE_DASHBOARD_STATS as MANAGER_FINANCE_SAMPLE_DASHBOARD_STATS_DEMO,
+  MANAGER_FINANCE_SAMPLE_DEPOSITS as MANAGER_FINANCE_SAMPLE_DEPOSITS_DEMO,
+  MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS as MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS_DEMO,
+  MANAGER_FINANCE_SAMPLE_INVOICES as MANAGER_FINANCE_SAMPLE_INVOICES_DEMO,
+  MANAGER_FINANCE_SAMPLE_LATE_FEE_CONFIG as MANAGER_FINANCE_SAMPLE_LATE_FEE_CONFIG_DEMO,
+  MANAGER_FINANCE_SAMPLE_OVERDUE_STUDENTS as MANAGER_FINANCE_SAMPLE_OVERDUE_STUDENTS_DEMO,
+  MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY as MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY_DEMO,
+  MANAGER_FINANCE_SAMPLE_PENDING_FINES as MANAGER_FINANCE_SAMPLE_PENDING_FINES_DEMO,
+  MANAGER_FINANCE_SAMPLE_RECEIPTS as MANAGER_FINANCE_SAMPLE_RECEIPTS_DEMO,
+  MANAGER_FINANCE_SAMPLE_RECENT_PAYMENTS as MANAGER_FINANCE_SAMPLE_RECENT_PAYMENTS_DEMO,
+  MANAGER_FINANCE_SAMPLE_REFERRERS as MANAGER_FINANCE_SAMPLE_REFERRERS_DEMO,
+  MANAGER_FINANCE_SAMPLE_RENEWALS as MANAGER_FINANCE_SAMPLE_RENEWALS_DEMO,
+  MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS as MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS_DEMO,
+  MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS as MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS_DEMO,
+  MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS as MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS_DEMO,
+} from '@/app/frontend_manager/manager_finance/finance_subscriptions/config/manager_finance_subscriptions.demo_data';
 
-export const MANAGER_FINANCE_SAMPLE_RECEIPTS = MANAGER_FINANCE_SAMPLE_RECEIPTSFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
-export const MANAGER_FINANCE_SAMPLE_INVOICES = MANAGER_FINANCE_SAMPLE_INVOICESFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
-export const MANAGER_FINANCE_SAMPLE_REFERRERS = MANAGER_FINANCE_SAMPLE_REFERRERSFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
-export const MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS = MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONSFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
-export const MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIG = { ...MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIGFixture };
-export const MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS = MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTSFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
-export const MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS = MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTSFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
-export const MANAGER_FINANCE_SAMPLE_RENEWALS = MANAGER_FINANCE_SAMPLE_RENEWALSFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
-export const MANAGER_FINANCE_SAMPLE_PENDING_FINES = MANAGER_FINANCE_SAMPLE_PENDING_FINESFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
-export const MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY = MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORYFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
-export const MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS = { ...MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTSFixture };
-export type ManagerFinanceSubscriptionsLateFeeConfig = ManagerFinanceSubscriptionsLateFeeConfigFixture;
-export type ManagerFinanceSubscriptionsOverdueStudent = ManagerFinanceSubscriptionsOverdueStudentFixture;
-export type ManagerFinanceSubscriptionsSampleDeposit = ManagerFinanceSubscriptionsSampleDepositFixture;
-export type ManagerFinanceSubscriptionsSampleDashboardStats = ManagerFinanceSubscriptionsSampleDashboardStatsFixture;
-export type ManagerFinanceSubscriptionsSampleRecentPayment = ManagerFinanceSubscriptionsSampleRecentPaymentFixture;
-export const MANAGER_FINANCE_SAMPLE_LATE_FEE_CONFIG = { ...MANAGER_FINANCE_SAMPLE_LATE_FEE_CONFIGFixture };
-export const MANAGER_FINANCE_SAMPLE_OVERDUE_STUDENTS = MANAGER_FINANCE_SAMPLE_OVERDUE_STUDENTSFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
-export const MANAGER_FINANCE_SAMPLE_DEPOSITS = MANAGER_FINANCE_SAMPLE_DEPOSITSFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
-export const MANAGER_FINANCE_SAMPLE_DASHBOARD_STATS = { ...MANAGER_FINANCE_SAMPLE_DASHBOARD_STATSFixture };
-export const MANAGER_FINANCE_SAMPLE_RECENT_PAYMENTS = MANAGER_FINANCE_SAMPLE_RECENT_PAYMENTSFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
+export const MANAGER_FINANCE_SAMPLE_RECEIPTS = MANAGER_FINANCE_SAMPLE_RECEIPTS_DEMO.map((record) => ({ ...record }));
+export const MANAGER_FINANCE_SAMPLE_INVOICES = MANAGER_FINANCE_SAMPLE_INVOICES_DEMO.map((record) => ({ ...record }));
+export const MANAGER_FINANCE_SAMPLE_REFERRERS = MANAGER_FINANCE_SAMPLE_REFERRERS_DEMO.map((record) => ({ ...record }));
+export const MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS = MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS_DEMO.map((record) => ({ ...record }));
+export const MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIG = { ...MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIG_DEMO };
+export const MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS = MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS_DEMO.map((record) => ({ ...record }));
+export const MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS = MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS_DEMO.map((record) => ({ ...record }));
+export const MANAGER_FINANCE_SAMPLE_RENEWALS = MANAGER_FINANCE_SAMPLE_RENEWALS_DEMO.map((record) => ({ ...record }));
+export const MANAGER_FINANCE_SAMPLE_PENDING_FINES = MANAGER_FINANCE_SAMPLE_PENDING_FINES_DEMO.map((record) => ({ ...record }));
+export const MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY = MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY_DEMO.map((record) => ({ ...record }));
+export const MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS = { ...MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS_DEMO };
+export type ManagerFinanceSubscriptionsLateFeeConfig = ManagerFinanceSubscriptionsLateFeeConfigDemo;
+export type ManagerFinanceSubscriptionsOverdueStudent = ManagerFinanceSubscriptionsOverdueStudentDemo;
+export type ManagerFinanceSubscriptionsSampleDeposit = ManagerFinanceSubscriptionsSampleDepositDemo;
+export type ManagerFinanceSubscriptionsSampleDashboardStats = ManagerFinanceSubscriptionsSampleDashboardStatsDemo;
+export type ManagerFinanceSubscriptionsSampleRecentPayment = ManagerFinanceSubscriptionsSampleRecentPaymentDemo;
+export const MANAGER_FINANCE_SAMPLE_LATE_FEE_CONFIG = { ...MANAGER_FINANCE_SAMPLE_LATE_FEE_CONFIG_DEMO };
+export const MANAGER_FINANCE_SAMPLE_OVERDUE_STUDENTS = MANAGER_FINANCE_SAMPLE_OVERDUE_STUDENTS_DEMO.map((record) => ({ ...record }));
+export const MANAGER_FINANCE_SAMPLE_DEPOSITS = MANAGER_FINANCE_SAMPLE_DEPOSITS_DEMO.map((record) => ({ ...record }));
+export const MANAGER_FINANCE_SAMPLE_DASHBOARD_STATS = { ...MANAGER_FINANCE_SAMPLE_DASHBOARD_STATS_DEMO };
+export const MANAGER_FINANCE_SAMPLE_RECENT_PAYMENTS = MANAGER_FINANCE_SAMPLE_RECENT_PAYMENTS_DEMO.map((record) => ({ ...record }));

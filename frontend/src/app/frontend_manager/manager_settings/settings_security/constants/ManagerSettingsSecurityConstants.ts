@@ -3,7 +3,7 @@ ManagerActiveSession,
 ManagerLoginHistoryEntry,
 ManagerProfileInfo,
 ManagerTwoFactorConfig,
-} from '../types/ManagerSettingsSecurityTypes';
+} from '@/app/frontend_manager/manager_settings/settings_security/types/ManagerSettingsSecurityTypes';
 
 export const INITIAL_MANAGER_PROFILE: ManagerProfileInfo = {
   name: 'Rajesh Kumar',

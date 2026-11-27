@@ -2,22 +2,21 @@
 // RESPONSIBILITY: Render the members new admission admission form component with dynamic shift & tenure pricing.
 import { useTranslations } from 'next-intl';
 
+import { ManagerMembersNewAdmissionPageHeader } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_forms/ManagerMembersNewAdmissionPageHeader';
 import { ManagerMembersNewAdmissionAdmissionDocumentSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionDocumentSection';
 import { ManagerMembersNewAdmissionAdmissionEnrollmentSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionEnrollmentSection';
 import { ManagerMembersNewAdmissionAdmissionPaymentSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionPaymentSection';
 import { ManagerMembersNewAdmissionAdmissionPersonalSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionPersonalSection';
 import { ManagerMembersNewAdmissionAdmissionSummary } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionSummary';
-import { ManagerMembersNewAdmissionSuccessBanner,type AdmittedStudentInfo } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionSuccessBanner';
-import { MANAGER_MEMBERS_NEW_ADMISSION_ROUTES } from '@/app/frontend_manager/manager_members/members_new_admission/config/manager_members_new_admission.url_config';
+import type { AdmittedStudentInfo } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionSuccessBanner';
 import { useManagerNewAdmissionAdmission } from '@/app/frontend_manager/manager_members/members_new_admission/hooks/useManagerMembersNewAdmissionAdmission';
 import { useManagerMembersNewAdmissionConfirm } from '@/app/frontend_manager/manager_members/members_new_admission/hooks/useManagerMembersNewAdmissionConfirm';
 import { useManagerMembersNewAdmissionUnsavedChangesGuard } from '@/app/frontend_manager/manager_members/members_new_admission/hooks/useManagerMembersNewAdmissionUnsavedChangesGuard';
+import { consumeEnquiryConversionPrefill, formatAdmissionInr, persistCompletedAdmission } from '@/app/frontend_manager/manager_members/members_new_admission/utils/ManagerMembersNewAdmissionStorageAndFormat';
 import type { DynamicPlanOption } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
-import { calculateAdmissionFee,getLibraryPricingConfig,type LibraryPricingConfig } from '@/lib/pricing/libraryPricingEngine';
-import { ArrowLeft, ShieldCheck, X } from 'lucide-react';
-import Link from 'next/link';
+import { calculateAdmissionFee, getLibraryPricingConfig, type LibraryPricingConfig } from '@/lib/pricing/libraryPricingEngine';
 import { useRouter } from 'next/navigation';
-import { useEffect,useMemo,useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export default function ManagerMembersNewAdmissionAdmissionForm() {
   const tManagerUi = useTranslations('manager.manager_new_admission.ui');
@@ -34,24 +33,17 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
   const [conversionOrigin, setConversionOrigin] = useState<{ enquiryId: string; name: string } | null>(null);
 
   useEffect(() => {
-    try {
-      const stored = sessionStorage.getItem('manager_pending_enquiry_conversion');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (parsed.name) setValue('fullName', parsed.name, { shouldValidate: true, shouldDirty: true });
-        if (parsed.phone) setValue('phone', parsed.phone, { shouldValidate: true, shouldDirty: true });
-        if (parsed.shift && parsed.shift !== 'Not specified') {
-          setValue('shift', parsed.shift, { shouldValidate: true, shouldDirty: true });
-        }
-        if (parsed.notes) {
-          setValue('remarks', `Converted from Enquiry: ${parsed.notes}`, { shouldValidate: false, shouldDirty: true });
-        }
-        setConversionOrigin({ enquiryId: parsed.enquiryId || 'ENQ', name: parsed.name });
-        sessionStorage.removeItem('manager_pending_enquiry_conversion');
-      }
-    } catch {
-      // Storage fallback
+    const parsed = consumeEnquiryConversionPrefill();
+    if (!parsed) return;
+    if (parsed.name) setValue('fullName', parsed.name, { shouldValidate: true, shouldDirty: true });
+    if (parsed.phone) setValue('phone', parsed.phone, { shouldValidate: true, shouldDirty: true });
+    if (parsed.shift && parsed.shift !== 'Not specified') {
+      setValue('shift', parsed.shift, { shouldValidate: true, shouldDirty: true });
     }
+    if (parsed.notes) {
+      setValue('remarks', `Converted from Enquiry: ${parsed.notes}`, { shouldValidate: false, shouldDirty: true });
+    }
+    setConversionOrigin({ enquiryId: parsed.enquiryId || 'ENQ', name: parsed.name || 'Candidate' });
   }, [setValue]);
 
   useEffect(() => {
@@ -116,7 +108,7 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
         pricingConfig
       );
       const savings = calc.tenureDiscountAmount > 0
-        ? `Save ₹${calc.tenureDiscountAmount.toLocaleString('en-IN')} • ${tier.discountPercent}% Off`
+        ? `Save ${formatAdmissionInr(calc.tenureDiscountAmount)} • ${tier.discountPercent}% Off`
         : undefined;
       return {
         id: tier.id,
@@ -209,75 +201,22 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
         securityDeposit: secDepositNum > 0 ? String(secDepositNum) : undefined,
       };
 
-      // Real local persistence across session
-      try {
-        const stored = JSON.parse(localStorage.getItem('manager_admitted_students') || '[]');
-        localStorage.setItem('manager_admitted_students', JSON.stringify([studentData, ...stored]));
-        sessionStorage.setItem(`admission_student_${generatedSmartId}`, JSON.stringify(studentData));
-        window.dispatchEvent(new CustomEvent('manager_member_admitted', { detail: studentData }));
-
-        // Auto-create Payment Promise if partial payment with balance due
-        if (isPartial) {
-          const promiseRecord = {
-            id: Date.now(),
-            studentName: values.fullName,
-            smartId: generatedSmartId,
-            phone: values.phone,
-            promisedAmount: balanceDue * 100, // minor units matching finance_payment_promises
-            expectedDate: expectedDueDate,
-            daysUntilDue: Math.ceil((new Date(expectedDueDate).getTime() - Date.now()) / (1000 * 3600 * 24)),
-            timesChanged: 0,
-            status: 'pending',
-            remarks: values.promiseRemarks?.trim() || `Admission Token Advance: Paid ₹${amountPaidNum} of ₹${finalPayable}. Balance ₹${balanceDue} promised.`,
-          };
-          const storedPromises = JSON.parse(localStorage.getItem('manager_finance_payment_promises_records') || '[]');
-          localStorage.setItem('manager_finance_payment_promises_records', JSON.stringify([promiseRecord, ...storedPromises]));
-          sessionStorage.setItem('manager_latest_payment_promise', JSON.stringify(promiseRecord));
-          window.dispatchEvent(new CustomEvent('manager_payment_promise_created', { detail: promiseRecord }));
-        }
-
-        // Auto-create Security Deposit record if refundable security deposit is collected
-        if (secDepositNum > 0) {
-          const depositRecord = {
-            id: Date.now(),
-            studentName: values.fullName,
-            smartId: generatedSmartId,
-            phone: values.phone,
-            depositAmount: secDepositNum * 100, // minor units matching finance_security_deposits
-            status: 'held',
-            collectedDate: new Date().toISOString().slice(0, 10),
-            collectedBy: 'Front Desk Admission',
-            receiptNumber: `DEP-${generatedSmartId}`,
-            notes: `Collected at admission. Plan: ${values.plan}, Seat: ${values.seat || 'General'}.`,
-          };
-          const storedDeposits = JSON.parse(localStorage.getItem('manager_finance_security_deposits_records') || '[]');
-          localStorage.setItem('manager_finance_security_deposits_records', JSON.stringify([depositRecord, ...storedDeposits]));
-          window.dispatchEvent(new CustomEvent('manager_security_deposit_collected', { detail: depositRecord }));
-        }
-
-        // Automatically record verified referral when newly admitted student declares a referrer
-        const refBy = values.referredBy?.trim();
-        if (refBy && refBy !== 'Direct Walk-in' && !refBy.toLowerCase().startsWith('direct walk-in')) {
-          const storedReferrals = JSON.parse(localStorage.getItem('manager_members_referral_records') || '[]');
-          const newRef = {
-            id: `REF-${Date.now().toString().slice(-4)}`,
-            referrer: refBy,
-            referred: `${values.fullName} (${generatedSmartId})`,
-            date: new Date().toISOString().slice(0, 10),
-            status: 'Pending',
-            bonus: '₹500',
-            method: 'Fee Discount',
-          };
-          localStorage.setItem('manager_members_referral_records', JSON.stringify([newRef, ...storedReferrals]));
-          window.dispatchEvent(new CustomEvent('manager_referral_created', { detail: newRef }));
-        }
-      } catch {
-        // Storage unavailable fallback
-      }
+      persistCompletedAdmission({
+        studentData,
+        generatedSmartId,
+        finalPayable,
+        amountPaidNum,
+        balanceDue,
+        isPartial,
+        secDepositNum,
+        expectedDueDate,
+        promiseRemarks: values.promiseRemarks,
+        referredBy: values.referredBy,
+      });
 
       setAdmittedStudent(studentData);
       const feedbackText = isPartial
-        ? `Admission registered successfully for ${values.fullName}! Token Advance: ₹${amountPaidNum}, Balance Due: ₹${balanceDue} (Auto-created Payment Promise scheduled for ${expectedDueDate}).`
+        ? `Admission registered successfully for ${values.fullName}! Token Advance: ${formatAdmissionInr(amountPaidNum)}, Balance Due: ${formatAdmissionInr(balanceDue)} (Auto-created Payment Promise scheduled for ${expectedDueDate}).`
         : `Admission registered successfully for ${values.fullName}! Assigned Seat: ${values.seat || 'General'}, Shift: ${values.shift}, Plan: ${values.plan}, Mode: ${values.paymentMode}.`;
       setDraftFeedback(feedbackText);
     }, 500);
@@ -287,46 +226,14 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
     <>
       {unsavedConfirmDialog}
       <div className="mgr-page w-full max-w-full min-w-0 overflow-x-hidden">
-        <div className="mgr-page-header flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 w-full max-w-full min-w-0">
-          <div className="min-w-0 flex-1">
-            <Link href={MANAGER_MEMBERS_NEW_ADMISSION_ROUTES.LIST} className="mgr-back-link inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors mb-2">
-              <ArrowLeft size={16} strokeWidth={2} />
-              <span>{tManagerUi('back_to_students_6de7b0')}</span>
-            </Link>
-            <h1 className="mgr-page-title text-xl sm:text-2xl font-black text-primary tracking-tight truncate">{tManagerUi('new_student_admission')}</h1>
-            <p className="mgr-page-subtitle text-xs sm:text-sm text-secondary mt-1">{tManagerUi('fill_all_mandatory_fields_accurately_smart_id_is_auto_ge_026bb4')}</p>
-            {admittedStudent && (
-              <ManagerMembersNewAdmissionSuccessBanner
-                student={admittedStudent}
-                onReset={handleResetAdmission}
-              />
-            )}
-            {draftFeedback && <p className="mt-3 rounded-lg border border-warning bg-warning-bg p-3 text-sm text-warning" role="status" aria-live="polite" data-testid="manager-students-admission-draft-feedback">{draftFeedback}</p>}
-            {conversionOrigin && (
-              <div className="mt-3 p-3.5 rounded-xl bg-indigo-500/15 border border-indigo-500/35 flex items-center justify-between text-xs text-indigo-300">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck size={16} className="text-indigo-400 shrink-0" />
-                  <span>
-                    Converted from Enquiry <strong>#{conversionOrigin.enquiryId}</strong>: Information pre-filled for <strong>{conversionOrigin.name}</strong>.
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setConversionOrigin(null)}
-                  className="text-secondary hover:text-primary transition-colors cursor-pointer p-1"
-                  aria-label="Dismiss banner"
-                >
-                  <X size={14} />
-                </button>
-              </div>
-            )}
-          </div>
-          <div className="mgr-smartid-badge self-start sm:self-auto shrink-0 flex items-center gap-2 p-2.5 sm:p-3 rounded-xl bg-card border border-border shadow-xs">
-            <span className="mgr-smartid-label text-xs text-secondary font-medium uppercase tracking-wider">{tManagerUi('smart_id')}</span>
-            <span className="mgr-smartid-value font-mono text-sm font-bold text-primary">{tManagerUi('lib_new')}</span>
-            <span className="mgr-badge mgr-badge--info text-[11px] font-semibold px-2 py-0.5 rounded-full bg-info-bg text-info border border-border">{tManagerUi('smart_id_preview_only')}</span>
-          </div>
-        </div>
+        <ManagerMembersNewAdmissionPageHeader
+          tManagerUi={tManagerUi}
+          admittedStudent={admittedStudent}
+          onResetAdmission={handleResetAdmission}
+          draftFeedback={draftFeedback}
+          conversionOrigin={conversionOrigin}
+          onDismissConversionOrigin={() => setConversionOrigin(null)}
+        />
 
         <form onSubmit={submit} noValidate className="w-full max-w-full min-w-0">
           <div className="mgr-admission-layout w-full max-w-full min-w-0">

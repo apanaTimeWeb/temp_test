@@ -11,6 +11,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:admin": "playwright test --config=frontend_admin_e2e/playwright.config.ts",
+    "test:e2e:manager": "playwright test --config=frontend_manager_e2e/playwright.config.ts",
     "test:e2e:superadmin": "playwright test --config=frontend_superadmin_e2e/playwright.config.ts"
   },
   "dependencies": {

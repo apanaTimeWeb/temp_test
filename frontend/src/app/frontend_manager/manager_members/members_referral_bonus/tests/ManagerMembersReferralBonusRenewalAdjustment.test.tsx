@@ -104,7 +104,7 @@ describe('ManagerMembersReferralBonusRenewalAdjustment', () => {
 
       // Verify Apply to Renewal modal opens
       expect(screen.getByRole('dialog', { name: /Apply Referral Bonus to Renewal/i })).toBeTruthy();
-      expect(screen.getByText(/Renewal Discount Amount \(₹\)/i)).toBeTruthy();
+      expect(screen.getByText(/Renewal Discount Amount \((₹|INR)\)/i)).toBeTruthy();
       expect(screen.getByText(/Net Payable Renewal Fee/i)).toBeTruthy();
 
       // Check preset chips: 200, 300, 500

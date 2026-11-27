@@ -12,7 +12,7 @@ MapPin,
 XCircle,
 } from 'lucide-react';
 import { useMemo,useState } from 'react';
-import type { ManagerLoginHistoryEntry } from '../types/ManagerSettingsSecurityTypes';
+import type { ManagerLoginHistoryEntry } from '@/app/frontend_manager/manager_settings/settings_security/types/ManagerSettingsSecurityTypes';
 
 interface ManagerSettingsSecurityLoginHistoryPanelProps {
   history: ManagerLoginHistoryEntry[];
@@ -107,7 +107,7 @@ export function ManagerSettingsSecurityLoginHistoryPanel({
       ) : (
         <>
           {/* Desktop Table View */}
-          <div className="hidden md:block overflow-hidden rounded-xl border border-white/10 bg-[#0c0d24]">
+          <div className="mgr-sec-panel-surface hidden md:block overflow-hidden rounded-xl border">
             <table className="w-full text-left text-xs">
               <thead className="border-b border-white/5 bg-white/5 text-[11px] font-semibold text-slate-400">
                 <tr>
@@ -183,7 +183,7 @@ export function ManagerSettingsSecurityLoginHistoryPanel({
             {paginatedHistory.map((item) => (
               <div
                 key={item.id}
-                className="rounded-xl border border-white/10 bg-[#0c0d24] p-3 space-y-2 text-xs"
+                className="mgr-sec-panel-surface rounded-xl border p-3 space-y-2 text-xs"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-white">{item.timestamp}</span>
@@ -221,7 +221,7 @@ export function ManagerSettingsSecurityLoginHistoryPanel({
           </div>
 
           {/* Pagination Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 rounded-xl border border-white/10 bg-[#0c0d24] text-xs text-slate-400">
+          <div className="mgr-sec-panel-surface flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 rounded-xl border text-xs text-slate-400">
             <div className="flex items-center gap-3">
               <span>
                 {filteredHistory.length === 0

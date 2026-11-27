@@ -1,6 +1,7 @@
 'use client';
 
-import { FileText,X } from 'lucide-react';
+import { FileText, X } from 'lucide-react';
+import Image from 'next/image';
 
 export interface ManagerMembersDirectoryDocLightboxProps {
   isZoomed: boolean;
@@ -34,8 +35,9 @@ export function ManagerMembersDirectoryDocLightbox({
             className="relative max-w-md w-full p-2 bg-card rounded-2xl border border-border shadow-2xl text-center space-y-3"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={mockPhotoUrl} alt={memberName} className="w-full h-80 object-cover rounded-xl" />
+            <div className="relative w-full h-80 overflow-hidden rounded-xl">
+              <Image src={mockPhotoUrl} alt={memberName} fill unoptimized className="object-cover" />
+            </div>
             <div className="flex justify-between items-center px-2">
               <span className="font-bold text-sm text-primary">
                 {memberName} ({memberId})

@@ -1,9 +1,9 @@
 'use client';
 
-import { CheckCircle2,MessageSquare,Printer,Send,ShieldCheck,X } from 'lucide-react';
-import { useEffect,useState } from 'react';
+import type { ManagerStudent } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorTypes';
+import { CheckCircle2, MessageSquare, Printer, Send, ShieldCheck, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import type { ManagerStudent } from '../../types/ManagerMembersIdCardGeneratorTypes';
 
 interface ManagerMembersIdCardBulkDispatchModalProps {
   isOpen: boolean;
@@ -62,7 +62,7 @@ export function ManagerMembersIdCardBulkDispatchModal({
       return next;
     });
 
-    toast.success(`ID Card WhatsApp opened for ${student.name} (+91 ${displayPhone})`);
+    toast.success(`ID Card WhatsApp opened for ${student.name} (+91 ${displayPhone})`, { id: 'idcard-bulk-wa' });
   };
 
   const openedCount = openedKeys.size;

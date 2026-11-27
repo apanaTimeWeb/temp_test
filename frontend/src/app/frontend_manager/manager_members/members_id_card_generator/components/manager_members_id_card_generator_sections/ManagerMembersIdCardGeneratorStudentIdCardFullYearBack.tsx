@@ -150,8 +150,8 @@ export function ManagerMembersIdCardGeneratorStudentIdCardFullYearBack({
         <div className="fy-back-card">
           <div className="fy-back-card-title">📋 Library Rules</div>
           <ul className="fy-rules-list">
-            {rules.slice(0, 5).map((rule, idx) => (
-              <li key={idx}>{rule}</li>
+            {rules.slice(0, 5).map((rule) => (
+              <li key={rule}>{rule}</li>
             ))}
           </ul>
         </div>

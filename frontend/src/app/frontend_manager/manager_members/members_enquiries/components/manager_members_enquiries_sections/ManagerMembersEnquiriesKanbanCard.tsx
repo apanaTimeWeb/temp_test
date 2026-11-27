@@ -42,7 +42,7 @@ export function ManagerMembersEnquiriesKanbanCard({ enq, colClass, onClick }: Ma
 
   return (
     <div
-      className={`crm-kanban-card ${colClass} rounded-xl bg-[#0c0f28]/95 border border-indigo-500/25 p-3.5 shadow-sm hover:border-indigo-400 hover:shadow-md transition-all cursor-pointer`}
+      className={`crm-kanban-card menq-surface-card ${colClass} rounded-xl border p-3.5 shadow-sm hover:border-indigo-400 hover:shadow-md motion-safe:transition-all cursor-pointer`}
       onClick={onClick}
       role="button"
       tabIndex={0}

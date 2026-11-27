@@ -5,16 +5,17 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
+import '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_styles/ManagerCommunicationWhatsappLogsManager_whatsapp_logs.css';
 import { ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_dialogs/ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog';
 import ManagerCommunicationWhatsappLogsNativeTable from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_table_parts/ManagerCommunicationWhatsappLogsNativeTable';
+import { ManagerCommunicationWhatsappLogsFilterBar } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_views/ManagerCommunicationWhatsappLogsFilterBar';
+import { ManagerCommunicationWhatsappLogsKpis } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_views/ManagerCommunicationWhatsappLogsKpis';
+import { buildLogColumns } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_views/ManagerCommunicationWhatsappLogsTableColumns';
 import {
   MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_LOGS,
   type WaLog,
 } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/hooks/ManagerCommunicationWhatsappLogsDemoRepository';
 import type { ManagerCommunicationWhatsappLogsRouteQueryProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/types/ManagerCommunicationWhatsappLogsComponentTypes';
-import { ManagerCommunicationWhatsappLogsKpis } from './ManagerCommunicationWhatsappLogsKpis';
-import { ManagerCommunicationWhatsappLogsFilterBar } from './ManagerCommunicationWhatsappLogsFilterBar';
-import { buildLogColumns } from './ManagerCommunicationWhatsappLogsTableColumns';
 
 const LOGS = MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_LOGS;
 
@@ -87,11 +88,11 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
     anchor.download = `whatsapp_logs_${new Date().toISOString().slice(0, 10)}.csv`;
     anchor.click();
     URL.revokeObjectURL(url);
-    toast.success('WhatsApp delivery logs exported to CSV successfully');
+    toast.success('WhatsApp delivery logs exported to CSV successfully', { id: 'manager-wa-logs-export-csv' });
   };
 
   const handlePrint = () => window.print();
-  const handleRefresh = () => toast.success('WhatsApp delivery logs feed refreshed');
+  const handleRefresh = () => toast.success('WhatsApp delivery logs feed refreshed', { id: 'manager-wa-logs-refresh' });
 
   const totalCount = LOGS.length;
   const deliveredCount = LOGS.filter((l) => l.status === 'Delivered').length;
@@ -192,7 +193,7 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
         log={viewLog}
         typeLabel={viewLog?.type ? viewLog.type.replace('_', ' ').toUpperCase() : 'WHATSAPP'}
         statusLabel={viewLog?.status || 'Sent'}
-        typeClassName="bg-primary/10 text-primary border-primary/25"
+        typeClassName="bg-primary-subtle text-primary border-border"
         statusClassName="bg-emerald-500/10 text-emerald-400 border-emerald-500/25"
         onClose={() => setViewLog(null)}
         labels={{

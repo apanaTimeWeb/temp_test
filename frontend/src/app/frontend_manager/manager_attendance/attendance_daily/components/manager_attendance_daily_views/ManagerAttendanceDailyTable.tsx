@@ -1,13 +1,13 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { ManagerAttendanceDailyEmptyState } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_empty_states/ManagerAttendanceDailyEmptyState';
+import { ManagerAttendanceDailyStudentRow } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_widgets/ManagerAttendanceDailyStudentRow';
 import type {
-AttStatus,
-ManagerAttendanceDailyTimeField,
-Student,
-} from '../../types/ManagerAttendanceDailyComponentTypes';
-import { ManagerAttendanceDailyEmptyState } from '../manager_attendance_daily_empty_states/ManagerAttendanceDailyEmptyState';
-import { ManagerAttendanceDailyStudentRow } from '../manager_attendance_daily_widgets/ManagerAttendanceDailyStudentRow';
+  AttStatus,
+  ManagerAttendanceDailyTimeField,
+  Student,
+} from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
+import { useTranslations } from 'next-intl';
 
 interface ManagerAttendanceDailyTableProps {
   filtered: Student[];

@@ -1,8 +1,9 @@
 'use client';
 
 import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
-import { Calculator,CheckCircle2,TrendingUp,X } from 'lucide-react';
-import React,{ useState } from 'react';
+import { formatSubscriptionInr } from '@/app/frontend_manager/manager_finance/finance_subscriptions/utils/ManagerFinanceSubscriptionsHelpers';
+import { Calculator, CheckCircle2, TrendingUp, X } from 'lucide-react';
+import React, { useState } from 'react';
 import { toast } from 'sonner';
 
 export interface SubscriptionRecord {
@@ -55,18 +56,12 @@ export default function ManagerFinanceSubscriptionsUpgradeModal({
 
   if (!isOpen || !subscription) return null;
 
-  // Determine current rate based on current shift/plan
   const currentMonthlyRate = subscription.shift === 'Full Day' ? 1500 : 800;
   const targetOption = SHIFT_PLAN_TIERS.find((t) => t.id === selectedTargetId) || SHIFT_PLAN_TIERS[2];
-
-  // Pro-rata mathematical formula:
-  // Remaining active days in billing cycle
   const remainingDays = Math.max(1, subscription.daysLeft > 0 ? subscription.daysLeft : 15);
   const cycleDays = 30;
-
   const currentDailyRate = currentMonthlyRate / cycleDays;
   const targetDailyRate = targetOption.monthlyRate / cycleDays;
-
   const unusedCredit = Math.round(remainingDays * currentDailyRate);
   const targetCostForRemainingDays = Math.round(remainingDays * targetDailyRate);
   const netProRataPayable = Math.max(0, targetCostForRemainingDays - unusedCredit);
@@ -77,7 +72,8 @@ export default function ManagerFinanceSubscriptionsUpgradeModal({
     try {
       onConfirmUpgrade(subscription.id, targetOption.name, targetOption.shift, netProRataPayable);
       toast.success(
-        `Plan upgraded for ${subscription.studentName}: ${targetOption.name} activated! Pro-rata collected: ₹${netProRataPayable}`
+        `Plan upgraded for ${subscription.studentName}: ${targetOption.name} activated! Pro-rata collected: ${formatSubscriptionInr(netProRataPayable)}`,
+        { id: 'subscriptions-upgrade-success' }
       );
       onClose();
     } finally {
@@ -87,62 +83,52 @@ export default function ManagerFinanceSubscriptionsUpgradeModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 motion-safe:animate-in fade-in"
       role="dialog"
       aria-modal="true"
       aria-labelledby="upgrade-plan-title"
       data-testid="manager-finance-upgrade-modal"
     >
-      <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-5 animate-in zoom-in-95">
+      <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-5 motion-safe:animate-in zoom-in-95">
         <div className="flex items-center justify-between border-b border-border pb-3">
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-primary/10 text-primary">
+            <div className="p-2 rounded-xl bg-primary-subtle text-primary">
               <TrendingUp size={18} />
             </div>
             <div>
               <h2 id="upgrade-plan-title" className="text-base font-bold text-primary">
                 Pro-Rata Plan Upgrade Calculator
               </h2>
-              <p className="text-xs text-secondary">
-                Mid-month shift & plan upgrade with auto-adjusted remaining days.
-              </p>
+              <p className="text-xs text-secondary">Mid-month shift &amp; plan upgrade with auto-adjusted remaining days.</p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-secondary hover:text-primary p-1 rounded-lg hover:bg-muted"
-          >
+          <button type="button" onClick={onClose} className="text-secondary hover:text-primary p-1 rounded-lg hover:bg-muted">
             <X size={18} />
           </button>
         </div>
 
         <form onSubmit={handleUpgrade} className="space-y-4">
-          {/* Current Membership Snapshot */}
           <div className="p-3.5 rounded-xl border border-border bg-muted/40 space-y-2 text-xs">
             <div className="flex justify-between items-center">
               <span className="text-secondary">Student:</span>
-              <span className="font-bold text-primary">{subscription.studentName} ({subscription.smartId})</span>
+              <span className="font-bold text-primary">
+                {subscription.studentName} ({subscription.smartId})
+              </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-secondary">Current Shift / Plan:</span>
               <span className="font-semibold text-primary">
-                {subscription.shift} ({subscription.plan}) • ₹{currentMonthlyRate}/mo
+                {subscription.shift} ({subscription.plan}) • {formatSubscriptionInr(currentMonthlyRate)}/mo
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-secondary">Remaining Active Days:</span>
-              <span className="font-bold text-primary bg-primary/10 px-2 py-0.5 rounded text-primary">
-                {remainingDays} Days remaining
-              </span>
+              <span className="font-bold text-primary bg-primary-subtle px-2 py-0.5 rounded">{remainingDays} Days remaining</span>
             </div>
           </div>
 
-          {/* Target Plan / Shift Selection */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-primary block">
-              Select Target Upgrade Shift:
-            </label>
+            <label className="text-xs font-bold text-primary block">Select Target Upgrade Shift:</label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {SHIFT_PLAN_TIERS.map((tier) => {
                 const isSelected = tier.id === selectedTargetId;
@@ -153,17 +139,17 @@ export default function ManagerFinanceSubscriptionsUpgradeModal({
                     key={tier.id}
                     disabled={isSameShift}
                     onClick={() => setSelectedTargetId(tier.id)}
-                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                    className={`p-3 rounded-xl border text-left motion-safe:transition-all cursor-pointer ${
                       isSelected
-                        ? 'border-primary bg-primary/10 ring-2 ring-primary/40'
+                        ? 'border-primary bg-primary-subtle ring-2 ring-primary'
                         : isSameShift
-                        ? 'border-border bg-muted/20 opacity-50 cursor-not-allowed'
-                        : 'border-border bg-card hover:bg-muted/40'
+                          ? 'border-border bg-muted/20 opacity-50 cursor-not-allowed'
+                          : 'border-border bg-card hover:bg-muted/40'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-primary">{tier.shift}</span>
-                      <span className="text-xs font-bold text-primary">₹{tier.monthlyRate}/mo</span>
+                      <span className="text-xs font-bold text-primary">{formatSubscriptionInr(tier.monthlyRate)}/mo</span>
                     </div>
                     <p className="text-[11px] text-secondary mt-0.5">{tier.hours} Hours Daily</p>
                     {isSameShift && <span className="text-[10px] text-secondary font-medium">(Current Plan)</span>}
@@ -173,29 +159,31 @@ export default function ManagerFinanceSubscriptionsUpgradeModal({
             </div>
           </div>
 
-          {/* Pro-Rata Math Breakdown Box */}
-          <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 space-y-2.5 text-xs" data-testid="pro-rata-calculator-breakdown">
+          <div className="p-4 rounded-xl border border-border bg-primary-subtle space-y-2.5 text-xs" data-testid="pro-rata-calculator-breakdown">
             <div className="flex items-center gap-1.5 text-primary font-bold">
               <Calculator size={15} />
               <span>Pro-Rata Adjustment Formula Breakdown</span>
             </div>
             <div className="space-y-1.5 pt-1 border-t border-border/60">
               <div className="flex justify-between text-secondary">
-                <span>Unused credit of current plan ({remainingDays} days @ ₹{currentDailyRate.toFixed(1)}/day):</span>
-                <span className="font-medium text-emerald-600 dark:text-emerald-400">- ₹{unusedCredit}</span>
+                <span>
+                  Unused credit of current plan ({remainingDays} days @ {formatSubscriptionInr(currentDailyRate, 1)}/day):
+                </span>
+                <span className="font-medium text-emerald-600 dark:text-emerald-400">- {formatSubscriptionInr(unusedCredit)}</span>
               </div>
               <div className="flex justify-between text-secondary">
-                <span>Cost of new plan ({remainingDays} days @ ₹{targetDailyRate.toFixed(1)}/day):</span>
-                <span className="font-medium text-primary">+ ₹{targetCostForRemainingDays}</span>
+                <span>
+                  Cost of new plan ({remainingDays} days @ {formatSubscriptionInr(targetDailyRate, 1)}/day):
+                </span>
+                <span className="font-medium text-primary">+ {formatSubscriptionInr(targetCostForRemainingDays)}</span>
               </div>
               <div className="flex justify-between items-center pt-2 border-t border-border text-sm font-black text-primary">
                 <span>Net Upgrade Amount Payable:</span>
-                <span className="text-base text-emerald-600 dark:text-emerald-400">₹{netProRataPayable}</span>
+                <span className="text-base text-emerald-600 dark:text-emerald-400">{formatSubscriptionInr(netProRataPayable)}</span>
               </div>
             </div>
           </div>
 
-          {/* Payment Mode Selector */}
           <div>
             <label className="text-xs font-semibold text-primary block mb-1">Payment Mode</label>
             <div className="grid grid-cols-3 gap-2">
@@ -204,7 +192,7 @@ export default function ManagerFinanceSubscriptionsUpgradeModal({
                   type="button"
                   key={m}
                   onClick={() => setPaymentMode(m)}
-                  className={`py-2 text-xs font-semibold rounded-lg border text-center uppercase transition-colors ${
+                  className={`py-2 text-xs font-semibold rounded-lg border text-center uppercase motion-safe:transition-colors ${
                     paymentMode === m ? 'bg-primary text-on-primary border-primary' : 'bg-card text-secondary border-border'
                   }`}
                 >
@@ -225,7 +213,7 @@ export default function ManagerFinanceSubscriptionsUpgradeModal({
               className="mgr-btn-primary text-xs flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? <ButtonLoader icon="repeat" /> : <CheckCircle2 size={14} />}
-              <span>{isSubmitting ? 'Upgrading...' : `Confirm Plan Upgrade (₹${netProRataPayable})`}</span>
+              <span>{isSubmitting ? 'Upgrading...' : `Confirm Plan Upgrade (${formatSubscriptionInr(netProRataPayable)})`}</span>
             </button>
           </div>
         </form>

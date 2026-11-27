@@ -1,4 +1,4 @@
-import { getManagerMemberDirectoryDemoRecords } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryDemoRepository';
+import { getManagerMembersDirectoryDemoSnapshot } from '@/app/frontend_manager/manager_members/members_directory/config/manager_members_directory.demo_data';
 import type { ManagerMembersDirectoryRecord,ManagerMembersDirectoryTab } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 import { useEffect,useMemo,useState } from 'react';
 
@@ -42,7 +42,7 @@ export function useManagerMemberDirectoryPageState(routeIntent: ManagerMembersDi
       setProfileSearch('LIB-001');
     }
   }, [routeIntent.view, routeIntent.id, routeIntent.name, routeIntent.phone, routeIntent.smartId, routeIntent.seat]);
-  const [members, setMembers] = useState<ManagerMembersDirectoryRecord[]>(() => getManagerMemberDirectoryDemoRecords());
+  const [members, setMembers] = useState<ManagerMembersDirectoryRecord[]>(() => getManagerMembersDirectoryDemoSnapshot());
 
   const updateMember = (updatedMember: ManagerMembersDirectoryRecord) => {
     setMembers((prev) => prev.map((m) => (m.id === updatedMember.id ? updatedMember : m)));

@@ -28,7 +28,7 @@ export default function ManagerSettingsSecurityError({
         <button
           type="button"
           onClick={reset}
-          className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow hover:bg-primary/90 transition-all"
+          className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow hover:opacity-90 motion-safe:transition-all"
         >
           <RefreshCw className="h-3.5 w-3.5" />
           Reload Security Module

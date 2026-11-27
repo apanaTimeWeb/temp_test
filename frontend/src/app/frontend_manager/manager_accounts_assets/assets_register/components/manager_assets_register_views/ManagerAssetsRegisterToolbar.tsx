@@ -130,7 +130,7 @@ export function ManagerAssetsRegisterToolbar({
           <button
             type="button"
             onClick={onResetFilters}
-            className="self-end sm:self-auto inline-flex items-center gap-1.5 text-xs text-secondary hover:text-danger hover:bg-danger/10 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer"
+            className="self-end sm:self-auto inline-flex items-center gap-1.5 text-xs text-secondary hover:text-danger hover:bg-danger-bg px-2.5 py-1.5 rounded-lg motion-safe:transition-colors cursor-pointer"
             title="Reset all active filters"
           >
             <RotateCcw size={12} />

@@ -57,7 +57,8 @@ export function ManagerSettingsHelpSupportTicketForm({ onCancel }: ManagerSettin
 
   const onSubmit = (data: ManagerSettingsHelpSupportTicketDraft) => {
     toast.success(
-      `Support ticket "${data.subject}" submitted successfully. Ticket ID: TKT-${Date.now().toString().slice(-4)}`
+      `Support ticket "${data.subject}" submitted successfully. Ticket ID: TKT-${Date.now().toString().slice(-4)}`,
+      { id: 'manager-support-ticket-submit' }
     );
     onCancel();
   };
@@ -87,7 +88,7 @@ export function ManagerSettingsHelpSupportTicketForm({ onCancel }: ManagerSettin
             <div className="relative">
               <select
                 id="manager-ticket-category"
-                className="mgr-select h-11 text-sm font-medium w-full rounded-xl bg-surface/60 border border-border focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/25 transition-all cursor-pointer px-3.5"
+                className="mgr-select h-11 text-sm font-medium w-full rounded-xl bg-surface border border-border focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/25 motion-safe:transition-all cursor-pointer px-3.5"
                 {...register('category')}
                 aria-invalid={Boolean(errors.category)}
                 aria-describedby={errors.category ? 'manager-ticket-category-error' : undefined}

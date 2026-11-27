@@ -1,8 +1,8 @@
 'use client';
 
-import { AlertTriangle,Clock,UserCheck,Users,UserX } from 'lucide-react';
+import type { Student } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
+import { AlertTriangle, Clock, UserCheck, Users, UserX } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import type { Student } from '../../types/ManagerAttendanceDailyComponentTypes';
 
 interface ManagerAttendanceDailyKpisProps {
   filtered: Student[];
@@ -30,14 +30,13 @@ export function ManagerAttendanceDailyKpis({
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-      {/* Total Students */}
-      <div className="group relative overflow-hidden p-5 rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex flex-col justify-between">
-        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-          <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" />
+      <div className="mgr-att-surface--indigo group relative overflow-hidden p-5 rounded-2xl border border-indigo-500/40 shadow-lg shadow-indigo-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex flex-col justify-between">
+        <svg aria-hidden="true" className="text-indigo-400 absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+          <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
         <div className="relative z-10">
           <div className="flex justify-between items-start mb-3">
-            <div className="p-2.5 rounded-xl border border-indigo-500/40 bg-indigo-500/20 text-indigo-400 transition-transform group-hover:scale-110 shadow-xs">
+            <div className="p-2.5 rounded-xl border border-indigo-500/40 bg-indigo-500/20 text-indigo-400 motion-safe:transition-transform group-hover:scale-110 shadow-xs">
               <Users size={18} />
             </div>
             <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border border-indigo-500/30 bg-indigo-500/15 text-indigo-300">
@@ -56,14 +55,13 @@ export function ManagerAttendanceDailyKpis({
         </div>
       </div>
 
-      {/* Present */}
-      <div className="group relative overflow-hidden p-5 rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex flex-col justify-between">
-        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-          <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
+      <div className="mgr-att-surface--emerald group relative overflow-hidden p-5 rounded-2xl border border-emerald-500/40 shadow-lg shadow-emerald-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex flex-col justify-between">
+        <svg aria-hidden="true" className="text-emerald-400 absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+          <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
         <div className="relative z-10">
           <div className="flex justify-between items-start mb-3">
-            <div className="p-2.5 rounded-xl border border-emerald-500/40 bg-emerald-500/20 text-emerald-400 transition-transform group-hover:scale-110 shadow-xs">
+            <div className="p-2.5 rounded-xl border border-emerald-500/40 bg-emerald-500/20 text-emerald-400 motion-safe:transition-transform group-hover:scale-110 shadow-xs">
               <UserCheck size={18} />
             </div>
             <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border border-emerald-500/30 bg-emerald-500/15 text-emerald-300">
@@ -82,14 +80,13 @@ export function ManagerAttendanceDailyKpis({
         </div>
       </div>
 
-      {/* Absent */}
-      <div className="group relative overflow-hidden p-5 rounded-2xl border border-rose-500/40 bg-gradient-to-br from-rose-950/80 via-[#260e19] to-rose-900/60 shadow-lg shadow-rose-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-rose-400/60 hover:shadow-xl flex flex-col justify-between">
-        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-          <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#f87171" strokeWidth="2.5" strokeLinecap="round" />
+      <div className="mgr-att-surface--rose group relative overflow-hidden p-5 rounded-2xl border border-rose-500/40 shadow-lg shadow-rose-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-rose-400/60 hover:shadow-xl flex flex-col justify-between">
+        <svg aria-hidden="true" className="text-rose-400 absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+          <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
         <div className="relative z-10">
           <div className="flex justify-between items-start mb-3">
-            <div className="p-2.5 rounded-xl border border-rose-500/40 bg-rose-500/20 text-rose-400 transition-transform group-hover:scale-110 shadow-xs">
+            <div className="p-2.5 rounded-xl border border-rose-500/40 bg-rose-500/20 text-rose-400 motion-safe:transition-transform group-hover:scale-110 shadow-xs">
               <UserX size={18} />
             </div>
             <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border border-rose-500/30 bg-rose-500/15 text-rose-300">
@@ -108,14 +105,13 @@ export function ManagerAttendanceDailyKpis({
         </div>
       </div>
 
-      {/* Late */}
-      <div className="group relative overflow-hidden p-5 rounded-2xl border border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261708] to-amber-900/60 shadow-lg shadow-amber-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex flex-col justify-between">
-        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-          <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
+      <div className="mgr-att-surface--amber group relative overflow-hidden p-5 rounded-2xl border border-amber-500/40 shadow-lg shadow-amber-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex flex-col justify-between">
+        <svg aria-hidden="true" className="text-amber-400 absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+          <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
         <div className="relative z-10">
           <div className="flex justify-between items-start mb-3">
-            <div className="p-2.5 rounded-xl border border-amber-500/40 bg-amber-500/20 text-amber-400 transition-transform group-hover:scale-110 shadow-xs">
+            <div className="p-2.5 rounded-xl border border-amber-500/40 bg-amber-500/20 text-amber-400 motion-safe:transition-transform group-hover:scale-110 shadow-xs">
               <Clock size={18} />
             </div>
             <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border border-amber-500/30 bg-amber-500/15 text-amber-300">
@@ -134,18 +130,17 @@ export function ManagerAttendanceDailyKpis({
         </div>
       </div>
 
-      {/* Overstay Alerts */}
-      <div className={`group relative overflow-hidden p-5 rounded-2xl border transition-all duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between ${
+      <div className={`group relative overflow-hidden p-5 rounded-2xl border motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between ${
         overstayCount > 0
-          ? 'border-rose-500/50 bg-gradient-to-br from-rose-950/85 via-[#351221] to-rose-900/70 shadow-lg shadow-rose-950/50 hover:border-rose-400/70'
-          : 'border-purple-500/40 bg-gradient-to-br from-purple-950/80 via-[#24133f] to-purple-900/60 shadow-lg shadow-purple-950/40 hover:border-purple-400/60'
+          ? 'mgr-att-surface--rose-alert border-rose-500/50 shadow-lg shadow-rose-950/50 hover:border-rose-400/70'
+          : 'mgr-att-surface--purple border-purple-500/40 shadow-lg shadow-purple-950/40 hover:border-purple-400/60'
       }`}>
-        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-          <path d="M0,32 Q30,14 60,25 T110,10 T150,18" fill="none" stroke={overstayCount > 0 ? '#f87171' : '#c084fc'} strokeWidth="2.5" strokeLinecap="round" />
+        <svg aria-hidden="true" className={`${overstayCount > 0 ? 'text-rose-400' : 'text-purple-400'} absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none`} viewBox="0 0 150 45">
+          <path d="M0,32 Q30,14 60,25 T110,10 T150,18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
         <div className="relative z-10">
           <div className="flex justify-between items-start mb-3">
-            <div className={`p-2.5 rounded-xl border transition-transform group-hover:scale-110 shadow-xs ${
+            <div className={`p-2.5 rounded-xl border motion-safe:transition-transform group-hover:scale-110 shadow-xs ${
               overstayCount > 0
                 ? 'border-rose-500/40 bg-rose-500/20 text-rose-400'
                 : 'border-purple-500/40 bg-purple-500/20 text-purple-400'
@@ -154,7 +149,7 @@ export function ManagerAttendanceDailyKpis({
             </div>
             <span className={`text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border ${
               overstayCount > 0
-                ? 'border-rose-500/40 bg-rose-500/20 text-rose-300 animate-pulse'
+                ? 'border-rose-500/40 bg-rose-500/20 text-rose-300 motion-safe:animate-pulse'
                 : 'border-purple-500/30 bg-purple-500/15 text-purple-300'
             }`}>
               Shift Overstay
@@ -176,4 +171,3 @@ export function ManagerAttendanceDailyKpis({
     </div>
   );
 }
-

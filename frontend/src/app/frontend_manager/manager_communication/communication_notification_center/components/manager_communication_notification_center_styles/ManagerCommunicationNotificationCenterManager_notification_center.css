@@ -519,3 +519,29 @@
     transition-delay: 0ms !important;
   }
 }
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  #printable-a4-notice-zone,
+  #printable-a4-notice-zone * {
+    visibility: visible !important;
+  }
+  #printable-a4-notice-zone {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 28px !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    box-shadow: none !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

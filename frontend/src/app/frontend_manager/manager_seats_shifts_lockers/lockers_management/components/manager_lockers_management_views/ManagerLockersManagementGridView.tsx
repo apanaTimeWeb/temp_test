@@ -1,7 +1,8 @@
 'use client';
 
-import { AlertTriangle,CheckCircle2,DoorClosed,User } from 'lucide-react';
-import type { ManagerLockersManagementSampleLocker as Locker } from '../../mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
+import type { ManagerLockersManagementSampleLocker as Locker } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/config/manager_lockers_management.demo_data';
+import { formatManagerLockerInr } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementCurrency';
+import { AlertTriangle, CheckCircle2, DoorClosed, User } from 'lucide-react';
 
 export interface ManagerLockersManagementGridViewProps {
   lockers: Locker[];
@@ -140,7 +141,7 @@ export function ManagerLockersManagementGridView({
                     </div>
                     {locker.lostKeyReported && (
                       <div className="text-[10px] font-bold text-rose-400">
-                        🚨 Key Lost (-₹{locker.lostKeyFine || 150})
+                        🚨 Key Lost (-{formatManagerLockerInr(locker.lostKeyFine || 150)})
                       </div>
                     )}
                     <div className="pt-1.5 text-[10px] font-bold text-amber-400 group-hover:underline flex items-center gap-1">
@@ -159,7 +160,7 @@ export function ManagerLockersManagementGridView({
                     </div>
                     {locker.lostKeyReported && (
                       <div className="text-[10px] font-bold text-rose-400">
-                        🚨 Key Lost (-₹{locker.lostKeyFine || 150})
+                        🚨 Key Lost (-{formatManagerLockerInr(locker.lostKeyFine || 150)})
                       </div>
                     )}
                     <div className="pt-1.5 text-[10px] font-medium text-rose-600 group-hover:underline flex items-center gap-1">

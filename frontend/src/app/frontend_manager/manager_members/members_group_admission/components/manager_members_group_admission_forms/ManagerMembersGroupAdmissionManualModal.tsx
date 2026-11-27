@@ -1,14 +1,16 @@
 'use client';
 
+import { ManagerMembersGroupAdmissionAdjacentClusterPanel } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionAdjacentClusterPanel';
+import { ManagerMembersGroupAdmissionCardView } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionCardView';
+import { ManagerMembersGroupAdmissionTableView } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionTableView';
 import {
-MANAGER_GROUP_SEAT_CLUSTERS,
-autoAllocateAdjacentSeats,
+  MANAGER_GROUP_SEAT_CLUSTERS,
+  autoAllocateAdjacentSeats,
 } from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionAdjacentSeats';
-import { Armchair,CheckCircle2,LayoutList,Plus,SlidersHorizontal,Users,Users2,X } from 'lucide-react';
+import { GROUP_SHIFT_OPTIONS, getGroupPlanOptions } from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionFormatAndStorage';
+import { CheckCircle2, LayoutList, Plus, SlidersHorizontal, Users, Users2, X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { ManagerMembersGroupAdmissionCardView } from './ManagerMembersGroupAdmissionCardView';
-import { ManagerMembersGroupAdmissionTableView } from './ManagerMembersGroupAdmissionTableView';
 
 export interface GroupStudentEntry {
   id: string;
@@ -37,22 +39,8 @@ export interface ManagerMembersGroupAdmissionManualModalProps {
   onConfirm: (batchName: string, students: GroupStudentEntry[]) => void;
 }
 
-const SHIFT_OPTIONS = [
-  'Morning (06:00 AM – 02:00 PM)',
-  'Evening (02:00 PM – 10:00 PM)',
-  'Night (10:00 PM – 06:00 AM)',
-  'Full Day (06:00 AM – 10:00 PM)',
-  'Dual Shift (Morning + Evening)',
-  'Dual Shift (Evening + Night)',
-];
-
-const PLAN_OPTIONS = [
-  'Basic Monthly (₹1,000/mo)',
-  'Pro Monthly (₹1,500/mo)',
-  'Quarterly Standard (₹2,700/qtr)',
-  'Half-Yearly Saver (₹5,000/half-yr)',
-  'Annual Elite (₹9,500/yr)',
-];
+const PLAN_OPTIONS = getGroupPlanOptions();
+const DEFAULT_PLAN = PLAN_OPTIONS[1] || PLAN_OPTIONS[0];
 
 export function ManagerMembersGroupAdmissionManualModal({
   isOpen,
@@ -69,8 +57,8 @@ export function ManagerMembersGroupAdmissionManualModal({
       phone: '',
       email: '',
       gender: 'Male',
-      plan: 'Pro Monthly (₹1,500/mo)',
-      shift: 'Morning (06:00 AM – 02:00 PM)',
+      plan: DEFAULT_PLAN,
+      shift: GROUP_SHIFT_OPTIONS[0],
       seatPreference: 'S-01',
       guardianPhone: '',
       preparationFor: 'UPSC Civil Services',
@@ -88,7 +76,7 @@ export function ManagerMembersGroupAdmissionManualModal({
     setManualRows(updated);
     setSelectedClusterId(clusterId);
     const chosen = MANAGER_GROUP_SEAT_CLUSTERS.find((c) => c.id === clusterId);
-    toast.success(`Allocated ${manualRows.length} adjacent seats (${seats.join(', ')}) in ${chosen?.name || 'Selected Row'}!`);
+    toast.success(`Allocated ${manualRows.length} adjacent seats (${seats.join(', ')}) in ${chosen?.name || 'Selected Row'}!`, { id: 'group-adjacent-alloc' });
   };
 
   const addStudent = () => {
@@ -103,8 +91,8 @@ export function ManagerMembersGroupAdmissionManualModal({
         phone: '',
         email: '',
         gender: 'Male',
-        plan: 'Pro Monthly (₹1,500/mo)',
-        shift: 'Morning (06:00 AM – 02:00 PM)',
+        plan: DEFAULT_PLAN,
+        shift: GROUP_SHIFT_OPTIONS[0],
         seatPreference: assignedSeat,
         guardianPhone: '',
         preparationFor: 'General Competitive',
@@ -129,7 +117,7 @@ export function ManagerMembersGroupAdmissionManualModal({
 
   const handleConfirm = () => {
     if (manualRows.length === 0) {
-      toast.error('At least one student application is required.');
+      toast.error('At least one student application is required.', { id: 'group-manual-empty' });
       return;
     }
 
@@ -142,21 +130,23 @@ export function ManagerMembersGroupAdmissionManualModal({
       const trimmedName = row.name.trim();
 
       if (!trimmedName || trimmedName.length < 2) {
-        toast.error(`Student #${rowNum}: Please enter a valid full name (minimum 2 letters).`);
+        toast.error(`Student #${rowNum}: Please enter a valid full name (minimum 2 letters).`, { id: 'group-manual-bad-name' });
         return;
       }
 
       const phone = row.phone.trim();
       if (!phone || phone.length !== 10 || !/^[6-9]\d{9}$/.test(phone)) {
         toast.error(
-          `Student #${rowNum} (${trimmedName}): Mobile number must be exactly 10 digits starting with 6, 7, 8, or 9.`
+          `Student #${rowNum} (${trimmedName}): Mobile number must be exactly 10 digits starting with 6, 7, 8, or 9.`,
+          { id: 'group-manual-bad-phone' }
         );
         return;
       }
 
       if (seenPhones.has(phone)) {
         toast.error(
-          `Duplicate mobile number detected: Student #${rowNum} has the same phone number (${phone}) as another student in this batch.`
+          `Duplicate mobile number detected: Student #${rowNum} has the same phone number (${phone}) as another student in this batch.`,
+          { id: 'group-manual-dup-phone' }
         );
         return;
       }
@@ -166,14 +156,16 @@ export function ManagerMembersGroupAdmissionManualModal({
       if (guardianPhone.length > 0) {
         if (guardianPhone.length !== 10 || !/^[6-9]\d{9}$/.test(guardianPhone)) {
           toast.error(
-            `Student #${rowNum} (${trimmedName}): Guardian phone must be a valid 10-digit number starting with 6, 7, 8, or 9.`
+            `Student #${rowNum} (${trimmedName}): Guardian phone must be a valid 10-digit number starting with 6, 7, 8, or 9.`,
+            { id: 'group-manual-bad-guardian-phone' }
           );
           return;
         }
 
         if (guardianPhone === phone) {
           toast.error(
-            `Student #${rowNum} (${trimmedName}): Guardian phone cannot be the same as the student's mobile number.`
+            `Student #${rowNum} (${trimmedName}): Guardian phone cannot be the same as the student's mobile number.`,
+            { id: 'group-manual-same-guardian-phone' }
           );
           return;
         }
@@ -247,83 +239,11 @@ export function ManagerMembersGroupAdmissionManualModal({
           </div>
         </div>
 
-        {/* Smart Adjacent Seat Allocation Panel */}
-        <div className="shrink-0 p-3 sm:p-3.5 rounded-xl border border-indigo-500/30 bg-surface/90 space-y-2.5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <Armchair size={17} className="text-indigo-400 shrink-0" />
-              <div>
-                <div className="flex items-center gap-2">
-                  <h4 className="text-xs font-bold text-primary">Smart Adjacent Seat Allocation (For Friends & Groups)</h4>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
-                    Smart Cluster
-                  </span>
-                </div>
-                <p className="text-[11px] text-secondary">
-                  Auto-allocate contiguous desks so friends and batchmates sit side-by-side without manual search.
-                </p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => handleAllocateAdjacent(selectedClusterId)}
-              className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shrink-0"
-              title="Allocate contiguous adjacent seats for all students in this batch"
-            >
-              <Users size={14} />
-              <span>1-Click Auto Assign Adjacent Seats</span>
-            </button>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-border/60">
-            <span className="text-[11px] text-secondary font-medium">Select Table / Zone:</span>
-            {MANAGER_GROUP_SEAT_CLUSTERS.map((cluster) => {
-              const isSelected = selectedClusterId === cluster.id;
-              const hasCapacity = cluster.seats.length >= manualRows.length;
-              return (
-                <button
-                  key={cluster.id}
-                  type="button"
-                  onClick={() => handleAllocateAdjacent(cluster.id)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors cursor-pointer flex items-center gap-1.5 ${
-                    isSelected
-                      ? 'bg-indigo-500/20 border-indigo-500 text-indigo-300 font-bold'
-                      : 'bg-card border-border text-secondary hover:text-primary hover:border-border-hover'
-                  }`}
-                >
-                  <span>{cluster.name.split(' (')[0]}</span>
-                  <span className="text-[10px] opacity-75 font-mono">
-                    ({cluster.seats[0]}–{cluster.seats[Math.min(cluster.seats.length - 1, manualRows.length - 1)]})
-                  </span>
-                  {hasCapacity && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" title="Has enough contiguous seats" />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Assigned Adjacent Desks Visual Ribbon */}
-          {manualRows.some((r) => r.seatPreference && r.seatPreference !== 'Any Seat') && (
-            <div className="p-2 rounded-lg bg-surface border border-border/80 flex items-center gap-2 overflow-x-auto text-xs">
-              <span className="text-[11px] text-secondary font-semibold shrink-0">Assigned Desks:</span>
-              <div className="flex items-center gap-1.5 shrink-0">
-                {manualRows.map((row, idx) => (
-                  <div
-                    key={row.id}
-                    className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 font-mono text-xs font-bold"
-                  >
-                    <span>{row.seatPreference || `S-${String(idx + 1).padStart(2, '0')}`}</span>
-                    <span className="text-[10px] font-sans font-normal opacity-80 max-w-[80px] truncate">
-                      ({row.name.trim() || `Student ${idx + 1}`})
-                    </span>
-                    {idx < manualRows.length - 1 && <span className="text-secondary font-sans font-normal ml-1">↔</span>}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+        <ManagerMembersGroupAdmissionAdjacentClusterPanel
+          manualRows={manualRows}
+          selectedClusterId={selectedClusterId}
+          onAllocateAdjacent={handleAllocateAdjacent}
+        />
 
         {/* Form Body */}
         <div className="flex-1 overflow-y-auto space-y-4 pr-1">
@@ -332,7 +252,7 @@ export function ManagerMembersGroupAdmissionManualModal({
               manualRows={manualRows}
               updateStudent={updateStudent}
               removeStudent={removeStudent}
-              shiftOptions={SHIFT_OPTIONS}
+              shiftOptions={GROUP_SHIFT_OPTIONS}
               planOptions={PLAN_OPTIONS}
             />
           ) : (
@@ -340,7 +260,7 @@ export function ManagerMembersGroupAdmissionManualModal({
               manualRows={manualRows}
               updateStudent={updateStudent}
               removeStudent={removeStudent}
-              shiftOptions={SHIFT_OPTIONS}
+              shiftOptions={GROUP_SHIFT_OPTIONS}
               planOptions={PLAN_OPTIONS}
             />
           )}

@@ -1,11 +1,12 @@
 'use client';
+import { formatManagerAttendanceDailyCurrency } from '@/app/frontend_manager/manager_attendance/attendance_daily/utils/ManagerAttendanceDailyCsv';
 import {
-AlertTriangle,
-Armchair,
-ArrowRightLeft,
-CheckCircle2,
-ShieldAlert,
-Activity
+  Activity,
+  AlertTriangle,
+  Armchair,
+  ArrowRightLeft,
+  CheckCircle2,
+  ShieldAlert,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -70,6 +71,7 @@ export function ManagerAttendanceDailyFloorTurnoverQueue() {
   const handleConfirmVacated = (id: string, seat: string) => {
     setItems((prev) => prev.filter((item) => item.id !== id));
     toast.success(t('vacated_success'), {
+      id: `turnover-vacated-${id}`,
       description: `${seat} is now vacant and clean.`,
     });
   };
@@ -78,13 +80,15 @@ export function ManagerAttendanceDailyFloorTurnoverQueue() {
     setItems((prev) => prev.filter((item) => item.id !== id));
     setFinesRecovered((prev) => prev + 50);
     toast.success(t('overstay_fined_success'), {
-      description: `₹50 overstay fine billed to ${name}.`,
+      id: `turnover-overstay-fine-${id}`,
+      description: `${formatManagerAttendanceDailyCurrency(50)} overstay fine billed to ${name}.`,
     });
   };
 
   const handleReportFake = (id: string, name: string) => {
     setItems((prev) => prev.filter((item) => item.id !== id));
     toast.warning(t('fake_checkout_flagged'), {
+      id: `turnover-fake-checkout-${id}`,
       description: `${name} desk kept occupied; student notified.`,
     });
   };
@@ -117,7 +121,7 @@ export function ManagerAttendanceDailyFloorTurnoverQueue() {
           </div>
           <div>
             <p className="text-xs text-text-secondary">{t('stat_recovered_fines')}</p>
-            <p className="text-lg font-bold text-success-text">₹{finesRecovered}</p>
+            <p className="text-lg font-bold text-success-text">{formatManagerAttendanceDailyCurrency(finesRecovered)}</p>
           </div>
         </div>
       </div>

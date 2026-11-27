@@ -1,8 +1,8 @@
 'use client';
 
-import type { NativeCellParams,NativeColumn } from '@/app/frontend_manager/manager_finance/finance_fines_payments/components/manager_finance_fines_payments_table_parts/ManagerFinanceFinesPaymentsNativeTable';
-import { Eye,Mail,MessageSquare,Printer,Smartphone,UserCheck } from 'lucide-react';
-import type { ManagerReceiptRecord } from './ManagerFinanceFinesPaymentsFinesAndPaymentsPage';
+import type { ManagerReceiptRecord } from '@/app/frontend_manager/manager_finance/finance_fines_payments/components/manager_finance_fines_payments_views/ManagerFinanceFinesPaymentsFinesAndPaymentsPage';
+import type { NativeCellParams, NativeColumn } from '@/app/frontend_manager/manager_finance/finance_fines_payments/components/manager_finance_fines_payments_table_parts/ManagerFinanceFinesPaymentsNativeTable';
+import { Eye, Mail, MessageSquare, Printer, Smartphone, UserCheck } from 'lucide-react';
 
 export interface UseTableColumnsParams {
   formatCurrency: (amount: number) => string;
@@ -66,7 +66,7 @@ export function buildPendingCols(
                 type="button"
                 data-testid={`add-to-renewal-btn-${row.id}`}
                 onClick={() => onAddToRenewal && onAddToRenewal(row)}
-                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg bg-primary-subtle text-primary hover:opacity-90 border border-border motion-safe:transition-colors cursor-pointer"
                 title={`Auto-add fine to next renewal bill for ${row.member}`}
               >
                 + Add to Next Renewal

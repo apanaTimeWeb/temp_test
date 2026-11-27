@@ -176,7 +176,7 @@ export function ManagerSeatsMatrixTableView({
                     {seat.student && seat.studentGender ? (
                       <span
                         className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-0.5 rounded-full font-semibold border ${seat.studentGender === 'Female'
-                          ? 'bg-primary-subtle text-primary border-primary/20'
+                          ? 'bg-primary-subtle text-primary border-border'
                           : 'bg-surface text-secondary border-border'
                           }`}
                       >

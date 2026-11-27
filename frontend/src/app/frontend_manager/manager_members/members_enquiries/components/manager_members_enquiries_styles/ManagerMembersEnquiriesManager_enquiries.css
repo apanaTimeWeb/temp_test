@@ -1912,4 +1912,119 @@
   background-color: rgba(99, 102, 241, 0.1) !important;
 }
 
+.menq-surface-card {
+  background-color: rgba(12, 15, 40, 0.95);
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+.menq-bulk-bar {
+  background-color: rgba(12, 15, 40, 0.98);
+}
+
+.menq-inset-bar {
+  background-color: #060818;
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+.menq-chip-btn {
+  background-color: #060818;
+}
+
+.menq-date-input {
+  background-color: #0c0f28;
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.menq-dark-input {
+  background-color: #060818;
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+.menq-dark-select {
+  background-color: #060818;
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.menq-dark-option {
+  background-color: #0b0c20;
+}
+
+.menq-table-head-row {
+  background-color: #07091c;
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+.menq-table-body-row {
+  border-color: rgba(99, 102, 241, 0.15);
+}
+.menq-table-body-row:nth-child(even) {
+  background-color: rgba(8, 10, 32, 0.6);
+}
+.menq-table-body-row:hover {
+  background-color: rgba(99, 102, 241, 0.1);
+}
+
+.menq-table-footer {
+  background-color: #07091c;
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.menq-kanban-col {
+  min-width: 240px;
+  max-width: 320px;
+  background-color: rgba(8, 10, 34, 0.8);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.menq-kanban-col-body {
+  min-height: 350px;
+}
+
+.menq-kanban-empty {
+  background-color: rgba(6, 8, 24, 0.6);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.menq-kpi-indigo {
+  border-color: rgba(99, 102, 241, 0.4);
+  background: linear-gradient(135deg, rgba(30, 27, 75, 0.8), #181c4b, rgba(49, 46, 129, 0.6));
+}
+
+.menq-kpi-sky {
+  border-color: rgba(14, 165, 233, 0.4);
+  background: linear-gradient(135deg, rgba(8, 47, 73, 0.8), #0e2540, rgba(12, 74, 110, 0.6));
+}
+
+.menq-kpi-amber {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: linear-gradient(135deg, rgba(69, 26, 3, 0.8), #261708, rgba(120, 53, 15, 0.6));
+}
+
+.menq-kpi-emerald {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, rgba(2, 44, 34, 0.8), #0e2c21, rgba(6, 78, 59, 0.6));
+}
+
+.menq-modal-dialog {
+  background-color: #0c0f28;
+}
+
+.menq-modal-rose-header {
+  background: linear-gradient(to right, rgba(136, 19, 55, 0.8), rgba(76, 5, 25, 0.9), #0c0f28);
+}
+
+.menq-inset-strip {
+  background-color: #060818;
+  border-color: rgba(99, 102, 241, 0.15);
+}
+
+.menq-reason-idle {
+  background-color: #080a20;
+  border-color: rgba(99, 102, 241, 0.2);
+}
+.menq-reason-idle:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+  background-color: #0b0e2a;
+}
+
 

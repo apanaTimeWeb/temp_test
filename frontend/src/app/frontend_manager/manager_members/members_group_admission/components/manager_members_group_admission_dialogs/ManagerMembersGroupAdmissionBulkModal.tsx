@@ -1,9 +1,9 @@
 'use client';
+import type { RecentGroupAdmission } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_tables/ManagerMembersGroupAdmissionRecentGroupsTable';
 import { autoAllocateAdjacentSeats } from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionAdjacentSeats';
-import { Armchair,CheckCircle2,FileSpreadsheet,Upload,Users,X } from 'lucide-react';
+import { Armchair, CheckCircle2, FileSpreadsheet, Upload, Users, X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import type { RecentGroupAdmission } from '../manager_members_group_admission_tables/ManagerMembersGroupAdmissionRecentGroupsTable';
 
 interface GroupStudentEntry {
   id: string;
@@ -39,7 +39,7 @@ export function ManagerMembersGroupAdmissionBulkModal({
     if (!file) return;
 
     if (!file.name.toLowerCase().endsWith('.csv')) {
-      toast.error('Only .csv files are supported. Please select a valid CSV file.');
+      toast.error('Only .csv files are supported. Please select a valid CSV file.', { id: 'group-bulk-invalid-ext' });
       event.target.value = '';
       return;
     }
@@ -77,26 +77,26 @@ export function ManagerMembersGroupAdmissionBulkModal({
 
   const confirmBulkUpload = () => {
     if (parsedRows.length === 0) {
-      toast.error('Please select a valid CSV file with student records.');
+      toast.error('Please select a valid CSV file with student records.', { id: 'group-bulk-empty' });
       return;
     }
 
     const invalidNameRows = parsedRows.filter((r) => !r.name || r.name.trim().length < 2);
     if (invalidNameRows.length > 0) {
-      toast.error(`${invalidNameRows.length} student row(s) have missing or invalid names (min 2 letters).`);
+      toast.error(`${invalidNameRows.length} student row(s) have missing or invalid names (min 2 letters).`, { id: 'group-bulk-bad-name' });
       return;
     }
 
     const invalidPhoneRows = parsedRows.filter((r) => r.phone.length !== 10 || !/^[6-9]\d{9}$/.test(r.phone));
     if (invalidPhoneRows.length > 0) {
-      toast.error(`${invalidPhoneRows.length} student row(s) have invalid or non-10-digit mobile numbers (must start with 6-9).`);
+      toast.error(`${invalidPhoneRows.length} student row(s) have invalid or non-10-digit mobile numbers (must start with 6-9).`, { id: 'group-bulk-bad-phone' });
       return;
     }
 
     const phoneSet = new Set<string>();
     for (const r of parsedRows) {
       if (phoneSet.has(r.phone)) {
-        toast.error(`Duplicate mobile number detected in CSV: ${r.phone}`);
+        toast.error(`Duplicate mobile number detected in CSV: ${r.phone}`, { id: 'group-bulk-dup-phone' });
         return;
       }
       phoneSet.add(r.phone);
@@ -106,7 +106,7 @@ export function ManagerMembersGroupAdmissionBulkModal({
       (r) => r.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(r.email)
     );
     if (invalidEmailRows.length > 0) {
-      toast.error(`${invalidEmailRows.length} student row(s) have invalid email format.`);
+      toast.error(`${invalidEmailRows.length} student row(s) have invalid email format.`, { id: 'group-bulk-bad-email' });
       return;
     }
 
@@ -185,7 +185,7 @@ export function ManagerMembersGroupAdmissionBulkModal({
                 </thead>
                 <tbody>
                   {parsedRows.slice(0, 10).map((row, idx) => (
-                    <tr key={idx} className="border-b border-border last:border-0">
+                    <tr key={`${row.id}-${row.phone || row.name}`} className="border-b border-border last:border-0">
                       <td className="p-2 font-medium">{row.name}</td>
                       <td className="p-2 font-mono">{row.phone}</td>
                       <td className="p-2">{row.email}</td>

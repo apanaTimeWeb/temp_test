@@ -12,7 +12,7 @@ X
 } from 'lucide-react';
 import { useEffect,useState } from 'react';
 import { toast } from 'sonner';
-import type { ManagerCommunicationComplaintsComplaint } from '../../types/ManagerCommunicationComplaintsTypes';
+import type { ManagerCommunicationComplaintsComplaint } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
 
 interface ManagerCommunicationComplaintsResolveModalProps {
   complaint: ManagerCommunicationComplaintsComplaint | null;
@@ -60,28 +60,33 @@ export function ManagerCommunicationComplaintsResolveModal({
 
   const handleResolveAndOpenWhatsApp = () => {
     if (!resolutionNote.trim()) {
-      toast.error('Please enter a brief resolution note.');
+      toast.error('Please enter a brief resolution note.', { id: 'manager-complaints-resolve-note-error' });
       return;
     }
     const encoded = encodeURIComponent(previewMessage);
     window.open(`https://wa.me/${targetPhone}?text=${encoded}`, '_blank', 'noopener,noreferrer');
     onConfirmResolve(complaint.id, resolutionNote.trim(), true, true);
-    toast.success(`Complaint #${complaint.id} resolved and WhatsApp dispatched to ${studentName}!`);
+    toast.success(`Complaint #${complaint.id} resolved and WhatsApp dispatched to ${studentName}!`, {
+      id: 'manager-complaints-resolve-wa-success',
+    });
     onClose();
   };
 
   const handleResolveWithAutoNotify = () => {
     if (!resolutionNote.trim()) {
-      toast.error('Please enter a brief resolution note.');
+      toast.error('Please enter a brief resolution note.', { id: 'manager-complaints-resolve-note-empty' });
       return;
     }
     onConfirmResolve(complaint.id, resolutionNote.trim(), notifyStudent, false);
     if (notifyStudent) {
       toast.success(
-        `Complaint #${complaint.id} marked Resolved. Automated WhatsApp notification sent to ${studentName} (+91 ${cleanPhone})!`
+        `Complaint #${complaint.id} marked Resolved. Automated WhatsApp notification sent to ${studentName} (+91 ${cleanPhone})!`,
+        { id: 'manager-complaints-resolve-auto-wa' }
       );
     } else {
-      toast.success(`Complaint #${complaint.id} marked Resolved without notification.`);
+      toast.success(`Complaint #${complaint.id} marked Resolved without notification.`, {
+        id: 'manager-complaints-resolve-silent',
+      });
     }
     onClose();
   };
@@ -173,12 +178,12 @@ export function ManagerCommunicationComplaintsResolveModal({
             </label>
           </div>
 
-          <div className="rounded-xl border border-emerald-500/30 bg-[#0b141a] p-3 text-[11px] text-slate-100 space-y-1 shadow-inner font-sans">
+          <div className="mc-whatsapp-preview-box rounded-xl border border-emerald-500/30 p-3 text-[11px] text-slate-100 space-y-1 shadow-inner font-sans">
             <div className="flex items-center gap-1 text-[10px] text-emerald-400 font-semibold mb-1">
               <CheckCircle2 size={12} />
               <span>Resolution WhatsApp Message</span>
             </div>
-            <p className="whitespace-pre-wrap leading-relaxed bg-[#005c4b]/80 p-2.5 rounded-lg border border-[#005c4b]">
+            <p className="mc-whatsapp-bubble whitespace-pre-wrap leading-relaxed p-2.5 rounded-lg border">
               {previewMessage}
             </p>
           </div>

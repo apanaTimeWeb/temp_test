@@ -2,7 +2,7 @@
 
 import { AlertCircle,CheckCircle2,Wrench,X } from 'lucide-react';
 import { useEffect,useRef } from 'react';
-import type { MaintenanceLogItem } from './ManagerAssetsMaintenanceTable';
+import type { MaintenanceLogItem } from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/components/ManagerAssetsMaintenanceTable';
 
 export interface ManagerAssetsMaintenanceConfirmModalProps {
   isOpen: boolean;

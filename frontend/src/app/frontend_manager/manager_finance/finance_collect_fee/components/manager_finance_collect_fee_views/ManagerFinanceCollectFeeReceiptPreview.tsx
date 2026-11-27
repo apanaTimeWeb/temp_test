@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { useManagerCollectFeeFormatting } from '@/app/frontend_manager/manager_finance/finance_collect_fee/hooks/ManagerFinanceCollectFeeFormattingHook';
 import type { ManagerFinanceCollectFeeReceiptPreviewProps } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
-import { maskManagerCollectFeePhone } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
+import { maskManagerCollectFeePhone, formatCollectFeeInr } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
 import { AlertCircle,BookOpen,CheckCircle,MessageSquare,X } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -39,7 +39,7 @@ export function ManagerFinanceCollectFeeReceiptPreview({
     let cleanPhone = selectedStudent.phone.replace(/\D/g, '');
     if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) cleanPhone = cleanPhone.slice(1);
     const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
-    const formattedTotal = total > 0 ? formatCurrency(toMinorUnits(total)) : '₹0';
+    const formattedTotal = total > 0 ? formatCurrency(toMinorUnits(total)) : formatCollectFeeInr(0);
     const activeDate = paymentDate ? formatDate(paymentDate) : formatDate(new Date().toISOString());
 
     const text = encodeURIComponent(
@@ -60,7 +60,9 @@ export function ManagerFinanceCollectFeeReceiptPreview({
     );
     const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
     if (popup) popup.opener = null;
-    toast.success(`WhatsApp receipt link opened for ${selectedStudent.name} (+91 ${maskManagerCollectFeePhone(cleanPhone)})`);
+    toast.success(`WhatsApp receipt link opened for ${selectedStudent.name} (+91 ${maskManagerCollectFeePhone(cleanPhone)})`, {
+      id: 'collect-fee-wa-receipt',
+    });
   };
 
   return (
@@ -113,7 +115,7 @@ export function ManagerFinanceCollectFeeReceiptPreview({
                 {lineItems.map((item) => (
                   <div key={item.id} className="flex justify-between items-center text-secondary">
                     <span>{item.label}</span>
-                    <span className="font-semibold text-text-primary">₹{item.amount}</span>
+                    <span className="font-semibold text-text-primary">{formatCollectFeeInr(item.amount)}</span>
                   </div>
                 ))}
               </div>

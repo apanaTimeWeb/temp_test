@@ -17,56 +17,56 @@ const getReportTheme = (icon: string) => {
   switch (icon) {
     case 'Users':
       return {
-        cardBg: 'border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 hover:border-indigo-400/60 hover:shadow-indigo-950/60',
+        cardBg: 'mgr-reports-kpi-surface--indigo border-indigo-500/40 shadow-lg shadow-indigo-950/40 hover:border-indigo-400/60 hover:shadow-indigo-950/60',
         iconBox: 'bg-indigo-500/20 border-indigo-500/40 text-indigo-400',
         badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
         valColor: 'text-white',
         titleColor: 'text-indigo-300',
-        stroke: '#818cf8',
+        strokeClass: 'text-indigo-400',
         accent: 'text-indigo-400',
         glow: 'bg-indigo-500/20 group-hover:bg-indigo-500/30',
       };
     case 'CalendarCheck':
       return {
-        cardBg: 'border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 shadow-lg shadow-emerald-950/40 hover:border-emerald-400/60 hover:shadow-emerald-950/60',
+        cardBg: 'mgr-reports-kpi-surface--emerald border-emerald-500/40 shadow-lg shadow-emerald-950/40 hover:border-emerald-400/60 hover:shadow-emerald-950/60',
         iconBox: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400',
         badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
         valColor: 'text-emerald-400',
         titleColor: 'text-emerald-300',
-        stroke: '#34d399',
+        strokeClass: 'text-emerald-400',
         accent: 'text-emerald-400',
         glow: 'bg-emerald-500/20 group-hover:bg-emerald-500/30',
       };
     case 'UserPlus':
       return {
-        cardBg: 'border-cyan-500/40 bg-gradient-to-br from-cyan-950/80 via-[#0e2540] to-cyan-900/60 shadow-lg shadow-cyan-950/40 hover:border-cyan-400/60 hover:shadow-cyan-950/60',
+        cardBg: 'mgr-reports-kpi-surface--cyan border-cyan-500/40 shadow-lg shadow-cyan-950/40 hover:border-cyan-400/60 hover:shadow-cyan-950/60',
         iconBox: 'bg-cyan-500/20 border-cyan-500/40 text-cyan-400',
         badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
         valColor: 'text-cyan-400',
         titleColor: 'text-cyan-300',
-        stroke: '#22d3ee',
+        strokeClass: 'text-cyan-400',
         accent: 'text-cyan-400',
         glow: 'bg-cyan-500/20 group-hover:bg-cyan-500/30',
       };
     case 'Phone':
       return {
-        cardBg: 'border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261708] to-amber-900/60 shadow-lg shadow-amber-950/40 hover:border-amber-400/60 hover:shadow-amber-950/60',
+        cardBg: 'mgr-reports-kpi-surface--amber border-amber-500/40 shadow-lg shadow-amber-950/40 hover:border-amber-400/60 hover:shadow-amber-950/60',
         iconBox: 'bg-amber-500/20 border-amber-500/40 text-amber-400',
         badge: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
         valColor: 'text-amber-400',
         titleColor: 'text-amber-300',
-        stroke: '#fbbf24',
+        strokeClass: 'text-amber-400',
         accent: 'text-amber-400',
         glow: 'bg-amber-500/20 group-hover:bg-amber-500/30',
       };
     default:
       return {
-        cardBg: 'border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 hover:border-indigo-400/60 hover:shadow-indigo-950/60',
+        cardBg: 'mgr-reports-kpi-surface--indigo border-indigo-500/40 shadow-lg shadow-indigo-950/40 hover:border-indigo-400/60 hover:shadow-indigo-950/60',
         iconBox: 'bg-indigo-500/20 border-indigo-500/40 text-indigo-400',
         badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
         valColor: 'text-white',
         titleColor: 'text-indigo-300',
-        stroke: '#818cf8',
+        strokeClass: 'text-indigo-400',
         accent: 'text-indigo-400',
         glow: 'bg-indigo-500/20 group-hover:bg-indigo-500/30',
       };
@@ -103,14 +103,14 @@ export function ManagerDashboardReportsKpiGrid({
         return (
           <div
             key={card.title}
-            className={`group relative overflow-hidden rounded-2xl border p-5 shadow-lg transition-all duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between ${theme.cardBg}`}
+            className={`group relative overflow-hidden rounded-2xl border p-5 shadow-lg motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between ${theme.cardBg}`}
           >
             {/* Glowing Orb */}
-            <div className={`pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full blur-2xl transition-all duration-500 ${theme.glow}`} />
+            <div className={`pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full blur-2xl motion-safe:transition-all motion-safe:duration-500 ${theme.glow}`} />
 
             {/* Decorative Sparkline */}
-            <svg aria-hidden="true" className="pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible transition-opacity duration-300 group-hover:opacity-40" viewBox="0 0 150 40" fill="none">
-              <path d="M0,32 Q15,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke={theme.stroke} strokeWidth="2.5" strokeLinecap="round" />
+            <svg aria-hidden="true" className={`pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible motion-safe:transition-opacity motion-safe:duration-300 group-hover:opacity-40 ${theme.strokeClass}`} viewBox="0 0 150 40" fill="none">
+              <path d="M0,32 Q15,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
             </svg>
 
             <div className="relative z-10">

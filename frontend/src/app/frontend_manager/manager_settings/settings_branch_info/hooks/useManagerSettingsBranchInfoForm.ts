@@ -1,4 +1,4 @@
-import { MANAGER_BRANCH_INFO_SAMPLE_DRAFT } from '@/app/frontend_manager/manager_settings/settings_branch_info/mocks/manager_settings_branch_info_fixtures/ManagerSettingsBranchInfoSampleFixture';
+import { MANAGER_BRANCH_INFO_DEMO_DRAFT } from '@/app/frontend_manager/manager_settings/settings_branch_info/config/manager_settings_branch_info.demo_data';
 import { managerBranchInfoDraftSchema,type ManagerSettingsBranchInfoDraft } from '@/app/frontend_manager/manager_settings/settings_branch_info/schemas/ManagerSettingsBranchInfoSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
@@ -13,7 +13,7 @@ export function useManagerBranchInfoForm() {
     resolver: zodResolver(managerBranchInfoDraftSchema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
-    defaultValues: MANAGER_BRANCH_INFO_SAMPLE_DRAFT,
+    defaultValues: MANAGER_BRANCH_INFO_DEMO_DRAFT,
   });
 
   const branchData = watch();

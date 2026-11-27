@@ -25,11 +25,11 @@ function statusLabel(value: unknown): string {
 }
 
 import {
-MANAGER_SEATS_SHIFTS_LOCKERS_ALLOCATIONS_FIXTURE,
-MANAGER_SEATS_SHIFTS_LOCKERS_HISTORY_FIXTURE,
-MANAGER_SEATS_SHIFTS_LOCKERS_LOCKERS_FIXTURE,
-MANAGER_SEATS_SHIFTS_LOCKERS_SEAT_MATRIX_FIXTURE,
-} from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/mocks/manager_lockers_management_fixtures/ManagerLockersManagementApiFixtures';
+  MANAGER_LOCKERS_ALLOCATIONS_DEMO,
+  MANAGER_LOCKERS_API_DEMO,
+  MANAGER_LOCKERS_HISTORY_DEMO,
+  MANAGER_LOCKERS_SEAT_MATRIX_DEMO,
+} from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/config/manager_lockers_management.demo_data';
 
 async function fetchValidatedRecords(endpoint: string): Promise<Record<string, unknown>[]> {
   try {
@@ -46,16 +46,16 @@ async function fetchValidatedRecords(endpoint: string): Promise<Record<string, u
     return recordArraySchema.parse(response.data);
   } catch (error) {
     if (endpoint === MANAGER_LOCKERS_MANAGEMENT_API.SEAT_MATRIX) {
-      return MANAGER_SEATS_SHIFTS_LOCKERS_SEAT_MATRIX_FIXTURE as unknown as Record<string, unknown>[];
+      return MANAGER_LOCKERS_SEAT_MATRIX_DEMO as unknown as Record<string, unknown>[];
     }
     if (endpoint === MANAGER_LOCKERS_MANAGEMENT_API.LOCKERS) {
-      return MANAGER_SEATS_SHIFTS_LOCKERS_LOCKERS_FIXTURE as unknown as Record<string, unknown>[];
+      return MANAGER_LOCKERS_API_DEMO as unknown as Record<string, unknown>[];
     }
     if (endpoint === MANAGER_LOCKERS_MANAGEMENT_API.ALLOCATIONS) {
-      return MANAGER_SEATS_SHIFTS_LOCKERS_ALLOCATIONS_FIXTURE as unknown as Record<string, unknown>[];
+      return MANAGER_LOCKERS_ALLOCATIONS_DEMO as unknown as Record<string, unknown>[];
     }
     if (endpoint === MANAGER_LOCKERS_MANAGEMENT_API.HISTORY) {
-      return MANAGER_SEATS_SHIFTS_LOCKERS_HISTORY_FIXTURE as unknown as Record<string, unknown>[];
+      return MANAGER_LOCKERS_HISTORY_DEMO as unknown as Record<string, unknown>[];
     }
     throw error;
   }

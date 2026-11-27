@@ -17,6 +17,7 @@ ShieldCheck,
 X,
 ZoomIn
 } from 'lucide-react';
+import Image from 'next/image';
 import { useEffect,useState } from 'react';
 
 export interface ManagerMembersDirectoryPhotoKycModalProps {
@@ -120,11 +121,12 @@ export function ManagerMembersDirectoryPhotoKycModal({
                 onClick={() => setIsZoomed(true)}
                 title="Click to Zoom Photo"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={mockPhotoUrl}
                   alt={member.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                  fill
+                  unoptimized
+                  className="object-cover group-hover:scale-105 motion-safe:transition-transform motion-safe:duration-200"
                 />
                 <div className="absolute inset-0 bg-overlay-backdrop opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white gap-1 font-semibold text-[11px]">
                   <ZoomIn size={14} /> Zoom

@@ -1,6 +1,7 @@
 'use client';
 
-import { DoorClosed,Key,Plus,X } from 'lucide-react';
+import { formatManagerLockerInr } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementCurrency';
+import { DoorClosed, Key, Plus, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 
@@ -45,7 +46,7 @@ export function ManagerLockersManagementAddModal({
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border pb-3.5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-primary-subtle text-primary flex items-center justify-center shrink-0">
               <DoorClosed size={20} />
             </div>
             <div>
@@ -97,7 +98,7 @@ export function ManagerLockersManagementAddModal({
               </p>
             )}
             <p className="text-[11px] text-secondary">
-              A standard physical key tag and ₹500 security deposit requirement will be initialized for this locker.
+              A standard physical key tag and {formatManagerLockerInr(500)} security deposit requirement will be initialized for this locker.
             </p>
           </div>
 

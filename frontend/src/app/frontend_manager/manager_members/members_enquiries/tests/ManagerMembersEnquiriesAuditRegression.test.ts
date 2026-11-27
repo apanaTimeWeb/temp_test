@@ -75,8 +75,8 @@ describe('Manager Members Enquiries - Audit Regression Suite (Section E)', () =>
 
   it('DetailPage provides local timeline persistence via session storage', () => {
     const detailSource = readSource('components/manager_members_enquiries_views/ManagerMembersEnquiriesDetailPage.tsx');
-    expect(detailSource).toContain('sessionStorage.getItem');
-    expect(detailSource).toContain('sessionStorage.setItem');
+    expect(detailSource).toContain('readBrowserSessionStorageItem');
+    expect(detailSource).toContain('writeBrowserSessionStorageItem');
   });
 });
 

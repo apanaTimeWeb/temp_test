@@ -8,13 +8,13 @@ import { toast } from 'sonner';
 
 import { ManagerSettingsHelpSupportTicketForm } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_forms/ManagerSettingsHelpSupportTicketForm';
 import { ManagerSettingsHelpSupportTabs } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_sections/ManagerSettingsHelpSupportTabs';
+import { ManagerSettingsHelpSupportAnnouncements } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_views/ManagerSettingsHelpSupportAnnouncements';
+import {
+  ManagerSettingsHelpSupportTicketsTable,
+  type TicketSortField,
+} from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_views/ManagerSettingsHelpSupportTicketsTable';
 import { MANAGER_HELP_SUPPORT_TABS } from '@/app/frontend_manager/manager_settings/settings_help_support/constants/ManagerSettingsHelpSupportConstants';
 import { useManagerHelpSupportPageState } from '@/app/frontend_manager/manager_settings/settings_help_support/hooks/useManagerSettingsHelpSupportPageState';
-import { ManagerSettingsHelpSupportAnnouncements } from './ManagerSettingsHelpSupportAnnouncements';
-import {
-ManagerSettingsHelpSupportTicketsTable,
-type TicketSortField,
-} from './ManagerSettingsHelpSupportTicketsTable';
 
 export default function ManagerSettingsHelpSupportPage() {
   const tManagerUi = useTranslations('manager.manager_help_support.ui');
@@ -99,7 +99,9 @@ export default function ManagerSettingsHelpSupportPage() {
     anchor.download = `support_tickets_${new Date().toISOString().slice(0, 10)}.csv`;
     anchor.click();
     URL.revokeObjectURL(url);
-    toast.success('Support tickets exported to CSV successfully');
+    toast.success('Support tickets exported to CSV successfully', {
+      id: 'manager-support-tickets-export',
+    });
   };
 
   const handleResetFilters = () => {

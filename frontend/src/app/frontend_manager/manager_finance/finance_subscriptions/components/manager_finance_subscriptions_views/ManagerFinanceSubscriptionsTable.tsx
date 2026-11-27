@@ -187,7 +187,7 @@ export default function ManagerFinanceSubscriptionsTable({
                       <button
                         type="button"
                         data-testid={`upgrade-plan-btn-${s.id}`}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20 cursor-pointer transition-colors shadow-xs"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-primary-subtle text-primary hover:opacity-90 border border-border cursor-pointer motion-safe:transition-colors shadow-xs"
                         onClick={() => onUpgradeSubscription(s)}
                         title={`Pro-rata plan upgrade for ${s.studentName}`}
                       >

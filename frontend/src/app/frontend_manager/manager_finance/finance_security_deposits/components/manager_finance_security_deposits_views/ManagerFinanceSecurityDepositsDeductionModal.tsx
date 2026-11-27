@@ -1,7 +1,8 @@
 'use client';
 
 import type { ManagerFinanceSecurityDepositsSampleDeposit } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
-import { CheckCircle,IndianRupee,Minus,X } from 'lucide-react';
+import { formatDepositInr } from '@/app/frontend_manager/manager_finance/finance_security_deposits/utils/ManagerFinanceSecurityDepositsHelpers';
+import { CheckCircle, IndianRupee, Minus, X } from 'lucide-react';
 import React from 'react';
 
 export interface ManagerFinanceSecurityDepositsDeductionModalProps {
@@ -42,7 +43,10 @@ export default function ManagerFinanceSecurityDepositsDeductionModal({
           <div className="p-3 bg-surface-highlight rounded-xl border border-border">
             <p className="text-xs text-secondary">Student Name</p>
             <p className="text-sm font-bold text-primary">{deductionTarget.studentName} ({deductionTarget.smartId})</p>
-            <p className="text-xs text-secondary mt-1">Available Deposit: <strong>₹{deductionTarget.depositAmount - (deductionTarget.deductionAmount || 0)}</strong></p>
+            <p className="text-xs text-secondary mt-1">
+              Available Deposit:{' '}
+              <strong>{formatDepositInr(deductionTarget.depositAmount - (deductionTarget.deductionAmount || 0))}</strong>
+            </p>
           </div>
 
           <div>
@@ -58,9 +62,9 @@ export default function ManagerFinanceSecurityDepositsDeductionModal({
                 if (r === 'Lost Library RFID Smart ID') onDeductionAmountChange('100');
               }}
             >
-              <option value="Locker Key Lost">Locker Key Lost (₹150)</option>
-              <option value="Desk or Chair Damage">Desk or Chair Damage (₹300)</option>
-              <option value="Lost Library RFID Smart ID">Lost Library RFID Smart ID (₹100)</option>
+              <option value="Locker Key Lost">{`Locker Key Lost (${formatDepositInr(150)})`}</option>
+              <option value="Desk or Chair Damage">{`Desk or Chair Damage (${formatDepositInr(300)})`}</option>
+              <option value="Lost Library RFID Smart ID">{`Lost Library RFID Smart ID (${formatDepositInr(100)})`}</option>
               <option value="Unpaid Late Overstay Fee">Unpaid Late Overstay Fee</option>
               <option value="Other">Other Specific Deduction</option>
             </select>

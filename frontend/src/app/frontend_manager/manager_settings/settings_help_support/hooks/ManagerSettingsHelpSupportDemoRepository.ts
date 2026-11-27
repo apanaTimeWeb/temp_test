@@ -1,14 +1,13 @@
-/**
- * Module-owned, sample-only repository implementation. Each exported collection/object is a defensive
- * snapshot of the authored fixture data; these values are not a persistence or API contract.
- */
-import { MANAGER_HELP_SUPPORT_SAMPLE_ANNOUNCEMENTS as MANAGER_HELP_SUPPORT_SAMPLE_ANNOUNCEMENTSFixture,MANAGER_HELP_SUPPORT_SAMPLE_DOCUMENTATION_ARTICLES as MANAGER_HELP_SUPPORT_SAMPLE_DOCUMENTATION_ARTICLESFixture } from '@/app/frontend_manager/manager_settings/settings_help_support/mocks/manager_settings_help_support_fixtures/ManagerSettingsHelpSupportContentFixtures';
-import type { ManagerSettingsHelpSupportSampleTicket as ManagerSettingsHelpSupportSampleTicketFixture } from '@/app/frontend_manager/manager_settings/settings_help_support/mocks/manager_settings_help_support_fixtures/ManagerSettingsHelpSupportSampleFixtures';
-import { MANAGER_HELP_SUPPORT_SAMPLE_TICKETS as MANAGER_HELP_SUPPORT_SAMPLE_TICKETSFixture } from '@/app/frontend_manager/manager_settings/settings_help_support/mocks/manager_settings_help_support_fixtures/ManagerSettingsHelpSupportSampleFixtures';
+import {
+  MANAGER_HELP_SUPPORT_DEMO_ANNOUNCEMENTS,
+  MANAGER_HELP_SUPPORT_DEMO_DOCUMENTATION_ARTICLES,
+  MANAGER_HELP_SUPPORT_DEMO_TICKETS,
+  type ManagerSettingsHelpSupportDemoTicket,
+} from '@/app/frontend_manager/manager_settings/settings_help_support/config/manager_settings_help_support.demo_data';
 
-/** DATA FLOW: Module-owned sample fixtures -> defensive demo repository exports -> feature preview; sample data is not persistence. */
+/** Module-owned sample repository detached from test-only mocks. */
+export type ManagerSettingsHelpSupportSampleTicket = ManagerSettingsHelpSupportDemoTicket;
 
-export type ManagerSettingsHelpSupportSampleTicket = ManagerSettingsHelpSupportSampleTicketFixture;
-export const MANAGER_HELP_SUPPORT_SAMPLE_TICKETS = MANAGER_HELP_SUPPORT_SAMPLE_TICKETSFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
-export const MANAGER_HELP_SUPPORT_SAMPLE_DOCUMENTATION_ARTICLES = MANAGER_HELP_SUPPORT_SAMPLE_DOCUMENTATION_ARTICLESFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
-export const MANAGER_HELP_SUPPORT_SAMPLE_ANNOUNCEMENTS = MANAGER_HELP_SUPPORT_SAMPLE_ANNOUNCEMENTSFixture.map((record) => (typeof record === 'object' && record !== null ? { ...record } : record));
+export const MANAGER_HELP_SUPPORT_SAMPLE_TICKETS = MANAGER_HELP_SUPPORT_DEMO_TICKETS.map((record) => ({ ...record }));
+export const MANAGER_HELP_SUPPORT_SAMPLE_DOCUMENTATION_ARTICLES = MANAGER_HELP_SUPPORT_DEMO_DOCUMENTATION_ARTICLES.map((record) => ({ ...record }));
+export const MANAGER_HELP_SUPPORT_SAMPLE_ANNOUNCEMENTS = MANAGER_HELP_SUPPORT_DEMO_ANNOUNCEMENTS.map((record) => ({ ...record }));

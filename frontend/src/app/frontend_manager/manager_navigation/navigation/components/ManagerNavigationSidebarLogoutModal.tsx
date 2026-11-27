@@ -1,8 +1,9 @@
 'use client';
 
-import { LogOut,User } from 'lucide-react';
+import { clearBrowserSessionStorage, expireBrowserCookie, removeBrowserStorageItem } from '@/lib/browserStorage';
+import { LogOut, User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useEffect,useRef,useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 interface ManagerNavigationSidebarLogoutModalProps {
@@ -65,21 +66,17 @@ export function ManagerNavigationSidebarLogoutModal({
   if (!isOpen || !mounted) return null;
 
   const handleConfirmLogout = () => {
-    try {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('user');
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('manager_session');
-      localStorage.removeItem('token');
-      localStorage.removeItem('admin_user');
-      sessionStorage.clear();
-      document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict;';
-      document.cookie = 'auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict;';
-      document.cookie = 'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict;';
-      document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict;';
-    } catch {
-      // ignore
-    }
+    removeBrowserStorageItem('access_token');
+    removeBrowserStorageItem('user');
+    removeBrowserStorageItem('auth_token');
+    removeBrowserStorageItem('manager_session');
+    removeBrowserStorageItem('token');
+    removeBrowserStorageItem('admin_user');
+    clearBrowserSessionStorage();
+    expireBrowserCookie('access_token');
+    expireBrowserCookie('auth_token');
+    expireBrowserCookie('session');
+    expireBrowserCookie('token');
     window.location.href = '/auth/login';
   };
 
@@ -89,18 +86,18 @@ export function ManagerNavigationSidebarLogoutModal({
       aria-modal="true"
       aria-labelledby="manager-logout-title"
       aria-describedby="manager-logout-desc"
-      className="fixed inset-0 z-[99999] flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
       data-testid="manager-logout-overlay"
     >
       <div
-        className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity animate-in fade-in duration-200"
+        className="fixed inset-0 bg-black/70 backdrop-blur-md motion-safe:transition-opacity motion-safe:animate-in motion-safe:fade-in motion-safe:duration-200"
         onClick={onClose}
         aria-hidden="true"
       />
       <div
         ref={logoutDialogRef}
         tabIndex={-1}
-        className="relative z-10 w-full max-w-sm rounded-2xl border border-indigo-500/30 bg-[#0b0c20] p-6 text-white shadow-2xl animate-in zoom-in-95 fade-in duration-200 focus:outline-none"
+        className="mgr-logout-dialog-surface relative z-10 w-full max-w-sm rounded-2xl border border-indigo-500/30 p-6 text-white shadow-2xl motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:fade-in motion-safe:duration-200 focus:outline-none"
         data-testid="manager-logout-dialog"
       >
         <div className="flex flex-col items-center text-center">

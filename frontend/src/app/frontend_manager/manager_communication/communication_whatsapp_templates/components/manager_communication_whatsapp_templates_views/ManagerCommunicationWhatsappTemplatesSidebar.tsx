@@ -61,7 +61,7 @@ export function ManagerCommunicationWhatsappTemplatesSidebar({
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className={`text-xs sm:text-sm font-bold truncate ${isActive ? 'text-primary' : 'text-primary/90'}`}>
+                    <span className={`text-xs sm:text-sm font-bold truncate ${isActive ? 'text-primary' : 'text-primary'}`}>
                       {templateLabel(t)}
                     </span>
                   </div>
@@ -79,7 +79,7 @@ export function ManagerCommunicationWhatsappTemplatesSidebar({
                 </span>
                 <ChevronRight
                   size={14}
-                  className={isActive ? 'text-primary' : 'text-secondary/40'}
+                  className={isActive ? 'text-primary' : 'text-secondary'}
                 />
               </div>
             </button>

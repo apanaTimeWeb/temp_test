@@ -1,0 +1,28 @@
+.mgr-sec-hero-surface {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(90deg, #0c0d24 0%, #0e1133 50%, #0a0c20 100%);
+}
+
+.mgr-sec-tabs-surface {
+  border-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(10, 12, 32, 0.6);
+}
+
+.mgr-sec-panel-surface {
+  border-color: rgba(255, 255, 255, 0.1);
+  background-color: #0c0d24;
+}
+
+.mgr-sec-session-card {
+  border-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(12, 13, 36, 0.6);
+}
+
+.mgr-sec-session-card:hover {
+  background-color: #0c0d24;
+}
+
+.mgr-sec-modal-surface {
+  border-color: rgba(255, 255, 255, 0.1);
+  background-color: #0e1133;
+}

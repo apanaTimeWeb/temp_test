@@ -132,7 +132,7 @@ export function ManagerMembersEnquiriesMobileCards({
       {paginated.map((enq, idx) => {
         const cleanDigits = enq.phone.replace(/\D/g, '');
         return (
-          <article className="crm-mobile-enquiry-card bg-[#0c0f28]/95 border border-indigo-500/25 rounded-2xl p-4 shadow-md transition-all hover:border-indigo-400" key={`mobile-${enq.id}`}>
+          <article className="crm-mobile-enquiry-card menq-surface-card border rounded-2xl p-4 shadow-md motion-safe:transition-all hover:border-indigo-400" key={`mobile-${enq.id}`}>
             <div className="flex items-center gap-2.5 pb-2">
               <button type="button" className="crm-mobile-enquiry-main flex-1 text-left cursor-pointer" onClick={() => onOpenDetails(enq.id)}>
                 <div className="flex items-center justify-between gap-2 flex-wrap">

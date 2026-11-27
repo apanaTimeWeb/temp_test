@@ -1,5 +1,6 @@
 'use client';
-import { Coins,QrCode,Scale,TrendingDown } from 'lucide-react';
+import '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/components/manager_accounts_daily_settlement_styles/ManagerAccountsDailySettlementStyles.css';
+import { Coins, QrCode, Scale, TrendingDown } from 'lucide-react';
 
 interface ManagerAccountsDailySettlementKpisProps {
   totalCash: number;
@@ -28,7 +29,7 @@ export function ManagerAccountsDailySettlementKpis({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* Cash Collected */}
-      <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 p-5 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
+      <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/40 mds-kpi-emerald p-5 shadow-lg shadow-emerald-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
         <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
@@ -56,7 +57,7 @@ export function ManagerAccountsDailySettlementKpis({
       </div>
 
       {/* UPI Collected */}
-      <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/40 bg-gradient-to-br from-cyan-950/80 via-[#0e2540] to-cyan-900/60 p-5 shadow-lg shadow-cyan-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-cyan-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
+      <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/40 mds-kpi-cyan p-5 shadow-lg shadow-cyan-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-cyan-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
         <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
@@ -84,7 +85,7 @@ export function ManagerAccountsDailySettlementKpis({
       </div>
 
       {/* Expenses Disbursed */}
-      <div className="group relative overflow-hidden rounded-2xl border border-rose-500/40 bg-gradient-to-br from-rose-950/80 via-[#260e19] to-rose-900/60 p-5 shadow-lg shadow-rose-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-rose-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
+      <div className="group relative overflow-hidden rounded-2xl border border-rose-500/40 mds-kpi-rose p-5 shadow-lg shadow-rose-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-rose-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
         <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#f87171" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
@@ -112,7 +113,7 @@ export function ManagerAccountsDailySettlementKpis({
       </div>
 
       {/* Net Shift Surplus */}
-      <div className="group relative overflow-hidden rounded-2xl border border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261708] to-amber-900/60 p-5 shadow-lg shadow-amber-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
+      <div className="group relative overflow-hidden rounded-2xl border border-amber-500/40 mds-kpi-amber p-5 shadow-lg shadow-amber-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
         <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
         </svg>

@@ -1,8 +1,9 @@
 'use client';
 
-import { AlertTriangle,ArrowRight,Calendar,DoorClosed,Key,KeyRound,ShieldCheck,User,X } from 'lucide-react';
+import type { ManagerLockersManagementSampleLocker as Locker } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/config/manager_lockers_management.demo_data';
+import { formatManagerLockerInr } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementCurrency';
+import { AlertTriangle, ArrowRight, Calendar, DoorClosed, Key, KeyRound, ShieldCheck, User, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import type { ManagerLockersManagementSampleLocker as Locker } from '../../mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
 
 export interface ManagerLockersManagementStudentModalProps {
   locker: Locker | null;
@@ -94,7 +95,7 @@ export function ManagerLockersManagementStudentModal({
         {isOccupied ? (
           <div className="space-y-4">
             <div className="flex items-center gap-3.5 p-3.5 rounded-xl bg-surface border border-border">
-              <div className="w-11 h-11 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-base shrink-0">
+              <div className="w-11 h-11 rounded-full bg-primary-subtle text-primary flex items-center justify-center font-bold text-base shrink-0">
                 {locker.assignedTo ? locker.assignedTo.charAt(0).toUpperCase() : 'S'}
               </div>
               <div className="flex-1 min-w-0">
@@ -128,7 +129,7 @@ export function ManagerLockersManagementStudentModal({
                   <ShieldCheck size={13} />
                   <span>Security Deposit</span>
                 </div>
-                <div className="font-semibold text-emerald-400">₹500.00 (Held)</div>
+                <div className="font-semibold text-emerald-400">{formatManagerLockerInr(500, true)} (Held)</div>
               </div>
 
               <div className="p-3 rounded-xl bg-surface border border-border space-y-1">
@@ -146,7 +147,7 @@ export function ManagerLockersManagementStudentModal({
             {locker.lostKeyReported && (
               <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center justify-between">
                 <span>🚨 Lost Key Fine Recorded:</span>
-                <strong className="font-mono">₹{locker.lostKeyFine || 150}.00 Penalty</strong>
+                <strong className="font-mono">{formatManagerLockerInr(locker.lostKeyFine || 150, true)} Penalty</strong>
               </div>
             )}
 

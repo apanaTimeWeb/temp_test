@@ -149,7 +149,7 @@ export function ManagerAccountsSeatGapReportTimeHorizonBar({
                   onCustomStartDateChange('');
                   onCustomEndDateChange('');
                 }}
-                className="p-1 rounded-md text-secondary hover:text-danger hover:bg-danger/10 transition-colors"
+                className="p-1 rounded-md text-secondary hover:text-danger hover:bg-danger-bg motion-safe:transition-colors"
                 title="Clear custom dates"
               >
                 <X size={14} />

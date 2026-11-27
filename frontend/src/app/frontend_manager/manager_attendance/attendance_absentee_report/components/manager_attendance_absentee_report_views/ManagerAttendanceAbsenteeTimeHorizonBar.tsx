@@ -132,7 +132,7 @@ export function ManagerAttendanceAbsenteeTimeHorizonBar({
                   onCustomStartDateChange('');
                   onCustomEndDateChange('');
                 }}
-                className="p-1 rounded text-secondary hover:text-danger hover:bg-danger/10 transition-colors cursor-pointer"
+                className="p-1 rounded text-secondary hover:text-danger hover:bg-danger-bg motion-safe:transition-colors cursor-pointer"
                 title="Clear custom dates"
               >
                 <X size={13} />

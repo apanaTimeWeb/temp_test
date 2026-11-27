@@ -3,7 +3,7 @@
 import { Calendar,Check,Clock,Copy,Filter,Search,ShieldAlert,User,X } from 'lucide-react';
 import { useMemo,useState } from 'react';
 import { toast } from 'sonner';
-import type { ManagerSeatsHistoryRow } from '../../types/ManagerSeatsHistoryTypes';
+import type { ManagerSeatsHistoryRow } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryTypes';
 
 export interface ManagerSeatsHistoryAuditModalProps {
   isOpen: boolean;
@@ -66,7 +66,7 @@ export function ManagerSeatsHistoryAuditModal({
 
   const handleCopyReport = () => {
     if (seatOccupants.length === 0) {
-      toast.error('No occupant records to copy.');
+      toast.error('No occupant records to copy.', { id: 'manager-seat-audit-copy-empty' });
       return;
     }
     const lines = [
@@ -83,7 +83,7 @@ export function ManagerSeatsHistoryAuditModal({
     ];
     navigator.clipboard.writeText(lines.join('\n'));
     setCopied(true);
-    toast.success('Audit report copied to clipboard');
+    toast.success('Audit report copied to clipboard', { id: 'manager-seat-audit-copy-success' });
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -216,7 +216,7 @@ export function ManagerSeatsHistoryAuditModal({
               <p className="text-secondary text-xs">
                 No students found on Seat {selectedSeat} within the selected audit period.
               </p>
-              <p className="text-[11px] text-secondary/70">
+              <p className="text-[11px] text-secondary">
                 Try switching the time horizon to "Past 3 Months" or "All Recorded Time".
               </p>
             </div>
@@ -224,7 +224,7 @@ export function ManagerSeatsHistoryAuditModal({
             seatOccupants.map((occ, idx) => (
               <div
                 key={`${occ.smartId}-${occ.occupiedFrom}-${idx}`}
-                className="p-3 rounded-xl border border-border bg-surface hover:border-primary/40 transition-colors space-y-1.5"
+                className="p-3 rounded-xl border border-border bg-surface hover:border-primary motion-safe:transition-colors space-y-1.5"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -245,7 +245,7 @@ export function ManagerSeatsHistoryAuditModal({
                   </span>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-between text-[11px] text-secondary pt-1 border-t border-border/50">
+                <div className="flex flex-wrap items-center justify-between text-[11px] text-secondary pt-1 border-t border-border">
                   <span className="flex items-center gap-1 font-mono">
                     <Calendar size={11} className="text-secondary" />
                     {occ.occupiedFrom} → {occ.occupiedTill}

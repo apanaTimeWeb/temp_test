@@ -1,5 +1,6 @@
 'use client';
 
+import '@/app/frontend_manager/manager_communication/communication_notification_center/components/manager_communication_notification_center_styles/ManagerCommunicationNotificationCenterManager_notification_center.css';
 import { ManagerCommunicationNotificationCenterNotificationDraftForm } from '@/app/frontend_manager/manager_communication/communication_notification_center/components/manager_communication_notification_center_forms/ManagerCommunicationNotificationCenterNotificationDraftForm';
 import { ManagerCommunicationNotificationCenterFlyerModal } from '@/app/frontend_manager/manager_communication/communication_notification_center/components/manager_communication_notification_center_modals/ManagerCommunicationNotificationCenterFlyerModal';
 import { ManagerCommunicationNotificationCenterMyNotificationsSection } from '@/app/frontend_manager/manager_communication/communication_notification_center/components/manager_communication_notification_center_sections/ManagerCommunicationNotificationCenterMyNotificationsSection';
@@ -69,7 +70,7 @@ export default function ManagerCommunicationNotificationCenterPage({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-primary tracking-tight flex items-center gap-2.5">
-            <span className="w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
+            <span className="w-9 h-9 rounded-xl bg-primary-subtle border border-border text-primary flex items-center justify-center shrink-0">
               <Bell size={20} />
             </span>
             <span>{tManagerUi('notification_center')}</span>

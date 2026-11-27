@@ -42,17 +42,21 @@ describe('Manager Members New Admission - Security Deposit & Partial Payment (To
   });
 
   it('renders dedicated Refundable Security Deposit box with quick preset options', () => {
-    const paymentSource = readSource('components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionPaymentSection.tsx');
+    const paymentSource =
+      readSource('components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionPaymentSection.tsx') +
+      readSource('components/manager_members_new_admission_sections/ManagerMembersNewAdmissionPaymentDetailsCards.tsx');
     expect(paymentSource).toContain('admission-security-deposit');
     expect(paymentSource).toContain('Refundable Security Deposit');
     expect(paymentSource).toContain('100% Refundable on Exit');
-    expect(paymentSource).toContain('₹500 Standard Desk');
-    expect(paymentSource).toContain('₹1,000 Desk + Locker');
-    expect(paymentSource).toContain('₹0 None');
+    expect(paymentSource).toContain('formatAdmissionInr(500)} Standard Desk');
+    expect(paymentSource).toContain('formatAdmissionInr(1000)} Desk + Locker');
+    expect(paymentSource).toContain('formatAdmissionInr(0)} None');
   });
 
   it('provides Partial Payment (Token Advance) toggle and auto payment promise schedule inputs', () => {
-    const paymentSource = readSource('components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionPaymentSection.tsx');
+    const paymentSource =
+      readSource('components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionPaymentSection.tsx') +
+      readSource('components/manager_members_new_admission_sections/ManagerMembersNewAdmissionPaymentDetailsCards.tsx');
     expect(paymentSource).toContain('Payment Structure');
     expect(paymentSource).toContain('Full Payment (Pay in Full)');
     expect(paymentSource).toContain('Partial Payment (Token Advance)');
@@ -65,8 +69,10 @@ describe('Manager Members New Admission - Security Deposit & Partial Payment (To
   });
 
   it('automatically registers Payment Promise and Security Deposit on admission submission', () => {
-    const formSource = readSource('components/manager_members_new_admission_forms/ManagerMembersNewAdmissionAdmissionForm.tsx');
-    // Checks that localStorage and dispatch events are wired for auto-creation
+    const formSource =
+      readSource('components/manager_members_new_admission_forms/ManagerMembersNewAdmissionAdmissionForm.tsx') +
+      readSource('utils/ManagerMembersNewAdmissionStorageAndFormat.ts');
+    // Checks that browserStorage and dispatch events are wired for auto-creation
     expect(formSource).toContain('manager_finance_payment_promises_records');
     expect(formSource).toContain('manager_payment_promise_created');
     expect(formSource).toContain('manager_finance_security_deposits_records');

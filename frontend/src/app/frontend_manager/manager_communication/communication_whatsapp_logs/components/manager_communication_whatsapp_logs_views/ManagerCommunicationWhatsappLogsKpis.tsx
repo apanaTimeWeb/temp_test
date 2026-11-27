@@ -24,7 +24,7 @@ export function ManagerCommunicationWhatsappLogsKpis({
           <p className="text-xs font-semibold text-secondary uppercase tracking-wider">{tManagerUi('total_messages')}</p>
           <p className="text-2xl font-black text-primary mt-1">{totalCount}</p>
         </div>
-        <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
+        <div className="w-10 h-10 rounded-xl bg-primary-subtle text-primary flex items-center justify-center border border-border">
           <Send size={18} />
         </div>
       </div>

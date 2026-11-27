@@ -60,19 +60,19 @@ export function ManagerMembersEnquiriesLostReasonModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="lost-reason-modal-title"
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
     >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm motion-safe:transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Modal Dialog (Direct presentation without inner scroll box) */}
-      <div className="relative z-10 w-full max-w-2xl bg-[#0c0f28] border border-rose-500/40 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 my-auto">
+      <div className="menq-modal-dialog relative z-10 w-full max-w-2xl border border-rose-500/40 rounded-2xl shadow-2xl overflow-hidden motion-safe:animate-in fade-in zoom-in-95 motion-safe:duration-200 my-auto">
         {/* Header */}
-        <div className="px-6 py-4 bg-gradient-to-r from-rose-900/80 via-rose-950/90 to-[#0c0f28] border-b border-rose-500/30 flex items-center justify-between">
+        <div className="menq-modal-rose-header px-6 py-4 border-b border-rose-500/30 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-400 flex items-center justify-center shrink-0">
               <AlertTriangle size={18} />
@@ -89,7 +89,7 @@ export function ManagerMembersEnquiriesLostReasonModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 motion-safe:transition-colors cursor-pointer"
             title="Close dialog"
             aria-label="Close"
           >
@@ -98,7 +98,7 @@ export function ManagerMembersEnquiriesLostReasonModal({
         </div>
 
         {/* Lead Context Banner */}
-        <div className="px-6 py-2.5 bg-[#060818] border-b border-indigo-500/15 flex items-center justify-between text-xs">
+        <div className="menq-inset-strip px-6 py-2.5 border-b flex items-center justify-between text-xs">
           <div>
             <span className="text-slate-400">Candidate: </span>
             <span className="font-semibold text-slate-200">{enquiry.name}</span>
@@ -125,12 +125,12 @@ export function ManagerMembersEnquiriesLostReasonModal({
                 return (
                   <label
                     key={r.id}
-                    className={`flex items-start gap-3 p-3 rounded-xl border text-xs cursor-pointer transition-all ${
+                    className={`flex items-start gap-3 p-3 rounded-xl border text-xs cursor-pointer motion-safe:transition-all ${
                       isOther ? 'sm:col-span-2' : ''
                     } ${
                       isSelected
                         ? 'bg-rose-500/20 border-rose-500/70 text-white shadow-md'
-                        : 'bg-[#080a20] border-indigo-500/20 text-slate-300 hover:border-indigo-500/40 hover:bg-[#0b0e2a]'
+                        : 'menq-reason-idle text-slate-300'
                     }`}
                   >
                     <input
@@ -167,7 +167,7 @@ export function ManagerMembersEnquiriesLostReasonModal({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Student found library too far from coaching; offered 10% discount but declined."
-              className="w-full bg-[#060818] border border-indigo-500/25 rounded-xl px-3 py-2 text-xs text-slate-200 placeholder:text-slate-500 outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all resize-none"
+              className="menq-dark-input w-full border rounded-xl px-3 py-2 text-xs text-slate-200 placeholder:text-slate-500 outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 motion-safe:transition-all resize-none"
             />
           </div>
 
@@ -176,13 +176,13 @@ export function ManagerMembersEnquiriesLostReasonModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl border border-indigo-500/30 text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-xl border border-indigo-500/30 text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/5 motion-safe:transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-600 text-white font-bold text-xs shadow-md shadow-rose-950/50 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-600 text-white font-bold text-xs shadow-md shadow-rose-950/50 motion-safe:transition-all cursor-pointer"
             >
               <XCircle size={15} />
               Confirm & Mark as Lost

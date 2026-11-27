@@ -10,7 +10,10 @@ import type { ManagerMembersEnquiriesEnquiry,ManagerMembersEnquiriesEnquiryStatu
 import { normalizeManagerEnquiriesEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
 import { apiFetch,type ApiResponse } from '@/lib/api';
 
-import { getManagerEnquiriesMockEnquiries,getManagerEnquiriesMockEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/mocks/manager_members_enquiries_fixtures/ManagerMembersEnquiriesFixtures';
+import {
+  getManagerEnquiriesDemoEnquiries,
+  getManagerEnquiriesDemoEnquiry,
+} from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.demo_data';
 
 function unwrapManagerApiResponse<T>(response: ApiResponse<T>, fallbackMessage: string): T {
   if (!response.success) {
@@ -31,16 +34,16 @@ export async function fetchManagerMembersEnquiries(): Promise<ManagerMembersEnqu
         if (response.statusCode === 503 || response.errorCode === 'CRM_UNAVAILABLE' || response.message?.includes('CRM service unavailable')) {
           unwrapManagerApiResponse(response, 'Unable to load CRM enquiries.');
         }
-        return getManagerEnquiriesMockEnquiries();
+        return getManagerEnquiriesDemoEnquiries();
       }
       return managerCrmEnquiryResponseSchema.parse(response.data).map((item) => normalizeManagerEnquiriesEnquiry(item));
     }
-    return getManagerEnquiriesMockEnquiries();
+    return getManagerEnquiriesDemoEnquiries();
   } catch (err: any) {
     if (err?.code === 'CRM_UNAVAILABLE' || err?.message?.includes('CRM service unavailable')) {
       throw err;
     }
-    return getManagerEnquiriesMockEnquiries();
+    return getManagerEnquiriesDemoEnquiries();
   }
 }
 
@@ -52,16 +55,16 @@ export async function fetchManagerEnquiriesEnquiryById(id: string): Promise<Mana
         if (response.statusCode === 503 || response.errorCode === 'CRM_UNAVAILABLE' || response.message?.includes('CRM service unavailable')) {
           unwrapManagerApiResponse(response, 'Unable to load the selected CRM enquiry.');
         }
-        return getManagerEnquiriesMockEnquiry(id) ?? getManagerEnquiriesMockEnquiries()[0];
+        return getManagerEnquiriesDemoEnquiry(id) ?? getManagerEnquiriesDemoEnquiries()[0];
       }
       return normalizeManagerEnquiriesEnquiry((managerCrmEnquirySchema.or(managerCrmNormalizedEnquirySchema)).parse(response.data));
     }
-    return getManagerEnquiriesMockEnquiry(id) ?? getManagerEnquiriesMockEnquiries()[0];
+    return getManagerEnquiriesDemoEnquiry(id) ?? getManagerEnquiriesDemoEnquiries()[0];
   } catch (err: any) {
     if (err?.code === 'CRM_UNAVAILABLE' || err?.message?.includes('CRM service unavailable')) {
       throw err;
     }
-    return getManagerEnquiriesMockEnquiry(id) ?? getManagerEnquiriesMockEnquiries()[0];
+    return getManagerEnquiriesDemoEnquiry(id) ?? getManagerEnquiriesDemoEnquiries()[0];
   }
 }
 

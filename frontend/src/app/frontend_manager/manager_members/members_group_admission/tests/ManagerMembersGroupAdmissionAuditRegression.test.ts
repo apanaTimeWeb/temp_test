@@ -32,7 +32,11 @@ describe('Manager Members Group Admission Audit Regression Tests', () => {
       __dirname,
       '../components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionCardView.tsx'
     );
-    const content = readFileSync(cardViewPath, 'utf8');
+    const extraFieldsPath = join(
+      __dirname,
+      '../components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionCardExtraFields.tsx'
+    );
+    const content = readFileSync(cardViewPath, 'utf8') + readFileSync(extraFieldsPath, 'utf8');
     expect(content).toContain('-- Select Blood Group (Optional) --');
     expect(content).not.toContain("value={row.bloodGroup || 'B+'}");
   });

@@ -1,11 +1,12 @@
 'use client';
 // RESPONSIBILITY: Render the members new admission admission enrollment section with multi-shift support.
 import {
-MANAGER_ADMISSION_FLOOR_OPTIONS,
-MANAGER_ADMISSION_LOCKER_OPTIONS,
-MANAGER_ADMISSION_SEAT_OPTIONS,
+  MANAGER_ADMISSION_FLOOR_OPTIONS,
+  MANAGER_ADMISSION_LOCKER_OPTIONS,
+  MANAGER_ADMISSION_SEAT_OPTIONS,
 } from '@/app/frontend_manager/manager_members/members_new_admission/config/manager_members_new_admission_options';
 import type { ManagerMembersNewAdmissionAdmissionEnrollmentSectionProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
+import { formatAdmissionInr } from '@/app/frontend_manager/manager_members/members_new_admission/utils/ManagerMembersNewAdmissionStorageAndFormat';
 import { SearchableCombobox } from '@/components/ui/combobox/SearchableCombobox';
 import { getLibraryPricingConfig,type LibraryPricingConfig } from '@/lib/pricing/libraryPricingEngine';
 import { Check,Clock,FileText,IndianRupee } from 'lucide-react';
@@ -125,7 +126,7 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
                     <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${isSelected ? 'bg-primary text-on-primary' : 'bg-floating text-secondary'
                       }`}>
                       {isSelected ? <Check size={12} className="inline mr-0.5" /> : null}
-                      ₹{shift.monthlyPrice}/mo
+                      {`${formatAdmissionInr(shift.monthlyPrice)}/mo`}
                     </span>
                   </div>
                   <span className="text-xs text-secondary">{shift.hours}</span>
@@ -144,7 +145,7 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
               </span>
               <span className="font-bold text-primary flex items-center gap-1 shrink-0 self-start sm:self-auto">
                 <IndianRupee size={12} />
-                <span>Base: ₹{currentTotalMonthlyShiftRate} / mo</span>
+                <span>{`Base: ${formatAdmissionInr(currentTotalMonthlyShiftRate)} / mo`}</span>
               </span>
             </div>
           )}

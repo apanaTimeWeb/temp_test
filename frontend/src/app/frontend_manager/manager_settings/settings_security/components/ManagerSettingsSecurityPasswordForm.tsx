@@ -1,18 +1,19 @@
 'use client';
 
 import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { ManagerSettingsSecurityPasswordRules } from '@/app/frontend_manager/manager_settings/settings_security/components/ManagerSettingsSecurityPasswordRules';
+import { changePasswordSchema } from '@/app/frontend_manager/manager_settings/settings_security/schemas/ManagerSettingsSecuritySchema';
 import {
-AlertCircle,
-CheckCircle2,
-Eye,
-EyeOff,
-KeyRound,
-ShieldCheck,
-XCircle,
+  AlertCircle,
+  CheckCircle2,
+  Eye,
+  EyeOff,
+  KeyRound,
+  ShieldCheck,
+  XCircle,
 } from 'lucide-react';
-import React,{ useMemo,useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { changePasswordSchema } from '../schemas/ManagerSettingsSecuritySchema';
 
 export function ManagerSettingsSecurityPasswordForm() {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -29,19 +30,15 @@ export function ManagerSettingsSecurityPasswordForm() {
     text: string;
   } | null>(null);
 
-  // Requirements checks
-  const checks = useMemo(() => {
-    return {
-      length: newPassword.length >= 8,
-      upper: /[A-Z]/.test(newPassword),
-      lower: /[a-z]/.test(newPassword),
-      number: /[0-9]/.test(newPassword),
-      symbol: /[^A-Za-z0-9]/.test(newPassword),
-      matches: Boolean(newPassword && newPassword === confirmPassword),
-    };
-  }, [newPassword, confirmPassword]);
+  const checks = useMemo(() => ({
+    length: newPassword.length >= 8,
+    upper: /[A-Z]/.test(newPassword),
+    lower: /[a-z]/.test(newPassword),
+    number: /[0-9]/.test(newPassword),
+    symbol: /[^A-Za-z0-9]/.test(newPassword),
+    matches: Boolean(newPassword && newPassword === confirmPassword),
+  }), [newPassword, confirmPassword]);
 
-  // Calculate score 0..100
   const strengthScore = useMemo(() => {
     if (!newPassword) return 0;
     let score = 0;
@@ -73,7 +70,7 @@ export function ManagerSettingsSecurityPasswordForm() {
     if (!result.success) {
       const firstError = result.error.errors[0]?.message || 'Please check the form inputs.';
       setStatusMessage({ type: 'error', text: firstError });
-      toast.error(firstError);
+      toast.error(firstError, { id: 'manager-security-password-validation-error' });
       return;
     }
 
@@ -84,7 +81,7 @@ export function ManagerSettingsSecurityPasswordForm() {
         type: 'success',
         text: 'Password updated successfully.',
       });
-      toast.success('Manager password updated successfully!');
+      toast.success('Manager password updated successfully!', { id: 'manager-security-password-updated' });
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
@@ -93,12 +90,10 @@ export function ManagerSettingsSecurityPasswordForm() {
 
   return (
     <div className="max-w-xl mx-auto space-y-5">
-      <div className="flex items-center justify-between border-b border-white/5 pb-3">
+      <div className="flex items-center justify-between border-b border-slate-800 pb-3">
         <div className="flex items-center gap-2">
           <KeyRound className="h-5 w-5 text-indigo-400" />
-          <h2 className="text-sm sm:text-base font-bold text-white">
-            Change Password
-          </h2>
+          <h2 className="text-sm sm:text-base font-bold text-white">Change Password</h2>
         </div>
         {newPassword && (
           <span className={`text-xs font-semibold ${strengthLabel.color}`}>
@@ -126,16 +121,13 @@ export function ManagerSettingsSecurityPasswordForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Current Password */}
         <div>
-          <label
-            htmlFor="currentPassword"
-            className="block text-xs font-semibold text-slate-300 mb-1"
-          >
+          <label htmlFor="currentPassword" className="block text-xs font-semibold text-slate-300 mb-1">
             Current Password
           </label>
           <div className="relative">
-            <input maxLength={30}
+            <input
+              maxLength={30}
               id="currentPassword"
               name="currentPassword"
               type={showCurrent ? 'text' : 'password'}
@@ -144,7 +136,7 @@ export function ManagerSettingsSecurityPasswordForm() {
               placeholder="Enter current password"
               autoComplete="current-password"
               required
-              className="w-full rounded-lg border border-white/10 bg-slate-900/60 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             />
             <button
               type="button"
@@ -157,16 +149,13 @@ export function ManagerSettingsSecurityPasswordForm() {
           </div>
         </div>
 
-        {/* New Password */}
         <div>
-          <label
-            htmlFor="newPassword"
-            className="block text-xs font-semibold text-slate-300 mb-1"
-          >
+          <label htmlFor="newPassword" className="block text-xs font-semibold text-slate-300 mb-1">
             New Password
           </label>
           <div className="relative">
-            <input maxLength={30}
+            <input
+              maxLength={30}
               id="newPassword"
               name="newPassword"
               type={showNew ? 'text' : 'password'}
@@ -175,7 +164,7 @@ export function ManagerSettingsSecurityPasswordForm() {
               placeholder="Minimum 8 characters with symbol & number"
               autoComplete="new-password"
               required
-              className="w-full rounded-lg border border-white/10 bg-slate-900/60 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             />
             <button
               type="button"
@@ -187,71 +176,16 @@ export function ManagerSettingsSecurityPasswordForm() {
             </button>
           </div>
 
-          {/* Real-time Checklist Chips */}
-          <div className="flex flex-wrap gap-1.5 mt-2 text-[11px]">
-            <span
-              className={`inline-flex items-center gap-1 rounded px-2 py-0.5 font-medium ${
-                checks.length
-                  ? 'bg-emerald-500/15 text-emerald-300'
-                  : 'bg-white/5 text-slate-500'
-              }`}
-            >
-              {checks.length ? <CheckCircle2 size={11} /> : <XCircle size={11} />}
-              8+ chars
-            </span>
-            <span
-              className={`inline-flex items-center gap-1 rounded px-2 py-0.5 font-medium ${
-                checks.upper
-                  ? 'bg-emerald-500/15 text-emerald-300'
-                  : 'bg-white/5 text-slate-500'
-              }`}
-            >
-              {checks.upper ? <CheckCircle2 size={11} /> : <XCircle size={11} />}
-              Uppercase
-            </span>
-            <span
-              className={`inline-flex items-center gap-1 rounded px-2 py-0.5 font-medium ${
-                checks.lower
-                  ? 'bg-emerald-500/15 text-emerald-300'
-                  : 'bg-white/5 text-slate-500'
-              }`}
-            >
-              {checks.lower ? <CheckCircle2 size={11} /> : <XCircle size={11} />}
-              Lowercase
-            </span>
-            <span
-              className={`inline-flex items-center gap-1 rounded px-2 py-0.5 font-medium ${
-                checks.number
-                  ? 'bg-emerald-500/15 text-emerald-300'
-                  : 'bg-white/5 text-slate-500'
-              }`}
-            >
-              {checks.number ? <CheckCircle2 size={11} /> : <XCircle size={11} />}
-              Number
-            </span>
-            <span
-              className={`inline-flex items-center gap-1 rounded px-2 py-0.5 font-medium ${
-                checks.symbol
-                  ? 'bg-emerald-500/15 text-emerald-300'
-                  : 'bg-white/5 text-slate-500'
-              }`}
-            >
-              {checks.symbol ? <CheckCircle2 size={11} /> : <XCircle size={11} />}
-              Symbol
-            </span>
-          </div>
+          <ManagerSettingsSecurityPasswordRules checks={checks} />
         </div>
 
-        {/* Confirm Password */}
         <div>
-          <label
-            htmlFor="confirmPassword"
-            className="block text-xs font-semibold text-slate-300 mb-1"
-          >
+          <label htmlFor="confirmPassword" className="block text-xs font-semibold text-slate-300 mb-1">
             Confirm New Password
           </label>
           <div className="relative">
-            <input maxLength={30}
+            <input
+              maxLength={30}
               id="confirmPassword"
               name="confirmPassword"
               type={showConfirm ? 'text' : 'password'}
@@ -260,7 +194,7 @@ export function ManagerSettingsSecurityPasswordForm() {
               placeholder="Re-enter new password"
               autoComplete="new-password"
               required
-              className="w-full rounded-lg border border-white/10 bg-slate-900/60 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             />
             <button
               type="button"
@@ -292,12 +226,11 @@ export function ManagerSettingsSecurityPasswordForm() {
           )}
         </div>
 
-        {/* Submit Button */}
         <div className="pt-2 flex justify-end">
           <button
             type="submit"
             disabled={isSubmitting || !checks.length || !checks.matches}
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 border border-indigo-500/40 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 text-xs font-bold text-white transition-all cursor-pointer shadow-md shadow-indigo-950/40"
+            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 border border-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 text-xs font-bold text-white motion-safe:transition-all cursor-pointer shadow-md"
           >
             {isSubmitting ? <ButtonLoader icon="key-round" /> : <ShieldCheck size={14} />}
             {isSubmitting ? 'Updating...' : 'Update Password'}

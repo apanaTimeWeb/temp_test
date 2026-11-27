@@ -1,5 +1,5 @@
+import { MANAGER_ID_CARD_DEMO_STUDENTS } from '@/app/frontend_manager/manager_members/members_id_card_generator/config/manager_members_id_card_generator.demo_data';
 import { MANAGER_MEMBERS_ID_CARD_GENERATOR_API } from '@/app/frontend_manager/manager_members/members_id_card_generator/config/manager_members_id_card_generator.url_config';
-import { MANAGER_STUDENTS_FIXTURES } from '@/app/frontend_manager/manager_members/members_id_card_generator/mocks/manager_members_id_card_generator_fixtures/ManagerMembersIdCardGeneratorFixtures';
 import {
 ManagerMembersIdCardGeneratorListResponseSchema,
 ManagerStudentDetailResponseSchema,
@@ -26,16 +26,16 @@ export async function fetchManagerIdCardGenerator(): Promise<ManagerStudent[]> {
         if (response.errorCode === 'UPSTREAM_UNAVAILABLE' || response.message === 'upstream unavailable') {
           unwrapManagerApiResponse(response, 'Unable to load student records.');
         }
-        return MANAGER_STUDENTS_FIXTURES;
+        return MANAGER_ID_CARD_DEMO_STUDENTS;
       }
       return ManagerMembersIdCardGeneratorListResponseSchema.parse(response.data);
     }
-    return MANAGER_STUDENTS_FIXTURES;
+    return MANAGER_ID_CARD_DEMO_STUDENTS;
   } catch (err: any) {
     if (err?.code === 'UPSTREAM_UNAVAILABLE' || err?.message === 'upstream unavailable') {
       throw err;
     }
-    return MANAGER_STUDENTS_FIXTURES;
+    return MANAGER_ID_CARD_DEMO_STUDENTS;
   }
 }
 
@@ -47,19 +47,19 @@ export async function fetchManagerStudentById(id: string): Promise<ManagerStuden
         if (response.errorCode === 'UPSTREAM_UNAVAILABLE' || response.message === 'upstream unavailable') {
           unwrapManagerApiResponse(response, 'Unable to load the selected student.');
         }
-        const found = MANAGER_STUDENTS_FIXTURES.find((s) => s.id === id || s.smartId === id);
-        return found || MANAGER_STUDENTS_FIXTURES[0];
+        const found = MANAGER_ID_CARD_DEMO_STUDENTS.find((s) => s.id === id || s.smartId === id);
+        return found || MANAGER_ID_CARD_DEMO_STUDENTS[0];
       }
       return ManagerStudentDetailResponseSchema.parse(response.data);
     }
-    const found = MANAGER_STUDENTS_FIXTURES.find((s) => s.id === id || s.smartId === id);
-    return found || MANAGER_STUDENTS_FIXTURES[0];
+    const found = MANAGER_ID_CARD_DEMO_STUDENTS.find((s) => s.id === id || s.smartId === id);
+    return found || MANAGER_ID_CARD_DEMO_STUDENTS[0];
   } catch (err: any) {
     if (err?.code === 'UPSTREAM_UNAVAILABLE' || err?.message === 'upstream unavailable') {
       throw err;
     }
-    const found = MANAGER_STUDENTS_FIXTURES.find((s) => s.id === id || s.smartId === id);
-    return found || MANAGER_STUDENTS_FIXTURES[0];
+    const found = MANAGER_ID_CARD_DEMO_STUDENTS.find((s) => s.id === id || s.smartId === id);
+    return found || MANAGER_ID_CARD_DEMO_STUDENTS[0];
   }
 }
 

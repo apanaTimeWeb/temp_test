@@ -1,0 +1,43 @@
+.mex-kpi-rose {
+  background: linear-gradient(135deg, rgba(76, 5, 25, 0.8), #260e19, rgba(136, 19, 55, 0.6));
+}
+
+.mex-kpi-emerald {
+  background: linear-gradient(135deg, rgba(6, 78, 59, 0.8), #0e2c21, rgba(6, 95, 70, 0.6));
+}
+
+.mex-kpi-sky {
+  background: linear-gradient(135deg, rgba(8, 47, 73, 0.8), #0e2540, rgba(7, 89, 133, 0.6));
+}
+
+.mex-kpi-amber {
+  background: linear-gradient(135deg, rgba(69, 26, 3, 0.8), #261708, rgba(120, 53, 15, 0.6));
+}
+
+.mex-mode-cash-active {
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.45);
+  background-color: #10b981;
+  border-color: #34d399;
+  color: #ffffff;
+}
+
+.mex-mode-upi-active {
+  box-shadow: 0 0 14px rgba(14, 165, 233, 0.45);
+  background-color: #0ea5e9;
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+.mex-mode-card-active {
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.45);
+  background-color: #a855f7;
+  border-color: #c084fc;
+  color: #ffffff;
+}
+
+.mex-mode-bank-active {
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.45);
+  background-color: #f59e0b;
+  border-color: #fbbf24;
+  color: #000000;
+}

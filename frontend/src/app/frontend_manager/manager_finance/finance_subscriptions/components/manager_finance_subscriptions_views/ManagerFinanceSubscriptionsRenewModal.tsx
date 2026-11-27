@@ -148,7 +148,7 @@ export default function ManagerFinanceSubscriptionsRenewModal({
         {/* Student Profile Card */}
         <div className="p-3.5 rounded-xl bg-surface border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm shrink-0">
+            <div className="w-10 h-10 rounded-full bg-primary-subtle text-primary flex items-center justify-center font-bold text-sm shrink-0">
               <User size={18} />
             </div>
             <div className="min-w-0">
@@ -183,10 +183,10 @@ export default function ManagerFinanceSubscriptionsRenewModal({
                     key={dur.months}
                     type="button"
                     onClick={() => setSelectedMonths(dur.months)}
-                    className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer relative ${
+                    className={`p-2.5 rounded-xl border text-center motion-safe:transition-all cursor-pointer relative ${
                       isSelected
                         ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold ring-1 ring-emerald-500'
-                        : 'border-border bg-card hover:border-primary/50 text-secondary'
+                        : 'border-border bg-card hover:border-primary text-secondary'
                     }`}
                   >
                     {dur.badge && (

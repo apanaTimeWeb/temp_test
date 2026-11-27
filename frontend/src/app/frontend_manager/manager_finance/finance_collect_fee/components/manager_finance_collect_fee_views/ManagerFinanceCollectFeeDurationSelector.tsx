@@ -2,7 +2,8 @@
 
 import { STANDARD_CYCLE_AMOUNTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/constants/ManagerFinanceCollectFeeConstants';
 import type { ManagerFinanceCollectFeeDraft } from '@/app/frontend_manager/manager_finance/finance_collect_fee/schemas/ManagerFinanceCollectFeeDraftSchema';
-import { Calendar,Clock } from 'lucide-react';
+import { formatCollectFeeInr } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
+import { Calendar, Clock } from 'lucide-react';
 
 export interface ManagerFinanceCollectFeeDurationSelectorProps {
   isCustomDuration: boolean;
@@ -107,10 +108,10 @@ export default function ManagerFinanceCollectFeeDurationSelector({
               }
             }}
           >
-            <option value="1">{label1Month} (₹1,200)</option>
-            <option value="3">{label3MonthsQuarterly} (₹3,400)</option>
-            <option value="6">{label6MonthsHalfYearly} (₹6,500)</option>
-            <option value="12">{label12MonthsAnnual} (₹12,000)</option>
+            <option value="1">{label1Month} ({formatCollectFeeInr(1200)})</option>
+            <option value="3">{label3MonthsQuarterly} ({formatCollectFeeInr(3400)})</option>
+            <option value="6">{label6MonthsHalfYearly} ({formatCollectFeeInr(6500)})</option>
+            <option value="12">{label12MonthsAnnual} ({formatCollectFeeInr(12000)})</option>
             <option value="custom">Custom Duration / Months...</option>
           </select>
         ) : (
