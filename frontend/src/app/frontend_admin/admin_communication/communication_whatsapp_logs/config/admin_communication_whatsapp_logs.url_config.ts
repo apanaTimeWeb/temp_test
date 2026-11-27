@@ -16,27 +16,12 @@ export const ADMIN_COMMUNICATION_WHATSAPP_LOGS_API = {
 /** Preserves the existing canonical route export without creating a re-export facade. */
 export const ADMIN_COMMUNICATION_WHATSAPP_LOGS_CANONICAL_ROUTE = ADMIN_COMMUNICATION_WHATSAPP_LOGS_ROUTES.ROOT;
 
-export const ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_BADGE: Record<string, string> = {
-  welcome: 'bg-info-bg text-info-text border-info-bg',
-  fee_reminder: 'bg-warning-bg text-warning-text border-warning-bg',
-  receipt: 'bg-success-bg text-success-text border-success-bg',
-  notice: 'bg-purple-bg text-purple-text',
-  renewal: 'bg-primary-subtle text-primary border-primary-subtle',
-};
-
 export const ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_LABEL: Record<string, string> = {
   welcome: 'WHATSAPP_TYPE_WELCOME',
   fee_reminder: 'WHATSAPP_TYPE_FEE_REMINDER',
   receipt: 'WHATSAPP_TYPE_RECEIPT',
   notice: 'WHATSAPP_TYPE_NOTICE',
   renewal: 'WHATSAPP_TYPE_RENEWAL',
-};
-
-export const ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_BADGE: Record<string, string> = {
-  Pending: 'bg-warning-bg text-warning-text border-warning-bg',
-  Sent: 'bg-info-bg text-info-text border-info-bg',
-  Delivered: 'bg-success-bg text-success-text border-success-bg',
-  Failed: 'bg-danger-bg text-danger-text border-danger-bg',
 };
 
 export const ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_LABEL: Record<string, string> = {

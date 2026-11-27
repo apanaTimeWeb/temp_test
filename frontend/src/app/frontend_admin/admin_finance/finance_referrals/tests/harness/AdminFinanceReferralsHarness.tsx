@@ -1,5 +1,10 @@
-import { AdminFinanceReferralsScenarioLabel } from '@/app/frontend_admin/admin_finance/finance_referrals/tests/harness/bootstrap';
-import type { AdminFinanceReferralsHarnessProps } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsComponentTypes';
+import { AdminFinanceReferralsScenarioLabel, type AdminFinanceReferralsScenario } from '@/app/frontend_admin/admin_finance/finance_referrals/tests/harness/bootstrap';
+import type { ReactNode } from 'react';
+
+export interface AdminFinanceReferralsHarnessProps {
+  children: ReactNode;
+  scenario?: AdminFinanceReferralsScenario;
+}
 
 
 /** Test-only deterministic state harness. It renders observable active, empty, server-error, timeout, and unauthorized states without assuming a backend DTO or live API contract. */
@@ -18,6 +23,3 @@ export function AdminFinanceReferralsHarness({ children, scenario = 'ACTIVE' }: 
     </div>
   );
 }
-
-
-export type { AdminFinanceReferralsHarnessProps };

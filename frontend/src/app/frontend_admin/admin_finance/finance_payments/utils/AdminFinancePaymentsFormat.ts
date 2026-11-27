@@ -45,10 +45,6 @@ export function formatCurrency(amountMinor: number, currency: string, locale: st
   return new Intl.NumberFormat(locale, { style: 'currency', currency, minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits }).format(safeMinor / (10 ** fractionDigits));
 }
 
-export function formatAdminFinanceCurrency(amountMinor: number, currency = 'INR'): string {
-  return formatCurrency(amountMinor, currency, getAdminFinanceLocale());
-}
-
 /** API-record formatter: absent currency/unit metadata is unknown, never silently treated as INR or paise. */
 export function formatAdminFinanceApiAmount(amount: number, currencyCode: string | undefined, amountUnit: 'minor' | 'major' | undefined): string {
   if (!currencyCode || !/^[A-Z]{3}$/.test(currencyCode) || !Number.isFinite(amount) || amount < 0 || amountUnit === undefined) return '—';
@@ -58,14 +54,6 @@ export function formatAdminFinanceApiAmount(amount: number, currencyCode: string
     return formatCurrency(amount, currencyCode, locale);
   }
   return new Intl.NumberFormat(locale, { style: 'currency', currency: currencyCode }).format(amount);
-}
-
-export function getAdminFinanceLocalDateString(date = new Date()): string {
-  return format(date, 'yyyy-MM-dd');
-}
-
-export function getAdminFinanceLocalMonthString(date = new Date()): string {
-  return format(date, 'yyyy-MM');
 }
 
 function parseAdminFinanceDisplayDate(dateStr: string): Date {
@@ -78,11 +66,4 @@ export function formatDate(dateStr: string): string {
   const date = parseAdminFinanceDisplayDate(dateStr);
   if (Number.isNaN(date.getTime())) return '';
   return format(date, 'PP', { locale: getAdminFinanceDateFnsLocale() });
-}
-
-export function formatDateTime(dateStr: string): string {
-  if (!dateStr) return '';
-  const date = parseAdminFinanceDisplayDate(dateStr);
-  if (Number.isNaN(date.getTime())) return '';
-  return format(date, 'PPp', { locale: getAdminFinanceDateFnsLocale() });
 }

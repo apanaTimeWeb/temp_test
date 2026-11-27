@@ -14,11 +14,3 @@ export function formatAdminFinanceSecurityDepositsCurrency(amountRupees: number,
     maximumFractionDigits: decimals,
   }).format(safeAmount);
 }
-
-export function getAdminFinanceSecurityDepositsCurrencySymbol(): string {
-  const parts = new Intl.NumberFormat(resolveFinanceLocale(), {
-    style: 'currency',
-    currency: 'INR',
-  }).formatToParts(0);
-  return parts.find((p) => p.type === 'currency')?.value ?? 'INR';
-}

@@ -16,10 +16,3 @@ export function formatAdminAccountingCurrency(minorUnits: number, locale = 'en-I
     maximumFractionDigits: fractionDigits,
   }).format(adminAccountingMinorToMajor(minorUnits, currency, resolvedLocale));
 }
-
-/** Convert a user-entered major-unit value to the currency's smallest unit. */
-export function toAdminAccountingMinorUnits(majorUnits: number, currency = 'INR', locale = 'en-IN'): number {
-  if (!Number.isFinite(majorUnits)) return 0;
-  const fractionDigits = new Intl.NumberFormat(locale, { style: 'currency', currency }).resolvedOptions().maximumFractionDigits ?? 2;
-  return Math.round(majorUnits * (10 ** fractionDigits));
-}

@@ -1,4 +1,4 @@
-import type { AdminCommunicationNotificationCategory,AdminCommunicationNotificationDomain } from '@/app/frontend_admin/admin_communication/communication_notification_center/types/AdminCommunicationNotificationCenterTypes';
+import type { AdminCommunicationNotificationCategory } from '@/app/frontend_admin/admin_communication/communication_notification_center/types/AdminCommunicationNotificationCenterTypes';
 
 /** Canonical routes and source-observed API paths owned by the notification-center module. */
 export const ADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES = {
@@ -23,10 +23,3 @@ export const ADMIN_COMMUNICATION_NOTIFICATION_CATEGORIES: ReadonlyArray<{ id: Ad
   { id: 'Attendance', labelKey: 'FILTER_ATTENDANCE', icon: '📅' },
   { id: 'High Only', labelKey: 'FILTER_HIGH_PRIORITY_ONLY', icon: '🔴' },
 ];
-
-export const ADMIN_COMMUNICATION_NOTIFICATION_ICON_CLASS: Record<AdminCommunicationNotificationDomain, string> = {
-  Finance: 'bg-success-bg text-success-text',
-  CRM: 'bg-info-bg text-info-text',
-  Operations: 'bg-warning-bg text-warning-text',
-  Attendance: 'bg-primary-subtle text-primary',
-};

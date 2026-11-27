@@ -1,5 +1,10 @@
-import { AdminCommunicationWhatsappTemplatesScenarioLabel } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/tests/harness/bootstrap';
-import type { AdminCommunicationWhatsappTemplatesHarnessProps } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/types/AdminCommunicationWhatsappTemplatesComponentTypes';
+import { AdminCommunicationWhatsappTemplatesScenarioLabel, type AdminCommunicationWhatsappTemplatesScenario } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/tests/harness/bootstrap';
+import type { ReactNode } from 'react';
+
+export interface AdminCommunicationWhatsappTemplatesHarnessProps {
+  children: ReactNode;
+  scenario?: AdminCommunicationWhatsappTemplatesScenario;
+}
 
 
 /** Test-only deterministic state harness. It renders observable active, empty, server-error, timeout, and unauthorized states without assuming a backend DTO or live API contract. */
@@ -18,6 +23,3 @@ export function AdminCommunicationWhatsappTemplatesHarness({ children, scenario 
     </div>
   );
 }
-
-
-export type { AdminCommunicationWhatsappTemplatesHarnessProps };

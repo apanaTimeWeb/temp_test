@@ -1,5 +1,10 @@
-import { AdminShiftsGapScenarioLabel } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/tests/harness/bootstrap';
-import type { AdminShiftsGapHarnessProps } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/types/AdminShiftsGapComponentTypes';
+import { AdminShiftsGapScenarioLabel, type AdminShiftsGapScenario } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/tests/harness/bootstrap';
+import type { ReactNode } from 'react';
+
+export interface AdminShiftsGapHarnessProps {
+  children: ReactNode;
+  scenario?: AdminShiftsGapScenario;
+}
 
 
 /** Test-only deterministic state harness. It renders observable active, empty, server-error, timeout, and unauthorized states without assuming a backend DTO or live API contract. */
@@ -18,6 +23,3 @@ export function AdminShiftsGapHarness({ children, scenario = 'ACTIVE' }: AdminSh
     </div>
   );
 }
-
-
-export type { AdminShiftsGapHarnessProps };
