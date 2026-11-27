@@ -4,7 +4,7 @@
 import type { AdminFinanceDemoReferrer } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsTypes';
 import { formatAdminFinanceCurrency } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/AdminFinanceReferralsFormat';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
-import { ArrowDown,ArrowUp,ArrowUpDown,CheckCircle2,IndianRupee,Receipt } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, CheckCircle2, IndianRupee, Receipt } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 export type ReferralsSortField = 'name' | 'referredCount' | 'bonusEarned' | 'redeemed' | 'balance';
@@ -66,7 +66,7 @@ export function AdminFinanceReferralsTable({
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 motion-safe:transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -116,10 +116,11 @@ export function AdminFinanceReferralsTable({
                 <tr key={r.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra">
                   <td className="py-3 px-4">
                     <span className={`inline-flex items-center justify-center h-6 w-6 rounded-full text-xs font-bold ${
-                      globalIndex === 0 ? 'bg-amber-500/15 text-amber-500 border border-amber-500/30' :
-                      globalIndex === 1 ? 'bg-slate-500/15 text-slate-400 border border-slate-500/30' :
-                      globalIndex === 2 ? 'bg-orange-500/15 text-orange-500 border border-orange-500/30' :
-                      'text-text-secondary font-mono'
+                      globalIndex === 0
+                        ? 'bg-warning-bg text-warning-text border border-warning'
+                        : globalIndex <= 2
+                          ? 'bg-surface-highlight text-text-primary border border-border'
+                          : 'text-text-secondary font-mono'
                     }`}>
                       #{globalIndex + 1}
                     </span>
@@ -130,9 +131,10 @@ export function AdminFinanceReferralsTable({
                   </td>
                   <td className="py-3 px-4">
                     <button
+                      type="button"
                       data-testid={`admin_finance-referral-expand-${r.id}`}
                       aria-expanded={isExpanded}
-                      className="inline-flex min-h-8 min-w-8 items-center justify-center gap-1.5 rounded-lg border border-indigo-500/25 bg-indigo-500/10 px-2.5 py-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                      className="inline-flex min-h-8 min-w-8 items-center justify-center gap-1.5 rounded-lg border border-border-focus bg-primary-subtle px-2.5 py-1 text-xs font-semibold text-primary hover:opacity-90 motion-safe:transition-opacity cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                       onClick={() => onToggleExpand(isExpanded ? null : r.id)}
                     >
                       {isExpanded ? '▲' : '▼'} {t(isExpanded ? 'COLLAPSE_STUDENTS' : 'EXPAND_STUDENTS')} ({r.referredNames.length})
@@ -140,7 +142,7 @@ export function AdminFinanceReferralsTable({
                     {isExpanded && (
                       <div className="flex flex-wrap gap-1 mt-2">
                         {r.referredNames.map((name: string) => (
-                          <span data-testid="admin_finance-page-state-005" key={name} className="inline-flex min-h-6 items-center gap-1 rounded-full border border-indigo-500/25 bg-indigo-500/10 px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-indigo-600 dark:text-indigo-400">
+                          <span data-testid="admin_finance-page-state-005" key={name} className="inline-flex min-h-6 items-center gap-1 rounded-full border border-border-focus bg-primary-subtle px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-primary">
                             {name}
                           </span>
                         ))}
@@ -148,7 +150,7 @@ export function AdminFinanceReferralsTable({
                     )}
                   </td>
                   <td className="py-3 px-4 text-center font-bold text-body text-text-primary font-mono">{r.referredNames.length}</td>
-                  <td className="py-3 px-4 text-right text-emerald-600 dark:text-emerald-400 font-bold font-mono">{formatAdminFinanceCurrency(r.bonusEarned)}</td>
+                  <td className="py-3 px-4 text-right text-success-text font-bold font-mono">{formatAdminFinanceCurrency(r.bonusEarned)}</td>
                   <td className="py-3 px-4 text-right text-body text-text-primary font-mono">{formatAdminFinanceCurrency(r.redeemed)}</td>
                   <td className="py-3 px-4 text-right font-bold text-body text-text-primary font-mono">{formatAdminFinanceCurrency(r.balance)}</td>
                   <td className="py-3 px-4 text-right">
@@ -157,28 +159,28 @@ export function AdminFinanceReferralsTable({
                         <button
                           type="button"
                           onClick={() => onViewVoucher(r)}
-                          className="inline-flex items-center gap-1 rounded-md border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 px-2 py-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 transition-colors shadow-xs"
+                          className="inline-flex items-center gap-1 rounded-md border border-border-focus bg-primary-subtle hover:opacity-90 px-2 py-1 text-xs font-semibold text-primary motion-safe:transition-opacity shadow-card"
                           title="View & Print Payout Voucher / Credit Note"
                           aria-label={`View payout voucher for ${r.name}`}
                         >
-                          <Receipt size={12} strokeWidth={2} />
+                          <Receipt size={12} strokeWidth={2} aria-hidden="true" />
                           <span>Voucher</span>
                         </button>
                       )}
                       {r.balance > 0 ? (
                         <button
                           type="button"
-                          onClick={() => onRedeem && onRedeem(r)}
-                          className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 px-2.5 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 transition-colors shadow-xs"
+                          onClick={() => onRedeem?.(r)}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-success bg-success-bg hover:opacity-90 px-2.5 py-1 text-xs font-semibold text-success-text motion-safe:transition-opacity shadow-card"
                           title="Disburse / Redeem Referral Bonus"
                           aria-label={`Redeem referral bonus for ${r.name}`}
                         >
-                          <IndianRupee size={12} strokeWidth={2.5} />
+                          <IndianRupee size={12} strokeWidth={2.5} aria-hidden="true" />
                           <span>Redeem</span>
                         </button>
                       ) : (
-                        <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2 py-0.5 text-[11px] font-medium text-text-muted">
-                          <CheckCircle2 size={11} className="text-emerald-500" /> Settled
+                        <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface-highlight px-2 py-0.5 text-[11px] font-medium text-text-secondary">
+                          <CheckCircle2 size={11} className="text-success-text" aria-hidden="true" /> Settled
                         </span>
                       )}
                     </div>
@@ -190,15 +192,8 @@ export function AdminFinanceReferralsTable({
         </tbody>
       </table>
       {filteredCount > 0 && (
-        <AdminTablePagination
-          page={page}
-          pageSize={pageSize}
-          totalCount={filteredCount}
-          onPageChange={onPageChange}
-          onPageSizeChange={onPageSizeChange}
-        />
+        <AdminTablePagination page={page} pageSize={pageSize} totalCount={filteredCount} onPageChange={onPageChange} onPageSizeChange={onPageSizeChange} />
       )}
     </div>
   );
 }
-

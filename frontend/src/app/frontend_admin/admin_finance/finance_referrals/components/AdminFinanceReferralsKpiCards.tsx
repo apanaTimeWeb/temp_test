@@ -2,7 +2,7 @@
 // Responsibility: AdminFinanceReferralsKpiCards component owned by admin_finance_referrals.
 
 import { formatAdminFinanceCurrency } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/AdminFinanceReferralsFormat';
-import { IndianRupee,TrendingUp,Trophy,Users } from 'lucide-react';
+import { IndianRupee, TrendingUp, Trophy, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 interface AdminFinanceReferralsKpiCardsProps {
@@ -13,10 +13,8 @@ interface AdminFinanceReferralsKpiCardsProps {
   activeCount?: number;
 }
 
-// Generates decorative SVG sparkline path like Superadmin Dashboard
-const generateSparkline = (title: string) => {
-  return `M0,32 Q${15 + (title.length % 10)},${42 - (title.length % 15)} ${35 + (title.length % 10)},22 T${75 + (title.length % 10)},26 T${115 + (title.length % 10)},12 T150,6`;
-};
+const generateSparkline = (title: string) =>
+  `M0,32 Q${15 + (title.length % 10)},${42 - (title.length % 15)} ${35 + (title.length % 10)},22 T${75 + (title.length % 10)},26 T${115 + (title.length % 10)},12 T150,6`;
 
 export function AdminFinanceReferralsKpiCards({
   totalReferrals,
@@ -27,111 +25,84 @@ export function AdminFinanceReferralsKpiCards({
 }: AdminFinanceReferralsKpiCardsProps) {
   const t = useTranslations('ADMIN_FINANCE_REFERRALS');
 
+  const cards = [
+    {
+      label: t('TOTAL_REFERRALS'),
+      value: totalReferrals,
+      footer: `${timeRangeLabel} conversions`,
+      footerCls: 'text-text-secondary',
+      valueCls: 'text-text-primary',
+      iconCls: 'border-info bg-info-bg text-info-text',
+      stroke: 'var(--chart-info)',
+      path: generateSparkline('referrals'),
+      Icon: Users,
+    },
+    {
+      label: t('TOTAL_BONUS'),
+      value: formatAdminFinanceCurrency(totalBonus),
+      footer: 'Earned by advocates',
+      footerCls: 'text-text-secondary',
+      valueCls: 'text-success-text',
+      iconCls: 'border-success bg-success-bg text-success-text',
+      stroke: 'var(--chart-success)',
+      path: generateSparkline('bonus'),
+      Icon: IndianRupee,
+    },
+    {
+      label: t('TOP_REFERRER'),
+      value: topReferrer.name,
+      footer: t('LISTED_REFERRALS', { count: topReferrer.referredNames.length }),
+      footerCls: 'text-warning-text font-semibold',
+      valueCls: 'text-text-primary text-xl sm:text-2xl',
+      iconCls: 'border-warning bg-warning-bg text-warning-text',
+      stroke: 'var(--chart-warning)',
+      path: generateSparkline('top_referrer'),
+      Icon: Trophy,
+    },
+    {
+      label: 'Advocates',
+      value: activeCount ?? 6,
+      footer: 'Enrolled promoters',
+      footerCls: 'text-text-secondary',
+      valueCls: 'text-text-primary',
+      iconCls: 'border-border-focus bg-primary-subtle text-primary',
+      stroke: 'var(--chart-primary)',
+      path: generateSparkline('advocates'),
+      Icon: TrendingUp,
+    },
+  ];
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-      {/* Total Referrals */}
-      <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 shadow-cyan-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
-        <svg
-          aria-hidden="true"
-          className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 motion-safe:transition-opacity motion-reduce:transition-none motion-safe:duration-500 pointer-events-none"
-          viewBox="0 0 150 45"
-        >
-          <path d={generateSparkline('referrals')} fill="none" stroke="#22d3ee" strokeWidth="3" strokeLinecap="round" />
-        </svg>
-
-        <div className="relative z-10 flex items-start justify-between gap-3">
-          <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300 truncate">
-            {t('TOTAL_REFERRALS')}
-          </span>
-          <div className="p-2.5 rounded-xl border border-cyan-500/30 bg-cyan-500/15 text-cyan-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
-            <Users size={18} strokeWidth={2.2} />
+      {cards.map((card) => {
+        const Icon = card.Icon;
+        return (
+          <div
+            key={card.label}
+            className="group relative overflow-hidden rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card motion-safe:transition-transform motion-safe:duration-300 motion-safe:hover:scale-[1.01]"
+          >
+            <svg
+              aria-hidden="true"
+              className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 motion-safe:transition-opacity pointer-events-none"
+              viewBox="0 0 150 45"
+            >
+              <path d={card.path} fill="none" stroke={card.stroke} strokeWidth="3" strokeLinecap="round" />
+            </svg>
+            <div className="relative z-10 flex items-start justify-between gap-3">
+              <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-text-secondary truncate">{card.label}</span>
+              <div className={`p-2.5 rounded-xl border shrink-0 motion-safe:transition-transform motion-safe:group-hover:scale-110 shadow-card ${card.iconCls}`}>
+                <Icon size={18} strokeWidth={2.2} aria-hidden="true" />
+              </div>
+            </div>
+            <p className={`relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight tabular-nums truncate ${card.valueCls}`}>
+              {card.value}
+            </p>
+            <p className={`relative z-10 mt-3.5 pt-2.5 border-t border-border text-xs font-medium truncate ${card.footerCls}`}>
+              {card.footer}
+            </p>
           </div>
-        </div>
-        <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white tabular-nums">
-          {totalReferrals}
-        </p>
-        <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400 truncate">
-          {timeRangeLabel} conversions
-        </p>
-      </div>
-
-      {/* Total Bonus */}
-      <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-emerald-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
-        <svg
-          aria-hidden="true"
-          className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 motion-safe:transition-opacity motion-reduce:transition-none motion-safe:duration-500 pointer-events-none"
-          viewBox="0 0 150 45"
-        >
-          <path d={generateSparkline('bonus')} fill="none" stroke="#34d399" strokeWidth="3" strokeLinecap="round" />
-        </svg>
-
-        <div className="relative z-10 flex items-start justify-between gap-3">
-          <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300 truncate">
-            {t('TOTAL_BONUS')}
-          </span>
-          <div className="p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
-            <IndianRupee size={18} strokeWidth={2.2} />
-          </div>
-        </div>
-        <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-emerald-400 tabular-nums">
-          {formatAdminFinanceCurrency(totalBonus)}
-        </p>
-        <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400 truncate">
-          Earned by advocates
-        </p>
-      </div>
-
-      {/* Top Referrer */}
-      <div className="group relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 shadow-amber-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
-        <svg
-          aria-hidden="true"
-          className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 motion-safe:transition-opacity motion-reduce:transition-none motion-safe:duration-500 pointer-events-none"
-          viewBox="0 0 150 45"
-        >
-          <path d={generateSparkline('top_referrer')} fill="none" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" />
-        </svg>
-
-        <div className="relative z-10 flex items-start justify-between gap-3">
-          <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300 truncate">
-            {t('TOP_REFERRER')}
-          </span>
-          <div className="p-2.5 rounded-xl border border-amber-500/30 bg-amber-500/15 text-amber-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
-            <Trophy size={18} strokeWidth={2.2} />
-          </div>
-        </div>
-        <p className="relative z-10 mt-3 sm:mt-4 text-xl sm:text-2xl font-bold tracking-tight text-white truncate">
-          {topReferrer.name}
-        </p>
-        <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-semibold text-amber-400 truncate">
-          {t('LISTED_REFERRALS', { count: topReferrer.referredNames.length })}
-        </p>
-      </div>
-
-      {/* Active Referrers */}
-      <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 shadow-indigo-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
-        <svg
-          aria-hidden="true"
-          className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 motion-safe:transition-opacity motion-reduce:transition-none motion-safe:duration-500 pointer-events-none"
-          viewBox="0 0 150 45"
-        >
-          <path d={generateSparkline('advocates')} fill="none" stroke="#818cf8" strokeWidth="3" strokeLinecap="round" />
-        </svg>
-
-        <div className="relative z-10 flex items-start justify-between gap-3">
-          <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300 truncate">
-            Advocates
-          </span>
-          <div className="p-2.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
-            <TrendingUp size={18} strokeWidth={2.2} />
-          </div>
-        </div>
-        <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white tabular-nums">
-          {activeCount ?? 6}
-        </p>
-        <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400 truncate">
-          Enrolled promoters
-        </p>
-      </div>
+        );
+      })}
     </div>
   );
 }

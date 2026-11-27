@@ -1,20 +1,21 @@
 'use client';
 
 import type { AdminFinanceRefund } from '@/app/frontend_admin/admin_finance/finance_refunds/types/AdminFinanceRefundsComponentTypes';
-import { formatAdminFinanceApiAmount,formatDate } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsFormat';
+import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsFormat';
 import { getAdminFinanceRefundStatusLabelKey } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsRefundStatus';
-import { buildWhatsAppLink,downloadRefundVoucherPdf } from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
+import { buildRefundNotificationMessage } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/adminFinanceRefundsExports';
+import { buildWhatsAppLink, downloadRefundVoucherPdf } from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
-import { ArrowDown,ArrowUp,ArrowUpDown,Building2,Check,CheckCircle2,Eye,FileText,MessageSquare,RotateCcw,X } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, Building2, Check, CheckCircle2, Eye, FileText, MessageSquare, RotateCcw, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useMemo,useState } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 const ADMIN_FINANCE_REFUND_STATUS_BADGE: Record<AdminFinanceRefund['status'], string> = {
-  pending: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-amber-500/25 bg-amber-500/10 px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-amber-600 dark:text-amber-400',
-  approved: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-emerald-600 dark:text-emerald-400',
-  rejected: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-rose-500/25 bg-rose-500/10 px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-rose-600 dark:text-rose-400',
-  processed: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-cyan-500/25 bg-cyan-500/10 px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-cyan-600 dark:text-cyan-400',
+  pending: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-warning bg-warning-bg px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-warning-text',
+  approved: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-success bg-success-bg px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-success-text',
+  rejected: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-danger bg-danger-bg px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-danger-text',
+  processed: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-info bg-info-bg px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-info-text',
 };
 
 type RefundSortField = 'studentName' | 'branchName' | 'exitDate' | 'depositHeld' | 'deductionAmount' | 'netRefund' | 'status' | 'paymentMethod';
@@ -105,7 +106,7 @@ export function AdminFinanceRefundsTable({
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 motion-safe:transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -159,7 +160,7 @@ export function AdminFinanceRefundsTable({
                   </td>
                   <td className="py-3 px-4 text-caption text-text-secondary">
                     <span className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-highlight px-2 py-0.5 text-xs font-medium text-text-primary whitespace-nowrap">
-                      <Building2 size={12} className="text-primary shrink-0" />
+                      <Building2 size={12} className="text-primary shrink-0" aria-hidden="true" />
                       <span>{refund.branchName ?? selectedBranchName ?? 'Downtown Central'}</span>
                     </span>
                   </td>
@@ -180,9 +181,7 @@ export function AdminFinanceRefundsTable({
                       {t(getAdminFinanceRefundStatusLabelKey(refund.status))}
                     </span>
                     {refund.status === 'rejected' && refund.rejectionReason ? (
-                      <div className="text-caption text-text-secondary mt-1 max-w-48 truncate">
-                        {refund.rejectionReason}
-                      </div>
+                      <div className="text-caption text-text-secondary mt-1 max-w-48 truncate">{refund.rejectionReason}</div>
                     ) : null}
                   </td>
                   <td className="py-3 px-4 text-caption text-text-secondary">
@@ -191,31 +190,31 @@ export function AdminFinanceRefundsTable({
                         <div className="flex items-center gap-1.5">
                           <button
                             type="button"
-                            className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 cursor-pointer transition-all"
+                            className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold bg-success text-on-primary hover:opacity-90 shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success cursor-pointer motion-safe:transition-opacity"
                             onClick={() => onApprove(refund)}
                           >
-                            <Check size={12} strokeWidth={2.5} /> Approve
+                            <Check size={12} strokeWidth={2.5} aria-hidden="true" /> Approve
                           </button>
                           <button
                             type="button"
-                            className="inline-flex items-center gap-1 rounded-lg border border-rose-500/30 bg-rose-500/10 px-2.5 py-1 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 cursor-pointer transition-all"
+                            className="inline-flex items-center gap-1 rounded-lg border border-danger bg-danger-bg px-2.5 py-1 text-xs font-semibold text-danger-text hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger cursor-pointer motion-safe:transition-opacity"
                             onClick={() => onReject(refund)}
                           >
-                            <X size={12} strokeWidth={2.5} /> Reject
+                            <X size={12} strokeWidth={2.5} aria-hidden="true" /> Reject
                           </button>
                         </div>
                       ) : refund.status === 'approved' ? (
                         <div className="flex items-center gap-1.5">
-                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded-full">
-                            <CheckCircle2 size={12} /> Approved
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-success-text bg-success-bg border border-success px-2 py-0.5 rounded-full">
+                            <CheckCircle2 size={12} aria-hidden="true" /> Approved
                           </span>
                           <button
                             type="button"
-                            className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold bg-cyan-600 hover:bg-cyan-500 text-white shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 cursor-pointer transition-all"
-                            onClick={() => onDisburse ? onDisburse(refund) : onViewDetail && onViewDetail(refund)}
+                            className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold bg-info text-on-primary hover:opacity-90 shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info cursor-pointer motion-safe:transition-opacity"
+                            onClick={() => (onDisburse ? onDisburse(refund) : onViewDetail && onViewDetail(refund))}
                             title="Disburse payment & record transaction UTR"
                           >
-                            <RotateCcw size={11} /> Disburse
+                            <RotateCcw size={11} aria-hidden="true" /> Disburse
                           </button>
                         </div>
                       ) : refund.status === 'processed' ? (
@@ -234,47 +233,43 @@ export function AdminFinanceRefundsTable({
                       <div className="flex items-center gap-1.5 ml-auto">
                         <button
                           type="button"
-                          className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-teal-500/30 bg-teal-500/10 text-teal-600 dark:text-teal-400 hover:bg-teal-500/20 transition-colors shadow-xs"
+                          className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-success bg-success-bg text-success-text hover:opacity-90 motion-safe:transition-opacity shadow-card"
                           onClick={() => {
                             downloadRefundVoucherPdf(refund);
-                            toast.success(`Downloaded clearance voucher PDF for ${refund.studentName}`);
+                            toast.success(`Downloaded clearance voucher PDF for ${refund.studentName}`, {
+                              id: 'refund-table-voucher-downloaded',
+                            });
                           }}
                           title="Print / Download Refund Voucher PDF"
                           aria-label={`Download refund voucher for ${refund.studentName}`}
                         >
-                          <FileText size={13} strokeWidth={2.2} />
+                          <FileText size={13} strokeWidth={2.2} aria-hidden="true" />
                         </button>
                         <button
                           type="button"
-                          className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors shadow-xs"
+                          className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-info bg-info-bg text-info-text hover:opacity-90 motion-safe:transition-opacity shadow-card"
                           onClick={() => {
-                            let msg = '';
-                            if (refund.status === 'approved') {
-                              msg = `Dear ${refund.studentName}, your Smart Library security deposit refund of ₹${refund.netRefund.toLocaleString('en-IN')} has been APPROVED! Method: ${refund.paymentMethod || 'UPI/Bank'}. Ref: ${refund.id}.`;
-                            } else if (refund.status === 'rejected') {
-                              msg = `Dear ${refund.studentName}, your deposit refund request has been REJECTED. Reason: ${refund.rejectionReason || 'Pending damages/dues'}. Ref: ${refund.id}.`;
-                            } else {
-                              msg = `Dear ${refund.studentName}, your security deposit refund status is currently ${refund.status.toUpperCase()}. Net amount: ₹${refund.netRefund.toLocaleString('en-IN')}. Ref: ${refund.id}.`;
-                            }
-                            const waUrl = buildWhatsAppLink(refund.studentPhone, msg);
+                            const waUrl = buildWhatsAppLink(refund.studentPhone, buildRefundNotificationMessage(refund));
                             const popup = window.open(waUrl, '_blank', 'noopener,noreferrer');
                             if (popup) popup.opener = null;
-                            toast.success(`Sent WhatsApp notification to ${refund.studentName}`);
+                            toast.success(`Sent WhatsApp notification to ${refund.studentName}`, {
+                              id: 'refund-table-whatsapp-sent',
+                            });
                           }}
                           title="Send WhatsApp / SMS Notification"
                           aria-label={`Send notification to ${refund.studentName}`}
                         >
-                          <MessageSquare size={13} strokeWidth={2.2} />
+                          <MessageSquare size={13} strokeWidth={2.2} aria-hidden="true" />
                         </button>
                         {onViewDetail && (
                           <button
                             type="button"
-                            className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-border bg-surface text-text-secondary hover:text-text-primary hover:bg-surface-elevated transition-colors shadow-xs"
+                            className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-border bg-card text-text-secondary hover:text-text-primary hover:bg-surface-hover motion-safe:transition-colors shadow-card"
                             onClick={() => onViewDetail(refund)}
                             title="View refund voucher dialog"
                             aria-label={`View refund voucher for ${refund.studentName}`}
                           >
-                            <Eye size={13} strokeWidth={2.2} />
+                            <Eye size={13} strokeWidth={2.2} aria-hidden="true" />
                           </button>
                         )}
                       </div>
@@ -301,4 +296,3 @@ export function AdminFinanceRefundsTable({
 }
 
 export default AdminFinanceRefundsTable;
-
