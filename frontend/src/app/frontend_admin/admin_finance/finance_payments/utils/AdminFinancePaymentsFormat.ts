@@ -9,7 +9,8 @@ import { hi } from 'date-fns/locale/hi';
 const ADMIN_FINANCE_DEFAULT_LOCALE = 'en-IN';
 
 function getAdminFinanceLocale(): string {
-  if (typeof document !== 'undefined' && document.documentElement.lang) return document.documentElement.lang;
+  if (typeof document === 'undefined') return ADMIN_FINANCE_DEFAULT_LOCALE;
+  if (document.documentElement.lang) return document.documentElement.lang;
   if (typeof navigator !== 'undefined' && navigator.language) return navigator.language;
   return ADMIN_FINANCE_DEFAULT_LOCALE;
 }

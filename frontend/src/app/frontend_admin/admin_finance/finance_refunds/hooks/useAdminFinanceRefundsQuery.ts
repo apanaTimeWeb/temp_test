@@ -144,6 +144,7 @@ export default function useAdminFinanceRefundsQuery() {
   return useQuery({
     queryKey: ADMIN_FINANCE_REFUNDS_QUERY_KEYS.list({ resource: 'refunds', demo: isDemo }),
     queryFn: async () => {
+      if (isDemo) return FALLBACK_REFUNDS;
       try {
         const data = await fetchAdminFinanceRefunds();
         if (!data || data.length === 0) {

@@ -194,6 +194,7 @@ export default function useAdminFinancePaymentsQuery() {
   return useQuery({
     queryKey: ADMIN_FINANCE_PAYMENTS_QUERY_KEYS.list({ resource: 'payments', demo: isDemo }),
     queryFn: async () => {
+      if (isDemo) return FALLBACK_PAYMENTS;
       try {
         const data = await fetchAdminFinancePayments();
         return data;
