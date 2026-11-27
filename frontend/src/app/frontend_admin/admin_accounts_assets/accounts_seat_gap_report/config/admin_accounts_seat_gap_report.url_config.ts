@@ -30,9 +30,6 @@ export const ADMIN_ACCOUNTING_EXPENSE_MODE_BADGE = {
   bank: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-pay-bank-bg text-pay-bank border-border',
 } as const;
 
-export const ADMIN_ACCOUNTING_EXPENSE_CATEGORY_COLORS = ['primary', 'success', 'warning', 'danger', 'info', 'purple'] as const;
-export type AdminAccountingExpenseCategoryColor = (typeof ADMIN_ACCOUNTING_EXPENSE_CATEGORY_COLORS)[number];
-
 /** Valid filter values shared only by this Accounting feature's shift-gap views. */
 export const ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS = ['all', 'Morning', 'Afternoon', 'Night', '24-Hour'] as const;
 export const ADMIN_ACCOUNTING_SEAT_GAP_STATUS_FILTER_OPTIONS = ['all', 'vacant', 'maintenance'] as const;

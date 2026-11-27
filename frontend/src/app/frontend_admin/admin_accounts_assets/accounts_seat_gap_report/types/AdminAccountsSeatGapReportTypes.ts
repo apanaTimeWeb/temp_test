@@ -1,6 +1,7 @@
-import type { AdminAccountingExpenseCategoryColor } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/config/admin_accounts_seat_gap_report.url_config';
 import type { AdminAccountsSeatGapReportScenario } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/tests/harness/bootstrap';
 import type { ReactNode } from 'react';
+
+export type AdminAccountingExpenseCategoryColor = 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'purple';
 
 /** Monetary fields in this module are stored in minor units (paise). */
 

@@ -1,32 +1,16 @@
 import { z } from 'zod';
 
 export interface AdminCommunicationValidationMessages {
-  complaintTitleRequired: string;
-  complaintDescriptionRequired: string;
   noticeTitleRequired: string;
   noticeMessageRequired: string;
   noticeDateInvalid: string;
 }
 
 const DEFAULT_MESSAGES: AdminCommunicationValidationMessages = {
-  complaintTitleRequired: 'Enter a complaint title.',
-  complaintDescriptionRequired: 'Describe the complaint.',
   noticeTitleRequired: 'Enter a notice title.',
   noticeMessageRequired: 'Enter the notice message.',
   noticeDateInvalid: 'Choose a valid date.',
 };
-
-/** Client-side guard for complaint entry; persistence remains blocked without an approved API mutation contract. */
-export function createAdminCommunicationComplaintSchema(messages: Pick<AdminCommunicationValidationMessages, 'complaintTitleRequired' | 'complaintDescriptionRequired'>) {
-  return z.object({
-    student: z.string(),
-    anonymous: z.boolean(),
-    title: z.string().trim().min(1, messages.complaintTitleRequired),
-    description: z.string().trim().min(1, messages.complaintDescriptionRequired),
-  });
-}
-export const AdminCommunicationComplaintSchema = createAdminCommunicationComplaintSchema(DEFAULT_MESSAGES);
-export type AdminCommunicationComplaintFormValues = z.infer<typeof AdminCommunicationComplaintSchema>;
 
 /** Client-side guard for notice entry; the schema does not imply that a notice can be persisted. */
 export function createAdminCommunicationNoticeSchema(messages: Pick<AdminCommunicationValidationMessages, 'noticeTitleRequired' | 'noticeMessageRequired' | 'noticeDateInvalid'>) {
@@ -56,14 +40,6 @@ export function isAdminCommunicationValidDate(value: string): boolean {
   return Number.isFinite(Date.parse(value));
 }
 
-export const AdminCommunicationComplaintApiSchema = z.object({
-  id: z.union([z.string(), z.number()]).transform(String),
-  subject: z.string(),
-  description: z.string(),
-  status: z.string().trim().min(1).max(40),
-  createdAt: z.string().trim().min(1).max(64).refine((value) => isAdminCommunicationValidDate(value), 'Expected a valid creation date'),
-});
-
 export const AdminCommunicationNoticeApiSchema = z.object({
   id: z.union([z.string(), z.number()]).transform(String),
   title: z.string(),
@@ -72,8 +48,6 @@ export const AdminCommunicationNoticeApiSchema = z.object({
   validTill: z.string().trim().min(1).max(64).refine((value) => isAdminCommunicationValidDate(value), 'Expected a valid expiry date'),
 });
 
-export const AdminCommunicationComplaintListSchema = z.array(AdminCommunicationComplaintApiSchema);
 export const AdminCommunicationNoticeListSchema = z.array(AdminCommunicationNoticeApiSchema);
 
-export type AdminCommunicationComplaintApiRecord = z.infer<typeof AdminCommunicationComplaintApiSchema>;
 export type AdminCommunicationNoticeApiRecord = z.infer<typeof AdminCommunicationNoticeApiSchema>;

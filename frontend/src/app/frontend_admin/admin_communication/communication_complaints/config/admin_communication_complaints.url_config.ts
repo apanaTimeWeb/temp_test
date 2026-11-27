@@ -11,7 +11,6 @@ export const ADMIN_COMMUNICATION_COMPLAINTS_ROUTES = {
 export const ADMIN_COMMUNICATION_COMPLAINTS_API = {
   /** API-relative path is preserved from existing apiFetch call sites; backend behavior/authorization remain unverified. */
   COMPLAINTS: '/communication/complaints',
-  NOTICES: '/communication/notices',
 } as const;
 
 /** Preserves the existing canonical route export without creating a re-export facade. */
@@ -21,11 +20,6 @@ export const ADMIN_COMMUNICATION_COMPLAINT_STATUS = {
   OPEN: "Open",
   IN_PROGRESS: "In Progress",
   RESOLVED: "Resolved",
-} as const;
-
-export const ADMIN_COMMUNICATION_NOTICE_STATUS = {
-  ACTIVE: "Active",
-  EXPIRED: "Expired",
 } as const;
 
 

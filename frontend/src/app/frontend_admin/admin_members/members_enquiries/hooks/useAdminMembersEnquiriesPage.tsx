@@ -1,6 +1,6 @@
 'use client';
 // DATA FLOW: members_enquiries route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
-import type { AdminEnquiriesEnquiryStoragePayload,Enquiry,EnquiryStatus } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
+import type { Enquiry,EnquiryStatus } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
 import { ADMIN_ENQUIRIES_ENQUIRY_STORAGE_EXPECTED_VERSION,AdminEnquiriesEnquiryStoragePayloadSchema } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
 import { matchesAdminEnquiriesEnquirySearch } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
@@ -11,18 +11,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect,useMemo,useState } from 'react';
 
 /** @description Owns CRM enquiry pipeline view/search/filter state and derives filtered records for the view layer. @dependencies Module-owned enquiry storage and CRM domain types. @edge-case Empty storage produces an empty pipeline; search is case-insensitive; phone search ignores punctuation. */
-/** Module-owned TanStack Query key registry. No live API contract is implied by these cache keys. */
-export const ADMIN_MEMBERS_ENQUIRIES_QUERY_KEYS = {
-  all: ['admin_members', 'members_enquiries'] as const,
-  lists: () => [...ADMIN_MEMBERS_ENQUIRIES_QUERY_KEYS.all, 'list'] as const,
-  list: (filters?: Readonly<Record<string, string | number | boolean | undefined>>) =>
-    [...ADMIN_MEMBERS_ENQUIRIES_QUERY_KEYS.lists(), filters ?? {}] as const,
-  details: () => [...ADMIN_MEMBERS_ENQUIRIES_QUERY_KEYS.all, 'detail'] as const,
-  detail: (id: string) => [...ADMIN_MEMBERS_ENQUIRIES_QUERY_KEYS.details(), id] as const,
-} as const;
-
-
-
 const INITIAL_ENQUIRIES: Enquiry[] = [
   { id: '1', name: 'Rahul Sharma', phone: '9876543210', shift: 'Morning', status: 'New', handledBy: 'Admin', addedDate: '2026-10-01', isToday: true, avatar: 'RS', preferredBranch: 'Downtown Central' },
   { id: '2', name: 'Sneha Patil', phone: '9123456789', shift: 'Evening', status: 'Visited', handledBy: 'John', addedDate: '2026-09-30', isUpcoming: true, avatar: 'SP', preferredBranch: 'Westside Branch' },
@@ -32,18 +20,6 @@ const INITIAL_ENQUIRIES: Enquiry[] = [
 
 // Demo records are intentionally memory-only: business entities must not be persisted in browser storage.
 let inMemoryAdminEnquiries: Enquiry[] = INITIAL_ENQUIRIES.map((record) => ({ ...record }));
-
-export function parseAdminEnquiriesStoredEnquiriesPayload(raw: string | null): AdminEnquiriesEnquiryStoragePayload | null {
-  if (!raw) return null;
-  try {
-    const parsed: unknown = JSON.parse(raw);
-    const validated = AdminEnquiriesEnquiryStoragePayloadSchema.safeParse(parsed);
-    if (!validated.success || validated.data.version !== ADMIN_ENQUIRIES_ENQUIRY_STORAGE_EXPECTED_VERSION) return null;
-    return validated.data;
-  } catch {
-    return null;
-  }
-}
 
 export function getEnquiries(): Enquiry[] {
   if (!isFrontendDemoModeEnabled()) return [];
@@ -71,16 +47,6 @@ export function addEnquiry(enquiry: Omit<Enquiry, 'id' | 'addedDate' | 'avatar'>
   };
   saveEnquiries([newEnquiry, ...records]);
   return newEnquiry;
-}
-
-export function updateEnquiry(id: string, updates: Partial<Enquiry>): void {
-  if (!isFrontendDemoModeEnabled()) throw new Error('CRM updates are blocked until a verified backend API contract is supplied.');
-  saveEnquiries(getEnquiries().map((record) => record.id === id ? { ...record, ...updates } : record));
-}
-
-export function deleteEnquiry(id: string): void {
-  if (!isFrontendDemoModeEnabled()) throw new Error('CRM deletion is blocked until a verified backend API contract is supplied.');
-  saveEnquiries(getEnquiries().filter((record) => record.id !== id));
 }
 
 export default function useAdminEnquiriesPage() {
