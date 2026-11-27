@@ -4,7 +4,7 @@
 'use client';
 
 import React from 'react';
-import { SuperadminIntegrationsOverviewMain } from './SuperadminIntegrationsOverviewMain';
+import { SuperadminIntegrationsOverviewMain } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewMain';
 
 export default function SuperadminIntegrationsOverviewScreen() {
   return (

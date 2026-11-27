@@ -55,7 +55,7 @@ export function SuperadminSystemHealthOverviewServicesTableRow({
         </div>
         <div className="h-1.5 w-full rounded-full bg-slate-800 overflow-hidden">
           <div
-            className={`h-full rounded-full transition-all duration-300 ${
+            className={`h-full rounded-full motion-safe:transition-all motion-safe:duration-300 ${
               item.cpu > 80
                 ? 'bg-amber-400'
                 : 'bg-gradient-to-r from-emerald-500 to-teal-400'
@@ -79,7 +79,7 @@ export function SuperadminSystemHealthOverviewServicesTableRow({
         >
           <span
             className={`w-1.5 h-1.5 rounded-full ${
-              item.status === 'Healthy' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
+              item.status === 'Healthy' ? 'bg-emerald-400 motion-safe:animate-pulse' : 'bg-amber-400'
             }`}
           />
           <span>{item.status}</span>
@@ -92,17 +92,17 @@ export function SuperadminSystemHealthOverviewServicesTableRow({
             type="button"
             onClick={() => onPing(item.name, item.id)}
             disabled={isPinging}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
             title="Send ping heartbeat probe"
           >
-            <RefreshCw size={11} className={isPinging ? 'animate-spin' : ''} />
+            <RefreshCw size={11} className={isPinging ? 'motion-safe:animate-spin' : ''} />
             <span>{isPinging ? 'Pinging' : 'Ping'}</span>
           </button>
 
           <button
             type="button"
             onClick={() => onInspect(item)}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20 text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-xs active:scale-95"
             title="Inspect node telemetry & logs"
           >
             <Eye size={11} />
@@ -112,7 +112,7 @@ export function SuperadminSystemHealthOverviewServicesTableRow({
           <button
             type="button"
             onClick={() => onRestart(item)}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-xs active:scale-95"
             title="Graceful restart worker"
           >
             <RotateCw size={11} />

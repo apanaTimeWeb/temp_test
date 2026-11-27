@@ -17,8 +17,8 @@ import {
   ShieldCheck,
   X,
 } from 'lucide-react';
-import type { PreflightValidationResult } from '../types/superadmin_data_import_migration.types';
-import { formatNumberWithCommas } from '../utils/superadmin_data_import_migration_formatters';
+import type { PreflightValidationResult } from '@/app/frontend_superadmin/superadmin_data/data_import_migration/types/superadmin_data_import_migration.types';
+import { formatNumberWithCommas } from '@/app/frontend_superadmin/superadmin_data/data_import_migration/utils/superadmin_data_import_migration_formatters';
 
 interface ValidationCardProps {
   result: PreflightValidationResult;

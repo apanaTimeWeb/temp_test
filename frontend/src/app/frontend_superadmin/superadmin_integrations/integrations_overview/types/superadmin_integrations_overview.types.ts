@@ -7,7 +7,7 @@ import type {
   WebhookEventName,
   ApiKeyStatus,
   IntegrationTabId,
-} from '../constants/superadmin_integrations_overview.constants';
+} from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/constants/superadmin_integrations_overview.constants';
 
 // Re-export constants types for consumer convenience
 export type {

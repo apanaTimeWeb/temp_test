@@ -18,7 +18,7 @@ export const SUPERADMIN_USERS_DIRECTORY_API = {} as const;
 
 /** Leaf-local navigation route map copied verbatim from this page client. Route values are source-observed and must not imply backend behavior. */
 export const SUPERADMIN_NAVIGATION_ROUTES = {
-  security_user_sessions: '/superadmin/superadmin_security/security_user_sessions',
+  security_active_sessions: '/superadmin/superadmin_security/security_active_sessions',
   users_directory: '/superadmin/superadmin_users/users_directory',
   users_roles_permissions: '/superadmin/superadmin_users/users_roles_permissions',
 } as const;

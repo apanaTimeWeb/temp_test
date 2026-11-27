@@ -84,7 +84,7 @@ export default function SuperadminLibrariesCreateStepBranches({
             <button
               type="button"
               onClick={handleAddBranch}
-              className="inline-flex items-center gap-1 text-xs font-bold text-white bg-cyan-600 hover:bg-cyan-500 px-3 py-1 rounded-lg transition-all cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-1 text-xs font-bold text-white bg-cyan-600 hover:bg-cyan-500 px-3 py-1 rounded-lg motion-safe:transition-all cursor-pointer shadow-xs"
             >
               <Plus size={13} />
               <span>Add Branch</span>
@@ -100,7 +100,7 @@ export default function SuperadminLibrariesCreateStepBranches({
             key={b.id || idx}
             type="button"
             onClick={() => setActiveTab(idx)}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer shrink-0 ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 motion-safe:transition-all cursor-pointer shrink-0 ${
               activeTab === idx
                 ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
                 : 'bg-slate-900/60 text-slate-400 hover:text-white border border-slate-800'

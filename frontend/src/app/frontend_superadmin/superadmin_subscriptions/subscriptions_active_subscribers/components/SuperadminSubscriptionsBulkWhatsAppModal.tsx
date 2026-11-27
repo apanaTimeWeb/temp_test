@@ -134,7 +134,7 @@ export default function SuperadminSubscriptionsBulkWhatsAppModal({
                   key={t.id}
                   type="button"
                   onClick={() => setTemplate(t.text)}
-                  className={`rounded-xl border p-2.5 text-left transition-all cursor-pointer ${
+                  className={`rounded-xl border p-2.5 text-left motion-safe:transition-all cursor-pointer ${
                     template === t.text
                       ? 'border-emerald-500/50 bg-emerald-500/15 text-emerald-300 font-semibold shadow-sm'
                       : 'border-slate-800 bg-slate-950/60 text-slate-400 hover:text-slate-200 hover:border-slate-700'
@@ -174,7 +174,7 @@ export default function SuperadminSubscriptionsBulkWhatsAppModal({
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-slate-800">
               <div
-                className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300 rounded-full"
+                className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 motion-safe:transition-all motion-safe:duration-300 rounded-full"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -190,7 +190,7 @@ export default function SuperadminSubscriptionsBulkWhatsAppModal({
                 type="button"
                 onClick={handleOpenNextPending}
                 disabled={openedIds.size >= subscribers.length}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/25 transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/25 motion-safe:transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 <span>Launch Next Uncontacted</span>
                 <ExternalLink size={12} />
@@ -203,7 +203,7 @@ export default function SuperadminSubscriptionsBulkWhatsAppModal({
                 return (
                   <div
                     key={sub.id}
-                    className={`flex items-center justify-between p-2.5 rounded-xl border transition-all ${
+                    className={`flex items-center justify-between p-2.5 rounded-xl border motion-safe:transition-all ${
                       isSent
                         ? 'border-emerald-500/30 bg-emerald-500/5 text-slate-400'
                         : 'border-slate-800 bg-slate-950/50 hover:border-slate-700 text-slate-200'
@@ -235,7 +235,7 @@ export default function SuperadminSubscriptionsBulkWhatsAppModal({
                     <button
                       type="button"
                       onClick={() => handleOpenChat(sub)}
-                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold motion-safe:transition-all cursor-pointer ${
                         isSent
                           ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
                           : 'bg-slate-800 hover:bg-emerald-600 hover:text-white text-slate-200 border border-slate-700'

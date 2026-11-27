@@ -4,13 +4,13 @@
 
 import React from 'react';
 import { Gauge, RefreshCw, Download } from 'lucide-react';
-import { useSuperadminAnalyticsUsageReports } from '../hooks/useSuperadminAnalyticsUsageReports';
-import { SuperadminAnalyticsUsageReportsKpiGrid } from './SuperadminAnalyticsUsageReportsKpiGrid';
-import { SuperadminAnalyticsUsageReportsCharts } from './SuperadminAnalyticsUsageReportsCharts';
-import { SuperadminAnalyticsUsageReportsFilterBar } from './SuperadminAnalyticsUsageReportsFilterBar';
-import { SuperadminAnalyticsUsageReportsTable } from './SuperadminAnalyticsUsageReportsTable';
-import { SuperadminAnalyticsUsageReportsExportModal } from './SuperadminAnalyticsUsageReportsExportModal';
-import { SuperadminAnalyticsUsageReportsDetailModal } from './SuperadminAnalyticsUsageReportsDetailModal';
+import { useSuperadminAnalyticsUsageReports } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/hooks/useSuperadminAnalyticsUsageReports';
+import { SuperadminAnalyticsUsageReportsKpiGrid } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/components/SuperadminAnalyticsUsageReportsKpiGrid';
+import { SuperadminAnalyticsUsageReportsCharts } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/components/SuperadminAnalyticsUsageReportsCharts';
+import { SuperadminAnalyticsUsageReportsFilterBar } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/components/SuperadminAnalyticsUsageReportsFilterBar';
+import { SuperadminAnalyticsUsageReportsTable } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/components/SuperadminAnalyticsUsageReportsTable';
+import { SuperadminAnalyticsUsageReportsExportModal } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/components/SuperadminAnalyticsUsageReportsExportModal';
+import { SuperadminAnalyticsUsageReportsDetailModal } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/components/SuperadminAnalyticsUsageReportsDetailModal';
 
 export function SuperadminAnalyticsUsageReportsMain() {
   const {
@@ -58,10 +58,10 @@ export function SuperadminAnalyticsUsageReportsMain() {
               type="button"
               onClick={() => refetch()}
               disabled={isPending}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-emerald-500/50 hover:bg-emerald-500/10 text-slate-200 text-xs font-semibold transition-all shadow-sm cursor-pointer disabled:opacity-50 active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-emerald-500/50 hover:bg-emerald-500/10 text-slate-200 text-xs font-semibold motion-safe:transition-all shadow-sm cursor-pointer disabled:opacity-50 active:scale-95"
               title="Refresh usage telemetry"
             >
-              <RefreshCw size={13} className={isPending ? 'animate-spin text-emerald-400' : 'text-emerald-400'} />
+              <RefreshCw size={13} className={isPending ? 'motion-safe:animate-spin text-emerald-400' : 'text-emerald-400'} />
               <span>Refresh</span>
             </button>
 
@@ -69,7 +69,7 @@ export function SuperadminAnalyticsUsageReportsMain() {
               type="button"
               onClick={() => setIsExportModalOpen(true)}
               data-testid="usage-reports-open-export-btn"
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 transition-all cursor-pointer shadow-lg shadow-emerald-500/20 active:scale-95"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 motion-safe:transition-all cursor-pointer shadow-lg shadow-emerald-500/20 active:scale-95"
             >
               <Download size={14} />
               <span>Export & Print</span>

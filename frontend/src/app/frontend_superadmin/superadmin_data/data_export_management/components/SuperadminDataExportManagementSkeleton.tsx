@@ -13,7 +13,7 @@ export function SuperadminDataExportManagementSkeleton() {
     <div
       role="status"
       aria-label="Loading export management data"
-      className="space-y-6 animate-pulse"
+      className="space-y-6 motion-safe:animate-pulse"
     >
       {/* Top 2 Cards Skeleton */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

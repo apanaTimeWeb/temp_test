@@ -8,7 +8,7 @@ import React from 'react';
 export const SuperadminIntegrationsOverviewListSkeleton: React.FC = () => {
   return (
     <div
-      className="space-y-6 animate-pulse"
+      className="space-y-6 motion-safe:animate-pulse"
       data-testid="superadmin-integrations-skeleton"
       aria-label="Loading integrations hub..."
     >

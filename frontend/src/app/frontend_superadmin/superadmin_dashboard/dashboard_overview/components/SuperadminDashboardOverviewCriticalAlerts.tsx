@@ -81,7 +81,7 @@ export default function SuperadminDashboardOverviewCriticalAlerts({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-rose-500/20">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-rose-500/20 border border-rose-500/30 text-rose-400 animate-pulse">
+          <div className="p-2 rounded-xl bg-rose-500/20 border border-rose-500/30 text-rose-400 motion-safe:animate-pulse">
             <AlertTriangle size={18} />
           </div>
           <div>
@@ -100,7 +100,7 @@ export default function SuperadminDashboardOverviewCriticalAlerts({
           <button
             type="button"
             onClick={() => setActiveFilter('all')}
-            className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer motion-safe:transition-all ${
               activeFilter === 'all'
                 ? 'bg-rose-600 text-white shadow-sm'
                 : 'bg-slate-900/60 text-slate-400 hover:text-white border border-slate-800'
@@ -111,7 +111,7 @@ export default function SuperadminDashboardOverviewCriticalAlerts({
           <button
             type="button"
             onClick={() => setActiveFilter('payment_failure')}
-            className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer motion-safe:transition-all ${
               activeFilter === 'payment_failure'
                 ? 'bg-rose-600 text-white shadow-sm'
                 : 'bg-slate-900/60 text-slate-400 hover:text-white border border-slate-800'
@@ -122,7 +122,7 @@ export default function SuperadminDashboardOverviewCriticalAlerts({
           <button
             type="button"
             onClick={() => setActiveFilter('subscription_expiring')}
-            className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer motion-safe:transition-all ${
               activeFilter === 'subscription_expiring'
                 ? 'bg-amber-600 text-white shadow-sm'
                 : 'bg-slate-900/60 text-slate-400 hover:text-white border border-slate-800'
@@ -133,7 +133,7 @@ export default function SuperadminDashboardOverviewCriticalAlerts({
           <button
             type="button"
             onClick={() => setActiveFilter('failed_login')}
-            className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer motion-safe:transition-all ${
               activeFilter === 'failed_login'
                 ? 'bg-rose-600 text-white shadow-sm'
                 : 'bg-slate-900/60 text-slate-400 hover:text-white border border-slate-800'
@@ -144,7 +144,7 @@ export default function SuperadminDashboardOverviewCriticalAlerts({
           <button
             type="button"
             onClick={() => setActiveFilter('job_failure')}
-            className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer motion-safe:transition-all ${
               activeFilter === 'job_failure'
                 ? 'bg-amber-600 text-white shadow-sm'
                 : 'bg-slate-900/60 text-slate-400 hover:text-white border border-slate-800'
@@ -160,7 +160,7 @@ export default function SuperadminDashboardOverviewCriticalAlerts({
         {filteredAlerts.map((alert) => (
           <div
             key={alert.id}
-            className="group p-4 rounded-xl border border-rose-500/20 bg-slate-900/80 hover:bg-slate-900 hover:border-rose-500/40 transition-all flex flex-col justify-between gap-3"
+            className="group p-4 rounded-xl border border-rose-500/20 bg-slate-900/80 hover:bg-slate-900 hover:border-rose-500/40 motion-safe:transition-all flex flex-col justify-between gap-3"
           >
             <div className="space-y-2">
               <div className="flex items-start justify-between gap-2">
@@ -190,7 +190,7 @@ export default function SuperadminDashboardOverviewCriticalAlerts({
               {alert.actionHref && (
                 <Link
                   href={alert.actionHref}
-                  className="inline-flex items-center gap-1 font-bold text-xs text-rose-400 hover:text-white bg-rose-500/10 hover:bg-rose-600 px-3 py-1.5 rounded-lg transition-all"
+                  className="inline-flex items-center gap-1 font-bold text-xs text-rose-400 hover:text-white bg-rose-500/10 hover:bg-rose-600 px-3 py-1.5 rounded-lg motion-safe:transition-all"
                 >
                   <span>{alert.actionLabel || 'Investigate'}</span>
                   <ArrowUpRight size={13} />

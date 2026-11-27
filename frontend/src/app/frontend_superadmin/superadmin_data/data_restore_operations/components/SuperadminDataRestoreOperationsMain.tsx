@@ -8,13 +8,13 @@
  */
 
 import React from 'react';
-import { useSuperadminDataRestoreOperations } from '../hooks/useSuperadminDataRestoreOperations';
-import { SuperadminDataRestoreOperationsSkeleton } from './SuperadminDataRestoreOperationsSkeleton';
-import { SuperadminDataRestoreOperationsTenantIsolationBanner } from './SuperadminDataRestoreOperationsTenantIsolationBanner';
-import { SuperadminDataRestoreOperationsSandboxDrillCard } from './SuperadminDataRestoreOperationsSandboxDrillCard';
-import { SuperadminDataRestoreOperationsSnapshotsTable } from './SuperadminDataRestoreOperationsSnapshotsTable';
-import { SuperadminDataRestoreOperationsRestoreModal } from './SuperadminDataRestoreOperationsRestoreModal';
-import { SuperadminDataRestoreOperationsEmptyState } from './SuperadminDataRestoreOperationsEmptyState';
+import { useSuperadminDataRestoreOperations } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/hooks/useSuperadminDataRestoreOperations';
+import { SuperadminDataRestoreOperationsSkeleton } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/components/SuperadminDataRestoreOperationsSkeleton';
+import { SuperadminDataRestoreOperationsTenantIsolationBanner } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/components/SuperadminDataRestoreOperationsTenantIsolationBanner';
+import { SuperadminDataRestoreOperationsSandboxDrillCard } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/components/SuperadminDataRestoreOperationsSandboxDrillCard';
+import { SuperadminDataRestoreOperationsSnapshotsTable } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/components/SuperadminDataRestoreOperationsSnapshotsTable';
+import { SuperadminDataRestoreOperationsRestoreModal } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/components/SuperadminDataRestoreOperationsRestoreModal';
+import { SuperadminDataRestoreOperationsEmptyState } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/components/SuperadminDataRestoreOperationsEmptyState';
 import { AlertCircle, RotateCcw } from 'lucide-react';
 
 export function SuperadminDataRestoreOperationsMain() {

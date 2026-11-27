@@ -8,7 +8,7 @@ import type {
 import type { MockTenantOption } from '@/app/frontend_superadmin/superadmin_features/features_overview/mocks/fixtures/superadmin_features_overview.fixtures';
 import { TENANT_MODULE_OVERRIDE_SCHEMA } from '@/app/frontend_superadmin/superadmin_features/features_overview/schemas/superadmin_features_overview.schema';
 import { useModalScrollLock } from '@/lib/useModalScrollLock';
-import { SuperadminFeaturesToggleSwitch } from './SuperadminFeaturesToggleSwitch';
+import { SuperadminFeaturesToggleSwitch } from '@/app/frontend_superadmin/superadmin_features/features_overview/components/SuperadminFeaturesToggleSwitch';
 
 interface OverrideModalProps {
   module: ModuleDefinition;
@@ -78,12 +78,12 @@ export default function SuperadminFeaturesOverviewOverrideModal({
 
   return (
     <div
-      className="fixed inset-0 z-[150] flex items-center justify-center p-3 sm:p-5 bg-slate-950/85 backdrop-blur-md overflow-hidden animate-in fade-in duration-200"
+      className="fixed inset-0 z-[150] flex items-center justify-center p-3 sm:p-5 bg-slate-950/85 backdrop-blur-md overflow-hidden animate-in fade-in motion-safe:duration-200"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="w-full max-w-xl rounded-3xl border border-indigo-500/30 bg-[#0a0d24] text-white shadow-2xl shadow-indigo-950/80 overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200">
+      <div className="w-full max-w-xl rounded-3xl border border-indigo-500/30 bg-[#0a0d24] text-white shadow-2xl shadow-indigo-950/80 overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 motion-safe:duration-200">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-indigo-500/20 bg-[#060818]/95 backdrop-blur-md">
           <div className="flex items-center gap-3">
@@ -253,7 +253,7 @@ export default function SuperadminFeaturesOverviewOverrideModal({
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold shadow-md shadow-teal-500/25 transition-all cursor-pointer active:scale-95"
+              className="px-5 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold shadow-md shadow-teal-500/25 motion-safe:transition-all cursor-pointer active:scale-95"
             >
               Save Custom Override
             </button>

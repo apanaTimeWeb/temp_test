@@ -29,7 +29,7 @@ export function SuperadminAnalyticsPlatformReportsEmptyState({ onReset, message 
         <button
           type="button"
           onClick={onReset}
-          className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-sky-500 text-white hover:bg-sky-600 transition-all cursor-pointer shadow-sm active:scale-95"
+          className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-sky-500 text-white hover:bg-sky-600 motion-safe:transition-all cursor-pointer shadow-sm active:scale-95"
         >
           <RotateCcw size={14} aria-hidden="true" />
           <span>Reset All Filters</span>

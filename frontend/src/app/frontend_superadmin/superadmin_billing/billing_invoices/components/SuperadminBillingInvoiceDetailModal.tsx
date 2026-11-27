@@ -237,7 +237,7 @@ export default function SuperadminBillingInvoiceDetailModal({
             <button
               type="button"
               onClick={handleDefaultEmail}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:bg-purple-500/25 text-xs font-semibold cursor-pointer active:scale-95 transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:bg-purple-500/25 text-xs font-semibold cursor-pointer active:scale-95 motion-safe:transition-all"
               title="Send invoice via default email client (Zero API Cost)"
             >
               <Mail size={13} />
@@ -246,7 +246,7 @@ export default function SuperadminBillingInvoiceDetailModal({
             <button
               type="button"
               onClick={handleDefaultWhatsApp}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 text-xs font-semibold cursor-pointer active:scale-95 transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 text-xs font-semibold cursor-pointer active:scale-95 motion-safe:transition-all"
               title="Share or resend invoice via WhatsApp Web (Zero API Cost)"
             >
               <MessageSquare size={13} />
@@ -266,7 +266,7 @@ export default function SuperadminBillingInvoiceDetailModal({
             <button
               type="button"
               onClick={handleDownload}
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 text-white text-xs font-semibold shadow-md active:scale-95 cursor-pointer transition-all"
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 text-white text-xs font-semibold shadow-md active:scale-95 cursor-pointer motion-safe:transition-all"
             >
               <Download size={13} />
               <span>Download PDF</span>

@@ -243,7 +243,7 @@ export default function SuperadminUsersDirectoryModal({ showModal, editUser, onC
           <div className="flex flex-wrap justify-end gap-3 pt-4 border-t border-border/80">
             <button
               type="button"
-              className="px-4 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+              className="px-4 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs sm:text-sm font-semibold motion-safe:transition-all cursor-pointer"
               onClick={() => requestCloseRef.current()}
               data-testid="superadmin-users-users-cancel-8"
             >
@@ -251,7 +251,7 @@ export default function SuperadminUsersDirectoryModal({ showModal, editUser, onC
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 transition-all active:scale-95 cursor-pointer disabled:opacity-50"
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 motion-safe:transition-all active:scale-95 cursor-pointer disabled:opacity-50"
               disabled={isSubmitting}
               data-testid="superadmin-users-users-saving-preview-9"
             >

@@ -30,7 +30,7 @@ export default function SuperadminSecurityActiveSessionsOperationsPanels({
             <button
               type="button"
               disabled
-              className="inline-flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/15 px-4 py-2 text-xs sm:text-sm font-semibold text-rose-300 opacity-60 cursor-not-allowed shadow-xs transition-all"
+              className="inline-flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/15 px-4 py-2 text-xs sm:text-sm font-semibold text-rose-300 opacity-60 cursor-not-allowed shadow-xs motion-safe:transition-all"
               title={tCopy("COPY.UNAVAILABLE_NO_SESSION_MANAGEMENT_API_CONTRACT_IS_SUPPLIED")}
               data-testid="superadmin-security-security-operations-panels-unavailable-no-session-management-api-contract-is-supplied-7"
             >
@@ -43,7 +43,7 @@ export default function SuperadminSecurityActiveSessionsOperationsPanels({
             {sessions.map((s) => (
               <div
                 key={s.id}
-                className="group relative rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0f143a]/80 to-[#090c24]/95 p-4 sm:p-5 backdrop-blur-md transition-all duration-200 hover:border-indigo-500/50 hover:from-[#141b4d]/90 hover:to-[#0c1033]/98 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4"
+                className="group relative rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0f143a]/80 to-[#090c24]/95 p-4 sm:p-5 backdrop-blur-md motion-safe:transition-all motion-safe:duration-200 hover:border-indigo-500/50 hover:from-[#141b4d]/90 hover:to-[#0c1033]/98 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4"
               >
                 <div className="flex items-center gap-3.5 min-w-0">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-sky-500/30 bg-sky-500/15 text-sky-400 shadow-inner">
@@ -75,7 +75,7 @@ export default function SuperadminSecurityActiveSessionsOperationsPanels({
                     type="button"
                     disabled
                     title={tCopy("COPY.UNAVAILABLE_NO_VERIFIED_SESSION_MANAGEMENT_API_CONTRACT_IS_SUPPLIED")}
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/15 px-3.5 py-1.5 text-xs font-semibold text-rose-300 opacity-60 cursor-not-allowed transition-all"
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/15 px-3.5 py-1.5 text-xs font-semibold text-rose-300 opacity-60 cursor-not-allowed motion-safe:transition-all"
                     data-testid={`superadmin-security-security-operations-panels-unavailable-no-verified-session-management-api-contract-is-supplied-8-${String(s.id)}`}
                   >
                     <ShieldAlert size={13} className="text-rose-400" />

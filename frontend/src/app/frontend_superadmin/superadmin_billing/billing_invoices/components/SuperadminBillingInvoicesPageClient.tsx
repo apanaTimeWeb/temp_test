@@ -116,7 +116,7 @@ export default function SuperadminBillingInvoicesPageClient({ initialFilter }: {
                 Billing, Invoices & Payment Engine
               </h1>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" /> SAC 998313 GST Ready
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" /> SAC 998313 GST Ready
               </span>
             </div>
             <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
@@ -151,7 +151,7 @@ export default function SuperadminBillingInvoicesPageClient({ initialFilter }: {
                 key={tab.id}
                 type="button"
                 onClick={() => handleTabChange(tab.id as BillingTab)}
-                className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all cursor-pointer whitespace-nowrap ${
+                className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl motion-safe:transition-all cursor-pointer whitespace-nowrap ${
                   active ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200 hover:bg-indigo-950/40'
                 }`}
               >

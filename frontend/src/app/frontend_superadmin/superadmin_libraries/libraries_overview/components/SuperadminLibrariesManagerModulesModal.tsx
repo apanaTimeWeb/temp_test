@@ -5,8 +5,8 @@ import {
   X, Sliders, CheckCircle, AlertTriangle, ShieldCheck,
   Check
 } from 'lucide-react';
-import type { SuperadminLibrariesLibrary } from '../types/SuperadminLibrariesOverviewTypes';
-import { SUPERADMIN_MANAGER_MODULES_CATALOG } from '../constants/SuperadminLibrariesManagerModulesCatalog';
+import type { SuperadminLibrariesLibrary } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
+import { SUPERADMIN_MANAGER_MODULES_CATALOG } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/constants/SuperadminLibrariesManagerModulesCatalog';
 
 interface SuperadminLibrariesManagerModulesModalProps {
   lib: SuperadminLibrariesLibrary;
@@ -72,7 +72,7 @@ export default function SuperadminLibrariesManagerModulesModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="manager-modules-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in motion-safe:duration-200"
     >
       <div className="relative w-full max-w-3xl max-h-[90vh] flex flex-col rounded-2xl border border-indigo-500/30 bg-[#0a0d22] text-slate-100 shadow-2xl overflow-hidden">
         {/* Header */}
@@ -148,7 +148,7 @@ export default function SuperadminLibrariesManagerModulesModal({
                         key={mod.key}
                         type="button"
                         onClick={() => toggleModule(mod.key)}
-                        className={`text-left p-3.5 rounded-xl border transition-all flex items-start gap-3 cursor-pointer ${
+                        className={`text-left p-3.5 rounded-xl border motion-safe:transition-all flex items-start gap-3 cursor-pointer ${
                           isEnabled
                             ? 'border-indigo-500/40 bg-indigo-500/10 hover:border-indigo-400/60 shadow-xs'
                             : 'border-slate-800 bg-slate-900/40 opacity-70 hover:opacity-100 hover:border-slate-700'
@@ -204,14 +204,14 @@ export default function SuperadminLibrariesManagerModulesModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-semibold rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all cursor-pointer"
+              className="px-4 py-2 text-xs font-semibold rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 motion-safe:transition-all cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="button"
               onClick={handleSave}
-              className="px-5 py-2 text-xs font-bold rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white shadow-md shadow-indigo-950/50 transition-all cursor-pointer active:scale-95"
+              className="px-5 py-2 text-xs font-bold rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white shadow-md shadow-indigo-950/50 motion-safe:transition-all cursor-pointer active:scale-95"
             >
               Save Permissions
             </button>

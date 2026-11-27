@@ -97,7 +97,7 @@ export default function SuperadminFeaturesOverviewScopeSelector({
                     type="button"
                     onClick={onEnableAll}
                     title="Enable all 16 modules for this library"
-                    className="px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/40 text-xs font-bold flex items-center gap-1 transition-all cursor-pointer shadow-xs active:scale-95"
+                    className="px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/40 text-xs font-bold flex items-center gap-1 motion-safe:transition-all cursor-pointer shadow-xs active:scale-95"
                   >
                     <CheckCheck size={13} />
                     <span>Enable All</span>
@@ -107,7 +107,7 @@ export default function SuperadminFeaturesOverviewScopeSelector({
                     type="button"
                     onClick={onDisableAll}
                     title="Disable all 16 modules for this library"
-                    className="px-3 py-1.5 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 border border-rose-500/40 text-xs font-bold flex items-center gap-1 transition-all cursor-pointer shadow-xs active:scale-95"
+                    className="px-3 py-1.5 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 border border-rose-500/40 text-xs font-bold flex items-center gap-1 motion-safe:transition-all cursor-pointer shadow-xs active:scale-95"
                   >
                     <Ban size={13} />
                     <span>Disable All</span>
@@ -117,7 +117,7 @@ export default function SuperadminFeaturesOverviewScopeSelector({
                     type="button"
                     onClick={onResetAll}
                     title="Reset all custom overrides back to plan defaults"
-                    className="px-3 py-1.5 rounded-xl bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 border border-indigo-500/40 text-xs font-bold flex items-center gap-1 transition-all cursor-pointer shadow-xs active:scale-95"
+                    className="px-3 py-1.5 rounded-xl bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 border border-indigo-500/40 text-xs font-bold flex items-center gap-1 motion-safe:transition-all cursor-pointer shadow-xs active:scale-95"
                   >
                     <RotateCcw size={13} />
                     <span>Reset Plan</span>

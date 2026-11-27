@@ -8,7 +8,7 @@ import type {
   EXPORT_SCOPES,
   EXPORT_FORMATS,
   EXPORT_STATUS,
-} from '../constants/superadmin_data_export_management.constants';
+} from '@/app/frontend_superadmin/superadmin_data/data_export_management/constants/superadmin_data_export_management.constants';
 
 export type ExportScope = keyof typeof EXPORT_SCOPES;
 export type ExportFormat = keyof typeof EXPORT_FORMATS;

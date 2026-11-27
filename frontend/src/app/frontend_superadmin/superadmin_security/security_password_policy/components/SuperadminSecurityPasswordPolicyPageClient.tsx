@@ -76,7 +76,7 @@ export default function SuperadminSecurityPasswordPolicyPageClient() {
                 Password & Credential Policy
               </h1>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
                 Policy Active
               </span>
             </div>
@@ -100,7 +100,7 @@ export default function SuperadminSecurityPasswordPolicyPageClient() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-b from-[#1b0d2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-purple-500/40 transition-all">
+        <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-b from-[#1b0d2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-purple-500/40 motion-safe:transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Min Password Length</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-400 shadow-inner">
@@ -111,7 +111,7 @@ export default function SuperadminSecurityPasswordPolicyPageClient() {
           <div className="text-[11px] text-slate-400 mt-1">High-entropy requirement</div>
         </div>
 
-        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-b from-[#06201a]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-emerald-500/40 transition-all">
+        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-b from-[#06201a]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-emerald-500/40 motion-safe:transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Complexity Rules</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shadow-inner">
@@ -122,7 +122,7 @@ export default function SuperadminSecurityPasswordPolicyPageClient() {
           <div className="text-[11px] text-slate-400 mt-1">Uppercase, digit, symbol required</div>
         </div>
 
-        <div className="rounded-2xl border border-sky-500/20 bg-gradient-to-b from-[#081c2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-sky-500/40 transition-all">
+        <div className="rounded-2xl border border-sky-500/20 bg-gradient-to-b from-[#081c2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-sky-500/40 motion-safe:transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Password Expiry</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-sky-500/30 bg-sky-500/15 text-sky-400 shadow-inner">
@@ -133,7 +133,7 @@ export default function SuperadminSecurityPasswordPolicyPageClient() {
           <div className="text-[11px] text-slate-400 mt-1">Automated rotation prompt</div>
         </div>
 
-        <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0e1338]/90 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-indigo-500/40 transition-all">
+        <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0e1338]/90 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-indigo-500/40 motion-safe:transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Breach Detection</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-400 shadow-inner">

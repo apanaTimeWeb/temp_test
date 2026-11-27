@@ -4,9 +4,9 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import type { IntegrationTabId } from '../constants/superadmin_integrations_overview.constants';
-import { useSuperadminIntegrationsOverviewStore } from '../state/useSuperadminIntegrationsOverviewStore';
-import { useSuperadminIntegrationsQueries } from './useSuperadminIntegrationsQueries';
+import type { IntegrationTabId } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/constants/superadmin_integrations_overview.constants';
+import { useSuperadminIntegrationsOverviewStore } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/state/useSuperadminIntegrationsOverviewStore';
+import { useSuperadminIntegrationsQueries } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/hooks/useSuperadminIntegrationsQueries';
 
 export function useSuperadminIntegrationsOverview() {
   const router = useRouter();

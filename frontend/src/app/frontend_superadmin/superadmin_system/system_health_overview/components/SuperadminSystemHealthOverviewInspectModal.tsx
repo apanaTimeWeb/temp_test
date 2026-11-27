@@ -1,6 +1,6 @@
 'use client';
 import { X, Server, Activity, CheckCircle, AlertTriangle, Cpu, HardDrive, Terminal } from 'lucide-react';
-import type { ServiceNode } from './SuperadminSystemHealthOverviewServicesTable';
+import type { ServiceNode } from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewServicesTable';
 
 interface InspectModalProps {
   service: ServiceNode | null;
@@ -24,7 +24,7 @@ export default function SuperadminSystemHealthOverviewInspectModal({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in motion-safe:duration-200">
       <div className="relative w-full max-w-2xl rounded-2xl border border-emerald-500/30 bg-[#0c1022] p-6 shadow-2xl text-slate-100 flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-border/80">
@@ -95,7 +95,7 @@ export default function SuperadminSystemHealthOverviewInspectModal({
             <div className="p-2.5 rounded-lg bg-slate-900/50 border border-slate-800 flex items-center justify-between">
               <span className="text-slate-400">Pod 1 (Primary)</span>
               <span className="text-emerald-400 font-semibold flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
                 Active
               </span>
             </div>
@@ -134,7 +134,7 @@ export default function SuperadminSystemHealthOverviewInspectModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition-all cursor-pointer"
+            className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold motion-safe:transition-all cursor-pointer"
           >
             Close
           </button>

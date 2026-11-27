@@ -2,13 +2,13 @@
 // API Service for Superadmin Security Reports
 
 import { apiFetch, type ApiResponse } from '@/lib/api';
-import { SUPERADMIN_ANALYTICS_SECURITY_REPORTS_API } from '../config/superadmin_analytics_security_reports.url_config';
+import { SUPERADMIN_ANALYTICS_SECURITY_REPORTS_API } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/config/superadmin_analytics_security_reports.url_config';
 import type {
   SecurityReportsOverviewData,
   SuperadminAnalyticsSecurityReportsFilters,
   ExportFormatType,
-} from '../types/SuperadminAnalyticsSecurityReportsTypes';
-import { SUPERADMIN_SECURITY_REPORTS_SCENARIOS } from '../mocks/scenarios/superadmin_analytics_security_reports.scenarios';
+} from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/types/SuperadminAnalyticsSecurityReportsTypes';
+import { SUPERADMIN_SECURITY_REPORTS_SCENARIOS } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/mocks/scenarios/superadmin_analytics_security_reports.scenarios';
 
 export async function fetchSecurityReportsOverview(
   filters: SuperadminAnalyticsSecurityReportsFilters

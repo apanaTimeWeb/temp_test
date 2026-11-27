@@ -2,8 +2,8 @@
 // RESPONSIBILITY: Render usage trend telemetry and quota utilization progress bars.
 
 import React from 'react';
-import type { UsageTrendPoint, UsageConsumptionBreakdown } from '../types/SuperadminAnalyticsUsageReportsTypes';
-import { formatUsageNumber } from '../utils/SuperadminAnalyticsUsageReportsFormatters';
+import type { UsageTrendPoint, UsageConsumptionBreakdown } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/types/SuperadminAnalyticsUsageReportsTypes';
+import { formatUsageNumber } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/utils/SuperadminAnalyticsUsageReportsFormatters';
 
 interface Props {
   usageTrends?: UsageTrendPoint[];
@@ -57,11 +57,11 @@ export function SuperadminAnalyticsUsageReportsCharts({
                 </div>
                 <div className="h-2.5 w-full bg-slate-900 border border-indigo-500/20 rounded-full overflow-hidden flex gap-1 p-0.5">
                   <div
-                    className="h-full bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full transition-all duration-500 shadow-xs shadow-sky-500/30"
+                    className="h-full bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full motion-safe:transition-all motion-safe:duration-500 shadow-xs shadow-sky-500/30"
                     style={{ width: `${apiPercent}%` }}
                   />
                   <div
-                    className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500 shadow-xs shadow-purple-500/30"
+                    className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full motion-safe:transition-all motion-safe:duration-500 shadow-xs shadow-purple-500/30"
                     style={{ width: `${msgPercent}%` }}
                   />
                 </div>
@@ -99,7 +99,7 @@ export function SuperadminAnalyticsUsageReportsCharts({
                 </div>
                 <div className="h-2.5 w-full bg-slate-900 border border-indigo-500/20 rounded-full overflow-hidden p-0.5">
                   <div
-                    className={`h-full ${barGradient} rounded-full transition-all duration-500 shadow-xs`}
+                    className={`h-full ${barGradient} rounded-full motion-safe:transition-all motion-safe:duration-500 shadow-xs`}
                     style={{ width: `${Math.min(100, item.percentage)}%` }}
                   />
                 </div>

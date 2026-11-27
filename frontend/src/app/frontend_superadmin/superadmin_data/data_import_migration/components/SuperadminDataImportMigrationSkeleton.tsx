@@ -13,7 +13,7 @@ export function SuperadminDataImportMigrationSkeleton() {
     <div
       role="status"
       aria-label="Loading migration data"
-      className="space-y-6 animate-pulse"
+      className="space-y-6 motion-safe:animate-pulse"
     >
       {/* Wizard Skeleton */}
       <div className="h-64 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 space-y-4">

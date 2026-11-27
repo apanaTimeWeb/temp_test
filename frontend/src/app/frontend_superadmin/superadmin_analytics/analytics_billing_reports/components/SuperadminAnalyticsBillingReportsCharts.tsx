@@ -2,8 +2,8 @@
 // RESPONSIBILITY: Render financial collection trends and plan-wise income breakdown.
 
 import React from 'react';
-import type { BillingRevenueTrendPoint, PlanWiseIncomeItem } from '../types/SuperadminAnalyticsBillingReportsTypes';
-import { formatBillingCurrency } from '../utils/SuperadminAnalyticsBillingReportsFormatters';
+import type { BillingRevenueTrendPoint, PlanWiseIncomeItem } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/types/SuperadminAnalyticsBillingReportsTypes';
+import { formatBillingCurrency } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/utils/SuperadminAnalyticsBillingReportsFormatters';
 
 interface Props {
   revenueTrend?: BillingRevenueTrendPoint[];
@@ -43,12 +43,12 @@ export function SuperadminAnalyticsBillingReportsCharts({
               <div className="w-full flex justify-center items-end gap-1.5 h-full">
                 <div
                   style={{ height: `${(point.collectedMinor / maxCollected) * 100}%` }}
-                  className="w-3 sm:w-5 rounded-t-md bg-gradient-to-t from-emerald-600 to-emerald-400 group-hover:brightness-125 transition-all shadow-xs shadow-emerald-500/30"
+                  className="w-3 sm:w-5 rounded-t-md bg-gradient-to-t from-emerald-600 to-emerald-400 group-hover:brightness-125 motion-safe:transition-all shadow-xs shadow-emerald-500/30"
                   title={`Collected: ${formatBillingCurrency(point.collectedMinor)}`}
                 />
                 <div
                   style={{ height: `${(point.pendingMinor / maxCollected) * 100}%` }}
-                  className="w-3 sm:w-5 rounded-t-md bg-gradient-to-t from-amber-600 to-amber-400 group-hover:brightness-125 transition-all shadow-xs shadow-amber-500/30"
+                  className="w-3 sm:w-5 rounded-t-md bg-gradient-to-t from-amber-600 to-amber-400 group-hover:brightness-125 motion-safe:transition-all shadow-xs shadow-amber-500/30"
                   title={`Pending: ${formatBillingCurrency(point.pendingMinor)}`}
                 />
               </div>
@@ -79,7 +79,7 @@ export function SuperadminAnalyticsBillingReportsCharts({
               <div className="h-2 w-full rounded-full bg-slate-900 border border-indigo-500/20 overflow-hidden">
                 <div
                   style={{ width: `${tier.percentage}%` }}
-                  className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-sky-400 to-emerald-400 transition-all duration-500 shadow-xs"
+                  className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-sky-400 to-emerald-400 motion-safe:transition-all motion-safe:duration-500 shadow-xs"
                 />
               </div>
               <p className="text-[10px] text-slate-400">{tier.subscriberCount} active subscribers</p>

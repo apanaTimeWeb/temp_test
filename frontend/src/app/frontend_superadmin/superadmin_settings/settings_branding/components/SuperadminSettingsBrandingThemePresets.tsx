@@ -35,7 +35,7 @@ export const SuperadminSettingsBrandingThemePresets: FC<SuperadminSettingsBrandi
             key={preset.name}
             type="button"
             onClick={() => onSelectPreset(preset.primary, preset.accent)}
-            className={`px-2.5 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-2.5 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-2 motion-safe:transition-all cursor-pointer ${
               isActive
                 ? 'border-purple-400 bg-purple-500/20 text-purple-200 shadow-sm shadow-purple-950/40 font-bold'
                 : 'border-indigo-500/20 bg-slate-950/60 text-slate-400 hover:text-slate-200 hover:bg-slate-900 hover:border-indigo-500/40'

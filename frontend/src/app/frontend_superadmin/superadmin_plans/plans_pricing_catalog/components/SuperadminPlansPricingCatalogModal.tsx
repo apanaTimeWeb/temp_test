@@ -274,7 +274,7 @@ export default function SuperadminPlansPricingCatalogModal({
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-indigo-500/20">
             <button
               type="button"
-              className="rounded-xl border border-border/80 bg-card/80 px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-800/60 cursor-pointer transition-all"
+              className="rounded-xl border border-border/80 bg-card/80 px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-800/60 cursor-pointer motion-safe:transition-all"
               onClick={onClose}
               data-testid="superadmin-subscriptions-subscriptions-overview-cancel-11"
             >
@@ -283,7 +283,7 @@ export default function SuperadminPlansPricingCatalogModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 px-5 py-2 text-xs font-semibold text-white shadow-md shadow-indigo-500/25 cursor-pointer transition-all active:scale-95 disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 px-5 py-2 text-xs font-semibold text-white shadow-md shadow-indigo-500/25 cursor-pointer motion-safe:transition-all active:scale-95 disabled:opacity-50"
               data-testid="superadmin-subscriptions-subscriptions-overview-updating-preview-12"
             >
               <span>{isSubmitting ? t('COPY.UPDATING_PREVIEW') : editPlan ? t('COPY.UPDATE_PREVIEW') : t('COPY.CREATE_PREVIEW_PLAN')}</span>

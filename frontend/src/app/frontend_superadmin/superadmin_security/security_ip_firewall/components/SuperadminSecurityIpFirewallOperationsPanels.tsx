@@ -55,7 +55,7 @@ export default function SuperadminSecurityIpFirewallOperationsPanels({
                 type="button"
                 disabled
                 title={tCopy("COPY.UNAVAILABLE_NO_VERIFIED_FIREWALL_API_CONTRACT_IS_SUPPLIED")}
-                className="inline-flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/15 px-4 py-2 text-xs sm:text-sm font-semibold text-rose-300 opacity-60 cursor-not-allowed shadow-xs transition-all"
+                className="inline-flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/15 px-4 py-2 text-xs sm:text-sm font-semibold text-rose-300 opacity-60 cursor-not-allowed shadow-xs motion-safe:transition-all"
                 data-testid="superadmin-security-security-operations-panels-unavailable-no-verified-firewall-api-contract-is-supplied-2"
               >
                 <Ban size={15} />
@@ -106,7 +106,7 @@ export default function SuperadminSecurityIpFirewallOperationsPanels({
                             disabled
                             aria-label={tCopy("COPY.DELETE_IP_RULE_UNAVAILABLE_ARIA_LABEL", { ip: rule.ip })}
                             title={tCopy("COPY.UNAVAILABLE_NO_VERIFIED_FIREWALL_API_CONTRACT_IS_SUPPLIED")}
-                            className="inline-flex items-center justify-center p-2 rounded-lg text-rose-400 hover:text-rose-300 hover:bg-rose-500/15 opacity-60 cursor-not-allowed transition-all"
+                            className="inline-flex items-center justify-center p-2 rounded-lg text-rose-400 hover:text-rose-300 hover:bg-rose-500/15 opacity-60 cursor-not-allowed motion-safe:transition-all"
                             data-testid={`superadmin-security-security-operations-panels-delete-ip-rule-unavailable-aria-label-3-${String(rule.id)}`}
                           >
                             <Trash2 size={15} />

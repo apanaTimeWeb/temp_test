@@ -19,13 +19,13 @@ import {
   Building,
   GitBranch,
 } from 'lucide-react';
-import type { ExportJobRecord } from '../types/superadmin_data_export_management.types';
+import type { ExportJobRecord } from '@/app/frontend_superadmin/superadmin_data/data_export_management/types/superadmin_data_export_management.types';
 import {
   displayValue,
   formatBytes,
   formatTimestamp,
   formatShortHash,
-} from '../utils/superadmin_data_export_management_formatters';
+} from '@/app/frontend_superadmin/superadmin_data/data_export_management/utils/superadmin_data_export_management_formatters';
 
 interface JobQueueTableProps {
   jobs: ExportJobRecord[];
@@ -176,12 +176,12 @@ export function SuperadminDataExportManagementJobQueueTable({
                   {job.status === 'PROCESSING' && (
                     <div className="space-y-1">
                       <div className="flex items-center gap-1.5 text-[11px] text-blue-600 dark:text-blue-400 font-medium">
-                        <Clock className="w-3 h-3 animate-spin" />
+                        <Clock className="w-3 h-3 motion-safe:animate-spin" />
                         <span>Packaging ({job.progressPercent}%)</span>
                       </div>
                       <div className="w-24 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-blue-600 rounded-full transition-all duration-300"
+                          className="h-full bg-blue-600 rounded-full motion-safe:transition-all motion-safe:duration-300"
                           style={{ width: `${job.progressPercent}%` }}
                         />
                       </div>

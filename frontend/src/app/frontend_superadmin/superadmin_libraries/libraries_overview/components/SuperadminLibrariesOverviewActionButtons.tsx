@@ -38,7 +38,7 @@ export default function SuperadminLibrariesOverviewActionButtons({
       {/* 1. View Details */}
       <button
         type="button"
-        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 motion-safe:transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
         aria-label={`View ${library.name}`}
         onClick={(e) => { e.stopPropagation(); onView(library); }}
         title="View Library Details"
@@ -50,7 +50,7 @@ export default function SuperadminLibrariesOverviewActionButtons({
       {/* 2. Edit Settings */}
       <button
         type="button"
-        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 motion-safe:transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
         aria-label={`Edit ${library.name}`}
         onClick={(e) => { e.stopPropagation(); onEdit(library); }}
         title="Edit Library Settings"
@@ -62,7 +62,7 @@ export default function SuperadminLibrariesOverviewActionButtons({
       {/* 3. Status Toggle (Active / Maintenance) */}
       <button
         type="button"
-        className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border shadow-xs active:scale-95 cursor-pointer transition-all shrink-0 ${
+        className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border shadow-xs active:scale-95 cursor-pointer motion-safe:transition-all shrink-0 ${
           isActive
             ? 'border-rose-500/30 bg-rose-500/15 text-rose-300 hover:text-white hover:bg-rose-600/30'
             : 'border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30'
@@ -78,7 +78,7 @@ export default function SuperadminLibrariesOverviewActionButtons({
       {/* 4. WhatsApp Quick Connect */}
       <button
         type="button"
-        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 motion-safe:transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
         aria-label={`Send WhatsApp to ${library.owner}`}
         onClick={(e) => {
           e.stopPropagation();
@@ -101,7 +101,7 @@ export default function SuperadminLibrariesOverviewActionButtons({
         <a
           href={`mailto:${library.email}?subject=${encodeURIComponent(`Smart Library SaaS - Notice for ${library.name}`)}`}
           onClick={(e) => e.stopPropagation()}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 motion-safe:transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
           aria-label={`Send email to ${library.owner}`}
           title="Send Email"
         >
@@ -114,7 +114,7 @@ export default function SuperadminLibrariesOverviewActionButtons({
       {/* 7. Manage Branches */}
       <button
         type="button"
-        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/15 text-sky-300 hover:text-white hover:bg-sky-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/15 text-sky-300 hover:text-white hover:bg-sky-600/30 motion-safe:transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
         onClick={(e) => { e.stopPropagation(); onManageBranches(library); }}
         title="Manage Branches"
       >
@@ -124,7 +124,7 @@ export default function SuperadminLibrariesOverviewActionButtons({
       {/* 8. Configure Manager Modules */}
       <button
         type="button"
-        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 motion-safe:transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
         onClick={(e) => { e.stopPropagation(); onConfigureModules(library); }}
         title="Configure Manager Modules"
       >
@@ -134,7 +134,7 @@ export default function SuperadminLibrariesOverviewActionButtons({
       {/* 9. Admin Panel Master Switch */}
       <button
         type="button"
-        className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border transition-all shadow-xs active:scale-95 cursor-pointer shrink-0 ${
+        className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border motion-safe:transition-all shadow-xs active:scale-95 cursor-pointer shrink-0 ${
           isAdminOn
             ? 'border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30'
             : 'border-amber-500/30 bg-amber-500/15 text-amber-300 hover:text-white hover:bg-amber-600/30'
@@ -149,7 +149,7 @@ export default function SuperadminLibrariesOverviewActionButtons({
       {onImpersonate && (
         <button
           type="button"
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-indigo-400/30 bg-indigo-500/20 text-indigo-300 hover:text-white hover:bg-indigo-600/40 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-indigo-400/30 bg-indigo-500/20 text-indigo-300 hover:text-white hover:bg-indigo-600/40 motion-safe:transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
           onClick={(e) => { e.stopPropagation(); onImpersonate(library); }}
           title="Login as Library Admin (Impersonate)"
         >
@@ -161,7 +161,7 @@ export default function SuperadminLibrariesOverviewActionButtons({
       {onDuplicate && (
         <button
           type="button"
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 motion-safe:transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
           onClick={(e) => { e.stopPropagation(); onDuplicate(library); }}
           title="Duplicate Library Configuration"
         >

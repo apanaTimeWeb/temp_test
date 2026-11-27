@@ -25,7 +25,7 @@ export function SuperadminSettingsGeneralDataRetentionCard() {
     <section
       id="section-data_retention"
       aria-labelledby="heading-data-retention"
-      className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-6 space-y-6 hover:border-indigo-500/35 transition-all"
+      className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-6 space-y-6 hover:border-indigo-500/35 motion-safe:transition-all"
     >
       <div className="flex items-center justify-between border-b border-indigo-500/15 pb-4">
         <div className="flex items-center gap-3">
@@ -44,7 +44,7 @@ export function SuperadminSettingsGeneralDataRetentionCard() {
         <div className="flex items-center gap-2">
           <Link
             href="/superadmin/superadmin_data/data_archive_retention"
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-xs font-semibold transition-all shadow-xs cursor-pointer no-underline"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-xs font-semibold motion-safe:transition-all shadow-xs cursor-pointer no-underline"
           >
             <span>Open Data Module 14</span>
             <ExternalLink size={12} />
@@ -80,7 +80,7 @@ export function SuperadminSettingsGeneralDataRetentionCard() {
             min={7}
             max={3650}
             {...register('dataRetention.memberLogsRetentionDays', { valueAsNumber: true })}
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             data-testid="settings-retention-member-logs-input"
           />
           <span className="text-[11px] text-slate-400">
@@ -110,7 +110,7 @@ export function SuperadminSettingsGeneralDataRetentionCard() {
             min={1}
             max={10}
             {...register('dataRetention.auditLogsRetentionYears', { valueAsNumber: true })}
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             data-testid="settings-retention-audit-logs-input"
           />
           <span className="text-[11px] text-slate-400">
@@ -140,7 +140,7 @@ export function SuperadminSettingsGeneralDataRetentionCard() {
             min={30}
             max={1825}
             {...register('dataRetention.punchLogsRetentionDays', { valueAsNumber: true })}
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             data-testid="settings-retention-punch-logs-input"
           />
           <span className="text-[11px] text-slate-400">
@@ -170,7 +170,7 @@ export function SuperadminSettingsGeneralDataRetentionCard() {
             min={1}
             max={90}
             {...register('dataRetention.autoPurgeTrashDays', { valueAsNumber: true })}
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             data-testid="settings-retention-trash-input"
           />
           <span className="text-[11px] text-slate-400">
@@ -191,7 +191,7 @@ export function SuperadminSettingsGeneralDataRetentionCard() {
           <select
             id="settings-retention-backup-schedule"
             {...register('dataRetention.autoBackupSchedule')}
-            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 motion-safe:transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             data-testid="settings-retention-backup-schedule-select"
           >
             {BACKUP_SCHEDULE_OPTIONS.map((opt) => (

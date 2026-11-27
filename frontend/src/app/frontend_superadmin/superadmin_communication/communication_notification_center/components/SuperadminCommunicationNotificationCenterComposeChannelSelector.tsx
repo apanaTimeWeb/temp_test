@@ -73,7 +73,7 @@ export function SuperadminCommunicationNotificationCenterComposeChannelSelector(
           <button
             type="button"
             onClick={() => onChannelToggle('EMAIL')}
-            className={`px-3.5 py-2 rounded-xl border text-xs font-semibold flex items-center gap-2 cursor-pointer transition-all ${
+            className={`px-3.5 py-2 rounded-xl border text-xs font-semibold flex items-center gap-2 cursor-pointer motion-safe:transition-all ${
               selectedChannels.includes('EMAIL')
                 ? 'bg-sky-500/20 text-sky-300 border-sky-500/40 shadow-xs'
                 : 'border-indigo-500/20 text-slate-400 hover:bg-slate-900/60'
@@ -86,7 +86,7 @@ export function SuperadminCommunicationNotificationCenterComposeChannelSelector(
           <button
             type="button"
             onClick={() => onChannelToggle('SMS')}
-            className={`px-3.5 py-2 rounded-xl border text-xs font-semibold flex items-center gap-2 cursor-pointer transition-all ${
+            className={`px-3.5 py-2 rounded-xl border text-xs font-semibold flex items-center gap-2 cursor-pointer motion-safe:transition-all ${
               selectedChannels.includes('SMS')
                 ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-xs'
                 : 'border-indigo-500/20 text-slate-400 hover:bg-slate-900/60'
@@ -99,7 +99,7 @@ export function SuperadminCommunicationNotificationCenterComposeChannelSelector(
           <button
             type="button"
             onClick={() => onChannelToggle('WHATSAPP')}
-            className={`px-3.5 py-2 rounded-xl border text-xs font-semibold flex items-center gap-2 cursor-pointer transition-all ${
+            className={`px-3.5 py-2 rounded-xl border text-xs font-semibold flex items-center gap-2 cursor-pointer motion-safe:transition-all ${
               selectedChannels.includes('WHATSAPP')
                 ? 'bg-teal-500/20 text-teal-300 border-teal-500/40 shadow-xs'
                 : 'border-indigo-500/20 text-slate-400 hover:bg-slate-900/60'

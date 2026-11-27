@@ -3,9 +3,9 @@
 
 import React from 'react';
 import { Eye, ChevronLeft, ChevronRight, ShieldAlert, ShieldCheck, Lock, Key, FileOutput, AlertTriangle } from 'lucide-react';
-import type { SecurityReportTableRecord, SecurityEventType, SecuritySeverity } from '../types/SuperadminAnalyticsSecurityReportsTypes';
-import { formatSecurityEventLabel } from '../utils/SuperadminAnalyticsSecurityReportsFormatters';
-import { SuperadminAnalyticsSecurityReportsEmptyState } from './SuperadminAnalyticsSecurityReportsEmptyState';
+import type { SecurityReportTableRecord, SecurityEventType, SecuritySeverity } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/types/SuperadminAnalyticsSecurityReportsTypes';
+import { formatSecurityEventLabel } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/utils/SuperadminAnalyticsSecurityReportsFormatters';
+import { SuperadminAnalyticsSecurityReportsEmptyState } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/components/SuperadminAnalyticsSecurityReportsEmptyState';
 
 interface Props {
   records: SecurityReportTableRecord[];
@@ -31,7 +31,7 @@ function getEventIcon(type: SecurityEventType) {
     case 'DATA_EXPORTED':
       return <FileOutput size={14} className="text-sky-400" />;
     case 'SUSPICIOUS_ACTIVITY':
-      return <AlertTriangle size={14} className="text-rose-500 animate-pulse" />;
+      return <AlertTriangle size={14} className="text-rose-500 motion-safe:animate-pulse" />;
     default:
       return <ShieldAlert size={14} className="text-slate-400" />;
   }
@@ -156,7 +156,7 @@ export function SuperadminAnalyticsSecurityReportsTable({
                     <button
                       type="button"
                       onClick={() => onSelectRecord(r)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border border-indigo-500/30 bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border border-indigo-500/30 bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 hover:text-white motion-safe:transition-all cursor-pointer shadow-xs active:scale-95"
                       title="Inspect security audit event"
                     >
                       <Eye size={13} />
@@ -181,7 +181,7 @@ export function SuperadminAnalyticsSecurityReportsTable({
             type="button"
             onClick={() => onPageChange(Math.max(1, currentPage - 1))}
             disabled={currentPage <= 1}
-            className="p-1.5 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-indigo-500/20 text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-all"
+            className="p-1.5 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-indigo-500/20 text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer motion-safe:transition-all"
             aria-label="Previous page"
           >
             <ChevronLeft size={14} />
@@ -193,7 +193,7 @@ export function SuperadminAnalyticsSecurityReportsTable({
             type="button"
             onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
             disabled={currentPage >= totalPages}
-            className="p-1.5 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-indigo-500/20 text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-all"
+            className="p-1.5 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-indigo-500/20 text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer motion-safe:transition-all"
             aria-label="Next page"
           >
             <ChevronRight size={14} />

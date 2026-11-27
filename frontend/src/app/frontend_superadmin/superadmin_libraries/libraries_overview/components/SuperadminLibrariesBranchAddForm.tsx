@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { SuperadminBranchRecord } from '../types/SuperadminLibrariesOverviewTypes';
+import type { SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
 
 interface SuperadminLibrariesBranchAddFormProps {
   libraryLocation: string;
@@ -52,7 +52,7 @@ export default function SuperadminLibrariesBranchAddForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-xl border border-indigo-500/30 bg-[#0e1333] p-4 space-y-3.5 animate-in fade-in duration-150">
+    <form onSubmit={handleSubmit} className="rounded-xl border border-indigo-500/30 bg-[#0e1333] p-4 space-y-3.5 animate-in fade-in motion-safe:duration-150">
       <div className="flex items-center justify-between pb-2 border-b border-indigo-500/20">
         <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-300">New Branch Details</h4>
         <button

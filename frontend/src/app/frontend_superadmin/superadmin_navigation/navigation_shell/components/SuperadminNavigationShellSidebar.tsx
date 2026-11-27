@@ -72,7 +72,7 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
             href={SUPERADMIN_NAVIGATION_ROUTES.dashboard_overview}
             className="flex items-center gap-3 w-full no-underline group"
           >
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 via-purple-600 to-cyan-500 p-[1.5px] shadow-[0_0_18px_rgba(99,102,241,0.4)] transition-transform duration-300 group-hover:scale-105 shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 via-purple-600 to-cyan-500 p-[1.5px] shadow-[0_0_18px_rgba(99,102,241,0.4)] transition-transform motion-safe:duration-300 group-hover:scale-105 shrink-0">
               <div className="w-full h-full rounded-[10px] bg-neutral-950/90 flex items-center justify-center">
                 <BookOpen
                   size={18}
@@ -104,7 +104,7 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
           <button
             type="button"
             onClick={toggleAll}
-            className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-semibold text-indigo-400 hover:text-indigo-300 hover:bg-indigo-400/10 border border-indigo-400/20 transition-all cursor-pointer"
+            className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-semibold text-indigo-400 hover:text-indigo-300 hover:bg-indigo-400/10 border border-indigo-400/20 motion-safe:transition-all cursor-pointer"
             title={allExpanded ? 'Collapse all sub-modules' : 'Expand all sub-modules'}
             aria-label={allExpanded ? 'Collapse all sub-modules' : 'Expand all sub-modules'}
           >
@@ -140,7 +140,7 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
             <div key={item.id} className="relative group/mod mb-1">
               {/* Module Header Row */}
               <div
-                className={`relative flex items-center justify-between rounded-xl transition-all duration-200 border ${
+                className={`relative flex items-center justify-between rounded-xl motion-safe:transition-all motion-safe:duration-200 border ${
                   isModuleActive
                     ? 'bg-gradient-to-r from-white/[0.09] via-white/[0.05] to-transparent border-white/15 shadow-[0_2px_12px_rgba(0,0,0,0.4)]'
                     : 'border-transparent hover:bg-white/[0.05] hover:border-white/5'
@@ -163,7 +163,7 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
                 >
                   {/* Jewel Icon Box */}
                   <div
-                    className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-transform duration-200 group-hover/mod:scale-110 shadow-sm"
+                    className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-transform motion-safe:duration-200 group-hover/mod:scale-110 shadow-sm"
                     style={{
                       backgroundColor: item.colorBg,
                       color: item.colorText,
@@ -206,7 +206,7 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
                   <button
                     type="button"
                     onClick={(e) => toggleModule(item.id, e)}
-                    className={`p-1.5 mr-1 text-neutral-400 hover:text-white rounded-lg hover:bg-white/10 transition-transform duration-200 cursor-pointer ${
+                    className={`p-1.5 mr-1 text-neutral-400 hover:text-white rounded-lg hover:bg-white/10 transition-transform motion-safe:duration-200 cursor-pointer ${
                       isExpanded ? 'rotate-0 text-amber-400' : '-rotate-90'
                     }`}
                     aria-label={`Toggle ${item.label} sub-items`}
@@ -229,14 +229,14 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
                       <Link
                         key={sub.id}
                         href={sub.href}
-                        className={`group flex items-center gap-2 py-1.5 px-2.5 text-[11px] rounded-lg transition-all no-underline ${
+                        className={`group flex items-center gap-2 py-1.5 px-2.5 text-[11px] rounded-lg motion-safe:transition-all no-underline ${
                           isSubActive
                             ? 'text-amber-300 font-bold bg-amber-500/15 border border-amber-500/30 shadow-[0_0_12px_rgba(245,158,11,0.15)]'
                             : 'text-neutral-300 hover:text-white hover:bg-white/[0.06]'
                         }`}
                       >
                         <span
-                          className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all ${
+                          className={`w-1.5 h-1.5 rounded-full shrink-0 motion-safe:transition-all ${
                             isSubActive
                               ? 'bg-amber-400 scale-125 shadow-[0_0_6px_rgba(251,191,36,0.9)]'
                               : 'bg-neutral-600 group-hover:bg-neutral-400'
@@ -265,7 +265,7 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
               <ShieldCheck size={12} className="text-amber-400" />
             </div>
             <div className="text-[10px] text-emerald-400 font-semibold flex items-center gap-1 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
               Online (Master Scope)
             </div>
           </div>

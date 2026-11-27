@@ -80,15 +80,15 @@ export default function SuperadminSecurityThreatsOperationsPanels({ failedLogins
             type="button"
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 text-xs font-semibold cursor-pointer transition-all disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 text-xs font-semibold cursor-pointer motion-safe:transition-all disabled:opacity-50"
             title="Refresh threat telemetry"
           >
-            <RotateCw size={13} className={`text-rose-400 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <RotateCw size={13} className={`text-rose-400 ${isRefreshing ? 'motion-safe:animate-spin' : ''}`} />
             <span>Refresh</span>
           </button>
 
           <button
-            className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 px-3.5 py-2 text-xs font-bold text-white shadow-md shadow-rose-600/30 transition-all active:scale-[0.98] cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 px-3.5 py-2 text-xs font-bold text-white shadow-md shadow-rose-600/30 motion-safe:transition-all active:scale-[0.98] cursor-pointer"
             type="button"
             onClick={handleExportLogs}
             data-testid="superadmin-security-security-operations-panels-export-sample-logs-csv-9"
@@ -101,7 +101,7 @@ export default function SuperadminSecurityThreatsOperationsPanels({ failedLogins
           <button
             type="button"
             onClick={handlePrint}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-700 bg-slate-800/70 text-slate-300 hover:bg-slate-700 text-xs font-semibold cursor-pointer transition-all"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-700 bg-slate-800/70 text-slate-300 hover:bg-slate-700 text-xs font-semibold cursor-pointer motion-safe:transition-all"
             title="Print Incident Response Report"
           >
             <Printer size={13} className="text-slate-400" />
@@ -151,7 +151,7 @@ export default function SuperadminSecurityThreatsOperationsPanels({ failedLogins
           <button
             type="button"
             onClick={handleResetFilters}
-            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 text-xs font-semibold cursor-pointer transition-all"
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 text-xs font-semibold cursor-pointer motion-safe:transition-all"
             title="Clear all filters"
           >
             <RotateCcw size={12} className="text-rose-400" />
@@ -168,7 +168,7 @@ export default function SuperadminSecurityThreatsOperationsPanels({ failedLogins
         {filteredLogins.map((f) => (
           <div
             key={f.id}
-            className="group relative rounded-2xl border border-rose-500/25 bg-gradient-to-b from-[#220918]/80 to-[#100618]/95 p-4 sm:p-5 backdrop-blur-md transition-all duration-200 hover:border-rose-500/50 hover:from-[#2e0c20]/90 hover:to-[#160822]/98 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4"
+            className="group relative rounded-2xl border border-rose-500/25 bg-gradient-to-b from-[#220918]/80 to-[#100618]/95 p-4 sm:p-5 backdrop-blur-md motion-safe:transition-all motion-safe:duration-200 hover:border-rose-500/50 hover:from-[#2e0c20]/90 hover:to-[#160822]/98 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4"
           >
             <div className="flex items-center gap-3.5 min-w-0">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-rose-500/40 bg-rose-500/20 text-rose-400 shadow-inner">

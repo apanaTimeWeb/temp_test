@@ -1,10 +1,11 @@
 'use client';
-// RESPONSIBILITY: Render complete branch creation dialog with unique code validation and tenant scoping.
+// RESPONSIBILITY: Render complete branch creation dialog with unique code validation and tenant scoping (< 300 lines).
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, GitBranch, AlertCircle, Building2, MapPin, Phone, Mail, Clock, Calendar, Armchair } from 'lucide-react';
+import { X, GitBranch, AlertCircle, Building2 } from 'lucide-react';
 import type { SuperadminBranchRecord, SuperadminLibraryOption } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
-import SuperadminBranchesOverviewQuotaBlockBanner from './SuperadminBranchesOverviewQuotaBlockBanner';
+import SuperadminBranchesOverviewQuotaBlockBanner from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewQuotaBlockBanner';
+import SuperadminBranchesOverviewCreateModalFields from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewCreateModalFields';
 import { useModalScrollLock } from '@/lib/useModalScrollLock';
 
 interface SuperadminBranchesOverviewCreateModalProps {
@@ -136,13 +137,13 @@ export default function SuperadminBranchesOverviewCreateModal({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
+      className="fixed inset-0 z-40 flex items-center justify-center bg-overlay-backdrop backdrop-blur-sm p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in motion-safe:duration-200"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div
-        className="relative w-full max-w-4xl rounded-2xl border border-indigo-500/40 bg-[#0d102b] p-6 shadow-2xl text-white max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 ease-out"
+        className="relative w-full max-w-4xl rounded-2xl border border-border bg-overlay p-6 shadow-dialog text-foreground max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 motion-safe:duration-200 ease-out"
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
@@ -150,45 +151,45 @@ export default function SuperadminBranchesOverviewCreateModal({
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+          className="absolute top-4 right-4 text-muted hover:text-foreground p-1 rounded-lg hover:bg-surface-elevated transition-colors cursor-pointer"
         >
           <X size={18} />
         </button>
 
         {/* Header */}
-        <div className="flex items-center gap-3 pb-4 border-b border-indigo-500/20">
-          <div className="p-2.5 rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400">
+        <div className="flex items-center gap-3 pb-4 border-b border-border">
+          <div className="p-2.5 rounded-xl bg-primary-subtle text-primary border border-border">
             <GitBranch size={22} />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-lg font-bold text-white">Create New Branch (SuperAdmin Only)</h2>
-              <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              <h2 className="text-lg font-bold text-foreground">Create New Branch (SuperAdmin Only)</h2>
+              <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-success-bg text-success border border-success-border">
                 PROVISIONING
               </span>
             </div>
-            <p className="text-xs text-slate-400">Scoped branch provisioning with duplicate code protection</p>
+            <p className="text-xs text-secondary">Scoped branch provisioning with duplicate code protection</p>
           </div>
         </div>
 
         {errorMsg && (
-          <div className="mt-3 p-3 rounded-xl border border-rose-500/30 bg-rose-950/40 flex items-center gap-2 text-xs text-rose-300">
+          <div className="mt-3 p-3 rounded-xl border border-danger-border bg-danger-bg flex items-center gap-2 text-xs text-danger" role="alert">
             <AlertCircle size={15} />
             <span>{errorMsg}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="my-4 space-y-4 max-h-[70vh] overflow-y-auto pr-1 text-xs">
-          {/* Library Account Selection (Guaranteed Tenant Scoping) */}
-          <div className="p-3.5 rounded-xl border border-indigo-500/30 bg-indigo-950/40">
-            <label className="block text-xs font-bold text-indigo-300 mb-1 flex items-center gap-1.5">
-              <Building2 size={13} />
+          {/* Library Account Selection */}
+          <div className="p-3.5 rounded-xl border border-border bg-surface">
+            <label className="block text-xs font-bold text-foreground mb-1 flex items-center gap-1.5">
+              <Building2 size={13} className="text-primary" />
               <span>Parent Library Account (Strict Tenant Scope) *</span>
             </label>
             <select
               value={libraryId}
               onChange={(e) => handleLibraryChange(e.target.value)}
-              className="w-full rounded-xl border border-indigo-500/30 bg-[#0c0f28] p-2.5 text-xs text-white focus:border-indigo-400 outline-none cursor-pointer"
+              className="w-full rounded-xl border border-border bg-input p-2.5 text-xs text-foreground focus:border-primary outline-none cursor-pointer"
             >
               {availableLibraries.map((lib) => (
                 <option key={lib.id} value={lib.id}>
@@ -198,207 +199,83 @@ export default function SuperadminBranchesOverviewCreateModal({
             </select>
           </div>
 
-          {/* Quota Limit Blocking Banner when 3/3 branches used */}
+          {/* Quota Limit Blocking Banner */}
           {isLimitReached && parentLib && (
             <SuperadminBranchesOverviewQuotaBlockBanner library={parentLib} />
           )}
 
           {/* Branch Name & Code */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="p-3 rounded-xl border border-indigo-500/20 bg-card/40">
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Branch Name *</label>
-              <input maxLength={100}
+            <div className="p-3 rounded-xl border border-border bg-card">
+              <label className="block text-xs font-semibold text-secondary mb-1">Branch Name *</label>
+              <input
+                maxLength={100}
                 type="text"
                 required
                 placeholder="e.g. Connaught Place Premier Hub"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/80 p-2.5 text-xs text-white placeholder:text-slate-500 focus:border-indigo-400 outline-none"
+                className="w-full rounded-xl border border-border bg-input p-2.5 text-xs text-foreground placeholder:text-muted focus:border-primary outline-none"
               />
             </div>
-            <div className="p-3 rounded-xl border border-indigo-500/20 bg-card/40">
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Unique Branch Code *</label>
-              <input maxLength={30}
+            <div className="p-3 rounded-xl border border-border bg-card">
+              <label className="block text-xs font-semibold text-secondary mb-1">Unique Branch Code *</label>
+              <input
+                maxLength={30}
                 type="text"
                 required
                 placeholder="e.g. BR-DEL-01"
                 value={code}
                 onChange={(e) => setCode(e.target.value.toUpperCase())}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/80 p-2.5 text-xs text-white uppercase font-mono placeholder:text-slate-500 focus:border-indigo-400 outline-none"
+                className="w-full rounded-xl border border-border bg-input p-2.5 text-xs text-foreground uppercase font-mono placeholder:text-muted focus:border-primary outline-none"
               />
             </div>
           </div>
 
-          {/* Location & Address */}
-          <div className="p-3.5 rounded-xl border border-indigo-500/20 bg-card/40 space-y-3">
-            <p className="text-xs font-bold text-indigo-300 flex items-center gap-1.5">
-              <MapPin size={13} /> Location & Address Details
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1">City *</label>
-                <input maxLength={100}
-                  type="text"
-                  required
-                  placeholder="e.g. New Delhi"
-                  value={city}
-                  onChange={(e) => handleCityChange(e.target.value)}
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/80 p-2 text-xs text-white focus:border-indigo-400 outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1">State</label>
-                <input maxLength={100}
-                  type="text"
-                  placeholder="e.g. Delhi NCR"
-                  value={state}
-                  onChange={(e) => setState(e.target.value)}
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/80 p-2 text-xs text-white focus:border-indigo-400 outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1">PIN Code</label>
-                <input maxLength={30}
-                  type="text"
-                  placeholder="e.g. 110001"
-                  value={pinCode}
-                  onChange={(e) => setPinCode(e.target.value)}
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/80 p-2 text-xs text-white font-mono focus:border-indigo-400 outline-none"
-                />
-              </div>
-            </div>
-            <div>
-              <label className="block text-[11px] font-semibold text-slate-400 mb-1">Premises / Street Address</label>
-              <input maxLength={250}
-                type="text"
-                placeholder="Plot/Floor, Road or Landmark..."
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/80 p-2 text-xs text-white focus:border-indigo-400 outline-none"
-              />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1">Branch Help Desk Phone</label>
-                <input maxLength={15}
-                  type="tel"
-                  placeholder="+91 "
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/80 p-2 text-xs text-white focus:border-indigo-400 outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1">Branch Help Desk Email</label>
-                <input maxLength={254}
-                  type="email"
-                  placeholder="branch@library.org"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/80 p-2 text-xs text-white focus:border-indigo-400 outline-none"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Branch Manager Assignment */}
-          <div className="p-3.5 rounded-xl border border-indigo-500/20 bg-card/40 space-y-3">
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-bold text-sky-300">Branch Manager Assignment</p>
-              <span className="text-[10px] text-slate-400">Scoped operational access strictly to this branch</span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1">Manager Name *</label>
-                <input maxLength={100}
-                  type="text"
-                  required
-                  placeholder="e.g. Rohan Sharma"
-                  value={managerName}
-                  onChange={(e) => setManagerName(e.target.value)}
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/80 p-2 text-xs text-white focus:border-indigo-400 outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1">Manager Email</label>
-                <input maxLength={254}
-                  type="email"
-                  placeholder="rohan@library.org"
-                  value={managerEmail}
-                  onChange={(e) => setManagerEmail(e.target.value)}
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/80 p-2 text-xs text-white focus:border-indigo-400 outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1">Manager Mobile</label>
-                <input maxLength={15}
-                  type="tel"
-                  placeholder="+91 "
-                  value={managerPhone}
-                  onChange={(e) => setManagerPhone(e.target.value)}
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/80 p-2 text-xs text-white focus:border-indigo-400 outline-none"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Operations & Schedule */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="p-3 rounded-xl border border-indigo-500/20 bg-card/40">
-              <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
-                <Armchair size={13} className="text-amber-300" />
-                <span>Seat Capacity</span>
-              </label>
-              <input
-                type="number"
-                min={10}
-                value={capacity}
-                onChange={(e) => setCapacity(Number(e.target.value))}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/80 p-2 text-xs text-white font-mono focus:border-indigo-400 outline-none"
-              />
-            </div>
-            <div className="p-3 rounded-xl border border-indigo-500/20 bg-card/40">
-              <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
-                <Clock size={13} className="text-indigo-400" />
-                <span>Working Hours</span>
-              </label>
-              <input maxLength={100}
-                type="text"
-                value={workingHours}
-                onChange={(e) => setWorkingHours(e.target.value)}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/80 p-2 text-xs text-white focus:border-indigo-400 outline-none"
-              />
-            </div>
-            <div className="p-3 rounded-xl border border-indigo-500/20 bg-card/40">
-              <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
-                <Calendar size={13} className="text-amber-400" />
-                <span>Weekly Holidays</span>
-              </label>
-              <input maxLength={30}
-                type="text"
-                value={weeklyHolidays}
-                onChange={(e) => setWeeklyHolidays(e.target.value)}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/80 p-2 text-xs text-white focus:border-indigo-400 outline-none"
-              />
-            </div>
-          </div>
+          {/* Extracted form fields for Location, Manager, Operations */}
+          <SuperadminBranchesOverviewCreateModalFields
+            city={city}
+            onCityChange={handleCityChange}
+            state={state}
+            setState={setState}
+            pinCode={pinCode}
+            setPinCode={setPinCode}
+            address={address}
+            setAddress={setAddress}
+            phone={phone}
+            setPhone={setPhone}
+            email={email}
+            setEmail={setEmail}
+            managerName={managerName}
+            setManagerName={setManagerName}
+            managerEmail={managerEmail}
+            setManagerEmail={setManagerEmail}
+            managerPhone={managerPhone}
+            setManagerPhone={setManagerPhone}
+            capacity={capacity}
+            setCapacity={setCapacity}
+            workingHours={workingHours}
+            setWorkingHours={setWorkingHours}
+            weeklyHolidays={weeklyHolidays}
+            setWeeklyHolidays={setWeeklyHolidays}
+          />
 
           {/* Action Footer */}
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl border border-slate-700 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:bg-surface-elevated transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isLimitReached}
-              className={`px-5 py-2.5 rounded-xl text-xs font-bold text-white shadow-md active:scale-95 transition-all cursor-pointer ${
+              className={`px-5 py-2.5 rounded-xl text-xs font-bold text-on-primary shadow-sm motion-safe:transition-all cursor-pointer motion-safe:active:scale-95 ${
                 isLimitReached
-                  ? 'bg-slate-700 opacity-60 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-500'
+                  ? 'bg-surface opacity-60 cursor-not-allowed text-muted'
+                  : 'bg-primary hover:bg-primary-hover'
               }`}
             >
               {isLimitReached ? 'Creation Blocked (Quota Reached)' : 'Create & Provision Branch'}

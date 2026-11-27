@@ -8,8 +8,8 @@
 
 import React from 'react';
 import { GitBranch, Download, Layers, ShieldCheck } from 'lucide-react';
-import type { TenantOption, BranchOption } from '../types/superadmin_data_export_management.types';
-import { formatNumberWithCommas } from '../utils/superadmin_data_export_management_formatters';
+import type { TenantOption, BranchOption } from '@/app/frontend_superadmin/superadmin_data/data_export_management/types/superadmin_data_export_management.types';
+import { formatNumberWithCommas } from '@/app/frontend_superadmin/superadmin_data/data_export_management/utils/superadmin_data_export_management_formatters';
 
 interface BranchExportCardProps {
   tenants: TenantOption[];
@@ -127,7 +127,7 @@ export function SuperadminDataExportManagementBranchExportCard({
           type="button"
           onClick={() => onInitiateExport(selectedTenantId, selectedBranchId)}
           disabled={!selectedBranchId}
-          className="group w-full inline-flex items-center justify-center gap-2.5 px-4 py-2.5 text-xs font-extrabold text-white bg-gradient-to-r from-violet-600 via-purple-500 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 disabled:opacity-50 rounded-xl shadow-lg shadow-violet-600/30 hover:shadow-violet-500/50 hover:scale-[1.01] active:scale-[0.97] transition-all duration-300 cursor-pointer"
+          className="group w-full inline-flex items-center justify-center gap-2.5 px-4 py-2.5 text-xs font-extrabold text-white bg-gradient-to-r from-violet-600 via-purple-500 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 disabled:opacity-50 rounded-xl shadow-lg shadow-violet-600/30 hover:shadow-violet-500/50 hover:scale-[1.01] active:scale-[0.97] motion-safe:transition-all motion-safe:duration-300 cursor-pointer"
         >
           <span className="p-1 rounded-md bg-white/20 text-white border border-white/30 group-hover:scale-110 transition-transform">
             <Download className="w-3.5 h-3.5" />

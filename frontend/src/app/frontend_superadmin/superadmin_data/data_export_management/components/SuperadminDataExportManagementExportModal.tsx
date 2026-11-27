@@ -14,15 +14,15 @@ import type {
   TenantOption,
   BranchOption,
   ExportScope,
-} from '../types/superadmin_data_export_management.types';
+} from '@/app/frontend_superadmin/superadmin_data/data_export_management/types/superadmin_data_export_management.types';
 import {
   CreateExportSchema,
   type CreateExportFormData,
-} from '../schemas/superadmin_data_export_management.schemas';
+} from '@/app/frontend_superadmin/superadmin_data/data_export_management/schemas/superadmin_data_export_management.schemas';
 import {
   EXPORT_DATA_ENTITIES,
   EXPORT_FORMATS,
-} from '../constants/superadmin_data_export_management.constants';
+} from '@/app/frontend_superadmin/superadmin_data/data_export_management/constants/superadmin_data_export_management.constants';
 
 interface ExportModalProps {
   isOpen: boolean;

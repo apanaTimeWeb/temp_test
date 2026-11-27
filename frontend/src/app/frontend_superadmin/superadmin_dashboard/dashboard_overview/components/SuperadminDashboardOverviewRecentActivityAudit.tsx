@@ -88,7 +88,7 @@ export default function SuperadminDashboardOverviewRecentActivityAudit({
             {adminLogins.map((item) => (
               <div
                 key={item.id}
-                className="p-3 rounded-xl border border-sky-500/15 bg-slate-900/60 hover:bg-slate-900/90 hover:border-sky-500/40 transition-all flex items-center justify-between gap-3"
+                className="p-3 rounded-xl border border-sky-500/15 bg-slate-900/60 hover:bg-slate-900/90 hover:border-sky-500/40 motion-safe:transition-all flex items-center justify-between gap-3"
               >
                 <div className="space-y-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -166,7 +166,7 @@ export default function SuperadminDashboardOverviewRecentActivityAudit({
             {superadminActivities.map((act) => (
               <div
                 key={act.id}
-                className="p-3 rounded-xl border border-indigo-500/15 bg-slate-900/60 hover:bg-slate-900/90 hover:border-indigo-500/40 transition-all flex items-center justify-between gap-3"
+                className="p-3 rounded-xl border border-indigo-500/15 bg-slate-900/60 hover:bg-slate-900/90 hover:border-indigo-500/40 motion-safe:transition-all flex items-center justify-between gap-3"
               >
                 <div className="space-y-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">

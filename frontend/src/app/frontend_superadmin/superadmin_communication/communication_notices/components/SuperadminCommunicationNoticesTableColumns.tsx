@@ -85,7 +85,7 @@ export function useSuperadminCommunicationNoticesColumns({
           <button
             type="button"
             onClick={() => openEdit(params.data)}
-            className="p-1.5 rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/25 transition-all cursor-pointer"
+            className="p-1.5 rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/25 motion-safe:transition-all cursor-pointer"
             title={tCopy('COPY.EDIT')}
             data-testid={`superadmin-communication-communication-notices-edit-1-${getSuperadminInteractiveTestIdSuffix(params.data)}`}
           >
@@ -94,7 +94,7 @@ export function useSuperadminCommunicationNoticesColumns({
           <button
             type="button"
             onClick={() => setBroadcastItem(params.data)}
-            className="p-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/25 transition-all cursor-pointer"
+            className="p-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/25 motion-safe:transition-all cursor-pointer"
             title={tCopy('COPY.BROADCAST')}
             data-testid={`superadmin-communication-communication-notices-broadcast-2-${getSuperadminInteractiveTestIdSuffix(params.data)}`}
           >
@@ -103,7 +103,7 @@ export function useSuperadminCommunicationNoticesColumns({
           <button
             type="button"
             onClick={() => setDeleteItem(params.data)}
-            className="p-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/25 transition-all cursor-pointer"
+            className="p-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/25 motion-safe:transition-all cursor-pointer"
             title={tCopy('COPY.DELETE')}
             data-testid={`superadmin-communication-communication-notices-delete-3-${getSuperadminInteractiveTestIdSuffix(params.data)}`}
           >

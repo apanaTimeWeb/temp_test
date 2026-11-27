@@ -180,7 +180,7 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => showToast(`Opening WhatsApp Web for ${sub.tenant} (Zero API Cost)`)}
-              className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs cursor-pointer"
+              className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 motion-safe:transition-all shadow-xs cursor-pointer"
               title={`WhatsApp ${sub.tenant} (Free Web)`}
               aria-label={`WhatsApp ${sub.tenant}`}
               data-testid={`superadmin-subscriptions-active-subscribers-whatsapp-${testIdSuffix}`}
@@ -191,7 +191,7 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
             {sub.email && (
               <a
                 href={`mailto:${sub.email}?subject=${encodeURIComponent(`Smart Library SaaS Subscription Notice - ${sub.tenant}`)}&body=${encodeURIComponent(`Dear ${sub.billingContact || sub.tenant},\n\n`)}`}
-                className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 transition-all shadow-xs cursor-pointer"
+                className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 motion-safe:transition-all shadow-xs cursor-pointer"
                 title={`Send email to ${sub.tenant} (Free Client)`}
                 aria-label={`Email ${sub.tenant}`}
               >
@@ -219,7 +219,7 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
                   {t("COPY.SAAS_SUBSCRIPTIONS")}
                 </h1>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="h-2 w-2 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
                   Live Active Subscribers
                 </span>
                 <span className="inline-flex items-center gap-1 rounded-full border border-indigo-500/30 bg-indigo-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-indigo-300">

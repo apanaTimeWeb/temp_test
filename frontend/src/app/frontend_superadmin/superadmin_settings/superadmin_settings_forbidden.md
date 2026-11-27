@@ -11,4 +11,4 @@
 
 ## Leaf boundary
 
-`settings_appearance`, `settings_branding`, `settings_general`, `settings_integrations`, `settings_library_configuration`, `settings_maintenance_mode`, `settings_overview`, `settings_storage`
+`settings_branding`, `settings_general`, `settings_library_configuration`

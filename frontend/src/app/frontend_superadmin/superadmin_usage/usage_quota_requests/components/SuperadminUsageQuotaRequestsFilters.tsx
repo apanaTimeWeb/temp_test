@@ -2,15 +2,15 @@
 // RESPONSIBILITY: Render search and filter controls for quota upgrade requests.
 import React from 'react';
 import { Search, RotateCcw } from 'lucide-react';
-import { useSuperadminUsageQuotaRequestsStore } from '../state/useSuperadminUsageQuotaRequestsStore';
+import { useSuperadminUsageQuotaRequestsStore } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/state/useSuperadminUsageQuotaRequestsStore';
 import {
   QUOTA_FILTER_STATUS_OPTIONS,
   QUOTA_FILTER_RESOURCE_OPTIONS,
-} from '../constants/SuperadminUsageQuotaRequestsConstants';
+} from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/constants/SuperadminUsageQuotaRequestsConstants';
 import type {
   QuotaRequestStatus,
   QuotaRequestResourceType,
-} from '../types/SuperadminUsageQuotaRequestsTypes';
+} from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/types/SuperadminUsageQuotaRequestsTypes';
 
 export function SuperadminUsageQuotaRequestsFilters() {
   const {

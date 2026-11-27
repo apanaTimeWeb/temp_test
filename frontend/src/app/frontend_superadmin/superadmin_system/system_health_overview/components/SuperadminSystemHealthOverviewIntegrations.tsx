@@ -25,7 +25,9 @@ export default function SuperadminSystemHealthOverviewIntegrations() {
         )
       );
       setTestingId(null);
-      toast.success(`${name}: Handshake successful (HTTP 200 in ${ping})`);
+      toast.success(`${name}: Handshake successful (HTTP 200 in ${ping})`, {
+        id: `superadmin:system_health:integration-ping:${id}`,
+      });
     }, 500);
   };
 
@@ -46,7 +48,9 @@ export default function SuperadminSystemHealthOverviewIntegrations() {
         )
       );
       setRunningJobId(null);
-      toast.success(`Cron Task executed: ${name} finished in ${duration}`);
+      toast.success(`Cron Task executed: ${name} finished in ${duration}`, {
+        id: `superadmin:system_health:cron-run:${id}`,
+      });
     }, 600);
   };
 
@@ -74,7 +78,7 @@ export default function SuperadminSystemHealthOverviewIntegrations() {
               return (
                 <div
                   key={api.id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-rose-500/30 transition-all group"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-rose-500/30 motion-safe:transition-all group"
                 >
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 group-hover:scale-105 transition-transform">
@@ -111,9 +115,9 @@ export default function SuperadminSystemHealthOverviewIntegrations() {
                       type="button"
                       onClick={() => handleTestIntegration(api.id, t(api.nameKey))}
                       disabled={isTesting}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50 whitespace-nowrap shrink-0"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50 whitespace-nowrap shrink-0"
                     >
-                      <RefreshCw size={11} className={isTesting ? 'animate-spin' : ''} />
+                      <RefreshCw size={11} className={isTesting ? 'motion-safe:animate-spin' : ''} />
                       <span>{isTesting ? 'Testing...' : t("COPY.TEST_CONNECTION")}</span>
                     </button>
                   </div>
@@ -150,7 +154,7 @@ export default function SuperadminSystemHealthOverviewIntegrations() {
               return (
                 <div
                   key={job.id}
-                  className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-amber-500/30 transition-all group"
+                  className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-amber-500/30 motion-safe:transition-all group"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-2">
@@ -170,9 +174,9 @@ export default function SuperadminSystemHealthOverviewIntegrations() {
                       type="button"
                       onClick={() => handleRunCron(job.id, t(job.nameKey))}
                       disabled={isRunning}
-                      className="inline-flex items-center gap-1.5 self-start sm:self-auto px-2.5 py-1 rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
+                      className="inline-flex items-center gap-1.5 self-start sm:self-auto px-2.5 py-1 rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
                     >
-                      <Play size={10} className={isRunning ? 'animate-spin' : ''} />
+                      <Play size={10} className={isRunning ? 'motion-safe:animate-spin' : ''} />
                       <span>{isRunning ? 'Running...' : t("COPY.RUN_NOW")}</span>
                     </button>
                   </div>

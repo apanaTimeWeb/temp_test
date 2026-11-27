@@ -8,12 +8,12 @@
  */
 
 import React from 'react';
-import { useSuperadminDataImportMigration } from '../hooks/useSuperadminDataImportMigration';
-import { SuperadminDataImportMigrationSkeleton } from './SuperadminDataImportMigrationSkeleton';
-import { SuperadminDataImportMigrationUploadWizard } from './SuperadminDataImportMigrationUploadWizard';
-import { SuperadminDataImportMigrationValidationCard } from './SuperadminDataImportMigrationValidationCard';
-import { SuperadminDataImportMigrationHistoryTable } from './SuperadminDataImportMigrationHistoryTable';
-import { SuperadminDataImportMigrationEmptyState } from './SuperadminDataImportMigrationEmptyState';
+import { useSuperadminDataImportMigration } from '@/app/frontend_superadmin/superadmin_data/data_import_migration/hooks/useSuperadminDataImportMigration';
+import { SuperadminDataImportMigrationSkeleton } from '@/app/frontend_superadmin/superadmin_data/data_import_migration/components/SuperadminDataImportMigrationSkeleton';
+import { SuperadminDataImportMigrationUploadWizard } from '@/app/frontend_superadmin/superadmin_data/data_import_migration/components/SuperadminDataImportMigrationUploadWizard';
+import { SuperadminDataImportMigrationValidationCard } from '@/app/frontend_superadmin/superadmin_data/data_import_migration/components/SuperadminDataImportMigrationValidationCard';
+import { SuperadminDataImportMigrationHistoryTable } from '@/app/frontend_superadmin/superadmin_data/data_import_migration/components/SuperadminDataImportMigrationHistoryTable';
+import { SuperadminDataImportMigrationEmptyState } from '@/app/frontend_superadmin/superadmin_data/data_import_migration/components/SuperadminDataImportMigrationEmptyState';
 import { AlertCircle, RotateCcw } from 'lucide-react';
 
 export function SuperadminDataImportMigrationMain() {

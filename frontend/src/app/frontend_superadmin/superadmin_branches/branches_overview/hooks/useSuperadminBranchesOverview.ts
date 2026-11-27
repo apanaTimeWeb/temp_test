@@ -1,8 +1,8 @@
 'use client';
 // RESPONSIBILITY: Own state and lifecycle for Branch Management (Module 03).
 import { useState, useCallback, useMemo } from 'react';
-import type { SuperadminBranchRecord, BranchAuditLog, BranchOperatingStatus } from '../types/SuperadminBranchesOverviewTypes';
-import { INITIAL_BRANCHES_DATA, INITIAL_BRANCH_AUDIT_LOGS, SUPERADMIN_AVAILABLE_LIBRARIES } from '../constants/SuperadminBranchesOverviewData';
+import type { SuperadminBranchRecord, BranchAuditLog, BranchOperatingStatus } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
+import { INITIAL_BRANCHES_DATA, INITIAL_BRANCH_AUDIT_LOGS, SUPERADMIN_AVAILABLE_LIBRARIES } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/constants/SuperadminBranchesOverviewData';
 
 export function useSuperadminBranchesOverview() {
   const [branches, setBranches] = useState<SuperadminBranchRecord[]>(INITIAL_BRANCHES_DATA);

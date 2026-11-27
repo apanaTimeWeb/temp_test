@@ -1,19 +1,19 @@
 // hooks/useSuperadminUsageQuotaRequestsMutations.ts
 // RESPONSIBILITY: TanStack Query v5 mutation hooks for 1-click approving and rejecting quota requests.
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { SUPERADMIN_USAGE_QUOTA_REQUESTS_QUERY_KEYS } from '../api/superadmin_usage_quota_requests.query_keys';
+import { SUPERADMIN_USAGE_QUOTA_REQUESTS_QUERY_KEYS } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/api/superadmin_usage_quota_requests.query_keys';
 import {
   approveQuotaRequestApi,
   rejectQuotaRequestApi,
-} from '../api/superadmin_usage_quota_requests.api';
+} from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/api/superadmin_usage_quota_requests.api';
 import {
   handleMockApproveQuotaRequest,
   handleMockRejectQuotaRequest,
-} from '../mocks/handlers/superadmin_usage_quota_requests.handlers';
+} from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/mocks/handlers/superadmin_usage_quota_requests.handlers';
 import type {
   ApproveQuotaRequestFormValues,
   RejectQuotaRequestFormValues,
-} from '../schemas/SuperadminUsageQuotaRequestsSchemas';
+} from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/schemas/SuperadminUsageQuotaRequestsSchemas';
 
 export function useSuperadminUsageQuotaRequestsMutations() {
   const queryClient = useQueryClient();

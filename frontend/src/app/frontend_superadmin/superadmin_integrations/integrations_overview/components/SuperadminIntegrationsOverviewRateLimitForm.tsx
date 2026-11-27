@@ -5,7 +5,7 @@
 
 import { Gauge, Loader2, Lock, Save, Shield } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import type { RateLimitPolicy } from '../types/superadmin_integrations_overview.types';
+import type { RateLimitPolicy } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/types/superadmin_integrations_overview.types';
 
 interface SuperadminIntegrationsOverviewRateLimitFormProps {
   rateLimits?: RateLimitPolicy | null;
@@ -182,7 +182,7 @@ export const SuperadminIntegrationsOverviewRateLimitForm: React.FC<
             disabled={isSavingLimits}
             className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 px-4 py-2 font-semibold text-xs text-white cursor-pointer min-w-36 justify-center shadow-md shadow-indigo-500/25 transition-opacity"
           >
-            {isSavingLimits ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
+            {isSavingLimits ? <Loader2 size={13} className="motion-safe:animate-spin" /> : <Save size={13} />}
             <span>Save Policy Rules</span>
           </button>
         </div>

@@ -84,7 +84,7 @@ export function SuperadminDataBackupOperationsMain() {
         <div className="flex items-center gap-2.5">
           <Link
             href={SUPERADMIN_NAVIGATION_ROUTES.data_restore_operations}
-            className="group inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-bold border border-emerald-500/30 bg-emerald-950/20 hover:bg-emerald-900/30 text-emerald-200 transition-all duration-300 shadow-sm hover:shadow-emerald-500/20 active:scale-[0.97] cursor-pointer"
+            className="group inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-bold border border-emerald-500/30 bg-emerald-950/20 hover:bg-emerald-900/30 text-emerald-200 motion-safe:transition-all motion-safe:duration-300 shadow-sm hover:shadow-emerald-500/20 active:scale-[0.97] cursor-pointer"
             data-testid="data_backup-view-history-btn"
           >
             <span className="p-1 rounded-md bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 group-hover:scale-110 transition-transform">
@@ -96,10 +96,10 @@ export function SuperadminDataBackupOperationsMain() {
           <button
             type="button"
             onClick={() => openCreateScheduleModal()}
-            className="group inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-500 hover:to-amber-500 text-white transition-all duration-300 shadow-lg shadow-amber-600/30 hover:shadow-amber-500/50 hover:scale-[1.02] active:scale-[0.97] cursor-pointer"
+            className="group inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-500 hover:to-amber-500 text-white motion-safe:transition-all motion-safe:duration-300 shadow-lg shadow-amber-600/30 hover:shadow-amber-500/50 hover:scale-[1.02] active:scale-[0.97] cursor-pointer"
             data-testid="data_backup-open-create-btn"
           >
-            <span className="p-1 rounded-md bg-white/20 text-white border border-white/30 group-hover:rotate-90 transition-transform duration-300">
+            <span className="p-1 rounded-md bg-white/20 text-white border border-white/30 group-hover:rotate-90 transition-transform motion-safe:duration-300">
               <Plus size={13} />
             </span>
             <span>Create Backup Policy</span>

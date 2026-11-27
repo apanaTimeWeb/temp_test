@@ -18,7 +18,7 @@ export default function SuperadminAnalyticsPlatformReportsNotFound() {
       </div>
       <Link
         href={SUPERADMIN_NAVIGATION_ROUTES.analytics_platform_reports}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-sky-500 text-white hover:bg-sky-600 transition-all cursor-pointer"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-sky-500 text-white hover:bg-sky-600 motion-safe:transition-all cursor-pointer"
       >
         <ArrowLeft size={14} />
         <span>Return to Platform Reports</span>

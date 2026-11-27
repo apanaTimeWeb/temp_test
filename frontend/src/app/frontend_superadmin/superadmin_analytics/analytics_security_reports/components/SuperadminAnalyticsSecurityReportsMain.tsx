@@ -4,13 +4,13 @@
 
 import React from 'react';
 import { ShieldAlert, RefreshCw, Download } from 'lucide-react';
-import { useSuperadminAnalyticsSecurityReports } from '../hooks/useSuperadminAnalyticsSecurityReports';
-import { SuperadminAnalyticsSecurityReportsKpiGrid } from './SuperadminAnalyticsSecurityReportsKpiGrid';
-import { SuperadminAnalyticsSecurityReportsCharts } from './SuperadminAnalyticsSecurityReportsCharts';
-import { SuperadminAnalyticsSecurityReportsFilterBar } from './SuperadminAnalyticsSecurityReportsFilterBar';
-import { SuperadminAnalyticsSecurityReportsTable } from './SuperadminAnalyticsSecurityReportsTable';
-import { SuperadminAnalyticsSecurityReportsExportModal } from './SuperadminAnalyticsSecurityReportsExportModal';
-import { SuperadminAnalyticsSecurityReportsDetailModal } from './SuperadminAnalyticsSecurityReportsDetailModal';
+import { useSuperadminAnalyticsSecurityReports } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/hooks/useSuperadminAnalyticsSecurityReports';
+import { SuperadminAnalyticsSecurityReportsKpiGrid } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/components/SuperadminAnalyticsSecurityReportsKpiGrid';
+import { SuperadminAnalyticsSecurityReportsCharts } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/components/SuperadminAnalyticsSecurityReportsCharts';
+import { SuperadminAnalyticsSecurityReportsFilterBar } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/components/SuperadminAnalyticsSecurityReportsFilterBar';
+import { SuperadminAnalyticsSecurityReportsTable } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/components/SuperadminAnalyticsSecurityReportsTable';
+import { SuperadminAnalyticsSecurityReportsExportModal } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/components/SuperadminAnalyticsSecurityReportsExportModal';
+import { SuperadminAnalyticsSecurityReportsDetailModal } from '@/app/frontend_superadmin/superadmin_analytics/analytics_security_reports/components/SuperadminAnalyticsSecurityReportsDetailModal';
 
 export function SuperadminAnalyticsSecurityReportsMain() {
   const {
@@ -58,10 +58,10 @@ export function SuperadminAnalyticsSecurityReportsMain() {
               type="button"
               onClick={() => refetch()}
               disabled={isPending}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-rose-500/50 hover:bg-rose-500/10 text-slate-200 text-xs font-semibold transition-all shadow-sm cursor-pointer disabled:opacity-50 active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-rose-500/50 hover:bg-rose-500/10 text-slate-200 text-xs font-semibold motion-safe:transition-all shadow-sm cursor-pointer disabled:opacity-50 active:scale-95"
               title="Refresh security audit log"
             >
-              <RefreshCw size={13} className={isPending ? 'animate-spin text-rose-400' : 'text-rose-400'} />
+              <RefreshCw size={13} className={isPending ? 'motion-safe:animate-spin text-rose-400' : 'text-rose-400'} />
               <span>Refresh</span>
             </button>
 
@@ -69,7 +69,7 @@ export function SuperadminAnalyticsSecurityReportsMain() {
               type="button"
               onClick={() => setIsExportModalOpen(true)}
               data-testid="security-reports-open-export-btn"
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-rose-600 via-pink-600 to-rose-700 hover:from-rose-500 hover:to-pink-500 text-white transition-all cursor-pointer shadow-lg shadow-rose-500/20 active:scale-95"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-rose-600 via-pink-600 to-rose-700 hover:from-rose-500 hover:to-pink-500 text-white motion-safe:transition-all cursor-pointer shadow-lg shadow-rose-500/20 active:scale-95"
             >
               <Download size={14} />
               <span>Export & Print</span>

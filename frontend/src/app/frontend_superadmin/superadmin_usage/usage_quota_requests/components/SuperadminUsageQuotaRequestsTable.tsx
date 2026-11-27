@@ -17,11 +17,11 @@ import {
 import type {
   QuotaUpgradeRequestRecord,
   QuotaRequestResourceType,
-} from '../types/SuperadminUsageQuotaRequestsTypes';
+} from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/types/SuperadminUsageQuotaRequestsTypes';
 import {
   QUOTA_RESOURCE_TYPE_LABELS,
   QUOTA_STATUS_BADGES,
-} from '../constants/SuperadminUsageQuotaRequestsConstants';
+} from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/constants/SuperadminUsageQuotaRequestsConstants';
 
 interface SuperadminUsageQuotaRequestsTableProps {
   requests: QuotaUpgradeRequestRecord[];
@@ -149,7 +149,7 @@ export function SuperadminUsageQuotaRequestsTable({
                     <span
                       className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${statusConfig.badgeClass}`}
                     >
-                      {isPending && <Clock className="h-2.5 w-2.5 animate-pulse" />}
+                      {isPending && <Clock className="h-2.5 w-2.5 motion-safe:animate-pulse" />}
                       {statusConfig.label}
                     </span>
                   </td>
@@ -160,13 +160,13 @@ export function SuperadminUsageQuotaRequestsTable({
                       <div className="inline-flex items-center gap-2">
                         <button
                           onClick={() => onApprove(req)}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/40 text-[11px] font-bold transition-all cursor-pointer shadow-xs active:scale-95"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/40 text-[11px] font-bold motion-safe:transition-all cursor-pointer shadow-xs active:scale-95"
                         >
                           <CheckCircle2 className="h-3.5 w-3.5" /> Approve
                         </button>
                         <button
                           onClick={() => onReject(req)}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 border border-rose-500/40 text-[11px] font-semibold transition-all cursor-pointer shadow-xs active:scale-95"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 border border-rose-500/40 text-[11px] font-semibold motion-safe:transition-all cursor-pointer shadow-xs active:scale-95"
                         >
                           <XCircle className="h-3.5 w-3.5" /> Reject
                         </button>

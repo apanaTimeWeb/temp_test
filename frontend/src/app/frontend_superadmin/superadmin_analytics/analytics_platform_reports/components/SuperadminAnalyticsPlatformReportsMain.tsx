@@ -4,12 +4,12 @@
 
 import React from 'react';
 import { Building2, RefreshCw, X } from 'lucide-react';
-import { useSuperadminAnalyticsPlatformReports } from '../hooks/useSuperadminAnalyticsPlatformReports';
-import { SuperadminAnalyticsPlatformReportsKpiGrid } from './SuperadminAnalyticsPlatformReportsKpiGrid';
-import { SuperadminAnalyticsPlatformReportsCharts } from './SuperadminAnalyticsPlatformReportsCharts';
-import { SuperadminAnalyticsPlatformReportsFilterBar } from './SuperadminAnalyticsPlatformReportsFilterBar';
-import { SuperadminAnalyticsPlatformReportsTable } from './SuperadminAnalyticsPlatformReportsTable';
-import { SuperadminAnalyticsPlatformReportsExportModal } from './SuperadminAnalyticsPlatformReportsExportModal';
+import { useSuperadminAnalyticsPlatformReports } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/hooks/useSuperadminAnalyticsPlatformReports';
+import { SuperadminAnalyticsPlatformReportsKpiGrid } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/components/SuperadminAnalyticsPlatformReportsKpiGrid';
+import { SuperadminAnalyticsPlatformReportsCharts } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/components/SuperadminAnalyticsPlatformReportsCharts';
+import { SuperadminAnalyticsPlatformReportsFilterBar } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/components/SuperadminAnalyticsPlatformReportsFilterBar';
+import { SuperadminAnalyticsPlatformReportsTable } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/components/SuperadminAnalyticsPlatformReportsTable';
+import { SuperadminAnalyticsPlatformReportsExportModal } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/components/SuperadminAnalyticsPlatformReportsExportModal';
 
 export function SuperadminAnalyticsPlatformReportsMain() {
   const {
@@ -31,18 +31,17 @@ export function SuperadminAnalyticsPlatformReportsMain() {
   return (
     <div className="space-y-6 pb-12 w-full max-w-full min-w-0" data-testid="superadmin-platform-reports-main">
       {/* ── Page Header ── */}
-      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-900/90 via-[#0d1338]/90 to-slate-900/90 border border-sky-500/25 p-5 sm:p-7 shadow-2xl backdrop-blur-md">
-        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-sky-500/10 blur-3xl" />
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
+      <div className="rounded-2xl border border-border bg-card p-5 sm:p-7 shadow-card">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/25 text-sky-400 text-xs font-semibold mb-2 shadow-xs">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-info-bg border border-border text-info text-xs font-semibold mb-2">
               <Building2 size={13} aria-hidden="true" />
               <span>Multi-Tenant Platform Directory</span>
             </div>
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-primary tracking-tight">
               Platform Reports & Growth Metrics
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-secondary max-w-2xl leading-relaxed">
               Aggregate intelligence on SaaS libraries, branch networks, active tenant accounts, and expansion velocity.
             </p>
           </div>
@@ -52,10 +51,10 @@ export function SuperadminAnalyticsPlatformReportsMain() {
               type="button"
               onClick={() => refetch()}
               disabled={isPending}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-sky-500/50 hover:bg-sky-500/10 text-slate-200 text-xs font-semibold transition-all shadow-sm cursor-pointer disabled:opacity-50 active:scale-95"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-input border border-border hover:bg-surface-hover text-secondary hover:text-primary text-xs font-semibold motion-safe:transition-all shadow-card cursor-pointer disabled:opacity-50 motion-safe:active:scale-95"
               aria-label="Refresh platform reports"
             >
-              <RefreshCw size={13} className={isPending ? 'animate-spin text-sky-400' : 'text-sky-400'} />
+              <RefreshCw size={13} className={isPending ? 'motion-safe:animate-spin text-primary' : 'text-primary'} />
               <span>Refresh</span>
             </button>
           </div>

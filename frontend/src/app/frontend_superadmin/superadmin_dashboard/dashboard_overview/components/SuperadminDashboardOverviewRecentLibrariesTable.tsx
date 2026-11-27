@@ -10,26 +10,26 @@ import { SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES } from "@/app/frontend_superadmin/
 import { useTranslations } from 'next-intl';
 
 const PLAN_STYLES: Record<string, string> = {
-  Enterprise: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
-  Pro:        'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
-  Starter:    'bg-sky-500/15 text-sky-300 border-sky-500/30',
-  Basic:      'bg-slate-500/15 text-slate-300 border-slate-500/30',
+  Enterprise: 'bg-purple-bg text-purple border-border',
+  Pro:        'bg-info-bg text-info border-border',
+  Starter:    'bg-primary-subtle text-primary border-border',
+  Basic:      'bg-input text-secondary border-border',
 };
 
 const STATUS_STYLES: Record<string, { badge: string; dot?: string; label: string }> = {
   active: {
-    badge: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
-    dot: 'bg-emerald-400',
+    badge: 'bg-success-bg text-success border-border',
+    dot: 'bg-success',
     label: 'Active',
   },
   setup: {
-    badge: 'bg-sky-500/15 text-sky-400 border-sky-500/30',
-    dot: 'bg-sky-400',
+    badge: 'bg-info-bg text-info border-border',
+    dot: 'bg-info',
     label: 'In Setup',
   },
   inactive: {
-    badge: 'bg-rose-500/15 text-rose-400 border-rose-500/30',
-    dot: 'bg-rose-400',
+    badge: 'bg-danger-bg text-danger border-border',
+    dot: 'bg-danger',
     label: 'Inactive',
   },
 };
@@ -48,12 +48,12 @@ export default function SuperadminDashboardOverviewRecentLibrariesTable({ data }
       minWidth: 180,
       cellRenderer: (p: ICellRendererParams<Library>) => (
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 shrink-0 shadow-xs">
+          <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs bg-info-bg text-info border border-border shrink-0 shadow-card">
             {p.data?.initials}
           </div>
           <div>
-            <span className="font-semibold text-white text-sm block leading-tight">{p.data?.name}</span>
-            {p.data?.city && <span className="text-[11px] text-slate-400 block mt-0.5">{p.data.city}</span>}
+            <span className="font-semibold text-primary text-sm block leading-tight">{p.data?.name}</span>
+            {p.data?.city && <span className="text-[11px] text-secondary block mt-0.5">{p.data.city}</span>}
           </div>
         </div>
       ),
@@ -64,7 +64,7 @@ export default function SuperadminDashboardOverviewRecentLibrariesTable({ data }
       flex: 1.5,
       minWidth: 140,
       cellRenderer: (p: ICellRendererParams<Library>) => (
-        <span className="text-slate-200 text-xs sm:text-sm font-medium">{p.data?.owner}</span>
+        <span className="text-primary text-xs sm:text-sm font-medium">{p.data?.owner}</span>
       ),
     },
     {
@@ -76,8 +76,8 @@ export default function SuperadminDashboardOverviewRecentLibrariesTable({ data }
         const count = p.data?.branches ?? 1;
         return (
           <div className="flex items-center gap-1.5">
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
-              <Building2 size={12} className="text-indigo-400" />
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-subtle text-primary border border-border">
+              <Building2 size={12} className="text-primary" />
               <span>{count} {count > 1 ? 'Branches' : 'Branch'}</span>
             </span>
           </div>
@@ -118,7 +118,7 @@ export default function SuperadminDashboardOverviewRecentLibrariesTable({ data }
         const config = STATUS_STYLES[status] ?? STATUS_STYLES.inactive;
         return (
           <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${config.badge}`}>
-            <span className={`w-1.5 h-1.5 rounded-full ${config.dot} ${status === 'active' ? 'animate-pulse' : ''}`} />
+            <span className={`w-1.5 h-1.5 rounded-full ${config.dot} ${status === 'active' ? 'motion-safe:animate-pulse' : ''}`} />
             <span>{config.label}</span>
           </span>
         );
@@ -149,7 +149,7 @@ export default function SuperadminDashboardOverviewRecentLibrariesTable({ data }
       cellRenderer: (p: ICellRendererParams<Library>) => (
         <Link
           href={SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.MODULE_URLS.LIBRARIES}
-          className="inline-flex min-h-8 px-2.5 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all shadow-xs"
+          className="inline-flex min-h-8 px-2.5 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 motion-safe:transition-all shadow-xs"
           title={`Manage ${p.data?.name}`}
         >
           <span>Manage</span>
@@ -174,7 +174,7 @@ export default function SuperadminDashboardOverviewRecentLibrariesTable({ data }
 
         <Link
           href={SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.MODULE_URLS.LIBRARIES}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 transition-all shadow-sm active:scale-95 cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 motion-safe:transition-all shadow-sm active:scale-95 cursor-pointer"
           data-testid="superadmin-dashboard-dashboard_overview-link-1"
         >
           <span>{t("COPY.VIEW_ALL")}</span>

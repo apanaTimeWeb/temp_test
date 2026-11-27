@@ -122,7 +122,7 @@ export default function SuperadminSecurityMfaAccountsTable({
                     <button
                       type="button"
                       onClick={() => toast.info(`MFA challenge verification sent to ${acc.email}`, { id: `mfa-test-${acc.id}` })}
-                      className="px-2.5 py-1 rounded-lg border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-[11px] font-semibold text-indigo-300 hover:text-white active:scale-95 transition-all cursor-pointer shadow-xs"
+                      className="px-2.5 py-1 rounded-lg border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-[11px] font-semibold text-indigo-300 hover:text-white active:scale-95 motion-safe:transition-all cursor-pointer shadow-xs"
                     >
                       Test Auth
                     </button>

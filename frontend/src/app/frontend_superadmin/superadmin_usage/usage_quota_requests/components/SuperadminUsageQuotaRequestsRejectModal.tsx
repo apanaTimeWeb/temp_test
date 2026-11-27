@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { X, XCircle, AlertCircle, Loader2 } from 'lucide-react';
-import type { QuotaUpgradeRequestRecord } from '../types/SuperadminUsageQuotaRequestsTypes';
+import type { QuotaUpgradeRequestRecord } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/types/SuperadminUsageQuotaRequestsTypes';
 import {
   RejectQuotaRequestSchema,
   type RejectQuotaRequestFormValues,
-} from '../schemas/SuperadminUsageQuotaRequestsSchemas';
-import { useSuperadminUsageQuotaRequestsMutations } from '../hooks/useSuperadminUsageQuotaRequestsMutations';
+} from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/schemas/SuperadminUsageQuotaRequestsSchemas';
+import { useSuperadminUsageQuotaRequestsMutations } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/hooks/useSuperadminUsageQuotaRequestsMutations';
 
 interface SuperadminUsageQuotaRequestsRejectModalProps {
   request: QuotaUpgradeRequestRecord | null;
@@ -54,7 +54,7 @@ export function SuperadminUsageQuotaRequestsRejectModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in motion-safe:duration-200">
       <div className="w-full max-w-md rounded-2xl border border-rose-500/30 bg-[#0a0d24] p-6 shadow-2xl shadow-rose-950/50 space-y-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-indigo-500/20 pb-3">
@@ -128,9 +128,9 @@ export function SuperadminUsageQuotaRequestsRejectModal({
             <button
               type="submit"
               disabled={isRejecting}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-all shadow-md shadow-rose-600/20 cursor-pointer disabled:opacity-50 active:scale-95"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold motion-safe:transition-all shadow-md shadow-rose-600/20 cursor-pointer disabled:opacity-50 active:scale-95"
             >
-              {isRejecting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <XCircle className="h-3.5 w-3.5" />}
+              {isRejecting ? <Loader2 className="h-3.5 w-3.5 motion-safe:animate-spin" /> : <XCircle className="h-3.5 w-3.5" />}
               Confirm Rejection
             </button>
           </div>

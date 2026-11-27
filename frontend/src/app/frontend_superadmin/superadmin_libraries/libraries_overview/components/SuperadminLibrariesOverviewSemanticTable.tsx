@@ -72,7 +72,7 @@ export default function SuperadminLibrariesOverviewSemanticTable<T extends objec
               value={filterText}
               onChange={(event) => { setFilterText(event.currentTarget.value); setPage(0); onPageChange?.(0); }}
               placeholder="Search libraries..."
-              className="w-full sm:min-w-56 pl-9 pr-8 py-1.5 rounded-xl border border-indigo-500/25 bg-input text-xs text-primary placeholder:text-secondary focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none transition-all"
+              className="w-full sm:min-w-56 pl-9 pr-8 py-1.5 rounded-xl border border-indigo-500/25 bg-input text-xs text-primary placeholder:text-secondary focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none motion-safe:transition-all"
               data-testid="superadmin-libraries-libraries-semantic-table-field-1"
             />
             {filterText && (
@@ -203,7 +203,7 @@ export default function SuperadminLibrariesOverviewSemanticTable<T extends objec
             {/* First Page */}
             <button
               type="button"
-              className="p-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-600/30 hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+              className="p-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-600/30 hover:text-white motion-safe:transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
               disabled={activePage === 0}
               onClick={() => { setPage(0); onPageChange?.(0); }}
               title="First page"
@@ -214,7 +214,7 @@ export default function SuperadminLibrariesOverviewSemanticTable<T extends objec
             {/* Previous Page */}
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-600/30 hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer font-medium"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-600/30 hover:text-white motion-safe:transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer font-medium"
               disabled={activePage === 0}
               onClick={() => { const nextPage = Math.max(0, activePage - 1); setPage(nextPage); onPageChange?.(nextPage); }}
               data-testid="superadmin-libraries-libraries-semantic-table-table-previous-3"
@@ -229,7 +229,7 @@ export default function SuperadminLibrariesOverviewSemanticTable<T extends objec
                 key={`page-btn-${i}`}
                 type="button"
                 onClick={() => { setPage(i); onPageChange?.(i); }}
-                className={`min-w-8 h-8 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`min-w-8 h-8 px-2 rounded-lg text-xs font-bold motion-safe:transition-all cursor-pointer ${
                   activePage === i
                     ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/40 border border-indigo-400'
                     : 'border border-indigo-500/20 bg-indigo-500/5 text-slate-300 hover:bg-indigo-500/20 hover:text-white'
@@ -242,7 +242,7 @@ export default function SuperadminLibrariesOverviewSemanticTable<T extends objec
             {/* Next Page */}
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-600/30 hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer font-medium"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-600/30 hover:text-white motion-safe:transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer font-medium"
               disabled={activePage + 1 >= pageCount}
               onClick={() => { const nextPage = Math.min(pageCount - 1, activePage + 1); setPage(nextPage); onPageChange?.(nextPage); }}
               data-testid="superadmin-libraries-libraries-semantic-table-table-next-4"
@@ -254,7 +254,7 @@ export default function SuperadminLibrariesOverviewSemanticTable<T extends objec
             {/* Last Page */}
             <button
               type="button"
-              className="p-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-600/30 hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+              className="p-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-600/30 hover:text-white motion-safe:transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
               disabled={activePage + 1 >= pageCount}
               onClick={() => { const last = Math.max(0, pageCount - 1); setPage(last); onPageChange?.(last); }}
               title="Last page"

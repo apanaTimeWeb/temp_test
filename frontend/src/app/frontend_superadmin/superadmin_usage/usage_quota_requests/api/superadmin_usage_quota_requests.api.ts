@@ -1,14 +1,14 @@
 // api/superadmin_usage_quota_requests.api.ts
 import { apiFetch, type ApiResponse } from '@/lib/api';
-import { SUPERADMIN_USAGE_QUOTA_REQUESTS_API } from '../config/superadmin_usage_quota_requests.url_config';
+import { SUPERADMIN_USAGE_QUOTA_REQUESTS_API } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/config/superadmin_usage_quota_requests.url_config';
 import type {
   QuotaUpgradeRequestRecord,
   QuotaRequestsKpis,
-} from '../types/SuperadminUsageQuotaRequestsTypes';
+} from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/types/SuperadminUsageQuotaRequestsTypes';
 import type {
   ApproveQuotaRequestFormValues,
   RejectQuotaRequestFormValues,
-} from '../schemas/SuperadminUsageQuotaRequestsSchemas';
+} from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/schemas/SuperadminUsageQuotaRequestsSchemas';
 
 export async function fetchQuotaRequestsList(
   filters: { search?: string; status?: string; resourceType?: string } = {}

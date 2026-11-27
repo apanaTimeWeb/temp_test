@@ -5,10 +5,10 @@
 
 import { Search, X } from 'lucide-react';
 import React from 'react';
-import { INTEGRATION_CATEGORIES } from '../constants/superadmin_integrations_overview.constants';
-import type { IntegrationGatewayItem } from '../types/superadmin_integrations_overview.types';
-import { SuperadminIntegrationsOverviewEmptyState } from './SuperadminIntegrationsOverviewEmptyState';
-import { SuperadminIntegrationsOverviewGatewayCard } from './SuperadminIntegrationsOverviewGatewayCard';
+import { INTEGRATION_CATEGORIES } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/constants/superadmin_integrations_overview.constants';
+import type { IntegrationGatewayItem } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/types/superadmin_integrations_overview.types';
+import { SuperadminIntegrationsOverviewEmptyState } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewEmptyState';
+import { SuperadminIntegrationsOverviewGatewayCard } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewGatewayCard';
 
 interface SuperadminIntegrationsOverviewGatewayGridProps {
   gateways: IntegrationGatewayItem[];
@@ -54,7 +54,7 @@ export const SuperadminIntegrationsOverviewGatewayGrid: React.FC<
                 role="tab"
                 aria-selected={isSelected}
                 onClick={() => onSelectCategory(cat.id)}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer select-none whitespace-nowrap ${
+                className={`px-3 py-1.5 text-xs font-semibold rounded-xl motion-safe:transition-all cursor-pointer select-none whitespace-nowrap ${
                   isSelected
                     ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold shadow-md shadow-indigo-500/25'
                     : 'bg-slate-900/80 border border-indigo-500/20 text-slate-300 hover:bg-slate-800/80 hover:text-slate-100'

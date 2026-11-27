@@ -75,7 +75,7 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
   if (isLoading) {
     return (
       <div className="p-8 rounded-2xl bg-[#0c102b]/85 border border-indigo-500/20 flex items-center justify-center text-slate-400 text-sm shadow-xl">
-        <RefreshCw className="w-5 h-5 animate-spin mr-2 text-indigo-400" />
+        <RefreshCw className="w-5 h-5 motion-safe:animate-spin mr-2 text-indigo-400" />
         <span>Loading delivery audit logs…</span>
       </div>
     );
@@ -92,7 +92,7 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
             placeholder="Search delivery logs by recipient, library, or failure reason..."
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(0); }}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 transition-all shadow-inner"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 motion-safe:transition-all shadow-inner"
           />
         </div>
 
@@ -227,10 +227,10 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
                           type="button"
                           disabled={isRetrying}
                           onClick={(e) => handleRetry(log, e)}
-                          className="px-3 py-1 rounded-xl bg-gradient-to-r from-rose-500 to-amber-600 hover:from-rose-600 hover:to-amber-700 text-white text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-md shadow-rose-500/20 active:scale-95 min-w-18 justify-center"
+                          className="px-3 py-1 rounded-xl bg-gradient-to-r from-rose-500 to-amber-600 hover:from-rose-600 hover:to-amber-700 text-white text-xs font-semibold motion-safe:transition-all flex items-center gap-1.5 cursor-pointer shadow-md shadow-rose-500/20 active:scale-95 min-w-18 justify-center"
                           data-testid={`table-retry-btn-${log.id}`}
                         >
-                          <RefreshCw className={`w-3 h-3 ${isRetrying ? 'animate-spin' : ''}`} />
+                          <RefreshCw className={`w-3 h-3 ${isRetrying ? 'motion-safe:animate-spin' : ''}`} />
                           <span>{isRetrying ? 'Retrying…' : 'Retry'}</span>
                         </button>
                       )}

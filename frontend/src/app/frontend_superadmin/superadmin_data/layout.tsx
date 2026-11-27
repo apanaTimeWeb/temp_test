@@ -108,7 +108,7 @@ export default function SuperadminDataLayout({ children }: { children: ReactNode
                 <Link
                   href={tab.href}
                   aria-current={active ? 'page' : undefined}
-                  className={`group relative inline-flex items-center gap-2.5 rounded-xl border px-4 py-2.5 text-xs sm:text-sm font-bold transition-all duration-300 ease-out cursor-pointer select-none active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400 ${
+                  className={`group relative inline-flex items-center gap-2.5 rounded-xl border px-4 py-2.5 text-xs sm:text-sm font-bold motion-safe:transition-all motion-safe:duration-300 ease-out cursor-pointer select-none active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400 ${
                     active
                       ? `${tab.activeStyle}`
                       : 'border-transparent bg-slate-900/40 text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 hover:border-slate-700/60 shadow-xs'
@@ -117,7 +117,7 @@ export default function SuperadminDataLayout({ children }: { children: ReactNode
                 >
                   {/* Colorful Icon Container */}
                   <span
-                    className={`p-1.5 rounded-lg border transition-all duration-300 shrink-0 ${
+                    className={`p-1.5 rounded-lg border motion-safe:transition-all motion-safe:duration-300 shrink-0 ${
                       active
                         ? tab.iconBoxActive
                         : `${tab.iconBoxInactive} border-transparent group-hover:scale-110`

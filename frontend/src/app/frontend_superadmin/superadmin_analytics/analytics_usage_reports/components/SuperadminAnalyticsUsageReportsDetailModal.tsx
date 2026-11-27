@@ -3,8 +3,8 @@
 
 import React from 'react';
 import { X, Gauge, HardDrive, Users, Activity, MessageSquare, ShieldCheck, Mail, Calendar } from 'lucide-react';
-import type { UsageReportTableRecord } from '../types/SuperadminAnalyticsUsageReportsTypes';
-import { formatUsageNumber, formatStorageSize } from '../utils/SuperadminAnalyticsUsageReportsFormatters';
+import type { UsageReportTableRecord } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/types/SuperadminAnalyticsUsageReportsTypes';
+import { formatUsageNumber, formatStorageSize } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/utils/SuperadminAnalyticsUsageReportsFormatters';
 
 interface Props {
   record: UsageReportTableRecord | null;
@@ -163,7 +163,7 @@ export function SuperadminAnalyticsUsageReportsDetailModal({ record, onClose }: 
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2.5 rounded-xl text-xs font-bold bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/40 text-white transition-all cursor-pointer shadow-xs active:scale-95"
+            className="px-5 py-2.5 rounded-xl text-xs font-bold bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/40 text-white motion-safe:transition-all cursor-pointer shadow-xs active:scale-95"
           >
             Close Details
           </button>

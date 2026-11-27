@@ -73,11 +73,15 @@ export default function SuperadminSettingsGeneralPageClient() {
   const onSubmit = (formData: SuperadminSettingsFormValues) => {
     updateSettings.mutate(formData, {
       onSuccess: () => {
-        toast.success('Global settings updated successfully');
+        toast.success('Global settings updated successfully', {
+          id: 'superadmin:settings_general:page-save-success',
+        });
         reset(formData);
       },
       onError: (err) => {
-        toast.error(`Update failed: ${err.message}`);
+        toast.error(`Update failed: ${err.message}`, {
+          id: 'superadmin:settings_general:page-save-error',
+        });
       },
     });
   };
@@ -87,10 +91,14 @@ export default function SuperadminSettingsGeneralPageClient() {
       onSuccess: () => {
         reset(SUPERADMIN_SETTINGS_PREVIEW_DEFAULTS);
         setIsResetOpen(false);
-        toast.success('Settings restored to system factory defaults');
+        toast.success('Settings restored to system factory defaults', {
+          id: 'superadmin:settings_general:page-reset-success',
+        });
       },
       onError: (err) => {
-        toast.error(`Reset failed: ${err.message}`);
+        toast.error(`Reset failed: ${err.message}`, {
+          id: 'superadmin:settings_general:page-reset-error',
+        });
       },
     });
   };
@@ -125,7 +133,7 @@ export default function SuperadminSettingsGeneralPageClient() {
                 <button
                   type="button"
                   onClick={() => setIsExportOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 hover:text-white text-xs font-semibold transition-all shadow-xs cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 hover:text-white text-xs font-semibold motion-safe:transition-all shadow-xs cursor-pointer"
                   data-testid="settings-top-export-btn"
                 >
                   <FileDown size={14} aria-hidden="true" />
@@ -135,7 +143,7 @@ export default function SuperadminSettingsGeneralPageClient() {
                   type="button"
                   onClick={() => setIsResetOpen(true)}
                   disabled={resetSettings.isPending}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-rose-500/30 bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 hover:text-rose-100 text-xs font-semibold transition-all shadow-xs cursor-pointer disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-rose-500/30 bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 hover:text-rose-100 text-xs font-semibold motion-safe:transition-all shadow-xs cursor-pointer disabled:opacity-50"
                   data-testid="settings-top-reset-btn"
                 >
                   <RotateCcw size={14} aria-hidden="true" />
@@ -144,11 +152,11 @@ export default function SuperadminSettingsGeneralPageClient() {
                 <button
                   type="submit"
                   disabled={updateSettings.isPending || isDataLoading}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs transition-all shadow-lg shadow-amber-950/40 cursor-pointer disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs motion-safe:transition-all shadow-lg shadow-amber-950/40 cursor-pointer disabled:opacity-50"
                   data-testid="settings-top-save-btn"
                 >
                   {updateSettings.isPending ? (
-                    <Loader2 size={14} className="animate-spin" aria-hidden="true" />
+                    <Loader2 size={14} className="motion-safe:animate-spin" aria-hidden="true" />
                   ) : (
                     <CheckCircle2 size={14} aria-hidden="true" />
                   )}
@@ -177,7 +185,7 @@ export default function SuperadminSettingsGeneralPageClient() {
                   role="tab"
                   aria-selected={isSelected}
                   onClick={() => setActiveSection(pill.id)}
-                  className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap motion-safe:transition-all cursor-pointer ${
                     isSelected
                       ? 'bg-gradient-to-r from-indigo-500/25 to-purple-500/25 text-slate-100 border border-indigo-500/40 shadow-sm font-semibold'
                       : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'

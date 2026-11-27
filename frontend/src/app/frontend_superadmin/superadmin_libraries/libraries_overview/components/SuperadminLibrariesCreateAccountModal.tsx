@@ -88,13 +88,13 @@ export default function SuperadminLibrariesCreateAccountModal({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in motion-safe:duration-200"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) handleClose();
       }}
     >
       <div
-        className="relative w-full max-w-4xl rounded-2xl border border-indigo-500/40 bg-[#0d102b] shadow-2xl text-white max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 ease-out"
+        className="relative w-full max-w-4xl rounded-2xl border border-indigo-500/40 bg-[#0d102b] shadow-2xl text-white max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 motion-safe:duration-200 ease-out"
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
@@ -198,7 +198,7 @@ export default function SuperadminLibrariesCreateAccountModal({
               type="button"
               disabled={step === 1}
               onClick={() => setStep((s) => (s > 1 ? ((s - 1) as 1 | 2 | 3 | 4) : s))}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-slate-700 bg-slate-800 text-xs font-semibold text-slate-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-slate-700 bg-slate-800 text-xs font-semibold text-slate-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none motion-safe:transition-all cursor-pointer"
             >
               <ChevronLeft size={14} />
               <span>Previous</span>
@@ -211,7 +211,7 @@ export default function SuperadminLibrariesCreateAccountModal({
                 type="button"
                 disabled={!canGoNext()}
                 onClick={() => setStep((s) => (s < 4 ? ((s + 1) as 1 | 2 | 3 | 4) : s))}
-                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-indigo-600 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-950/60 disabled:opacity-40 disabled:pointer-events-none transition-all cursor-pointer active:scale-95"
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-indigo-600 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-950/60 disabled:opacity-40 disabled:pointer-events-none motion-safe:transition-all cursor-pointer active:scale-95"
               >
                 <span>Continue</span>
                 <ChevronRight size={14} />

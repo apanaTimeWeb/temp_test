@@ -4,13 +4,13 @@
 
 import React from 'react';
 import { Receipt, RefreshCw, Download } from 'lucide-react';
-import { useSuperadminAnalyticsBillingReports } from '../hooks/useSuperadminAnalyticsBillingReports';
-import { SuperadminAnalyticsBillingReportsKpiGrid } from './SuperadminAnalyticsBillingReportsKpiGrid';
-import { SuperadminAnalyticsBillingReportsCharts } from './SuperadminAnalyticsBillingReportsCharts';
-import { SuperadminAnalyticsBillingReportsFilterBar } from './SuperadminAnalyticsBillingReportsFilterBar';
-import { SuperadminAnalyticsBillingReportsTable } from './SuperadminAnalyticsBillingReportsTable';
-import { SuperadminAnalyticsBillingReportsExportModal } from './SuperadminAnalyticsBillingReportsExportModal';
-import { SuperadminAnalyticsBillingReportsDetailModal } from './SuperadminAnalyticsBillingReportsDetailModal';
+import { useSuperadminAnalyticsBillingReports } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/hooks/useSuperadminAnalyticsBillingReports';
+import { SuperadminAnalyticsBillingReportsKpiGrid } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/components/SuperadminAnalyticsBillingReportsKpiGrid';
+import { SuperadminAnalyticsBillingReportsCharts } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/components/SuperadminAnalyticsBillingReportsCharts';
+import { SuperadminAnalyticsBillingReportsFilterBar } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/components/SuperadminAnalyticsBillingReportsFilterBar';
+import { SuperadminAnalyticsBillingReportsTable } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/components/SuperadminAnalyticsBillingReportsTable';
+import { SuperadminAnalyticsBillingReportsExportModal } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/components/SuperadminAnalyticsBillingReportsExportModal';
+import { SuperadminAnalyticsBillingReportsDetailModal } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/components/SuperadminAnalyticsBillingReportsDetailModal';
 
 export function SuperadminAnalyticsBillingReportsMain() {
   const {
@@ -58,10 +58,10 @@ export function SuperadminAnalyticsBillingReportsMain() {
               type="button"
               onClick={() => refetch()}
               disabled={isPending}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-amber-500/50 hover:bg-amber-500/10 text-slate-200 text-xs font-semibold transition-all shadow-sm cursor-pointer disabled:opacity-50 active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-amber-500/50 hover:bg-amber-500/10 text-slate-200 text-xs font-semibold motion-safe:transition-all shadow-sm cursor-pointer disabled:opacity-50 active:scale-95"
               title="Refresh billing data"
             >
-              <RefreshCw size={13} className={isPending ? 'animate-spin text-amber-400' : 'text-amber-400'} />
+              <RefreshCw size={13} className={isPending ? 'motion-safe:animate-spin text-amber-400' : 'text-amber-400'} />
               <span>Refresh</span>
             </button>
 
@@ -69,7 +69,7 @@ export function SuperadminAnalyticsBillingReportsMain() {
               type="button"
               onClick={() => setIsExportModalOpen(true)}
               data-testid="billing-reports-open-export-btn"
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-400 text-slate-950 transition-all cursor-pointer shadow-lg shadow-amber-500/20 active:scale-95"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-400 text-slate-950 motion-safe:transition-all cursor-pointer shadow-lg shadow-amber-500/20 active:scale-95"
             >
               <Download size={14} />
               <span>Export & Print</span>

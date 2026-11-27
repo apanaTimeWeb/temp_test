@@ -2,10 +2,10 @@
 
 // RESPONSIBILITY: Render the route loading state for superadmin_libraries/libraries_onboarding_setup; it does not fetch or mutate business data.
 // FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
-import { SuperadminPageLoader } from '@/app/frontend_superadmin/components/SuperadminLoader';
+import { SuperadminPageLoader } from '@/components/ui/loader/SuperadminLoader';
 import { useTranslations } from 'next-intl';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
-import SuperadminLibrariesOnboardingSetupListSkeleton from './components/SuperadminLibrariesOnboardingSetupListSkeleton';
+import SuperadminLibrariesOnboardingSetupListSkeleton from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/components/SuperadminLibrariesOnboardingSetupListSkeleton';
 
 export default function ModuleLoading() {
   const t = useTranslations('SUPERADMIN_SETUP_WIZARD');

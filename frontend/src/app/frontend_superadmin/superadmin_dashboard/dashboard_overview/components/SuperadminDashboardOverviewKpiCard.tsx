@@ -135,7 +135,7 @@ export default function SuperadminDashboardOverviewKpiCard({
   const theme = THEME_PALETTES[themeKey] ?? THEME_PALETTES.indigo;
 
   const cardContent = (
-    <div className={`sa-kpi-card group relative h-full overflow-hidden rounded-2xl border p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.015] hover:shadow-xl cursor-pointer ${theme.cardBorderBg}`}>
+    <div className={`sa-kpi-card group relative h-full overflow-hidden rounded-2xl border p-5 sm:p-6 shadow-md motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.015] hover:shadow-xl cursor-pointer ${theme.cardBorderBg}`}>
       {/* Decorative sparkline using theme-specific accent color */}
       <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 motion-safe:transition-opacity motion-reduce:transition-none motion-safe:duration-500 pointer-events-none" viewBox="0 0 150 45">
         <path d={sparklinePath} fill="none" stroke={theme.strokeColor} strokeWidth="3" strokeLinecap="round" />
@@ -145,7 +145,7 @@ export default function SuperadminDashboardOverviewKpiCard({
         <div className="flex items-center gap-1.5 min-w-0">
           <p className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider truncate">{displayTitle}</p>
           {href && (
-            <ArrowUpRight size={14} className="text-slate-400 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+            <ArrowUpRight size={14} className="text-slate-400 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-safe:transition-all shrink-0" />
           )}
         </div>
         <div className={`p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 ${theme.iconBox}`}>
@@ -186,7 +186,7 @@ export default function SuperadminDashboardOverviewKpiCard({
             </div>
             <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
               <div
-                className={`h-full rounded-full bg-gradient-to-r transition-all duration-700 ${theme.progressGradient}`}
+                className={`h-full rounded-full bg-gradient-to-r motion-safe:transition-all duration-700 ${theme.progressGradient}`}
                 style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
                 role="progressbar"
                 aria-valuenow={progress}

@@ -11,4 +11,4 @@
 
 ## Leaf boundary
 
-`users_directory`, `users_overview`, `users_roles_permissions`
+`users_directory`, `users_roles_permissions`

@@ -49,12 +49,14 @@ export const SuperadminSettingsGeneralGstTaxCard: React.FC = () => {
     setIsSaving(true);
     setTimeout(() => {
       setIsSaving(false);
-      toast.success('GST & Legal Tax Configuration saved and synced across all SaaS invoices.');
+      toast.success('GST & Legal Tax Configuration saved and synced across all SaaS invoices.', {
+        id: 'superadmin:settings_general:gst-tax-save',
+      });
     }, 700);
   };
 
   return (
-    <div className="rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-6 space-y-6 hover:border-indigo-500/35 transition-all">
+    <div className="rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-6 space-y-6 hover:border-indigo-500/35 motion-safe:transition-all">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-indigo-500/15 pb-4">
         <div className="flex items-center gap-3">
@@ -78,7 +80,7 @@ export const SuperadminSettingsGeneralGstTaxCard: React.FC = () => {
           disabled={isSaving}
           className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 text-white text-xs font-bold shadow-md cursor-pointer disabled:opacity-50"
         >
-          {isSaving ? <RefreshCw size={13} className="animate-spin" /> : <Save size={13} />}
+          {isSaving ? <RefreshCw size={13} className="motion-safe:animate-spin" /> : <Save size={13} />}
           <span>Save Tax Profile</span>
         </button>
       </div>
@@ -226,7 +228,7 @@ export const SuperadminSettingsGeneralGstTaxCard: React.FC = () => {
           </label>
           <select
             value={config.taxCalculationMode}
-            onChange={(e) => setConfig({ ...config, taxCalculationMode: e.target.value as any })}
+            onChange={(e) => setConfig({ ...config, taxCalculationMode: e.target.value as SuperadminGstTaxSettingsState['taxCalculationMode'] })}
             className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 focus:outline-none focus:border-indigo-400"
           >
             <option value="exclusive">Exclusive (Tax added on top of base plan price)</option>

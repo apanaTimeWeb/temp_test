@@ -2,10 +2,11 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Plus, Ticket, Building2, User, Mail, Phone, FileText } from 'lucide-react';
+import { X, Plus, Ticket, FileText } from 'lucide-react';
 import type { SuperadminSupportTicket, SuperadminSupportTicketCategory, SuperadminSupportTicketPriority } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
 import { SUPERADMIN_SUPPORT_TICKET_TYPES } from '@/app/frontend_superadmin/superadmin_support/support_tickets/constants/SuperadminSupportTicketsOverviewConstants';
 import { useModalScrollLock } from '@/lib/useModalScrollLock';
+import SuperadminSupportTicketsCreateContactFields from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsCreateContactFields';
 
 interface SuperadminSupportTicketsCreateModalProps {
   isOpen: boolean;
@@ -104,7 +105,7 @@ export default function SuperadminSupportTicketsCreateModal({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto animate-in fade-in motion-safe:duration-200"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -114,7 +115,7 @@ export default function SuperadminSupportTicketsCreateModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="create-ticket-title"
-        className="w-full max-w-xl rounded-2xl border border-indigo-500/30 bg-[#0a0d22] shadow-2xl shadow-indigo-950/80 flex flex-col max-h-[90vh] my-auto overflow-hidden text-white animate-in zoom-in-95 duration-200 ease-out"
+        className="w-full max-w-xl rounded-2xl border border-indigo-500/30 bg-[#0a0d22] shadow-2xl shadow-indigo-950/80 flex flex-col max-h-[90vh] my-auto overflow-hidden text-white animate-in zoom-in-95 motion-safe:duration-200 ease-out"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header - Fixed at Top */}
@@ -145,70 +146,17 @@ export default function SuperadminSupportTicketsCreateModal({
         {/* Form Body - Scrollable Form Container */}
         <form onSubmit={handleSubmit} className="flex-1 min-h-0 flex flex-col overflow-hidden" noValidate>
           <div className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-5 space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Tenant/Library */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-                  <Building2 size={13} className="text-indigo-400" />
-                  <span>Library / Tenant Name</span>
-                  <span className="text-rose-400">*</span>
-                </label>
-                <input maxLength={100}
-                  type="text"
-                  placeholder="e.g. Apex Central Library"
-                  value={tenant}
-                  onChange={(e) => setTenant(e.target.value)}
-                  className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all ${errors.tenant ? 'border-rose-500 focus:border-rose-400' : 'border-indigo-500/30 focus:border-indigo-400'
-                    }`}
-                />
-                {errors.tenant && <p className="text-[11px] text-rose-400 mt-1">{errors.tenant}</p>}
-              </div>
-
-              {/* Contact Person */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-                  <User size={13} className="text-indigo-400" />
-                  <span>Contact Person (Optional)</span>
-                </label>
-                <input maxLength={100}
-                  type="text"
-                  placeholder="e.g. Anil Kumar (Admin)"
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
-                  className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none transition-all"
-                />
-              </div>
-
-              {/* Phone */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-                  <Phone size={13} className="text-indigo-400" />
-                  <span>Phone / WhatsApp</span>
-                </label>
-                <input maxLength={15}
-                  type="tel"
-                  placeholder="+91 98765 43210"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none transition-all"
-                />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-                  <Mail size={13} className="text-indigo-400" />
-                  <span>Email Address</span>
-                </label>
-                <input maxLength={254}
-                  type="email"
-                  placeholder="owner@library.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none transition-all"
-                />
-              </div>
-            </div>
+            <SuperadminSupportTicketsCreateContactFields
+              tenant={tenant}
+              setTenant={setTenant}
+              contact={contact}
+              setContact={setContact}
+              phone={phone}
+              setPhone={setPhone}
+              email={email}
+              setEmail={setEmail}
+              errors={errors}
+            />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Category / Ticket Type */}
@@ -259,7 +207,7 @@ export default function SuperadminSupportTicketsCreateModal({
                 placeholder="e.g. Biometric QR scanner not connecting after power outage"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all ${errors.subject ? 'border-rose-500 focus:border-rose-400' : 'border-indigo-500/30 focus:border-indigo-400'
+                className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none motion-safe:transition-all ${errors.subject ? 'border-rose-500 focus:border-rose-400' : 'border-indigo-500/30 focus:border-indigo-400'
                   }`}
               />
               {errors.subject && <p className="text-[11px] text-rose-400 mt-1">{errors.subject}</p>}
@@ -275,7 +223,7 @@ export default function SuperadminSupportTicketsCreateModal({
                 placeholder="Describe the issue, device model, affected students/seats, and error messages..."
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
-                className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all resize-none min-h-[90px] ${
+                className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none motion-safe:transition-all resize-none min-h-[90px] ${
                   errors.desc ? 'border-rose-500 focus:border-rose-400' : 'border-indigo-500/30 focus:border-indigo-400'
                 }`}
               />
@@ -294,7 +242,7 @@ export default function SuperadminSupportTicketsCreateModal({
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-indigo-600 text-xs font-bold text-white hover:from-rose-500 hover:to-indigo-500 shadow-lg shadow-rose-950/40 hover:shadow-rose-500/30 transition-all duration-150 cursor-pointer active:scale-[0.97] group"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-indigo-600 text-xs font-bold text-white hover:from-rose-500 hover:to-indigo-500 shadow-lg shadow-rose-950/40 hover:shadow-rose-500/30 motion-safe:transition-all motion-safe:duration-150 cursor-pointer active:scale-[0.97] group"
             >
               <Plus size={15} strokeWidth={2.5} className="group-hover:scale-110 transition-transform" />
               <span>Create Ticket</span>

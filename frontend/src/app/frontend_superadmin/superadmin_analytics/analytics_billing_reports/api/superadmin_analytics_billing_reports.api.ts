@@ -2,13 +2,13 @@
 // API Service for Billing Reports
 
 import { apiFetch, type ApiResponse } from '@/lib/api';
-import { SUPERADMIN_ANALYTICS_BILLING_REPORTS_API } from '../config/superadmin_analytics_billing_reports.url_config';
+import { SUPERADMIN_ANALYTICS_BILLING_REPORTS_API } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/config/superadmin_analytics_billing_reports.url_config';
 import type {
   BillingReportsOverviewData,
   SuperadminAnalyticsBillingReportsFilters,
   ExportFormatType,
-} from '../types/SuperadminAnalyticsBillingReportsTypes';
-import { SUPERADMIN_BILLING_REPORTS_SCENARIOS } from '../mocks/scenarios/superadmin_analytics_billing_reports.scenarios';
+} from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/types/SuperadminAnalyticsBillingReportsTypes';
+import { SUPERADMIN_BILLING_REPORTS_SCENARIOS } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/mocks/scenarios/superadmin_analytics_billing_reports.scenarios';
 
 export async function fetchBillingReportsOverview(
   filters: SuperadminAnalyticsBillingReportsFilters

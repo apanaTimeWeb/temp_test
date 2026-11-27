@@ -48,7 +48,7 @@ export default function SuperadminFeaturesOverviewCategoryTabs({
             <button
               type="button"
               onClick={() => onViewModeChange('grid')}
-              className={`p-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`p-1.5 rounded-lg text-xs font-semibold motion-safe:transition-all cursor-pointer ${
                 viewMode === 'grid'
                   ? 'bg-teal-500 text-slate-950 shadow-sm shadow-teal-500/30'
                   : 'text-slate-400 hover:text-white'
@@ -60,7 +60,7 @@ export default function SuperadminFeaturesOverviewCategoryTabs({
             <button
               type="button"
               onClick={() => onViewModeChange('table')}
-              className={`p-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`p-1.5 rounded-lg text-xs font-semibold motion-safe:transition-all cursor-pointer ${
                 viewMode === 'table'
                   ? 'bg-teal-500 text-slate-950 shadow-sm shadow-teal-500/30'
                   : 'text-slate-400 hover:text-white'
@@ -81,7 +81,7 @@ export default function SuperadminFeaturesOverviewCategoryTabs({
             <button
               key={cat.id}
               onClick={() => onCategoryChange(cat.id)}
-              className={`px-3.5 py-1.5 text-xs rounded-xl font-bold whitespace-nowrap transition-all cursor-pointer border ${
+              className={`px-3.5 py-1.5 text-xs rounded-xl font-bold whitespace-nowrap motion-safe:transition-all cursor-pointer border ${
                 isActive
                   ? 'bg-teal-500 text-slate-950 border-teal-400 shadow-md shadow-teal-500/25'
                   : 'border-indigo-500/20 bg-slate-900/60 text-slate-400 hover:text-white hover:bg-slate-800/60'

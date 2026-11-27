@@ -4,7 +4,7 @@ import type {
   QuotaRequestResourceType,
   QuotaRequestStatus,
   QuotaUpgradeRequestRecord,
-} from '../types/SuperadminUsageQuotaRequestsTypes';
+} from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/types/SuperadminUsageQuotaRequestsTypes';
 
 interface SuperadminUsageQuotaRequestsState {
   search: string;

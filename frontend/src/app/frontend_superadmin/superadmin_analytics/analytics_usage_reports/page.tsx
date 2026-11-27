@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Server component route entry for Superadmin Usage Reports.
 // FLOW: App Router -> analytics_usage_reports/page.tsx -> SuperadminAnalyticsUsageReportsMain
 
-import { SuperadminAnalyticsUsageReportsMain } from './components/SuperadminAnalyticsUsageReportsMain';
+import { SuperadminAnalyticsUsageReportsMain } from '@/app/frontend_superadmin/superadmin_analytics/analytics_usage_reports/components/SuperadminAnalyticsUsageReportsMain';
 
 export const metadata = {
   title: 'Usage Reports | Superadmin Analytics',

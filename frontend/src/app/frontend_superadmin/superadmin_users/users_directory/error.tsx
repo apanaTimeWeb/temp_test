@@ -3,7 +3,7 @@
 /** Framework error boundary delegates to the feature-local retry component with explicit props. */
 'use client';
 
-import SuperadminUsersDirectoryErrorFallback from './components/SuperadminUsersDirectoryErrorFallback';
+import SuperadminUsersDirectoryErrorFallback from '@/app/frontend_superadmin/superadmin_users/users_directory/components/SuperadminUsersDirectoryErrorFallback';
 
 type ModuleErrorProps = { error: Error & { digest?: string }; reset: () => void };
 

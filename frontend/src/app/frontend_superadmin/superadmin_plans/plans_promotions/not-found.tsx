@@ -20,7 +20,7 @@ export default function SuperadminModuleNotFound() {
       </div>
       <p className="mt-2 text-sm text-slate-400">{t('COPY.MODULE_NOT_FOUND_MESSAGE')}</p>
       <Link
-        className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 px-5 py-2.5 text-xs font-semibold text-white shadow-md shadow-indigo-500/25 transition-all active:scale-95"
+        className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 px-5 py-2.5 text-xs font-semibold text-white shadow-md shadow-indigo-500/25 motion-safe:transition-all active:scale-95"
         href={SUPERADMIN_PLANS_PROMOTIONS_ROUTES.SUPERADMIN_BILLING_PROMO_CODES_URLS.DASHBOARD_OVERVIEW}
         data-testid="superadmin-plans-promotions-not-found-dashboard-link"
       >

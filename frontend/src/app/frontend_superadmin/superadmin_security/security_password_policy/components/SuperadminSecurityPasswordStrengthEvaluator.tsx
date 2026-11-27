@@ -88,7 +88,7 @@ export default function SuperadminSecurityPasswordStrengthEvaluator() {
             </div>
             <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
               <div
-                className={`h-full transition-all duration-300 ${strengthAnalysis.color}`}
+                className={`h-full motion-safe:transition-all motion-safe:duration-300 ${strengthAnalysis.color}`}
                 style={{ width: `${strengthAnalysis.score}%` }}
               />
             </div>

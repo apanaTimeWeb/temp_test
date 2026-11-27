@@ -4,13 +4,13 @@
 import React from 'react';
 import { X, FileSpreadsheet, FileText, Printer, Download } from 'lucide-react';
 import { toast } from 'sonner';
-import type { BillingReportTableRecord, BillingReportsOverviewData } from '../types/SuperadminAnalyticsBillingReportsTypes';
+import type { BillingReportTableRecord, BillingReportsOverviewData } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/types/SuperadminAnalyticsBillingReportsTypes';
 import {
   exportBillingRecordsAsCsv,
   exportBillingRecordsAsExcel,
   downloadBillingReportJson,
   printBillingReportsRoster,
-} from '../utils/SuperadminAnalyticsBillingReportsFormatters';
+} from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/utils/SuperadminAnalyticsBillingReportsFormatters';
 
 interface Props {
   isOpen: boolean;
@@ -96,7 +96,7 @@ export function SuperadminAnalyticsBillingReportsExportModal({
             type="button"
             onClick={handleExcelExport}
             data-testid="billing-export-excel-btn"
-            className="flex items-center gap-3 p-3.5 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-left transition-all cursor-pointer group active:scale-95 shadow-xs"
+            className="flex items-center gap-3 p-3.5 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-left motion-safe:transition-all cursor-pointer group active:scale-95 shadow-xs"
           >
             <div className="p-2.5 rounded-xl bg-emerald-500/20 text-emerald-400 group-hover:scale-105 transition-transform">
               <FileSpreadsheet size={20} />
@@ -112,7 +112,7 @@ export function SuperadminAnalyticsBillingReportsExportModal({
             type="button"
             onClick={handleCsvExport}
             data-testid="billing-export-csv-btn"
-            className="flex items-center gap-3 p-3.5 rounded-2xl border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-left transition-all cursor-pointer group active:scale-95 shadow-xs"
+            className="flex items-center gap-3 p-3.5 rounded-2xl border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-left motion-safe:transition-all cursor-pointer group active:scale-95 shadow-xs"
           >
             <div className="p-2.5 rounded-xl bg-sky-500/20 text-sky-400 group-hover:scale-105 transition-transform">
               <FileText size={20} />
@@ -128,7 +128,7 @@ export function SuperadminAnalyticsBillingReportsExportModal({
             type="button"
             onClick={handlePdfExport}
             data-testid="billing-export-pdf-btn"
-            className="flex items-center gap-3 p-3.5 rounded-2xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-left transition-all cursor-pointer group active:scale-95 shadow-xs"
+            className="flex items-center gap-3 p-3.5 rounded-2xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-left motion-safe:transition-all cursor-pointer group active:scale-95 shadow-xs"
           >
             <div className="p-2.5 rounded-xl bg-rose-500/20 text-rose-400 group-hover:scale-105 transition-transform">
               <FileText size={20} />
@@ -144,7 +144,7 @@ export function SuperadminAnalyticsBillingReportsExportModal({
             type="button"
             onClick={handlePrint}
             data-testid="billing-export-print-btn"
-            className="flex items-center gap-3 p-3.5 rounded-2xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-left transition-all cursor-pointer group active:scale-95 shadow-xs"
+            className="flex items-center gap-3 p-3.5 rounded-2xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-left motion-safe:transition-all cursor-pointer group active:scale-95 shadow-xs"
           >
             <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-400 group-hover:scale-105 transition-transform">
               <Printer size={20} />
@@ -162,7 +162,7 @@ export function SuperadminAnalyticsBillingReportsExportModal({
             type="button"
             onClick={handleJsonDownload}
             data-testid="billing-export-download-btn"
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 hover:text-white motion-safe:transition-all cursor-pointer shadow-xs active:scale-95"
           >
             <Download size={14} />
             <span>Download Raw Dataset</span>
@@ -170,7 +170,7 @@ export function SuperadminAnalyticsBillingReportsExportModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-indigo-500/20 cursor-pointer transition-all"
+            className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-indigo-500/20 cursor-pointer motion-safe:transition-all"
           >
             Cancel
           </button>

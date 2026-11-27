@@ -2,8 +2,8 @@
 // RESPONSIBILITY: Route entry file for integrations_overview submodule.
 // DATA FLOW: Next.js App Router -> page.tsx -> SuperadminIntegrationsOverviewScreen.
 import { Suspense } from 'react';
-import { SuperadminIntegrationsOverviewListSkeleton } from './components/SuperadminIntegrationsOverviewListSkeleton';
-import SuperadminIntegrationsOverviewScreen from './components/SuperadminIntegrationsOverviewScreen';
+import { SuperadminIntegrationsOverviewListSkeleton } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewListSkeleton';
+import SuperadminIntegrationsOverviewScreen from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/components/SuperadminIntegrationsOverviewScreen';
 
 export default function SuperadminIntegrationsOverviewPage() {
   return (

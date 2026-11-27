@@ -44,7 +44,7 @@ export function SuperadminCommunicationNotificationCenterDetailModal() {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in motion-safe:duration-200"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) setSelectedNotification(null);
       }}
@@ -53,7 +53,7 @@ export function SuperadminCommunicationNotificationCenterDetailModal() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="detail-modal-title"
-        className="bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] border border-indigo-500/30 shadow-2xl rounded-3xl w-full max-w-xl p-6 sm:p-7 relative space-y-4 text-slate-100 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200 ease-out"
+        className="bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] border border-indigo-500/30 shadow-2xl rounded-3xl w-full max-w-xl p-6 sm:p-7 relative space-y-4 text-slate-100 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 motion-safe:duration-200 ease-out"
         data-testid="notif-detail-dialog"
       >
         {/* Header */}
@@ -101,9 +101,9 @@ export function SuperadminCommunicationNotificationCenterDetailModal() {
                 type="button"
                 disabled={isRetrying}
                 onClick={handleRetry}
-                className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-rose-500 to-amber-600 hover:from-rose-600 hover:to-amber-700 text-white font-semibold text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-md shadow-rose-500/20 active:scale-95"
+                className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-rose-500 to-amber-600 hover:from-rose-600 hover:to-amber-700 text-white font-semibold text-xs motion-safe:transition-all flex items-center gap-1.5 cursor-pointer shadow-md shadow-rose-500/20 active:scale-95"
               >
-                <RefreshCw className={`w-3.5 h-3.5 ${isRetrying ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-3.5 h-3.5 ${isRetrying ? 'motion-safe:animate-spin' : ''}`} />
                 <span>{isRetrying ? 'Retrying…' : 'Retry Transmission'}</span>
               </button>
             </div>
@@ -176,7 +176,7 @@ export function SuperadminCommunicationNotificationCenterDetailModal() {
           <button
             type="button"
             onClick={() => setSelectedNotification(null)}
-            className="px-5 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-indigo-500/25 font-semibold text-xs sm:text-sm cursor-pointer transition-all active:scale-95"
+            className="px-5 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-indigo-500/25 font-semibold text-xs sm:text-sm cursor-pointer motion-safe:transition-all active:scale-95"
           >
             Close Details
           </button>

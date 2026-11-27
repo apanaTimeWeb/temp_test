@@ -5,19 +5,19 @@
  */
 
 import { apiFetch } from '@/lib/api';
-import { IMPORT_MIGRATION_URLS } from '../config/superadmin_data_import_migration.url_config';
+import { IMPORT_MIGRATION_URLS } from '@/app/frontend_superadmin/superadmin_data/data_import_migration/config/superadmin_data_import_migration.url_config';
 import type {
   ImportOverview,
   ImportBatchRecord,
   PreflightValidationResult,
   PreflightValidatePayload,
   CommitImportPayload,
-} from '../types/superadmin_data_import_migration.types';
+} from '@/app/frontend_superadmin/superadmin_data/data_import_migration/types/superadmin_data_import_migration.types';
 import {
   MOCK_IMPORT_OVERVIEW,
   MOCK_IMPORT_BATCHES,
   MOCK_PREFLIGHT_RESULT,
-} from '../mocks/fixtures/superadmin_data_import_migration.fixtures';
+} from '@/app/frontend_superadmin/superadmin_data/data_import_migration/mocks/fixtures/superadmin_data_import_migration.fixtures';
 
 const IS_MOCK_ENV = process.env.NODE_ENV !== 'production';
 

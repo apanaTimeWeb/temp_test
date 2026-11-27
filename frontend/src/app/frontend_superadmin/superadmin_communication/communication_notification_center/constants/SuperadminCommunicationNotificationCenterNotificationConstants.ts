@@ -1,6 +1,3 @@
-// RESPONSIBILITY: Central constants for Superadmin Notification & Communication management.
-// FLOW: Feature domain -> constants/SuperadminCommunicationNotificationCenterNotificationConstants.ts -> components/hooks/mocks.
-
 import type {
   NotificationCategory,
   NotificationChannel,
@@ -84,7 +81,7 @@ export const TARGET_LIBRARY_ACCOUNTS: NotificationTargetAccount[] = [
 
 /** The 10 Mandated System Notification Templates with full Email, SMS, WhatsApp copies */
 // Mandated templates extracted to sub-constants file for file size compliance (< 300 lines)
-export { MANDATED_NOTIFICATION_TEMPLATES } from './SuperadminCommunicationNotificationCenterTemplatesConstants';
+export { MANDATED_NOTIFICATION_TEMPLATES } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/constants/SuperadminCommunicationNotificationCenterTemplatesConstants';
 
 export const SUPERADMIN_COMMUNICATION_NOTIFICATION_FILTERS: SuperadminCommunicationNotificationCategoryOption[] = [
   { id: 'All', labelKey: 'COPY.NOTIFICATION_CATEGORY_ALL', icon: '🔔' },

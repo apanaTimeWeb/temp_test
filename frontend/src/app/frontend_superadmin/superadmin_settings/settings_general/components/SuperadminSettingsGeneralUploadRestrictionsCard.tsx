@@ -42,7 +42,7 @@ export function SuperadminSettingsGeneralUploadRestrictionsCard() {
     <section
       id="section-upload_restrictions"
       aria-labelledby="heading-upload-restrictions"
-      className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-6 space-y-6 hover:border-indigo-500/35 transition-all"
+      className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-6 space-y-6 hover:border-indigo-500/35 motion-safe:transition-all"
     >
       <div className="flex items-center justify-between border-b border-indigo-500/15 pb-4">
         <div className="flex items-center gap-3">
@@ -81,7 +81,7 @@ export function SuperadminSettingsGeneralUploadRestrictionsCard() {
                   key={ext}
                   onClick={() => toggleExtension(ext)}
                   aria-pressed={isSelected}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border motion-safe:transition-all cursor-pointer ${
                     isSelected
                       ? 'bg-cyan-500/20 border-cyan-500/40 text-cyan-300 shadow-sm'
                       : 'bg-slate-950/60 border-indigo-500/20 text-slate-400 hover:text-slate-200 hover:bg-slate-900'

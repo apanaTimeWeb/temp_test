@@ -1,7 +1,7 @@
 // state/useSuperadminUsageOverviewStore.ts
 // DATA FLOW: UI Controls -> useSuperadminUsageOverviewStore -> Filter State -> Query Hooks
 import { create } from 'zustand';
-import type { QuotaSeverity } from '../types/SuperadminUsageOverviewTypes';
+import type { QuotaSeverity } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/types/SuperadminUsageOverviewTypes';
 
 interface SuperadminUsageOverviewState {
   search: string;

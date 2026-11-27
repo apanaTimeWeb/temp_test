@@ -95,7 +95,7 @@ export function SuperadminFeaturesToggleSwitch({
         height: `${config.height}px`,
         padding: `${config.padding}px`,
       }}
-      className={`relative inline-flex items-center shrink-0 rounded-full select-none cursor-pointer transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-[#0a0d24] ${
+      className={`relative inline-flex items-center shrink-0 rounded-full select-none cursor-pointer transition-colors motion-safe:duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-[#0a0d24] ${
         disabled
           ? 'opacity-40 cursor-not-allowed bg-slate-800 border border-slate-700'
           : checked

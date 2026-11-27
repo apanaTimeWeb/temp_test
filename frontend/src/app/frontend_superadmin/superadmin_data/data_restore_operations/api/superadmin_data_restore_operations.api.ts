@@ -6,19 +6,19 @@
  */
 
 import { apiFetch } from '@/lib/api';
-import { RESTORE_OPERATIONS_URLS } from '../config/superadmin_data_restore_operations.url_config';
+import { RESTORE_OPERATIONS_URLS } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/config/superadmin_data_restore_operations.url_config';
 import type {
   BackupSnapshotRecord,
   RestoreDrillRecord,
   RestoreExecutionRequest,
   RestoreExecutionResponse,
   RestoreOperationsOverview,
-} from '../types/superadmin_data_restore_operations.types';
+} from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/types/superadmin_data_restore_operations.types';
 import {
   MOCK_SNAPSHOTS,
   MOCK_DRILL_HISTORY,
   MOCK_RESTORE_OVERVIEW,
-} from '../mocks/fixtures/superadmin_data_restore_operations.fixtures';
+} from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/mocks/fixtures/superadmin_data_restore_operations.fixtures';
 
 const IS_MOCK_ENV = process.env.NODE_ENV !== 'production';
 

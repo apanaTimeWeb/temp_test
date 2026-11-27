@@ -17,7 +17,7 @@ import {
   Settings,
 } from 'lucide-react';
 import React from 'react';
-import type { IntegrationGatewayItem } from '../types/superadmin_integrations_overview.types';
+import type { IntegrationGatewayItem } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/types/superadmin_integrations_overview.types';
 
 interface SuperadminIntegrationsOverviewGatewayCardProps {
   gateway: IntegrationGatewayItem;
@@ -44,7 +44,7 @@ export const SuperadminIntegrationsOverviewGatewayCard: React.FC<
 
   return (
     <div
-      className="group relative flex flex-col justify-between rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 p-5 shadow-xl backdrop-blur-md transition-all hover:border-indigo-500/40 hover:shadow-indigo-500/10"
+      className="group relative flex flex-col justify-between rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 p-5 shadow-xl backdrop-blur-md motion-safe:transition-all hover:border-indigo-500/40 hover:shadow-indigo-500/10"
       data-testid={`gateway-card-${gateway.id}`}
     >
       <div className="space-y-3.5">
@@ -136,7 +136,7 @@ export const SuperadminIntegrationsOverviewGatewayCard: React.FC<
             className="inline-flex items-center gap-1.5 rounded-xl border border-indigo-500/20 bg-slate-800/80 px-2.5 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-700/80 hover:text-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-w-20 justify-center shadow-xs"
             title="Send test ping request to verify provider connection"
           >
-            {isPinging ? <Loader2 size={12} className="animate-spin text-indigo-400" /> : <Activity size={12} />}
+            {isPinging ? <Loader2 size={12} className="motion-safe:animate-spin text-indigo-400" /> : <Activity size={12} />}
             <span>Ping</span>
           </button>
 

@@ -2,6 +2,7 @@
 import { describe, expect, it } from 'vitest';
 import { SUPERADMIN_SUBSCRIPTIONS_SAMPLE_PLANS } from '@/app/frontend_superadmin/superadmin_plans/plans_pricing_catalog/mocks/fixtures/SuperadminPlansPricingCatalogMockFixtures';
 import { SUPERADMIN_SUBSCRIPTIONS_PLAN_SCHEMA } from '@/app/frontend_superadmin/superadmin_plans/plans_pricing_catalog/schemas/SuperadminPlansPricingCatalogPlanSchema';
+import { SUPERADMIN_PLANS_PRICING_CATALOG_CONSTANTS } from '../constants/superadmin_plans_pricing_catalog.constants';
 
 describe('Superadmin SaaS Plans Catalog Full Capabilities Suite', () => {
   it('supplies Starter tier with 1 branch limit, core limits, and standard support', () => {
@@ -66,5 +67,10 @@ describe('Superadmin SaaS Plans Catalog Full Capabilities Suite', () => {
     };
     const parsed = SUPERADMIN_SUBSCRIPTIONS_PLAN_SCHEMA.safeParse(invalidPlan);
     expect(parsed.success).toBe(false);
+  });
+
+  it('provides default catalog constants for quotas and discounts', () => {
+    expect(SUPERADMIN_PLANS_PRICING_CATALOG_CONSTANTS.DEFAULT_PAGE_SIZE).toBe(10);
+    expect(SUPERADMIN_PLANS_PRICING_CATALOG_CONSTANTS.CYCLE_DISCOUNTS.ANNUAL_PERCENT).toBe(17);
   });
 });

@@ -5,7 +5,7 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { superadminDataExportManagementKeys } from '../api/superadmin_data_export_management.query_keys';
+import { superadminDataExportManagementKeys } from '@/app/frontend_superadmin/superadmin_data/data_export_management/api/superadmin_data_export_management.query_keys';
 import {
   fetchExportOverview,
   fetchExportJobs,
@@ -13,9 +13,9 @@ import {
   fetchExportBranches,
   triggerDataExport,
   cancelExportJob,
-} from '../api/superadmin_data_export_management.api';
-import { useSuperadminDataExportManagementStore } from '../state/useSuperadminDataExportManagementStore';
-import type { CreateExportPayload } from '../types/superadmin_data_export_management.types';
+} from '@/app/frontend_superadmin/superadmin_data/data_export_management/api/superadmin_data_export_management.api';
+import { useSuperadminDataExportManagementStore } from '@/app/frontend_superadmin/superadmin_data/data_export_management/state/useSuperadminDataExportManagementStore';
+import type { CreateExportPayload } from '@/app/frontend_superadmin/superadmin_data/data_export_management/types/superadmin_data_export_management.types';
 
 export function useSuperadminDataExportManagement() {
   const queryClient = useQueryClient();

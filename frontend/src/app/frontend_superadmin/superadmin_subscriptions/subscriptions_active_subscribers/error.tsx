@@ -3,7 +3,7 @@
 /** Framework error boundary delegates to the feature-local retry component with explicit props. */
 'use client';
 
-import SuperadminSubscriptionsActiveSubscribersErrorFallback from './components/SuperadminSubscriptionsActiveSubscribersErrorFallback';
+import SuperadminSubscriptionsActiveSubscribersErrorFallback from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/components/SuperadminSubscriptionsActiveSubscribersErrorFallback';
 
 type ModuleErrorProps = { error: Error & { digest?: string }; reset: () => void };
 

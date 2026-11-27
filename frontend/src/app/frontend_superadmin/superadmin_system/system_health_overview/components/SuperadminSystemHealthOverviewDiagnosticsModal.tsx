@@ -81,7 +81,9 @@ export default function SuperadminSystemHealthOverviewDiagnosticsModal({ isOpen,
         ...prev,
         `[${new Date().toLocaleTimeString()}] COMPLETE: All 6 cluster diagnostic layers verified with zero exceptions.`,
       ]);
-      toast.success('Deep system diagnostics complete: 100% nominal score');
+      toast.success('Deep system diagnostics complete: 100% nominal score', {
+        id: 'superadmin:system_health:diagnostics-complete',
+      });
     }
   }, [isRunning, currentStepIndex, steps.length]);
 
@@ -98,17 +100,19 @@ export default function SuperadminSystemHealthOverviewDiagnosticsModal({ isOpen,
     link.download = `diagnostics-report-${Date.now()}.txt`;
     link.click();
     URL.revokeObjectURL(url);
-    toast.success('Diagnostics report log downloaded');
+    toast.success('Diagnostics report log downloaded', {
+      id: 'superadmin:system_health:diagnostics-download',
+    });
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in motion-safe:duration-200">
       <div className="relative w-full max-w-2xl rounded-2xl border border-emerald-500/30 bg-[#0c1022] p-6 shadow-2xl text-slate-100 flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-border/80">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
-              <Activity size={20} className={isRunning ? 'animate-spin' : ''} />
+              <Activity size={20} className={isRunning ? 'motion-safe:animate-spin' : ''} />
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
@@ -137,7 +141,7 @@ export default function SuperadminSystemHealthOverviewDiagnosticsModal({ isOpen,
           </div>
           <div className="h-2 w-full rounded-full bg-slate-900 overflow-hidden border border-emerald-500/20">
             <div
-              className="h-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 transition-all duration-300 rounded-full"
+              className="h-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 motion-safe:transition-all motion-safe:duration-300 rounded-full"
               style={{ width: `${progressPct}%` }}
             />
           </div>
@@ -150,7 +154,7 @@ export default function SuperadminSystemHealthOverviewDiagnosticsModal({ isOpen,
             return (
               <div
                 key={step.id}
-                className={`flex items-center justify-between p-3 rounded-xl border text-xs transition-all ${
+                className={`flex items-center justify-between p-3 rounded-xl border text-xs motion-safe:transition-all ${
                   step.status === 'running'
                     ? 'border-emerald-500/50 bg-emerald-500/10 shadow-sm'
                     : step.status === 'passed'
@@ -164,7 +168,7 @@ export default function SuperadminSystemHealthOverviewDiagnosticsModal({ isOpen,
                       step.status === 'passed'
                         ? 'border-emerald-500/30 bg-emerald-500/15 text-emerald-400'
                         : step.status === 'running'
-                        ? 'border-sky-500/30 bg-sky-500/15 text-sky-400 animate-pulse'
+                        ? 'border-sky-500/30 bg-sky-500/15 text-sky-400 motion-safe:animate-pulse'
                         : 'border-slate-700 bg-slate-800 text-slate-500'
                     }`}
                   >
@@ -182,7 +186,7 @@ export default function SuperadminSystemHealthOverviewDiagnosticsModal({ isOpen,
                 <div className="flex items-center gap-2.5">
                   <span className="font-mono text-[11px] text-slate-300">{step.latency}</span>
                   {step.status === 'running' && (
-                    <RefreshCw size={14} className="text-sky-400 animate-spin" />
+                    <RefreshCw size={14} className="text-sky-400 motion-safe:animate-spin" />
                   )}
                   {step.status === 'passed' && (
                     <CheckCircle2 size={16} className="text-emerald-400" />
@@ -214,7 +218,7 @@ export default function SuperadminSystemHealthOverviewDiagnosticsModal({ isOpen,
           <button
             type="button"
             onClick={handleDownloadLog}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border/80 bg-slate-800/60 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border/80 bg-slate-800/60 hover:bg-slate-700 text-slate-200 text-xs font-semibold motion-safe:transition-all cursor-pointer"
           >
             <Download size={13} />
             <span>Download Log</span>
@@ -225,15 +229,15 @@ export default function SuperadminSystemHealthOverviewDiagnosticsModal({ isOpen,
               type="button"
               onClick={runDiagnostics}
               disabled={isRunning}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-semibold disabled:opacity-50 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-semibold disabled:opacity-50 motion-safe:transition-all cursor-pointer"
             >
-              <RefreshCw size={13} className={isRunning ? 'animate-spin' : ''} />
+              <RefreshCw size={13} className={isRunning ? 'motion-safe:animate-spin' : ''} />
               <span>Re-run Diagnostics</span>
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-all cursor-pointer shadow-sm"
+              className="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-sm"
             >
               Done
             </button>

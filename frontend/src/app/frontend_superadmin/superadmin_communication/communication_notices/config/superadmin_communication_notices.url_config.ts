@@ -14,15 +14,15 @@ const SUPERADMIN_COMMUNICATION_NOTICES_URLS = {
   NOTICES_LIST: '/communication/notices',
 
   // Existing public page routes.
-  COMPLAINTS_PAGE: '/superadmin/superadmin_support/support_complaints',
+  COMPLAINTS_PAGE: '/superadmin/superadmin_support/support_tickets',
   NOTICES_PAGE: '/superadmin/superadmin_communication/communication_notices',
   NOTIFICATION_CENTER_PAGE: '/superadmin/superadmin_communication/communication_notification_center',
 
   // Existing cross-module public page routes.
   FINANCE_RENEWALS_PAGE: '/superadmin/superadmin_subscriptions/subscriptions_overview?view=member_renewals',
-  PAYMENT_PROMISES_PAGE: '/superadmin/superadmin_billing/billing_overview?view=member_payment_promises',
+  PAYMENT_PROMISES_PAGE: '/superadmin/superadmin_billing/billing_invoices?view=member_payment_promises',
   ASSET_MAINTENANCE_PAGE: '/superadmin/superadmin_libraries/libraries_overview?view=facility_asset_maintenance',
-  LATE_FEES_PAGE: '/superadmin/superadmin_billing/billing_overview?view=member_late_fees',
+  LATE_FEES_PAGE: '/superadmin/superadmin_billing/billing_invoices?view=member_late_fees',
   DASHBOARD_OVERVIEW: '/superadmin/superadmin_dashboard/dashboard_overview',
 } as const;
 

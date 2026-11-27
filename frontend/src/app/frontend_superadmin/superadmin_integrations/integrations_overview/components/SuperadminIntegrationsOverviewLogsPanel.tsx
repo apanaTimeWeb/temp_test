@@ -6,12 +6,12 @@ import { SuperadminTablePagination } from '@/components/ui/table/SuperadminTable
 // DATA FLOW: Logs array -> SuperadminIntegrationsOverviewLogsPanel -> Inspector Modal.
 import { Activity, Copy, Eye, Filter, Search, X } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
-import type { IntegrationLogItem } from '../types/superadmin_integrations_overview.types';
+import type { IntegrationLogItem } from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/types/superadmin_integrations_overview.types';
 import {
   formatLatency,
   formatRelativeTimestamp,
   formatStatusCodeBadge,
-} from '../utils/superadmin_integrations_overviewFormatters';
+} from '@/app/frontend_superadmin/superadmin_integrations/integrations_overview/utils/superadmin_integrations_overviewFormatters';
 
 interface SuperadminIntegrationsOverviewLogsPanelProps {
   logs: IntegrationLogItem[];
@@ -181,7 +181,7 @@ export const SuperadminIntegrationsOverviewLogsPanel: React.FC<
           role="dialog"
           aria-modal="true"
         >
-          <div className="relative w-full max-w-2xl rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] p-6 shadow-2xl text-slate-100 animate-in zoom-in-95 duration-150">
+          <div className="relative w-full max-w-2xl rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] p-6 shadow-2xl text-slate-100 animate-in zoom-in-95 motion-safe:duration-150">
             <div className="flex items-start justify-between pb-3 border-b border-indigo-500/20">
               <div>
                 <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">

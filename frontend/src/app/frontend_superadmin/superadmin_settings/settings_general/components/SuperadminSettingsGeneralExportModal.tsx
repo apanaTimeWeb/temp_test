@@ -85,7 +85,7 @@ export function SuperadminSettingsGeneralExportModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-all cursor-pointer"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 motion-safe:transition-all cursor-pointer"
             aria-label="Close dialog"
           >
             <X size={18} aria-hidden="true" />
@@ -102,7 +102,7 @@ export function SuperadminSettingsGeneralExportModal({
           <button
             type="button"
             onClick={handleCopy}
-            className="px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 hover:bg-indigo-500/25 text-xs font-semibold text-indigo-300 hover:text-white inline-flex items-center gap-2 transition-all cursor-pointer"
+            className="px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 hover:bg-indigo-500/25 text-xs font-semibold text-indigo-300 hover:text-white inline-flex items-center gap-2 motion-safe:transition-all cursor-pointer"
             data-testid="settings-export-copy-btn"
           >
             {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
@@ -111,7 +111,7 @@ export function SuperadminSettingsGeneralExportModal({
           <button
             type="button"
             onClick={handleDownload}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-bold inline-flex items-center gap-2 transition-all shadow-md shadow-amber-950/40 cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-bold inline-flex items-center gap-2 motion-safe:transition-all shadow-md shadow-amber-950/40 cursor-pointer"
             data-testid="settings-export-download-btn"
           >
             <Download size={14} />

@@ -15,6 +15,7 @@ import {
   updateSuperadminBranchStatusApi,
   transferSuperadminBranchManagerApi,
 } from '../api/superadmin_branches_overview.api';
+import { superadminBranchesOverviewHandlers } from '../mocks/handlers/superadmin_branches_overview_handlers';
 import type { SuperadminBranchRecord } from '../types/SuperadminBranchesOverviewTypes';
 
 describe('Superadmin Branches Overview Schemas, Utils & API Contract', () => {
@@ -167,6 +168,11 @@ describe('Superadmin Branches Overview Schemas, Utils & API Contract', () => {
       if (transferRes.success && transferRes.data) {
         expect(transferRes.data.manager.name).toBe('Kavita');
       }
+    });
+
+    it('declares MSW mock handlers for branches API endpoints', () => {
+      expect(superadminBranchesOverviewHandlers.length).toBeGreaterThan(0);
+      expect(superadminBranchesOverviewHandlers[0].path).toBe('/api/superadmin/branches');
     });
   });
 });

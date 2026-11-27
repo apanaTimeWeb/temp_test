@@ -13,7 +13,7 @@ export function SuperadminDataRestoreOperationsSkeleton() {
     <div
       role="status"
       aria-label="Loading restore operations data"
-      className="space-y-6 animate-pulse"
+      className="space-y-6 motion-safe:animate-pulse"
     >
       {/* Banner Skeleton */}
       <div className="h-20 rounded-xl bg-slate-200 dark:bg-slate-800" />

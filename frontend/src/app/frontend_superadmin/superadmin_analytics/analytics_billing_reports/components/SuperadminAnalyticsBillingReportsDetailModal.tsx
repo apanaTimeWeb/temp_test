@@ -3,9 +3,9 @@
 
 import React from 'react';
 import { X, Receipt, CheckCircle2, Clock, AlertOctagon, RefreshCw, Printer, ShieldCheck } from 'lucide-react';
-import type { BillingReportTableRecord } from '../types/SuperadminAnalyticsBillingReportsTypes';
-import { BILLING_PAYMENT_STATUS_COLORS } from '../constants/SuperadminAnalyticsBillingReportsConstants';
-import { formatBillingCurrency } from '../utils/SuperadminAnalyticsBillingReportsFormatters';
+import type { BillingReportTableRecord } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/types/SuperadminAnalyticsBillingReportsTypes';
+import { BILLING_PAYMENT_STATUS_COLORS } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/constants/SuperadminAnalyticsBillingReportsConstants';
+import { formatBillingCurrency } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/utils/SuperadminAnalyticsBillingReportsFormatters';
 
 interface Props {
   record: BillingReportTableRecord | null;
@@ -169,7 +169,7 @@ export function SuperadminAnalyticsBillingReportsDetailModal({ record, onClose }
           <button
             type="button"
             onClick={handlePrint}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 hover:text-white transition-all cursor-pointer active:scale-95 shadow-xs"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 hover:text-white motion-safe:transition-all cursor-pointer active:scale-95 shadow-xs"
           >
             <Printer size={13} />
             <span>Print Invoice</span>
@@ -178,7 +178,7 @@ export function SuperadminAnalyticsBillingReportsDetailModal({ record, onClose }
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2.5 rounded-xl text-xs font-bold bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/40 text-white transition-all cursor-pointer shadow-xs active:scale-95"
+            className="px-5 py-2.5 rounded-xl text-xs font-bold bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/40 text-white motion-safe:transition-all cursor-pointer shadow-xs active:scale-95"
           >
             Close Details
           </button>

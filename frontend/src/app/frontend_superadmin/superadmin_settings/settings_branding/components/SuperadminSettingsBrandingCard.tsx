@@ -12,7 +12,7 @@ export function SuperadminSettingsBrandingCard({ children, className }: Superadm
   return (
     <div
       className={cn(
-        'rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-5 sm:p-6 transition-all duration-200 hover:border-indigo-500/35 overflow-hidden relative',
+        'rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 backdrop-blur-md shadow-xl shadow-black/40 p-5 sm:p-6 motion-safe:transition-all motion-safe:duration-200 hover:border-indigo-500/35 overflow-hidden relative',
         className
       )}
     >

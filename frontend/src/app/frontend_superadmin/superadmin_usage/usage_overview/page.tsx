@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import SuperadminUsageOverviewScreen from './components/SuperadminUsageOverviewScreen';
+import SuperadminUsageOverviewScreen from '@/app/frontend_superadmin/superadmin_usage/usage_overview/components/SuperadminUsageOverviewScreen';
 
 export default function SuperadminUsageOverviewPage() {
   return (

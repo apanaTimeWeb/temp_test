@@ -2,9 +2,9 @@
 
 // RESPONSIBILITY: Render the route loading state for superadmin_branches/branches_overview; it does not fetch or mutate business data.
 // FLOW: App Router pending state -> loading.tsx -> loading UI -> route content when ready.
-import { SuperadminPageLoader } from '@/app/frontend_superadmin/components/SuperadminLoader';
+import { SuperadminPageLoader } from '@/components/ui/loader/SuperadminLoader';
 /** Framework loading boundary delegates to the feature-local skeleton component. */
-import SuperadminBranchesOverviewListSkeleton from './components/SuperadminBranchesOverviewListSkeleton';
+import SuperadminBranchesOverviewListSkeleton from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewListSkeleton';
 
 export default function ModuleLoading() {
   return (

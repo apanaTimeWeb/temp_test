@@ -11,4 +11,4 @@
 
 ## Leaf boundary
 
-`security_active_sessions`, `security_api_keys`, `security_ip_firewall`, `security_login_security`, `security_mfa`, `security_overview`, `security_password_policy`, `security_threats`, `security_user_sessions`
+`security_active_sessions`, `security_audit_logs`, `security_ip_firewall`, `security_login_security`, `security_mfa`, `security_overview`, `security_password_policy`, `security_threats`

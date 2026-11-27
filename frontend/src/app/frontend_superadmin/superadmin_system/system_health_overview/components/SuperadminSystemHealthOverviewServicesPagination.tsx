@@ -43,7 +43,7 @@ export function SuperadminSystemHealthOverviewServicesPagination({
       <div className="flex items-center gap-2">
         <button
           type="button"
-          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer"
+          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold motion-safe:transition-all cursor-pointer"
           disabled={page === 0}
           onClick={() => onPageChange(Math.max(0, page - 1))}
         >
@@ -57,7 +57,7 @@ export function SuperadminSystemHealthOverviewServicesPagination({
               key={idx}
               type="button"
               onClick={() => onPageChange(idx)}
-              className={`w-7 h-7 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`w-7 h-7 rounded-lg text-xs font-semibold motion-safe:transition-all cursor-pointer ${
                 page === idx ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400 hover:text-white hover:bg-slate-800'
               }`}
             >
@@ -68,7 +68,7 @@ export function SuperadminSystemHealthOverviewServicesPagination({
 
         <button
           type="button"
-          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer"
+          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold motion-safe:transition-all cursor-pointer"
           disabled={page + 1 >= totalPages}
           onClick={() => onPageChange(Math.min(totalPages - 1, page + 1))}
         >

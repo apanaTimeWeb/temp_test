@@ -11,13 +11,13 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertOctagon, X, RotateCcw, ShieldCheck } from 'lucide-react';
-import type { BackupSnapshotRecord } from '../types/superadmin_data_restore_operations.types';
+import type { BackupSnapshotRecord } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/types/superadmin_data_restore_operations.types';
 import {
   RestoreExecutionSchema,
   type RestoreExecutionFormData,
-} from '../schemas/superadmin_data_restore_operations.schemas';
-import { RESTORE_TYPE_CONFIRM_KEY } from '../constants/superadmin_data_restore_operations.constants';
-import { formatBytes, formatTimestamp } from '../utils/superadmin_data_restore_operations_formatters';
+} from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/schemas/superadmin_data_restore_operations.schemas';
+import { RESTORE_TYPE_CONFIRM_KEY } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/constants/superadmin_data_restore_operations.constants';
+import { formatBytes, formatTimestamp } from '@/app/frontend_superadmin/superadmin_data/data_restore_operations/utils/superadmin_data_restore_operations_formatters';
 
 interface RestoreModalProps {
   isOpen: boolean;

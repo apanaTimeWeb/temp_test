@@ -48,7 +48,7 @@ export default function SuperadminPlansPricingCatalogTierCards({
         return (
           <div
             key={p.id}
-            className={`relative flex flex-col justify-between overflow-hidden rounded-2xl border bg-gradient-to-br via-slate-900/90 to-slate-900/90 p-5 sm:p-6 shadow-xl backdrop-blur-md transition-all hover:scale-[1.01] ${
+            className={`relative flex flex-col justify-between overflow-hidden rounded-2xl border bg-gradient-to-br via-slate-900/90 to-slate-900/90 p-5 sm:p-6 shadow-xl backdrop-blur-md motion-safe:transition-all hover:scale-[1.01] ${
               isPop
                 ? 'border-indigo-400 shadow-indigo-500/15 ring-1 ring-indigo-400/40 from-indigo-950/40'
                 : 'border-indigo-500/20 from-slate-950/40'
@@ -146,7 +146,7 @@ export default function SuperadminPlansPricingCatalogTierCards({
 
             <button
               type="button"
-              className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 py-2.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 transition-all cursor-pointer active:scale-95"
+              className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 py-2.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 motion-safe:transition-all cursor-pointer active:scale-95"
               onClick={() => onOpenEdit(p)}
               data-testid={`superadmin-subscriptions-subscriptions-overview-edit-limits-pricing-4-${String(p.id)}`}
             >

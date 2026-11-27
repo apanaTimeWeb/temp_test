@@ -143,7 +143,7 @@ export default function SuperadminUserSecurityAccountsTable({
                     <button
                       type="button"
                       onClick={() => onToggleLock(user.id)}
-                      className={`inline-flex items-center justify-center h-7 w-7 rounded-lg border transition-all cursor-pointer shrink-0 ${
+                      className={`inline-flex items-center justify-center h-7 w-7 rounded-lg border motion-safe:transition-all cursor-pointer shrink-0 ${
                         user.isLocked
                           ? 'border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-600/30'
                           : 'border-rose-500/30 bg-rose-500/15 text-rose-300 hover:bg-rose-600/30'

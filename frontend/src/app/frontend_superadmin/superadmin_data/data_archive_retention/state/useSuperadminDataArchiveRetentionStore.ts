@@ -5,7 +5,7 @@
  */
 
 import { create } from 'zustand';
-import type { RetentionRuleRecord } from '../types/superadmin_data_archive_retention.types';
+import type { RetentionRuleRecord } from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/types/superadmin_data_archive_retention.types';
 
 interface ArchiveRetentionState {
   selectedRule: RetentionRuleRecord | null;

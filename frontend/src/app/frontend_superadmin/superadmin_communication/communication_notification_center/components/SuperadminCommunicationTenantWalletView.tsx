@@ -155,7 +155,7 @@ export function SuperadminCommunicationTenantWalletView() {
                     <button
                       type="button"
                       onClick={() => setSelectedWallet(w)}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-[11px] font-bold shadow-md cursor-pointer transition-all active:scale-95"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-[11px] font-bold shadow-md cursor-pointer motion-safe:transition-all active:scale-95"
                     >
                       <Plus size={11} /> Top-Up Wallet
                     </button>
@@ -199,7 +199,7 @@ export function SuperadminCommunicationTenantWalletView() {
                       key={amt}
                       type="button"
                       onClick={() => setTopUpAmount(amt)}
-                      className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
+                      className={`p-2.5 rounded-xl border text-center motion-safe:transition-all cursor-pointer ${
                         topUpAmount === amt
                           ? 'border-emerald-400 bg-emerald-500/20 text-white font-bold'
                           : 'border-indigo-500/20 bg-[#060818] text-slate-300 hover:border-indigo-500/40'

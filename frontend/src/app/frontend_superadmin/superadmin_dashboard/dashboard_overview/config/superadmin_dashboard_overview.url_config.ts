@@ -14,13 +14,13 @@ const SUPERADMIN_DASHBOARD_URLS = {
   FEATURES: '/superadmin/superadmin_features/features_overview',
   USAGE: '/superadmin/superadmin_usage/usage_overview',
   SECURITY: '/superadmin/superadmin_security/security_overview',
-  REPORTS: '/superadmin/superadmin_reports/reports_overview',
-  SUPPORT_TICKETS: '/superadmin/superadmin_support',
-  NOTIFICATIONS: '/superadmin/superadmin_notifications/notifications_overview',
+  REPORTS: '/superadmin/superadmin_analytics/analytics_platform_reports',
+  SUPPORT_TICKETS: '/superadmin/superadmin_support/support_tickets',
+  NOTIFICATIONS: '/superadmin/superadmin_communication/communication_notification_center',
   INTEGRATIONS: '/superadmin/superadmin_integrations/integrations_overview',
   DATA: '/superadmin/superadmin_data/data_overview',
   SYSTEM_HEALTH: '/superadmin/superadmin_system/system_health_overview',
-  SETTINGS: '/superadmin/superadmin_settings/settings_overview',
+  SETTINGS: '/superadmin/superadmin_settings/settings_general',
 } as const;
 
 /** Required typed grouping alias consumed by the module. */

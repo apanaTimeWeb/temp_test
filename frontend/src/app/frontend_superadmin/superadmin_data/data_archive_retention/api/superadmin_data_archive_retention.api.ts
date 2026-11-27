@@ -5,18 +5,18 @@
  */
 
 import { apiFetch } from '@/lib/api';
-import { ARCHIVE_RETENTION_URLS } from '../config/superadmin_data_archive_retention.url_config';
+import { ARCHIVE_RETENTION_URLS } from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/config/superadmin_data_archive_retention.url_config';
 import type {
   ArchiveRetentionOverview,
   RetentionRuleRecord,
   ArchivedRecordItem,
   UpdateRetentionRulePayload,
-} from '../types/superadmin_data_archive_retention.types';
+} from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/types/superadmin_data_archive_retention.types';
 import {
   MOCK_ARCHIVE_OVERVIEW,
   MOCK_RETENTION_RULES,
   MOCK_ARCHIVED_RECORDS,
-} from '../mocks/fixtures/superadmin_data_archive_retention.fixtures';
+} from '@/app/frontend_superadmin/superadmin_data/data_archive_retention/mocks/fixtures/superadmin_data_archive_retention.fixtures';
 
 const IS_MOCK_ENV = process.env.NODE_ENV !== 'production';
 

@@ -11,4 +11,4 @@
 
 ## Leaf boundary
 
-`analytics_financials`, `analytics_library_growth`, `analytics_overview`, `analytics_subscription_mix`
+`analytics_billing_reports`, `analytics_platform_reports`, `analytics_security_reports`, `analytics_usage_reports`

@@ -26,7 +26,7 @@ export default function SuperadminSubscriptionsOverviewHeader({
                 {title}
               </h1>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="h-2 w-2 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
                 SaaS Lifecycle Active
               </span>
               <span className="inline-flex items-center gap-1 rounded-full border border-indigo-500/30 bg-indigo-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-indigo-300">
@@ -42,7 +42,7 @@ export default function SuperadminSubscriptionsOverviewHeader({
         <button
           type="button"
           onClick={onNewSubscription}
-          className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-md shadow-indigo-500/25 transition-all active:scale-95 cursor-pointer"
+          className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-md shadow-indigo-500/25 motion-safe:transition-all active:scale-95 cursor-pointer"
         >
           <Plus size={16} />
           <span>New Subscription</span>

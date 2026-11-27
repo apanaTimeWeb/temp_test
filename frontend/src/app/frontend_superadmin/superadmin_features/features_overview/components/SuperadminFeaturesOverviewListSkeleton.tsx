@@ -3,7 +3,7 @@ import React from 'react';
 
 export default function SuperadminFeaturesOverviewListSkeleton() {
   return (
-    <div className="space-y-6 animate-pulse" aria-busy="true" aria-label="Loading feature controls">
+    <div className="space-y-6 motion-safe:animate-pulse" aria-busy="true" aria-label="Loading feature controls">
       {/* Header skeleton */}
       <div className="h-14 bg-neutral-800/40 rounded-xl" />
 

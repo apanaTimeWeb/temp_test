@@ -36,6 +36,7 @@ export default function SuperadminBillingTransactionsLedger() {
     toast.promise(
       new Promise((resolve) => setTimeout(resolve, 1200)),
       {
+        id: `superadmin:billing_invoices:txn-retry:${txnId}`,
         loading: `Re-dispatching gateway webhook query for ${txnId}...`,
         success: `Payment gateway re-queried: ${txnId} status updated.`,
         error: 'Failed to reconnect with payment gateway.',
@@ -54,7 +55,7 @@ export default function SuperadminBillingTransactionsLedger() {
     a.href = url;
     a.download = 'superadmin_payment_transactions_ledger.csv';
     a.click();
-    toast.success('Transactions ledger exported to CSV');
+    toast.success('Transactions ledger exported to CSV', { id: 'superadmin:billing_invoices:txn-export' });
   };
 
   return (
@@ -66,7 +67,7 @@ export default function SuperadminBillingTransactionsLedger() {
             <CreditCard className="text-indigo-400" size={20} />
             <h2 className="text-lg font-bold text-white tracking-tight">Real-Time Transactions & Payment History</h2>
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Live Webhook Stream
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" /> Live Webhook Stream
             </span>
           </div>
           <p className="text-xs text-slate-400">
@@ -77,7 +78,7 @@ export default function SuperadminBillingTransactionsLedger() {
           <button
             type="button"
             onClick={handleExportCsv}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 text-xs font-semibold transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 text-xs font-semibold motion-safe:transition-all cursor-pointer"
           >
             <Download size={14} /> Export Ledger CSV
           </button>
@@ -188,7 +189,7 @@ export default function SuperadminBillingTransactionsLedger() {
                     ) : (
                       <button
                         type="button"
-                        onClick={() => toast.info(`Transaction ${t.id} settled via ${t.gateway}. Reference: ${t.utr}`)}
+                        onClick={() => toast.info(`Transaction ${t.id} settled via ${t.gateway}. Reference: ${t.utr}`, { id: `superadmin:billing_invoices:txn-info:${t.id}` })}
                         className="p-1 rounded-lg hover:bg-indigo-500/20 text-indigo-400"
                         title="View Audit Details"
                       >

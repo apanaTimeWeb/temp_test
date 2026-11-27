@@ -7,7 +7,7 @@ import { SUPERADMIN_AUDIT_LOGS_QUERY_KEYS } from '@/app/frontend_superadmin/supe
 describe('audit_logs standalone contract', () => {
   it('keeps the public route inside its owning domain', () => {
     expect(__SUPERADMIN_SYSTEM_AUDIT_LOGS_ROUTES.SUPERADMIN_AUDIT_LOGS_OVERVIEW_URLS.PAGE).toContain('/superadmin/superadmin_system');
-    expect(__SUPERADMIN_SYSTEM_AUDIT_LOGS_ROUTES.SUPERADMIN_AUDIT_LOGS_OVERVIEW_URLS.SCREEN).toBe("/superadmin/superadmin_system/audit_logs");
+    expect(__SUPERADMIN_SYSTEM_AUDIT_LOGS_ROUTES.SUPERADMIN_AUDIT_LOGS_OVERVIEW_URLS.SCREEN).toBe("/superadmin/superadmin_system/system_audit_logs");
   });
   it('uses an isolated query-key namespace', () => {
     expect(SUPERADMIN_AUDIT_LOGS_QUERY_KEYS.all).toEqual(["superadmin", "superadmin_system", "audit_logs"]);

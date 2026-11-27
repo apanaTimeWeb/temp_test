@@ -32,7 +32,7 @@ export default function SuperadminRolesOverviewHeader({
               Granular Action-Level RBAC
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
               10 System & Branch Roles
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/15 text-purple-300 border border-purple-500/30 shadow-xs">
@@ -59,7 +59,7 @@ export default function SuperadminRolesOverviewHeader({
             <button
               type="button"
               onClick={() => setActiveTab('roles_matrix')}
-              className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap active:scale-95 ${
+              className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold motion-safe:transition-all cursor-pointer whitespace-nowrap active:scale-95 ${
                 activeTab === 'roles_matrix'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-950/50'
                   : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
@@ -71,7 +71,7 @@ export default function SuperadminRolesOverviewHeader({
             <button
               type="button"
               onClick={() => setActiveTab('user_security')}
-              className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap active:scale-95 ${
+              className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold motion-safe:transition-all cursor-pointer whitespace-nowrap active:scale-95 ${
                 activeTab === 'user_security'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-950/50'
                   : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
@@ -85,7 +85,7 @@ export default function SuperadminRolesOverviewHeader({
           <button
             type="button"
             onClick={onCreateRole}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-indigo-950/60 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-indigo-950/60 motion-safe:transition-all hover:scale-[1.02] active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
           >
             <Plus size={16} className="shrink-0" />
             <span>Create New Role</span>

@@ -54,7 +54,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
 
   const drawerContent = (
     <div
-      className="sa-panel-overlay fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md flex justify-end animate-in fade-in duration-200"
+      className="sa-panel-overlay fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md flex justify-end animate-in fade-in motion-safe:duration-200"
       role="presentation"
       onClick={onClose}
       data-testid="superadmin-superadmin-audit-logs-overview-detail-drawer-div-line-58"
@@ -62,7 +62,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
       <div className="sa-panel-backdrop sr-only" aria-hidden="true" />
       <div
         ref={drawerRef}
-        className="sa-panel-drawer relative w-full max-w-lg bg-[#0a0e27] border-l border-indigo-500/30 text-white shadow-2xl shadow-black/90 h-full flex flex-col overflow-hidden animate-in slide-in-from-right duration-200 ease-out"
+        className="sa-panel-drawer relative w-full max-w-lg bg-[#0a0e27] border-l border-indigo-500/30 text-white shadow-2xl shadow-black/90 h-full flex flex-col overflow-hidden animate-in slide-in-from-right motion-safe:duration-200 ease-out"
         role="dialog"
         aria-modal="true"
         aria-label={t("COPY.SAMPLE_AUDIT_ENTRY_ARIA_LABEL", { id: log.id })}
@@ -86,7 +86,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
           </div>
           <button
             type="button"
-            className="sa-btn-icon text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800/80 active:scale-95 transition-all cursor-pointer shrink-0"
+            className="sa-btn-icon text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800/80 active:scale-95 motion-safe:transition-all cursor-pointer shrink-0"
             aria-label={t("COPY.CLOSE_SAMPLE_AUDIT_ENTRY")}
             onClick={onClose}
             data-testid="superadmin-audit-logs-audit-logs-detail-drawer-close-sample-audit-entry-1"
@@ -200,7 +200,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
             <button
               type="button"
               onClick={handleCopyId}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-xs font-semibold text-indigo-300 transition-all cursor-pointer active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-xs font-semibold text-indigo-300 motion-safe:transition-all cursor-pointer active:scale-95"
             >
               <Copy size={12} />
               <span>Copy ID</span>
@@ -208,7 +208,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
             <button
               type="button"
               onClick={handleCopyJson}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700/80 hover:border-slate-600 bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition-all cursor-pointer active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700/80 hover:border-slate-600 bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-200 motion-safe:transition-all cursor-pointer active:scale-95"
             >
               <FileText size={12} />
               <span>Copy JSON</span>
@@ -218,7 +218,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition-all cursor-pointer active:scale-95"
+            className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 motion-safe:transition-all cursor-pointer active:scale-95"
           >
             Close
           </button>

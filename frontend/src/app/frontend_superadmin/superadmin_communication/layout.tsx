@@ -62,7 +62,7 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
                 <Link
                   href={route.href}
                   aria-current={active ? 'page' : undefined}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold motion-safe:transition-all motion-safe:duration-200 cursor-pointer ${
                     active
                       ? `${route.bg} ${route.activeColor} border ${route.border} shadow-lg shadow-indigo-500/10 font-bold`
                       : 'border border-transparent text-slate-400 hover:text-slate-200 hover:bg-white/[0.05]'

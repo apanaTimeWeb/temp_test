@@ -3,8 +3,8 @@
 
 import React from 'react';
 import { Search, X, RotateCcw } from 'lucide-react';
-import type { SuperadminAnalyticsBillingReportsFilters } from '../types/SuperadminAnalyticsBillingReportsTypes';
-import { BILLING_REPORTS_DATE_RANGES } from '../constants/SuperadminAnalyticsBillingReportsConstants';
+import type { SuperadminAnalyticsBillingReportsFilters } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/types/SuperadminAnalyticsBillingReportsTypes';
+import { BILLING_REPORTS_DATE_RANGES } from '@/app/frontend_superadmin/superadmin_analytics/analytics_billing_reports/constants/SuperadminAnalyticsBillingReportsConstants';
 
 interface Props {
   filters: SuperadminAnalyticsBillingReportsFilters;
@@ -67,7 +67,7 @@ export function SuperadminAnalyticsBillingReportsFilterBar({
           <button
             type="button"
             onClick={onResetFilters}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:text-white hover:bg-indigo-500/20 transition-all cursor-pointer active:scale-95 shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:text-white hover:bg-indigo-500/20 motion-safe:transition-all cursor-pointer active:scale-95 shadow-xs"
             aria-label="Reset all billing filters"
           >
             <RotateCcw size={13} />

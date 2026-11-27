@@ -1,7 +1,7 @@
 // constants/SuperadminAnalyticsPlatformReportsConstants.ts
 // Constant configurations for Superadmin Platform Reports
 
-import type { SuperadminAnalyticsPlatformReportsFilters } from '../types/SuperadminAnalyticsPlatformReportsTypes';
+import type { SuperadminAnalyticsPlatformReportsFilters } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/types/SuperadminAnalyticsPlatformReportsTypes';
 
 export const PLATFORM_REPORTS_DATE_RANGES = [
   { value: 'today', labelKey: 'DATE_RANGE_TODAY' },

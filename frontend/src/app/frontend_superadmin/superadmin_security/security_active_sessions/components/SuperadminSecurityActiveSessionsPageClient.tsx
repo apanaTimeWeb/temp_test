@@ -114,7 +114,7 @@ export default function SuperadminSecurityActiveSessionsPageClient() {
                 Active User & Admin Sessions
               </h1>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
                 Live Telemetry Active
               </span>
             </div>
@@ -138,7 +138,7 @@ export default function SuperadminSecurityActiveSessionsPageClient() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0e1338]/90 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-indigo-500/40 transition-all">
+        <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0e1338]/90 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-indigo-500/40 motion-safe:transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Active Sessions</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-400 shadow-inner">
@@ -149,7 +149,7 @@ export default function SuperadminSecurityActiveSessionsPageClient() {
           <div className="text-[11px] text-slate-400 mt-1">Live tokens authenticated</div>
         </div>
 
-        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-b from-[#06201a]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-emerald-500/40 transition-all">
+        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-b from-[#06201a]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-emerald-500/40 motion-safe:transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Concurrency</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shadow-inner">
@@ -160,7 +160,7 @@ export default function SuperadminSecurityActiveSessionsPageClient() {
           <div className="text-[11px] text-slate-400 mt-1">Simultaneous active portals</div>
         </div>
 
-        <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-b from-[#1b0d2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-purple-500/40 transition-all">
+        <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-b from-[#1b0d2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-purple-500/40 motion-safe:transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">SuperAdmin Sessions</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-400 shadow-inner">
@@ -171,7 +171,7 @@ export default function SuperadminSecurityActiveSessionsPageClient() {
           <div className="text-[11px] text-slate-400 mt-1">Privileged root access</div>
         </div>
 
-        <div className="rounded-2xl border border-sky-500/20 bg-gradient-to-b from-[#081c2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-sky-500/40 transition-all">
+        <div className="rounded-2xl border border-sky-500/20 bg-gradient-to-b from-[#081c2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-sky-500/40 motion-safe:transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tenant Library Admins</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-sky-500/30 bg-sky-500/15 text-sky-400 shadow-inner">
@@ -197,7 +197,7 @@ export default function SuperadminSecurityActiveSessionsPageClient() {
               <button
                 type="button"
                 onClick={() => setSessionScope('all')}
-                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
+                className={`rounded-lg px-3 py-1.5 text-xs font-semibold motion-safe:transition-all cursor-pointer ${
                   sessionScope === 'all'
                     ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md shadow-indigo-600/30'
                     : 'text-slate-400 hover:text-slate-200'
@@ -208,7 +208,7 @@ export default function SuperadminSecurityActiveSessionsPageClient() {
               <button
                 type="button"
                 onClick={() => setSessionScope('superadmin')}
-                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
+                className={`rounded-lg px-3 py-1.5 text-xs font-semibold motion-safe:transition-all cursor-pointer ${
                   sessionScope === 'superadmin'
                     ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md shadow-indigo-600/30'
                     : 'text-slate-400 hover:text-slate-200'
@@ -219,7 +219,7 @@ export default function SuperadminSecurityActiveSessionsPageClient() {
               <button
                 type="button"
                 onClick={() => setSessionScope('library_admin')}
-                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
+                className={`rounded-lg px-3 py-1.5 text-xs font-semibold motion-safe:transition-all cursor-pointer ${
                   sessionScope === 'library_admin'
                     ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md shadow-indigo-600/30'
                     : 'text-slate-400 hover:text-slate-200'

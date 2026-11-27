@@ -6,19 +6,19 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { superadminDataImportMigrationKeys } from '../api/superadmin_data_import_migration.query_keys';
+import { superadminDataImportMigrationKeys } from '@/app/frontend_superadmin/superadmin_data/data_import_migration/api/superadmin_data_import_migration.query_keys';
 import {
   fetchImportOverview,
   fetchImportBatches,
   runPreflightValidation,
   commitImportBatch,
   rollbackImportBatch,
-} from '../api/superadmin_data_import_migration.api';
-import { useSuperadminDataImportMigrationStore } from '../state/useSuperadminDataImportMigrationStore';
+} from '@/app/frontend_superadmin/superadmin_data/data_import_migration/api/superadmin_data_import_migration.api';
+import { useSuperadminDataImportMigrationStore } from '@/app/frontend_superadmin/superadmin_data/data_import_migration/state/useSuperadminDataImportMigrationStore';
 import type {
   PreflightValidatePayload,
   CommitImportPayload,
-} from '../types/superadmin_data_import_migration.types';
+} from '@/app/frontend_superadmin/superadmin_data/data_import_migration/types/superadmin_data_import_migration.types';
 
 export function useSuperadminDataImportMigration() {
   const queryClient = useQueryClient();

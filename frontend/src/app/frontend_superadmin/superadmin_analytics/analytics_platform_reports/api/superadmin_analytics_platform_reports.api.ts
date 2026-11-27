@@ -2,13 +2,13 @@
 // API Service for Platform Reports conforming to ApiResponse<T> contract
 
 import { apiFetch, type ApiResponse } from '@/lib/api';
-import { SUPERADMIN_ANALYTICS_PLATFORM_REPORTS_API } from '../config/superadmin_analytics_platform_reports.url_config';
+import { SUPERADMIN_ANALYTICS_PLATFORM_REPORTS_API } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/config/superadmin_analytics_platform_reports.url_config';
 import type {
   PlatformReportsOverviewData,
   SuperadminAnalyticsPlatformReportsFilters,
   ExportFormatType,
-} from '../types/SuperadminAnalyticsPlatformReportsTypes';
-import { SUPERADMIN_PLATFORM_REPORTS_SCENARIOS } from '../mocks/scenarios/superadmin_analytics_platform_reports.scenarios';
+} from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/types/SuperadminAnalyticsPlatformReportsTypes';
+import { SUPERADMIN_PLATFORM_REPORTS_SCENARIOS } from '@/app/frontend_superadmin/superadmin_analytics/analytics_platform_reports/mocks/scenarios/superadmin_analytics_platform_reports.scenarios';
 
 export async function fetchPlatformReportsOverview(
   filters: SuperadminAnalyticsPlatformReportsFilters

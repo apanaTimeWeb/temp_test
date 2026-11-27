@@ -5,15 +5,15 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ShieldCheck } from 'lucide-react';
-import { SuperadminUsageQuotaRequestsKpiCards } from './SuperadminUsageQuotaRequestsKpiCards';
-import { SuperadminUsageQuotaRequestsFilters } from './SuperadminUsageQuotaRequestsFilters';
-import { SuperadminUsageQuotaRequestsTable } from './SuperadminUsageQuotaRequestsTable';
-import { SuperadminUsageQuotaRequestsEmptyState } from './SuperadminUsageQuotaRequestsEmptyState';
-import { SuperadminUsageQuotaRequestsApproveModal } from './SuperadminUsageQuotaRequestsApproveModal';
-import { SuperadminUsageQuotaRequestsRejectModal } from './SuperadminUsageQuotaRequestsRejectModal';
-import { useSuperadminUsageQuotaRequestsQueries } from '../hooks/useSuperadminUsageQuotaRequestsQueries';
-import { useSuperadminUsageQuotaRequestsStore } from '../state/useSuperadminUsageQuotaRequestsStore';
-import { SUPERADMIN_USAGE_QUOTA_REQUESTS_ROUTES } from '../config/superadmin_usage_quota_requests.url_config';
+import { SuperadminUsageQuotaRequestsKpiCards } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/components/SuperadminUsageQuotaRequestsKpiCards';
+import { SuperadminUsageQuotaRequestsFilters } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/components/SuperadminUsageQuotaRequestsFilters';
+import { SuperadminUsageQuotaRequestsTable } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/components/SuperadminUsageQuotaRequestsTable';
+import { SuperadminUsageQuotaRequestsEmptyState } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/components/SuperadminUsageQuotaRequestsEmptyState';
+import { SuperadminUsageQuotaRequestsApproveModal } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/components/SuperadminUsageQuotaRequestsApproveModal';
+import { SuperadminUsageQuotaRequestsRejectModal } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/components/SuperadminUsageQuotaRequestsRejectModal';
+import { useSuperadminUsageQuotaRequestsQueries } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/hooks/useSuperadminUsageQuotaRequestsQueries';
+import { useSuperadminUsageQuotaRequestsStore } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/state/useSuperadminUsageQuotaRequestsStore';
+import { SUPERADMIN_USAGE_QUOTA_REQUESTS_ROUTES } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/config/superadmin_usage_quota_requests.url_config';
 
 export function SuperadminUsageQuotaRequestsMain() {
   const { requests, kpis, isPending } = useSuperadminUsageQuotaRequestsQueries();

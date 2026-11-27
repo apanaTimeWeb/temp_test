@@ -97,7 +97,7 @@ export default function SuperadminBillingInvoicesFilterBar({
         <button
           type="button"
           onClick={onExportCsv}
-          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs font-semibold cursor-pointer transition-all"
+          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs font-semibold cursor-pointer motion-safe:transition-all"
           title="Export filtered invoices to CSV"
         >
           <Download size={12} />
@@ -106,7 +106,7 @@ export default function SuperadminBillingInvoicesFilterBar({
         <button
           type="button"
           onClick={onExportExcel}
-          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 text-xs font-semibold cursor-pointer transition-all"
+          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 text-xs font-semibold cursor-pointer motion-safe:transition-all"
           title="Export filtered invoices to Excel (.xls)"
         >
           <FileSpreadsheet size={12} />
@@ -115,7 +115,7 @@ export default function SuperadminBillingInvoicesFilterBar({
         <button
           type="button"
           onClick={onPrint}
-          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-border/60 bg-slate-800/60 text-slate-300 hover:bg-slate-700 text-xs font-semibold cursor-pointer transition-all"
+          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-border/60 bg-slate-800/60 text-slate-300 hover:bg-slate-700 text-xs font-semibold cursor-pointer motion-safe:transition-all"
           title="Print Invoices Summary Report"
         >
           <Printer size={12} />

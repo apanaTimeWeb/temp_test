@@ -6,7 +6,7 @@ import React from 'react';
 
 export function SuperadminDataBackupOperationsSkeleton() {
   return (
-    <div className="space-y-6 animate-pulse" data-testid="data_backup-skeleton">
+    <div className="space-y-6 motion-safe:animate-pulse" data-testid="data_backup-skeleton">
       <div className="h-28 rounded-xl border border-border bg-card/60 p-5 space-y-3" />
       <div className="h-10 w-full max-w-sm bg-neutral-800 rounded-lg" />
       <div className="h-64 rounded-xl border border-border bg-card/60 p-4 space-y-4">

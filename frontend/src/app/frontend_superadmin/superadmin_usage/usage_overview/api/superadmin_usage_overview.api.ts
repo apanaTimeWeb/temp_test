@@ -1,7 +1,7 @@
 // api/superadmin_usage_overview.api.ts
 import { apiFetch, type ApiResponse } from '@/lib/api';
-import { SUPERADMIN_USAGE_OVERVIEW_API } from '../config/superadmin_usage_overview.url_config';
-import type { LibraryUsageRecord, SystemUsageAggregates } from '../types/SuperadminUsageOverviewTypes';
+import { SUPERADMIN_USAGE_OVERVIEW_API } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/config/superadmin_usage_overview.url_config';
+import type { LibraryUsageRecord, SystemUsageAggregates } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/types/SuperadminUsageOverviewTypes';
 
 export async function fetchUsageOverviewList(
   filters: { search?: string; planTier?: string; severity?: string } = {}

@@ -4,6 +4,7 @@ import type {
   PlatformModuleState,
   ModuleDefinition,
   EffectiveAccessResult,
+  TenantModuleOverride,
 } from '@/app/frontend_superadmin/superadmin_features/features_overview/types/superadmin_features_overview.types';
 import { ALL_16_LIBRARY_MODULES } from '@/app/frontend_superadmin/superadmin_features/features_overview/constants/superadmin_features_overview.constants';
 import {
@@ -12,7 +13,7 @@ import {
   type MockTenantOption,
 } from '@/app/frontend_superadmin/superadmin_features/features_overview/mocks/fixtures/superadmin_features_overview.fixtures';
 import { computeEffectiveAccess } from '@/app/frontend_superadmin/superadmin_features/features_overview/utils/superadmin_features_overview_utils';
-import { useSuperadminFeaturesOverrides } from './useSuperadminFeaturesOverrides';
+import { useSuperadminFeaturesOverrides } from '@/app/frontend_superadmin/superadmin_features/features_overview/hooks/useSuperadminFeaturesOverrides';
 
 export function useSuperadminFeaturesOverviewState() {
   const [platformStates, setPlatformStates] = useState<PlatformModuleState[]>(INITIAL_PLATFORM_MODULE_STATES);
@@ -130,7 +131,7 @@ export function useSuperadminFeaturesOverviewState() {
     enableAllForCurrentScope: overridesHook.enableAllForCurrentScope,
     disableAllForCurrentScope: overridesHook.disableAllForCurrentScope,
     resetAllForCurrentScope: overridesHook.resetAllForCurrentScope,
-    saveOverride: useCallback((ovr: any) => {
+    saveOverride: useCallback((ovr: Omit<TenantModuleOverride, 'id' | 'updatedAt' | 'updatedBy'>) => {
       overridesHook.saveOverride(ovr);
       setIsOverrideModalOpen(false);
     }, [overridesHook]),

@@ -6,7 +6,7 @@ import React from 'react';
 
 export function SuperadminDataOverviewSkeleton() {
   return (
-    <div className="space-y-6 animate-pulse" data-testid="data_overview-skeleton">
+    <div className="space-y-6 motion-safe:animate-pulse" data-testid="data_overview-skeleton">
       {/* Header Skeleton */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 pb-2 border-b border-border">
         <div className="space-y-2">

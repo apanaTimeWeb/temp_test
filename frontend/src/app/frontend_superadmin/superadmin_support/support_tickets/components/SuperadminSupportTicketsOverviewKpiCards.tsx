@@ -20,13 +20,13 @@ export default function SuperadminSupportTicketsOverviewKpiCards({
   return (
     <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" aria-label={t("COPY.SAMPLE_SUPPORT_TICKET_METRICS")}>
       {/* 1. Total Helpdesk Tickets - Indigo */}
-      <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#0c0f2a]/95 via-[#090d24]/90 to-[#141a45]/80 p-5 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-500/45 hover:shadow-xl hover:shadow-indigo-950/50">
-        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-indigo-500/10 blur-2xl transition-all duration-500 group-hover:bg-indigo-500/20" />
+      <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#0c0f2a]/95 via-[#090d24]/90 to-[#141a45]/80 p-5 shadow-lg shadow-indigo-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-indigo-500/45 hover:shadow-xl hover:shadow-indigo-950/50">
+        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-indigo-500/10 blur-2xl motion-safe:transition-all motion-safe:duration-500 group-hover:bg-indigo-500/20" />
         <div className="relative flex items-center justify-between">
           <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
             Total Tickets
           </span>
-          <div className="p-2.5 rounded-xl border shrink-0 transition-transform duration-200 group-hover:scale-110 shadow-md shadow-indigo-500/20 bg-indigo-500/20 border-indigo-500/40 text-indigo-400">
+          <div className="p-2.5 rounded-xl border shrink-0 transition-transform motion-safe:duration-200 group-hover:scale-110 shadow-md shadow-indigo-500/20 bg-indigo-500/20 border-indigo-500/40 text-indigo-400">
             <Ticket size={18} strokeWidth={2.3} />
           </div>
         </div>
@@ -39,52 +39,52 @@ export default function SuperadminSupportTicketsOverviewKpiCards({
       </div>
 
       {/* 2. Open Tickets - Rose */}
-      <div className="group relative overflow-hidden rounded-2xl border border-rose-500/25 bg-gradient-to-br from-[#1c0810]/95 via-[#1c0810]/90 to-[#2c0c1a]/80 p-5 shadow-lg shadow-rose-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-rose-500/45 hover:shadow-xl hover:shadow-rose-950/40">
-        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-rose-500/10 blur-2xl transition-all duration-500 group-hover:bg-rose-500/20" />
+      <div className="group relative overflow-hidden rounded-2xl border border-rose-500/25 bg-gradient-to-br from-[#1c0810]/95 via-[#1c0810]/90 to-[#2c0c1a]/80 p-5 shadow-lg shadow-rose-950/30 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-rose-500/45 hover:shadow-xl hover:shadow-rose-950/40">
+        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-rose-500/10 blur-2xl motion-safe:transition-all motion-safe:duration-500 group-hover:bg-rose-500/20" />
         <div className="relative flex items-center justify-between">
           <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
             {t("COPY.SAMPLE_OPEN_TICKETS")}
           </span>
-          <div className="p-2.5 rounded-xl border shrink-0 transition-transform duration-200 group-hover:scale-110 shadow-md shadow-rose-500/20 bg-rose-500/20 border-rose-500/40 text-rose-400">
+          <div className="p-2.5 rounded-xl border shrink-0 transition-transform motion-safe:duration-200 group-hover:scale-110 shadow-md shadow-rose-500/20 bg-rose-500/20 border-rose-500/40 text-rose-400">
             <MessageSquare size={18} strokeWidth={2.3} />
           </div>
         </div>
         <p className="mt-3 text-3xl font-bold tracking-tight text-rose-400">{openCount}</p>
         <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-400">
           <span className="inline-flex items-center gap-1 font-semibold rounded-full px-2 py-0.5 border text-rose-300 bg-rose-500/10 border-rose-500/25">
-            <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" /> Awaiting Resolution
+            <span className="w-1.5 h-1.5 rounded-full bg-rose-400 motion-safe:animate-pulse" /> Awaiting Resolution
           </span>
         </div>
       </div>
 
       {/* 3. SLA Breaches - Amber */}
-      <div className="group relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 p-5 shadow-lg shadow-amber-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-amber-500/45 hover:shadow-xl hover:shadow-amber-950/40">
-        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-amber-500/10 blur-2xl transition-all duration-500 group-hover:bg-amber-500/20" />
+      <div className="group relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 p-5 shadow-lg shadow-amber-950/30 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-amber-500/45 hover:shadow-xl hover:shadow-amber-950/40">
+        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-amber-500/10 blur-2xl motion-safe:transition-all motion-safe:duration-500 group-hover:bg-amber-500/20" />
         <div className="relative flex items-center justify-between">
           <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
             {t("COPY.SAMPLE_SLA_BREACHES")}
           </span>
-          <div className="p-2.5 rounded-xl border shrink-0 transition-transform duration-200 group-hover:scale-110 shadow-md shadow-amber-500/20 bg-amber-500/20 border-amber-500/40 text-amber-400">
+          <div className="p-2.5 rounded-xl border shrink-0 transition-transform motion-safe:duration-200 group-hover:scale-110 shadow-md shadow-amber-500/20 bg-amber-500/20 border-amber-500/40 text-amber-400">
             <Flag size={18} strokeWidth={2.3} />
           </div>
         </div>
         <p className="mt-3 text-3xl font-bold tracking-tight text-amber-400">{slaBreachCount}</p>
         <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-400">
           <span className="inline-flex items-center gap-1 font-semibold rounded-full px-2 py-0.5 border text-amber-300 bg-amber-500/10 border-amber-500/25">
-            <span className={`w-1.5 h-1.5 rounded-full ${slaBreachCount > 0 ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'}`} />
+            <span className={`w-1.5 h-1.5 rounded-full ${slaBreachCount > 0 ? 'bg-amber-400 motion-safe:animate-pulse' : 'bg-emerald-400'}`} />
             {slaBreachCount > 0 ? 'Urgent Action Required' : 'All SLAs Intact'}
           </span>
         </div>
       </div>
 
       {/* 4. Avg Response - Cyan */}
-      <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 p-5 shadow-lg shadow-cyan-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-cyan-500/45 hover:shadow-xl hover:shadow-cyan-950/40">
-        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-cyan-500/10 blur-2xl transition-all duration-500 group-hover:bg-cyan-500/20" />
+      <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 p-5 shadow-lg shadow-cyan-950/30 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-cyan-500/45 hover:shadow-xl hover:shadow-cyan-950/40">
+        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-cyan-500/10 blur-2xl motion-safe:transition-all motion-safe:duration-500 group-hover:bg-cyan-500/20" />
         <div className="relative flex items-center justify-between">
           <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
             {t("COPY.SAMPLE_AVG_RESPONSE_TIME")}
           </span>
-          <div className="p-2.5 rounded-xl border shrink-0 transition-transform duration-200 group-hover:scale-110 shadow-md shadow-cyan-500/20 bg-cyan-500/20 border-cyan-500/40 text-cyan-400">
+          <div className="p-2.5 rounded-xl border shrink-0 transition-transform motion-safe:duration-200 group-hover:scale-110 shadow-md shadow-cyan-500/20 bg-cyan-500/20 border-cyan-500/40 text-cyan-400">
             <Clock size={18} strokeWidth={2.3} />
           </div>
         </div>

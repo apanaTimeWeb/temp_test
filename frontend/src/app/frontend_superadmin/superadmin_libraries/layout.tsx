@@ -124,7 +124,7 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
                 <Link
                   href={route.href}
                   aria-current={active ? 'page' : undefined}
-                  className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-3.5 sm:p-4 transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 active:scale-[0.98] ${
+                  className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-3.5 sm:p-4 motion-safe:transition-all motion-safe:duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 active:scale-[0.98] ${
                     active ? theme.activeCard : theme.inactiveCard
                   }`}
                   data-testid={`superadmin_libraries-secondary-link-${route.key}`}
@@ -140,7 +140,7 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
                   <div className="flex items-center justify-between gap-2 mb-2.5">
                     <div className="flex items-center gap-2.5">
                       <div
-                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all duration-200 ${
+                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl motion-safe:transition-all motion-safe:duration-200 ${
                           active ? theme.activeIconTile : theme.inactiveIconTile
                         }`}
                       >
@@ -154,7 +154,7 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
                         }`}
                       >
                         {active && (
-                          <span className={`h-1.5 w-1.5 rounded-full ${theme.pulseDot} animate-pulse`} />
+                          <span className={`h-1.5 w-1.5 rounded-full ${theme.pulseDot} motion-safe:animate-pulse`} />
                         )}
                         {route.badge}
                       </span>
@@ -162,7 +162,7 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
 
                     <ArrowUpRight
                       size={16}
-                      className={`transition-all duration-200 ${
+                      className={`motion-safe:transition-all motion-safe:duration-200 ${
                         active
                           ? 'text-white opacity-90 translate-x-0.5 -translate-y-0.5'
                           : 'text-slate-500 opacity-40 group-hover:text-white group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5'

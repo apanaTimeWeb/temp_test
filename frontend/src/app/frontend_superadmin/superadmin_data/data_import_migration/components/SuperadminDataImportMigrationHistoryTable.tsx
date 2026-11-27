@@ -18,13 +18,13 @@ import {
   Layers,
   Download,
 } from 'lucide-react';
-import type { ImportBatchRecord } from '../types/superadmin_data_import_migration.types';
+import type { ImportBatchRecord } from '@/app/frontend_superadmin/superadmin_data/data_import_migration/types/superadmin_data_import_migration.types';
 import {
   displayValue,
   formatTimestamp,
   formatNumberWithCommas,
   calculateSuccessRate,
-} from '../utils/superadmin_data_import_migration_formatters';
+} from '@/app/frontend_superadmin/superadmin_data/data_import_migration/utils/superadmin_data_import_migration_formatters';
 
 interface HistoryTableProps {
   batches: ImportBatchRecord[];

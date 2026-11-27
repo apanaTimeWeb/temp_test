@@ -98,7 +98,7 @@ export default function SuperadminSecurityIpFirewallPageClient() {
                 IP Firewall & Network Rules
               </h1>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-400">
-                <span className="h-1.5 w-1.5 rounded-full bg-rose-400 animate-pulse" />
+                <span className="h-1.5 w-1.5 rounded-full bg-rose-400 motion-safe:animate-pulse" />
                 Firewall Filtering Active
               </span>
             </div>
@@ -122,7 +122,7 @@ export default function SuperadminSecurityIpFirewallPageClient() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-b from-[#1b0d2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-purple-500/40 transition-all">
+        <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-b from-[#1b0d2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-purple-500/40 motion-safe:transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total IP Rules</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-400 shadow-inner">
@@ -133,7 +133,7 @@ export default function SuperadminSecurityIpFirewallPageClient() {
           <div className="text-[11px] text-slate-400 mt-1">Configured subnets & CIDRs</div>
         </div>
 
-        <div className="rounded-2xl border border-rose-500/20 bg-gradient-to-b from-[#220a14]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-rose-500/40 transition-all">
+        <div className="rounded-2xl border border-rose-500/20 bg-gradient-to-b from-[#220a14]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-rose-500/40 motion-safe:transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Blocked CIDRs</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-rose-500/30 bg-rose-500/15 text-rose-400 shadow-inner">
@@ -144,7 +144,7 @@ export default function SuperadminSecurityIpFirewallPageClient() {
           <div className="text-[11px] text-slate-400 mt-1">Zero-tolerance ingress drop</div>
         </div>
 
-        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-b from-[#06201a]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-emerald-500/40 transition-all">
+        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-b from-[#06201a]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-emerald-500/40 motion-safe:transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Allowed Networks</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shadow-inner">
@@ -155,7 +155,7 @@ export default function SuperadminSecurityIpFirewallPageClient() {
           <div className="text-[11px] text-slate-400 mt-1">Trusted HQ & branch gateways</div>
         </div>
 
-        <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-b from-[#241306]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-amber-500/40 transition-all">
+        <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-b from-[#241306]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-amber-500/40 motion-safe:transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Edge Filtering</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-amber-500/30 bg-amber-500/15 text-amber-400 shadow-inner">

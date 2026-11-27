@@ -2,10 +2,10 @@
 // RESPONSIBILITY: Orchestrates TanStack Query fetching for 12-resource usage overview with debouncing.
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { SUPERADMIN_USAGE_OVERVIEW_QUERY_KEYS } from '../api/superadmin_usage_overview.query_keys';
-import { fetchUsageOverviewList, fetchSystemUsageSummary } from '../api/superadmin_usage_overview.api';
-import { useSuperadminUsageOverviewStore } from '../state/useSuperadminUsageOverviewStore';
-import { getMockUsageOverviewResponse, getMockSystemSummaryResponse } from '../mocks/handlers/superadmin_usage_overview.handlers';
+import { SUPERADMIN_USAGE_OVERVIEW_QUERY_KEYS } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/api/superadmin_usage_overview.query_keys';
+import { fetchUsageOverviewList, fetchSystemUsageSummary } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/api/superadmin_usage_overview.api';
+import { useSuperadminUsageOverviewStore } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/state/useSuperadminUsageOverviewStore';
+import { getMockUsageOverviewResponse, getMockSystemSummaryResponse } from '@/app/frontend_superadmin/superadmin_usage/usage_overview/mocks/handlers/superadmin_usage_overview.handlers';
 
 export function useSuperadminUsageOverviewList() {
   const { search, planTier, severity } = useSuperadminUsageOverviewStore();

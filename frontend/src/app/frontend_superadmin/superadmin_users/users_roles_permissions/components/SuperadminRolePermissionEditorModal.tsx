@@ -158,7 +158,7 @@ export default function SuperadminRolePermissionEditorModal({
                         <button
                           type="button"
                           onClick={() => toggleCell(mod.key, act.key)}
-                          className={`inline-flex items-center justify-center h-6 w-6 rounded-md transition-all cursor-pointer ${
+                          className={`inline-flex items-center justify-center h-6 w-6 rounded-md motion-safe:transition-all cursor-pointer ${
                             isChecked
                               ? 'bg-emerald-600/30 border border-emerald-500/60 text-emerald-300 hover:bg-emerald-600/40'
                               : 'bg-slate-900 border border-slate-700/60 text-transparent hover:border-slate-500'

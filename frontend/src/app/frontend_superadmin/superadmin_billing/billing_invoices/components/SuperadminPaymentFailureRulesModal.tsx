@@ -36,7 +36,9 @@ export default function SuperadminPaymentFailureRulesModal({
     setIsVerifyingWebhook(true);
     setTimeout(() => {
       setIsVerifyingWebhook(false);
-      toast.success('Gateway Webhook Status: Polled Razorpay & Stripe API. 2 delayed transactions reconciled successfully without duplicates.');
+      toast.success('Gateway Webhook Status: Polled Razorpay & Stripe API. 2 delayed transactions reconciled successfully without duplicates.', {
+        id: 'superadmin:billing_invoices:webhook-reverify',
+      });
     }, 1200);
   };
 
@@ -44,7 +46,9 @@ export default function SuperadminPaymentFailureRulesModal({
     setIsSimulatingIdempotency(true);
     setTimeout(() => {
       setIsSimulatingIdempotency(false);
-      toast.info('Idempotency Check Passed: Repeated webhook callback with idempotency_key=pay_evt_8831 dropped safely. Zero double billing.');
+      toast.info('Idempotency Check Passed: Repeated webhook callback with idempotency_key=pay_evt_8831 dropped safely. Zero double billing.', {
+        id: 'superadmin:billing_invoices:idempotency-check',
+      });
     }, 1000);
   };
 
@@ -213,16 +217,16 @@ export default function SuperadminPaymentFailureRulesModal({
               type="button"
               disabled={isVerifyingWebhook}
               onClick={handleTestWebhookReverify}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:bg-indigo-500/25 font-semibold active:scale-95 cursor-pointer disabled:opacity-50 transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:bg-indigo-500/25 font-semibold active:scale-95 cursor-pointer disabled:opacity-50 motion-safe:transition-all"
             >
-              <RefreshCw size={12} className={isVerifyingWebhook ? 'animate-spin' : ''} />
+              <RefreshCw size={12} className={isVerifyingWebhook ? 'motion-safe:animate-spin' : ''} />
               <span>{isVerifyingWebhook ? 'Re-verifying...' : 'Re-verify Webhook'}</span>
             </button>
             <button
               type="button"
               disabled={isSimulatingIdempotency}
               onClick={handleTestIdempotency}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 font-semibold active:scale-95 cursor-pointer disabled:opacity-50 transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 font-semibold active:scale-95 cursor-pointer disabled:opacity-50 motion-safe:transition-all"
             >
               <Check size={12} />
               <span>Test Idempotency</span>

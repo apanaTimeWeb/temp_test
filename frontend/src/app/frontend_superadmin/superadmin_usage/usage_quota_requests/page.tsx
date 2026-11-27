@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { SuperadminUsageQuotaRequestsMain } from './components/SuperadminUsageQuotaRequestsMain';
+import { SuperadminUsageQuotaRequestsMain } from '@/app/frontend_superadmin/superadmin_usage/usage_quota_requests/components/SuperadminUsageQuotaRequestsMain';
 
 export default function SuperadminUsageQuotaRequestsPage() {
   return (

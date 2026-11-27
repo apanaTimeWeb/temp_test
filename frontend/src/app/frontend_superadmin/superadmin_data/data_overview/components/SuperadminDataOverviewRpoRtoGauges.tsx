@@ -119,12 +119,12 @@ export function SuperadminDataOverviewRpoRtoGauges({
             type="button"
             onClick={onSimulateDrill}
             disabled={isSimulatingDrill}
-            className="group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-extrabold bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-600 hover:from-emerald-500 hover:to-teal-400 text-white transition-all duration-300 shadow-md shadow-emerald-600/30 hover:shadow-emerald-500/50 hover:scale-[1.02] active:scale-[0.97] disabled:opacity-50 cursor-pointer min-w-40 justify-center"
+            className="group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-extrabold bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-600 hover:from-emerald-500 hover:to-teal-400 text-white motion-safe:transition-all motion-safe:duration-300 shadow-md shadow-emerald-600/30 hover:shadow-emerald-500/50 hover:scale-[1.02] active:scale-[0.97] disabled:opacity-50 cursor-pointer min-w-40 justify-center"
             data-testid="data_overview-run-drill-btn"
           >
             {isSimulatingDrill ? (
               <>
-                <RotateCcw size={13} className="animate-spin text-emerald-100" />
+                <RotateCcw size={13} className="motion-safe:animate-spin text-emerald-100" />
                 <span>Drill Running...</span>
               </>
             ) : (

@@ -6,7 +6,7 @@
 
 import React from 'react';
 import type { Metadata } from 'next';
-import { SuperadminDataImportMigrationMain } from './components/SuperadminDataImportMigrationMain';
+import { SuperadminDataImportMigrationMain } from '@/app/frontend_superadmin/superadmin_data/data_import_migration/components/SuperadminDataImportMigrationMain';
 
 export const metadata: Metadata = {
   title: 'Data Import & Migration | Superadmin Data',
