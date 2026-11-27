@@ -1,5 +1,0 @@
-export {
-  ADMIN_STAFF_ATTENDANCE_DEMO_DATA as ADMIN_STAFF_ATTENDANCE_FIXTURES,
-  ADMIN_STAFF_LEAVE_REQUEST_DEMO_DATA as ADMIN_STAFF_LEAVE_REQUEST_FIXTURES,
-  ADMIN_STAFF_ROSTER_DEMO_DATA as ADMIN_STAFF_ROSTER_FIXTURES,
-} from '@/app/frontend_admin/admin_staff/staff_attendance/config/admin_staff_attendance.demo_data';
