@@ -3,7 +3,7 @@
 import {
   ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS,
   ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_VARIABLES,
-} from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/config/admin_communication_whatsapp_templates_whatsapp_template_constants';
+} from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/constants/AdminCommunicationWhatsappTemplatesConstants';
 import type { AdminCommunicationWhatsappTemplate } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/types/AdminCommunicationWhatsappTemplatesWhatsappTemplateTypes';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';

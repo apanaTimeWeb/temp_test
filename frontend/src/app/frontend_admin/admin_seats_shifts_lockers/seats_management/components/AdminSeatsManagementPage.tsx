@@ -5,7 +5,7 @@ import { ADMIN_SEATS_DEMO_SEATS } from '@/app/frontend_admin/admin_seats_shifts_
 import {
   ADMIN_SEATS_MANAGEMENT_STATUS_OPTIONS,
   ADMIN_SEATS_SEAT_STATUS_BADGE_CLASS,
-} from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/config/admin_seats_management_constants';
+} from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/constants/AdminSeatsManagementConstants';
 import type { Seat, SeatStatus } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/types/AdminSeatsManagementComponentTypes';
 import {
   exportMasterSeatsCsv,

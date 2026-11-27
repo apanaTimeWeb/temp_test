@@ -1,6 +1,6 @@
 import { ADMIN_FINANCE_PAYMENTS_API } from "@/app/frontend_admin/admin_finance/finance_payments/config/admin_finance_payments.url_config";
 import useQueryHook from "@/app/frontend_admin/admin_finance/finance_payments/hooks/useAdminFinancePaymentsQuery";
-import { ADMIN_FINANCE_PAYMENTS_MSW_HANDLERS } from "@/app/frontend_admin/admin_finance/finance_payments/mocks/AdminFinancePaymentsMSWHandlers";
+import { ADMIN_FINANCE_PAYMENTS_MSW_HANDLERS } from "@/app/frontend_admin/admin_finance/finance_payments/mocks/handlers/AdminFinancePaymentsMSWHandlers";
 import { buildAdminFinancePaymentsCsv } from "@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinancePaymentsCsvUtils";
 import { formatAdminFinanceApiAmount,formatCurrency,formatDate,majorToMinor,minorToMajor } from "@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinancePaymentsFormat";
 import { mswTestServer } from "@/app/frontend_admin/test/mswServer";

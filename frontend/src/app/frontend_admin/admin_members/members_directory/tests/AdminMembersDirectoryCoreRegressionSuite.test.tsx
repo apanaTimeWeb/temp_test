@@ -7,7 +7,7 @@ import { default as suite0_useAdminMembersDirectoryMain,default as suite1_useAdm
 import suite3_useUnsavedChangesGuard from "@/app/frontend_admin/admin_members/members_directory/hooks/useAdminMembersDirectoryUnsavedChangesGuard";
 import { default as suite0_adminMembersEn,default as suite1_adminMembersEn } from "@/app/frontend_admin/admin_members/members_directory/locales/admin_members_directory_en.json";
 import { default as suite0_adminMembersHi,default as suite1_adminMembersHi } from "@/app/frontend_admin/admin_members/members_directory/locales/admin_members_directory_hi.json";
-import { ADMIN_MEMBERS_MSW_HANDLERS as Suite0_ADMIN_MEMBERS_MSW_HANDLERS,ADMIN_MEMBERS_FIXTURES as Suite2_ADMIN_MEMBERS_FIXTURES } from "@/app/frontend_admin/admin_members/members_directory/mocks/AdminMembersDirectoryFixtures";
+import { ADMIN_MEMBERS_MSW_HANDLERS as Suite0_ADMIN_MEMBERS_MSW_HANDLERS,ADMIN_MEMBERS_FIXTURES as Suite2_ADMIN_MEMBERS_FIXTURES } from "@/app/frontend_admin/admin_members/members_directory/mocks/fixtures/AdminMembersDirectoryFixtures";
 import type { AdminMembersMember as Suite0_AdminMembersMember,AdminMembersMember as Suite1_AdminMembersMember } from "@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema";
 import { AdminMembersCreateSchema as Suite0_AdminMembersCreateSchema } from "@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema";
 import { AdminMembersDirectoryHarness as Suite2_HarnessScenarioComponent } from "@/app/frontend_admin/admin_members/members_directory/tests/harness/AdminMembersDirectoryHarness";

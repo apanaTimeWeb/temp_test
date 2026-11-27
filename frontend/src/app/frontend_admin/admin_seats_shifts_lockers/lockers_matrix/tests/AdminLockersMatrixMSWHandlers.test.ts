@@ -1,5 +1,5 @@
 import { ADMIN_LOCKERS_URLS } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/config/admin_lockers_matrix_lockers_url_config_source_routes';
-import { ADMIN_LOCKERS_MATRIX_MSW_HANDLERS } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/mocks/AdminLockersMatrixMSWHandlers';
+import { ADMIN_LOCKERS_MATRIX_MSW_HANDLERS } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/mocks/handlers/AdminLockersMatrixMSWHandlers';
 import { mswTestServer } from '@/app/frontend_admin/test/mswServer';
 import { afterEach,describe,expect,it } from 'vitest';
 

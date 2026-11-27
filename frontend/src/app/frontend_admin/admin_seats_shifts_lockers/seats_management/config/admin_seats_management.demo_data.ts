@@ -3,7 +3,7 @@ import {
   ADMIN_SEATS_ALLOCATION_STATUS_BADGE_CLASS,
   ADMIN_SEATS_LOCKER_STATUS_BADGE_CLASS,
   type AdminSeatsSeatStatus,
-} from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/config/admin_seats_management_constants';
+} from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/constants/AdminSeatsManagementConstants';
 
 export interface AdminSeatsDemoSeat {
   id: string;

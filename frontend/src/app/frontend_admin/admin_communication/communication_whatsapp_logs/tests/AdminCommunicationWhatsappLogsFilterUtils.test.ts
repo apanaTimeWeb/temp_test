@@ -1,5 +1,5 @@
 import suite1_useAdminCommunicationWhatsappLogsUnsavedChangesGuard from "@/app/frontend_admin/admin_communication/communication_whatsapp_logs/hooks/useAdminCommunicationWhatsappLogsUnsavedChangesGuard.ts";
-import { ADMIN_COMMUNICATION_WHATSAPP_LOGS_FIXTURES as suite0_ADMIN_COMMUNICATION_WHATSAPP_LOGS_FIXTURES } from "@/app/frontend_admin/admin_communication/communication_whatsapp_logs/mocks/AdminCommunicationWhatsappLogsFixtures";
+import { ADMIN_COMMUNICATION_WHATSAPP_LOGS_FIXTURES as suite0_ADMIN_COMMUNICATION_WHATSAPP_LOGS_FIXTURES } from "@/app/frontend_admin/admin_communication/communication_whatsapp_logs/mocks/fixtures/AdminCommunicationWhatsappLogsFixtures";
 import { filterAdminCommunicationWhatsappLogs as suite0_filterAdminCommunicationWhatsappLogs } from "@/app/frontend_admin/admin_communication/communication_whatsapp_logs/utils/AdminCommunicationWhatsappLogsFilterUtils";
 import { act as suite1_act,renderHook as suite1_renderHook } from "@testing-library/react";
 import { describe as suite0_describe,expect as suite0_expect,it as suite0_it,afterEach as suite1_afterEach,describe as suite1_describe,expect as suite1_expect,it as suite1_it,vi as suite1_vi } from "vitest";

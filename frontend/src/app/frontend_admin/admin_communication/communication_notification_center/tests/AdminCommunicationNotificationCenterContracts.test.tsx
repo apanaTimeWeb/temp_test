@@ -3,8 +3,8 @@ import { ADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES as ADMIN_COMMUNICATION_N
 import ErrorBoundary from '@/app/frontend_admin/admin_communication/communication_notification_center/error';
 import Loading from '@/app/frontend_admin/admin_communication/communication_notification_center/loading';
 import messages from '@/app/frontend_admin/admin_communication/communication_notification_center/locales/admin_communication_notification_center_en.json';
-import { ADMIN_COMMUNICATION_NOTIFICATION_FIXTURES } from '@/app/frontend_admin/admin_communication/communication_notification_center/mocks/AdminCommunicationNotificationCenterFixtures';
-import { ADMIN_COMMUNICATION_MSW_HANDLERS } from '@/app/frontend_admin/admin_communication/communication_notification_center/mocks/AdminCommunicationNotificationCenterMSWHandlers';
+import { ADMIN_COMMUNICATION_NOTIFICATION_FIXTURES } from '@/app/frontend_admin/admin_communication/communication_notification_center/mocks/fixtures/AdminCommunicationNotificationCenterFixtures';
+import { ADMIN_COMMUNICATION_MSW_HANDLERS } from '@/app/frontend_admin/admin_communication/communication_notification_center/mocks/handlers/AdminCommunicationNotificationCenterMSWHandlers';
 import { AdminCommunicationComplaintApiSchema,AdminCommunicationNoticeApiSchema } from '@/app/frontend_admin/admin_communication/communication_notification_center/schemas/AdminCommunicationNotificationCenterApiSchema';
 import { AdminCommunicationComplaintSchema,AdminCommunicationNoticeSchema } from '@/app/frontend_admin/admin_communication/communication_notification_center/schemas/AdminCommunicationNotificationCenterSchema';
 import { AdminCommunicationNotificationCenterHarness } from '@/app/frontend_admin/admin_communication/communication_notification_center/tests/harness/AdminCommunicationNotificationCenterHarness';

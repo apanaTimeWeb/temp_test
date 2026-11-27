@@ -1,6 +1,6 @@
 'use client';
 
-import { ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/config/admin_communication_whatsapp_templates_whatsapp_template_constants';
+import { ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/constants/AdminCommunicationWhatsappTemplatesConstants';
 import type { AdminCommunicationWhatsappTemplate } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/types/AdminCommunicationWhatsappTemplatesWhatsappTemplateTypes';
 import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
 import { CheckCheck, Clock, Copy, Edit2, Send, Server, ShieldCheck, Smartphone } from 'lucide-react';

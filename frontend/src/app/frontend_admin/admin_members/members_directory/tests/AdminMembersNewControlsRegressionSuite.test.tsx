@@ -3,7 +3,7 @@ import type { AdminCouponsCoupon } from '@/app/frontend_admin/admin_members/memb
 import AdminMembersDirectoryBulkImportModal from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryBulkImportModal';
 import AdminMembersDirectoryDataToolsView from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryDataToolsView';
 import { AdminMembersDirectoryMemberDetailCard } from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryMemberDetailCard';
-import { ADMIN_MEMBERS_FIXTURES } from '@/app/frontend_admin/admin_members/members_directory/mocks/AdminMembersDirectoryFixtures';
+import { ADMIN_MEMBERS_FIXTURES } from '@/app/frontend_admin/admin_members/members_directory/mocks/fixtures/AdminMembersDirectoryFixtures';
 import adminMembersMessages from '@/app/frontend_admin/admin_members/members_directory/locales/admin_members_directory_en.json';
 import AdminMembersEnquiriesImportModal from '@/app/frontend_admin/admin_members/members_enquiries/components/AdminMembersEnquiriesImportModal';
 import { fireEvent,render,screen } from '@testing-library/react';
