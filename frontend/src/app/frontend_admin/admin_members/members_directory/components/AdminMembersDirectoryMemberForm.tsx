@@ -9,7 +9,7 @@ import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useCallback,useEffect,useMemo,useState } from 'react';
+import { useCallback,useEffect,useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function AdminMembersDirectoryMemberForm({ model }: AdminMembersDirectoryMemberFormProps) {
@@ -20,10 +20,6 @@ export default function AdminMembersDirectoryMemberForm({ model }: AdminMembersD
   const isEditing = editingMember !== null;
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
-
-  const branchOptions = useMemo(() => {
-    return branches.map((b) => ({ value: b.name, label: b.name }));
-  }, [branches]);
 
   const defaults = editingMember
     ? {

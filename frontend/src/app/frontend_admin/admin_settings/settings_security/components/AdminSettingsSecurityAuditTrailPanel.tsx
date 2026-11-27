@@ -1,9 +1,6 @@
 // components/AdminSettingsSecurityAuditTrailPanel.tsx
 'use client';
 import { ADMIN_SECURITY_ANTI_FRAUD_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/config/admin_settings_security.demo_data';
-import type {
-AntiFraudAuditRecord
-} from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import {
 AlertTriangle,
@@ -23,7 +20,6 @@ export function AdminSettingsSecurityAuditTrailPanel() {
   const [severityFilter, setSeverityFilter] = useState<string>('ALL');
   const [entityFilter, setEntityFilter] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
-  const [inspectingRecord, setInspectingRecord] = useState<AntiFraudAuditRecord | null>(null);
 
   type AuditSortField = 'timestamp' | 'severity' | 'actionTitle' | 'targetEntity' | 'managerName';
   const [sortField, setSortField] = useState<AuditSortField | null>(null);

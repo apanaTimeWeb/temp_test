@@ -169,6 +169,7 @@ export default function AdminEnquiriesPageView() {
           </select>
           <div className="inline-flex items-center gap-1 rounded-xl border border-border bg-surface-highlight p-1">
             <button
+              type="button"
               data-testid="admin_enquiries-AdminEnquiriesPageView-control-001"
               className={`inline-flex h-8 w-8 items-center justify-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-colors ${view === 'kanban' ? 'bg-primary text-on-primary shadow-card' : 'text-primary hover:bg-surface-hover'}`}
               onClick={() => setView('kanban')}
@@ -179,6 +180,7 @@ export default function AdminEnquiriesPageView() {
               <LayoutGrid size={15} strokeWidth={2} aria-hidden="true" />
             </button>
             <button
+              type="button"
               data-testid="admin_enquiries-AdminEnquiriesPageView-control-002"
               className={`inline-flex h-8 w-8 items-center justify-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-colors ${view === 'table' ? 'bg-primary text-on-primary shadow-card' : 'text-primary hover:bg-surface-hover'}`}
               onClick={() => setView('table')}
@@ -232,7 +234,7 @@ export default function AdminEnquiriesPageView() {
                         <span className="truncate text-xs font-bold text-text-primary uppercase tracking-wider">{statusLabel(col.label)}</span>
                         <span className="inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-card px-2 text-[11px] font-bold text-text-secondary border border-border">{cards.length}</span>
                       </div>
-                      <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-013" className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40" title={t('COLUMN_ACTIONS_UNAVAILABLE')} aria-label={t('COLUMN_OPTIONS')} disabled>
+                      <button type="button" data-testid="admin_enquiries-AdminEnquiriesPageView-control-013" className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40" title={t('COLUMN_ACTIONS_UNAVAILABLE')} aria-label={t('COLUMN_OPTIONS')} disabled>
                         <MoreHorizontal size={16} strokeWidth={2} aria-hidden="true" />
                       </button>
                     </div>

@@ -197,6 +197,7 @@ export function AdminCommunicationComplaintsPage() {
           <p className="text-sm text-text-secondary">{t('COMPLAINTS_SUBTITLE')}</p>
         </div>
         <button
+          type="button"
           data-testid="admin_communication-page-control-014"
           onClick={openAdd}
           className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-primary bg-primary px-4 py-2.5 text-sm font-semibold text-on-primary hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-colors shadow-card"

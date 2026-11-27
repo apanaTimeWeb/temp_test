@@ -1,5 +1,3 @@
-import type { AdminSecurityEvent } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
-
 /**
  * Canonical transport-level mock scenario registry for Admin Settings Security.
  *

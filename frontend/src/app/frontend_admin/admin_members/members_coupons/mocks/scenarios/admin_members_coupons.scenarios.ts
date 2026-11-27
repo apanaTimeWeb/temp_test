@@ -1,6 +1,4 @@
 import { ADMIN_COUPONS_API_FIXTURE } from '@/app/frontend_admin/admin_members/members_coupons/config/admin_members_coupons.demo_data';
-import { AdminCouponsApiResponseSchema } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
-import type { z } from 'zod';
 
 /**
  * Canonical transport-level mock scenario registry for Admin Members Coupons.

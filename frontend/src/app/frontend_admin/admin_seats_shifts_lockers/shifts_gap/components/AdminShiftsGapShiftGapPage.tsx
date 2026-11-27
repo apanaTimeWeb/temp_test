@@ -6,7 +6,7 @@ import { ADMIN_SHIFTS_DEMO_SHIFT_GAPS } from '@/app/frontend_admin/admin_seats_s
 import { formatAdminShiftsGapCurrency } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/utils/formatAdminShiftsGapCurrency';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
-import { AlertCircle, CheckCircle2, Clock, Filter, TrendingUp, Zap } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Clock, Filter, TrendingUp } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
@@ -228,10 +228,6 @@ export function AdminShiftsShiftGapPage() {
                   </div>
                 </div>
               </div>
-
-              <button data-testid="admin_shifts-page-control-004" className="hidden" disabled>
-                <Zap size={14} aria-hidden="true" />
-              </button>
             </div>
           );
         })}
