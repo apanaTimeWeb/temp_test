@@ -8,8 +8,8 @@ describe('admin lockers matrix mock contract', () => {
 
   it('serves the source-supported empty list without inventing matrix entities', async () => {
     mswTestServer.use(...ADMIN_LOCKERS_MATRIX_MSW_HANDLERS);
-    const response = await fetch(`http://localhost${ADMIN_LOCKERS_URLS.SEAT_MATRIX}`);
+    const response = await fetch(`http://localhost${ADMIN_LOCKERS_URLS.LOCKERS}`);
     const payload = await response.json();
-    expect(payload).toMatchObject({ success: true, data: [], requestId: 'mock-lockers-matrix-seat-matrix' });
+    expect(payload).toMatchObject({ success: true, data: [], requestId: 'mock-lockers-matrix-lockers' });
   });
 });

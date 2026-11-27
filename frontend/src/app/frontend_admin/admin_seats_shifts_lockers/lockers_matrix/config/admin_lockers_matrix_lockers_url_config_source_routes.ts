@@ -8,12 +8,10 @@ const adminLockersRoute = (view: string): string => { const routes: Record<strin
 export const ADMIN_LOCKERS_ROUTE_LOCKERS = adminLockersRoute('lockers');
 export const ADMIN_LOCKERS_ROUTE_MATRIX = adminLockersRoute('matrix');
 export const ADMIN_LOCKERS_API_LOCKERS = '/seats_shifts_lockers/lockers' as const;
-export const ADMIN_LOCKERS_API_SEAT_MATRIX = '/seats_shifts_lockers/seat-matrix' as const;
 export const ADMIN_LOCKERS_URLS = {
   ROOT: ADMIN_LOCKERS_ROOT,
   ROUTE_LOCKERS: ADMIN_LOCKERS_ROUTE_LOCKERS,
   ROUTE_MATRIX: ADMIN_LOCKERS_ROUTE_MATRIX,
   LOCKERS: ADMIN_LOCKERS_API_LOCKERS,
-  SEAT_MATRIX: ADMIN_LOCKERS_API_SEAT_MATRIX,
 } as const;
 export const MODULE_URLS = ADMIN_LOCKERS_URLS;
