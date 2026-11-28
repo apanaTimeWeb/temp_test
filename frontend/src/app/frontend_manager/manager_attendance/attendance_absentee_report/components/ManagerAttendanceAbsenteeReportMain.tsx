@@ -5,5 +5,5 @@ import type { ManagerAttendanceAbsenteeReportMainProps } from '@/app/frontend_ma
 // RESPONSIBILITY: Preserve route query state at the module boundary and pass it to the feature view.
 // DATA FLOW: Next.js searchParams -> route page -> Main props -> feature view.
 export function ManagerAttendanceAbsenteeReportMain(props: ManagerAttendanceAbsenteeReportMainProps) {
-  return <ManagerAttendanceAbsenteeReportPage {...props} />;
+  return <ManagerAttendanceAbsenteeReportPage view={props.view} id={props.id} name={props.name} phone={props.phone} smartId={props.smartId} />;
 }

@@ -108,7 +108,7 @@ export function buildLogColumns({ tManagerUi, onViewLog }: BuildLogColumnsParams
         <button
           type="button"
           onClick={() => onViewLog(p.data as WaLog)}
-          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 motion-safe:transition-colors cursor-pointer"
           title="View Delivery Details"
         >
           <Eye size={12} className="text-indigo-400" />

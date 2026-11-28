@@ -31,7 +31,7 @@ export function ManagerDashboardOverviewSeatMatrix({
   const expiringCount = seatData.filter((s) => s.status === 'expiring').length;
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all flex flex-col justify-between h-full">
+    <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card motion-safe:transition-all flex flex-col justify-between h-full">
       <div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-4 border-b border-border">
           <div className="flex items-center gap-3">
@@ -60,7 +60,7 @@ export function ManagerDashboardOverviewSeatMatrix({
             className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline group"
           >
             <span>Full Matrix</span>
-            <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-safe:transition-transform" />
           </Link>
         </div>
 
@@ -75,7 +75,7 @@ export function ManagerDashboardOverviewSeatMatrix({
               <button
                 key={seat.id}
                 type="button"
-                className={`mgr-seat-cell mgr-seat-cell-button ${SEAT_CLASS[seat.status] || ''} h-16 w-full rounded-xl flex flex-col items-center justify-center gap-1 transition-all duration-200 cursor-pointer border-2 hover:scale-105 shadow-xs ${
+                className={`mgr-seat-cell mgr-seat-cell-button ${SEAT_CLASS[seat.status] || ''} h-16 w-full rounded-xl flex flex-col items-center justify-center gap-1 motion-safe:transition-all motion-safe:duration-base cursor-pointer border-2 hover:scale-105 shadow-xs ${
                   isAvailable
                     ? 'bg-success-bg text-success border-border hover:border-success'
                     : isOccupied

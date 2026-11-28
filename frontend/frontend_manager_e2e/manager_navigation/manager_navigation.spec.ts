@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-/** Canonical route sweep for all 35 active Manager leaves across all 8 domains. */
+/** Canonical route sweep for all 36 active Manager leaves across all 8 domains. */
 const canonicalRoutes = [
   '/frontend_manager/manager_dashboard/dashboard_overview',
   '/frontend_manager/manager_dashboard/dashboard_reports',
@@ -23,6 +23,7 @@ const canonicalRoutes = [
   '/frontend_manager/manager_finance/finance_fines_payments',
   '/frontend_manager/manager_finance/finance_auto_suspend',
   '/frontend_manager/manager_attendance/attendance_daily',
+  '/frontend_manager/manager_attendance/attendance_monthly_history',
   '/frontend_manager/manager_attendance/attendance_absentee_report',
   '/frontend_manager/manager_attendance/attendance_qr_scanner',
   '/frontend_manager/manager_accounts_assets/accounts_expenses',
@@ -40,7 +41,7 @@ const canonicalRoutes = [
 ] as const;
 
 test.describe('Manager shell & canonical navigation', () => {
-  test('renders 35 sidebar destinations, single main landmark, and navigates cleanly', async ({ page }) => {
+  test('renders 36 sidebar destinations, single main landmark, and navigates cleanly', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/frontend_manager/manager_dashboard/dashboard_overview');
 
@@ -50,7 +51,7 @@ test.describe('Manager shell & canonical navigation', () => {
 
     const navigation = page.getByTestId('manager-navigation');
     await expect(navigation).toBeVisible();
-    await expect(navigation.locator('a[href^="/frontend_manager/"]')).toHaveCount(35);
+    await expect(navigation.locator('a[href^="/frontend_manager/"]')).toHaveCount(36);
 
     for (const route of canonicalRoutes) {
       await expect(navigation.locator(`a[href="${route}"]`)).toHaveCount(1);

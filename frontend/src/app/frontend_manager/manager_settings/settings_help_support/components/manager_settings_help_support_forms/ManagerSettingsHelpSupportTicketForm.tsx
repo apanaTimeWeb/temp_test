@@ -132,7 +132,7 @@ export function ManagerSettingsHelpSupportTicketForm({ onCancel }: ManagerSettin
             <div className="relative">
               <select
                 id="manager-ticket-priority"
-                className="mgr-select h-11 text-sm font-medium w-full rounded-xl bg-surface/60 border border-border focus:border-amber-400 focus:ring-1 focus:ring-amber-400/25 transition-all cursor-pointer px-3.5"
+                className="mgr-select h-11 text-sm font-medium w-full rounded-xl bg-surface/60 border border-border focus:border-amber-400 focus:ring-1 focus:ring-amber-400/25 motion-safe:transition-all cursor-pointer px-3.5"
                 {...register('priority')}
                 aria-invalid={Boolean(errors.priority)}
                 aria-describedby={errors.priority ? 'manager-ticket-priority-error' : undefined}
@@ -178,7 +178,7 @@ export function ManagerSettingsHelpSupportTicketForm({ onCancel }: ManagerSettin
               type="text"
               required
               placeholder={tManagerUi('briefly_describe_the_issue')}
-              className="mgr-input h-11 text-sm w-full rounded-xl bg-surface/60 border border-border focus:border-sky-400 focus:ring-1 focus:ring-sky-400/25 transition-all px-4"
+              className="mgr-input h-11 text-sm w-full rounded-xl bg-surface/60 border border-border focus:border-sky-400 focus:ring-1 focus:ring-sky-400/25 motion-safe:transition-all px-4"
               {...register('subject')}
               aria-invalid={Boolean(errors.subject)}
               aria-describedby={errors.subject ? 'manager-ticket-subject-error' : undefined}
@@ -219,7 +219,7 @@ export function ManagerSettingsHelpSupportTicketForm({ onCancel }: ManagerSettin
               rows={6}
               required
               placeholder={tManagerUi('provide_as_much_detail_as_possible')}
-              className="mgr-input resize-none py-3.5 px-4 text-sm leading-relaxed w-full rounded-xl bg-surface/60 border border-border focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/25 transition-all"
+              className="mgr-input resize-none py-3.5 px-4 text-sm leading-relaxed w-full rounded-xl bg-surface/60 border border-border focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/25 motion-safe:transition-all"
               {...register('description')}
               aria-invalid={Boolean(errors.description)}
               aria-describedby={errors.description ? 'manager-ticket-description-error' : undefined}
@@ -252,7 +252,7 @@ export function ManagerSettingsHelpSupportTicketForm({ onCancel }: ManagerSettin
             </span>
           </div>
 
-          <div className="border-2 border-dashed border-border hover:border-violet-500/40 rounded-xl p-6 flex flex-col items-center justify-center text-center bg-surface/30 hover:bg-surface/50 transition-all cursor-pointer">
+          <div className="border-2 border-dashed border-border hover:border-violet-500/40 rounded-xl p-6 flex flex-col items-center justify-center text-center bg-surface/30 hover:bg-surface/50 motion-safe:transition-all cursor-pointer">
             <div className="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400 mb-2.5">
               <UploadCloud size={22} />
             </div>

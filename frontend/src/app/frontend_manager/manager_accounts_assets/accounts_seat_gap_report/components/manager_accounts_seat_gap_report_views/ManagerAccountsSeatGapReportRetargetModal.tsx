@@ -9,7 +9,7 @@ import {
 import type { GapRow } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/hooks/ManagerAccountsSeatGapReportDemoRepository';
 import {
   buildRetargetWhatsAppMessage,
-  formatSeatGapInrRupees,
+  formatSeatGapMinorInr,
 } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/utils/ManagerAccountsSeatGapReportHelpers';
 import { Check, Clock, Copy, Megaphone, Send, Target, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -106,7 +106,7 @@ export function ManagerAccountsSeatGapReportRetargetModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="retarget-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-xs motion-safe:animate-in fade-in motion-safe:duration-150 overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-xs motion-safe:animate-in fade-in motion-safe:duration-fast overflow-y-auto"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -138,7 +138,7 @@ export function ManagerAccountsSeatGapReportRetargetModal({
             <span className="text-amber-300 font-medium">Vacant duration: <strong className="text-white">{seat.gapDays} days</strong></span>
             <span className="text-border">•</span>
             <span className="text-rose-300 font-medium">
-              Revenue Lost: <strong className="text-rose-200">{formatSeatGapInrRupees(Math.round(seat.revenueLoss / 100))}</strong>
+              Revenue Lost: <strong className="text-rose-200">{formatSeatGapMinorInr(seat.revenueLoss)}</strong>
             </span>
           </div>
           <span className="text-[11px] text-amber-400 font-semibold bg-amber-500/20 px-2 py-0.5 rounded-md">

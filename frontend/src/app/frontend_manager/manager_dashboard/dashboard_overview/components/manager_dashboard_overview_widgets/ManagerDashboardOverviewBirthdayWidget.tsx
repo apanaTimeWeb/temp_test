@@ -92,7 +92,7 @@ export function ManagerDashboardOverviewBirthdayWidget() {
           return (
             <div
               key={student.id}
-              className="p-4 rounded-xl bg-card border border-border hover:border-primary shadow-xs flex flex-col justify-between gap-3.5 transition-all group hover:-translate-y-0.5"
+              className="p-4 rounded-xl bg-card border border-border hover:border-primary shadow-xs flex flex-col justify-between gap-3.5 motion-safe:transition-all group hover:-translate-y-0.5"
             >
               <div className="flex items-start gap-3">
                 <div className="w-11 h-11 rounded-full bg-linear-to-br from-amber-400 to-amber-600 text-primary-foreground font-black text-sm flex items-center justify-center shrink-0 shadow-xs">
@@ -121,7 +121,7 @@ export function ManagerDashboardOverviewBirthdayWidget() {
                 <button
                   type="button"
                   onClick={() => handleSendWish(student)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95 ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-xs active:scale-95 ${
                     isWished
                       ? 'bg-muted text-muted-foreground border border-border'
                       : 'bg-emerald-600 hover:bg-emerald-700 text-white'

@@ -14,5 +14,5 @@ export default async function ManagerAccountsDailySettlementPage({ searchParams 
     view: firstValue(params.view),
     id: firstValue(params.id),
   };
-  return <ManagerAccountsDailySettlementMain {...mainProps} />;
+  return <ManagerAccountsDailySettlementMain view={mainProps.view} id={mainProps.id} />;
 }

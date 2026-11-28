@@ -1,9 +1,11 @@
 'use client';
 
-import { MONTH_OPTIONS } from '@/app/frontend_manager/manager_attendance/attendance_daily/constants/ManagerAttendanceDailyMonthlyConstants';
+// RESPONSIBILITY: Render month selector, search input, shift filter, and CSV/Print actions for monthly attendance.
+
+import { MONTH_OPTIONS } from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/constants/ManagerAttendanceMonthlyHistoryConstants';
 import { Calendar, Download, Printer, Search, X } from 'lucide-react';
 
-interface ManagerAttendanceDailyMonthlyToolbarProps {
+interface ManagerAttendanceMonthlyHistoryToolbarProps {
   selectedMonth: string;
   onSelectMonth: (monthId: string) => void;
   searchQuery: string;
@@ -14,7 +16,7 @@ interface ManagerAttendanceDailyMonthlyToolbarProps {
   onPrint: () => void;
 }
 
-export function ManagerAttendanceDailyMonthlyToolbar({
+export function ManagerAttendanceMonthlyHistoryToolbar({
   selectedMonth,
   onSelectMonth,
   searchQuery,
@@ -23,7 +25,7 @@ export function ManagerAttendanceDailyMonthlyToolbar({
   onSelectShift,
   onExportCsv,
   onPrint,
-}: ManagerAttendanceDailyMonthlyToolbarProps) {
+}: ManagerAttendanceMonthlyHistoryToolbarProps) {
   return (
     <div className="rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-xs space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/70 pb-3">
@@ -75,7 +77,8 @@ export function ManagerAttendanceDailyMonthlyToolbar({
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
           <input
             maxLength={30}
-            type="text"
+            type="search"
+            aria-label="Search member name, smart ID, or seat"
             placeholder="Search member name, smart ID, or seat..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}

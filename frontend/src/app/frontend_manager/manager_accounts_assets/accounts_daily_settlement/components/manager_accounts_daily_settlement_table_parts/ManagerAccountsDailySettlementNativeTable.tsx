@@ -69,7 +69,7 @@ export default function ManagerAccountsDailySettlementNativeTable<T extends obje
                         <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
                       )
                     ) : (
-                      <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 transition-colors shrink-0" aria-hidden="true" />
+                      <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 motion-safe:transition-colors shrink-0" aria-hidden="true" />
                     )}
                   </button>
                 ) : (
@@ -126,7 +126,7 @@ export default function ManagerAccountsDailySettlementNativeTable<T extends obje
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="px-2.5 py-1 rounded-lg border border-border text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            className="px-2.5 py-1 rounded-lg border border-border text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed motion-safe:transition-colors cursor-pointer"
             disabled={effectivePage <= 0}
             onClick={() => setPage((current) => Math.max(0, current - 1))}
           >
@@ -138,7 +138,7 @@ export default function ManagerAccountsDailySettlementNativeTable<T extends obje
           </span>
           <button
             type="button"
-            className="px-2.5 py-1 rounded-lg border border-border text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            className="px-2.5 py-1 rounded-lg border border-border text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed motion-safe:transition-colors cursor-pointer"
             disabled={effectivePage >= pageCount - 1}
             onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
           >

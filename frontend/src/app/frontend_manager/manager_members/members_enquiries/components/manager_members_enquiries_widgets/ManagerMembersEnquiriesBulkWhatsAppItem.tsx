@@ -21,7 +21,7 @@ export function ManagerMembersEnquiriesBulkWhatsAppItem({
 }: ManagerMembersEnquiriesBulkWhatsAppItemProps) {
   return (
     <div
-      className={`pt-2.5 first:pt-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl border transition-all ${
+      className={`pt-2.5 first:pt-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl border motion-safe:transition-all ${
         isOpened
           ? 'bg-success-bg border-border'
           : 'bg-surface-highlight border-border hover:border-primary'
@@ -57,7 +57,7 @@ export function ManagerMembersEnquiriesBulkWhatsAppItem({
             type="button"
             onClick={() => onSend(enq)}
             disabled={disabled}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs motion-safe:transition-colors cursor-pointer disabled:opacity-50"
             title={`Open WhatsApp for ${enq.name}`}
           >
             <Send size={12} />

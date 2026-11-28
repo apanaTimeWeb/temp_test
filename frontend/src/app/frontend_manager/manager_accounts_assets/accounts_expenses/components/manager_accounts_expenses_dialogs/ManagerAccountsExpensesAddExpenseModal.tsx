@@ -89,12 +89,12 @@ export function ManagerAccountsExpensesAddExpenseModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-add-expense-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 motion-safe:animate-in fade-in motion-safe:duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 motion-safe:animate-in fade-in motion-safe:duration-fast"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="bg-card border border-border rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto motion-safe:animate-in zoom-in-95 motion-safe:duration-150">
+      <div className="bg-card border border-border rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto motion-safe:animate-in zoom-in-95 motion-safe:duration-fast">
         <div className="flex items-center justify-between p-5 border-b border-border bg-surface-highlight">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-primary-subtle text-primary border border-border flex items-center justify-center">

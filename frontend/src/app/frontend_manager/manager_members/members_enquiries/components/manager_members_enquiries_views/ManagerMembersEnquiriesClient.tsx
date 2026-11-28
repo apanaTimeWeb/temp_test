@@ -207,7 +207,7 @@ export function ManagerMembersEnquiriesClient() {
               setCustomEndDate('');
               clearSelection();
             }}
-            className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:bg-primary-hover shadow-xs transition-all cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:bg-primary-hover shadow-xs motion-safe:transition-all cursor-pointer"
           >
             View All Time Leads
           </button>

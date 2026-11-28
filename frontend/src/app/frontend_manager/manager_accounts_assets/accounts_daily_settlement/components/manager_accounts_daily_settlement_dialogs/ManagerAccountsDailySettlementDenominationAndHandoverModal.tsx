@@ -5,6 +5,7 @@ import { ManagerAccountsDailySettlementHandoverReceiptTab } from '@/app/frontend
 import type { Entry } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
 import {
   buildWhatsAppHandoverSummary,
+  closingBalanceToMajorRupees,
   DENOMINATIONS,
   formatInrRupees,
   type DenominationCounts,
@@ -36,7 +37,7 @@ export function ManagerAccountsDailySettlementDenominationAndHandoverModal({
   entry,
   onConfirmSettlement,
 }: ManagerAccountsDailySettlementDenominationAndHandoverModalProps) {
-  const expectedCashRupees = useMemo(() => (entry ? Math.round(entry.closingBalance / 100) : 8500), [entry]);
+  const expectedCashRupees = useMemo(() => closingBalanceToMajorRupees(entry?.closingBalance), [entry]);
 
   const [counts, setCounts] = useState<DenominationCounts>({
     n500: Math.floor(expectedCashRupees / 500),
@@ -56,7 +57,7 @@ export function ManagerAccountsDailySettlementDenominationAndHandoverModal({
 
   useEffect(() => {
     if (!isOpen) return;
-    const exp = entry ? Math.round(entry.closingBalance / 100) : 8500;
+    const exp = closingBalanceToMajorRupees(entry?.closingBalance);
     setCounts({
       n500: Math.floor(exp / 500),
       n200: Math.floor((exp % 500) / 200),
@@ -151,7 +152,7 @@ export function ManagerAccountsDailySettlementDenominationAndHandoverModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="denomination-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-xs motion-safe:animate-in fade-in motion-safe:duration-150 overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-xs motion-safe:animate-in fade-in motion-safe:duration-fast overflow-y-auto"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}

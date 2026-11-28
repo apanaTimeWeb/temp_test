@@ -73,14 +73,14 @@ export function ManagerSeatsMatrixModalConfigTab({
       <div className="flex gap-2.5 pt-2">
         <button
           type="button"
-          className="mgr-btn-ghost flex-1 h-9 text-xs font-semibold rounded-xl border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
+          className="mgr-btn-ghost flex-1 h-9 text-xs font-semibold rounded-xl border border-border text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer"
           onClick={onBack}
         >
           Back to Actions
         </button>
         <button
           type="submit"
-          className="mgr-btn-primary flex-1 h-9 text-xs font-bold rounded-xl transition-colors cursor-pointer"
+          className="mgr-btn-primary flex-1 h-9 text-xs font-bold rounded-xl motion-safe:transition-colors cursor-pointer"
         >
           Save Configuration
         </button>

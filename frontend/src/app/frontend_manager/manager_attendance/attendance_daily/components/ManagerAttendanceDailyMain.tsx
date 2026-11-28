@@ -5,5 +5,5 @@ import type { ManagerAttendanceDailyMainProps } from '@/app/frontend_manager/man
 // RESPONSIBILITY: Preserve route query state at the module boundary and pass it to the feature view.
 // DATA FLOW: Next.js searchParams -> route page -> Main props -> feature view.
 export function ManagerAttendanceDailyMain(props: ManagerAttendanceDailyMainProps) {
-  return <ManagerAttendanceDailyPage {...props} />;
+  return <ManagerAttendanceDailyPage view={props.view} id={props.id} name={props.name} phone={props.phone} smartId={props.smartId} />;
 }

@@ -17,5 +17,5 @@ export default async function ManagerAttendanceAbsenteeReportPage({ searchParams
     phone: firstValue(params.phone),
     smartId: firstValue(params.smartId),
   };
-  return <ManagerAttendanceAbsenteeReportMain {...mainProps} />;
+  return <ManagerAttendanceAbsenteeReportMain view={mainProps.view} id={mainProps.id} name={mainProps.name} phone={mainProps.phone} smartId={mainProps.smartId} />;
 }

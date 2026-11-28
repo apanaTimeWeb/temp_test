@@ -17,5 +17,5 @@ export default async function ManagerFinanceAutoSuspendPage({ searchParams }: Ma
     phone: firstValue(params.phone),
     smartId: firstValue(params.smartId),
   };
-  return <ManagerFinanceAutoSuspendMain {...mainProps} />;
+  return <ManagerFinanceAutoSuspendMain view={mainProps.view} id={mainProps.id} name={mainProps.name} phone={mainProps.phone} smartId={mainProps.smartId} />;
 }

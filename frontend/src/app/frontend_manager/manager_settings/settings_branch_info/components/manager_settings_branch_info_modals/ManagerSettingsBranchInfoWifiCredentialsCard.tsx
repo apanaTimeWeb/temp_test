@@ -159,7 +159,7 @@ export function ManagerSettingsBranchInfoWifiCredentialsCard({
             </button>
             <button
               type="submit"
-              className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 border border-indigo-500 text-white text-xs font-bold cursor-pointer shadow-md motion-safe:transition-all"
+              className="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 border border-indigo-500 text-white text-xs font-bold cursor-pointer shadow-md motion-safe:transition-all"
             >
               Apply &amp; Update QR
             </button>

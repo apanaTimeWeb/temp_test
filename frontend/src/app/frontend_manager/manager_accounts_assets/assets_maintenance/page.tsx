@@ -9,5 +9,5 @@ function firstValue(value: QueryValue): string | undefined { return Array.isArra
 export default async function ManagerAssetsMaintenancePage({ searchParams }: ManagerAssetsMaintenancePageProps) {
   const params = searchParams ? await searchParams : {};
   const mainProps: ManagerAssetsMaintenanceMainProps = { view: firstValue(params.view), id: firstValue(params.id) };
-  return <ManagerAssetsMaintenanceMain {...mainProps} />;
+  return <ManagerAssetsMaintenanceMain view={mainProps.view} />;
 }

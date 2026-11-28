@@ -17,5 +17,5 @@ export default async function ManagerCommunicationWhatsappLogsPage({ searchParam
     phone: firstValue(params.phone),
     smartId: firstValue(params.smartId),
   };
-  return <ManagerCommunicationWhatsappLogsMain {...mainProps} />;
+  return <ManagerCommunicationWhatsappLogsMain view={mainProps.view} id={mainProps.id} name={mainProps.name} phone={mainProps.phone} smartId={mainProps.smartId} />;
 }

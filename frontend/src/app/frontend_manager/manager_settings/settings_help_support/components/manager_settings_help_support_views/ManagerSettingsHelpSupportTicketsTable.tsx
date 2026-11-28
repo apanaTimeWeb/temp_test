@@ -198,7 +198,7 @@ export function ManagerSettingsHelpSupportTicketsTable({
                         <button
                           type="button"
                           onClick={onResetFilters}
-                          className="mt-1 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-xs font-semibold text-primary hover:bg-surface-hover transition-colors cursor-pointer"
+                          className="mt-1 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-xs font-semibold text-primary hover:bg-surface-hover motion-safe:transition-colors cursor-pointer"
                         >
                           <RotateCcw size={12} />
                           <span>Reset all filters</span>

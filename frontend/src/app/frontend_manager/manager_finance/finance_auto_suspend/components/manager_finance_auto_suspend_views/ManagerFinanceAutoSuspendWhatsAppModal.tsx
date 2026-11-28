@@ -93,7 +93,7 @@ export default function ManagerFinanceAutoSuspendWhatsAppModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer transition-colors"
+            className="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer motion-safe:transition-colors"
             title="Close dialog"
           >
             <X size={18} />
@@ -170,14 +170,14 @@ export default function ManagerFinanceAutoSuspendWhatsAppModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-xs font-semibold border border-border text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer transition-colors active:scale-95"
+            className="px-4 py-2 rounded-xl text-xs font-semibold border border-border text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer motion-safe:transition-colors active:scale-95"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={handleCopy}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary cursor-pointer transition-colors active:scale-95"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary cursor-pointer motion-safe:transition-colors active:scale-95"
             title="Copy message to clipboard"
           >
             <Copy size={13} />
@@ -186,7 +186,7 @@ export default function ManagerFinanceAutoSuspendWhatsAppModal({
           <button
             type="button"
             onClick={handleSendWhatsApp}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm cursor-pointer transition-all active:scale-95"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm cursor-pointer motion-safe:transition-all active:scale-95"
             title="Open WhatsApp with message"
           >
             <Send size={13} />

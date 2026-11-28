@@ -102,7 +102,7 @@ export function ManagerSeatsMatrixSwapModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-secondary hover:text-primary hover:bg-surface transition-colors cursor-pointer"
+            className="p-1 rounded-lg text-secondary hover:text-primary hover:bg-surface motion-safe:transition-colors cursor-pointer"
             aria-label="Close"
           >
             <X size={18} />
@@ -276,7 +276,7 @@ export function ManagerSeatsMatrixSwapModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface motion-safe:transition-colors cursor-pointer"
           >
             Cancel
           </button>
@@ -285,7 +285,7 @@ export function ManagerSeatsMatrixSwapModal({
             data-testid="manager-confirm-seat-swap-btn"
             disabled={!selectedTargetId}
             onClick={handleConfirm}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm motion-safe:transition-all cursor-pointer"
           >
             <ArrowLeftRight size={14} />
             <span>Confirm Seat Swap</span>

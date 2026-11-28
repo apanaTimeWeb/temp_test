@@ -109,7 +109,7 @@ export function ManagerAssetsMaintenanceTable({
           ) : (
             <ArrowUpDown
               size={14}
-              className="text-secondary opacity-40 group-hover:opacity-100 transition-colors shrink-0"
+              className="text-secondary opacity-40 group-hover:opacity-100 motion-safe:transition-colors shrink-0"
               aria-hidden="true"
             />
           )}

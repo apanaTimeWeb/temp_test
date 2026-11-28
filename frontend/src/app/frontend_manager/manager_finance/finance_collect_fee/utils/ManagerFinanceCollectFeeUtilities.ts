@@ -1,4 +1,9 @@
 
+/** Converts integer paise amounts to major rupee units when positive. */
+export function paiseToRupees(paiseAmount: number): number {
+  return paiseAmount > 0 ? paiseAmount / 100 : 0;
+}
+
 /** Formats integer or major-unit INR amounts using Intl.NumberFormat. */
 export function formatCollectFeeInr(amount: number, showDecimals = false): string {
   return new Intl.NumberFormat('en-IN', {

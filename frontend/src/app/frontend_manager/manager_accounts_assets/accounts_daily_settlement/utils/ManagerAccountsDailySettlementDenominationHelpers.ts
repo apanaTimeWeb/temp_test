@@ -20,6 +20,11 @@ export function formatInrRupees(rupees: number): string {
   return INR_RUPEES_FORMATTER.format(rupees);
 }
 
+/** Converts minor-unit closing balance to whole major INR units for denomination counting. */
+export function closingBalanceToMajorRupees(minorAmount?: number | null): number {
+  return minorAmount != null ? Math.round(minorAmount / 100) : 8500;
+}
+
 export const DENOMINATIONS = [
   { key: 'n500', value: 500, badge: formatInrRupees(500), label: `${formatInrRupees(500)} Note` },
   { key: 'n200', value: 200, badge: formatInrRupees(200), label: `${formatInrRupees(200)} Note` },

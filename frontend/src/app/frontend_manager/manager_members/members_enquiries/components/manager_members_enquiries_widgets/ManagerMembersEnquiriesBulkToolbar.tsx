@@ -33,7 +33,7 @@ export function ManagerMembersEnquiriesBulkToolbar({
   return (
     <div
       aria-label="Bulk Lead Actions Toolbar"
-      className="menq-bulk-bar p-3.5 sm:p-4 rounded-2xl border border-emerald-500/40 shadow-xl shadow-black/40 flex flex-col md:flex-row md:items-center justify-between gap-3 motion-safe:animate-in fade-in slide-in-from-top-2 motion-safe:duration-200"
+      className="menq-bulk-bar p-3.5 sm:p-4 rounded-2xl border border-emerald-500/40 shadow-xl shadow-black/40 flex flex-col md:flex-row md:items-center justify-between gap-3 motion-safe:animate-in fade-in slide-in-from-top-2 motion-safe:duration-base"
     >
       {/* Left: Selection Counter & Quick Filter Chips */}
       <div className="flex flex-wrap items-center gap-2">
@@ -103,7 +103,7 @@ export function ManagerMembersEnquiriesBulkToolbar({
           <button
             type="button"
             onClick={onClearSelection}
-            className="inline-flex items-center gap-1 text-xs text-rose-400 hover:text-rose-300 hover:underline px-2 py-1 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1 text-xs text-rose-400 hover:text-rose-300 hover:underline px-2 py-1 motion-safe:transition-colors cursor-pointer"
           >
             <X size={12} />
             <span>Clear</span>
@@ -117,7 +117,7 @@ export function ManagerMembersEnquiriesBulkToolbar({
           <button
             type="button"
             onClick={onBulkDelete}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-md shadow-rose-950/40 transition-all hover:scale-[1.02] cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-md shadow-rose-950/40 motion-safe:transition-all hover:scale-[1.02] cursor-pointer"
             title="Delete selected leads"
           >
             <Trash2 size={15} />
@@ -127,7 +127,7 @@ export function ManagerMembersEnquiriesBulkToolbar({
         <button
           type="button"
           onClick={onOpenBulkWhatsApp}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-md shadow-emerald-950/50 transition-all hover:scale-[1.02] cursor-pointer"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-md shadow-emerald-950/50 motion-safe:transition-all hover:scale-[1.02] cursor-pointer"
         >
           <MessageCircle size={16} />
           <span>Launch WhatsApp Queue ({selectedCount})</span>

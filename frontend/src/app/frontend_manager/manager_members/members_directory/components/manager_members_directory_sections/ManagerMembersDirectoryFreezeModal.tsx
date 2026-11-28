@@ -79,7 +79,7 @@ export function ManagerMembersDirectoryFreezeModal({
       className="fixed inset-0 md-modal-shell flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
     >
       <div className="fixed inset-0 bg-black/80 backdrop-blur-sm motion-safe:transition-opacity" onClick={onClose} aria-hidden="true" />
-      <div className="relative z-10 w-full max-w-2xl md-modal-card border border-amber-500/40 rounded-2xl shadow-2xl overflow-hidden motion-safe:animate-in fade-in zoom-in-95 motion-safe:duration-200 my-auto text-white">
+      <div className="relative z-10 w-full max-w-2xl md-modal-card border border-amber-500/40 rounded-2xl shadow-2xl overflow-hidden motion-safe:animate-in fade-in zoom-in-95 motion-safe:duration-base my-auto text-white">
         <div className="px-6 py-4 md-freeze-header border-b border-amber-500/30 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center shrink-0">
@@ -181,7 +181,7 @@ export function ManagerMembersDirectoryFreezeModal({
 
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-indigo-500/20">
             <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl border border-indigo-500/30 text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/5 motion-safe:transition-colors cursor-pointer">Cancel</button>
-            <button type="submit" className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white font-bold text-xs shadow-md shadow-amber-950/50 motion-safe:transition-all cursor-pointer">
+            <button type="submit" className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-amber-600 hover:from-amber-500 hover:to-amber-400 text-white font-bold text-xs shadow-md shadow-amber-950/50 motion-safe:transition-all cursor-pointer">
               <PauseCircle size={15} />
               Confirm & Pause Membership
             </button>

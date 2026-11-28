@@ -71,7 +71,7 @@ export function createManagerAbsenteeReportAbsenteeColumns(
               <button
                 type="button"
                 onClick={() => onViewDetails(item)}
-                className="p-1.5 rounded-lg text-sky-400 hover:text-sky-300 hover:bg-sky-500/15 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg text-sky-400 hover:text-sky-300 hover:bg-sky-500/15 motion-safe:transition-colors cursor-pointer"
                 title={`View absentee profile for ${item.name}`}
                 aria-label={`View absentee profile for ${item.name}`}
               >
@@ -82,7 +82,7 @@ export function createManagerAbsenteeReportAbsenteeColumns(
             {item.parentEmail && (
               <a
                 href={`mailto:${encodeURIComponent(item.parentEmail)}?subject=${encodeURIComponent(`Library Attendance Notice - ${item.name}`)}&body=${encodeURIComponent(`Dear Parent,\n\nThis is an attendance notice regarding ${item.name} (${item.smartId}) who has been absent for ${item.daysAbsent} consecutive days.\n\nPlease contact library management if you have any questions.\n\nThank you,\nLibrary Administration`)}`}
-                className="p-1.5 rounded-lg text-blue-400 hover:text-blue-300 hover:bg-blue-500/15 transition-colors cursor-pointer inline-flex items-center"
+                className="p-1.5 rounded-lg text-blue-400 hover:text-blue-300 hover:bg-blue-500/15 motion-safe:transition-colors cursor-pointer inline-flex items-center"
                 title={`Send email notice to ${item.name}'s parent`}
                 aria-label={`Send email notice to ${item.name}'s parent`}
               >
@@ -96,7 +96,7 @@ export function createManagerAbsenteeReportAbsenteeColumns(
               <button
                 type="button"
                 onClick={() => onAlertWhatsApp?.(item)}
-                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs motion-safe:transition-colors cursor-pointer"
                 title={`Send WhatsApp alert to ${item.name}'s parent`}
               >
                 <MessageSquare size={12} className="mr-0.5" /> WhatsApp

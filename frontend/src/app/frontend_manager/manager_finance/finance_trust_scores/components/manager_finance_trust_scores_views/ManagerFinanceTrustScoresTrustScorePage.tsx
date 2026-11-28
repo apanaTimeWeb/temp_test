@@ -125,7 +125,7 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
         </div>
       </div>
 
-      <div style={{ display: 'none' }} role="status">
+      <div className="hidden" role="status">
         <p className="fin-input-hint fin-text-warning mt-2" data-testid="manager-finance-trust-score-sample-warning">
           {tManagerUi('student_names_and_trust_scores_are_illustrative_sample_d_0de711')}
         </p>

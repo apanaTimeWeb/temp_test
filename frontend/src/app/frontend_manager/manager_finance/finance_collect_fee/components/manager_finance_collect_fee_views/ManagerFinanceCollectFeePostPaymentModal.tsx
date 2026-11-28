@@ -78,13 +78,13 @@ export default function ManagerFinanceCollectFeePostPaymentModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 motion-safe:animate-in fade-in motion-safe:duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 motion-safe:animate-in fade-in motion-safe:duration-base"
       role="dialog"
       aria-modal="true"
       aria-labelledby="post-payment-title"
       data-testid="manager-finance-post-payment-modal"
     >
-      <div className="w-full max-w-md rounded-2xl border border-emerald-500/30 bg-card p-6 shadow-2xl space-y-5 motion-safe:animate-in zoom-in-95 motion-safe:duration-200">
+      <div className="w-full max-w-md rounded-2xl border border-emerald-500/30 bg-card p-6 shadow-2xl space-y-5 motion-safe:animate-in zoom-in-95 motion-safe:duration-base">
         <div className="flex flex-col items-center text-center space-y-2">
           <div className="w-14 h-14 rounded-full bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-500">
             <CheckCircle2 size={32} className="stroke-[2.5]" />

@@ -101,7 +101,7 @@ export function ManagerMembersDirectoryKpiSection({
             type="button"
             data-testid={`manager-kpi-card-${kpi.id}`}
             onClick={() => onSelectTab?.(kpi.tab)}
-            className={`group relative overflow-hidden rounded-2xl p-4 sm:p-5 flex flex-col justify-between gap-3 text-left transition-all duration-300 cursor-pointer ${
+            className={`group relative overflow-hidden rounded-2xl p-4 sm:p-5 flex flex-col justify-between gap-3 text-left motion-safe:transition-all motion-safe:duration-slow cursor-pointer ${
               isSelected
                 ? `${kpi.activeBorder} scale-[1.01] -translate-y-0.5 z-10 opacity-100 shadow-xl`
                 : `${kpi.unselectedBg} opacity-85 hover:opacity-100 hover:scale-[1.01]`
@@ -129,7 +129,7 @@ export function ManagerMembersDirectoryKpiSection({
                   </span>
                 )}
               </div>
-              <div className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-xs shrink-0 transition-transform group-hover:scale-110 ${kpi.iconBg} ${kpi.iconColor}`}>
+              <div className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-xs shrink-0 motion-safe:transition-transform group-hover:scale-110 ${kpi.iconBg} ${kpi.iconColor}`}>
                 <kpi.icon size={18} />
               </div>
             </div>

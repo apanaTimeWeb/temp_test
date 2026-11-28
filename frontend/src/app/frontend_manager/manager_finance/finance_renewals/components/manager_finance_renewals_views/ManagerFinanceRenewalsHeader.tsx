@@ -46,13 +46,13 @@ export default function ManagerFinanceRenewalsHeader({
         <div className="flex items-center gap-3">
           <h1 className="fin-page-title">{renewalsTitle}</h1>
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500 motion-safe:animate-pulse" />
             Active Renewal Desk
           </span>
         </div>
         <p className="fin-page-subtitle">{renewalsSubtitle}</p>
         <p
-          style={{ display: 'none' }}
+          className="hidden"
           data-testid="manager-finance-renewals-sample-warning"
           role="status"
         >
@@ -71,7 +71,7 @@ export default function ManagerFinanceRenewalsHeader({
         <button
           type="button"
           onClick={onImportClick}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer motion-safe:transition-all"
           title={importLabel}
         >
           <Upload size={13} className="text-secondary" />
@@ -81,7 +81,7 @@ export default function ManagerFinanceRenewalsHeader({
           type="button"
           onClick={onExportCsv}
           disabled={!hasVisibleRows}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer motion-safe:transition-all disabled:opacity-40 disabled:cursor-not-allowed"
           title="Export CSV"
         >
           <Download size={13} className="text-secondary" />
@@ -91,7 +91,7 @@ export default function ManagerFinanceRenewalsHeader({
           type="button"
           onClick={onPrint}
           disabled={!hasVisibleRows}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer motion-safe:transition-all disabled:opacity-40 disabled:cursor-not-allowed"
           title="Print Renewals"
           data-testid="manager-finance-renewals-print"
         >
@@ -113,7 +113,7 @@ export default function ManagerFinanceRenewalsHeader({
             type="button"
             onClick={onEmailAll}
             disabled={!hasVisibleRows}
-            className="p-2 rounded-xl border border-border bg-card hover:bg-purple-500/10 text-purple-600 dark:text-purple-400 transition-colors cursor-pointer shadow-xs disabled:opacity-40 disabled:cursor-not-allowed"
+            className="p-2 rounded-xl border border-border bg-card hover:bg-purple-500/10 text-purple-600 dark:text-purple-400 motion-safe:transition-colors cursor-pointer shadow-xs disabled:opacity-40 disabled:cursor-not-allowed"
             title="Send Email to All (Email All)"
             aria-label="Send Email to All"
           >
@@ -123,7 +123,7 @@ export default function ManagerFinanceRenewalsHeader({
             type="button"
             onClick={onRemindAll}
             disabled={!hasVisibleRows}
-            className="p-2 rounded-xl border border-border bg-card hover:bg-amber-500/10 text-amber-500 dark:text-amber-400 transition-colors cursor-pointer shadow-xs disabled:opacity-40 disabled:cursor-not-allowed"
+            className="p-2 rounded-xl border border-border bg-card hover:bg-amber-500/10 text-amber-500 dark:text-amber-400 motion-safe:transition-colors cursor-pointer shadow-xs disabled:opacity-40 disabled:cursor-not-allowed"
             title="Send SMS to All (SMS All)"
             aria-label="Send SMS to All"
           >

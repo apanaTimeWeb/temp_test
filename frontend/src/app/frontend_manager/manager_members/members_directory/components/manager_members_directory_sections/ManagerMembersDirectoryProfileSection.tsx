@@ -168,7 +168,7 @@ export function ManagerMembersDirectoryProfileSection({
             </button>
           )}
         </div>
-        <button type="button" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-950/50 motion-safe:transition-all cursor-pointer shrink-0" onClick={() => onSearchChange(searchValue.trim())} aria-label={tManagerUi('search_member_profile')}>
+        <button type="button" className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-950/50 motion-safe:transition-all cursor-pointer shrink-0" onClick={() => onSearchChange(searchValue.trim())} aria-label={tManagerUi('search_member_profile')}>
           <Search size={15} /><span>{tManagerUi('search')}</span>
         </button>
       </div>
@@ -200,7 +200,7 @@ export function ManagerMembersDirectoryProfileSection({
               </div>
 
               <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap shrink-0">
-                <button type="button" onClick={handleCollectFee} className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-md shadow-emerald-950/40 motion-safe:transition-all cursor-pointer hover:scale-[1.02]" title={`Direct Collect Fee or Renew Plan for ${member.name}`}>
+                <button type="button" onClick={handleCollectFee} className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-950/40 motion-safe:transition-all cursor-pointer hover:scale-[1.02]" title={`Direct Collect Fee or Renew Plan for ${member.name}`}>
                   <IndianRupee size={13} /><span>Collect Fee</span>
                 </button>
                 {isFrozen ? (
@@ -243,7 +243,7 @@ export function ManagerMembersDirectoryProfileSection({
                     {member.leaveDetails?.notes && <p className="text-slate-400 text-[11px] mt-0.5 italic">Remarks: &quot;{member.leaveDetails.notes}&quot;</p>}
                   </div>
                 </div>
-                <button type="button" onClick={handleResumeMember} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-500 hover:to-teal-400 text-white font-bold text-xs shadow-md shadow-cyan-950/50 motion-safe:transition-all cursor-pointer shrink-0 self-start sm:self-auto">
+                <button type="button" onClick={handleResumeMember} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs shadow-md shadow-cyan-950/50 motion-safe:transition-all cursor-pointer shrink-0 self-start sm:self-auto">
                   <PlayCircle size={14} /><span>Resume / Unfreeze Now</span>
                 </button>
               </div>

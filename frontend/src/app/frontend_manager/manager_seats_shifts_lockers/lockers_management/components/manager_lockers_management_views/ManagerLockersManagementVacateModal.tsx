@@ -65,7 +65,7 @@ export function ManagerLockersManagementVacateModal({
             </label>
 
             <label
-              className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${
+              className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer motion-safe:transition-colors ${
                 keyStatus === 'returned'
                   ? 'border-primary bg-primary-subtle'
                   : 'border-border bg-card'
@@ -90,7 +90,7 @@ export function ManagerLockersManagementVacateModal({
             </label>
 
             <label
-              className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${
+              className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer motion-safe:transition-colors ${
                 keyStatus === 'lost'
                   ? 'border-danger bg-danger-bg'
                   : 'border-border bg-card'

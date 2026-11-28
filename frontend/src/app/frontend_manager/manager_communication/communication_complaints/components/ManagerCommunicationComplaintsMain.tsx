@@ -5,5 +5,5 @@ import type { ManagerCommunicationComplaintsMainProps } from '@/app/frontend_man
 // RESPONSIBILITY: Preserve supported route query state at the module boundary and pass it to the feature view.
 // DATA FLOW: Next.js searchParams -> route page -> Main props -> feature view.
 export function ManagerCommunicationComplaintsMain(props: ManagerCommunicationComplaintsMainProps) {
-  return <ManagerCommunicationComplaintsPage {...props} />;
+  return <ManagerCommunicationComplaintsPage view={props.view} id={props.id} name={props.name} phone={props.phone} smartId={props.smartId} />;
 }

@@ -131,7 +131,7 @@ export default function ManagerFinanceSubscriptionsDetailModal({
                 onClose();
                 onRenewClick(target);
               }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs cursor-pointer transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs cursor-pointer motion-safe:transition-colors"
             >
               <RefreshCw size={13} /> Renew This Plan
             </button>

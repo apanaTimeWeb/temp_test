@@ -2,41 +2,19 @@ import {
   ATTENDANCE_DAY_NAMES,
   ATTENDANCE_SHIFT_TIMINGS,
   pseudoAttendanceHash,
-} from '@/app/frontend_manager/manager_attendance/attendance_daily/constants/ManagerAttendanceDailyMonthlyConstants';
-import type { Student } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
+} from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/constants/ManagerAttendanceMonthlyHistoryConstants';
+import type {
+  AttendanceMonthlyHistoryDayRecord,
+  AttendanceMonthlyHistoryMonthStatus,
+  Student,
+  StudentMonthlyAttendanceSummary,
+} from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/types/ManagerAttendanceMonthlyHistoryTypes';
 
-export type AttendanceDailyMonthStatus = 'present' | 'absent' | 'late' | 'holiday';
-
-export interface AttendanceDailyDayRecord {
-  dayNumber: number;
-  dateStr: string;
-  dayOfWeek: string;
-  isSunday: boolean;
-  status: AttendanceDailyMonthStatus;
-  inTime: string;
-  outTime: string;
-  studyHours: number;
-  verificationMethod: string;
-}
-
-export interface StudentMonthlyAttendanceSummary {
-  studentId: string;
-  studentName: string;
-  smartId: string;
-  shift: string;
-  seat: string;
-  month: string;
-  monthLabel: string;
-  totalDays: number;
-  totalWorkingDays: number;
-  presentDays: number;
-  absentDays: number;
-  lateDays: number;
-  holidayDays: number;
-  attendanceRate: number;
-  totalStudyHours: number;
-  dailyLogs: AttendanceDailyDayRecord[];
-}
+export type {
+  AttendanceMonthlyHistoryDayRecord,
+  AttendanceMonthlyHistoryMonthStatus,
+  StudentMonthlyAttendanceSummary,
+};
 
 export function getStudentMonthlyAttendance(
   student: Student,
@@ -49,7 +27,7 @@ export function getStudentMonthlyAttendance(
   const monthLabel = new Date(year, monthIndex, 1).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
   const defaultTiming = ATTENDANCE_SHIFT_TIMINGS[student.shift] || { in: '08:00', out: '17:00', hours: 9.0 };
 
-  const dailyLogs: AttendanceDailyDayRecord[] = [];
+  const dailyLogs: AttendanceMonthlyHistoryDayRecord[] = [];
   let presentDays = 0;
   let absentDays = 0;
   let lateDays = 0;
@@ -71,18 +49,18 @@ export function getStudentMonthlyAttendance(
     const hashMod = hash % 100;
     const isConsecutiveAbsentWindow = student.consecutiveAbsent > 0 && d > totalDays - student.consecutiveAbsent - 2 && monthKey === '2026-11';
 
-    let status: AttendanceDailyMonthStatus = 'present';
+    let status: AttendanceMonthlyHistoryMonthStatus = 'present';
     let inTime = defaultTiming.in;
-    const outTimeDefault = defaultTiming.out;
-    let outTime = outTimeDefault;
+    const outTime = defaultTiming.out;
     let studyHours = defaultTiming.hours;
 
     if (isConsecutiveAbsentWindow || hashMod < 6) {
       status = 'absent';
       absentDays++;
       inTime = '—';
-      outTime = '—';
       studyHours = 0;
+      dailyLogs.push({ dayNumber: d, dateStr: dateFormatted, dayOfWeek, isSunday: false, status, inTime, outTime: '—', studyHours: 0, verificationMethod: 'Unmarked / Absent' });
+      continue;
     } else if (hashMod < 14) {
       status = 'late';
       lateDays++;
@@ -97,7 +75,7 @@ export function getStudentMonthlyAttendance(
     }
 
     const methods = ['Biometric Turnstile', 'QR Kiosk Scan', 'Manager Roll Check'];
-    const verificationMethod = status === 'absent' ? 'Unmarked / Absent' : methods[hash % 3];
+    const verificationMethod = methods[hash % 3];
     dailyLogs.push({ dayNumber: d, dateStr: dateFormatted, dayOfWeek, isSunday: false, status, inTime, outTime, studyHours: Math.round(studyHours * 10) / 10, verificationMethod });
   }
 

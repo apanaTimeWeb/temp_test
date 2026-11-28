@@ -46,7 +46,7 @@ export function ManagerAssetsRegisterConfirmModal({
       aria-modal="true"
       aria-labelledby="asset-register-confirm-title"
       aria-describedby="asset-register-confirm-desc"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs motion-safe:animate-in fade-in motion-safe:duration-fast"
       onClick={(e) => {
         if (e.target === e.currentTarget) onCancel();
       }}
@@ -55,7 +55,7 @@ export function ManagerAssetsRegisterConfirmModal({
         <button
           type="button"
           onClick={onCancel}
-          className="absolute right-4 top-4 p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-surface-hover transition-colors"
+          className="absolute right-4 top-4 p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-colors"
           aria-label="Close dialog"
         >
           <X size={18} />
@@ -96,7 +96,7 @@ export function ManagerAssetsRegisterConfirmModal({
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-colors cursor-pointer"
           >
             Cancel
           </button>
@@ -104,7 +104,7 @@ export function ManagerAssetsRegisterConfirmModal({
             ref={confirmBtnRef}
             type="button"
             onClick={onConfirm}
-            className="mar-pill-active-state inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-xs font-semibold hover:opacity-95 transition-all cursor-pointer border"
+            className="mar-pill-active-state inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-xs font-semibold hover:opacity-95 motion-safe:transition-all cursor-pointer border"
           >
             <CheckCircle2 size={14} />
             Confirm & Register

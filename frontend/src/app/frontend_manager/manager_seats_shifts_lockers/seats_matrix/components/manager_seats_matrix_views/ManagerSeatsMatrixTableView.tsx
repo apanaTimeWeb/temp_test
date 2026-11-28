@@ -72,7 +72,7 @@ export function ManagerSeatsMatrixTableView({
               <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 transition-colors shrink-0" aria-hidden="true" />
+            <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 motion-safe:transition-colors shrink-0" aria-hidden="true" />
           )}
         </button>
       </th>
@@ -115,7 +115,7 @@ export function ManagerSeatsMatrixTableView({
               </tr>
             ) : (
               paginatedTableSeats.map((seat) => (
-                <tr key={seat.uuid || seat.id} className="border-b border-border hover:bg-surface-hover transition-colors">
+                <tr key={seat.uuid || seat.id} className="border-b border-border hover:bg-surface-hover motion-safe:transition-colors">
                   <td className="py-3 px-4 font-mono font-bold text-primary">{seat.id}</td>
                   <td className="py-3 px-4 text-secondary text-xs">{seat.wing || 'North Reading Hall (AC)'}</td>
                   <td className="py-3 px-4 text-xs">{shiftLabel(seat.shift)}</td>
@@ -150,7 +150,7 @@ export function ManagerSeatsMatrixTableView({
                           <button
                             type="button"
                             onClick={() => (onViewStudentProfile ? onViewStudentProfile(seat) : onSelectSeat(seat))}
-                            className="font-semibold text-primary block leading-tight hover:text-indigo-400 hover:underline text-left cursor-pointer transition-colors"
+                            className="font-semibold text-primary block leading-tight hover:text-indigo-400 hover:underline text-left cursor-pointer motion-safe:transition-colors"
                             title={`Preview Profile & KYC of ${seat.student}`}
                           >
                             {seat.student}
@@ -162,7 +162,7 @@ export function ManagerSeatsMatrixTableView({
                             type="button"
                             onClick={() => onViewStudentProfile(seat)}
                             title={`Directly View Profile & KYC of ${seat.student}`}
-                            className="opacity-70 group-hover:opacity-100 p-1 rounded-md text-indigo-400 hover:bg-indigo-500/15 hover:text-indigo-300 transition-all cursor-pointer ml-1.5 shrink-0"
+                            className="opacity-70 group-hover:opacity-100 p-1 rounded-md text-indigo-400 hover:bg-indigo-500/15 hover:text-indigo-300 motion-safe:transition-all cursor-pointer ml-1.5 shrink-0"
                           >
                             <ShieldCheck size={14} />
                           </button>
@@ -192,7 +192,7 @@ export function ManagerSeatsMatrixTableView({
                         <button
                           type="button"
                           onClick={() => onViewStudentProfile(seat)}
-                          className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-lg text-indigo-400 hover:text-indigo-300 hover:bg-indigo-500/15 border border-indigo-500/20 transition-all cursor-pointer"
+                          className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-lg text-indigo-400 hover:text-indigo-300 hover:bg-indigo-500/15 border border-indigo-500/20 motion-safe:transition-all cursor-pointer"
                           title={`Direct Profile & KYC of ${seat.student}`}
                         >
                           <ShieldCheck size={12} />

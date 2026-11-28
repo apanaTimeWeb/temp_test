@@ -39,7 +39,7 @@ export function ManagerMembersEnquiriesKanban({ isEmpty, getCardsByStatus }: Man
         <p className="text-slate-400 text-sm mb-6">{tManagerUi('add_your_first_lead_to_start_the_pipeline')}</p>
         <button
           type="button"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-bold text-sm shadow-lg shadow-indigo-950/50 motion-safe:transition-all cursor-pointer"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-950/50 motion-safe:transition-all cursor-pointer"
           onClick={() => router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADD)}
         >
           <Plus size={16} /> {tManagerUi('add_enquiry')}

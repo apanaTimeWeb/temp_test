@@ -49,7 +49,7 @@ export function ManagerAccountsExpensesToolbar({
                 key={tab.id}
                 type="button"
                 onClick={() => setModeFilter(tab.id)}
-                className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
                   isActive
                     ? `${tab.activeClass} border shadow-sm font-bold`
                     : 'bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover border border-border/80'
@@ -85,7 +85,7 @@ export function ManagerAccountsExpensesToolbar({
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search description, payee, or category..."
             style={{ paddingLeft: '2.5rem', paddingRight: '2.25rem' }}
-            className="w-full text-xs rounded-xl bg-card border border-border py-2 text-primary placeholder:text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+            className="w-full text-xs rounded-xl bg-card border border-border py-2 text-primary placeholder:text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary motion-safe:transition-all"
           />
           <Search
             size={16}
@@ -95,7 +95,7 @@ export function ManagerAccountsExpensesToolbar({
             <button
               type="button"
               onClick={() => setSearchQuery('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-secondary hover:text-primary rounded-md hover:bg-surface-hover transition-colors cursor-pointer z-10"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-secondary hover:text-primary rounded-md hover:bg-surface-hover motion-safe:transition-colors cursor-pointer z-10"
               title="Clear search"
             >
               <X size={14} />

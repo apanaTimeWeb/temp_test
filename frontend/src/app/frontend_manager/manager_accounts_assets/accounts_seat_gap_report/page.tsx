@@ -14,5 +14,5 @@ export default async function ManagerAccountsSeatGapReportPage({ searchParams }:
     view: firstValue(params.view),
     id: firstValue(params.id),
   };
-  return <ManagerAccountsSeatGapReportMain {...mainProps} />;
+  return <ManagerAccountsSeatGapReportMain view={mainProps.view} id={mainProps.id} />;
 }

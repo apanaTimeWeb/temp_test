@@ -65,7 +65,7 @@ export default function ManagerFinanceFinesPaymentsDashboardTab({
               key={kpi.labelKey}
               type="button"
               onClick={() => onSelectKpi(kpi.targetTab, kpi.filterType)}
-              className={`fin-fines-kpi-card--${variant} group relative overflow-hidden p-5 rounded-2xl border motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:shadow-xl text-left cursor-pointer flex flex-col justify-between`}
+              className={`fin-fines-kpi-card--${variant} group relative overflow-hidden p-5 rounded-2xl border motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:shadow-xl text-left cursor-pointer flex flex-col justify-between`}
             >
               <svg
                 aria-hidden="true"

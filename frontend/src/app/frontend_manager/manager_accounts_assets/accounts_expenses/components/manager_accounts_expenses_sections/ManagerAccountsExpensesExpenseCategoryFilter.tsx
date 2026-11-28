@@ -42,7 +42,7 @@ export default function ManagerAccountsExpensesExpenseCategoryFilter({
                 key={cat}
                 type="button"
                 onClick={() => onChange(cat)}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
                   isActive
                     ? `${activeClass} border shadow-sm font-bold`
                     : 'bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover border border-border/80'
@@ -58,7 +58,7 @@ export default function ManagerAccountsExpensesExpenseCategoryFilter({
         <button
           type="button"
           onClick={onViewCategories}
-          className="self-end sm:self-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs shrink-0"
+          className="self-end sm:self-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-colors cursor-pointer shadow-xs shrink-0"
         >
           <TrendingUp size={13} />
           <span>{labels.viewCategories}</span>

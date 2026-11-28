@@ -110,7 +110,7 @@ export function ManagerMembersAlumniTable({
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-danger hover:opacity-80 rounded-full transition-colors"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-danger hover:opacity-80 rounded-full motion-safe:transition-colors"
                 title="Clear search"
                 aria-label="Clear search"
               >
@@ -176,7 +176,7 @@ export function ManagerMembersAlumniTable({
                 type="button"
                 data-testid="manager-alumni-reset-filters"
                 onClick={onResetFilters}
-                className="inline-flex items-center justify-center gap-1.5 px-3 h-9 rounded-lg border border-border text-xs font-semibold text-danger hover:bg-danger-bg cursor-pointer shrink-0 col-span-full lg:col-auto w-full lg:w-auto transition-colors"
+                className="inline-flex items-center justify-center gap-1.5 px-3 h-9 rounded-lg border border-border text-xs font-semibold text-danger hover:bg-danger-bg cursor-pointer shrink-0 col-span-full lg:col-auto w-full lg:w-auto motion-safe:transition-colors"
                 title="Reset all filters"
               >
                 <X size={14} className="text-danger shrink-0" />

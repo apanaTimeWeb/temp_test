@@ -61,7 +61,7 @@ export function ManagerMembersEnquiriesKanbanCard({ enq, colClass, onClick }: Ma
         <button
           type="button"
           onClick={handleWhatsApp}
-          className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/35 hover:text-emerald-200 transition-all shrink-0 cursor-pointer"
+          className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/35 hover:text-emerald-200 motion-safe:transition-all shrink-0 cursor-pointer"
           title={`WhatsApp ${enq.name}`}
           aria-label={`WhatsApp ${enq.name}`}
         >

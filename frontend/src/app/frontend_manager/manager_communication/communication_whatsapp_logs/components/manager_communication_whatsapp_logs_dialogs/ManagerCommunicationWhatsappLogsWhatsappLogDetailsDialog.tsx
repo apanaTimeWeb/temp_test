@@ -52,7 +52,7 @@ export function ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg hover:bg-surface-hover text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer"
             aria-label={labels.close}
           >
             <X size={16} />
@@ -150,7 +150,7 @@ export function ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog({
           <button
             type="button"
             onClick={() => window.print()}
-            className="mgr-btn-outline text-xs sm:text-sm h-10 px-4 rounded-xl inline-flex items-center gap-1.5 cursor-pointer w-full sm:w-auto justify-center hover:bg-surface-hover transition-colors"
+            className="mgr-btn-outline text-xs sm:text-sm h-10 px-4 rounded-xl inline-flex items-center gap-1.5 cursor-pointer w-full sm:w-auto justify-center hover:bg-surface-hover motion-safe:transition-colors"
             title="Print message receipt"
           >
             <Printer size={14} className="text-secondary" />

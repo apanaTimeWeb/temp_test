@@ -115,7 +115,7 @@ export function ManagerAssetsMaintenanceAddModal({ isOpen, onClose, onAddOrder }
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 motion-safe:animate-in fade-in motion-safe:duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 motion-safe:animate-in fade-in motion-safe:duration-fast"
       role="dialog"
       aria-modal="true"
       aria-labelledby="add-maintenance-title"

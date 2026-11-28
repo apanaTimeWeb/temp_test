@@ -112,7 +112,7 @@ export function ManagerAttendanceDailyTable({
                 type="button"
                 disabled={effectivePage === 0}
                 onClick={() => setPage(effectivePage - 1)}
-                className="px-3 py-1 rounded-lg border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-secondary hover:text-primary disabled:opacity-40 cursor-pointer active:scale-95 transition-all shadow-2xs"
+                className="px-3 py-1 rounded-lg border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-secondary hover:text-primary disabled:opacity-40 cursor-pointer active:scale-95 motion-safe:transition-all shadow-2xs"
               >
                 Previous
               </button>
@@ -123,7 +123,7 @@ export function ManagerAttendanceDailyTable({
                 type="button"
                 disabled={effectivePage >= pageCount - 1}
                 onClick={() => setPage(effectivePage + 1)}
-                className="px-3 py-1 rounded-lg border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-secondary hover:text-primary disabled:opacity-40 cursor-pointer active:scale-95 transition-all shadow-2xs"
+                className="px-3 py-1 rounded-lg border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-secondary hover:text-primary disabled:opacity-40 cursor-pointer active:scale-95 motion-safe:transition-all shadow-2xs"
               >
                 Next
               </button>

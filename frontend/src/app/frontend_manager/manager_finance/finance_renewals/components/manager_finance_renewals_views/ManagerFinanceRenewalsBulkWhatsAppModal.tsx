@@ -1,7 +1,7 @@
 'use client';
 
 import {
-  formatRenewalInr,
+  formatRenewalMinorInr,
   getRenewalTemplates,
   personalizeRenewalTemplate,
   type RenewalMessageItem,
@@ -113,7 +113,7 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
             </div>
             <div className="flex items-center gap-3">
               <div className="w-28 sm:w-36 bg-surface-highlight rounded-full h-2.5 overflow-hidden border border-border">
-                <div className="bg-emerald-600 h-2.5 rounded-full motion-safe:transition-all motion-safe:duration-300" style={{ width: `${progressPct}%` }} />
+                <div className="bg-emerald-600 h-2.5 rounded-full motion-safe:transition-all motion-safe:duration-slow" style={{ width: `${progressPct}%` }} />
               </div>
               {!isComplete && (
                 <button
@@ -184,7 +184,7 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
                         {isExpired ? `Expired ${Math.abs(r.daysLeft)} days ago` : `Expires in ${r.daysLeft} days`}
                       </span>
                       <span className="font-semibold text-primary">
-                        Due: {formatRenewalInr(Math.round(r.due / 100))}
+                        Due: {formatRenewalMinorInr(r.due)}
                       </span>
                     </div>
                   </div>

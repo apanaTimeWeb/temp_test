@@ -21,7 +21,7 @@ export default function ManagerFinanceTrustScoresKpiGrid({
 }: ManagerFinanceTrustScoresKpiGridProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
-      <div className="fin-kpi-card fin-trust-kpi-card--indigo group relative overflow-hidden rounded-2xl border p-4 sm:p-5 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between">
+      <div className="fin-kpi-card fin-trust-kpi-card--indigo group relative overflow-hidden rounded-2xl border p-4 sm:p-5 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between">
         <svg aria-hidden="true" className="fin-trust-kpi-spark absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
@@ -44,7 +44,7 @@ export default function ManagerFinanceTrustScoresKpiGrid({
         </div>
       </div>
 
-      <div className="fin-kpi-card fin-kpi-card--danger fin-trust-kpi-card--rose group relative overflow-hidden rounded-2xl border p-4 sm:p-5 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between">
+      <div className="fin-kpi-card fin-kpi-card--danger fin-trust-kpi-card--rose group relative overflow-hidden rounded-2xl border p-4 sm:p-5 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between">
         <svg aria-hidden="true" className="fin-trust-kpi-spark absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
@@ -67,7 +67,7 @@ export default function ManagerFinanceTrustScoresKpiGrid({
         </div>
       </div>
 
-      <div className="fin-kpi-card fin-trust-kpi-card--emerald group relative overflow-hidden rounded-2xl border p-4 sm:p-5 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between">
+      <div className="fin-kpi-card fin-trust-kpi-card--emerald group relative overflow-hidden rounded-2xl border p-4 sm:p-5 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between">
         <svg aria-hidden="true" className="fin-trust-kpi-spark absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" strokeWidth="2.5" strokeLinecap="round" />
         </svg>

@@ -146,7 +146,7 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
       {/* Action Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {/* Bulk Upload Card */}
-        <div className="mgr-card p-4 sm:p-6 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2 border-primary bg-floating hover:border-primary transition-all">
+        <div className="mgr-card p-4 sm:p-6 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2 border-primary bg-floating hover:border-primary motion-safe:transition-all">
           <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-primary-subtle flex items-center justify-center text-primary mb-1">
             <Upload size={28} className="text-primary" />
           </div>
@@ -161,7 +161,7 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
         </div>
 
         {/* Manual Group Entry Card */}
-        <div className="mgr-card p-4 sm:p-6 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2 border-border bg-floating hover:border-success transition-all">
+        <div className="mgr-card p-4 sm:p-6 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2 border-border bg-floating hover:border-success motion-safe:transition-all">
           <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-success-bg flex items-center justify-center text-success mb-1">
             <Users2 size={28} className="text-success" />
           </div>

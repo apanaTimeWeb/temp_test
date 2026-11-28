@@ -112,7 +112,7 @@ export default function ManagerFinanceSubscriptionsTable({
               <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 transition-colors shrink-0" aria-hidden="true" />
+            <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 motion-safe:transition-colors shrink-0" aria-hidden="true" />
           )}
         </button>
       </th>
@@ -177,7 +177,7 @@ export default function ManagerFinanceSubscriptionsTable({
                   <div className="flex items-center justify-end gap-1.5">
                     <button
                       type="button"
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 cursor-pointer transition-colors shadow-xs"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 cursor-pointer motion-safe:transition-colors shadow-xs"
                       onClick={() => (onRenewSubscription ? onRenewSubscription(s) : onSelectSubscription(s))}
                       title={`Renew subscription plan for ${s.studentName}`}
                     >
@@ -196,7 +196,7 @@ export default function ManagerFinanceSubscriptionsTable({
                     )}
                     <button
                       type="button"
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 border border-blue-500/20 cursor-pointer transition-colors shadow-xs"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 border border-blue-500/20 cursor-pointer motion-safe:transition-colors shadow-xs"
                       onClick={() => onSelectSubscription(s)}
                       title="View Subscription Details"
                     >
@@ -234,7 +234,7 @@ export default function ManagerFinanceSubscriptionsTable({
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                className="px-2.5 py-1 rounded-lg border border-border bg-card text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                className="px-2.5 py-1 rounded-lg border border-border bg-card text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer motion-safe:transition-colors"
                 disabled={effectivePage <= 0}
                 onClick={onPrevPage}
               >
@@ -245,7 +245,7 @@ export default function ManagerFinanceSubscriptionsTable({
               </span>
               <button
                 type="button"
-                className="px-2.5 py-1 rounded-lg border border-border bg-card text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                className="px-2.5 py-1 rounded-lg border border-border bg-card text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer motion-safe:transition-colors"
                 disabled={effectivePage >= pageCount - 1}
                 onClick={onNextPage}
               >

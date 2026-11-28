@@ -102,7 +102,7 @@ export function ManagerSeatsMatrixAddModal({
             </button>
             <button
               type="submit"
-              className="mgr-btn-primary flex-1 h-9 text-xs font-bold rounded-xl transition-colors cursor-pointer"
+              className="mgr-btn-primary flex-1 h-9 text-xs font-bold rounded-xl motion-safe:transition-colors cursor-pointer"
             >
               Create Seat
             </button>

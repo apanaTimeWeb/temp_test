@@ -70,7 +70,7 @@ export function ManagerCommunicationComplaintsViewModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="complaint-view-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm motion-safe:animate-fade-in"
     >
       <div
         ref={dialogRef}
@@ -98,7 +98,7 @@ export function ManagerCommunicationComplaintsViewModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg border border-border text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer transition-colors"
+            className="p-1.5 rounded-lg border border-border text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer motion-safe:transition-colors"
             aria-label={tManagerUi('close_complaint')}
           >
             <X size={16} />
@@ -168,7 +168,7 @@ export function ManagerCommunicationComplaintsViewModal({
             <button
               type="button"
               onClick={handleCopyDetails}
-              className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer"
+              className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer"
             >
               <Copy size={12} />
               <span>Copy</span>
@@ -176,7 +176,7 @@ export function ManagerCommunicationComplaintsViewModal({
             <button
               type="button"
               onClick={handlePrint}
-              className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer"
+              className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer"
             >
               <Printer size={12} />
               <span>Print Slip</span>
@@ -191,7 +191,7 @@ export function ManagerCommunicationComplaintsViewModal({
                   onClose();
                   onResolveClick(viewItem);
                 }}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 motion-safe:transition-colors cursor-pointer"
               >
                 <CheckCircle2 size={13} />
                 <span>Resolve Ticket</span>
@@ -201,7 +201,7 @@ export function ManagerCommunicationComplaintsViewModal({
             <button
               type="button"
               onClick={handleWhatsAppStudent}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs motion-safe:transition-colors cursor-pointer"
               title="Send resolution update via WhatsApp"
             >
               <MessageSquare size={13} />
@@ -210,7 +210,7 @@ export function ManagerCommunicationComplaintsViewModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-3 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary transition-colors cursor-pointer"
+              className="px-3 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer"
             >
               {tManagerUi('close')}
             </button>

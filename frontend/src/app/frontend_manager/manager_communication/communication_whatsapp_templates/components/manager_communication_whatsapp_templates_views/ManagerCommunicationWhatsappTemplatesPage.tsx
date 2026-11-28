@@ -127,7 +127,7 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
           <button
             type="button"
             onClick={() => setShowTest(true)}
-            className="mgr-btn-outline inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-4 rounded-xl cursor-pointer hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/30 transition-all flex-1 sm:flex-initial"
+            className="mgr-btn-outline inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-4 rounded-xl cursor-pointer hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/30 motion-safe:transition-all flex-1 sm:flex-initial"
           >
             <Send size={14} className="text-emerald-400" />
             <span>{tManagerUi('send_test')}</span>
@@ -135,7 +135,7 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
           <button
             type="button"
             onClick={handleSave}
-            className="mgr-btn-primary inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-5 rounded-xl shadow-sm cursor-pointer transition-all flex-1 sm:flex-initial"
+            className="mgr-btn-primary inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-5 rounded-xl shadow-sm cursor-pointer motion-safe:transition-all flex-1 sm:flex-initial"
           >
             <Save size={14} />
             <span>Save Template</span>
@@ -225,7 +225,7 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
                       type="button"
                       key={v}
                       onClick={() => insertVar(v)}
-                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all duration-150 cursor-pointer shadow-xs border ${style.bg} ${style.text} ${style.border} ${style.hover} active:scale-95`}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-semibold motion-safe:transition-all motion-safe:duration-fast cursor-pointer shadow-xs border ${style.bg} ${style.text} ${style.border} ${style.hover} active:scale-95`}
                       title={`Click to insert ${v} (${style.title})`}
                     >
                       <span className="font-bold opacity-80">+</span>
@@ -241,7 +241,7 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
               <button
                 type="button"
                 onClick={() => setShowTest(true)}
-                className="mgr-btn-outline inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold py-2.5 px-4 rounded-xl cursor-pointer hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/30 transition-all w-full sm:w-auto"
+                className="mgr-btn-outline inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold py-2.5 px-4 rounded-xl cursor-pointer hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/30 motion-safe:transition-all w-full sm:w-auto"
               >
                 <Send size={13} className="text-emerald-400" />
                 <span>{tManagerUi('send_test')}</span>
@@ -249,7 +249,7 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
               <button
                 type="button"
                 onClick={handleSave}
-                className="mgr-btn-primary inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold py-2.5 px-6 rounded-xl shadow-sm cursor-pointer transition-all w-full sm:w-auto"
+                className="mgr-btn-primary inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold py-2.5 px-6 rounded-xl shadow-sm cursor-pointer motion-safe:transition-all w-full sm:w-auto"
               >
                 <Save size={13} />
                 <span>Save Template</span>

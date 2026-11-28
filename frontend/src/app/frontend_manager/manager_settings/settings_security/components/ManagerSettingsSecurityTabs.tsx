@@ -62,7 +62,7 @@ export function ManagerSettingsSecurityTabs({
               key={tab.id}
               type="button"
               onClick={() => onTabChange(tab.id)}
-              className={`group inline-flex items-center gap-2 border-b-2 py-3 px-3 text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
+              className={`group inline-flex items-center gap-2 border-b-2 py-3 px-3 text-xs sm:text-sm font-semibold motion-safe:transition-all whitespace-nowrap cursor-pointer ${
                 isActive
                   ? 'border-indigo-500 text-indigo-400'
                   : 'border-transparent text-slate-400 hover:border-slate-600 hover:text-slate-200'
@@ -71,7 +71,7 @@ export function ManagerSettingsSecurityTabs({
             >
               <Icon
                 size={16}
-                className={`transition-colors ${
+                className={`motion-safe:transition-colors ${
                   isActive ? 'text-indigo-400' : 'text-slate-500 group-hover:text-slate-300'
                 }`}
               />

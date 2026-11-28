@@ -68,7 +68,7 @@ export function ManagerFinancePaymentPromisesKpis({
       {cards.map(({ key, variant, label, value, valClass, chip, subtitle, Icon }) => (
         <div
           key={key}
-          className={`fin-promise-kpi-card--${variant} group relative overflow-hidden rounded-2xl border p-5 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between`}
+          className={`fin-promise-kpi-card--${variant} group relative overflow-hidden rounded-2xl border p-5 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between`}
         >
           <svg
             aria-hidden="true"

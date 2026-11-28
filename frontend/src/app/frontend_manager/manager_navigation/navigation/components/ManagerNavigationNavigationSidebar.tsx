@@ -202,7 +202,7 @@ export default function ManagerNavigationSidebar({
               onClick={mobileOpen ? onMobileClose : undefined}
             >
               <span className="mgr-sidebar-brand-mark" aria-hidden="true">
-                <BookOpen size={18} strokeWidth={2.2} className="mgr-nav-brand-icon-shadow text-white motion-safe:transition-transform motion-safe:duration-300 group-hover:scale-110" />
+                <BookOpen size={18} strokeWidth={2.2} className="mgr-nav-brand-icon-shadow text-white motion-safe:transition-transform motion-safe:duration-slow group-hover:scale-110" />
               </span>
               <div className="flex flex-col min-w-0 justify-center">
                 <span className="mgr-sidebar-brand-name flex items-center leading-none">

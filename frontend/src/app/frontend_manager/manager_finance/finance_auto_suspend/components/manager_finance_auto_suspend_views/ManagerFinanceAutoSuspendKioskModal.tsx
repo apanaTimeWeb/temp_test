@@ -69,12 +69,12 @@ export default function ManagerFinanceAutoSuspendKioskModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4 animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4 motion-safe:animate-in fade-in"
       role="dialog"
       aria-modal="true"
       data-testid="gate-qr-kiosk-modal"
     >
-      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-5 animate-in zoom-in-95">
+      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-5 motion-safe:animate-in zoom-in-95">
         <div className="flex items-center justify-between border-b border-border pb-3">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400">
@@ -127,7 +127,7 @@ export default function ManagerFinanceAutoSuspendKioskModal({
               type="button"
               data-testid="simulate-kiosk-scan-btn"
               onClick={handleSimulateScan}
-              className="px-4 py-2 rounded-xl text-xs font-bold bg-primary text-on-primary hover:opacity-90 shadow-sm transition-all cursor-pointer shrink-0"
+              className="px-4 py-2 rounded-xl text-xs font-bold bg-primary text-on-primary hover:opacity-90 shadow-sm motion-safe:transition-all cursor-pointer shrink-0"
             >
               Scan QR
             </button>
@@ -151,7 +151,7 @@ export default function ManagerFinanceAutoSuspendKioskModal({
           {scanResult === 'denied' && (
             <div
               data-testid="kiosk-access-denied-screen"
-              className="p-8 flex flex-col items-center justify-center text-center space-y-4 bg-rose-600 text-white animate-pulse"
+              className="p-8 flex flex-col items-center justify-center text-center space-y-4 bg-rose-600 text-white motion-safe:animate-pulse"
             >
               <div className="w-20 h-20 rounded-full bg-white/20 border-4 border-white flex items-center justify-center text-white shadow-lg">
                 <AlertOctagon size={48} className="stroke-[2.5]" />
@@ -189,7 +189,7 @@ export default function ManagerFinanceAutoSuspendKioskModal({
               )}
 
               <div className="flex items-center gap-2 text-xs font-bold text-white bg-white/20 px-3 py-1.5 rounded-full">
-                <Volume2 size={14} className="animate-bounce" />
+                <Volume2 size={14} className="motion-safe:animate-bounce" />
                 <span>Audio Alert Buzzer Ringing At Entrance</span>
               </div>
             </div>

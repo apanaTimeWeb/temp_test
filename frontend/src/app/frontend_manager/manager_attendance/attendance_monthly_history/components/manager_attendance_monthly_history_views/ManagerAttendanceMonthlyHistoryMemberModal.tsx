@@ -1,28 +1,36 @@
 'use client';
 
-import { ManagerAttendanceDailyCalendarGrid } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyCalendarGrid';
-import { MONTH_OPTIONS } from '@/app/frontend_manager/manager_attendance/attendance_daily/constants/ManagerAttendanceDailyMonthlyConstants';
-import type { Student } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
-import { exportManagerMemberMonthlyHistoryCsv } from '@/app/frontend_manager/manager_attendance/attendance_daily/utils/ManagerAttendanceDailyCsv';
-import { getStudentMonthlyAttendance } from '@/app/frontend_manager/manager_attendance/attendance_daily/utils/ManagerAttendanceDailyMonthlyHistoryUtils';
+// RESPONSIBILITY: Render individual student monthly attendance calendar modal with slip print and CSV export.
+
+import { ManagerAttendanceMonthlyHistoryCalendarGrid } from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/components/manager_attendance_monthly_history_views/ManagerAttendanceMonthlyHistoryCalendarGrid';
+import { MONTH_OPTIONS } from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/constants/ManagerAttendanceMonthlyHistoryConstants';
+import type { Student } from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/types/ManagerAttendanceMonthlyHistoryTypes';
+import { exportManagerMemberMonthlyHistoryCsv } from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/utils/ManagerAttendanceMonthlyHistoryCsv';
+import { getStudentMonthlyAttendance } from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/utils/ManagerAttendanceMonthlyHistoryUtilities';
 import { Armchair, Calendar, Download, Printer, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-export interface ManagerAttendanceDailyMemberMonthlyHistoryModalProps {
+export interface ManagerAttendanceMonthlyHistoryMemberModalProps {
   isOpen: boolean;
   student: Student | null;
   onClose: () => void;
+  initialMonth?: string;
 }
 
-export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
+export function ManagerAttendanceMonthlyHistoryMemberModal({
   isOpen,
   student,
   onClose,
-}: ManagerAttendanceDailyMemberMonthlyHistoryModalProps) {
-  const [selectedMonth, setSelectedMonth] = useState<string>('2026-11');
+  initialMonth,
+}: ManagerAttendanceMonthlyHistoryMemberModalProps) {
+  const [selectedMonth, setSelectedMonth] = useState<string>(initialMonth || '2026-11');
   const [activeView, setActiveView] = useState<'calendar' | 'table'>('calendar');
   const [statusFilter, setStatusFilter] = useState<'all' | 'present' | 'absent' | 'late'>('all');
+
+  useEffect(() => {
+    if (initialMonth) setSelectedMonth(initialMonth);
+  }, [initialMonth]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -67,13 +75,12 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="member-monthly-history-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-xs motion-safe:animate-in fade-in motion-safe:duration-fast"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div className="relative w-full max-w-4xl rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-2xl space-y-5 max-h-[92vh] overflow-y-auto">
-        {/* Header Bar */}
         <div className="flex items-start justify-between border-b border-border pb-4 gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-12 h-12 rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 flex items-center justify-center font-bold text-base shrink-0">
@@ -97,7 +104,7 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
                 )}
               </div>
               <p className="text-xs text-secondary mt-1 flex items-center gap-2 flex-wrap">
-                <span>Month-wise Member Attendance Record & Turnstile Log</span>
+                <span>Month-wise Member Attendance Record &amp; Turnstile Log</span>
                 <span>•</span>
                 <span className="font-semibold text-primary">{summary.monthLabel}</span>
               </p>
@@ -107,14 +114,14 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shrink-0"
+            className="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-colors cursor-pointer shrink-0"
             title="Close modal"
+            aria-label="Close modal"
           >
             <X size={18} />
           </button>
         </div>
 
-        {/* Month Selector Pills & Action Buttons */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-muted p-2.5 rounded-xl border border-border">
           <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1 sm:pb-0">
             <span className="text-xs font-bold text-secondary mr-1 shrink-0 flex items-center gap-1">
@@ -127,7 +134,7 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
                   key={m.id}
                   type="button"
                   onClick={() => setSelectedMonth(m.id)}
-                  className={`px-3 py-1 text-xs rounded-lg font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                  className={`px-3 py-1 text-xs rounded-lg font-semibold motion-safe:transition-all cursor-pointer whitespace-nowrap ${
                     isSelected
                       ? 'bg-primary text-primary-foreground shadow-xs'
                       : 'bg-card text-secondary hover:text-primary border border-border'
@@ -143,7 +150,7 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
             <button
               type="button"
               onClick={handlePrintSlip}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-colors cursor-pointer shadow-2xs"
               title="Print Monthly Attendance Slip"
             >
               <Printer size={13} />
@@ -152,7 +159,7 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
             <button
               type="button"
               onClick={handleExportCsv}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-colors cursor-pointer shadow-2xs"
               title="Export Month CSV"
             >
               <Download size={13} />
@@ -161,9 +168,7 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
           </div>
         </div>
 
-        {/* Top Metric Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-          {/* Attendance Rate */}
           <div className="col-span-2 sm:col-span-1 p-3.5 rounded-xl bg-card border border-border shadow-xs flex flex-col justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-secondary">Attendance Rate</span>
             <div className="mt-2">
@@ -193,7 +198,6 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
             </div>
           </div>
 
-          {/* Present Days */}
           <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs">
             <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-500">Present Days</span>
             <div className="mt-2 text-2xl font-black text-emerald-500 font-mono">
@@ -203,21 +207,18 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
             <p className="text-[11px] text-secondary mt-1">Full shift attended</p>
           </div>
 
-          {/* Absent Days */}
           <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs">
             <span className="text-[11px] font-bold uppercase tracking-wider text-rose-500">Absent Days</span>
             <div className="mt-2 text-2xl font-black text-rose-500 font-mono">{summary.absentDays}</div>
-            <p className="text-[11px] text-secondary mt-1">Leaves & unexcused</p>
+            <p className="text-[11px] text-secondary mt-1">Leaves &amp; unexcused</p>
           </div>
 
-          {/* Late Days */}
           <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs">
             <span className="text-[11px] font-bold uppercase tracking-wider text-amber-500">Late Arrivals</span>
             <div className="mt-2 text-2xl font-black text-amber-500 font-mono">{summary.lateDays}</div>
             <p className="text-[11px] text-secondary mt-1">&gt;30 min delay</p>
           </div>
 
-          {/* Study Hours */}
           <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs">
             <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-400">Total Hours</span>
             <div className="mt-2 text-2xl font-black text-indigo-400 font-mono">{summary.totalStudyHours}h</div>
@@ -271,14 +272,13 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
           </div>
         </div>
 
-        <ManagerAttendanceDailyCalendarGrid
+        <ManagerAttendanceMonthlyHistoryCalendarGrid
           activeView={activeView}
           dailyLogs={summary.dailyLogs}
           filteredLogs={filteredLogs}
           statusFilter={statusFilter}
         />
 
-        {/* Footer info & close button */}
         <div className="flex items-center justify-between pt-3 border-t border-border">
           <p className="text-xs text-secondary">
             Displaying full {summary.totalDays} days attendance audit record for{' '}
@@ -287,7 +287,7 @@ export function ManagerAttendanceDailyMemberMonthlyHistoryModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-primary transition-colors cursor-pointer shadow-2xs"
+            className="px-4 py-2 rounded-xl border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-primary motion-safe:transition-colors cursor-pointer shadow-2xs"
           >
             Close
           </button>

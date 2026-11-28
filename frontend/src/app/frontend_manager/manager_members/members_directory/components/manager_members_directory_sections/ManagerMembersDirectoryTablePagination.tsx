@@ -47,7 +47,7 @@ export function ManagerMembersDirectoryTablePagination({
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 hover:text-white hover:bg-indigo-600/30 disabled:opacity-40 transition-all cursor-pointer shadow-xs"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 hover:text-white hover:bg-indigo-600/30 disabled:opacity-40 motion-safe:transition-all cursor-pointer shadow-xs"
             disabled={effectivePage <= 0}
             onClick={() => onPageChange(Math.max(0, effectivePage - 1))}
           >
@@ -59,7 +59,7 @@ export function ManagerMembersDirectoryTablePagination({
           </span>
           <button
             type="button"
-            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 hover:text-white hover:bg-indigo-600/30 disabled:opacity-40 transition-all cursor-pointer shadow-xs"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 hover:text-white hover:bg-indigo-600/30 disabled:opacity-40 motion-safe:transition-all cursor-pointer shadow-xs"
             disabled={effectivePage >= pageCount - 1}
             onClick={() => onPageChange(Math.min(pageCount - 1, effectivePage + 1))}
           >

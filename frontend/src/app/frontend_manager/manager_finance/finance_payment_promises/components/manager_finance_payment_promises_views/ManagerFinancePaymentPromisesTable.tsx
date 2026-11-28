@@ -87,7 +87,7 @@ export default function ManagerFinancePaymentPromisesTable({
           <thead>
             <tr className="border-b border-border bg-muted text-xs font-semibold text-secondary">
               <th
-                className="py-3 px-4 cursor-pointer hover:text-primary transition-colors select-none"
+                className="py-3 px-4 cursor-pointer hover:text-primary motion-safe:transition-colors select-none"
                 onClick={() => onToggleSort('studentName')}
                 role="columnheader"
               >
@@ -97,7 +97,7 @@ export default function ManagerFinancePaymentPromisesTable({
                 </div>
               </th>
               <th
-                className="py-3 px-4 cursor-pointer hover:text-primary transition-colors select-none text-right"
+                className="py-3 px-4 cursor-pointer hover:text-primary motion-safe:transition-colors select-none text-right"
                 onClick={() => onToggleSort('promisedAmount')}
                 role="columnheader"
               >
@@ -107,7 +107,7 @@ export default function ManagerFinancePaymentPromisesTable({
                 </div>
               </th>
               <th
-                className="py-3 px-4 cursor-pointer hover:text-primary transition-colors select-none"
+                className="py-3 px-4 cursor-pointer hover:text-primary motion-safe:transition-colors select-none"
                 onClick={() => onToggleSort('expectedDate')}
                 role="columnheader"
               >
@@ -117,7 +117,7 @@ export default function ManagerFinancePaymentPromisesTable({
                 </div>
               </th>
               <th
-                className="py-3 px-4 cursor-pointer hover:text-primary transition-colors select-none"
+                className="py-3 px-4 cursor-pointer hover:text-primary motion-safe:transition-colors select-none"
                 onClick={() => onToggleSort('daysUntilDue')}
                 role="columnheader"
               >
@@ -127,7 +127,7 @@ export default function ManagerFinancePaymentPromisesTable({
                 </div>
               </th>
               <th
-                className="py-3 px-4 cursor-pointer hover:text-primary transition-colors select-none"
+                className="py-3 px-4 cursor-pointer hover:text-primary motion-safe:transition-colors select-none"
                 onClick={() => onToggleSort('timesChanged')}
                 role="columnheader"
               >
@@ -137,7 +137,7 @@ export default function ManagerFinancePaymentPromisesTable({
                 </div>
               </th>
               <th
-                className="py-3 px-4 cursor-pointer hover:text-primary transition-colors select-none"
+                className="py-3 px-4 cursor-pointer hover:text-primary motion-safe:transition-colors select-none"
                 onClick={() => onToggleSort('status')}
                 role="columnheader"
               >
@@ -160,7 +160,7 @@ export default function ManagerFinancePaymentPromisesTable({
               </tr>
             ) : (
               paginated.map((p) => (
-                <tr key={p.id} className="hover:bg-muted/40 transition-colors">
+                <tr key={p.id} className="hover:bg-muted/40 motion-safe:transition-colors">
                   <td className="py-3 px-4">
                     <div className="font-semibold text-primary">{p.studentName}</div>
                     <div className="text-[11px] font-mono text-secondary">{p.smartId}</div>
@@ -219,7 +219,7 @@ export default function ManagerFinancePaymentPromisesTable({
                         <button
                           type="button"
                           onClick={() => onMarkPaid(p)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs motion-safe:transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
                           title="Mark payment promise as cleared"
                         >
                           <CheckCircle size={11} /> Mark Paid
@@ -227,7 +227,7 @@ export default function ManagerFinancePaymentPromisesTable({
                         <button
                           type="button"
                           onClick={() => onOpenEdit(p)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
                           title="Edit promise amount or expected date"
                         >
                           <Edit3 size={11} /> Edit
@@ -235,7 +235,7 @@ export default function ManagerFinancePaymentPromisesTable({
                         <button
                           type="button"
                           onClick={() => onOpenView(p)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
                           title="View commitment details"
                         >
                           <Eye size={11} /> View
@@ -249,7 +249,7 @@ export default function ManagerFinancePaymentPromisesTable({
                         <button
                           type="button"
                           onClick={() => onOpenView(p)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
                           title="View commitment details"
                         >
                           <Eye size={11} /> View

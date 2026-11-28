@@ -96,7 +96,7 @@ export function ManagerCommunicationComplaintsResolveModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="resolve-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm motion-safe:animate-fade-in"
     >
       <div className="relative w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-4">
         {/* Header */}
@@ -117,7 +117,7 @@ export function ManagerCommunicationComplaintsResolveModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg border border-border text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer transition-colors"
+            className="p-1.5 rounded-lg border border-border text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer motion-safe:transition-colors"
           >
             <X size={16} />
           </button>
@@ -194,7 +194,7 @@ export function ManagerCommunicationComplaintsResolveModal({
           <button
             type="button"
             onClick={onClose}
-            className="w-full sm:w-auto px-3.5 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary transition-colors cursor-pointer"
+            className="w-full sm:w-auto px-3.5 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer"
           >
             Cancel
           </button>
@@ -203,7 +203,7 @@ export function ManagerCommunicationComplaintsResolveModal({
             <button
               type="button"
               onClick={handleResolveWithAutoNotify}
-              className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-surface-hover hover:bg-surface border border-border text-primary transition-colors cursor-pointer flex items-center gap-1.5"
+              className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-surface-hover hover:bg-surface border border-border text-primary motion-safe:transition-colors cursor-pointer flex items-center gap-1.5"
             >
               <FileCheck size={13} />
               <span>Resolve Status</span>
@@ -211,7 +211,7 @@ export function ManagerCommunicationComplaintsResolveModal({
             <button
               type="button"
               onClick={handleResolveAndOpenWhatsApp}
-              className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md transition-all cursor-pointer flex items-center gap-1.5"
+              className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md motion-safe:transition-all cursor-pointer flex items-center gap-1.5"
             >
               <Send size={13} />
               <span>Resolve & WhatsApp</span>

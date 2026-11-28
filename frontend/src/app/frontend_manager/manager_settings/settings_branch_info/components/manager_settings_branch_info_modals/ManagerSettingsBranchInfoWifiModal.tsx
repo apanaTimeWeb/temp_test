@@ -207,7 +207,7 @@ export function ManagerSettingsBranchInfoWifiModal({
               <button
                 type="button"
                 onClick={handlePrintStandee}
-                className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 border border-indigo-500 text-white font-bold text-xs motion-safe:transition-all shadow-md cursor-pointer"
+                className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 border border-indigo-500 text-white font-bold text-xs motion-safe:transition-all shadow-md cursor-pointer"
                 title="Print Desk Standee for reception"
               >
                 <Printer size={15} />

@@ -51,7 +51,7 @@ export function LockerStatusCell(props: { value?: unknown; data?: Locker }) {
           : STATUS_CLASS[status] ?? 'ss-badge ss-badge--inactive'
       }
     >
-      <span className={`w-1.5 h-1.5 rounded-full ${isOverdue ? 'bg-amber-400 animate-pulse' : 'bg-current'}`} />
+      <span className={`w-1.5 h-1.5 rounded-full ${isOverdue ? 'bg-amber-400 motion-safe:animate-pulse' : 'bg-current'}`} />
       {label}
     </span>
   );
@@ -163,7 +163,7 @@ export function getLockerColumns({
             {data.status === 'Free' && (
               <button
                 type="button"
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-primary text-on-primary hover:bg-primary-hover transition-colors cursor-pointer shadow-xs"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-primary text-on-primary hover:bg-primary-hover motion-safe:transition-colors cursor-pointer shadow-xs"
                 aria-label={tManagerUi('assign_student')}
                 title="Allot Locker to Student"
                 onClick={() => onShowAssign(data)}
@@ -177,7 +177,7 @@ export function getLockerColumns({
                 {onSelectLocker && (
                   <button
                     type="button"
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold border border-border text-primary hover:bg-surface-hover transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold border border-border text-primary hover:bg-surface-hover motion-safe:transition-colors cursor-pointer"
                     title="View Student Details"
                     onClick={() => onSelectLocker(data)}
                   >
@@ -188,7 +188,7 @@ export function getLockerColumns({
                   <button
                     type="button"
                     data-testid="manager-locker-table-lost-key-btn"
-                    className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold border border-rose-500/30 text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold border border-rose-500/30 text-rose-400 hover:bg-rose-500/10 motion-safe:transition-colors cursor-pointer"
                     title="Report Lost Key and Impose Fine"
                     onClick={() => onReportLostKey(data)}
                   >
@@ -198,7 +198,7 @@ export function getLockerColumns({
                 )}
                 <button
                   type="button"
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-danger-subtle text-danger hover:bg-danger hover:text-white transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-danger-subtle text-danger hover:bg-danger hover:text-white motion-safe:transition-colors cursor-pointer"
                   aria-label={tManagerUi('free_locker')}
                   title="Vacate and Refund Locker"
                   onClick={() => onSetFreeTarget(data)}

@@ -17,5 +17,5 @@ export default async function ManagerSeatsHistoryPage({ searchParams }: ManagerS
     phone: firstValue(params.phone),
     smartId: firstValue(params.smartId),
   };
-  return <ManagerSeatsHistoryMain {...mainProps} />;
+  return <ManagerSeatsHistoryMain view={mainProps.view} id={mainProps.id} name={mainProps.name} phone={mainProps.phone} smartId={mainProps.smartId} />;
 }

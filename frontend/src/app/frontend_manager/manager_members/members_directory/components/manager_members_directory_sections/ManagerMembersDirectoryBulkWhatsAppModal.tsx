@@ -89,7 +89,7 @@ export function ManagerMembersDirectoryBulkWhatsAppModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-overlay-backdrop backdrop-blur-sm transition-opacity duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-overlay-backdrop backdrop-blur-sm motion-safe:transition-opacity motion-safe:duration-base"
       role="dialog"
       aria-modal="true"
       aria-labelledby="bulk-members-whatsapp-title"
@@ -122,7 +122,7 @@ export function ManagerMembersDirectoryBulkWhatsAppModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-secondary hover:text-foreground hover:bg-surface-hover transition-colors"
+            className="p-1.5 rounded-lg text-secondary hover:text-foreground hover:bg-surface-hover motion-safe:transition-colors"
             aria-label="Close"
           >
             <X size={18} />
@@ -143,7 +143,7 @@ export function ManagerMembersDirectoryBulkWhatsAppModal({
             </div>
             <div className="w-32 bg-surface-highlight rounded-full h-2.5 overflow-hidden border border-border">
               <div
-                className="bg-emerald-600 h-2.5 rounded-full transition-all duration-300"
+                className="bg-emerald-600 h-2.5 rounded-full motion-safe:transition-all motion-safe:duration-slow"
                 style={{ width: `${progressPct}%` }}
               />
             </div>
@@ -160,7 +160,7 @@ export function ManagerMembersDirectoryBulkWhatsAppModal({
                   type="button"
                   key={tmpl.label}
                   onClick={() => setMessageTemplate(tmpl.text)}
-                  className={`px-2.5 py-1 text-xs rounded-lg border transition-colors ${
+                  className={`px-2.5 py-1 text-xs rounded-lg border motion-safe:transition-colors ${
                     messageTemplate === tmpl.text
                       ? 'bg-primary text-on-primary border-primary font-semibold'
                       : 'bg-surface border-border text-secondary hover:text-foreground'
@@ -193,7 +193,7 @@ export function ManagerMembersDirectoryBulkWhatsAppModal({
               return (
                 <div
                   key={m.id}
-                  className="p-3 flex items-center justify-between gap-3 hover:bg-surface-hover transition-colors"
+                  className="p-3 flex items-center justify-between gap-3 hover:bg-surface-hover motion-safe:transition-colors"
                 >
                   <div>
                     <p className="text-sm font-bold text-foreground leading-tight">
@@ -214,7 +214,7 @@ export function ManagerMembersDirectoryBulkWhatsAppModal({
                       <button
                         type="button"
                         onClick={() => handleSendSingle(m)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm motion-safe:transition-colors cursor-pointer"
                       >
                         <Send size={12} />
                         <span>Send WhatsApp</span>
@@ -238,7 +238,7 @@ export function ManagerMembersDirectoryBulkWhatsAppModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-secondary hover:text-foreground hover:bg-surface-hover transition-colors"
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-secondary hover:text-foreground hover:bg-surface-hover motion-safe:transition-colors"
             >
               Close
             </button>
@@ -250,7 +250,7 @@ export function ManagerMembersDirectoryBulkWhatsAppModal({
                   onComplete();
                   toast.success(`Cleared selection of ${count} members.`, { id: 'manager-members-bulk-wa-clear' });
                 }}
-                className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm motion-safe:transition-colors cursor-pointer"
               >
                 All Done & Clear Selection
               </button>

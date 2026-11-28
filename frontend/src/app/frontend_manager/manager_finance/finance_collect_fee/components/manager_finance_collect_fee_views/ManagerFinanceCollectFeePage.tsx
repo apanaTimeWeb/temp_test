@@ -18,7 +18,7 @@ import { managerFinanceCollectFeeDraftSchema, type ManagerFinanceCollectFeeDraft
 import type { ManagerFinanceCollectFeeContractStatus, ManagerFinanceCollectFeeRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeComponentTypes';
 import type { ManagerFinanceCollectFeeMode } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
 import { computeCollectionReconciliation, INITIAL_COMPOSITE_ITEMS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeReconciliation';
-import { calculateBillingCycleInfo, formatCollectFeeInr, getAvailableBillingMonths } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
+import { calculateBillingCycleInfo, formatCollectFeeInr, getAvailableBillingMonths, paiseToRupees } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertTriangle, IndianRupee, Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -87,10 +87,10 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
 
   function applyCollectionType(type: ManagerFinanceCollectionType, student = selectedStudent, duration = monthsToRenew) {
     setDraftValue('collectionType', type);
-    if (type === 'dues') { setDraftValue('amount', String(student && student.dueAmount > 0 ? student.dueAmount / 100 : 0)); setDraftValue('feeCategory', 'seat_fee'); setDraftValue('lateFee', ''); }
+    if (type === 'dues') { setDraftValue('amount', String(student ? paiseToRupees(student.dueAmount) : 0)); setDraftValue('feeCategory', 'seat_fee'); setDraftValue('lateFee', ''); }
     else if (type === 'monthly') { setDraftValue('amount', String(STANDARD_CYCLE_AMOUNTS[duration] ?? (Number(duration) > 0 ? Number(duration) * 1200 : 1200))); setDraftValue('feeCategory', 'seat_fee'); setDraftValue('lateFee', ''); }
     else if (type === 'fine') { setDraftValue('amount', '200'); setDraftValue('feeCategory', 'fine'); setDraftValue('lateFee', '200'); }
-    else if (type === 'partial') { setDraftValue('amount', String(Math.round((student && student.dueAmount > 0 ? student.dueAmount / 100 : 1200) / 2))); setDraftValue('feeCategory', 'seat_fee'); }
+    else if (type === 'partial') { setDraftValue('amount', String(Math.round((student && student.dueAmount > 0 ? paiseToRupees(student.dueAmount) : 1200) / 2))); setDraftValue('feeCategory', 'seat_fee'); }
     else if (type === 'locker') { setDraftValue('amount', '400'); setDraftValue('feeCategory', 'locker_fee'); setDraftValue('lateFee', ''); }
   }
 

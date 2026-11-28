@@ -73,13 +73,13 @@ export function ManagerSettingsSecurityMain({ initialTab }: ManagerSettingsSecur
   return (
     <div className="mgr-page-animate pb-8 space-y-4 max-w-7xl mx-auto">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-1 border-b border-white/5">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-1 border-b border-border">
         <div>
-          <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2.5 tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-black text-primary flex items-center gap-2.5 tracking-tight">
             <ShieldCheck className="text-indigo-400 shrink-0" size={24} />
             <span>Security & Authentication</span>
           </h1>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-secondary mt-0.5">
             Manage manager password, two-factor authentication, and monitor active device sessions.
           </p>
         </div>

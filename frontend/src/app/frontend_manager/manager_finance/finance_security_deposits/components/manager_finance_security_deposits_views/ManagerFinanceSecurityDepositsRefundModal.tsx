@@ -260,7 +260,7 @@ export default function ManagerFinanceSecurityDepositsRefundModal({
               type="submit"
               disabled={!allCleared}
               data-testid="confirm-deposit-refund-btn"
-              className={`mgr-btn-primary text-xs flex items-center gap-1.5 transition-opacity ${!allCleared ? 'opacity-50 cursor-not-allowed' : ''
+              className={`mgr-btn-primary text-xs flex items-center gap-1.5 motion-safe:transition-opacity ${!allCleared ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               title={!allCleared ? 'Please verify all clearance items with student before releasing refund' : undefined}
             >

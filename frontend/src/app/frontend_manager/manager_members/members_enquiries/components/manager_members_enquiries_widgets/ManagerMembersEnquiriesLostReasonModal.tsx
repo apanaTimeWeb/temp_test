@@ -70,7 +70,7 @@ export function ManagerMembersEnquiriesLostReasonModal({
       />
 
       {/* Modal Dialog (Direct presentation without inner scroll box) */}
-      <div className="menq-modal-dialog relative z-10 w-full max-w-2xl border border-rose-500/40 rounded-2xl shadow-2xl overflow-hidden motion-safe:animate-in fade-in zoom-in-95 motion-safe:duration-200 my-auto">
+      <div className="menq-modal-dialog relative z-10 w-full max-w-2xl border border-rose-500/40 rounded-2xl shadow-2xl overflow-hidden motion-safe:animate-in fade-in zoom-in-95 motion-safe:duration-base my-auto">
         {/* Header */}
         <div className="menq-modal-rose-header px-6 py-4 border-b border-rose-500/30 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -182,7 +182,7 @@ export function ManagerMembersEnquiriesLostReasonModal({
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-600 text-white font-bold text-xs shadow-md shadow-rose-950/50 motion-safe:transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-md shadow-rose-950/50 motion-safe:transition-all cursor-pointer"
             >
               <XCircle size={15} />
               Confirm & Mark as Lost

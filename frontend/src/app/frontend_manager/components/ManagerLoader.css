@@ -47,3 +47,9 @@
 .library-loader-stop-end {
   stop-color: var(--accent, #a78bfa);
 }
+
+.library-loader-box--xs { width: 20px; height: 20px; }
+.library-loader-box--sm { width: 40px; height: 40px; }
+.library-loader-box--md { width: 64px; height: 64px; }
+.library-loader-box--lg { width: 96px; height: 96px; }
+.library-loader-box--xl { width: 112px; height: 112px; }

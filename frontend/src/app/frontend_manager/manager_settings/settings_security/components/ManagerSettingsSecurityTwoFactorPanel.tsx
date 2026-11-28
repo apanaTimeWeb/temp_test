@@ -151,7 +151,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
             <button
               type="button"
               onClick={() => setIsSettingUp(true)}
-              className="inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 border border-indigo-500 text-white motion-safe:transition-all cursor-pointer shadow-md"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 border border-indigo-500 text-white motion-safe:transition-all cursor-pointer shadow-md"
             >
               <Smartphone size={13} />
               <span>Enable 2FA Now</span>

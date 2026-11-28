@@ -18,7 +18,7 @@ export function ManagerDashboardOverviewLiveShiftBar({
   return (
     <section
       aria-label="Live Shift and Floor Operations"
-      className="rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-card transition-all"
+      className="rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-card motion-safe:transition-all"
     >
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         {/* Left: Shift Status & Timing */}
@@ -32,7 +32,7 @@ export function ManagerDashboardOverviewLiveShiftBar({
                 Current Shift
               </span>
               <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-success-bg text-success border border-border">
-                <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-success motion-safe:animate-pulse" />
                 Live Active
               </span>
               {timeRangeLabel && (
@@ -58,7 +58,7 @@ export function ManagerDashboardOverviewLiveShiftBar({
           <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-surface-highlight border border-border shadow-xs">
             <div className="relative">
               <Users size={18} className="text-primary shrink-0" />
-              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-400 motion-safe:animate-ping" />
               <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-500" />
             </div>
             <div className="text-xs">
@@ -80,14 +80,14 @@ export function ManagerDashboardOverviewLiveShiftBar({
           {overstayCount > 0 ? (
             <Link
               href="/frontend_manager/manager_accounts_assets/accounts_seat_gap_report"
-              className="group flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-warning-bg border border-border text-warning-text hover:border-warning transition-colors"
+              className="group flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-warning-bg border border-border text-warning-text hover:border-warning motion-safe:transition-colors"
               title="View overstaying students past shift buffer"
             >
               <AlertTriangle size={16} className="text-warning shrink-0" />
               <div className="text-xs text-left">
                 <div className="flex items-center gap-1.5 font-bold text-foreground">
                   <span>{overstayCount} Overstay Alerts</span>
-                  <ArrowRight size={12} className="text-warning group-hover:translate-x-0.5 transition-transform" />
+                  <ArrowRight size={12} className="text-warning group-hover:translate-x-0.5 motion-safe:transition-transform" />
                 </div>
                 <p className="text-[10px] text-muted-foreground">Past morning cutoff</p>
               </div>

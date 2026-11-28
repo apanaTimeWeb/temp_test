@@ -17,5 +17,5 @@ export default async function ManagerCommunicationNotificationCenterPage({ searc
     phone: firstValue(params.phone),
     smartId: firstValue(params.smartId),
   };
-  return <ManagerCommunicationNotificationCenterMain {...mainProps} />;
+  return <ManagerCommunicationNotificationCenterMain view={mainProps.view} id={mainProps.id} name={mainProps.name} phone={mainProps.phone} smartId={mainProps.smartId} />;
 }

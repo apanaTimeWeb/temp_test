@@ -13,7 +13,7 @@ export function ManagerDashboardOverviewOperationalAlerts({
   return (
     <section
       aria-labelledby="manager-operational-alerts-heading"
-      className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all flex flex-col justify-between h-full"
+      className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card motion-safe:transition-all flex flex-col justify-between h-full"
     >
       <div>
         {/* Card Header */}
@@ -47,7 +47,7 @@ export function ManagerDashboardOverviewOperationalAlerts({
           {/* Dropout Risk / Consecutive Absentees */}
           <Link
             href="/frontend_manager/manager_attendance/attendance_absentee_report"
-            className="group block p-3 rounded-xl border border-border bg-surface-highlight hover:border-danger hover:bg-surface-hover transition-all"
+            className="group block p-3 rounded-xl border border-border bg-surface-highlight hover:border-danger hover:bg-surface-hover motion-safe:transition-all"
           >
             <div className="flex items-start justify-between gap-2.5">
               <div className="flex items-start gap-2.5">
@@ -68,14 +68,14 @@ export function ManagerDashboardOverviewOperationalAlerts({
                   </p>
                 </div>
               </div>
-              <ArrowRight size={13} className="text-muted-foreground group-hover:text-danger group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
+              <ArrowRight size={13} className="text-muted-foreground group-hover:text-danger group-hover:translate-x-0.5 motion-safe:transition-all shrink-0 mt-1" />
             </div>
           </Link>
 
           {/* Active Facility & Complaints Ticket */}
           <Link
             href="/frontend_manager/manager_communication/communication_complaints"
-            className="group block p-3 rounded-xl border border-border bg-surface-highlight hover:border-warning hover:bg-surface-hover transition-all"
+            className="group block p-3 rounded-xl border border-border bg-surface-highlight hover:border-warning hover:bg-surface-hover motion-safe:transition-all"
           >
             <div className="flex items-start justify-between gap-2.5">
               <div className="flex items-start gap-2.5">
@@ -96,14 +96,14 @@ export function ManagerDashboardOverviewOperationalAlerts({
                   </p>
                 </div>
               </div>
-              <ArrowRight size={13} className="text-muted-foreground group-hover:text-warning group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
+              <ArrowRight size={13} className="text-muted-foreground group-hover:text-warning group-hover:translate-x-0.5 motion-safe:transition-all shrink-0 mt-1" />
             </div>
           </Link>
 
           {/* Hot Walk-in Enquiries */}
           <Link
             href="/frontend_manager/manager_members/members_enquiries"
-            className="group block p-3 rounded-xl border border-border bg-surface-highlight hover:border-info hover:bg-surface-hover transition-all"
+            className="group block p-3 rounded-xl border border-border bg-surface-highlight hover:border-info hover:bg-surface-hover motion-safe:transition-all"
           >
             <div className="flex items-start justify-between gap-2.5">
               <div className="flex items-start gap-2.5">
@@ -124,7 +124,7 @@ export function ManagerDashboardOverviewOperationalAlerts({
                   </p>
                 </div>
               </div>
-              <ArrowRight size={13} className="text-muted-foreground group-hover:text-info group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
+              <ArrowRight size={13} className="text-muted-foreground group-hover:text-info group-hover:translate-x-0.5 motion-safe:transition-all shrink-0 mt-1" />
             </div>
           </Link>
         </div>

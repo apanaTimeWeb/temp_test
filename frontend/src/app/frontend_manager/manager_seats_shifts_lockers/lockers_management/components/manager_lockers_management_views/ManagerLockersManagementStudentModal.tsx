@@ -35,7 +35,7 @@ export function ManagerLockersManagementStudentModal({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4 animate-in fade-in-50 zoom-in-95 max-h-[92vh] overflow-y-auto"
+        className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4 motion-safe:animate-in fade-in-50 zoom-in-95 max-h-[92vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
@@ -71,7 +71,7 @@ export function ManagerLockersManagementStudentModal({
           <button
             type="button"
             onClick={onClose}
-            className="text-secondary hover:text-primary p-1.5 rounded-lg hover:bg-surface-hover transition-colors"
+            className="text-secondary hover:text-primary p-1.5 rounded-lg hover:bg-surface-hover motion-safe:transition-colors"
             aria-label="Close modal"
           >
             <X size={18} />
@@ -161,7 +161,7 @@ export function ManagerLockersManagementStudentModal({
                     onClose();
                     onReportLostKey(locker);
                   }}
-                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border border-rose-500/40 text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border border-rose-500/40 text-rose-400 hover:bg-rose-500/10 motion-safe:transition-colors cursor-pointer"
                   title="Report Lost Key & Apply Fine"
                 >
                   <KeyRound size={13} />

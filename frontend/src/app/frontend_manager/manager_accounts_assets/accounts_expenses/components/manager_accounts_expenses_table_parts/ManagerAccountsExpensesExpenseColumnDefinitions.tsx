@@ -101,7 +101,7 @@ export function createManagerExpensesExpenseColumnDefinitions(
               <button
                 type="button"
                 onClick={() => onViewDetails(expense)}
-                className="p-1.5 rounded-lg text-sky-400 hover:text-sky-300 hover:bg-sky-500/15 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg text-sky-400 hover:text-sky-300 hover:bg-sky-500/15 motion-safe:transition-colors cursor-pointer"
                 title={`View voucher for ${expense.description}`}
                 aria-label={`View voucher for ${expense.description}`}
               >
@@ -113,7 +113,7 @@ export function createManagerExpensesExpenseColumnDefinitions(
               <button
                 type="button"
                 onClick={() => onDeleteExpense(expense.id)}
-                className="p-1.5 rounded-lg text-rose-400 hover:text-rose-300 hover:bg-rose-500/15 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg text-rose-400 hover:text-rose-300 hover:bg-rose-500/15 motion-safe:transition-colors cursor-pointer"
                 title="Delete expense voucher"
                 aria-label={`Delete expense voucher ${expense.id}`}
               >

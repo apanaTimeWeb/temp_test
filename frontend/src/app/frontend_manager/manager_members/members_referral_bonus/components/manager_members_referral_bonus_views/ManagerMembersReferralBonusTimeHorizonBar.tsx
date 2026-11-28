@@ -83,7 +83,7 @@ export function ManagerMembersReferralBonusTimeHorizonBar({
                   onCustomStartDateChange('');
                   onCustomEndDateChange('');
                 }}
-                className="p-1 text-danger hover:opacity-80 transition-opacity"
+                className="p-1 text-danger hover:opacity-80 motion-safe:transition-opacity"
                 title="Clear custom dates"
               >
                 <X size={14} className="text-danger shrink-0" />

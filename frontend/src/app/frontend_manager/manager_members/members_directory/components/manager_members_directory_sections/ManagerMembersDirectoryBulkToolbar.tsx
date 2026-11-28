@@ -22,7 +22,7 @@ export function ManagerMembersDirectoryBulkToolbar({
 
   return (
     <div
-      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-auto min-w-[280px] sm:min-w-[340px] max-w-[95vw] px-4 py-3 md-surface-panel border border-indigo-500/30 shadow-2xl rounded-2xl flex items-center justify-between gap-4 motion-safe:transition-all motion-safe:duration-200"
+      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-auto min-w-[280px] sm:min-w-[340px] max-w-[95vw] px-4 py-3 md-surface-panel border border-indigo-500/30 shadow-2xl rounded-2xl flex items-center justify-between gap-4 motion-safe:transition-all motion-safe:duration-base"
       role="region"
       aria-label="Bulk actions toolbar"
     >
@@ -47,7 +47,7 @@ export function ManagerMembersDirectoryBulkToolbar({
         <button
           type="button"
           onClick={onOpenBulkWhatsApp}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm shadow-emerald-950/50 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm shadow-emerald-950/50 motion-safe:transition-colors cursor-pointer"
         >
           <MessageCircle size={13} />
           <span>Launch WhatsApp Queue ({selectedCount})</span>
@@ -56,7 +56,7 @@ export function ManagerMembersDirectoryBulkToolbar({
         <button
           type="button"
           onClick={onClearSelection}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
+          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 motion-safe:transition-colors cursor-pointer"
           title="Clear Selection"
           aria-label="Clear selection"
         >

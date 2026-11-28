@@ -65,7 +65,7 @@ export function ManagerMembersDirectoryFilterBar({
           <button
             type="button"
             onClick={() => setSearchQuery('')}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-primary transition-colors cursor-pointer p-0.5"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer p-0.5"
             title="Clear search"
           >
             <X size={13} />
@@ -136,7 +136,7 @@ export function ManagerMembersDirectoryFilterBar({
           <button
             type="button"
             onClick={onResetFilters}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/35 hover:text-rose-100 transition-all cursor-pointer shadow-sm shadow-rose-950/40"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/35 hover:text-rose-100 motion-safe:transition-all cursor-pointer shadow-sm shadow-rose-950/40"
             title="Clear all active filters"
           >
             <RotateCcw size={13} />

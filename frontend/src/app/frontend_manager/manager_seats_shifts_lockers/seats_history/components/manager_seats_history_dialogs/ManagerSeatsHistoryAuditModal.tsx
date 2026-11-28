@@ -97,7 +97,7 @@ export function ManagerSeatsHistoryAuditModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="manager-seat-audit-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-3 sm:p-4 overflow-y-auto backdrop-blur-xs animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-3 sm:p-4 overflow-y-auto backdrop-blur-xs motion-safe:animate-in fade-in"
       onClick={onClose}
     >
       <div
@@ -122,7 +122,7 @@ export function ManagerSeatsHistoryAuditModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-secondary hover:text-primary hover:bg-surface transition-colors cursor-pointer"
+            className="p-1 rounded-lg text-secondary hover:text-primary hover:bg-surface motion-safe:transition-colors cursor-pointer"
             aria-label="Close"
           >
             <X size={18} />
@@ -202,7 +202,7 @@ export function ManagerSeatsHistoryAuditModal({
             type="button"
             data-testid="manager-audit-copy-report-btn"
             onClick={handleCopyReport}
-            className="inline-flex items-center gap-1 text-xs font-semibold text-secondary hover:text-primary transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer"
           >
             {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
             <span>{copied ? 'Copied' : 'Copy Audit Report'}</span>
@@ -269,7 +269,7 @@ export function ManagerSeatsHistoryAuditModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface motion-safe:transition-colors cursor-pointer"
             >
               Close
             </button>
@@ -277,7 +277,7 @@ export function ManagerSeatsHistoryAuditModal({
               type="button"
               data-testid="manager-audit-apply-filter-btn"
               onClick={handleApplyFilter}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-primary text-primary-foreground hover:opacity-90 transition-all shadow-sm cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-primary text-primary-foreground hover:opacity-90 motion-safe:transition-all shadow-sm cursor-pointer"
             >
               <Filter size={13} />
               <span>Filter Main Table to Seat {selectedSeat}</span>

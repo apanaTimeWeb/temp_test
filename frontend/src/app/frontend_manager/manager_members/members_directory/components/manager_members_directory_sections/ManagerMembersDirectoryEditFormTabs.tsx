@@ -112,7 +112,7 @@ export function ManagerMembersDirectoryEditFormTabs({ activeTab, formData, onCha
                   key={shift.id}
                   onClick={() => toggleShift(shift.id)}
                   aria-pressed={isSelected}
-                  className={`p-2.5 rounded-xl border text-left flex items-center justify-between transition-all focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 outline-none cursor-pointer ${
+                  className={`p-2.5 rounded-xl border text-left flex items-center justify-between motion-safe:transition-all focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 outline-none cursor-pointer ${
                     isSelected ? 'border-primary bg-primary-subtle shadow-xs ring-1 ring-primary text-primary' : 'border-border bg-card hover:bg-surface-hover text-secondary'
                   }`}
                 >

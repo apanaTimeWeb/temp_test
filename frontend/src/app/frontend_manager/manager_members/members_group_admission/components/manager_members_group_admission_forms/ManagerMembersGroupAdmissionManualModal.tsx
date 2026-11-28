@@ -192,7 +192,7 @@ export function ManagerMembersGroupAdmissionManualModal({
               <button
                 type="button"
                 onClick={() => setViewStyle('card')}
-                className={`px-2.5 py-1 rounded-md font-medium flex items-center gap-1.5 transition-colors ${
+                className={`px-2.5 py-1 rounded-md font-medium flex items-center gap-1.5 motion-safe:transition-colors ${
                   viewStyle === 'card' ? 'bg-card text-primary shadow-xs' : 'text-secondary hover:text-primary'
                 }`}
               >
@@ -201,7 +201,7 @@ export function ManagerMembersGroupAdmissionManualModal({
               <button
                 type="button"
                 onClick={() => setViewStyle('table')}
-                className={`px-2.5 py-1 rounded-md font-medium flex items-center gap-1.5 transition-colors ${
+                className={`px-2.5 py-1 rounded-md font-medium flex items-center gap-1.5 motion-safe:transition-colors ${
                   viewStyle === 'table' ? 'bg-card text-primary shadow-xs' : 'text-secondary hover:text-primary'
                 }`}
               >

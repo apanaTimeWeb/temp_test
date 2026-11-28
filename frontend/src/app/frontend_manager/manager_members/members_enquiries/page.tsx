@@ -17,5 +17,5 @@ export default async function ManagerMembersEnquiriesPage({ searchParams }: Mana
     phone: firstValue(params.phone),
     smartId: firstValue(params.smartId),
   };
-  return <ManagerMembersEnquiriesMain {...mainProps} />;
+  return <ManagerMembersEnquiriesMain view={mainProps.view} id={mainProps.id} name={mainProps.name} phone={mainProps.phone} smartId={mainProps.smartId} />;
 }

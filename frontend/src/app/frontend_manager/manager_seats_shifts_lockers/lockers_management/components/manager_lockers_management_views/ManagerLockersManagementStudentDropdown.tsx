@@ -105,7 +105,7 @@ export function ManagerLockersManagementStudentDropdown({
               onClick={() => setIsOpen((prev) => !prev)}
               className="p-1 text-secondary hover:text-primary rounded-md cursor-pointer motion-safe:transition-colors"
             >
-              <ChevronDown size={14} className={`motion-safe:transition-transform motion-safe:duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown size={14} className={`motion-safe:transition-transform motion-safe:duration-base ${isOpen ? 'rotate-180' : ''}`} />
             </button>
           )}
         </div>

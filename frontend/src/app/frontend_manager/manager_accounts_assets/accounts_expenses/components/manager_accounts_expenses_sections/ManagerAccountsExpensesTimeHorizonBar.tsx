@@ -59,7 +59,7 @@ export function ManagerAccountsExpensesTimeHorizonBar({
                 key={opt.id}
                 type="button"
                 onClick={() => setTimeHorizon(opt.id)}
-                className={`min-h-8 px-3 py-1 text-xs rounded-lg font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                className={`min-h-8 px-3 py-1 text-xs rounded-lg font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
                   isActive
                     ? `${HORIZON_ACTIVE_CLASSES[opt.id]} border shadow-sm font-bold`
                     : 'text-secondary hover:text-primary hover:bg-surface-hover'

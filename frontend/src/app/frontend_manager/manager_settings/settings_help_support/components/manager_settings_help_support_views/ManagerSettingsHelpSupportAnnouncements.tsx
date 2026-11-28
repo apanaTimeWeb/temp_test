@@ -82,7 +82,7 @@ export function ManagerSettingsHelpSupportAnnouncements({
           return (
             <div
               key={ann.id}
-              className={`mgr-card p-5 md:p-6 ${styleInfo.cardBorder} hover:border-border-focus transition-all duration-200 relative overflow-hidden group`}
+              className={`mgr-card p-5 md:p-6 ${styleInfo.cardBorder} hover:border-border-focus motion-safe:transition-all motion-safe:duration-base relative overflow-hidden group`}
             >
               {/* Header row: Tag Badge + Date */}
               <div className="flex flex-wrap items-center justify-between gap-2.5 mb-3">
@@ -107,7 +107,7 @@ export function ManagerSettingsHelpSupportAnnouncements({
               </div>
 
               {/* Title & Description */}
-              <h3 className="text-base md:text-lg font-bold text-primary mb-2 group-hover:text-primary transition-colors">
+              <h3 className="text-base md:text-lg font-bold text-primary mb-2 group-hover:text-primary motion-safe:transition-colors">
                 {tManagerUi(ann.titleKey)}
               </h3>
               <p className="text-sm text-secondary leading-relaxed font-normal">

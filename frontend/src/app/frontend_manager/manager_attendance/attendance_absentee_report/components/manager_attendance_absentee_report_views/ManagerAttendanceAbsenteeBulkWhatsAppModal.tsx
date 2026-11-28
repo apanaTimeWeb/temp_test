@@ -87,7 +87,7 @@ export function ManagerAttendanceAbsenteeBulkWhatsAppModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-overlay-backdrop backdrop-blur-sm animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-overlay-backdrop backdrop-blur-sm motion-safe:animate-in fade-in"
       role="dialog"
       aria-modal="true"
       aria-labelledby="bulk-absentee-whatsapp-title"
@@ -120,7 +120,7 @@ export function ManagerAttendanceAbsenteeBulkWhatsAppModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-secondary hover:text-foreground hover:bg-surface-hover transition-colors"
+            className="p-1.5 rounded-lg text-secondary hover:text-foreground hover:bg-surface-hover motion-safe:transition-colors"
             aria-label="Close"
           >
             <X size={18} />
@@ -141,7 +141,7 @@ export function ManagerAttendanceAbsenteeBulkWhatsAppModal({
             </div>
             <div className="w-32 bg-surface-highlight rounded-full h-2.5 overflow-hidden border border-border">
               <div
-                className="bg-emerald-600 h-2.5 rounded-full transition-all duration-300"
+                className="bg-emerald-600 h-2.5 rounded-full motion-safe:transition-all motion-safe:duration-slow"
                 style={{ width: `${progressPct}%` }}
               />
             </div>
@@ -158,7 +158,7 @@ export function ManagerAttendanceAbsenteeBulkWhatsAppModal({
                   type="button"
                   key={tmpl.label}
                   onClick={() => setSelectedTemplate(tmpl.text)}
-                  className={`px-2.5 py-1 text-xs rounded-lg border transition-colors ${
+                  className={`px-2.5 py-1 text-xs rounded-lg border motion-safe:transition-colors ${
                     selectedTemplate === tmpl.text
                       ? 'bg-primary text-on-primary border-primary font-semibold'
                       : 'bg-surface border-border text-secondary hover:text-foreground'
@@ -192,7 +192,7 @@ export function ManagerAttendanceAbsenteeBulkWhatsAppModal({
               return (
                 <div
                   key={item.smartId}
-                  className="p-3 flex items-center justify-between gap-3 hover:bg-surface-hover transition-colors"
+                  className="p-3 flex items-center justify-between gap-3 hover:bg-surface-hover motion-safe:transition-colors"
                 >
                   <div>
                     <p className="text-sm font-bold text-foreground leading-tight">
@@ -217,7 +217,7 @@ export function ManagerAttendanceAbsenteeBulkWhatsAppModal({
                       <button
                         type="button"
                         onClick={() => handleSendSingle(item)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm motion-safe:transition-colors cursor-pointer"
                         title={`Send attendance alert to ${item.name}'s parent`}
                       >
                         <Send size={12} />
@@ -242,7 +242,7 @@ export function ManagerAttendanceAbsenteeBulkWhatsAppModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-secondary hover:text-foreground hover:bg-surface-hover transition-colors"
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-secondary hover:text-foreground hover:bg-surface-hover motion-safe:transition-colors"
             >
               Close
             </button>
@@ -250,7 +250,7 @@ export function ManagerAttendanceAbsenteeBulkWhatsAppModal({
               <button
                 type="button"
                 onClick={onComplete}
-                className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm motion-safe:transition-colors cursor-pointer"
               >
                 All Done & Dismiss
               </button>

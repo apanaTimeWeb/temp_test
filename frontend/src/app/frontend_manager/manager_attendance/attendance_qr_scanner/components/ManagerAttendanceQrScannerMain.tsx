@@ -5,5 +5,5 @@ import type { ManagerAttendanceQrScannerMainProps } from '@/app/frontend_manager
 // RESPONSIBILITY: Preserve supported route query state at the module boundary and pass it to the feature view.
 // DATA FLOW: Next.js searchParams -> route page -> Main props -> feature view.
 export function ManagerAttendanceQrScannerMain(props: ManagerAttendanceQrScannerMainProps) {
-  return <ManagerAttendanceQrScannerPage {...props} />;
+  return <ManagerAttendanceQrScannerPage view={props.view} id={props.id} name={props.name} phone={props.phone} smartId={props.smartId} />;
 }

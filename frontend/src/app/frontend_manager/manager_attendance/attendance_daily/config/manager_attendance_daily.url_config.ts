@@ -4,6 +4,9 @@ const ROOT = '/frontend_manager/manager_attendance/attendance_daily' as const;
 export const MANAGER_ATTENDANCE_DAILY_ROUTES = {
   root: ROOT,
   attendance: '/frontend_manager/manager_attendance/attendance_daily',
+  monthlyHistory: '/frontend_manager/manager_attendance/attendance_monthly_history',
+  memberMonthlyHistory: (smartId: string) =>
+    `/frontend_manager/manager_attendance/attendance_monthly_history?smartId=${encodeURIComponent(smartId)}`,
   absenteeReport: '/frontend_manager/manager_attendance/attendance_absentee_report',
   holidayCalendar: '/frontend_manager/manager_attendance/attendance_daily',
   qrScanner: '/frontend_manager/manager_attendance/attendance_qr_scanner',

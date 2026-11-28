@@ -86,7 +86,7 @@ export default function ManagerFinanceAutoSuspendTable({
               <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 transition-colors shrink-0" aria-hidden="true" />
+            <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 motion-safe:transition-colors shrink-0" aria-hidden="true" />
           )}
         </button>
       </th>
@@ -121,7 +121,7 @@ export default function ManagerFinanceAutoSuspendTable({
             </tr>
           ) : (
             paginated.map((s) => (
-              <tr key={s.id} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-14 transition-colors">
+              <tr key={s.id} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-14 motion-safe:transition-colors">
                 <td className="py-3 px-4">
                   <div className="font-semibold text-primary text-sm">{s.studentName}</div>
                   <div className="text-xs text-secondary font-mono">{s.smartId}</div>
@@ -146,7 +146,7 @@ export default function ManagerFinanceAutoSuspendTable({
                         type="button"
                         data-testid={`test-gate-btn-${s.id}`}
                         onClick={() => onTestKioskScan(s)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-500/20 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-semibold transition-all cursor-pointer shadow-2xs active:scale-95"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-500/20 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-2xs active:scale-95"
                         title={`Test Gate Kiosk scan for ${s.studentName}`}
                       >
                         <QrCode size={13} />
@@ -156,7 +156,7 @@ export default function ManagerFinanceAutoSuspendTable({
                     <button
                       type="button"
                       onClick={() => onSendReminder(s)}
-                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all cursor-pointer shadow-2xs active:scale-95 ${
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-2xs active:scale-95 ${
                         remindedStudents[s.id]
                           ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
                           : 'border-emerald-500/20 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'
@@ -169,7 +169,7 @@ export default function ManagerFinanceAutoSuspendTable({
                     <button
                       type="button"
                       onClick={() => onRestoreStudent(s)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-semibold transition-all cursor-pointer shadow-2xs active:scale-95"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-semibold motion-safe:transition-all cursor-pointer shadow-2xs active:scale-95"
                       title={`Manually restore ${s.studentName}`}
                     >
                       <RotateCcw size={13} />

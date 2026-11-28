@@ -1,19 +1,21 @@
 'use client';
 
+// RESPONSIBILITY: Render calendar grid and tabular punch log views for member monthly attendance history.
+
 import type {
-  AttendanceDailyDayRecord,
-  AttendanceDailyMonthStatus,
-} from '@/app/frontend_manager/manager_attendance/attendance_daily/utils/ManagerAttendanceDailyMonthlyHistoryUtils';
+  AttendanceMonthlyHistoryDayRecord,
+  AttendanceMonthlyHistoryMonthStatus,
+} from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/types/ManagerAttendanceMonthlyHistoryTypes';
 import { CheckCircle2, Clock, XCircle } from 'lucide-react';
 
-interface ManagerAttendanceDailyCalendarGridProps {
+interface ManagerAttendanceMonthlyHistoryCalendarGridProps {
   activeView: 'calendar' | 'table';
-  dailyLogs: AttendanceDailyDayRecord[];
-  filteredLogs: AttendanceDailyDayRecord[];
+  dailyLogs: AttendanceMonthlyHistoryDayRecord[];
+  filteredLogs: AttendanceMonthlyHistoryDayRecord[];
   statusFilter: 'all' | 'present' | 'absent' | 'late';
 }
 
-function statusBadge(status: AttendanceDailyMonthStatus) {
+function statusBadge(status: AttendanceMonthlyHistoryMonthStatus) {
   switch (status) {
     case 'present':
       return (
@@ -42,12 +44,12 @@ function statusBadge(status: AttendanceDailyMonthStatus) {
   }
 }
 
-export function ManagerAttendanceDailyCalendarGrid({
+export function ManagerAttendanceMonthlyHistoryCalendarGrid({
   activeView,
   dailyLogs,
   filteredLogs,
   statusFilter,
-}: ManagerAttendanceDailyCalendarGridProps) {
+}: ManagerAttendanceMonthlyHistoryCalendarGridProps) {
   if (activeView === 'calendar') {
     return (
       <div className="border border-border rounded-xl bg-card overflow-hidden">

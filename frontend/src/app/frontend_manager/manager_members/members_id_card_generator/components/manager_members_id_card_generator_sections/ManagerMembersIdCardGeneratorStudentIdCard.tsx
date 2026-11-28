@@ -208,7 +208,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
           type="button"
           onClick={() => handleSideSelect('front')}
           data-testid="id-card-side-front-btn"
-          className={`flex-1 sm:flex-none justify-center px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${currentSide === 'front'
+          className={`flex-1 sm:flex-none justify-center px-3 py-1 rounded-lg text-xs font-semibold motion-safe:transition-colors cursor-pointer flex items-center gap-1.5 ${currentSide === 'front'
               ? 'bg-primary text-primary-foreground shadow-sm'
               : 'text-secondary hover:text-foreground'
             }`}
@@ -220,7 +220,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
           type="button"
           onClick={() => handleSideSelect('back')}
           data-testid="id-card-side-back-btn"
-          className={`flex-1 sm:flex-none justify-center px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${currentSide === 'back'
+          className={`flex-1 sm:flex-none justify-center px-3 py-1 rounded-lg text-xs font-semibold motion-safe:transition-colors cursor-pointer flex items-center gap-1.5 ${currentSide === 'back'
               ? 'bg-primary text-primary-foreground shadow-sm'
               : 'text-secondary hover:text-foreground'
             }`}
@@ -232,7 +232,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
           type="button"
           onClick={() => handleSideSelect('both')}
           data-testid="id-card-side-both-btn"
-          className={`flex-1 sm:flex-none justify-center px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${currentSide === 'both'
+          className={`flex-1 sm:flex-none justify-center px-3 py-1 rounded-lg text-xs font-semibold motion-safe:transition-colors cursor-pointer flex items-center gap-1.5 ${currentSide === 'both'
               ? 'bg-primary text-primary-foreground shadow-sm'
               : 'text-secondary hover:text-foreground'
             }`}
@@ -282,7 +282,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
           </div>
           <div className="flex flex-col items-center">
             <div className="side-label no-print">
-              <span className="dot" style={{ background: '#10b981', boxShadow: '0 0 8px #10b981' }} />
+              <span className="dot dot--emerald" />
               <span>Back Side</span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface border border-border text-primary font-semibold ml-2 hidden sm:inline-block">
                 85.60 × 53.98 mm

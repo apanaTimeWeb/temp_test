@@ -19,7 +19,7 @@ import { useManagerAssetsMaintenanceCurrencyFormatter } from '@/app/frontend_man
 import type { ManagerAssetsMaintenanceMainProps } from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/types/ManagerAssetsMaintenanceTypes';
 import {
   exportMaintenanceLogsCsv,
-  formatMaintenanceInrRupees,
+  formatMaintenanceMinorInr,
 } from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/utils/ManagerAssetsMaintenanceExportHelpers';
 import { Download, Plus, Printer } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -56,7 +56,7 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
     if (newLog.cost > 0 && newLog.autoPostToExpenses !== false) {
       const sourceLabel = newLog.expensePaymentSource === 'bank_direct' ? 'Bank Account' : 'Petty Cash Float';
       toast.success(
-        `Maintenance order logged & expense of ${formatMaintenanceInrRupees(Math.round(newLog.cost / 100))} automatically posted to Operating Expenses (${sourceLabel})!`,
+        `Maintenance order logged & expense of ${formatMaintenanceMinorInr(newLog.cost)} automatically posted to Operating Expenses (${sourceLabel})!`,
         { id: `manager-maintenance-create-${newLog.id}` }
       );
     } else {

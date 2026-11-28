@@ -14,5 +14,5 @@ export default async function ManagerAccountsExpensesPage({ searchParams }: Mana
     view: firstValue(params.view),
     id: firstValue(params.id),
   };
-  return <ManagerAccountsExpensesMain {...mainProps} />;
+  return <ManagerAccountsExpensesMain view={mainProps.view} id={mainProps.id} />;
 }

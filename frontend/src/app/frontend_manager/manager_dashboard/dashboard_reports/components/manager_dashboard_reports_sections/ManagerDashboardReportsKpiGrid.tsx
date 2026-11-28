@@ -103,19 +103,19 @@ export function ManagerDashboardReportsKpiGrid({
         return (
           <div
             key={card.title}
-            className={`group relative overflow-hidden rounded-2xl border p-5 shadow-lg motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between ${theme.cardBg}`}
+            className={`group relative overflow-hidden rounded-2xl border p-5 shadow-lg motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between ${theme.cardBg}`}
           >
             {/* Glowing Orb */}
-            <div className={`pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full blur-2xl motion-safe:transition-all motion-safe:duration-500 ${theme.glow}`} />
+            <div className={`pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full blur-2xl motion-safe:transition-all motion-safe:duration-xslow ${theme.glow}`} />
 
             {/* Decorative Sparkline */}
-            <svg aria-hidden="true" className={`pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible motion-safe:transition-opacity motion-safe:duration-300 group-hover:opacity-40 ${theme.strokeClass}`} viewBox="0 0 150 40" fill="none">
+            <svg aria-hidden="true" className={`pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible motion-safe:transition-opacity motion-safe:duration-slow group-hover:opacity-40 ${theme.strokeClass}`} viewBox="0 0 150 40" fill="none">
               <path d="M0,32 Q15,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
             </svg>
 
             <div className="relative z-10">
               <div className="flex items-center justify-between gap-2">
-                <div className={`p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs ${theme.iconBox}`}>
+                <div className={`p-2.5 rounded-xl border shrink-0 motion-safe:transition-transform group-hover:scale-110 shadow-xs ${theme.iconBox}`}>
                   <Icon size={20} strokeWidth={2.2} />
                 </div>
 

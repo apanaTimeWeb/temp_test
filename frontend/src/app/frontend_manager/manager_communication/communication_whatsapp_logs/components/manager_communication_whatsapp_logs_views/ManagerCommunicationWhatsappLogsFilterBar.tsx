@@ -111,7 +111,7 @@ export function ManagerCommunicationWhatsappLogsFilterBar({
             <button
               type="button"
               onClick={onResetFilters}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 border border-rose-500/20 transition-all cursor-pointer w-full justify-center"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 border border-rose-500/20 motion-safe:transition-all cursor-pointer w-full justify-center"
             >
               <RotateCcw size={13} />
               <span>Clear</span>

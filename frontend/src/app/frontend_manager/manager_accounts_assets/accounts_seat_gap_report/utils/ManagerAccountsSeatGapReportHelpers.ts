@@ -18,6 +18,11 @@ export function formatSeatGapInrRupees(rupees: number): string {
   return INR_RUPEES_FORMATTER.format(rupees);
 }
 
+/** Formats minor-unit INR amounts into major-unit rupee display strings. */
+export function formatSeatGapMinorInr(minorAmount: number): string {
+  return formatSeatGapInrRupees(Math.round(minorAmount / 100));
+}
+
 export function formatSeatGapDailyRate(): string {
   return `${INR_RUPEES_FORMATTER.format(50)}.00/day`;
 }

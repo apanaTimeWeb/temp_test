@@ -30,7 +30,7 @@ export function ManagerAssetsRegisterKpis({
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="group relative overflow-hidden p-5 rounded-2xl border border-indigo-500/40 mar-kpi-indigo shadow-lg shadow-indigo-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
+        <div className="group relative overflow-hidden p-5 rounded-2xl border border-indigo-500/40 mar-kpi-indigo shadow-lg shadow-indigo-950/40 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
           <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 text-indigo-400 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
             <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
           </svg>
@@ -44,7 +44,7 @@ export function ManagerAssetsRegisterKpis({
           </div>
         </div>
 
-        <div className="group relative overflow-hidden p-5 rounded-2xl border border-emerald-500/40 mar-kpi-emerald shadow-lg shadow-emerald-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
+        <div className="group relative overflow-hidden p-5 rounded-2xl border border-emerald-500/40 mar-kpi-emerald shadow-lg shadow-emerald-950/40 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
           <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 text-emerald-400 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
             <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
           </svg>
@@ -58,7 +58,7 @@ export function ManagerAssetsRegisterKpis({
           </div>
         </div>
 
-        <div className="group relative overflow-hidden p-5 rounded-2xl border border-amber-500/40 mar-kpi-amber shadow-lg shadow-amber-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
+        <div className="group relative overflow-hidden p-5 rounded-2xl border border-amber-500/40 mar-kpi-amber shadow-lg shadow-amber-950/40 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
           <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 text-amber-400 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
             <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
           </svg>
@@ -72,7 +72,7 @@ export function ManagerAssetsRegisterKpis({
           </div>
         </div>
 
-        <div className="group relative overflow-hidden p-5 rounded-2xl border border-sky-500/40 mar-kpi-sky shadow-lg shadow-sky-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-sky-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
+        <div className="group relative overflow-hidden p-5 rounded-2xl border border-sky-500/40 mar-kpi-sky shadow-lg shadow-sky-950/40 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-sky-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
           <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 text-sky-400 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
             <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
           </svg>
@@ -93,9 +93,9 @@ export function ManagerAssetsRegisterKpis({
           <span className="text-xs text-secondary font-medium">{totalAssets} Total Inventory Records</span>
         </div>
         <div className="w-full h-2.5 rounded-full overflow-hidden flex bg-surface-highlight">
-          <div style={{ width: `${activePct}%` }} className="bg-emerald-500 h-full motion-safe:transition-all motion-safe:duration-300" title={`Active (${activePct}%)`} />
-          <div style={{ width: `${maintenancePct}%` }} className="bg-amber-500 h-full motion-safe:transition-all motion-safe:duration-300" title={`Maintenance (${maintenancePct}%)`} />
-          <div style={{ width: `${disposedPct}%` }} className="bg-slate-500 h-full motion-safe:transition-all motion-safe:duration-300" title={`Disposed (${disposedPct}%)`} />
+          <div style={{ width: `${activePct}%` }} className="bg-emerald-500 h-full motion-safe:transition-all motion-safe:duration-slow" title={`Active (${activePct}%)`} />
+          <div style={{ width: `${maintenancePct}%` }} className="bg-amber-500 h-full motion-safe:transition-all motion-safe:duration-slow" title={`Maintenance (${maintenancePct}%)`} />
+          <div style={{ width: `${disposedPct}%` }} className="bg-slate-500 h-full motion-safe:transition-all motion-safe:duration-slow" title={`Disposed (${disposedPct}%)`} />
         </div>
         <div className="flex flex-wrap gap-4 text-xs text-secondary pt-1">
           <span className="flex items-center gap-1.5 font-medium"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Operational ({activePct}%)</span>

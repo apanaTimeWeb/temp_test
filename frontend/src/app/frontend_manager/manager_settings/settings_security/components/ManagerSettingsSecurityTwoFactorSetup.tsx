@@ -95,7 +95,7 @@ export function ManagerSettingsSecurityTwoFactorSetup({
             <button
               type="submit"
               disabled={verificationCode.trim().length !== 6}
-              className="w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 border border-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 text-xs font-bold text-white motion-safe:transition-all cursor-pointer shadow-md"
+              className="w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 border border-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 text-xs font-bold text-white motion-safe:transition-all cursor-pointer shadow-md"
             >
               <ShieldCheck size={14} />
               Verify and Enable 2FA

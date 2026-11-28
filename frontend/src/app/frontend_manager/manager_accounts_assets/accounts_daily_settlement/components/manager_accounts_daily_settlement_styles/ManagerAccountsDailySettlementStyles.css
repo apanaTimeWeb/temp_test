@@ -53,3 +53,7 @@
   box-shadow: 0 0 14px rgba(245, 158, 11, 0.4);
   border-color: #f59e0b;
 }
+
+.mds-btn-glow-emerald {
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
+}

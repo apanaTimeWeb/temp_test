@@ -17,5 +17,5 @@ export default async function ManagerAttendanceDailyPage({ searchParams }: Manag
     phone: firstValue(params.phone),
     smartId: firstValue(params.smartId),
   };
-  return <ManagerAttendanceDailyMain {...mainProps} />;
+  return <ManagerAttendanceDailyMain view={mainProps.view} id={mainProps.id} name={mainProps.name} phone={mainProps.phone} smartId={mainProps.smartId} />;
 }

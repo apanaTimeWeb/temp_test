@@ -70,7 +70,7 @@ export function ManagerSeatsHistoryNativeTable<T extends object>({ rows, columns
                             <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
                           )
                         ) : (
-                          <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 transition-colors shrink-0" aria-hidden="true" />
+                          <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 motion-safe:transition-colors shrink-0" aria-hidden="true" />
                         )}
                       </button>
                     ) : (
@@ -83,7 +83,7 @@ export function ManagerSeatsHistoryNativeTable<T extends object>({ rows, columns
           </thead>
           <tbody>
             {visibleRows.map((row, rowIndex) => (
-              <tr key={getRowKey(row, effectivePage * pageSize + rowIndex)} className="border-b border-border last:border-0 hover:bg-surface-hover transition-colors h-11">
+              <tr key={getRowKey(row, effectivePage * pageSize + rowIndex)} className="border-b border-border last:border-0 hover:bg-surface-hover motion-safe:transition-colors h-11">
                 {columns.map((column, columnIndex) => {
                   const field = column.field == null ? undefined : String(column.field);
                   const value = field ? (row as unknown as Record<string, unknown>)[field] : undefined;

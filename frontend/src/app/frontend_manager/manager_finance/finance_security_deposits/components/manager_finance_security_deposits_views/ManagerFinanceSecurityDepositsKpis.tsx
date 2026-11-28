@@ -75,7 +75,7 @@ export function ManagerFinanceSecurityDepositsKpis({
       {cards.map(({ key, variant, label, labelCls, val, valCls, chip, sub, subCls, Icon }) => (
         <div
           key={key}
-          className={`fin-deposit-kpi-card--${variant} group relative overflow-hidden rounded-2xl border p-5 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between`}
+          className={`fin-deposit-kpi-card--${variant} group relative overflow-hidden rounded-2xl border p-5 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between`}
         >
           <svg
             aria-hidden="true"

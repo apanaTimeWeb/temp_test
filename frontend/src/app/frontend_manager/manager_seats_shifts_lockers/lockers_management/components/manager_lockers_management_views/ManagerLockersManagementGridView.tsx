@@ -39,7 +39,7 @@ export function ManagerLockersManagementGridView({
             <span>Occupied (Click for Student Detail)</span>
           </div>
           <div className="flex items-center gap-1.5 font-medium text-amber-400">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 motion-safe:animate-pulse" />
             <span>Plan Expired / Overdue</span>
           </div>
           <div className="flex items-center gap-1.5 font-medium text-secondary">
@@ -84,7 +84,7 @@ export function ManagerLockersManagementGridView({
                   else onSelectLocker(locker);
                 }
               }}
-              className={`group relative flex flex-col justify-between p-3.5 rounded-2xl border transition-all cursor-pointer select-none text-left focus:outline-none focus:ring-2 focus:ring-primary ${
+              className={`group relative flex flex-col justify-between p-3.5 rounded-2xl border motion-safe:transition-all cursor-pointer select-none text-left focus:outline-none focus:ring-2 focus:ring-primary ${
                 isExpired
                   ? 'bg-card border-amber-500/50 hover:border-amber-500 hover:bg-amber-500/10 shadow-xs ring-1 ring-amber-500/30'
                   : isOccupied
@@ -122,7 +122,7 @@ export function ManagerLockersManagementGridView({
 
                 <span
                   className={`w-2 h-2 rounded-full shrink-0 mt-1 ${
-                    isExpired ? 'bg-amber-500 animate-pulse' : isOccupied ? 'bg-rose-500' : isFree ? 'bg-emerald-500' : 'bg-amber-500'
+                    isExpired ? 'bg-amber-500 motion-safe:animate-pulse' : isOccupied ? 'bg-rose-500' : isFree ? 'bg-emerald-500' : 'bg-amber-500'
                   }`}
                   title={isExpired ? 'Plan Expired' : locker.status}
                 />

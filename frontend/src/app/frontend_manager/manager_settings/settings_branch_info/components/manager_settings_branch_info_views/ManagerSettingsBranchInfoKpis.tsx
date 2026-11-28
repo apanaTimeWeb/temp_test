@@ -7,7 +7,7 @@ import { Armchair, CalendarCheck, Clock, Layers } from 'lucide-react';
 export function ManagerSettingsBranchInfoKpis({ branchData }: { branchData: ManagerSettingsBranchInfoDraft }) {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-      <div className="mgr-branch-kpi--amber group relative overflow-hidden rounded-2xl border border-amber-500/40 p-4 sm:p-5 shadow-lg motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex flex-col justify-between">
+      <div className="mgr-branch-kpi--amber group relative overflow-hidden rounded-2xl border border-amber-500/40 p-4 sm:p-5 shadow-lg motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex flex-col justify-between">
         <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none text-amber-400" viewBox="0 0 150 45">
           <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
@@ -27,7 +27,7 @@ export function ManagerSettingsBranchInfoKpis({ branchData }: { branchData: Mana
         </div>
       </div>
 
-      <div className="mgr-branch-kpi--purple group relative overflow-hidden rounded-2xl border border-purple-500/40 p-4 sm:p-5 shadow-lg motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-purple-400/60 hover:shadow-xl flex flex-col justify-between">
+      <div className="mgr-branch-kpi--purple group relative overflow-hidden rounded-2xl border border-purple-500/40 p-4 sm:p-5 shadow-lg motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-purple-400/60 hover:shadow-xl flex flex-col justify-between">
         <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none text-purple-400" viewBox="0 0 150 45">
           <path d="M0,32 Q30,14 60,25 T110,10 T150,18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
@@ -47,7 +47,7 @@ export function ManagerSettingsBranchInfoKpis({ branchData }: { branchData: Mana
         </div>
       </div>
 
-      <div className="mgr-branch-kpi--sky group relative overflow-hidden rounded-2xl border border-sky-500/40 p-4 sm:p-5 shadow-lg motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-sky-400/60 hover:shadow-xl flex flex-col justify-between">
+      <div className="mgr-branch-kpi--sky group relative overflow-hidden rounded-2xl border border-sky-500/40 p-4 sm:p-5 shadow-lg motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-sky-400/60 hover:shadow-xl flex flex-col justify-between">
         <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none text-sky-400" viewBox="0 0 150 45">
           <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
@@ -67,7 +67,7 @@ export function ManagerSettingsBranchInfoKpis({ branchData }: { branchData: Mana
         </div>
       </div>
 
-      <div className="mgr-branch-kpi--emerald group relative overflow-hidden rounded-2xl border border-emerald-500/40 p-4 sm:p-5 shadow-lg motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex flex-col justify-between">
+      <div className="mgr-branch-kpi--emerald group relative overflow-hidden rounded-2xl border border-emerald-500/40 p-4 sm:p-5 shadow-lg motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex flex-col justify-between">
         <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none text-emerald-400" viewBox="0 0 150 45">
           <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>

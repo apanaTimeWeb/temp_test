@@ -178,7 +178,7 @@ export function ManagerMembersEnquiriesMobileCards({
               {/* WhatsApp Button (Emerald) */}
               <button
                 type="button"
-                className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/35 hover:text-emerald-200 transition-all cursor-pointer shadow-sm shadow-emerald-950/50"
+                className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/35 hover:text-emerald-200 motion-safe:transition-all cursor-pointer shadow-sm shadow-emerald-950/50"
                 aria-label={`WhatsApp: ${enq.name}`}
                 title="Send WhatsApp"
                 onClick={(e) => onSendWhatsApp(e, enq)}
@@ -191,7 +191,7 @@ export function ManagerMembersEnquiriesMobileCards({
               {/* View Button (Cyan) */}
               <button
                 type="button"
-                className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 border border-sky-500/40 hover:bg-sky-500/35 hover:text-sky-200 transition-all cursor-pointer shadow-sm shadow-sky-950/50"
+                className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 border border-sky-500/40 hover:bg-sky-500/35 hover:text-sky-200 motion-safe:transition-all cursor-pointer shadow-sm shadow-sky-950/50"
                 aria-label={tManagerUi('view_details')}
                 title={tManagerUi('view_details')}
                 onClick={() => onOpenDetails(enq.id)}
@@ -202,7 +202,7 @@ export function ManagerMembersEnquiriesMobileCards({
               {/* Convert Button (Indigo) */}
               <button
                 type="button"
-                className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 hover:bg-indigo-500/35 hover:text-indigo-200 transition-all cursor-pointer shadow-sm shadow-indigo-950/50"
+                className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 hover:bg-indigo-500/35 hover:text-indigo-200 motion-safe:transition-all cursor-pointer shadow-sm shadow-indigo-950/50"
                 aria-label={tManagerUi('convert_to_admission')}
                 title={tManagerUi('convert_to_admission')}
                 onClick={(e) => onQuickConvert(e, enq)}
@@ -213,7 +213,7 @@ export function ManagerMembersEnquiriesMobileCards({
               {/* Close / Mark Lost Button (Rose) */}
               <button
                 type="button"
-                className={`inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/40 transition-all shadow-sm shadow-rose-950/50 ${
+                className={`inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/40 motion-safe:transition-all shadow-sm shadow-rose-950/50 ${
                   enq.status === 'Lost'
                     ? 'opacity-40 cursor-not-allowed'
                     : 'hover:bg-rose-500/35 hover:text-rose-200 cursor-pointer opacity-90 hover:opacity-100'

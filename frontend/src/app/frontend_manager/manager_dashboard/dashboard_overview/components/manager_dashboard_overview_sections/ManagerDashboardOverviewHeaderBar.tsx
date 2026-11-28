@@ -41,12 +41,12 @@ export function ManagerDashboardOverviewHeaderBar({
   const occupancyPct = Math.round((liveHeadcount / totalCapacity) * 100);
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all space-y-4">
+    <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card motion-safe:transition-all space-y-4">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div className="space-y-1.5">
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
               Live Operations Active
             </span>
             {/* Real-Time Live Headcount Badge */}
@@ -71,7 +71,7 @@ export function ManagerDashboardOverviewHeaderBar({
             type="button"
             onClick={onRefresh}
             disabled={isFetching}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-foreground hover:bg-surface-hover hover:border-primary transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-foreground hover:bg-surface-hover hover:border-primary motion-safe:transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
             title="Refresh dashboard KPIs"
           >
             {isFetching ? <ButtonLoader icon="layout-dashboard" /> : <RotateCw size={13} className="text-muted-foreground" />}
@@ -79,7 +79,7 @@ export function ManagerDashboardOverviewHeaderBar({
           </button>
           <Link
             href={MANAGER_DASHBOARD_OVERVIEW_ROUTES.REPORTS}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:bg-primary-hover shadow-xs transition-all hover:scale-[1.02] cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:bg-primary-hover shadow-xs motion-safe:transition-all hover:scale-[1.02] cursor-pointer"
           >
             <TrendingUp size={14} />
             <span>{tManagerUi('view_reports')}</span>
@@ -95,28 +95,28 @@ export function ManagerDashboardOverviewHeaderBar({
           </span>
           <Link
             href="/frontend_manager/manager_members/members_new_admission"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white text-xs font-bold shadow-sm shadow-indigo-950/40 transition-all hover:scale-[1.02] cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-sm shadow-indigo-950/40 motion-safe:transition-all hover:scale-[1.02] cursor-pointer"
           >
             <UserPlus size={13} />
             <span>+ New Admission</span>
           </Link>
           <Link
             href="/frontend_manager/manager_members/members_enquiries?view=add"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-500/15 text-sky-300 border border-sky-500/30 hover:bg-sky-500/25 text-xs font-semibold transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-500/15 text-sky-300 border border-sky-500/30 hover:bg-sky-500/25 text-xs font-semibold motion-safe:transition-all cursor-pointer"
           >
             <Plus size={13} />
             <span>+ New Enquiry</span>
           </Link>
           <Link
             href={MANAGER_DASHBOARD_OVERVIEW_ROUTES.FINANCE_COLLECT_FEE}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25 text-xs font-semibold transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25 text-xs font-semibold motion-safe:transition-all cursor-pointer"
           >
             <IndianRupee size={13} />
             <span>Collect Fee</span>
           </Link>
           <Link
             href={MANAGER_DASHBOARD_OVERVIEW_ROUTES.ENGAGEMENT_QR_SCANNER}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/15 text-purple-300 border border-purple-500/30 hover:bg-purple-500/25 text-xs font-semibold transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/15 text-purple-300 border border-purple-500/30 hover:bg-purple-500/25 text-xs font-semibold motion-safe:transition-all cursor-pointer"
           >
             <QrCode size={13} />
             <span>Scan QR / Attendance</span>
@@ -135,7 +135,7 @@ export function ManagerDashboardOverviewHeaderBar({
             <button
               type="button"
               onClick={() => onTimeRangeChange('today')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold motion-safe:transition-all cursor-pointer ${
                 timeRange === 'today'
                   ? 'bg-primary text-primary-foreground shadow-xs font-bold'
                   : 'text-muted-foreground hover:text-foreground hover:bg-surface-hover'
@@ -146,7 +146,7 @@ export function ManagerDashboardOverviewHeaderBar({
             <button
               type="button"
               onClick={() => onTimeRangeChange('this_week')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold motion-safe:transition-all cursor-pointer ${
                 timeRange === 'this_week'
                   ? 'bg-primary text-primary-foreground shadow-xs font-bold'
                   : 'text-muted-foreground hover:text-foreground hover:bg-surface-hover'
@@ -157,7 +157,7 @@ export function ManagerDashboardOverviewHeaderBar({
             <button
               type="button"
               onClick={() => onTimeRangeChange('this_month')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold motion-safe:transition-all cursor-pointer ${
                 timeRange === 'this_month'
                   ? 'bg-primary text-primary-foreground shadow-xs font-bold'
                   : 'text-muted-foreground hover:text-foreground hover:bg-surface-hover'
@@ -168,7 +168,7 @@ export function ManagerDashboardOverviewHeaderBar({
             <button
               type="button"
               onClick={() => onTimeRangeChange('custom')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold motion-safe:transition-all cursor-pointer flex items-center gap-1.5 ${
                 timeRange === 'custom'
                   ? 'bg-primary text-primary-foreground shadow-xs font-bold'
                   : 'text-muted-foreground hover:text-foreground hover:bg-surface-hover'
@@ -181,7 +181,7 @@ export function ManagerDashboardOverviewHeaderBar({
         </div>
 
         {timeRange === 'custom' ? (
-          <div className="flex items-center gap-2 bg-card border border-primary p-1.5 rounded-xl text-xs shadow-xs animate-in fade-in duration-200">
+          <div className="flex items-center gap-2 bg-card border border-primary p-1.5 rounded-xl text-xs shadow-xs motion-safe:animate-in fade-in motion-safe:duration-base">
             <span className="text-muted-foreground font-medium pl-1">From:</span>
             <input maxLength={100}
               type="date"

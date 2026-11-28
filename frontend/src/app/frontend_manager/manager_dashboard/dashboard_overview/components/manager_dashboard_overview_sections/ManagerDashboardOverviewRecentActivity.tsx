@@ -79,7 +79,7 @@ export function ManagerDashboardOverviewRecentActivity({
   return (
     <section className="grid grid-cols-1 lg:grid-cols-2 gap-6" aria-label={tManagerUi('recent_activity')}>
       {/* Recent Admissions Card */}
-      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all flex flex-col justify-between">
+      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card motion-safe:transition-all flex flex-col justify-between">
         <div>
           <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-border">
             <div className="flex items-center gap-3">
@@ -104,7 +104,7 @@ export function ManagerDashboardOverviewRecentActivity({
               className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline group"
             >
               <span>{tManagerUi('view_all')}</span>
-              <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-safe:transition-transform" />
             </Link>
           </div>
 
@@ -127,7 +127,7 @@ export function ManagerDashboardOverviewRecentActivity({
                 </thead>
                 <tbody className="divide-y divide-border">
                   {admissions.map((row) => (
-                    <tr key={row.smartId} className="hover:bg-surface-hover transition-colors">
+                    <tr key={row.smartId} className="hover:bg-surface-hover motion-safe:transition-colors">
                       <td className="w-5/12 py-3 truncate font-semibold text-foreground">
                         <div className="flex items-center gap-2">
                           <div className="w-6 h-6 rounded-full bg-warning-bg text-warning-text font-bold text-[10px] flex items-center justify-center shrink-0">
@@ -156,7 +156,7 @@ export function ManagerDashboardOverviewRecentActivity({
       </div>
 
       {/* Recent Enquiries Card */}
-      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all flex flex-col justify-between">
+      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card motion-safe:transition-all flex flex-col justify-between">
         <div>
           <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-border">
             <div className="flex items-center gap-3">
@@ -181,7 +181,7 @@ export function ManagerDashboardOverviewRecentActivity({
               className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline group"
             >
               <span>{tManagerUi('view_all')}</span>
-              <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-safe:transition-transform" />
             </Link>
           </div>
 
@@ -204,7 +204,7 @@ export function ManagerDashboardOverviewRecentActivity({
                 </thead>
                 <tbody className="divide-y divide-border">
                   {enquiries.map((row, index) => (
-                    <tr key={enquiryKeys[index]} className="hover:bg-surface-hover transition-colors">
+                    <tr key={enquiryKeys[index]} className="hover:bg-surface-hover motion-safe:transition-colors">
                       <td className="w-5/12 py-3 truncate font-semibold text-foreground">
                         <div className="flex items-center gap-2">
                           <div className="w-6 h-6 rounded-full bg-info-bg text-info font-bold text-[10px] flex items-center justify-center shrink-0">

@@ -149,7 +149,7 @@ export function createManagerAccountsDailySettlementColumns({
               <button
                 type="button"
                 onClick={() => onViewDetails(entry)}
-                className="p-1.5 rounded-lg text-sky-400 hover:text-sky-300 hover:bg-sky-500/15 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg text-sky-400 hover:text-sky-300 hover:bg-sky-500/15 motion-safe:transition-colors cursor-pointer"
                 title={`View ${entry.shift} audit details`}
                 aria-label={`View audit details for ${entry.shift}`}
               >
@@ -161,7 +161,7 @@ export function createManagerAccountsDailySettlementColumns({
               <button
                 type="button"
                 onClick={() => onSettleShift(entry.shift)}
-                className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+                className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs motion-safe:transition-colors cursor-pointer"
                 title={`Settle shift ${entry.shift}`}
               >
                 Settle Shift

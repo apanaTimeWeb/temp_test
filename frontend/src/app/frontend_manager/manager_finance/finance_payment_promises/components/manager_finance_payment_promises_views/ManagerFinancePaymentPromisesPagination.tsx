@@ -30,7 +30,7 @@ export function ManagerFinancePaymentPromisesPagination({
           type="button"
           disabled={effectivePage === 0}
           onClick={onPrevPage}
-          className="px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
+          className="px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed motion-safe:transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
         >
           Previous
         </button>
@@ -41,7 +41,7 @@ export function ManagerFinancePaymentPromisesPagination({
           type="button"
           disabled={effectivePage >= pageCount - 1}
           onClick={onNextPage}
-          className="px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
+          className="px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed motion-safe:transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
         >
           Next
         </button>

@@ -33,7 +33,7 @@ export default function ManagerFinanceSubscriptionsKpiGrid({
       {cards.map(({ key, variant, label, value, valCls, sub, subCls, Icon, span2 }) => (
         <div
           key={key}
-          className={`fin-sub-kpi-card--${variant} group relative overflow-hidden p-3.5 sm:p-4 rounded-2xl border motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between ${span2 ? 'col-span-2 sm:col-span-1' : ''}`}
+          className={`fin-sub-kpi-card--${variant} group relative overflow-hidden p-3.5 sm:p-4 rounded-2xl border motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between ${span2 ? 'col-span-2 sm:col-span-1' : ''}`}
         >
           <svg aria-hidden="true" className="fin-sub-kpi-spark absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
             <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" strokeWidth="2.5" strokeLinecap="round" />

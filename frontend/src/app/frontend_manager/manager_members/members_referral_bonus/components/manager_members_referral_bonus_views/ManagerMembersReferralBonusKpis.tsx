@@ -74,7 +74,7 @@ export function ManagerMembersReferralBonusKpis({
             data-testid={`manager-referral-kpi-${kpi.id}`}
             onClick={() => onSelectStatusFilter(kpi.status === 'All' ? 'All' : isSelected ? 'All' : kpi.status)}
             aria-pressed={isSelected}
-            className={`group relative overflow-hidden rounded-2xl border p-4 sm:p-5 flex flex-col justify-between gap-3 text-left motion-safe:transition-all motion-safe:duration-300 cursor-pointer ${
+            className={`group relative overflow-hidden rounded-2xl border p-4 sm:p-5 flex flex-col justify-between gap-3 text-left motion-safe:transition-all motion-safe:duration-slow cursor-pointer ${
               isSelected ? `${kpi.activeBorder} scale-[1.01] -translate-y-0.5 z-10 opacity-100 shadow-xl` : `${kpi.unselectedBg} opacity-85 hover:opacity-100 hover:scale-[1.01]`
             }`}
             title={`Filter by: ${kpi.label}`}

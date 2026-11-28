@@ -1,10 +1,10 @@
 'use client';
 // RESPONSIBILITY: Render the attendance daily student row component within the components feature. It does not own backend persistence or cross-feature business logic.
-
-// RESPONSIBILITY: Render the attendance daily student row component within the components feature. It does not own backend persistence or cross-feature business logic.
+import { MANAGER_ATTENDANCE_DAILY_ROUTES } from '@/app/frontend_manager/manager_attendance/attendance_daily/config/manager_attendance_daily.url_config';
 import type { ManagerAttendanceDailyStudentRowProps } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
 import { AlertTriangle,Bell,Calendar,CheckCircle,Clock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 
 /** Single illustrative attendance row. All changes remain local preview state. */
 export function ManagerAttendanceDailyStudentRow({ student, onStatusChange, onFieldChange, onSendAlert, onEvictOverstay, onViewHistory }: ManagerAttendanceDailyStudentRowProps) {
@@ -19,7 +19,7 @@ export function ManagerAttendanceDailyStudentRow({ student, onStatusChange, onFi
         <div className="eng-att-name flex items-center gap-2">
           <span>{student.name}</span>
           {isOverstay && (
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-rose-600 text-white animate-pulse">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-rose-600 text-white motion-safe:animate-pulse">
               Overstay Alert
             </span>
           )}
@@ -34,17 +34,28 @@ export function ManagerAttendanceDailyStudentRow({ student, onStatusChange, onFi
               <span>{student.seat}</span>
             </>
           )}
-          {onViewHistory && (
+          {onViewHistory ? (
             <>
               <span>·</span>
               <button
                 type="button"
                 onClick={() => onViewHistory(student)}
-                className="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-500 hover:text-indigo-400 dark:text-indigo-400 dark:hover:text-indigo-300 cursor-pointer underline underline-offset-2 transition-colors ml-0.5"
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-500 hover:text-indigo-400 dark:text-indigo-400 dark:hover:text-indigo-300 cursor-pointer underline underline-offset-2 motion-safe:transition-colors ml-0.5"
                 title={`View ${student.name}'s month-wise attendance history & calendar`}
               >
                 <Calendar size={11} /> Monthly History
               </button>
+            </>
+          ) : (
+            <>
+              <span>·</span>
+              <Link
+                href={MANAGER_ATTENDANCE_DAILY_ROUTES.memberMonthlyHistory(student.smartId)}
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-500 hover:text-indigo-400 dark:text-indigo-400 dark:hover:text-indigo-300 cursor-pointer underline underline-offset-2 motion-safe:transition-colors ml-0.5"
+                title={`View ${student.name}'s month-wise attendance history & calendar`}
+              >
+                <Calendar size={11} /> Monthly History
+              </Link>
             </>
           )}
         </div>
@@ -84,7 +95,7 @@ export function ManagerAttendanceDailyStudentRow({ student, onStatusChange, onFi
             <button
               type="button"
               onClick={() => onEvictOverstay(student)}
-              className="ml-auto px-2.5 py-1 text-[11px] font-bold rounded-lg bg-rose-600 hover:bg-rose-700 text-white shadow-xs transition-all cursor-pointer whitespace-nowrap"
+              className="ml-auto px-2.5 py-1 text-[11px] font-bold rounded-lg bg-rose-600 hover:bg-rose-700 text-white shadow-xs motion-safe:transition-all cursor-pointer whitespace-nowrap"
               title={`Notify ${student.name} to vacate seat for incoming shift`}
             >
               Evict / Vacate Seat

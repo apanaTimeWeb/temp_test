@@ -145,7 +145,7 @@ export function ManagerAttendanceDailyFloorTurnoverQueue() {
             return (
               <article
                 key={item.id}
-                className={`relative flex flex-col justify-between gap-4 rounded-xl border p-4 shadow-sm transition-all sm:flex-row sm:items-center ${
+                className={`relative flex flex-col justify-between gap-4 rounded-xl border p-4 shadow-sm motion-safe:transition-all sm:flex-row sm:items-center ${
                   isOverstay
                     ? 'border-danger bg-danger-bg'
                     : 'border-border bg-card'

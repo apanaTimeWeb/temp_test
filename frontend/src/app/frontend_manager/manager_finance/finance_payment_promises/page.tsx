@@ -17,5 +17,5 @@ export default async function ManagerFinancePaymentPromisesPage({ searchParams }
     phone: firstValue(params.phone),
     smartId: firstValue(params.smartId),
   };
-  return <ManagerFinancePaymentPromisesMain {...mainProps} />;
+  return <ManagerFinancePaymentPromisesMain view={mainProps.view} id={mainProps.id} name={mainProps.name} phone={mainProps.phone} smartId={mainProps.smartId} />;
 }

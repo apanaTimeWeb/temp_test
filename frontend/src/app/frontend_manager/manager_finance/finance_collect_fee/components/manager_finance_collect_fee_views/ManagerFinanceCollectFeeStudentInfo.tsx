@@ -5,6 +5,7 @@ import type { ManagerFinanceCollectFeeStudent } from '@/app/frontend_manager/man
 import {
   formatCollectFeeInr,
   maskManagerCollectFeePhone,
+  paiseToRupees,
 } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
 import { AlertCircle, AlertTriangle, ArrowRight, Check, CheckCircle } from 'lucide-react';
 
@@ -30,7 +31,7 @@ export default function ManagerFinanceCollectFeeStudentInfo({
   const isSuspended = selectedStudent.status === 'suspended';
   const isExpired = selectedStudent.status === 'expired';
   const isActive = selectedStudent.status === 'active';
-  const dueMajorUnits = selectedStudent.dueAmount > 0 ? selectedStudent.dueAmount / 100 : 0;
+  const dueMajorUnits = paiseToRupees(selectedStudent.dueAmount);
 
   return (
     <div className="space-y-3 pt-2">

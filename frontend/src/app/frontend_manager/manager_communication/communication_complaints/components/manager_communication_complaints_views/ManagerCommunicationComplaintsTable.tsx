@@ -82,7 +82,7 @@ export function ManagerCommunicationComplaintsTable({
           ) : (
             <ArrowUpDown
               size={14}
-              className="text-secondary group-hover:text-secondary transition-colors shrink-0"
+              className="text-secondary group-hover:text-secondary motion-safe:transition-colors shrink-0"
               aria-hidden="true"
             />
           )}
@@ -182,7 +182,7 @@ export function ManagerCommunicationComplaintsTable({
                     <button
                       type="button"
                       onClick={() => onViewItem(complaint)}
-                      className="p-1.5 rounded-lg border border-border bg-card/60 text-secondary hover:text-primary hover:border-border-focus hover:bg-surface-hover transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg border border-border bg-card/60 text-secondary hover:text-primary hover:border-border-focus hover:bg-surface-hover motion-safe:transition-colors cursor-pointer"
                       title={tManagerUi('view')}
                       aria-label={tManagerUi('view_complaint')}
                     >
@@ -195,7 +195,7 @@ export function ManagerCommunicationComplaintsTable({
                         type="button"
                         onClick={onStatusChange ? () => onStatusChange(complaint.id, 'In-Progress') : undefined}
                         disabled={!onStatusChange}
-                        className="p-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors cursor-pointer"
+                        className="p-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 motion-safe:transition-colors cursor-pointer"
                         title="Mark as In-Progress"
                         aria-label={`Mark #${complaint.id} in progress`}
                       >
@@ -214,7 +214,7 @@ export function ManagerCommunicationComplaintsTable({
                             ? () => onStatusChange(complaint.id, 'Resolved')
                             : undefined
                         }
-                        className="p-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors cursor-pointer"
+                        className="p-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 motion-safe:transition-colors cursor-pointer"
                         title="Resolve & Send WhatsApp"
                         aria-label={`Mark #${complaint.id} resolved`}
                       >
@@ -239,7 +239,7 @@ export function ManagerCommunicationComplaintsTable({
                         );
                         window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
                       }}
-                      className="p-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 motion-safe:transition-colors cursor-pointer"
                       title="Open WhatsApp chat with student"
                       aria-label="WhatsApp student"
                     >

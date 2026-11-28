@@ -132,7 +132,7 @@ export function ManagerSeatsMatrixStudentProfileModal({
                   fill
                   unoptimized
                   sizes="96px"
-                  className="object-cover group-hover:scale-105 motion-safe:transition-transform motion-safe:duration-200"
+                  className="object-cover group-hover:scale-105 motion-safe:transition-transform motion-safe:duration-base"
                 />
                 <div className="absolute inset-0 bg-overlay-backdrop opacity-0 group-hover:opacity-100 flex items-center justify-center motion-safe:transition-opacity text-white text-[10px] font-semibold gap-1">
                   <ZoomIn size={13} /> Zoom

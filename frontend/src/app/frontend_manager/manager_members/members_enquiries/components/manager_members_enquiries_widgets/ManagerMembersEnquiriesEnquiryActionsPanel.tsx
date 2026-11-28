@@ -46,7 +46,7 @@ export function ManagerMembersEnquiriesEnquiryActionsPanel({
         {/* 1. Convert to Admission */}
         <button
           type="button"
-          className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white font-bold text-xs shadow-md shadow-emerald-950/40 transition-all hover:scale-[1.01] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md shadow-emerald-950/40 motion-safe:transition-all hover:scale-[1.01] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={onConvert}
           disabled={status === 'Converted'}
         >
@@ -58,7 +58,7 @@ export function ManagerMembersEnquiriesEnquiryActionsPanel({
         {onSendDemoPass && (
           <button
             type="button"
-            className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold text-xs shadow-md shadow-emerald-950/40 transition-all hover:scale-[1.01] cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs shadow-md shadow-emerald-950/40 motion-safe:transition-all hover:scale-[1.01] cursor-pointer"
             onClick={onSendDemoPass}
           >
             <Ticket size={15} className="text-emerald-200" aria-hidden="true" />
@@ -70,7 +70,7 @@ export function ManagerMembersEnquiriesEnquiryActionsPanel({
         {onSendLocation && (
           <button
             type="button"
-            className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-indigo-500/15 border border-indigo-500/35 hover:bg-indigo-500/25 text-indigo-300 hover:text-white font-bold text-xs transition-all cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-indigo-500/15 border border-indigo-500/35 hover:bg-indigo-500/25 text-indigo-300 hover:text-white font-bold text-xs motion-safe:transition-all cursor-pointer"
             onClick={onSendLocation}
           >
             <MapPin size={15} className="text-indigo-400" aria-hidden="true" />
@@ -82,7 +82,7 @@ export function ManagerMembersEnquiriesEnquiryActionsPanel({
         {onMarkLost ? (
           <button
             type="button"
-            className={`inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl border text-xs font-bold transition-all ${
+            className={`inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl border text-xs font-bold motion-safe:transition-all ${
               status === 'Lost'
                 ? 'bg-rose-500/10 border-rose-500/20 text-rose-400 opacity-50 cursor-not-allowed'
                 : 'bg-rose-500/15 border-rose-500/35 text-rose-400 hover:bg-rose-500/25 hover:border-rose-500/50 hover:text-rose-300 cursor-pointer'

@@ -10903,7 +10903,8 @@
         "search_navigation": "Search modules...",
         "clear_search": "Clear search",
         "no_matching_modules": "No matching modules",
-        "no_results_for": "No results for"
+        "no_results_for": "No results for",
+        "nav_monthly_history": "Monthly History"
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",
@@ -13905,6 +13906,24 @@
         "status_success": "Successful",
         "status_failed": "Blocked / Failed",
         "no_history_records": "No login records found for the selected filter."
+      }
+    },
+    "manager_attendance_monthly_history": {
+      "ui": {
+        "title": "Monthly Attendance History",
+        "subtitle": "Month-wise member attendance register, turnstile hours logged, and calendar audit drilldown.",
+        "back_to_daily": "Daily Attendance",
+        "select_month": "Select Month:",
+        "export_csv": "Export CSV",
+        "print_register": "Print Register",
+        "shift_filter": "Shift Filter:",
+        "not_found_title": "Monthly attendance record not found",
+        "not_found_body": "The requested attendance record could not be located."
+      },
+      "errors": {
+        "MODULE_ERROR": "Unable to load Monthly Attendance History",
+        "GENERIC_BODY": "An unexpected error occurred while rendering monthly attendance history.",
+        "RETRY": "Retry"
       }
     }
   }

@@ -133,7 +133,7 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
 
   const handleCollectThisAmount = (promise: ManagerFinancePaymentPromisesPaymentPromiseSample) => {
     const phoneParam = promise.phone ? `&phone=${encodeURIComponent(promise.phone)}` : '';
-    router.push(`/frontend_manager/manager_finance/finance_collect_fee?id=${promise.id}&name=${encodeURIComponent(promise.studentName)}&smartId=${encodeURIComponent(promise.smartId)}&amount=${promise.promisedAmount / 100}&promiseId=${promise.id}${phoneParam}`);
+    router.push(`/frontend_manager/manager_finance/finance_collect_fee?id=${promise.id}&name=${encodeURIComponent(promise.studentName)}&smartId=${encodeURIComponent(promise.smartId)}&amount=${getPromiseMajorUnits(promise.promisedAmount)}&promiseId=${promise.id}${phoneParam}`);
   };
 
   return (

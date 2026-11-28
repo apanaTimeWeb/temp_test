@@ -40,7 +40,7 @@ export function ManagerMembersEnquiriesTimeHorizonBar({
               onClick={() => setTimeHorizon(opt.id)}
               className={`min-h-8 flex-1 sm:flex-initial text-center px-2.5 sm:px-3 py-1 text-xs font-semibold rounded-lg motion-safe:transition-all cursor-pointer whitespace-nowrap ${
                 timeHorizon === opt.id
-                  ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-sm shadow-indigo-950/50'
+                  ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-950/50'
                   : 'text-slate-300 hover:text-white hover:bg-indigo-500/15'
               }`}
             >
@@ -77,7 +77,7 @@ export function ManagerMembersEnquiriesTimeHorizonBar({
                   setCustomStartDate('');
                   setCustomEndDate('');
                 }}
-                className="p-1 text-slate-400 hover:text-rose-400 transition-colors"
+                className="p-1 text-slate-400 hover:text-rose-400 motion-safe:transition-colors"
                 title="Clear custom dates"
               >
                 <X size={13} />

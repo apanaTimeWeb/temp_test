@@ -64,7 +64,7 @@ export function ManagerCommunicationWhatsappTemplatesTestModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer"
+            className="p-1 rounded-lg hover:bg-surface-hover text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer"
             aria-label={tManagerUi('close')}
           >
             <X size={16} />
@@ -112,7 +112,7 @@ export function ManagerCommunicationWhatsappTemplatesTestModal({
           <button
             type="button"
             onClick={onSendTest}
-            className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold h-10 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white shadow-md cursor-pointer transition-colors w-full sm:w-auto"
+            className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold h-10 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white shadow-md cursor-pointer motion-safe:transition-colors w-full sm:w-auto"
           >
             <Send size={14} />
             <span>{tManagerUi('send_test')}</span>

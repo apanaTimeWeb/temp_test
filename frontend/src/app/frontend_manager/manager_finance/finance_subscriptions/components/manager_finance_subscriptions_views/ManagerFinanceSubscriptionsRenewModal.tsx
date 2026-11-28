@@ -284,7 +284,7 @@ export default function ManagerFinanceSubscriptionsRenewModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs cursor-pointer transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs cursor-pointer motion-safe:transition-colors"
             >
               {isSubmitting ? <ButtonLoader icon="repeat" /> : null}
               {isSubmitting ? 'Processing...' : 'Confirm & Renew Subscription'}

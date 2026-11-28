@@ -128,7 +128,7 @@ export function ManagerSettingsBranchInfoWifiCard({
         <button
           type="button"
           onClick={onOpenModal}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 border border-indigo-500 text-white font-bold text-xs motion-safe:transition-all shadow-md cursor-pointer"
+          className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 border border-indigo-500 text-white font-bold text-xs motion-safe:transition-all shadow-md cursor-pointer"
         >
           <Printer size={13} />
           <span>{t('print_front_desk_standee', 'Print Desk Standee')}</span>

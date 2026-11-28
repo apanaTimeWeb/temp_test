@@ -103,7 +103,7 @@ export function ManagerDashboardOverviewCashDrawerCard({
         <span className="text-xs text-slate-400">Register closing & cash handover</span>
         <Link
           href="/frontend_manager/manager_accounts_assets/accounts_daily_settlement"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 text-xs font-bold text-emerald-300 hover:bg-emerald-500/20 transition-all cursor-pointer shadow-xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 text-xs font-bold text-emerald-300 hover:bg-emerald-500/20 motion-safe:transition-all cursor-pointer shadow-xs"
         >
           <span>Open Daily Settlement</span>
           <ArrowUpRight size={13} />

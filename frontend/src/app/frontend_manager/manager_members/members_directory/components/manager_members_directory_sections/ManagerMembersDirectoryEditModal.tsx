@@ -102,7 +102,7 @@ export function ManagerMembersDirectoryEditModal({ member, isOpen, onClose, onSa
           <button
             type="button"
             onClick={handleAttemptClose}
-            className="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-card transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 outline-none cursor-pointer"
+            className="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-card motion-safe:transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 outline-none cursor-pointer"
             aria-label="Close dialog"
           >
             <X size={20} />
@@ -114,7 +114,7 @@ export function ManagerMembersDirectoryEditModal({ member, isOpen, onClose, onSa
           <button
             type="button"
             onClick={() => setActiveTab('personal')}
-            className={`flex items-center gap-2 py-3 px-3 text-xs font-semibold border-b-2 transition-all whitespace-nowrap focus-visible:ring-2 focus-visible:ring-primary outline-none cursor-pointer ${
+            className={`flex items-center gap-2 py-3 px-3 text-xs font-semibold border-b-2 motion-safe:transition-all whitespace-nowrap focus-visible:ring-2 focus-visible:ring-primary outline-none cursor-pointer ${
               activeTab === 'personal' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-primary'
             }`}
           >
@@ -123,7 +123,7 @@ export function ManagerMembersDirectoryEditModal({ member, isOpen, onClose, onSa
           <button
             type="button"
             onClick={() => setActiveTab('seat_locker')}
-            className={`flex items-center gap-2 py-3 px-3 text-xs font-semibold border-b-2 transition-all whitespace-nowrap focus-visible:ring-2 focus-visible:ring-primary outline-none cursor-pointer ${
+            className={`flex items-center gap-2 py-3 px-3 text-xs font-semibold border-b-2 motion-safe:transition-all whitespace-nowrap focus-visible:ring-2 focus-visible:ring-primary outline-none cursor-pointer ${
               activeTab === 'seat_locker' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-primary'
             }`}
           >
@@ -132,7 +132,7 @@ export function ManagerMembersDirectoryEditModal({ member, isOpen, onClose, onSa
           <button
             type="button"
             onClick={() => setActiveTab('guardian_goal')}
-            className={`flex items-center gap-2 py-3 px-3 text-xs font-semibold border-b-2 transition-all whitespace-nowrap focus-visible:ring-2 focus-visible:ring-primary outline-none cursor-pointer ${
+            className={`flex items-center gap-2 py-3 px-3 text-xs font-semibold border-b-2 motion-safe:transition-all whitespace-nowrap focus-visible:ring-2 focus-visible:ring-primary outline-none cursor-pointer ${
               activeTab === 'guardian_goal' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-primary'
             }`}
           >
@@ -141,7 +141,7 @@ export function ManagerMembersDirectoryEditModal({ member, isOpen, onClose, onSa
           <button
             type="button"
             onClick={() => setActiveTab('plan_status')}
-            className={`flex items-center gap-2 py-3 px-3 text-xs font-semibold border-b-2 transition-all whitespace-nowrap focus-visible:ring-2 focus-visible:ring-primary outline-none cursor-pointer ${
+            className={`flex items-center gap-2 py-3 px-3 text-xs font-semibold border-b-2 motion-safe:transition-all whitespace-nowrap focus-visible:ring-2 focus-visible:ring-primary outline-none cursor-pointer ${
               activeTab === 'plan_status' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-primary'
             }`}
           >
@@ -215,7 +215,7 @@ export function ManagerMembersDirectoryEditModal({ member, isOpen, onClose, onSa
                 <button
                   type="button"
                   onClick={handleConfirmDiscard}
-                  className="px-3 py-1.5 rounded-lg text-xs font-bold bg-danger text-on-danger hover:opacity-90 transition-opacity cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold bg-danger text-on-danger hover:opacity-90 motion-safe:transition-opacity cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
                 >
                   Discard Changes
                 </button>

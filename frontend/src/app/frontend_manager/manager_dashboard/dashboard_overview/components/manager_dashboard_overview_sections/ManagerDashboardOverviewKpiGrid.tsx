@@ -92,11 +92,11 @@ export function ManagerDashboardOverviewKpiGrid({
           <Link
             key={kpi.title}
             href={route}
-            className={`group relative flex flex-col justify-between p-5 rounded-2xl border motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:shadow-xl cursor-pointer overflow-hidden text-inherit no-underline ${theme.cardBg}`}
+            className={`group relative flex flex-col justify-between p-5 rounded-2xl border motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:shadow-xl cursor-pointer overflow-hidden text-inherit no-underline ${theme.cardBg}`}
           >
-            <div className={`pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full blur-2xl motion-safe:transition-all motion-safe:duration-500 ${theme.glow}`} />
+            <div className={`pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full blur-2xl motion-safe:transition-all motion-safe:duration-xslow ${theme.glow}`} />
 
-            <svg aria-hidden="true" className={`pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible motion-safe:transition-opacity motion-safe:duration-300 group-hover:opacity-40 ${theme.strokeClass}`} viewBox="0 0 150 40" fill="none">
+            <svg aria-hidden="true" className={`pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible motion-safe:transition-opacity motion-safe:duration-slow group-hover:opacity-40 ${theme.strokeClass}`} viewBox="0 0 150 40" fill="none">
               <path d="M0,32 Q15,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
             </svg>
 
@@ -150,7 +150,7 @@ export function ManagerDashboardOverviewKpiGrid({
                     <span className="font-semibold text-white">75%</span>
                   </div>
                   <div className="w-full bg-slate-800/80 rounded-full h-1.5 overflow-hidden">
-                    <div className={`h-full rounded-full bg-gradient-to-r motion-safe:transition-all motion-safe:duration-500 w-3/4 ${theme.progress}`} />
+                    <div className={`h-full rounded-full bg-gradient-to-r motion-safe:transition-all motion-safe:duration-xslow w-3/4 ${theme.progress}`} />
                   </div>
                 </div>
               ) : (

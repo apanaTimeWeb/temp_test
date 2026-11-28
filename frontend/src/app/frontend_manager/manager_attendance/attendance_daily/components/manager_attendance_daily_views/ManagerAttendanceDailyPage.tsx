@@ -2,17 +2,17 @@
 
 import { ManagerAttendanceDailyHeaderBanner } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyHeaderBanner';
 import { ManagerAttendanceDailyKpis } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyKpis';
-import { ManagerAttendanceDailyMemberMonthlyHistoryModal } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyMemberMonthlyHistoryModal';
-import { ManagerAttendanceDailyMonthlyRegister } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyMonthlyRegister';
 import { ManagerAttendanceDailyTable } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyTable';
 import { ManagerAttendanceDailyToolbar } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyToolbar';
 import { ManagerAttendanceDailyFloorTurnoverQueue } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_widgets/ManagerAttendanceDailyFloorTurnoverQueue';
+import { MANAGER_ATTENDANCE_DAILY_ROUTES } from '@/app/frontend_manager/manager_attendance/attendance_daily/config/manager_attendance_daily.url_config';
 import { MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE } from '@/app/frontend_manager/manager_attendance/attendance_daily/hooks/ManagerAttendanceDailyDemoRepository';
 import type { AttStatus, ManagerAttendanceDailyTimeField, Student } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
 import type { ManagerAttendanceDailyMainProps } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyMainTypes';
 import { exportManagerAttendanceDailyCsv } from '@/app/frontend_manager/manager_attendance/attendance_daily/utils/ManagerAttendanceDailyCsv';
 import { Save } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -32,8 +32,7 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
   yesterdayDate.setDate(yesterdayDate.getDate() - 1);
   const yesterdayStr = toLocalDateInputValue(yesterdayDate);
 
-  const [activeTab, setActiveTab] = useState<'roster' | 'monthly_history' | 'turnover'>('roster');
-  const [selectedHistoryStudent, setSelectedHistoryStudent] = useState<Student | null>(null);
+  const [activeTab, setActiveTab] = useState<'roster' | 'turnover'>('roster');
   const [date, setDate] = useState(() => todayStr);
   const [shift, setShift] = useState('All');
   const [students, setStudents] = useState<Student[]>(INIT_STUDENTS);
@@ -133,10 +132,9 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
     <div className="space-y-6 w-full max-w-full" data-route-view={view} data-route-id={id}>
       {/* ── Hidden Sample Warning for Contract Compliance ── */}
       <p
-        className="fin-input-hint fin-text-warning"
+        className="hidden fin-input-hint fin-text-warning"
         role="status"
         data-testid="manager-engagement-attendance-contract-warning"
-        style={{ display: 'none' }}
       >
         {tManagerUi('sample_attendance_only_status_edits_are_an_in_page_previ_f63093')}
       </p>
@@ -155,25 +153,22 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
         <button
           type="button"
           onClick={() => setActiveTab('roster')}
-          className={`pb-3 px-1 text-sm font-semibold border-b-2 transition-all cursor-pointer ${
+          className={`pb-3 px-1 text-sm font-semibold border-b-2 motion-safe:transition-all cursor-pointer ${
             activeTab === 'roster' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-primary'
           }`}
         >
           {tManagerUi('roster_tab')}
         </button>
-        <button
-          type="button"
-          onClick={() => setActiveTab('monthly_history')}
-          className={`flex items-center gap-1.5 pb-3 px-1 text-sm font-semibold border-b-2 transition-all cursor-pointer ${
-            activeTab === 'monthly_history' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-primary'
-          }`}
+        <Link
+          href={MANAGER_ATTENDANCE_DAILY_ROUTES.monthlyHistory}
+          className="flex items-center gap-1.5 pb-3 px-1 text-sm font-semibold border-b-2 border-transparent text-secondary hover:text-primary motion-safe:transition-all cursor-pointer"
         >
           <span>Monthly Attendance History</span>
-        </button>
+        </Link>
         <button
           type="button"
           onClick={() => setActiveTab('turnover')}
-          className={`flex items-center gap-1.5 pb-3 px-1 text-sm font-semibold border-b-2 transition-all cursor-pointer ${
+          className={`flex items-center gap-1.5 pb-3 px-1 text-sm font-semibold border-b-2 motion-safe:transition-all cursor-pointer ${
             activeTab === 'turnover' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-primary'
           }`}
         >
@@ -182,12 +177,7 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
         </button>
       </div>
 
-      {activeTab === 'monthly_history' ? (
-        <ManagerAttendanceDailyMonthlyRegister
-          students={students}
-          onOpenStudentHistory={(student) => setSelectedHistoryStudent(student)}
-        />
-      ) : activeTab === 'turnover' ? (
+      {activeTab === 'turnover' ? (
         <ManagerAttendanceDailyFloorTurnoverQueue />
       ) : (
         <>
@@ -241,7 +231,6 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
             onFieldChange={setField}
             onSendAlert={handleSendAlert}
             onEvictOverstay={handleEvictOverstay}
-            onViewHistory={(student) => setSelectedHistoryStudent(student)}
           />
 
           {/* ── Sticky Save Bar ── */}
@@ -263,13 +252,6 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
           </div>
         </>
       )}
-
-      {/* ── Individual Member Monthly Attendance History Modal ── */}
-      <ManagerAttendanceDailyMemberMonthlyHistoryModal
-        isOpen={Boolean(selectedHistoryStudent)}
-        student={selectedHistoryStudent}
-        onClose={() => setSelectedHistoryStudent(null)}
-      />
     </div>
   );
 }

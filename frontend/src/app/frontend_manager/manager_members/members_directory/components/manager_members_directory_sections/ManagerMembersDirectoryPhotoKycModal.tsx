@@ -103,7 +103,7 @@ export function ManagerMembersDirectoryPhotoKycModal({
           <button
             type="button"
             onClick={onClose}
-            className="text-secondary hover:text-primary transition-colors p-1 rounded-lg hover:bg-surface-hover"
+            className="text-secondary hover:text-primary motion-safe:transition-colors p-1 rounded-lg hover:bg-surface-hover"
             aria-label="Close dialog"
           >
             <X size={18} />
@@ -126,9 +126,9 @@ export function ManagerMembersDirectoryPhotoKycModal({
                   alt={member.name}
                   fill
                   unoptimized
-                  className="object-cover group-hover:scale-105 motion-safe:transition-transform motion-safe:duration-200"
+                  className="object-cover group-hover:scale-105 motion-safe:transition-transform motion-safe:duration-base"
                 />
-                <div className="absolute inset-0 bg-overlay-backdrop opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white gap-1 font-semibold text-[11px]">
+                <div className="absolute inset-0 bg-overlay-backdrop opacity-0 group-hover:opacity-100 flex items-center justify-center motion-safe:transition-opacity text-white gap-1 font-semibold text-[11px]">
                   <ZoomIn size={14} /> Zoom
                 </div>
               </div>
@@ -192,7 +192,7 @@ export function ManagerMembersDirectoryPhotoKycModal({
               <FileText size={14} className="text-primary" /> Verified KYC Documents (2 Attached)
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="p-3 rounded-xl border border-border bg-card flex items-center justify-between hover:border-primary transition-colors">
+              <div className="p-3 rounded-xl border border-border bg-card flex items-center justify-between hover:border-primary motion-safe:transition-colors">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-primary">
                     <FileText size={16} />
@@ -205,7 +205,7 @@ export function ManagerMembersDirectoryPhotoKycModal({
                 <button
                   type="button"
                   onClick={() => setSelectedDocPreview('Aadhaar Card (Verified Document #4821)')}
-                  className="px-2 py-1 rounded-lg border border-border hover:bg-surface text-secondary hover:text-primary transition-colors"
+                  className="px-2 py-1 rounded-lg border border-border hover:bg-surface text-secondary hover:text-primary motion-safe:transition-colors"
                 >
                   Preview
                 </button>
@@ -221,7 +221,7 @@ export function ManagerMembersDirectoryPhotoKycModal({
               <button
                 type="button"
                 onClick={() => onQuickWhatsApp(member)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/35 hover:text-emerald-200 shadow-sm shadow-emerald-950/50 transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/35 hover:text-emerald-200 shadow-sm shadow-emerald-950/50 motion-safe:transition-all cursor-pointer"
               >
                 <MessageCircle size={14} /> Send WhatsApp
               </button>
@@ -232,7 +232,7 @@ export function ManagerMembersDirectoryPhotoKycModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-3.5 py-2 text-xs font-semibold rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all cursor-pointer"
+              className="px-3.5 py-2 text-xs font-semibold rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 motion-safe:transition-all cursor-pointer"
             >
               Close
             </button>
@@ -242,7 +242,7 @@ export function ManagerMembersDirectoryPhotoKycModal({
                 onClose();
                 onViewFullProfile(member.id);
               }}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-950/50 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-950/50 motion-safe:transition-all cursor-pointer"
             >
               <ExternalLink size={13} /> View Full Profile
             </button>

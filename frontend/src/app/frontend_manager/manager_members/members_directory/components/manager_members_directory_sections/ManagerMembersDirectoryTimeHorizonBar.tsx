@@ -50,7 +50,7 @@ export function ManagerMembersDirectoryTimeHorizonBar({
               onClick={() => onChangeTimeHorizon(opt.id)}
               className={`min-h-8 px-3 py-1 text-xs font-semibold rounded-lg motion-safe:transition-all cursor-pointer ${
                 timeHorizon === opt.id
-                  ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-sm shadow-indigo-950/50'
+                  ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-950/50'
                   : 'text-slate-300 hover:text-white hover:bg-indigo-500/15'
               }`}
             >

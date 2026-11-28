@@ -5,5 +5,5 @@ import type { ManagerCommunicationNotificationCenterMainProps } from '@/app/fron
 // RESPONSIBILITY: Preserve supported route query state at the module boundary and pass it to the feature view.
 // DATA FLOW: Next.js searchParams -> route page -> Main props -> feature view.
 export function ManagerCommunicationNotificationCenterMain(props: ManagerCommunicationNotificationCenterMainProps) {
-  return <ManagerCommunicationNotificationCenterPage {...props} />;
+  return <ManagerCommunicationNotificationCenterPage view={props.view} id={props.id} name={props.name} phone={props.phone} smartId={props.smartId} />;
 }

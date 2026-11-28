@@ -25,5 +25,5 @@ export default async function ManagerMembersIdCardGeneratorPage({ searchParams }
     phone: firstValue(params.phone),
     smartId: firstValue(params.smartId),
   };
-  return <ManagerMembersIdCardGeneratorMain {...mainProps} />;
+  return <ManagerMembersIdCardGeneratorMain view={mainProps.view} id={mainProps.id} name={mainProps.name} phone={mainProps.phone} smartId={mainProps.smartId} />;
 }

@@ -2237,4 +2237,24 @@
   z-index: 4;
 }
 
+.side-label .dot--emerald {
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.side-label .dot--emerald-lg {
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+}
+
+.side-label .dot--silver {
+  background: #e2e8f0;
+  box-shadow: 0 0 12px #ffffff;
+}
+
+.side-label .dot--amber {
+  background: #fbbf24;
+  box-shadow: 0 0 8px #fbbf24;
+}
+
 

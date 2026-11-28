@@ -31,7 +31,7 @@ export function ManagerLockersManagementAddModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 motion-safe:animate-in fade-in"
       role="dialog"
       aria-modal="true"
       aria-labelledby="ss-locker-add-title"
@@ -40,7 +40,7 @@ export function ManagerLockersManagementAddModal({
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-4 animate-in fade-in-50 zoom-in-95"
+        className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-4 motion-safe:animate-in fade-in-50 zoom-in-95"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -61,7 +61,7 @@ export function ManagerLockersManagementAddModal({
           <button
             type="button"
             onClick={onClose}
-            className="text-secondary hover:text-primary p-1.5 rounded-lg hover:bg-surface-hover transition-colors cursor-pointer"
+            className="text-secondary hover:text-primary p-1.5 rounded-lg hover:bg-surface-hover motion-safe:transition-colors cursor-pointer"
             aria-label="Close"
           >
             <X size={18} />

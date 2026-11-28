@@ -18,7 +18,7 @@ export function ManagerMembersEnquiriesKpis({ stats, horizonLabel }: ManagerMemb
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 w-full max-w-full min-w-0">
       {/* KPI 1: Total Enquiries */}
-      <div className="menq-kpi-indigo group relative overflow-hidden rounded-2xl border p-4 sm:p-5 shadow-lg shadow-indigo-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex flex-col justify-between">
+      <div className="menq-kpi-indigo group relative overflow-hidden rounded-2xl border p-4 sm:p-5 shadow-lg shadow-indigo-950/40 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex flex-col justify-between">
         <svg aria-hidden="true" className="absolute bottom-0 right-0 w-32 h-16 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="currentColor" className="text-indigo-400" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
@@ -44,7 +44,7 @@ export function ManagerMembersEnquiriesKpis({ stats, horizonLabel }: ManagerMemb
       </div>
 
       {/* KPI 2: New Prospects */}
-      <div className="menq-kpi-sky group relative overflow-hidden rounded-2xl border p-4 sm:p-5 shadow-lg shadow-sky-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-sky-400/60 hover:shadow-xl flex flex-col justify-between">
+      <div className="menq-kpi-sky group relative overflow-hidden rounded-2xl border p-4 sm:p-5 shadow-lg shadow-sky-950/40 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-sky-400/60 hover:shadow-xl flex flex-col justify-between">
         <svg aria-hidden="true" className="absolute bottom-0 right-0 w-32 h-16 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="currentColor" className="text-sky-400" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
@@ -68,7 +68,7 @@ export function ManagerMembersEnquiriesKpis({ stats, horizonLabel }: ManagerMemb
       </div>
 
       {/* KPI 3: Active Pipeline (Visited + Interested) */}
-      <div className="menq-kpi-amber group relative overflow-hidden rounded-2xl border p-4 sm:p-5 shadow-lg shadow-amber-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex flex-col justify-between">
+      <div className="menq-kpi-amber group relative overflow-hidden rounded-2xl border p-4 sm:p-5 shadow-lg shadow-amber-950/40 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex flex-col justify-between">
         <svg aria-hidden="true" className="absolute bottom-0 right-0 w-32 h-16 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,32 Q30,14 60,25 T110,10 T150,18" fill="none" stroke="currentColor" className="text-amber-400" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
@@ -94,7 +94,7 @@ export function ManagerMembersEnquiriesKpis({ stats, horizonLabel }: ManagerMemb
       </div>
 
       {/* KPI 4: Admissions Converted */}
-      <div className="menq-kpi-emerald group relative overflow-hidden rounded-2xl border p-4 sm:p-5 shadow-lg shadow-emerald-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex flex-col justify-between">
+      <div className="menq-kpi-emerald group relative overflow-hidden rounded-2xl border p-4 sm:p-5 shadow-lg shadow-emerald-950/40 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex flex-col justify-between">
         <svg aria-hidden="true" className="absolute bottom-0 right-0 w-32 h-16 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="currentColor" className="text-emerald-400" strokeWidth="2.5" strokeLinecap="round" />
         </svg>

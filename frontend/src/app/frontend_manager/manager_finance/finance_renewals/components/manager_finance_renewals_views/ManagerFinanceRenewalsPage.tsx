@@ -13,7 +13,7 @@ import { useManagerFinanceRenewalsActions } from '@/app/frontend_manager/manager
 import { useManagerFinanceRenewalsConfirm } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsConfirm';
 import { useManagerRenewalsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsUrlFilters';
 import type { FilterType, ManagerFinanceRenewalsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
-import { formatRenewalInr } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsActionHelpers';
+import { formatRenewalMinorInr } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsActionHelpers';
 import { exportManagerRenewalsCsv } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsCsv';
 import { CheckCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -154,7 +154,7 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
       const text = encodeURIComponent(
         `Hello ${student.studentName}, your Library subscription (${student.smartId} • ${student.plan}) ${
           student.daysLeft < 0 ? `expired ${Math.abs(student.daysLeft)} days ago` : `expires in ${student.daysLeft} days`
-        }. Amount due: ${formatRenewalInr(Math.round(student.due / 100))}. Please renew to maintain your seat access. — Library Administration`
+        }. Amount due: ${formatRenewalMinorInr(student.due)}. Please renew to maintain your seat access. — Library Administration`
       );
       const rawPhone = (student as { phone?: string }).phone || cleanPhone;
       let digits = rawPhone.replace(/\D/g, '');
@@ -208,7 +208,7 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
         onFileChange={handleFileChange}
       />
 
-      <div style={{ display: 'none' }} role="status">
+      <div className="hidden" role="status">
         <span>Sample renewals queue active under current contract layout preview.</span>
         <button type="button" disabled className="mgr-btn-outline text-xs opacity-50 cursor-not-allowed">
           Renewal API Unavailable

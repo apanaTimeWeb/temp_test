@@ -47,7 +47,7 @@ export default function ManagerFinanceRenewalsFilterBar({
             type="button"
             key={f.value}
             onClick={() => onFilterChange(f.value)}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${filter === f.value ? 'bg-primary text-on-primary shadow-sm' : 'bg-card border border-border text-secondary hover:text-primary hover:bg-surface-hover'}`}
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${filter === f.value ? 'bg-primary text-on-primary shadow-sm' : 'bg-card border border-border text-secondary hover:text-primary hover:bg-surface-hover'}`}
           >
             {f.emoji} {tManagerUi(f.labelKey)}
           </button>

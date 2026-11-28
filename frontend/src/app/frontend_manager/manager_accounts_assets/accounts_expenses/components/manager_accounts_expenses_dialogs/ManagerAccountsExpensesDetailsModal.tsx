@@ -38,7 +38,7 @@ export function ManagerAccountsExpensesDetailsModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="expense-details-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs motion-safe:animate-in fade-in motion-safe:duration-fast"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -67,7 +67,7 @@ export function ManagerAccountsExpensesDetailsModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer"
+            className="p-1 rounded-lg text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-colors cursor-pointer"
             aria-label="Close dialog"
           >
             <X size={18} />
@@ -143,7 +143,7 @@ export function ManagerAccountsExpensesDetailsModal({
           <button
             type="button"
             onClick={() => window.print()}
-            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-colors cursor-pointer shadow-xs"
           >
             <Printer size={14} /> Print Expense Voucher
           </button>
@@ -152,7 +152,7 @@ export function ManagerAccountsExpensesDetailsModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
+              className="px-4 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-colors cursor-pointer shadow-xs"
             >
               Close
             </button>

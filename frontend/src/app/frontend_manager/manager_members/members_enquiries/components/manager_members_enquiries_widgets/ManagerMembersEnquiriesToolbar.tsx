@@ -91,7 +91,7 @@ export function ManagerMembersEnquiriesToolbar({
             <button
               type="button"
               onClick={onResetFilters}
-              className="text-xs font-bold text-indigo-400 hover:text-indigo-300 hover:underline px-2 py-1 transition-colors shrink-0 cursor-pointer"
+              className="text-xs font-bold text-indigo-400 hover:text-indigo-300 hover:underline px-2 py-1 motion-safe:transition-colors shrink-0 cursor-pointer"
             >
               Reset Filters
             </button>

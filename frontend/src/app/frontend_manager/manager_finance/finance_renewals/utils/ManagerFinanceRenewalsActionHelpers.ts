@@ -21,6 +21,11 @@ export function formatRenewalInr(majorAmount: number): string {
   }).format(majorAmount);
 }
 
+/** Formats minor-unit renewal dues into major-unit INR display text. */
+export function formatRenewalMinorInr(minorAmount: number): string {
+  return formatRenewalInr(Math.round(minorAmount / 100));
+}
+
 export function getRenewalTemplates() {
   const sampleDue = '{due}';
   return [
@@ -47,7 +52,7 @@ export function personalizeRenewalTemplate(template: string, item: RenewalMessag
     .replace(/{shift}/gi, item.shift)
     .replace(/{expiry}/gi, item.expiryDate)
     .replace(/{daysLeft}/gi, String(Math.abs(item.daysLeft)))
-    .replace(/{due}/gi, formatRenewalInr(Math.round(item.due / 100)));
+    .replace(/{due}/gi, formatRenewalMinorInr(item.due));
 }
 
 export function handleRenewalsExport(visible: Parameters<typeof exportManagerRenewalsCsv>[0], filter: FilterType, setMsg: (m: string) => void) {

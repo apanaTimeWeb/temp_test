@@ -48,7 +48,7 @@ export default function ManagerFinanceRenewalsAlertBanner({
               type="button"
               data-testid="manager-finance-1click-3day-whatsapp"
               onClick={onSend3DayReminders}
-              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs motion-safe:transition-colors flex items-center gap-1.5 cursor-pointer"
               title="1-Click WhatsApp reminder to all students expiring in <= 3 days"
             >
               <MessageSquare size={13} />
@@ -91,7 +91,7 @@ export default function ManagerFinanceRenewalsAlertBanner({
             type="button"
             data-testid="manager-finance-bulk-seat-release"
             onClick={onAutoReleaseSeats}
-            className="px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-xs transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer"
+            className="px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-xs motion-safe:transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer"
           >
             <UserX size={13} />
             <span>Auto-Release Expired Seats ({pastGraceCount})</span>

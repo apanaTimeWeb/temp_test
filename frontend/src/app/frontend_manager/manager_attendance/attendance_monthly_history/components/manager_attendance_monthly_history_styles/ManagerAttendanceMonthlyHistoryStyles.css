@@ -1,0 +1,42 @@
+/* Scoped styles for manager_attendance/attendance_monthly_history */
+.engagement-theme {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: theme(--color-text-primary);
+  background-color: theme(--color-page);
+  min-height: 100vh;
+}
+
+.engagement-theme :where(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid theme(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .engagement-theme *, .engagement-theme *::before, .engagement-theme *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}
+
+.mgr-att-surface--indigo {
+  background-image: linear-gradient(to bottom right, rgba(30, 27, 75, 0.8), #181c4b, rgba(49, 46, 129, 0.6));
+}
+
+.mgr-att-surface--emerald {
+  background-image: linear-gradient(to bottom right, rgba(6, 78, 59, 0.8), #0e2c21, rgba(6, 95, 70, 0.6));
+}
+
+.mgr-att-surface--rose {
+  background-image: linear-gradient(to bottom right, rgba(76, 5, 25, 0.8), #260e19, rgba(136, 19, 55, 0.6));
+}
+
+.mgr-att-surface--amber {
+  background-image: linear-gradient(to bottom right, rgba(69, 26, 3, 0.8), #261708, rgba(120, 53, 15, 0.6));
+}
+
+.mgr-att-surface--sky {
+  background-image: linear-gradient(to bottom right, rgba(8, 47, 73, 0.8), #0e2540, rgba(12, 74, 110, 0.6));
+}

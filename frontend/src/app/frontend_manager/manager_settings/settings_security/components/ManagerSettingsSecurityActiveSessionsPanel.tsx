@@ -75,7 +75,7 @@ export function ManagerSettingsSecurityActiveSessionsPanel({
           <button
             type="button"
             onClick={() => setShowLogoutAllModal(true)}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-rose-500/40 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 transition-all cursor-pointer self-start sm:self-auto shrink-0"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-rose-500/40 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 motion-safe:transition-all cursor-pointer self-start sm:self-auto shrink-0"
           >
             <LogOut size={13} />
             <span>Log Out All Other Devices ({otherSessionsCount})</span>
@@ -156,7 +156,7 @@ export function ManagerSettingsSecurityActiveSessionsPanel({
                     type="button"
                     onClick={() => handleRevoke(session.id, session.device)}
                     disabled={revokingId === session.id}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 transition-all cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 motion-safe:transition-all cursor-pointer disabled:opacity-50"
                   >
                     {revokingId === session.id ? <ButtonLoader icon="key-round" /> : <LogOut size={12} />}
                     <span>{revokingId === session.id ? 'Revoking...' : 'Revoke Session'}</span>

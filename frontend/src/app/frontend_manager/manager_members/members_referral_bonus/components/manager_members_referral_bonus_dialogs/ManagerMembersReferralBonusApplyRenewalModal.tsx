@@ -115,7 +115,7 @@ export function ManagerMembersReferralBonusApplyRenewalModal({
           <button
             type="button"
             onClick={onClose}
-            className="text-secondary hover:text-primary p-1 rounded-lg hover:bg-surface-zebra transition-colors cursor-pointer"
+            className="text-secondary hover:text-primary p-1 rounded-lg hover:bg-surface-zebra motion-safe:transition-colors cursor-pointer"
             aria-label="Close dialog"
           >
             <X size={18} />
@@ -267,13 +267,13 @@ export function ManagerMembersReferralBonusApplyRenewalModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-semibold rounded-xl border border-border text-secondary hover:text-primary hover:bg-surface-zebra transition-colors cursor-pointer w-full sm:w-auto"
+              className="px-4 py-2 text-xs font-semibold rounded-xl border border-border text-secondary hover:text-primary hover:bg-surface-zebra motion-safe:transition-colors cursor-pointer w-full sm:w-auto"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer w-full sm:w-auto"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm motion-safe:transition-colors cursor-pointer w-full sm:w-auto"
             >
               <Check size={14} />
               <span>Apply to Next Renewal</span>

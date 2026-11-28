@@ -5,6 +5,7 @@ import { MANAGER_ASSETS_MAINTENANCE_ROUTES } from '@/app/frontend_manager/manage
 import { MANAGER_ASSETS_REGISTER_ROUTES } from '@/app/frontend_manager/manager_accounts_assets/assets_register/config/manager_assets_register.url_config';
 import { MANAGER_ATTENDANCE_ABSENTEE_REPORT_ROUTES as MANAGER_ABSENTEE_REPORT_ROUTES } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/config/manager_attendance_absentee_report.url_config';
 import { MANAGER_ATTENDANCE_DAILY_ROUTES as MANAGER_ATTENDANCE_ROUTES } from '@/app/frontend_manager/manager_attendance/attendance_daily/config/manager_attendance_daily.url_config';
+import { MANAGER_ATTENDANCE_MONTHLY_HISTORY_ROUTES } from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/config/manager_attendance_monthly_history.url_config';
 import { MANAGER_ATTENDANCE_QR_SCANNER_ROUTES as MANAGER_QR_SCANNER_ROUTES } from '@/app/frontend_manager/manager_attendance/attendance_qr_scanner/config/manager_attendance_qr_scanner.url_config';
 import { MANAGER_COMMUNICATION_COMPLAINTS_ROUTES as MANAGER_COMPLAINTS_ROUTES } from '@/app/frontend_manager/manager_communication/communication_complaints/config/manager_communication_complaints.url_config';
 import { MANAGER_COMMUNICATION_NOTIFICATION_CENTER_ROUTES as MANAGER_NOTIFICATION_CENTER_ROUTES } from '@/app/frontend_manager/manager_communication/communication_notification_center/config/manager_communication_notification_center.url_config';
@@ -106,6 +107,7 @@ export type ManagerNavigationLabelKey =
   | 'nav_locker_matrix'
   | 'nav_lockers'
   | 'nav_member_directory'
+  | 'nav_monthly_history'
   | 'nav_new_admission'
   | 'nav_notices'
   | 'nav_notification_center'
@@ -163,6 +165,7 @@ export const MANAGER_NAVIGATION_ITEMS: readonly ManagerNavigationItem[] = [
   { kind: 'link', href: MANAGER_FINANCE_AUTO_SUSPEND_ROUTES.root, icon: UserX, labelKey: 'nav_auto_suspend' },
   { kind: 'group', labelKey: 'group_operations' },
   { kind: 'link', href: MANAGER_ATTENDANCE_ROUTES.root, icon: CalendarCheck, labelKey: 'nav_attendance' },
+  { kind: 'link', href: MANAGER_ATTENDANCE_MONTHLY_HISTORY_ROUTES.root, icon: History, labelKey: 'nav_monthly_history' },
   { kind: 'link', href: MANAGER_ABSENTEE_REPORT_ROUTES.root, icon: UserMinus, labelKey: 'nav_absentee_report' },
   { kind: 'link', href: MANAGER_QR_SCANNER_ROUTES.root, icon: QrCode, labelKey: 'nav_qr_scanner' },
   { kind: 'group', labelKey: 'group_accounts_assets' },

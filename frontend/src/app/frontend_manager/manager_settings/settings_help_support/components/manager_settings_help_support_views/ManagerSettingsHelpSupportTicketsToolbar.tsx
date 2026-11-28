@@ -80,7 +80,7 @@ export function ManagerSettingsHelpSupportTicketsToolbar({
           <button
             type="button"
             onClick={onExportCsv}
-            className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors cursor-pointer"
+            className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight motion-safe:transition-colors cursor-pointer"
             title="Export Tickets CSV"
           >
             <Download size={13} className="text-secondary" />
@@ -109,7 +109,7 @@ export function ManagerSettingsHelpSupportTicketsToolbar({
             <button
               type="button"
               onClick={() => setSearchQuery('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-md text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-md text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-colors cursor-pointer"
               title="Clear search"
               aria-label="Clear search"
             >

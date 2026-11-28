@@ -17,5 +17,5 @@ export default async function ManagerMembersAlumniPage({ searchParams }: Manager
     phone: firstValue(params.phone),
     smartId: firstValue(params.smartId),
   };
-  return <ManagerMembersAlumniMain {...mainProps} />;
+  return <ManagerMembersAlumniMain view={mainProps.view} id={mainProps.id} name={mainProps.name} phone={mainProps.phone} smartId={mainProps.smartId} />;
 }

@@ -107,7 +107,7 @@ export function ManagerMembersNewAdmissionSuccessBanner({
               type="button"
               onClick={() => setShowWhatsAppConfirm(true)}
               aria-label="Send Welcome and ID Card via WhatsApp to student"
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm motion-safe:transition-colors cursor-pointer"
               title="Resend ID Card via WhatsApp Web (Free • Zero API Cost)"
             >
               <MessageSquare size={15} />
@@ -118,7 +118,7 @@ export function ManagerMembersNewAdmissionSuccessBanner({
             <Link
               href={`/frontend_manager/manager_members/members_id_card_generator?id=${encodeURIComponent(student.smartId)}`}
               aria-label="View digital ID card for student"
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-surface border border-border text-foreground hover:bg-surface-hover transition-colors"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-surface border border-border text-foreground hover:bg-surface-hover motion-safe:transition-colors"
             >
               <IdCard size={15} />
               <span>View ID Card</span>
@@ -129,7 +129,7 @@ export function ManagerMembersNewAdmissionSuccessBanner({
               type="button"
               onClick={() => setShowResetConfirm(true)}
               aria-label="Start new admission for another student"
-              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-muted-foreground hover:text-foreground motion-safe:transition-colors cursor-pointer"
             >
               <UserPlus size={14} />
               <span>Admit Another</span>

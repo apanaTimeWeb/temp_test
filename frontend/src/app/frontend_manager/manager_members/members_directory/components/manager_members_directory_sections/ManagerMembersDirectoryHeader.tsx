@@ -22,7 +22,7 @@ export function ManagerMembersDirectoryHeader({
         <div className="space-y-1.5">
           <div className="flex items-center gap-2 flex-wrap text-xs">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
               Active Directory
             </span>
           </div>
@@ -55,7 +55,7 @@ export function ManagerMembersDirectoryHeader({
 
           <Link
             href={MANAGER_MEMBERS_DIRECTORY_ROUTES.newAdmission}
-            className="inline-flex items-center gap-1.5 min-h-11 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-950/50 transition-all hover:scale-[1.02] cursor-pointer"
+            className="inline-flex items-center gap-1.5 min-h-11 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-950/50 motion-safe:transition-all hover:scale-[1.02] cursor-pointer"
           >
             <UserPlus size={15} />
             <span>New Admission</span>

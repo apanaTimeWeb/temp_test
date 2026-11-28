@@ -89,7 +89,7 @@ export function ManagerMembersEnquiriesHeaderBanner({
               type="button"
               className={`min-h-9 min-w-9 px-3 py-1.5 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 motion-safe:transition-all cursor-pointer ${
                 view === 'kanban'
-                  ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-sm'
+                  ? 'bg-indigo-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
               onClick={() => onViewChange('kanban')}
@@ -104,7 +104,7 @@ export function ManagerMembersEnquiriesHeaderBanner({
               type="button"
               className={`min-h-9 min-w-9 px-3 py-1.5 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 motion-safe:transition-all cursor-pointer ${
                 view === 'table'
-                  ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-sm'
+                  ? 'bg-indigo-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
               onClick={() => onViewChange('table')}
@@ -120,7 +120,7 @@ export function ManagerMembersEnquiriesHeaderBanner({
           {/* Add Enquiry Primary CTA */}
           <button
             type="button"
-            className="min-h-11 px-5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-bold text-sm shadow-lg shadow-indigo-950/50 inline-flex items-center gap-2 cursor-pointer transition-all hover:scale-[1.02] active:scale-95"
+            className="min-h-11 px-5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-950/50 inline-flex items-center gap-2 cursor-pointer motion-safe:transition-all hover:scale-[1.02] active:scale-95"
             onClick={onAddEnquiry}
           >
             <Plus size={16} />

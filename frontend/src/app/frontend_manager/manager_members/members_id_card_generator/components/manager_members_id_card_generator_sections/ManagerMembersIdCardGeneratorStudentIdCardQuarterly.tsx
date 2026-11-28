@@ -170,7 +170,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCardQuarterly({
           type="button"
           onClick={() => handleSideSelect('front')}
           data-testid="id-card-side-front-btn"
-          className={`flex-1 sm:flex-none justify-center px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${currentSide === 'front' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-secondary hover:text-foreground'}`}
+          className={`flex-1 sm:flex-none justify-center px-3 py-1 rounded-lg text-xs font-semibold motion-safe:transition-colors cursor-pointer flex items-center gap-1.5 ${currentSide === 'front' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-secondary hover:text-foreground'}`}
         >
           <CreditCard size={13} /><span>Front Side</span>
         </button>
@@ -178,7 +178,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCardQuarterly({
           type="button"
           onClick={() => handleSideSelect('back')}
           data-testid="id-card-side-back-btn"
-          className={`flex-1 sm:flex-none justify-center px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${currentSide === 'back' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-secondary hover:text-foreground'}`}
+          className={`flex-1 sm:flex-none justify-center px-3 py-1 rounded-lg text-xs font-semibold motion-safe:transition-colors cursor-pointer flex items-center gap-1.5 ${currentSide === 'back' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-secondary hover:text-foreground'}`}
         >
           <RotateCw size={13} /><span>Back Side</span>
         </button>
@@ -186,7 +186,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCardQuarterly({
           type="button"
           onClick={() => handleSideSelect('both')}
           data-testid="id-card-side-both-btn"
-          className={`flex-1 sm:flex-none justify-center px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${currentSide === 'both' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-secondary hover:text-foreground'}`}
+          className={`flex-1 sm:flex-none justify-center px-3 py-1 rounded-lg text-xs font-semibold motion-safe:transition-colors cursor-pointer flex items-center gap-1.5 ${currentSide === 'both' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-secondary hover:text-foreground'}`}
         >
           <span>Both Sides</span>
         </button>
@@ -194,14 +194,14 @@ export default function ManagerMembersIdCardGeneratorStudentIdCardQuarterly({
 
       {currentSide === 'front' && (
         <div className="flex flex-col items-center">
-          <div className="side-label no-print"><span className="dot" style={{ background: '#fbbf24', boxShadow: '0 0 8px #fbbf24' }} />Front Side</div>
+          <div className="side-label no-print"><span className="dot dot--amber" />Front Side</div>
           <div className={`mgr-idcard-wrap ${scaleClass}`}>{renderFront()}</div>
         </div>
       )}
 
       {currentSide === 'back' && (
         <div className="flex flex-col items-center">
-          <div className="side-label no-print"><span className="dot" style={{ background: '#fbbf24', boxShadow: '0 0 8px #fbbf24' }} />Back Side</div>
+          <div className="side-label no-print"><span className="dot dot--amber" />Back Side</div>
           <div className={`mgr-idcard-wrap ${scaleClass}`}>
             <ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack data={data} />
           </div>
@@ -212,7 +212,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCardQuarterly({
         <div className="flex flex-col lg:flex-row flex-wrap items-center lg:items-start justify-center gap-4 sm:gap-8 w-full">
           <div className="flex flex-col items-center">
             <div className="side-label no-print">
-              <span className="dot" style={{ background: '#fbbf24', boxShadow: '0 0 8px #fbbf24' }} />
+              <span className="dot dot--amber" />
               <span>Front Side</span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface border border-border text-primary font-semibold ml-2 hidden sm:inline-block">85.60 × 53.98 mm</span>
             </div>
@@ -220,7 +220,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCardQuarterly({
           </div>
           <div className="flex flex-col items-center">
             <div className="side-label no-print">
-              <span className="dot" style={{ background: '#10b981', boxShadow: '0 0 8px #10b981' }} />
+              <span className="dot dot--emerald" />
               <span>Back Side</span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface border border-border text-primary font-semibold ml-2 hidden sm:inline-block">85.60 × 53.98 mm</span>
             </div>

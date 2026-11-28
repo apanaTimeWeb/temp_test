@@ -87,7 +87,7 @@ export function buildRenewalColumns({
             <button
               type="button"
               onClick={() => onRenewStudent(row.id, row.studentName)}
-              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm motion-safe:transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
               title={`Renew subscription for ${row.studentName}`}
             >
               <RotateCcw size={12} /> Renew
@@ -95,7 +95,7 @@ export function buildRenewalColumns({
             <button
               type="button"
               onClick={() => onRemindStudent(row.studentName)}
-              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded border border-border bg-card hover:bg-surface-hover text-secondary transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded border border-border bg-card hover:bg-surface-hover text-secondary motion-safe:transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               title={`Send reminder to ${row.studentName}`}
             >
               <Send size={12} className="text-amber-500" /> Remind
@@ -105,7 +105,7 @@ export function buildRenewalColumns({
                 type="button"
                 data-testid={`release-seat-btn-${row.id}`}
                 onClick={() => onReleaseSeat(row.id, row.studentName)}
-                className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 border border-rose-500/20 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 border border-rose-500/20 motion-safe:transition-colors cursor-pointer"
                 title={`Release seat for ${row.studentName} due to grace period expiration`}
               >
                 <UserX size={12} /> Release Seat

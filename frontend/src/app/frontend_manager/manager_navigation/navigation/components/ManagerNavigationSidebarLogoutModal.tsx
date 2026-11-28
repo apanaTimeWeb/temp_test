@@ -90,14 +90,14 @@ export function ManagerNavigationSidebarLogoutModal({
       data-testid="manager-logout-overlay"
     >
       <div
-        className="fixed inset-0 bg-black/70 backdrop-blur-md motion-safe:transition-opacity motion-safe:animate-in motion-safe:fade-in motion-safe:duration-200"
+        className="fixed inset-0 bg-black/70 backdrop-blur-md motion-safe:transition-opacity motion-safe:animate-in motion-safe:fade-in motion-safe:duration-base"
         onClick={onClose}
         aria-hidden="true"
       />
       <div
         ref={logoutDialogRef}
         tabIndex={-1}
-        className="mgr-logout-dialog-surface relative z-10 w-full max-w-sm rounded-2xl border border-indigo-500/30 p-6 text-white shadow-2xl motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:fade-in motion-safe:duration-200 focus:outline-none"
+        className="mgr-logout-dialog-surface relative z-10 w-full max-w-sm rounded-2xl border border-indigo-500/30 p-6 text-white shadow-2xl motion-safe:animate-in motion-safe:zoom-in-95 motion-safe:fade-in motion-safe:duration-base focus:outline-none"
         data-testid="manager-logout-dialog"
       >
         <div className="flex flex-col items-center text-center">
@@ -126,11 +126,11 @@ export function ManagerNavigationSidebarLogoutModal({
         </div>
 
         <div className="mt-4 flex items-center justify-end gap-2.5">
-          <button
+            <button
             type="button"
             data-testid="manager-logout-cancel"
             onClick={onClose}
-            className="border border-white/10 rounded-lg px-4 py-2 text-sm text-slate-300 hover:bg-white/5 transition-colors cursor-pointer"
+            className="border border-white/10 rounded-lg px-4 py-2 text-sm text-slate-300 hover:bg-white/5 motion-safe:transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             {tManagerUi('cancel') || 'Cancel'}
           </button>
@@ -138,7 +138,7 @@ export function ManagerNavigationSidebarLogoutModal({
             type="button"
             data-testid="manager-logout-confirm"
             onClick={handleConfirmLogout}
-            className="bg-red-600 text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-red-700 transition-colors cursor-pointer flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+            className="bg-danger text-on-danger rounded-lg px-4 py-2 text-sm font-semibold hover:opacity-90 motion-safe:transition-colors cursor-pointer flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <LogOut size={14} strokeWidth={2} />
             <span>{tManagerUi('log_out') || 'Log out'}</span>

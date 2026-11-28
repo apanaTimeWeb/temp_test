@@ -63,7 +63,7 @@ export function ManagerDashboardOverviewActionItems({
 
   return (
     <section
-      className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all flex flex-col justify-between h-full"
+      className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card motion-safe:transition-all flex flex-col justify-between h-full"
       aria-labelledby="manager-dashboard-action-items-heading"
     >
       <div>
@@ -109,7 +109,7 @@ export function ManagerDashboardOverviewActionItems({
               return (
                 <div
                   key={item.title}
-                  className="mgr-action-item p-3.5 rounded-xl border border-border bg-surface-highlight hover:border-primary hover:bg-surface-highlight transition-all flex items-center justify-between gap-3"
+                  className="mgr-action-item p-3.5 rounded-xl border border-border bg-surface-highlight hover:border-primary hover:bg-surface-highlight motion-safe:transition-all flex items-center justify-between gap-3"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className={`w-9 h-9 rounded-lg border flex items-center justify-center shrink-0 ${meta.theme}`}>
@@ -132,8 +132,8 @@ export function ManagerDashboardOverviewActionItems({
                       href={item.href}
                       className={
                         item.showRenew
-                          ? 'inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-primary text-primary-foreground hover:bg-primary-hover shadow-xs transition-all'
-                          : 'inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-card border border-border text-foreground hover:border-primary hover:bg-surface-hover transition-all'
+                          ? 'inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-primary text-primary-foreground hover:bg-primary-hover shadow-xs motion-safe:transition-all'
+                          : 'inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-card border border-border text-foreground hover:border-primary hover:bg-surface-hover motion-safe:transition-all'
                       }
                     >
                       <span>{item.showRenew ? tManagerUi('renew') : tManagerUi('view')}</span>

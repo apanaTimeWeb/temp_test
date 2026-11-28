@@ -100,12 +100,12 @@ export default function ManagerCommunicationNotificationCenterPage({
             >
               <tab.icon
                 size={16}
-                className={isActive ? tab.activeIcon : 'text-secondary/70 group-hover:text-primary transition-colors'}
+                className={isActive ? tab.activeIcon : 'text-secondary/70 group-hover:text-primary motion-safe:transition-colors'}
               />
               <span>{tManagerUi(tab.labelKey)}</span>
               {tab.badge && (
                 <span
-                  className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full border transition-colors ${
+                  className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full border motion-safe:transition-colors ${
                     isActive
                       ? tab.badgeActiveClass
                       : 'bg-surface border-border text-secondary group-hover:text-primary'

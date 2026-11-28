@@ -64,7 +64,7 @@ export function ManagerSettingsSecurityLoginHistoryPanel({
           <button
             type="button"
             onClick={() => { setFilter('all'); setPage(0); }}
-            className={`rounded-md px-2.5 py-1 text-xs font-semibold transition-colors cursor-pointer ${
+            className={`rounded-md px-2.5 py-1 text-xs font-semibold motion-safe:transition-colors cursor-pointer ${
               filter === 'all'
                 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
                 : 'text-slate-400 hover:text-white'
@@ -75,7 +75,7 @@ export function ManagerSettingsSecurityLoginHistoryPanel({
           <button
             type="button"
             onClick={() => { setFilter('success'); setPage(0); }}
-            className={`rounded-md px-2.5 py-1 text-xs font-semibold transition-colors cursor-pointer ${
+            className={`rounded-md px-2.5 py-1 text-xs font-semibold motion-safe:transition-colors cursor-pointer ${
               filter === 'success'
                 ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
                 : 'text-slate-400 hover:text-white'
@@ -86,7 +86,7 @@ export function ManagerSettingsSecurityLoginHistoryPanel({
           <button
             type="button"
             onClick={() => { setFilter('failed'); setPage(0); }}
-            className={`rounded-md px-2.5 py-1 text-xs font-semibold transition-colors cursor-pointer ${
+            className={`rounded-md px-2.5 py-1 text-xs font-semibold motion-safe:transition-colors cursor-pointer ${
               filter === 'failed'
                 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
                 : 'text-slate-400 hover:text-white'
@@ -121,7 +121,7 @@ export function ManagerSettingsSecurityLoginHistoryPanel({
               </thead>
               <tbody className="divide-y divide-white/5">
                 {paginatedHistory.map((item) => (
-                  <tr key={item.id} className="hover:bg-white/5 transition-colors">
+                  <tr key={item.id} className="hover:bg-white/5 motion-safe:transition-colors">
                     <td className="whitespace-nowrap px-4 py-3 font-medium text-slate-200">
                       {item.timestamp}
                     </td>
@@ -250,7 +250,7 @@ export function ManagerSettingsSecurityLoginHistoryPanel({
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold motion-safe:transition-all cursor-pointer"
                 disabled={effectivePage <= 0}
                 onClick={() => setPage((p) => Math.max(0, p - 1))}
               >
@@ -264,7 +264,7 @@ export function ManagerSettingsSecurityLoginHistoryPanel({
 
               <button
                 type="button"
-                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold motion-safe:transition-all cursor-pointer"
                 disabled={effectivePage >= totalPages - 1}
                 onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
               >

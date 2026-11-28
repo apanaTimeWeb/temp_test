@@ -24,7 +24,7 @@ export function ManagerAttendanceAbsenteeKpis({
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-      <div className="mgr-absentee-surface--indigo group relative overflow-hidden rounded-2xl border border-indigo-500/40 p-5 shadow-lg shadow-indigo-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
+      <div className="mgr-absentee-surface--indigo group relative overflow-hidden rounded-2xl border border-indigo-500/40 p-5 shadow-lg shadow-indigo-950/40 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
         <svg aria-hidden="true" className="text-indigo-400 absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
@@ -48,7 +48,7 @@ export function ManagerAttendanceAbsenteeKpis({
         </div>
       </div>
 
-      <div className="mgr-absentee-surface--rose group relative overflow-hidden rounded-2xl border border-rose-500/40 p-5 shadow-lg shadow-rose-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-rose-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
+      <div className="mgr-absentee-surface--rose group relative overflow-hidden rounded-2xl border border-rose-500/40 p-5 shadow-lg shadow-rose-950/40 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-rose-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
         <svg aria-hidden="true" className="text-rose-400 absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
@@ -70,7 +70,7 @@ export function ManagerAttendanceAbsenteeKpis({
         </div>
       </div>
 
-      <div className="mgr-absentee-surface--amber group relative overflow-hidden rounded-2xl border border-amber-500/40 p-5 shadow-lg shadow-amber-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
+      <div className="mgr-absentee-surface--amber group relative overflow-hidden rounded-2xl border border-amber-500/40 p-5 shadow-lg shadow-amber-950/40 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
         <svg aria-hidden="true" className="text-amber-400 absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
@@ -92,7 +92,7 @@ export function ManagerAttendanceAbsenteeKpis({
         </div>
       </div>
 
-      <div className="mgr-absentee-surface--sky group relative overflow-hidden rounded-2xl border border-sky-500/40 p-5 shadow-lg shadow-sky-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-sky-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
+      <div className="mgr-absentee-surface--sky group relative overflow-hidden rounded-2xl border border-sky-500/40 p-5 shadow-lg shadow-sky-950/40 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-sky-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
         <svg aria-hidden="true" className="text-sky-400 absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
@@ -114,7 +114,7 @@ export function ManagerAttendanceAbsenteeKpis({
         </div>
       </div>
 
-      <div className="mgr-absentee-surface--emerald group relative overflow-hidden rounded-2xl border border-emerald-500/40 p-5 shadow-lg shadow-emerald-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
+      <div className="mgr-absentee-surface--emerald group relative overflow-hidden rounded-2xl border border-emerald-500/40 p-5 shadow-lg shadow-emerald-950/40 motion-safe:transition-all motion-safe:duration-slow hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl cursor-default select-none flex flex-col justify-between">
         <svg aria-hidden="true" className="text-emerald-400 absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
           <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>

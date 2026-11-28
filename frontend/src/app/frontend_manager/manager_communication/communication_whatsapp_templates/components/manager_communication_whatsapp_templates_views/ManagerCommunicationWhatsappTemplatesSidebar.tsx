@@ -47,7 +47,7 @@ export function ManagerCommunicationWhatsappTemplatesSidebar({
               type="button"
               onClick={() => setActiveId(t.id)}
               aria-pressed={isActive}
-              className={`w-full p-3 sm:p-3.5 rounded-xl text-left transition-all duration-150 cursor-pointer flex items-center justify-between border ${
+              className={`w-full p-3 sm:p-3.5 rounded-xl text-left motion-safe:transition-all motion-safe:duration-fast cursor-pointer flex items-center justify-between border ${
                 isActive
                   ? `bg-surface-highlight/80 ${config.accentBorder} shadow-md ring-1 ${config.ring}`
                   : 'bg-card/70 border-border hover:bg-card hover:border-border-focus'

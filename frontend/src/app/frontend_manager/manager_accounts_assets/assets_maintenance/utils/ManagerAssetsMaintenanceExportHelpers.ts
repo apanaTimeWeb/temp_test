@@ -16,6 +16,11 @@ export function formatMaintenanceInrRupees(rupees: number): string {
   return INR_RUPEES_FORMATTER.format(rupees);
 }
 
+/** Formats minor-unit maintenance cost into major-unit INR display text. */
+export function formatMaintenanceMinorInr(minorAmount: number): string {
+  return formatMaintenanceInrRupees(Math.round(minorAmount / 100));
+}
+
 export const MAINTENANCE_CURRENCY_SYMBOL = INR_RUPEES_FORMATTER.format(0).replace(/[0-9.,\s]/g, '');
 
 function escapeCsvCell(v: unknown): string {

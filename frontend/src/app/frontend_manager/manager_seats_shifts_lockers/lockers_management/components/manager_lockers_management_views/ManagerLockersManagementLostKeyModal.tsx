@@ -38,7 +38,7 @@ export function ManagerLockersManagementLostKeyModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="manager-lost-key-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-3 sm:p-4 overflow-y-auto backdrop-blur-xs animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-3 sm:p-4 overflow-y-auto backdrop-blur-xs motion-safe:animate-in fade-in"
       onClick={onClose}
     >
       <div
@@ -63,7 +63,7 @@ export function ManagerLockersManagementLostKeyModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-secondary hover:text-primary hover:bg-surface transition-colors cursor-pointer"
+            className="p-1 rounded-lg text-secondary hover:text-primary hover:bg-surface motion-safe:transition-colors cursor-pointer"
             aria-label="Close"
           >
             <X size={18} />
@@ -191,14 +191,14 @@ export function ManagerLockersManagementLostKeyModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface motion-safe:transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               data-testid="manager-confirm-lost-key-fine-btn"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 text-white hover:bg-rose-700 shadow-sm transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 text-white hover:bg-rose-700 shadow-sm motion-safe:transition-all cursor-pointer"
             >
               <KeyRound size={14} />
               <span>Apply Fine & Confirm</span>

@@ -17,5 +17,5 @@ export default async function ManagerCommunicationWhatsappTemplatesPage({ search
     phone: firstValue(params.phone),
     smartId: firstValue(params.smartId),
   };
-  return <ManagerCommunicationWhatsappTemplatesMain {...mainProps} />;
+  return <ManagerCommunicationWhatsappTemplatesMain view={mainProps.view} id={mainProps.id} name={mainProps.name} phone={mainProps.phone} smartId={mainProps.smartId} />;
 }

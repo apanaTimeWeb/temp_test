@@ -251,7 +251,7 @@ export default function ManagerSettingsHelpSupportPage() {
                   <button
                     type="button"
                     onClick={() => setTicketTab('My Tickets')}
-                    className="mgr-btn-outline text-xs sm:text-sm inline-flex items-center gap-1.5 shrink-0 self-start sm:self-auto py-2 px-3.5 rounded-lg hover:bg-surface-hover transition-colors cursor-pointer"
+                    className="mgr-btn-outline text-xs sm:text-sm inline-flex items-center gap-1.5 shrink-0 self-start sm:self-auto py-2 px-3.5 rounded-lg hover:bg-surface-hover motion-safe:transition-colors cursor-pointer"
                     title="Back to tickets list"
                   >
                     <ArrowLeft size={14} />

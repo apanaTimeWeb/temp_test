@@ -58,7 +58,7 @@ export function ManagerAssetsRegisterToolbar({
                 key={tab.id}
                 type="button"
                 onClick={() => onStatusChange(tab.id)}
-                className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
                   isActive
                     ? `${tab.activeClass} border shadow-sm`
                     : 'bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover border border-border/80'
@@ -67,7 +67,7 @@ export function ManagerAssetsRegisterToolbar({
                 <Icon size={14} className="shrink-0" />
                 <span>{tab.label}</span>
                 <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold transition-colors ${
+                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold motion-safe:transition-colors ${
                     isActive
                       ? tab.id === 'maintenance'
                         ? 'bg-black/20 text-black'
@@ -105,7 +105,7 @@ export function ManagerAssetsRegisterToolbar({
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search asset name, category, or location..."
             style={{ paddingLeft: '2.5rem', paddingRight: '2.25rem' }}
-            className="w-full text-xs rounded-xl bg-card border border-border py-2 text-primary placeholder:text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+            className="w-full text-xs rounded-xl bg-card border border-border py-2 text-primary placeholder:text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary motion-safe:transition-all"
           />
           <Search
             size={16}
@@ -115,7 +115,7 @@ export function ManagerAssetsRegisterToolbar({
             <button
               type="button"
               onClick={() => onSearchChange('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-secondary hover:text-primary rounded-md hover:bg-surface-hover transition-colors z-10"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-secondary hover:text-primary rounded-md hover:bg-surface-hover motion-safe:transition-colors z-10"
               title="Clear search"
             >
               <X size={14} />

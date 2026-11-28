@@ -133,14 +133,13 @@ export function LibraryLoader({
   className = '',
   label = 'Loading',
 }: LoaderProps) {
-  const px = SIZES[size];
   const variantClass = variant !== 'default' ? ` ${variant}` : '';
+  const sizeClass = ` library-loader-box--${size in SIZES ? size : 'md'}`;
   const Icon = ICONS[icon] ?? Book;
 
   return (
     <div
-      className={`library-loader-box${variantClass}${className ? ' ' + className : ''}`}
-      style={{ width: px, height: px }}
+      className={`library-loader-box${sizeClass}${variantClass}${className ? ' ' + className : ''}`}
       role="status"
       aria-label={label}
       aria-live="polite"
@@ -185,10 +184,10 @@ export function LibraryLoader({
 }
 
 /* ---------- PAGE-LEVEL WRAPPER (centered full area) ---------- */
-export function ManagerPageLoader(props: LoaderProps) {
+export function ManagerPageLoader({ size, icon, variant, className, label }: LoaderProps) {
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
-      <LibraryLoader {...props} />
+      <LibraryLoader size={size} icon={icon} variant={variant} className={className} label={label} />
     </div>
   );
 }

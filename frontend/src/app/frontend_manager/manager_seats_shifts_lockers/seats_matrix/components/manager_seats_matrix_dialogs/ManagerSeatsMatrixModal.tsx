@@ -167,7 +167,7 @@ export function ManagerSeatsMatrixModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 text-secondary hover:text-primary hover:bg-floating rounded-xl transition-colors cursor-pointer"
+            className="p-1.5 text-secondary hover:text-primary hover:bg-floating rounded-xl motion-safe:transition-colors cursor-pointer"
             aria-label="Close dialog"
           >
             <X size={18} />
@@ -179,7 +179,7 @@ export function ManagerSeatsMatrixModal({
           <button
             type="button"
             onClick={() => setActiveModalTab('actions')}
-            className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+            className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 motion-safe:transition-colors cursor-pointer ${
               activeModalTab === 'actions'
                 ? 'bg-card text-primary font-bold shadow-sm'
                 : 'text-secondary hover:text-primary'
@@ -190,7 +190,7 @@ export function ManagerSeatsMatrixModal({
           <button
             type="button"
             onClick={() => setActiveModalTab('config')}
-            className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+            className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 motion-safe:transition-colors cursor-pointer ${
               activeModalTab === 'config'
                 ? 'bg-card text-primary font-bold shadow-sm'
                 : 'text-secondary hover:text-primary'
@@ -201,7 +201,7 @@ export function ManagerSeatsMatrixModal({
           <button
             type="button"
             onClick={() => setActiveModalTab('history')}
-            className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+            className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 motion-safe:transition-colors cursor-pointer ${
               activeModalTab === 'history'
                 ? 'bg-card text-primary font-bold shadow-sm'
                 : 'text-secondary hover:text-primary'

@@ -49,7 +49,7 @@ export function ManagerSeatsMatrixModalHistoryTab({
       <div className="pt-2">
         <button
           type="button"
-          className="mgr-btn-ghost w-full h-9 text-xs font-semibold rounded-xl border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
+          className="mgr-btn-ghost w-full h-9 text-xs font-semibold rounded-xl border border-border text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer"
           onClick={onBack}
         >
           Back to Actions

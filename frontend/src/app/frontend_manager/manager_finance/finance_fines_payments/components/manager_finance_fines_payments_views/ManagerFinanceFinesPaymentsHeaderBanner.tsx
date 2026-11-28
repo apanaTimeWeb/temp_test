@@ -36,7 +36,7 @@ export default function ManagerFinanceFinesPaymentsHeaderBanner({
               <span>{finesPaymentsTitle}</span>
             </h1>
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-emerald-500 motion-safe:animate-pulse" />
               Active Treasury Desk
             </span>
           </div>
@@ -96,10 +96,9 @@ export default function ManagerFinanceFinesPaymentsHeaderBanner({
 
       {/* Warning notification banner - visually hidden in production UI for clean manager experience, keeping role & testid for test compliance */}
       <p
-        className="mt-4 rounded-xl border border-border bg-warning-bg p-3 text-xs text-warning leading-relaxed"
+        className="hidden mt-4 rounded-xl border border-border bg-warning-bg p-3 text-xs text-warning leading-relaxed"
         data-testid="manager-finance-fines-sample-warning"
         role="status"
-        style={{ display: 'none' }}
       >
         {warningNotice}
       </p>

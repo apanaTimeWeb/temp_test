@@ -106,7 +106,7 @@ export function ManagerCommunicationComplaintsToolbar({
                 />
                 <span>{item}</span>
                 <span
-                  className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold border transition-colors ${
+                  className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold border motion-safe:transition-colors ${
                     isActive
                       ? config.badgeActiveClass
                       : 'bg-surface border-border text-secondary group-hover:text-primary'
@@ -125,7 +125,7 @@ export function ManagerCommunicationComplaintsToolbar({
             <button
               type="button"
               onClick={onPrint}
-              className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold h-10 px-3.5 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer"
+              className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold h-10 px-3.5 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary motion-safe:transition-colors cursor-pointer"
               title="Print Complaints"
             >
               <Printer size={13} />
@@ -135,7 +135,7 @@ export function ManagerCommunicationComplaintsToolbar({
           <button
             type="button"
             onClick={onExportCsv}
-            className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold h-10 px-3.5 rounded-xl border border-border bg-card hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-400 transition-colors cursor-pointer"
+            className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold h-10 px-3.5 rounded-xl border border-border bg-card hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-400 motion-safe:transition-colors cursor-pointer"
             title="Export Complaints CSV"
           >
             <Download size={13} />
@@ -145,7 +145,7 @@ export function ManagerCommunicationComplaintsToolbar({
             <button
               type="button"
               onClick={onExportExcel}
-              className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold h-10 px-3.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors cursor-pointer"
+              className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold h-10 px-3.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 motion-safe:transition-colors cursor-pointer"
               title="Export Complaints Excel"
             >
               <FileSpreadsheet size={13} />
@@ -213,7 +213,7 @@ export function ManagerCommunicationComplaintsToolbar({
             <button
               type="button"
               onClick={onResetFilters}
-              className="inline-flex items-center justify-center gap-1.5 h-10 px-3.5 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-rose-400 hover:border-rose-500/30 hover:bg-rose-500/10 cursor-pointer transition-colors whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-1.5 h-10 px-3.5 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-rose-400 hover:border-rose-500/30 hover:bg-rose-500/10 cursor-pointer motion-safe:transition-colors whitespace-nowrap"
               title="Reset all filters"
             >
               <X size={13} />

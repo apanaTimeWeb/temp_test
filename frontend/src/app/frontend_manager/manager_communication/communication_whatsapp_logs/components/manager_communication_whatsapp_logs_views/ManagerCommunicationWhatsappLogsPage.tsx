@@ -127,7 +127,7 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
           <button
             type="button"
             onClick={handleRefresh}
-            className="p-2 rounded-xl border border-border bg-card text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer"
+            className="p-2 rounded-xl border border-border bg-card text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-colors cursor-pointer"
             title="Refresh Logs Feed"
           >
             <RotateCw size={15} />
@@ -135,7 +135,7 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
           <button
             type="button"
             onClick={handleExportCsv}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer motion-safe:transition-all"
             title="Export CSV"
           >
             <Download size={13} className="text-secondary" />
@@ -144,7 +144,7 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
           <button
             type="button"
             onClick={handlePrint}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer motion-safe:transition-all"
             title="Print Delivery Audit"
           >
             <Printer size={13} className="text-secondary" />

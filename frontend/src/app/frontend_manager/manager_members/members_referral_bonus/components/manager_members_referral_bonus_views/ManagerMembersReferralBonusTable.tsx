@@ -114,7 +114,7 @@ export function ManagerMembersReferralBonusTable({
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-danger hover:opacity-80 rounded-full transition-colors"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-danger hover:opacity-80 rounded-full motion-safe:transition-colors"
                   title="Clear search"
                   aria-label="Clear search"
                 >
@@ -154,7 +154,7 @@ export function ManagerMembersReferralBonusTable({
               <button
                 type="button"
                 onClick={onResetFilters}
-                className="inline-flex items-center justify-center gap-1.5 px-3 h-9 rounded-lg border border-border text-xs font-semibold text-danger hover:bg-danger-bg cursor-pointer shrink-0 w-full sm:w-auto transition-colors"
+                className="inline-flex items-center justify-center gap-1.5 px-3 h-9 rounded-lg border border-border text-xs font-semibold text-danger hover:bg-danger-bg cursor-pointer shrink-0 w-full sm:w-auto motion-safe:transition-colors"
                 title="Reset all filters"
               >
                 <X size={14} className="text-danger shrink-0" />
@@ -166,7 +166,7 @@ export function ManagerMembersReferralBonusTable({
           <button
             type="button"
             onClick={onExportCsv}
-            className="mgr-btn mgr-btn-secondary inline-flex items-center justify-center gap-2 text-xs h-9 px-4 rounded-lg font-semibold shrink-0 transition-colors w-full sm:w-auto"
+            className="mgr-btn mgr-btn-secondary inline-flex items-center justify-center gap-2 text-xs h-9 px-4 rounded-lg font-semibold shrink-0 motion-safe:transition-colors w-full sm:w-auto"
             title="Export Referrals CSV"
           >
             <Download size={15} className="shrink-0 text-primary" />

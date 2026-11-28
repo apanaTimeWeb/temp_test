@@ -156,7 +156,7 @@ export function buildReceiptsCols({
             <button
               type="button"
               onClick={() => onSelectReceipt(row)}
-              className="p-1.5 rounded-lg border border-border bg-card hover:bg-primary hover:text-white hover:border-primary text-secondary transition-all cursor-pointer shadow-2xs active:scale-95"
+              className="p-1.5 rounded-lg border border-border bg-card hover:bg-primary hover:text-white hover:border-primary text-secondary motion-safe:transition-all cursor-pointer shadow-2xs active:scale-95"
               title="View Receipt Details"
             >
               <Eye size={14} />
@@ -164,7 +164,7 @@ export function buildReceiptsCols({
             <button
               type="button"
               onClick={() => onPrintReceipt(row)}
-              className="p-1.5 rounded-lg border border-border bg-card hover:bg-slate-800 hover:text-white hover:border-slate-800 text-secondary transition-all cursor-pointer shadow-2xs active:scale-95"
+              className="p-1.5 rounded-lg border border-border bg-card hover:bg-slate-800 hover:text-white hover:border-slate-800 text-secondary motion-safe:transition-all cursor-pointer shadow-2xs active:scale-95"
               title="Print Receipt"
             >
               <Printer size={14} />
@@ -172,7 +172,7 @@ export function buildReceiptsCols({
             <button
               type="button"
               onClick={() => onShareWhatsApp(row)}
-              className="p-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 text-emerald-600 dark:text-emerald-400 transition-all cursor-pointer shadow-2xs active:scale-95"
+              className="p-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 text-emerald-600 dark:text-emerald-400 motion-safe:transition-all cursor-pointer shadow-2xs active:scale-95"
               title="Share via WhatsApp"
             >
               <MessageSquare size={14} />
@@ -180,7 +180,7 @@ export function buildReceiptsCols({
             <button
               type="button"
               onClick={() => onShareEmail(row)}
-              className="p-1.5 rounded-lg border border-purple-500/20 bg-purple-500/10 hover:bg-purple-600 hover:text-white hover:border-purple-600 text-purple-600 dark:text-purple-400 transition-all cursor-pointer shadow-2xs active:scale-95"
+              className="p-1.5 rounded-lg border border-purple-500/20 bg-purple-500/10 hover:bg-purple-600 hover:text-white hover:border-purple-600 text-purple-600 dark:text-purple-400 motion-safe:transition-all cursor-pointer shadow-2xs active:scale-95"
               title="Share via Email"
             >
               <Mail size={14} />
@@ -188,7 +188,7 @@ export function buildReceiptsCols({
             <button
               type="button"
               onClick={() => onShareSms(row)}
-              className="p-1.5 rounded-lg border border-blue-500/20 bg-blue-500/10 hover:bg-blue-600 hover:text-white hover:border-blue-600 text-blue-600 dark:text-blue-400 transition-all cursor-pointer shadow-2xs active:scale-95"
+              className="p-1.5 rounded-lg border border-blue-500/20 bg-blue-500/10 hover:bg-blue-600 hover:text-white hover:border-blue-600 text-blue-600 dark:text-blue-400 motion-safe:transition-all cursor-pointer shadow-2xs active:scale-95"
               title="Share via SMS"
             >
               <Smartphone size={14} />

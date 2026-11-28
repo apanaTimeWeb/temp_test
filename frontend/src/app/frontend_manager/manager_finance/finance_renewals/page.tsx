@@ -17,5 +17,5 @@ export default async function ManagerFinanceRenewalsPage({ searchParams }: Manag
     phone: firstValue(params.phone),
     smartId: firstValue(params.smartId),
   };
-  return <ManagerFinanceRenewalsMain {...mainProps} />;
+  return <ManagerFinanceRenewalsMain view={mainProps.view} id={mainProps.id} name={mainProps.name} phone={mainProps.phone} smartId={mainProps.smartId} />;
 }

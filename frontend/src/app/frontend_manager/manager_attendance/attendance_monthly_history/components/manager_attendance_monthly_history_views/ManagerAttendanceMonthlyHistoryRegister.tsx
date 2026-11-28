@@ -1,34 +1,43 @@
 'use client';
 
-import { ManagerAttendanceDailyMonthlyKpis } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyMonthlyKpis';
-import { ManagerAttendanceDailyMonthlyToolbar } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyMonthlyToolbar';
-import { MONTH_OPTIONS } from '@/app/frontend_manager/manager_attendance/attendance_daily/constants/ManagerAttendanceDailyMonthlyConstants';
-import type { Student } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
-import { exportManagerMonthlyRegisterCsv } from '@/app/frontend_manager/manager_attendance/attendance_daily/utils/ManagerAttendanceDailyCsv';
-import {
-  getStudentMonthlyAttendance,
-  type StudentMonthlyAttendanceSummary,
-} from '@/app/frontend_manager/manager_attendance/attendance_daily/utils/ManagerAttendanceDailyMonthlyHistoryUtils';
+// RESPONSIBILITY: Render the month-wise attendance register table with KPIs, toolbar, and student history trigger.
+
+import { ManagerAttendanceMonthlyHistoryKpis } from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/components/manager_attendance_monthly_history_views/ManagerAttendanceMonthlyHistoryKpis';
+import { ManagerAttendanceMonthlyHistoryToolbar } from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/components/manager_attendance_monthly_history_views/ManagerAttendanceMonthlyHistoryToolbar';
+import { MONTH_OPTIONS } from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/constants/ManagerAttendanceMonthlyHistoryConstants';
+import type {
+  Student,
+  StudentMonthlyAttendanceSummary,
+} from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/types/ManagerAttendanceMonthlyHistoryTypes';
+import { exportManagerMonthlyRegisterCsv } from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/utils/ManagerAttendanceMonthlyHistoryCsv';
+import { getStudentMonthlyAttendance } from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/utils/ManagerAttendanceMonthlyHistoryUtilities';
 import { Calendar, ChevronRight } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-interface ManagerAttendanceDailyMonthlyRegisterProps {
+interface ManagerAttendanceMonthlyHistoryRegisterProps {
   students: Student[];
   onOpenStudentHistory: (student: Student) => void;
+  initialMonth?: string;
 }
 
-export function ManagerAttendanceDailyMonthlyRegister({
+export function ManagerAttendanceMonthlyHistoryRegister({
   students,
   onOpenStudentHistory,
-}: ManagerAttendanceDailyMonthlyRegisterProps) {
-  const [selectedMonth, setSelectedMonth] = useState<string>('2026-11');
+  initialMonth,
+}: ManagerAttendanceMonthlyHistoryRegisterProps) {
+  const [selectedMonth, setSelectedMonth] = useState<string>(initialMonth || '2026-11');
   const [selectedShift, setSelectedShift] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const monthlySummaries: StudentMonthlyAttendanceSummary[] = useMemo(() => {
-    return students.map((s) => getStudentMonthlyAttendance(s, selectedMonth));
-  }, [students, selectedMonth]);
+  useEffect(() => {
+    if (initialMonth) setSelectedMonth(initialMonth);
+  }, [initialMonth]);
+
+  const monthlySummaries: StudentMonthlyAttendanceSummary[] = useMemo(
+    () => students.map((s) => getStudentMonthlyAttendance(s, selectedMonth)),
+    [students, selectedMonth]
+  );
 
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -43,13 +52,10 @@ export function ManagerAttendanceDailyMonthlyRegister({
     });
   }, [monthlySummaries, selectedShift, searchQuery]);
 
-  // Aggregated KPIs
   const totalEnrolled = filtered.length;
   const avgAttendance =
     totalEnrolled > 0
-      ? Math.round(
-          (filtered.reduce((acc, curr) => acc + curr.attendanceRate, 0) / totalEnrolled) * 10
-        ) / 10
+      ? Math.round((filtered.reduce((acc, curr) => acc + curr.attendanceRate, 0) / totalEnrolled) * 10) / 10
       : 0;
   const highAttendanceCount = filtered.filter((s) => s.attendanceRate >= 90).length;
   const lowAttendanceCount = filtered.filter((s) => s.attendanceRate < 75).length;
@@ -71,7 +77,7 @@ export function ManagerAttendanceDailyMonthlyRegister({
 
   return (
     <div className="space-y-5">
-      <ManagerAttendanceDailyMonthlyToolbar
+      <ManagerAttendanceMonthlyHistoryToolbar
         selectedMonth={selectedMonth}
         onSelectMonth={setSelectedMonth}
         searchQuery={searchQuery}
@@ -82,7 +88,7 @@ export function ManagerAttendanceDailyMonthlyRegister({
         onPrint={handlePrint}
       />
 
-      <ManagerAttendanceDailyMonthlyKpis
+      <ManagerAttendanceMonthlyHistoryKpis
         totalEnrolled={totalEnrolled}
         avgAttendance={avgAttendance}
         highAttendanceCount={highAttendanceCount}
@@ -90,14 +96,13 @@ export function ManagerAttendanceDailyMonthlyRegister({
         totalHoursLogged={totalHoursLogged}
       />
 
-      {/* ── Month-wise Member Register Table ── */}
       <div className="rounded-2xl border border-border bg-card shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
               <tr className="bg-muted text-secondary uppercase tracking-wider text-[11px] border-b border-border">
-                <th className="py-3 px-4 font-semibold">Student Name & ID</th>
-                <th className="py-3 px-4 font-semibold">Shift & Seat</th>
+                <th className="py-3 px-4 font-semibold">Student Name &amp; ID</th>
+                <th className="py-3 px-4 font-semibold">Shift &amp; Seat</th>
                 <th className="py-3 px-4 font-semibold min-w-[160px]">Monthly Attendance %</th>
                 <th className="py-3 px-4 font-semibold text-center">Present</th>
                 <th className="py-3 px-4 font-semibold text-center">Absent</th>
@@ -120,7 +125,7 @@ export function ManagerAttendanceDailyMonthlyRegister({
                   return (
                     <tr
                       key={item.studentId}
-                      className="hover:bg-surface-hover transition-colors group cursor-pointer"
+                      className="hover:bg-surface-hover motion-safe:transition-colors group cursor-pointer"
                       onClick={() => studentObj && onOpenStudentHistory(studentObj)}
                     >
                       <td className="py-3 px-4">
@@ -129,7 +134,7 @@ export function ManagerAttendanceDailyMonthlyRegister({
                             {item.studentName.slice(0, 2).toUpperCase()}
                           </div>
                           <div>
-                            <span className="font-bold text-primary block leading-tight group-hover:text-primary transition-colors">
+                            <span className="font-bold text-primary block leading-tight group-hover:text-primary motion-safe:transition-colors">
                               {item.studentName}
                             </span>
                             <span className="font-mono text-[11px] text-secondary mt-0.5 block">
@@ -144,9 +149,7 @@ export function ManagerAttendanceDailyMonthlyRegister({
                           <span className="inline-block px-2 py-0.5 rounded text-[11px] font-semibold bg-primary-subtle text-primary border border-border">
                             {item.shift} Shift
                           </span>
-                          <span className="block text-[11px] text-secondary font-mono">
-                            {item.seat}
-                          </span>
+                          <span className="block text-[11px] text-secondary font-mono">{item.seat}</span>
                         </div>
                       </td>
 
@@ -186,15 +189,12 @@ export function ManagerAttendanceDailyMonthlyRegister({
                       <td className="py-3 px-4 text-center font-mono font-bold text-emerald-500">
                         {item.presentDays}
                       </td>
-
                       <td className="py-3 px-4 text-center font-mono font-bold text-rose-500">
                         {item.absentDays}
                       </td>
-
                       <td className="py-3 px-4 text-center font-mono font-bold text-amber-500">
                         {item.lateDays}
                       </td>
-
                       <td className="py-3 px-4 text-center font-mono text-primary">
                         {item.totalStudyHours}h
                       </td>
@@ -206,7 +206,7 @@ export function ManagerAttendanceDailyMonthlyRegister({
                             e.stopPropagation();
                             if (studentObj) onOpenStudentHistory(studentObj);
                           }}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-secondary hover:text-primary transition-all shadow-2xs cursor-pointer"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-secondary hover:text-primary motion-safe:transition-all shadow-2xs cursor-pointer"
                           title={`Open ${item.studentName}'s month calendar view`}
                         >
                           <Calendar size={12} className="text-primary" />

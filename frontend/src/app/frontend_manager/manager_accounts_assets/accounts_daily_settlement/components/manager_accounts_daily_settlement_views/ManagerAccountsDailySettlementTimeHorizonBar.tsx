@@ -63,7 +63,7 @@ export function ManagerAccountsDailySettlementTimeHorizonBar({
                 key={opt.id}
                 type="button"
                 onClick={() => onChangeTimeHorizon(opt.id)}
-                className={`min-h-8 px-3 py-1 text-xs rounded-lg font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                className={`min-h-8 px-3 py-1 text-xs rounded-lg font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
                   isActive
                     ? `${opt.activeClass} border shadow-sm font-bold`
                     : 'text-secondary hover:text-primary hover:bg-surface-hover'
@@ -77,7 +77,7 @@ export function ManagerAccountsDailySettlementTimeHorizonBar({
 
         {/* Date Picker Input with Visual Glow when Custom is chosen */}
         <div
-          className={`flex items-center gap-1.5 p-1 rounded-xl border transition-all ${
+          className={`flex items-center gap-1.5 p-1 rounded-xl border motion-safe:transition-all ${
             isCustomActive
               ? 'bg-amber-500/10 mds-date-custom-glow'
               : 'bg-surface-highlight/80 border-border'

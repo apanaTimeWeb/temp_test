@@ -54,7 +54,7 @@ export function ManagerAssetsRegisterDetailsModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="asset-details-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs motion-safe:animate-in fade-in motion-safe:duration-fast"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -83,7 +83,7 @@ export function ManagerAssetsRegisterDetailsModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-secondary hover:text-primary hover:bg-surface-hover transition-colors"
+            className="p-1 rounded-lg text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-colors"
             aria-label="Close dialog"
           >
             <X size={18} />
@@ -196,7 +196,7 @@ export function ManagerAssetsRegisterDetailsModal({
                   onClose();
                   onScheduleMaintenance(asset);
                 }}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border border-amber-500/40 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 shadow-xs cursor-pointer transition-all"
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border border-amber-500/40 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 shadow-xs cursor-pointer motion-safe:transition-all"
               >
                 <Wrench size={14} /> Send to Maintenance
               </button>
