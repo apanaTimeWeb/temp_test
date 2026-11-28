@@ -1,6 +1,3 @@
-import type { FilterType } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
-import { exportManagerRenewalsCsv } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsCsv';
-
 export interface RenewalMessageItem {
   id: number | string;
   studentName: string;
@@ -53,25 +50,4 @@ export function personalizeRenewalTemplate(template: string, item: RenewalMessag
     .replace(/{expiry}/gi, item.expiryDate)
     .replace(/{daysLeft}/gi, String(Math.abs(item.daysLeft)))
     .replace(/{due}/gi, formatRenewalMinorInr(item.due));
-}
-
-export function handleRenewalsExport(visible: Parameters<typeof exportManagerRenewalsCsv>[0], filter: FilterType, setMsg: (m: string) => void) {
-  exportManagerRenewalsCsv(visible, filter);
-  setMsg(`Exported ${visible.length} renewal records to CSV successfully.`);
-}
-
-export function handleRenewalsPrint() {
-  if (typeof window !== 'undefined') window.print();
-}
-
-export function handleRenewalsFileImport(
-  e: React.ChangeEvent<HTMLInputElement>,
-  count: number,
-  setMsg: (m: string) => void
-) {
-  const file = e.target.files?.[0];
-  if (file) {
-    setMsg(`Imported file "${file.name}" successfully with ${count} renewals records.`);
-    e.target.value = '';
-  }
 }

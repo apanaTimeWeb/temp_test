@@ -22,18 +22,6 @@ export const SHIFT_BADGE: Record<string, string> = {
   'Full Day': 'ss-badge ss-badge--info',
 };
 
-export const MANAGER_SEATS_MATRIX_ALLOCATION_STATUS_CLASSES: Record<string, string> = {
-  Active: 'ss-badge ss-badge--success',
-  Expired: 'ss-badge ss-badge--danger',
-  Suspended: 'ss-badge ss-badge--warning',
-};
-
-export const MANAGER_SEATS_MATRIX_HISTORY_REASON_CLASSES: Record<string, string> = {
-  Admission: 'ss-badge ss-badge--success',
-  'Shift Change': 'ss-badge ss-badge--info',
-  'Seat Change': 'ss-badge ss-badge--warning',
-};
-
 export interface RegisteredStudentCandidate {
   id: string;
   name: string;

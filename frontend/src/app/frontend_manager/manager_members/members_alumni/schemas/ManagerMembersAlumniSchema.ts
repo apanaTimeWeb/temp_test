@@ -31,5 +31,4 @@ export const MembersAlumniRowSchema = z.object({
   designation: z.string().optional(),
   testimonial: z.string().optional(),
 });
-export const ManagerAlumniListSchema = z.array(MembersAlumniRowSchema);
 

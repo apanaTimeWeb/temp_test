@@ -18,14 +18,6 @@ export const MANAGER_CRM_STATUS_BADGE: Record<ManagerMembersEnquiriesEnquiryStat
   Lost: 'crm-badge--danger',
 };
 
-export const MANAGER_CRM_DOT_CLASS: Record<ManagerMembersEnquiriesEnquiryStatus, string> = {
-  New: 'crm-col-dot--new',
-  Visited: 'crm-col-dot--visited',
-  Interested: 'crm-col-dot--interested',
-  Converted: 'crm-col-dot--converted',
-  Lost: 'crm-col-dot--lost',
-};
-
 export const MANAGER_CRM_DEFAULT_WHATSAPP_TEMPLATES = [
   {
     id: 'demo_pass',

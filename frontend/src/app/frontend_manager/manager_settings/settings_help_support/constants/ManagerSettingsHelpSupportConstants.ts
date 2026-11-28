@@ -6,10 +6,3 @@ export const MANAGER_HELP_SUPPORT_TABS: readonly ManagerSettingsHelpSupportTab[]
   { name: 'Support Tickets', icon: Ticket, color: 'text-success', bg: 'bg-success-bg' },
   { name: 'Announcements', icon: Megaphone, color: 'text-warning', bg: 'bg-warning-bg' },
 ] as const;
-
-export const MANAGER_HELP_SUPPORT_DOCUMENTATION_CATEGORIES = [
-  { value: 'All', labelKey: 'all_documentation' },
-  { value: 'Student Management', labelKey: 'student_management' },
-] as const;
-
-export const MANAGER_SETTINGS_HELP_SUPPORT_SEARCH_DEBOUNCE_MS = 300;

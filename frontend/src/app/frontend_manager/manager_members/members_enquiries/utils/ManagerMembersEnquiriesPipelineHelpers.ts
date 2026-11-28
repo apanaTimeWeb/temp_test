@@ -1,5 +1,5 @@
 import type { ManagerMembersEnquiriesEnquiry, ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
-import { readBrowserSessionStorageItem, writeBrowserSessionStorageItem, writeBrowserStorageItem } from '@/lib/browserStorage';
+import { writeBrowserSessionStorageItem } from '@/lib/browserStorage';
 
 export type ManagerCrmTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
 
@@ -82,29 +82,4 @@ export function persistEnquiryLostState(id: string, reason: string, notes?: stri
     writeBrowserSessionStorageItem(`manager_crm_lost_${id}`, JSON.stringify({ reason, notes, date: todayStr }));
   } catch { /* Storage fallback */ }
   return todayStr;
-}
-
-export function persistEnquiryConversionPayload(enq: ManagerMembersEnquiriesEnquiry): void {
-  try {
-    const payload = JSON.stringify({ enquiryId: enq.id, name: enq.name, phone: enq.phone, shift: enq.shift, source: enq.source, preferredBranch: enq.preferredBranch });
-    writeBrowserSessionStorageItem('manager_pending_enquiry_conversion', payload);
-    writeBrowserSessionStorageItem('enquiry_conversion_prefill', payload);
-    writeBrowserSessionStorageItem('new_admission_prefill', payload);
-    writeBrowserStorageItem('manager_pending_enquiry_conversion', payload);
-    writeBrowserStorageItem('enquiry_conversion_prefill', payload);
-  } catch { /* Storage fallback */ }
-}
-
-export function loadStoredFollowUps(id: string): Array<{ id: string; date: string; time: string; remark: string; by: string }> {
-  if (typeof window === 'undefined') return [];
-  try {
-    const stored = readBrowserSessionStorageItem(`manager_crm_followups_${id}`);
-    return stored.available && stored.value ? JSON.parse(stored.value) : [];
-  } catch { return []; }
-}
-
-export function saveStoredFollowUps(id: string, list: Array<{ id: string; date: string; time: string; remark: string; by: string }>): void {
-  try {
-    writeBrowserSessionStorageItem(`manager_crm_followups_${id}`, JSON.stringify(list));
-  } catch { /* Safe storage fallback */ }
 }

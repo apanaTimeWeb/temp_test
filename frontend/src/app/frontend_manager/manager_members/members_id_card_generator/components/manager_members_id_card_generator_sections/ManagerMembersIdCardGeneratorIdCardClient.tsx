@@ -21,7 +21,6 @@ import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 export type { IdCardPlanTheme };
-export const getIdCardPlanTheme = resolveIdCardPlanTheme;
 
 export function ManagerMembersIdCardGeneratorIdCardClient() {
   const tManagerUi = useTranslations('manager.manager_id_card_generator.ui');
@@ -109,7 +108,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
 
   if (isError) return <div className="mgr-page mgr-students-theme"><div className="mgr-state-card mgr-state-card-error" role="alert"><p className="mgr-state-title">{tManagerUi('unable_to_load_students')}</p><p className="mgr-state-description">{tManagerUi('please_retry_from_the_students_directory')}</p><button type="button" className="mgr-btn-primary mgr-btn-sm mt-3 inline-flex items-center gap-1.5" onClick={() => { void refetch(); }} disabled={isFetching}>{isFetching ? <ButtonLoader icon="id-card" /> : null}<span>{isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</span></button></div></div>;
 
-  const activeTheme = cardData ? getIdCardPlanTheme(cardData.plan) : 'monthly';
+  const activeTheme = cardData ? resolveIdCardPlanTheme(cardData.plan) : 'monthly';
   const themeBadgeClass = activeTheme === 'quarterly' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : activeTheme === 'half-yearly' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : activeTheme === 'full-year' ? 'bg-surface text-slate-100 border border-border shadow-xs' : 'bg-primary-subtle text-primary border border-border';
 
   return (
@@ -235,7 +234,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
               <div className="hidden print:block mgr-print-container print-mode-pvc_single">
                 <div>
                   {(bulkStudents.length > 0 ? bulkStudents.map(getStudentCardData) : [cardData]).map((itemData) => {
-                    const theme = getIdCardPlanTheme(itemData.plan);
+                    const theme = resolveIdCardPlanTheme(itemData.plan);
                     return (
                       <Fragment key={`print-duplex-${itemData.smartId}`}>
                         <div className="break-after-page"><ManagerMembersIdCardThemedCard theme={theme} data={itemData} forceSide="front" /></div>
