@@ -77,12 +77,14 @@ test.describe('Manager shell & canonical navigation', () => {
     await toggle.click();
     await expect(sidebar).not.toHaveClass(/mgr-sidebar-collapsed/);
 
-    const navSearch = sidebar.getByRole('searchbox');
-    if ((await navSearch.count()) > 0 && (await navSearch.isVisible())) {
-      await navSearch.fill('Auto-Suspend');
-      await expect(sidebar.locator('a[href="/frontend_manager/manager_finance/finance_auto_suspend"]')).toBeVisible();
-      await navSearch.fill('');
-    }
+    const navSearch = sidebar.getByTestId('manager-sidebar-search-input');
+    await expect(navSearch).toBeVisible();
+    await navSearch.fill('Auto-Suspend');
+    await expect(sidebar.locator('a[href="/frontend_manager/manager_finance/finance_auto_suspend"]')).toBeVisible();
+    await navSearch.fill('Monthly History');
+    await expect(sidebar.locator('a[href="/frontend_manager/manager_attendance/attendance_monthly_history"]')).toBeVisible();
+    await navSearch.fill('');
+    await expect(sidebar.getByTestId('manager-nav-link--frontend-manager-manager-dashboard-dashboard-overview')).toBeVisible();
   });
 
   test('mobile drawer opens, traps Tab focus, and closes cleanly on Escape', async ({ page }) => {

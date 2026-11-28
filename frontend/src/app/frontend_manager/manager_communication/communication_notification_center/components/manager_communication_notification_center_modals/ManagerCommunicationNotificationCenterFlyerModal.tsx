@@ -94,6 +94,9 @@ export function ManagerCommunicationNotificationCenterFlyerModal({
       onClick={onClose}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="A4 Noticeboard Flyer Generator"
         className="relative w-full max-w-5xl rounded-2xl border border-border bg-card text-primary shadow-2xl overflow-hidden my-auto flex flex-col max-h-[92vh]"
         onClick={(e) => e.stopPropagation()}
       >

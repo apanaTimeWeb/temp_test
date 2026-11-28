@@ -148,6 +148,9 @@ export function ManagerSettingsBranchInfoWifiModal({
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Student Wi-Fi Connect QR Code"
       className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-overlay-backdrop backdrop-blur-md overflow-y-auto no-print"
       onClick={onClose}
     >

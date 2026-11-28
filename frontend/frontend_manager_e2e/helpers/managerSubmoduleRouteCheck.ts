@@ -22,7 +22,8 @@ export async function expectCanonicalManagerSubmoduleLoaded(
     expect(response!.status(), `HTTP error ${response!.status()} on ${route}`).toBeLessThan(400);
     await expect(page).toHaveURL(new RegExp(`${route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:[?#]|$)`));
     await expect(page.getByTestId('manager-role-shell')).toBeVisible();
-    await expect(page.getByTestId('manager-main-content')).toBeVisible();
+    const main = page.getByTestId('manager-main-content');
+    await expect(main).toBeVisible();
     await expect(page.getByRole('main')).toHaveCount(1);
     await expect(page.getByRole('heading').first()).toBeVisible();
     await expect(page.getByText('This page could not be found', { exact: false })).toHaveCount(0);
@@ -33,13 +34,12 @@ export async function expectCanonicalManagerSubmoduleLoaded(
     await expect(navigation.locator(`a[href="${route}"]`)).toHaveCount(1);
 
     if (options?.checkSearchInput) {
-      const searchBox = page.locator('input[type="search"], input[placeholder*="Search" i]').first();
-      if ((await searchBox.count()) > 0 && (await searchBox.isVisible())) {
-        await searchBox.fill('__NO_MATCH_999__');
-        await expect(searchBox).toHaveValue('__NO_MATCH_999__');
-        await searchBox.fill('');
-        await expect(searchBox).toHaveValue('');
-      }
+      const searchBox = main.locator('input[type="search"], input[placeholder*="Search" i]').first();
+      await expect(searchBox, `Expected visible search input in <main> for ${route}`).toBeVisible();
+      await searchBox.fill('__NO_MATCH_999__');
+      await expect(searchBox).toHaveValue('__NO_MATCH_999__');
+      await searchBox.fill('');
+      await expect(searchBox).toHaveValue('');
     }
 
     if (options?.checkNoHorizontalOverflow) {

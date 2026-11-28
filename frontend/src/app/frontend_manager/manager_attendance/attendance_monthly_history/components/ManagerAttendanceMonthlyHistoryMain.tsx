@@ -4,14 +4,17 @@
 
 import ManagerAttendanceMonthlyHistoryPage from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/components/manager_attendance_monthly_history_views/ManagerAttendanceMonthlyHistoryPage';
 import type { ManagerAttendanceMonthlyHistoryMainProps } from '@/app/frontend_manager/manager_attendance/attendance_monthly_history/types/ManagerAttendanceMonthlyHistoryMainTypes';
+import { Suspense } from 'react';
 
 export function ManagerAttendanceMonthlyHistoryMain(props: ManagerAttendanceMonthlyHistoryMainProps) {
   return (
-    <ManagerAttendanceMonthlyHistoryPage
-      view={props.view}
-      id={props.id}
-      smartId={props.smartId}
-      month={props.month}
-    />
+    <Suspense fallback={null}>
+      <ManagerAttendanceMonthlyHistoryPage
+        view={props.view}
+        id={props.id}
+        smartId={props.smartId}
+        month={props.month}
+      />
+    </Suspense>
   );
 }
