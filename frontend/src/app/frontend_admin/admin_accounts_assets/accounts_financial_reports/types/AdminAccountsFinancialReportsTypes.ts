@@ -1,5 +1,6 @@
-import type { AdminAccountsFinancialReportsScenario } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/tests/harness/bootstrap';
 import type { ReactNode } from 'react';
+
+export type AdminAccountsFinancialReportsScenario = 'ACTIVE' | 'EMPTY' | 'SERVER_500' | 'TIMEOUT' | 'UNAUTHORIZED';
 
 export interface AdminAccountingFinancialReportPeriodRow {
   month: string;

@@ -53,15 +53,15 @@ type LucideIcon,
 import React from 'react';
 
 /* ---------- SIZE MAP ---------- */
-const SIZES = {
-  xs: 20,
-  sm: 40,
-  md: 64,
-  lg: 96,
-  xl: 112,
+const SIZE_CLASSES = {
+  xs: 'w-5 h-5',
+  sm: 'w-10 h-10',
+  md: 'w-16 h-16',
+  lg: 'w-24 h-24',
+  xl: 'w-28 h-28',
 } as const;
 
-export type LoaderSize = keyof typeof SIZES;
+export type LoaderSize = keyof typeof SIZE_CLASSES;
 export type LoaderVariant = 'default' | 'contra' | 'flip' | 'breath';
 export type LoaderIcon = keyof typeof ICONS;
 
@@ -149,14 +149,13 @@ export function AdminLoader({
   label = 'Loading',
   screenReaderText,
 }: AdminLoaderProps) {
-  const px = SIZES[size];
+  const sizeClass = SIZE_CLASSES[size];
   const variantClass = variant !== 'default' ? ` ${variant}` : '';
   const Icon = ICONS[icon] ?? Book;
 
   return (
     <div
-      className={`library-loader-box${variantClass}${className ? ' ' + className : ''}`}
-      style={{ width: px, height: px }}
+      className={`library-loader-box ${sizeClass}${variantClass}${className ? ' ' + className : ''}`}
       role="status"
       aria-label={label}
       aria-live="polite"

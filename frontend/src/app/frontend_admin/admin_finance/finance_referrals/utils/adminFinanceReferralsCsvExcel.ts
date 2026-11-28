@@ -1,20 +1,27 @@
 import type { AdminFinanceDemoReferrer } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsTypes';
 import { toast } from 'sonner';
 
+function escapeReferralsCsvCell(value: unknown): string {
+  const text = String(value ?? '');
+  const isFiniteNumber = typeof value === 'number' && Number.isFinite(value);
+  const safeText = !isFiniteNumber && /^[\u0000-\u0020]*[=+\-@]/.test(text) ? `'${text}` : text;
+  return `"${safeText.replaceAll('"', '""')}"`;
+}
+
 export function exportReferralsCsv(filteredReferrers: readonly AdminFinanceDemoReferrer[], fallbackBranchName: string) {
   const headers = ['Rank', 'Referrer Student', 'Smart ID', 'Branch', 'Referred Count', 'Referred Students', 'Total Bonus Earned (INR)', 'Redeemed (INR)', 'Outstanding Balance (INR)'];
   const rows = filteredReferrers.map((r, i) => [
     i + 1,
-    `"${r.name.replace(/"/g, '""')}"`,
+    r.name,
     r.smartId,
-    `"${(r.branch ?? fallbackBranchName).replace(/"/g, '""')}"`,
+    r.branch ?? fallbackBranchName,
     r.referredNames.length,
-    `"${r.referredNames.join(', ').replace(/"/g, '""')}"`,
+    r.referredNames.join(', '),
     r.bonusEarned / 100,
     r.redeemed / 100,
     r.balance / 100,
-  ]);
-  const csv = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+  ].map(escapeReferralsCsvCell));
+  const csv = [headers.map(escapeReferralsCsvCell).join(','), ...rows.map((row) => row.join(','))].join('\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');

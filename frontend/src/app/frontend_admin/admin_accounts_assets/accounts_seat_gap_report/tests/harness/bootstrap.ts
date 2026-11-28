@@ -1,6 +1,8 @@
+import type { AdminAccountsSeatGapReportScenario } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/types/AdminAccountsSeatGapReportTypes';
+
 /** Isolated test-scenario vocabulary owned by admin_accounts_seat_gap_report. No sibling imports or live API assumptions. */
 export const AdminAccountsSeatGapReportScenarios = ['ACTIVE', 'EMPTY', 'SERVER_500', 'TIMEOUT', 'UNAUTHORIZED'] as const;
-export type AdminAccountsSeatGapReportScenario = (typeof AdminAccountsSeatGapReportScenarios)[number];
+export type { AdminAccountsSeatGapReportScenario };
 
 /** Describes a scenario for local tests without asserting an undocumented backend DTO. */
 export function AdminAccountsSeatGapReportScenarioLabel(scenario: AdminAccountsSeatGapReportScenario): string {

@@ -1,5 +1,6 @@
-import type { AdminCommunicationNoticesScenario } from '@/app/frontend_admin/admin_communication/communication_notices/tests/harness/bootstrap';
 import type { ReactNode } from 'react';
+
+export type AdminCommunicationNoticesScenario = 'ACTIVE' | 'EMPTY' | 'SERVER_500' | 'TIMEOUT' | 'UNAUTHORIZED';
 
 export interface AdminCommunicationEmptyStateProps {
   title?: string;

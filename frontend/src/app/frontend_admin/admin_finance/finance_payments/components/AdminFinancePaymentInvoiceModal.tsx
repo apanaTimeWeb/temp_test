@@ -29,11 +29,12 @@ export function AdminFinancePaymentInvoiceModal({ payment, isOpen, onClose }: Ad
 
   const handlePrint = () => {
     if (typeof window === 'undefined') return;
-    const printWindow = window.open('', '_blank', 'width=800,height=900');
+    const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=800,height=900');
     if (!printWindow) {
       window.print();
       return;
     }
+    printWindow.opener = null;
     const html = generateInvoicePrintHtml(payment, calcs);
     printWindow.document.open();
     printWindow.document.write(html);

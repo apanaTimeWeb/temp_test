@@ -1,6 +1,8 @@
+import type { AdminCommunicationComplaintsScenario } from '@/app/frontend_admin/admin_communication/communication_complaints/types/AdminCommunicationComplaintsComponentTypes';
+
 /** Isolated test-scenario vocabulary owned by admin_communication_complaints. No sibling imports or live API assumptions. */
 export const AdminCommunicationComplaintsScenarios = ['ACTIVE', 'EMPTY', 'SERVER_500', 'TIMEOUT', 'UNAUTHORIZED'] as const;
-export type AdminCommunicationComplaintsScenario = (typeof AdminCommunicationComplaintsScenarios)[number];
+export type { AdminCommunicationComplaintsScenario };
 
 /** Describes a scenario for local tests without asserting an undocumented backend DTO. */
 export function AdminCommunicationComplaintsScenarioLabel(scenario: AdminCommunicationComplaintsScenario): string {

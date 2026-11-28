@@ -17,11 +17,12 @@ const PLANS_PRINT_CSS = `
 
 export function printPlansCatalogHtml(visiblePlans: readonly AdminPlansPlan[], branchName: string | undefined): void {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=900,height=700');
+  const printWindow = window.open('', '_blank', 'width=900,height=700,noopener,noreferrer');
   if (!printWindow) {
     window.print();
     return;
   }
+  printWindow.opener = null;
   const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   const html = `
     <!DOCTYPE html><html><head><title>Smart Library - Fee Structure & Plans Catalog</title><style>${PLANS_PRINT_CSS}</style></head>

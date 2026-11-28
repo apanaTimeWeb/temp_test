@@ -135,7 +135,7 @@ describe('Admin Accounts Financial Reports Controls', () => {
       totalExpenseMinor: 13600000,
     });
 
-    expect(window.open).toHaveBeenCalledWith('', '_blank', 'width=900,height=800');
+    expect(window.open).toHaveBeenCalledWith('', '_blank', 'noopener,noreferrer,width=900,height=800');
     expect(writeMock).toHaveBeenCalled();
     const htmlWritten = writeMock.mock.calls[0]?.[0];
     expect(htmlWritten).toContain('Official Executive Financial Statement & P&L Audit');

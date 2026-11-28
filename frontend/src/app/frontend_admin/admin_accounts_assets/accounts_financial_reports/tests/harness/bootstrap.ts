@@ -1,6 +1,8 @@
+import type { AdminAccountsFinancialReportsScenario } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/types/AdminAccountsFinancialReportsTypes';
+
 /** Isolated test-scenario vocabulary owned by admin_accounts_financial_reports. No sibling imports or live API assumptions. */
 export const AdminAccountsFinancialReportsScenarios = ['ACTIVE', 'EMPTY', 'SERVER_500', 'TIMEOUT', 'UNAUTHORIZED'] as const;
-export type AdminAccountsFinancialReportsScenario = (typeof AdminAccountsFinancialReportsScenarios)[number];
+export type { AdminAccountsFinancialReportsScenario };
 
 /** Describes a scenario for local tests without asserting an undocumented backend DTO. */
 export function AdminAccountsFinancialReportsScenarioLabel(scenario: AdminAccountsFinancialReportsScenario): string {

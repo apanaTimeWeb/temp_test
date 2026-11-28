@@ -15,6 +15,15 @@ const LOCKER_ROSTER_CSS = `
   .badge-free { background: #dcfce7; color: #15803d; } .badge-occupied { background: #fee2e2; color: #b91c1c; } .badge-maintenance { background: #fef3c7; color: #b45309; }
 `;
 
+function escapeLockerHtml(value: unknown): string {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
 export function printLockersMatrixRoster(
   visibleLockers: readonly AdminLockersLockerMatrixViewModel[],
   activeBranchFilter: string,
@@ -22,17 +31,18 @@ export function printLockersMatrixRoster(
   pricingPolicy: LockerPricingPolicy,
 ) {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=950,height=750');
+  const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=950,height=750');
   if (!printWindow) {
     window.print();
     return;
   }
-  const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  printWindow.opener = null;
+  const dateStr = escapeLockerHtml(new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }));
   const html = `
     <!DOCTYPE html><html><head><title>Smart Library - Locker Allotment & Custody Roster</title><style>${LOCKER_ROSTER_CSS}</style></head>
       <body>
         <div class="header">
-          <div><div class="title">Smart Library Network · Locker Asset Custody & Allotment Roster</div><div class="subtitle">Branch: ${activeBranchFilter} · Total Lockers: ${visibleLockers.length} · Free: ${stats.free} · Occupied: ${stats.occupied}</div></div>
+          <div><div class="title">Smart Library Network · Locker Asset Custody & Allotment Roster</div><div class="subtitle">Branch: ${escapeLockerHtml(activeBranchFilter)} · Total Lockers: ${visibleLockers.length} · Free: ${stats.free} · Occupied: ${stats.occupied}</div></div>
           <div style="font-size: 11px; text-align: right; color: #475569;"><div><strong>Generated:</strong> ${dateStr}</div><div><strong>Custodian:</strong> Front Desk Administration</div></div>
         </div>
         <div class="policy"><strong>Active Policy:</strong> Monthly Rent: ₹${pricingPolicy.monthlyRent} · Key Security Deposit: ₹${pricingPolicy.securityDeposit} (Refundable) · Lost Key Replacement: ₹${pricingPolicy.lostKeyFee}</div>
@@ -41,11 +51,11 @@ export function printLockersMatrixRoster(
           <tbody>
             ${visibleLockers.map((l) => `
               <tr>
-                <td><strong style="color:#4338ca;">#${l.id}</strong></td>
-                <td>${l.branchName || 'Downtown Central'}</td>
-                <td><span class="badge badge-${l.status}">${l.status}</span></td>
-                <td>${l.student || '—'}</td><td>${l.smartId || '—'}</td><td>${l.phone || '—'}</td>
-                <td>${l.shift || '—'}</td><td>${l.expiry || '—'}</td><td>${l.allottedByManager || '—'}</td>
+                <td><strong style="color:#4338ca;">#${escapeLockerHtml(l.id)}</strong></td>
+                <td>${escapeLockerHtml(l.branchName || 'Downtown Central')}</td>
+                <td><span class="badge badge-${escapeLockerHtml(l.status)}">${escapeLockerHtml(l.status)}</span></td>
+                <td>${escapeLockerHtml(l.student || '—')}</td><td>${escapeLockerHtml(l.smartId || '—')}</td><td>${escapeLockerHtml(l.phone || '—')}</td>
+                <td>${escapeLockerHtml(l.shift || '—')}</td><td>${escapeLockerHtml(l.expiry || '—')}</td><td>${escapeLockerHtml(l.allottedByManager || '—')}</td>
               </tr>
             `).join('')}
           </tbody>

@@ -14,23 +14,33 @@ const SEAT_ROSTER_CSS = `
   .badge-free { background: #dcfce7; color: #15803d; } .badge-occupied { background: #fee2e2; color: #b91c1c; } .badge-maintenance { background: #fef3c7; color: #b45309; }
 `;
 
+function escapeSeatMatrixHtml(value: unknown): string {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
 export function printSeatMatrixRosterHtml(
   visible: readonly AdminSeatMatrixSeatMatrixViewModel[],
   activeBranchFilter: string,
   stats: { total: number; free: number; occupied: number; occupancyRate: number },
 ) {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=950,height=750');
+  const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=950,height=750');
   if (!printWindow) {
     window.print();
     return;
   }
-  const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  printWindow.opener = null;
+  const dateStr = escapeSeatMatrixHtml(new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }));
   const html = `
     <!DOCTYPE html><html><head><title>Smart Library - Seat Matrix & Floor Plan Roster</title><style>${SEAT_ROSTER_CSS}</style></head>
       <body>
         <div class="header">
-          <div><div class="title">Smart Library Network · Seat Matrix Master Roster</div><div class="subtitle">Branch: ${activeBranchFilter} · Total Desks: ${visible.length}</div></div>
+          <div><div class="title">Smart Library Network · Seat Matrix Master Roster</div><div class="subtitle">Branch: ${escapeSeatMatrixHtml(activeBranchFilter)} · Total Desks: ${visible.length}</div></div>
           <div style="font-size: 11px; text-align: right; color: #475569;"><div><strong>Generated:</strong> ${dateStr}</div><div><strong>Authority:</strong> Central Operations Desk</div></div>
         </div>
         <div class="kpis">
@@ -44,11 +54,11 @@ export function printSeatMatrixRosterHtml(
           <tbody>
             ${visible.map((s) => `
               <tr>
-                <td><strong style="color:#4338ca;">S-${s.id}</strong></td>
-                <td>${s.branchName || 'Downtown Central'}</td>
-                <td><span class="badge badge-${s.status}">${s.status}</span></td>
-                <td>${s.student || '—'}</td><td>${s.smartId || '—'}</td><td>${s.phone || '—'}</td>
-                <td>${s.shift || '—'}</td><td>${s.plan || '—'}</td><td>${s.locker || '—'}</td><td>${s.expiry || '—'}</td>
+                <td><strong style="color:#4338ca;">S-${escapeSeatMatrixHtml(s.id)}</strong></td>
+                <td>${escapeSeatMatrixHtml(s.branchName || 'Downtown Central')}</td>
+                <td><span class="badge badge-${escapeSeatMatrixHtml(s.status)}">${escapeSeatMatrixHtml(s.status)}</span></td>
+                <td>${escapeSeatMatrixHtml(s.student || '—')}</td><td>${escapeSeatMatrixHtml(s.smartId || '—')}</td><td>${escapeSeatMatrixHtml(s.phone || '—')}</td>
+                <td>${escapeSeatMatrixHtml(s.shift || '—')}</td><td>${escapeSeatMatrixHtml(s.plan || '—')}</td><td>${escapeSeatMatrixHtml(s.locker || '—')}</td><td>${escapeSeatMatrixHtml(s.expiry || '—')}</td>
               </tr>
             `).join('')}
           </tbody>

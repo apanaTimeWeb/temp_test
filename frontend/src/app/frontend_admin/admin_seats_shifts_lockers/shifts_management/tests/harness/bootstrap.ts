@@ -1,6 +1,8 @@
+import type { AdminShiftsManagementScenario } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/types/AdminShiftsManagementTypes';
+
 /** Isolated test-scenario vocabulary owned by admin_shifts_management. No sibling imports or live API assumptions. */
 export const AdminShiftsManagementScenarios = ['ACTIVE', 'EMPTY', 'SERVER_500', 'TIMEOUT', 'UNAUTHORIZED'] as const;
-export type AdminShiftsManagementScenario = (typeof AdminShiftsManagementScenarios)[number];
+export type { AdminShiftsManagementScenario };
 
 /** Describes a scenario for local tests without asserting an undocumented backend DTO. */
 export function AdminShiftsManagementScenarioLabel(scenario: AdminShiftsManagementScenario): string {

@@ -1,6 +1,8 @@
+import type { AdminLockersMatrixScenario } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/types/AdminLockersMatrixTypes';
+
 /** Isolated test-scenario vocabulary owned by admin_lockers_matrix. No sibling imports or live API assumptions. */
 export const AdminLockersMatrixScenarios = ['ACTIVE', 'EMPTY', 'SERVER_500', 'TIMEOUT', 'UNAUTHORIZED'] as const;
-export type AdminLockersMatrixScenario = (typeof AdminLockersMatrixScenarios)[number];
+export type { AdminLockersMatrixScenario };
 
 /** Describes a scenario for local tests without asserting an undocumented backend DTO. */
 export function AdminLockersMatrixScenarioLabel(scenario: AdminLockersMatrixScenario): string {

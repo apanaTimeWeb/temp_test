@@ -13,25 +13,35 @@ const SEATS_INVENTORY_CSS = `
   .badge-working { background: #dcfce7; color: #15803d; } .badge-maintenance { background: #fef3c7; color: #b45309; } .badge-broken { background: #fee2e2; color: #b91c1c; }
 `;
 
+function escapeSeatHtml(value: unknown): string {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
 export function printMasterSeatsRoster(filtered: readonly Seat[], branchLabel: string) {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=950,height=750');
+  const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=950,height=750');
   if (!printWindow) {
     window.print();
     return;
   }
-  const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  printWindow.opener = null;
+  const dateStr = escapeSeatHtml(new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }));
   const html = `
     <!DOCTYPE html><html><head><title>Smart Library - Seats Master Inventory Roster</title><style>${SEATS_INVENTORY_CSS}</style></head>
       <body>
         <div class="header">
-          <div><div class="title">Smart Library Network · Seats Master Inventory Roster</div><div class="subtitle">Branch: ${branchLabel} · Total Seats: ${filtered.length}</div></div>
+          <div><div class="title">Smart Library Network · Seats Master Inventory Roster</div><div class="subtitle">Branch: ${escapeSeatHtml(branchLabel)} · Total Seats: ${filtered.length}</div></div>
           <div style="font-size: 11px; text-align: right; color: #475569;"><div><strong>Generated:</strong> ${dateStr}</div><div><strong>Scope:</strong> Master Inventory Asset Audit</div></div>
         </div>
         <table>
           <thead><tr><th>Seat Number</th><th>Branch</th><th>Operational Status</th><th>Assigned Student</th><th>Last Maintenance Log</th></tr></thead>
           <tbody>
-            ${filtered.map((s) => `<tr><td><strong style="color:#0891b2;">${s.seatNo}</strong></td><td>${s.branch}</td><td><span class="badge badge-${s.status.toLowerCase()}">${s.status}</span></td><td>${s.assignedTo || '—'}</td><td>${s.lastMaintenance || '—'}</td></tr>`).join('')}
+            ${filtered.map((s) => `<tr><td><strong style="color:#0891b2;">${escapeSeatHtml(s.seatNo)}</strong></td><td>${escapeSeatHtml(s.branch)}</td><td><span class="badge badge-${escapeSeatHtml(s.status.toLowerCase())}">${escapeSeatHtml(s.status)}</span></td><td>${escapeSeatHtml(s.assignedTo || '—')}</td><td>${escapeSeatHtml(s.lastMaintenance || '—')}</td></tr>`).join('')}
           </tbody>
         </table>
         <script>window.onload = function() { window.print(); };</script>

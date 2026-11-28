@@ -1,6 +1,10 @@
+import {
+  AdminNavigationSidebarScenarios,
+  type AdminNavigationSidebarScenario,
+} from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/types/AdminNavigationSidebarComponentTypes';
+
 /** Isolated test-scenario vocabulary owned by admin_navigation_sidebar. No sibling imports or live API assumptions. */
-export const AdminNavigationSidebarScenarios = ['ACTIVE', 'EMPTY', 'SERVER_500', 'TIMEOUT', 'UNAUTHORIZED'] as const;
-export type AdminNavigationSidebarScenario = (typeof AdminNavigationSidebarScenarios)[number];
+export { AdminNavigationSidebarScenarios, type AdminNavigationSidebarScenario };
 
 /** Describes a scenario for local tests without asserting an undocumented backend DTO. */
 export function AdminNavigationSidebarScenarioLabel(scenario: AdminNavigationSidebarScenario): string {

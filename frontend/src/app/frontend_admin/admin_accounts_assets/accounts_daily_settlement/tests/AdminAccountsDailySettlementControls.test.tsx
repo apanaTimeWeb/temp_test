@@ -75,7 +75,7 @@ describe('AdminAccountsDailySettlement Controls & Discrepancy Resolution', () =>
     const sampleRecord = ADMIN_DAILY_SETTLEMENT_FIXTURES[0];
     printDailySettlementVoucher(sampleRecord);
 
-    expect(window.open).toHaveBeenCalledWith('', '_blank', 'width=750,height=800');
+    expect(window.open).toHaveBeenCalledWith('', '_blank', 'noopener,noreferrer,width=750,height=800');
     expect(writeMock).toHaveBeenCalled();
     const htmlWritten = writeMock.mock.calls[0][0];
     expect(htmlWritten).toContain('Daily Cash Closing & Handover Voucher');

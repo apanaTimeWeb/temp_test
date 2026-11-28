@@ -142,10 +142,9 @@ export function AdminShiftsGapOverstayAuditTable() {
                       <div className="flex items-center gap-2">
                         <div className="flex-1 h-2 rounded-full bg-card border border-border overflow-hidden">
                           <div
-                            className={`h-full rounded-full motion-safe:transition-all motion-safe:duration-300 ${
+                            className={`h-full rounded-full motion-safe:transition-all motion-safe:duration-300 admin-dynamic-width-${Math.min(100, Math.max(0, Math.round(r.gapPercent)))} ${
                               r.gapPercent > 40 ? 'bg-danger-text' : r.gapPercent > 25 ? 'bg-warning-text' : 'bg-success-text'
                             }`}
-                            style={{ width: `${r.gapPercent}%` }}
                           />
                         </div>
                         <span className="font-mono text-[11px] text-text-secondary shrink-0 font-bold">{r.gapPercent}%</span>

@@ -45,8 +45,7 @@ export function AdminStaffPayrollKpiOverview({ model }: Props) {
           </div>
           <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-surface">
             <div
-              className="h-full rounded-full bg-success motion-safe:transition-all motion-safe:duration-500"
-              style={{ width: `${progressPercent}%` }}
+              className={`h-full rounded-full bg-success motion-safe:transition-all motion-safe:duration-500 admin-dynamic-width-${Math.min(100, Math.max(0, Math.round(progressPercent)))}`}
               role="progressbar"
               aria-valuenow={progressPercent}
               aria-valuemin={0}

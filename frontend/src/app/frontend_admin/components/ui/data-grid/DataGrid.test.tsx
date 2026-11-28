@@ -1,5 +1,5 @@
-import type { DataGridColumn } from '@/components/ui/data-grid/DataGrid';
-import { DataGrid } from '@/components/ui/data-grid/DataGrid';
+import type { DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
+import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import { DataGridMobileCards } from '@/components/ui/data-grid/DataGridMobileCards';
 import { fireEvent,render,screen,within } from '@testing-library/react';
 import { describe,expect,it,vi } from 'vitest';
@@ -94,6 +94,8 @@ describe('DataGrid localized defaults and row identity', () => {
     expect(screen.getByRole('table', { name: 'डेटा तालिका' })).toBeTruthy();
     expect(screen.getByText(/दिखाए जा रहे हैं/)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'अगला' })).toBeTruthy();
+    expect(screen.getByText('प्रति पृष्ठ पंक्तियाँ:')).toBeTruthy();
+    expect(screen.getByText(/पृष्ठ 1 में से 2/)).toBeTruthy();
     expect(screen.getByRole('button', { name: /इसके अनुसार क्रमबद्ध करें/ })).toBeTruthy();
   });
 

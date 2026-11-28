@@ -37,7 +37,7 @@ export interface DataGridProps<TRow extends object> {
   mobileOpenLabel?: string;
   /** Optional locale override; defaults to the document language after mount. */
   locale?: AdminUiDataGridLocale;
-  paginationLabels?: { showing: string; of: string; previous: string; next: string; sortBy?: string; currently?: string; ascending?: string; descending?: string };
+  paginationLabels?: { showing: string; of: string; previous: string; next: string; rowsPerPage?: string; page?: string; sortBy?: string; currently?: string; ascending?: string; descending?: string };
 }
 
 export type ColDef<TRow extends object> = DataGridColumn<TRow>;

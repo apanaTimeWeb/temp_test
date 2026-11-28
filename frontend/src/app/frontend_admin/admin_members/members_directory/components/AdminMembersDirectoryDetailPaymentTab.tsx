@@ -80,7 +80,8 @@ export function AdminMembersDirectoryDetailPaymentTab({
                       type="button"
                       onClick={() => {
                         const msg = encodeURIComponent(p.isWaiver ? `Smart Library Concession Order: ${p.id}\nStudent: ${member.name} (${member.id})\nApproved Waiver: ${p.amount}\nCategory: ${p.category}\nAuthorized by Master Admin.` : `Smart Library Receipt: ${p.id}\nMember: ${member.name}\nAmount: ${p.amount}\nDate: ${p.date}\nStatus: Verified.`);
-                        window.open(`https://wa.me/?text=${msg}`, '_blank');
+                        const popup = window.open(`https://wa.me/?text=${msg}`, '_blank', 'noopener,noreferrer');
+                        if (popup) popup.opener = null;
                       }}
                       className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-success bg-success-bg text-[11px] font-semibold text-success-text hover:opacity-90 motion-safe:transition-opacity"
                       title={p.isWaiver ? 'Share Concession on WhatsApp' : 'Share Receipt on WhatsApp'}

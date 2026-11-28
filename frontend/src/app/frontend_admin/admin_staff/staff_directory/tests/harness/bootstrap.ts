@@ -2,9 +2,13 @@ import { ADMIN_STAFF_DIRECTORY_URLS } from '@/app/frontend_admin/admin_staff/sta
 import { ADMIN_STAFF_DIRECTORY_API_FIXTURE } from '@/app/frontend_admin/admin_staff/staff_directory/mocks/scenarios/admin_staff_directory.scenarios';
 import { http,HttpResponse } from 'msw';
 
+import {
+  AdminStaffDirectoryScenarios,
+  type AdminStaffDirectoryScenario,
+} from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
+
 /** Isolated test-scenario vocabulary owned by admin_staff_directory. No sibling imports or live API assumptions. */
-export const AdminStaffDirectoryScenarios = ['ACTIVE', 'EMPTY', 'SERVER_500', 'TIMEOUT', 'UNAUTHORIZED'] as const;
-export type AdminStaffDirectoryScenario = (typeof AdminStaffDirectoryScenarios)[number];
+export { AdminStaffDirectoryScenarios, type AdminStaffDirectoryScenario };
 
 /** Describes a scenario for local tests without asserting an undocumented backend DTO. */
 export function AdminStaffDirectoryScenarioLabel(scenario: AdminStaffDirectoryScenario): string {

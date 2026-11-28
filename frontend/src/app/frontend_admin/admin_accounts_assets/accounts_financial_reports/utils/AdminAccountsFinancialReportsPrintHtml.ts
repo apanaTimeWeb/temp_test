@@ -24,10 +24,20 @@ const PRINT_STYLES = `
   .footer-note { margin-top: 30px; font-size: 10px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 10px; }
 `;
 
+function escapeFinancialHtml(value: unknown): string {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
 export function printFinancialReport(spec: FinancialReportExportSpec): void {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=900,height=800');
+  const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=900,height=800');
   if (!printWindow) return;
+  printWindow.opener = null;
 
   const totalProfitMinor = spec.totalIncomeMinor - spec.totalExpenseMinor;
   const totalMargin = spec.totalIncomeMinor > 0 ? ((totalProfitMinor / spec.totalIncomeMinor) * 100).toFixed(1) : '0.0';
@@ -38,9 +48,9 @@ export function printFinancialReport(spec: FinancialReportExportSpec): void {
       <div class="header">
         <div><div class="logo-title">SMART LIBRARY SYSTEM</div><div class="subtitle">Official Executive Financial Statement & P&L Audit</div></div>
         <div class="meta-box">
-          <div><strong>Horizon:</strong> ${spec.period.toUpperCase()}</div>
-          ${spec.customStartDate ? `<div><strong>Range:</strong> ${spec.customStartDate} to ${spec.customEndDate}</div>` : ''}
-          <div><strong>Date:</strong> ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
+          <div><strong>Horizon:</strong> ${escapeFinancialHtml(spec.period.toUpperCase())}</div>
+          ${spec.customStartDate ? `<div><strong>Range:</strong> ${escapeFinancialHtml(spec.customStartDate)} to ${escapeFinancialHtml(spec.customEndDate)}</div>` : ''}
+          <div><strong>Date:</strong> ${escapeFinancialHtml(new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }))}</div>
           <div><strong>Status:</strong> Audited & Balanced</div>
         </div>
       </div>
@@ -55,13 +65,13 @@ export function printFinancialReport(spec: FinancialReportExportSpec): void {
         ${spec.rows.map((r) => {
           const p = (r.incomeMinor - r.expenseMinor) / 100;
           const m = r.incomeMinor > 0 ? (((r.incomeMinor - r.expenseMinor) / r.incomeMinor) * 100).toFixed(1) : '0.0';
-          return `<tr><td><strong>${r.month}</strong></td><td>₹${(r.incomeMinor / 100).toLocaleString('en-IN')}</td><td>₹${(r.expenseMinor / 100).toLocaleString('en-IN')}</td><td style="color: #047857; font-weight: 600;">₹${p.toLocaleString('en-IN')}</td><td>${m}%</td></tr>`;
+          return `<tr><td><strong>${escapeFinancialHtml(r.month)}</strong></td><td>₹${(r.incomeMinor / 100).toLocaleString('en-IN')}</td><td>₹${(r.expenseMinor / 100).toLocaleString('en-IN')}</td><td style="color: #047857; font-weight: 600;">₹${p.toLocaleString('en-IN')}</td><td>${m}%</td></tr>`;
         }).join('')}
         <tr class="total-row"><td>TOTAL CONSOLIDATED</td><td>₹${(spec.totalIncomeMinor / 100).toLocaleString('en-IN')}</td><td>₹${(spec.totalExpenseMinor / 100).toLocaleString('en-IN')}</td><td style="color: #047857;">₹${(totalProfitMinor / 100).toLocaleString('en-IN')}</td><td>${totalMargin}%</td></tr>
       </tbody></table>
       <div class="section-title">2. Operational Expense Category Breakdown</div>
       <table><thead><tr><th>Expense Category</th><th>Disbursed Amount (INR)</th><th>Portfolio Share (%)</th></tr></thead>
-      <tbody>${spec.categories.map((c) => `<tr><td><strong>${c.category}</strong></td><td>₹${(c.amountMinor / 100).toLocaleString('en-IN')}</td><td>${c.pct}%</td></tr>`).join('')}</tbody></table>
+      <tbody>${spec.categories.map((c) => `<tr><td><strong>${escapeFinancialHtml(c.category)}</strong></td><td>₹${(c.amountMinor / 100).toLocaleString('en-IN')}</td><td>${c.pct}%</td></tr>`).join('')}</tbody></table>
       <div class="signatures">
         <div class="sig-block"><div>Prepared By</div><strong>Chief Accounts Officer</strong></div>
         <div class="sig-block"><div>Audited & Reconciled By</div><strong>Internal Audit Committee</strong></div>
@@ -72,6 +82,7 @@ export function printFinancialReport(spec: FinancialReportExportSpec): void {
     </body></html>
   `.trim();
 
+  printWindow.document.open?.();
   printWindow.document.write(html);
   printWindow.document.close();
 }

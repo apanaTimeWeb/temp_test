@@ -8,7 +8,8 @@ import { toast } from 'sonner';
 
 function escapeCsvCell(value: unknown): string {
   const s = String(value ?? '');
-  return /^[\u0000-\u0020]*[=+\-@]/.test(s) ? `'"${s.replace(/"/g, '""')}"` : `"${s.replace(/"/g, '""')}"`;
+  const safe = /^[\u0000-\u0020]*[=+\-@]/.test(s) ? `'${s}` : s;
+  return `"${safe.replace(/"/g, '""')}"`;
 }
 
 export function filterDepositsByTimeHorizon(

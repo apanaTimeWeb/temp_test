@@ -1,16 +1,23 @@
 import type { Seat } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_management/types/AdminSeatsManagementComponentTypes';
 import { toast } from 'sonner';
 
+function escapeSeatCsvCell(value: unknown): string {
+  const text = String(value ?? '');
+  const isFiniteNumber = typeof value === 'number' && Number.isFinite(value);
+  const safeText = !isFiniteNumber && /^[\s]*[=+@-]/.test(text) ? `'${text}` : text;
+  return `"${safeText.replaceAll('"', '""')}"`;
+}
+
 export function exportMasterSeatsCsv(filtered: readonly Seat[]) {
   const headers = ['Seat Number', 'Branch', 'Status', 'Assigned Student', 'Last Maintenance'];
   const rows = filtered.map((s) => [
-    `"${s.seatNo}"`,
-    `"${s.branch.replaceAll('"', '""')}"`,
-    `"${s.status}"`,
-    `"${(s.assignedTo || '—').replaceAll('"', '""')}"`,
-    `"${s.lastMaintenance || '—'}"`,
-  ]);
-  const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
+    s.seatNo,
+    s.branch,
+    s.status,
+    s.assignedTo || '—',
+    s.lastMaintenance || '—',
+  ].map(escapeSeatCsvCell));
+  const csvContent = '\uFEFF' + [headers.map(escapeSeatCsvCell).join(','), ...rows.map((r) => r.join(','))].join('\r\n');
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');

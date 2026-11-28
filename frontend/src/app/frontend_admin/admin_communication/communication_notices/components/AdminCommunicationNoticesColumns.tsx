@@ -142,7 +142,7 @@ export function buildAdminCommunicationNoticeColumns({
             type="button"
             disabled={!isDemoMode}
             title={!isDemoMode ? t('NOTICE_PERSISTENCE_BLOCKED') : t('NOTICE_ROW_EDIT_ARIA', { title: params.data.title })}
-            onClick={() => onEdit(params.data)}
+            onClick={(e) => { e.stopPropagation(); onEdit(params.data); }}
             aria-label={t('NOTICE_ROW_EDIT_ARIA', { title: params.data.title })}
             className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-lg border border-info bg-info-bg text-info-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:hover:scale-105 motion-safe:transition-all disabled:cursor-not-allowed disabled:opacity-50"
           >
@@ -151,7 +151,7 @@ export function buildAdminCommunicationNoticeColumns({
           <button
             data-testid={`admin_communication-notice-broadcast-${params.data.id}`}
             type="button"
-            onClick={() => onBroadcast(params.data)}
+            onClick={(e) => { e.stopPropagation(); onBroadcast(params.data); }}
             aria-label={t('NOTICE_ROW_BROADCAST_ARIA', { title: params.data.title })}
             className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-lg border border-primary bg-info-bg text-primary-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:hover:scale-105 motion-safe:transition-all disabled:cursor-not-allowed disabled:opacity-50"
             title={t('NOTICE_ROW_BROADCAST_ARIA', { title: params.data.title })}
@@ -163,7 +163,7 @@ export function buildAdminCommunicationNoticeColumns({
             type="button"
             disabled={!isDemoMode}
             title={!isDemoMode ? t('NOTICE_DELETE_BLOCKED_TOAST') : t('NOTICE_ROW_DELETE_ARIA', { title: params.data.title })}
-            onClick={() => onDelete(params.data)}
+            onClick={(e) => { e.stopPropagation(); onDelete(params.data); }}
             aria-label={t('NOTICE_ROW_DELETE_ARIA', { title: params.data.title })}
             className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-lg border border-danger bg-danger-bg text-danger-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:hover:scale-105 motion-safe:transition-all disabled:cursor-not-allowed disabled:opacity-50"
           >

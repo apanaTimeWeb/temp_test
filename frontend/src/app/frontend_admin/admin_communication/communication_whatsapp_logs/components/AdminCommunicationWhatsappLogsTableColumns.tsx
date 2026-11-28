@@ -221,7 +221,7 @@ export function buildAdminCommunicationWhatsappLogColumns(
           <button
             data-testid={`admin_communication-whatsapp-view-${params.data.id}`}
             type="button"
-            onClick={() => onView(params.data)}
+            onClick={(e) => { e.stopPropagation(); onView(params.data); }}
             className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-success bg-success-bg text-success-text hover:opacity-90 motion-safe:transition-all cursor-pointer shadow-xs"
             title={t('WHATSAPP_VIEW_ACTION')}
             aria-label={t('WHATSAPP_VIEW_MESSAGE_FOR', { phone: params.data.phone })}
@@ -232,7 +232,7 @@ export function buildAdminCommunicationWhatsappLogColumns(
             <button
               data-testid={`admin_communication-whatsapp-retry-${params.data.id}`}
               type="button"
-              onClick={() => onRetry(params.data.id)}
+              onClick={(e) => { e.stopPropagation(); onRetry(params.data.id); }}
               className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-warning bg-warning-bg text-warning-text hover:opacity-90 motion-safe:transition-all cursor-pointer shadow-xs"
               title="Retry / Resend failed message"
               aria-label="Retry dispatch"

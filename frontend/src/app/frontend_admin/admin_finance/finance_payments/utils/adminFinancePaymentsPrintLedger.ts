@@ -15,6 +15,15 @@ const LEDGER_PRINT_CSS = `
   .footer { margin-top: 14px; font-size: 10px; color: #94a3b8; display: flex; justify-content: space-between; border-top: 1px solid #e2e8f0; padding-top: 6px; }
 `;
 
+function escapeLedgerHtml(value: unknown): string {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
 export function printFinancePaymentsLedger(
   visible: readonly AdminFinancePayment[],
   branchLabel: string,
@@ -22,32 +31,33 @@ export function printFinancePaymentsLedger(
   totalCollected: string,
 ) {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=900,height=700');
+  const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=900,height=700');
   if (!printWindow) {
     window.print();
     return;
   }
-  const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  printWindow.opener = null;
+  const dateStr = escapeLedgerHtml(new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }));
   const html = `
     <!DOCTYPE html><html><head><title>Smart Library - Fee Collections & Payments Ledger</title><style>${LEDGER_PRINT_CSS}</style></head>
       <body>
         <div class="header">
-          <div><div class="title">Smart Library Network · Payments & Receipts Ledger</div><div class="subtitle">Scope: ${branchLabel} · Range: ${timeRangeLabel} · Records: ${visible.length}</div></div>
-          <div class="meta"><div><strong>Generated:</strong> ${dateStr}</div><div><strong>Total Collected:</strong> ${totalCollected}</div></div>
+          <div><div class="title">Smart Library Network · Payments & Receipts Ledger</div><div class="subtitle">Scope: ${escapeLedgerHtml(branchLabel)} · Range: ${escapeLedgerHtml(timeRangeLabel)} · Records: ${visible.length}</div></div>
+          <div class="meta"><div><strong>Generated:</strong> ${dateStr}</div><div><strong>Total Collected:</strong> ${escapeLedgerHtml(totalCollected)}</div></div>
         </div>
         <table>
           <thead><tr><th>Receipt #</th><th>Date</th><th>Student Name</th><th>Smart ID</th><th>Amount</th><th>Mode</th><th>Txn ID</th><th>Status</th></tr></thead>
           <tbody>
             ${visible.map((p) => `
               <tr>
-                <td style="font-family:monospace; font-weight:bold;">${p.receiptNumber}</td>
-                <td>${formatDate(p.date)}</td>
-                <td><strong>${p.studentName}</strong></td>
-                <td>${p.smartId}</td>
-                <td>${formatAdminFinanceApiAmount(p.amount, p.currencyCode, p.amountUnit)}</td>
-                <td>${p.mode.toUpperCase()}</td>
-                <td>${p.txnId || '—'}</td>
-                <td><span class="badge badge-${p.status}">${p.status}</span></td>
+                <td style="font-family:monospace; font-weight:bold;">${escapeLedgerHtml(p.receiptNumber)}</td>
+                <td>${escapeLedgerHtml(formatDate(p.date))}</td>
+                <td><strong>${escapeLedgerHtml(p.studentName)}</strong></td>
+                <td>${escapeLedgerHtml(p.smartId)}</td>
+                <td>${escapeLedgerHtml(formatAdminFinanceApiAmount(p.amount, p.currencyCode, p.amountUnit))}</td>
+                <td>${escapeLedgerHtml(p.mode.toUpperCase())}</td>
+                <td>${escapeLedgerHtml(p.txnId || '—')}</td>
+                <td><span class="badge badge-${escapeLedgerHtml(p.status)}">${escapeLedgerHtml(p.status)}</span></td>
               </tr>
             `).join('')}
           </tbody>

@@ -1,5 +1,6 @@
-import type { AdminCommunicationNotificationCenterScenario } from '@/app/frontend_admin/admin_communication/communication_notification_center/tests/harness/bootstrap';
 import type { ReactNode } from 'react';
+
+export type AdminCommunicationNotificationCenterScenario = 'ACTIVE' | 'EMPTY' | 'SERVER_500' | 'TIMEOUT' | 'UNAUTHORIZED';
 
 /** Communication-owned types for notification-center data and filter state. */
 export type AdminCommunicationNotificationCategory = 'All' | 'Finance' | 'CRM' | 'Operations' | 'Attendance' | 'High Only';

@@ -1,7 +1,9 @@
 import type useAdminStaffDirectory from '@/app/frontend_admin/admin_staff/staff_directory/hooks/useAdminStaffDirectory';
 import type { AdminStaffDirectoryCreateManagerFormValues,AdminStaffDirectoryManager,AdminStaffDirectoryTab } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
-import type { AdminStaffDirectoryScenario } from '@/app/frontend_admin/admin_staff/staff_directory/tests/harness/bootstrap';
 import type { ReactNode } from 'react';
+
+export const AdminStaffDirectoryScenarios = ['ACTIVE', 'EMPTY', 'SERVER_500', 'TIMEOUT', 'UNAUTHORIZED'] as const;
+export type AdminStaffDirectoryScenario = (typeof AdminStaffDirectoryScenarios)[number];
 
 export interface AdminStaffDirectoryAuditSectionProps {
   tab: Extract<AdminStaffDirectoryTab, AdminStaffDirectoryAuditSectionTabSubset>;

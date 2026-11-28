@@ -35,8 +35,9 @@ const FLYER_STYLE = `
 
 export function printCouponsRosterHtml(filteredCoupons: readonly AdminCouponsCoupon[]): void {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=900,height=700');
+  const printWindow = window.open('', '_blank', 'width=900,height=700,noopener,noreferrer');
   if (!printWindow) { window.print(); return; }
+  printWindow.opener = null;
   const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   const html = `
     <!DOCTYPE html><html><head><title>Smart Library - Promotional Coupons & Discounts</title><style>${ROSTER_STYLE}</style></head>
@@ -57,8 +58,9 @@ export function printCouponsRosterHtml(filteredCoupons: readonly AdminCouponsCou
 
 export function printCouponFlyersHtml(displayCoupons: readonly AdminCouponsCoupon[]): void {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=950,height=800');
+  const printWindow = window.open('', '_blank', 'width=950,height=800,noopener,noreferrer');
   if (!printWindow) { window.print(); return; }
+  printWindow.opener = null;
   const html = `
     <!DOCTYPE html><html><head><title>Smart Library - Printable Promotional Coupon Flyers</title><style>${FLYER_STYLE}</style></head>
       <body>

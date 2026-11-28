@@ -130,7 +130,10 @@ export function AdminSeatsMatrixFloorPlanView({
       cellRenderer: ({ data }) => (
         <button
           type="button"
-          onClick={() => onSelectSeat(data)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelectSeat(data);
+          }}
           className="rounded-lg border border-border-focus bg-primary-subtle px-3 py-1 text-xs font-semibold text-primary hover:opacity-90 motion-safe:transition-opacity"
         >
           Manage

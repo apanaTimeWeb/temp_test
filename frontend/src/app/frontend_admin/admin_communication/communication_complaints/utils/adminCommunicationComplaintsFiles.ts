@@ -21,6 +21,13 @@ function triggerComplaintDownload(blob: Blob, filename: string): void {
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+function escapeComplaintCsvCell(value: unknown): string {
+  const text = String(value ?? '');
+  const isFiniteNumber = typeof value === 'number' && Number.isFinite(value);
+  const safeText = !isFiniteNumber && /^[\u0000-\u0020]*[=+\-@]/.test(text) ? `'${text}` : text;
+  return `"${safeText.replaceAll('"', '""')}"`;
+}
+
 export function exportComplaintsCsv(filtered: Complaint[]): void {
   const headers = [
     'Ticket ID', 'Title / Grievance Subject', 'Category', 'Priority', 'Complainant Student',
@@ -28,20 +35,20 @@ export function exportComplaintsCsv(filtered: Complaint[]): void {
   ];
   const rows = filtered.map((c) => [
     c.id,
-    `"${c.title.replace(/"/g, '""')}"`,
-    `"${c.category ?? 'General'}"`,
+    c.title,
+    c.category ?? 'General',
     c.priority ?? 'MEDIUM',
-    `"${c.student.replace(/"/g, '""')}"`,
-    `"${c.studentPhone ?? ''}"`,
-    `"${c.seatNumber ?? ''}"`,
-    `"${c.branchName ?? ''}"`,
+    c.student,
+    c.studentPhone ?? '',
+    c.seatNumber ?? '',
+    c.branchName ?? '',
     c.status,
     c.date,
     c.resolvedDate !== '—' ? c.resolvedDate : '',
-    `"${c.resolvedBy !== '—' ? c.resolvedBy.replace(/"/g, '""') : ''}"`,
-    `"${(c.resolvedNote ?? '').replace(/"/g, '""')}"`,
-  ]);
-  const csv = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+    c.resolvedBy !== '—' ? c.resolvedBy : '',
+    c.resolvedNote ?? '',
+  ].map(escapeComplaintCsvCell));
+  const csv = [headers.map(escapeComplaintCsvCell).join(','), ...rows.map((row) => row.join(','))].join('\n');
   triggerComplaintDownload(
     new Blob([csv], { type: 'text/csv;charset=utf-8' }),
     `admin-complaints-report-${new Date().toISOString().slice(0, 10)}.csv`,
@@ -80,8 +87,9 @@ export function exportComplaintsExcel(filtered: Complaint[]): void {
 
 export function printComplaintsReport(filtered: Complaint[], branchLabel: string): void {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=900,height=800');
+  const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=900,height=800');
   if (!printWindow) return;
+  printWindow.opener = null;
   const html = `
     <!DOCTYPE html><html><head><title>Student Complaints Audit Report</title>
       <style>

@@ -114,7 +114,7 @@ export default function AdminMembersDirectoryBulkWhatsAppModal({
               <span className="font-bold text-success-text">{progressPercent}%</span>
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-surface-zebra">
-              <div className="h-full bg-success motion-safe:transition-[width] motion-safe:duration-300" style={{ width: `${progressPercent}%` }} />
+              <div className={`h-full bg-success motion-safe:transition-[width] motion-safe:duration-300 admin-dynamic-width-${Math.min(100, Math.max(0, Math.round(progressPercent)))}`} />
             </div>
           </div>
 

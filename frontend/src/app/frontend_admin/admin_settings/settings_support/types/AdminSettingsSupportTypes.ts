@@ -1,6 +1,8 @@
-import type { AdminSettingsSupportScenario } from '@/app/frontend_admin/admin_settings/settings_support/tests/harness/bootstrap';
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
+
+export const AdminSettingsSupportScenarios = ['ACTIVE', 'EMPTY', 'SERVER_500', 'TIMEOUT', 'UNAUTHORIZED'] as const;
+export type AdminSettingsSupportScenario = (typeof AdminSettingsSupportScenarios)[number];
 
 export type AdminSupportTab = 'help' | 'tickets' | 'status' | 'announcements' | 'docs';
 

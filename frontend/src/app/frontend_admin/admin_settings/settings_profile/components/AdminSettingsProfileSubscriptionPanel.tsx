@@ -118,7 +118,7 @@ export function AdminSettingsProfileSubscriptionPanel() {
                     <span className="font-bold text-text-primary font-mono">{q.fmt}</span>
                   </div>
                   <div className="h-2 w-full bg-border rounded-full overflow-hidden">
-                    <div className="h-full bg-primary rounded-full" style={{ width: `${(q.used / q.total) * 100}%` }} />
+                    <div className={`h-full bg-primary rounded-full admin-dynamic-width-${q.total > 0 ? Math.min(100, Math.max(0, Math.round((q.used / q.total) * 100))) : 0}`} />
                   </div>
                 </div>
                 <p className="text-micro text-text-secondary mt-2">{q.note}</p>

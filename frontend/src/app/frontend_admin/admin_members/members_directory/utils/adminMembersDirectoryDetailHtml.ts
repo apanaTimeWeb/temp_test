@@ -7,8 +7,9 @@ function escapeHtml(value: string): string {
 
 export function printMemberDossierHtml(member: AdminMembersMember): void {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=900,height=700');
+  const printWindow = window.open('', '_blank', 'width=900,height=700,noopener,noreferrer');
   if (!printWindow) { window.print(); return; }
+  printWindow.opener = null;
   const html = `
     <!DOCTYPE html><html><head><title>Member Dossier - ${escapeHtml(member.name)} (${escapeHtml(member.id)})</title>
       <style>
@@ -39,8 +40,10 @@ export function printMemberDossierHtml(member: AdminMembersMember): void {
 
 export function printWaiverSlipHtml(member: AdminMembersMember, slip: WaiverSlipPreview): void {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=800,height=600');
+  const printWindow = window.open('', '_blank', 'width=800,height=600,noopener,noreferrer');
   if (!printWindow) return;
+  printWindow.opener = null;
+  printWindow.document.open?.();
   printWindow.document.write(`
     <html><head><title>Special Concession Order - ${escapeHtml(slip.id)}</title>
       <style>

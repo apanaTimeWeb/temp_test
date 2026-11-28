@@ -1,21 +1,28 @@
 import type { AdminLockersLockerMatrixViewModel } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/types/AdminLockersMatrixTypes';
 import { toast } from 'sonner';
 
+function escapeLockerCsvCell(value: unknown): string {
+  const text = String(value ?? '');
+  const isFiniteNumber = typeof value === 'number' && Number.isFinite(value);
+  const safeText = !isFiniteNumber && /^[\s]*[=+@-]/.test(text) ? `'${text}` : text;
+  return `"${safeText.replaceAll('"', '""')}"`;
+}
+
 export function exportLockersMatrixCsv(visibleLockers: readonly AdminLockersLockerMatrixViewModel[], activeBranchFilter: string) {
   const headers = ['Locker Number', 'Branch', 'Status', 'Assigned Student', 'Smart ID', 'Phone', 'Shift Plan', 'Expiry Date', 'Allotted By', 'Allotted Date'];
   const rows = visibleLockers.map((l) => [
-    `"${l.id}"`,
-    `"${(l.branchName || 'Downtown Central').replaceAll('"', '""')}"`,
-    `"${l.status}"`,
-    `"${(l.student || '—').replaceAll('"', '""')}"`,
-    `"${l.smartId || '—'}"`,
-    `"${l.phone || '—'}"`,
-    `"${(l.shift || '—').replaceAll('"', '""')}"`,
-    `"${l.expiry || '—'}"`,
-    `"${(l.allottedByManager || '—').replaceAll('"', '""')}"`,
-    `"${l.allottedDate || '—'}"`,
-  ]);
-  const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
+    l.id,
+    l.branchName || 'Downtown Central',
+    l.status,
+    l.student || '—',
+    l.smartId || '—',
+    l.phone || '—',
+    l.shift || '—',
+    l.expiry || '—',
+    l.allottedByManager || '—',
+    l.allottedDate || '—',
+  ].map(escapeLockerCsvCell));
+  const csvContent = '\uFEFF' + [headers.map(escapeLockerCsvCell).join(','), ...rows.map((r) => r.join(','))].join('\r\n');
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');

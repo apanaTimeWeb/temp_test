@@ -1,5 +1,6 @@
-import type { AdminLockersMatrixScenario } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/tests/harness/bootstrap';
 import type { ReactNode } from 'react';
+
+export type AdminLockersMatrixScenario = 'ACTIVE' | 'EMPTY' | 'SERVER_500' | 'TIMEOUT' | 'UNAUTHORIZED';
 
 export type AdminLockersLockerMatrixStatus = 'free' | 'occupied' | 'maintenance' | 'unknown';
 export interface AdminLockersLockerMatrixViewModel {

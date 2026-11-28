@@ -1,5 +1,6 @@
-import type { AdminCommunicationWhatsappLogsScenario } from '@/app/frontend_admin/admin_communication/communication_whatsapp_logs/tests/harness/bootstrap';
 import type { ReactNode } from 'react';
+
+export type AdminCommunicationWhatsappLogsScenario = 'ACTIVE' | 'EMPTY' | 'SERVER_500' | 'TIMEOUT' | 'UNAUTHORIZED';
 
 export type AdminCommunicationWhatsappLogType = 'welcome' | 'fee_reminder' | 'receipt' | 'notice' | 'renewal';
 export type AdminCommunicationWhatsappLogStatus = 'Pending' | 'Sent' | 'Delivered' | 'Failed';

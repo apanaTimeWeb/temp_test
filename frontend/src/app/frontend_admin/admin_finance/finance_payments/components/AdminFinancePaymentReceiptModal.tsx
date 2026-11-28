@@ -30,11 +30,12 @@ export function AdminFinancePaymentReceiptModal({ payment, isOpen, onClose }: Ad
 
   const handlePrint = () => {
     if (typeof window === 'undefined') return;
-    const printWindow = window.open('', '_blank', 'width=420,height=600');
+    const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=420,height=600');
     if (!printWindow) {
       window.print();
       return;
     }
+    printWindow.opener = null;
     printWindow.document.open();
     printWindow.document.write(buildPaymentThermalReceiptHtml(payment));
     printWindow.document.close();

@@ -28,12 +28,19 @@ const SETTLEMENT_HEADERS = [
   'Actual Handover (INR)', 'Variance (INR)', 'Status', 'Approved By',
 ];
 
+function escapeSettlementCsvCell(value: unknown): string {
+  const text = String(value ?? '');
+  const isFiniteNumber = typeof value === 'number' && Number.isFinite(value);
+  const safeText = !isFiniteNumber && /^[\u0000-\u0020]*[=+\-@]/.test(text) ? `'${text}` : text;
+  return `"${safeText.replaceAll('"', '""')}"`;
+}
+
 export function exportDailySettlementsCsv(records: DailySettlementRecord[]): void {
   const rows = records.map((r) => [
     r.date,
-    `"${r.shiftName.replace(/"/g, '""')}"`,
-    `"${r.branchName.replace(/"/g, '""')}"`,
-    `"${r.managerName.replace(/"/g, '""')}"`,
+    r.shiftName,
+    r.branchName,
+    r.managerName,
     (r.openingCash / 100).toFixed(2),
     (r.cashCollected / 100).toFixed(2),
     (r.upiCollected / 100).toFixed(2),
@@ -42,9 +49,9 @@ export function exportDailySettlementsCsv(records: DailySettlementRecord[]): voi
     (r.actualHandoverCash / 100).toFixed(2),
     (r.difference / 100).toFixed(2),
     r.status,
-    `"${(r.approvedBy ?? '').replace(/"/g, '""')}"`,
-  ]);
-  const csv = [SETTLEMENT_HEADERS.join(','), ...rows.map((row) => row.join(','))].join('\n');
+    r.approvedBy ?? '',
+  ].map(escapeSettlementCsvCell));
+  const csv = [SETTLEMENT_HEADERS.map(escapeSettlementCsvCell).join(','), ...rows.map((row) => row.join(','))].join('\n');
   triggerSettlementDownload(
     new Blob([csv], { type: 'text/csv;charset=utf-8' }),
     `admin-daily-settlement-history-${new Date().toISOString().slice(0, 10)}.csv`,

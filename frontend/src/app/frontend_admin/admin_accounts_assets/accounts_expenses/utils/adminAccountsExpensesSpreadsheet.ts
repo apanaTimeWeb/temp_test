@@ -14,23 +14,30 @@ function triggerExpenseDownload(blob: Blob, filename: string): void {
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+function escapeExpenseCsvCell(value: unknown): string {
+  const text = String(value ?? '');
+  const isFiniteNumber = typeof value === 'number' && Number.isFinite(value);
+  const safeText = !isFiniteNumber && /^[\u0000-\u0020]*[=+\-@]/.test(text) ? `'${text}` : text;
+  return `"${safeText.replaceAll('"', '""')}"`;
+}
+
 export function exportAdminExpensesCsv(visibleExpenses: AdminAccountingExpense[]): void {
   const headers = ['ID', 'Date', 'Description', 'Category', 'Amount (INR)', 'Payment Method', 'Paid By', 'Branch', 'Status', 'Approved By', 'Approved Date', 'Voucher / Receipt Ref'];
   const rows = visibleExpenses.map((e) => [
     e.id,
     e.date ?? '',
-    `"${(e.description ?? '').replace(/"/g, '""')}"`,
-    `"${e.category ?? ''}"`,
+    e.description ?? '',
+    e.category ?? '',
     e.amount ?? 0,
-    `"${e.mode ?? 'cash'}"`,
-    `"${(e.paidBy ?? '').replace(/"/g, '""')}"`,
-    `"${(e.branchName ?? '').replace(/"/g, '""')}"`,
+    e.mode ?? 'cash',
+    e.paidBy ?? '',
+    e.branchName ?? '',
     e.status ?? 'APPROVED',
-    `"${(e.approvedBy ?? '').replace(/"/g, '""')}"`,
+    e.approvedBy ?? '',
     e.approvedAt ? e.approvedAt.slice(0, 10) : '',
-    `"${e.voucherNo ?? `EXP-${e.id}`}"`,
-  ]);
-  const csv = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+    e.voucherNo ?? `EXP-${e.id}`,
+  ].map(escapeExpenseCsvCell));
+  const csv = [headers.map(escapeExpenseCsvCell).join(','), ...rows.map((row) => row.join(','))].join('\n');
   triggerExpenseDownload(
     new Blob([csv], { type: 'text/csv;charset=utf-8' }),
     `admin-accounting-expenses-${new Date().toISOString().slice(0, 10)}.csv`,

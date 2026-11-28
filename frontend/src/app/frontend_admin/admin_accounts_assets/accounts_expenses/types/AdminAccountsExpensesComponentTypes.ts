@@ -1,7 +1,8 @@
 import type { ADMIN_ACCOUNTING_EXPENSE_CATEGORIES } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/config/admin_accounts_expenses.url_config';
 import type { AdminAccountingExpense } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/schemas/AdminAccountsExpensesSchemas';
-import type { AdminAccountsExpensesScenario } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/tests/harness/bootstrap';
 import type { ReactNode } from 'react';
+
+export type AdminAccountsExpensesScenario = 'ACTIVE' | 'EMPTY' | 'SERVER_500' | 'TIMEOUT' | 'UNAUTHORIZED';
 
 export interface AdminAccountsExpensesAddPageProps {
   onSaveExpense: (expense: AdminAccountingExpense) => void;

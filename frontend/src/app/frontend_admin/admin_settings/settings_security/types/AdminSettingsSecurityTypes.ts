@@ -1,5 +1,7 @@
-import type { AdminSettingsSecurityScenario } from '@/app/frontend_admin/admin_settings/settings_security/tests/harness/bootstrap';
 import type { ReactNode } from 'react';
+
+export const AdminSettingsSecurityScenarios = ['ACTIVE', 'EMPTY', 'SERVER_500', 'TIMEOUT', 'UNAUTHORIZED'] as const;
+export type AdminSettingsSecurityScenario = (typeof AdminSettingsSecurityScenarios)[number];
 
 export type AdminSecurityTab =
   | 'dashboard'

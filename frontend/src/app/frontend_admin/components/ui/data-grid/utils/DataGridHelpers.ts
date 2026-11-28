@@ -44,7 +44,7 @@ export function uniqueRowIdentities<TRow extends object>(rows: readonly TRow[], 
 }
 
 export const GRID_LABELS = {
-  en: { empty: 'No records found.', table: 'Data table', open: 'Open record', showing: 'Showing', of: 'of', previous: 'Previous', next: 'Next', sortBy: 'Sort by', currently: 'currently', ascending: 'ascending', descending: 'descending', cards: 'cards' },
-  hi: { empty: 'कोई रिकॉर्ड नहीं मिला।', table: 'डेटा तालिका', open: 'रिकॉर्ड खोलें', showing: 'दिखाए जा रहे हैं', of: 'में से', previous: 'पिछला', next: 'अगला', sortBy: 'इसके अनुसार क्रमबद्ध करें', currently: 'वर्तमान क्रम', ascending: 'आरोही', descending: 'अवरोही', cards: 'कार्ड' },
+  en: { empty: 'No records found.', table: 'Data table', open: 'Open record', showing: 'Showing', of: 'of', previous: 'Previous', next: 'Next', rowsPerPage: 'Rows per page:', page: 'Page', sortBy: 'Sort by', currently: 'currently', ascending: 'ascending', descending: 'descending', cards: 'cards' },
+  hi: { empty: 'कोई रिकॉर्ड नहीं मिला।', table: 'डेटा तालिका', open: 'रिकॉर्ड खोलें', showing: 'दिखाए जा रहे हैं', of: 'में से', previous: 'पिछला', next: 'अगला', rowsPerPage: 'प्रति पृष्ठ पंक्तियाँ:', page: 'पृष्ठ', sortBy: 'इसके अनुसार क्रमबद्ध करें', currently: 'वर्तमान क्रम', ascending: 'आरोही', descending: 'अवरोही', cards: 'कार्ड' },
 } as const;
 

@@ -21,22 +21,29 @@ function triggerRefundDownload(blob: Blob, filename: string): void {
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+function escapeRefundCsvCell(value: unknown): string {
+  const text = String(value ?? '');
+  const isFiniteNumber = typeof value === 'number' && Number.isFinite(value);
+  const safeText = !isFiniteNumber && /^[\u0000-\u0020]*[=+\-@]/.test(text) ? `'${text}` : text;
+  return `"${safeText.replaceAll('"', '""')}"`;
+}
+
 export function exportAdminFinanceRefundsCsv(refunds: AdminFinanceRefund[], fallbackBranchName?: string): void {
   const rows = refunds.map((r) => [
     r.id,
-    `"${r.studentName.replace(/"/g, '""')}"`,
+    r.studentName,
     r.smartId,
-    `"${(r.branchName ?? fallbackBranchName ?? 'Downtown Central').replace(/"/g, '""')}"`,
+    r.branchName ?? fallbackBranchName ?? 'Downtown Central',
     r.exitDate ? formatDate(r.exitDate) : '—',
     r.depositHeld,
     r.deductionAmount,
     r.netRefund,
     r.status.toUpperCase(),
-    r.paymentMethod ? `"${r.paymentMethod.replace(/"/g, '""')}"` : '—',
+    r.paymentMethod ?? '—',
     r.processedDate ? formatDate(r.processedDate) : '—',
-    r.rejectionReason ? `"${r.rejectionReason.replace(/"/g, '""')}"` : '—',
-  ]);
-  const csv = [EXPORT_HEADERS.join(','), ...rows.map((row) => row.join(','))].join('\n');
+    r.rejectionReason ?? '—',
+  ].map(escapeRefundCsvCell));
+  const csv = [EXPORT_HEADERS.map(escapeRefundCsvCell).join(','), ...rows.map((row) => row.join(','))].join('\n');
   triggerRefundDownload(
     new Blob([csv], { type: 'text/csv;charset=utf-8' }),
     `admin-finance-refunds-${new Date().toISOString().slice(0, 10)}.csv`,

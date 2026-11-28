@@ -1,5 +1,7 @@
-import type { AdminNavigationSidebarScenario } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/tests/harness/bootstrap';
 import type { ReactNode } from 'react';
+
+export const AdminNavigationSidebarScenarios = ['ACTIVE', 'EMPTY', 'SERVER_500', 'TIMEOUT', 'UNAUTHORIZED'] as const;
+export type AdminNavigationSidebarScenario = (typeof AdminNavigationSidebarScenarios)[number];
 
 export interface AdminNavigationSidebarProps {
   collapsed?: boolean;

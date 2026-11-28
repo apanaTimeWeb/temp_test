@@ -28,24 +28,31 @@ const ASSET_HEADERS = [
   'AMC Status', 'AMC Vendor', 'AMC Expiry', 'Serial Number',
 ];
 
+function escapeAssetsCsvCell(value: unknown): string {
+  const text = String(value ?? '');
+  const isFiniteNumber = typeof value === 'number' && Number.isFinite(value);
+  const safeText = !isFiniteNumber && /^[\u0000-\u0020]*[=+\-@]/.test(text) ? `'${text}` : text;
+  return `"${safeText.replaceAll('"', '""')}"`;
+}
+
 export function exportAdminAssetsCsv(filteredRecords: AdminAssetRecord[]): void {
   const rows = filteredRecords.map((r) => [
-    `"${r.assetCode}"`,
-    `"${r.name.replace(/"/g, '""')}"`,
+    r.assetCode,
+    r.name,
     r.category,
-    `"${r.branchName}"`,
-    `"${r.locationWithinBranch.replace(/"/g, '""')}"`,
+    r.branchName,
+    r.locationWithinBranch,
     r.purchaseDate,
     (r.purchaseCost / 100).toFixed(2),
     (r.currentBookValue / 100).toFixed(2),
     r.status,
     r.warrantyExpiryDate,
     r.amcStatus,
-    `"${r.amcVendorName ?? ''}"`,
+    r.amcVendorName ?? '',
     r.amcExpiryDate ?? '',
-    `"${r.serialNumber ?? ''}"`,
-  ]);
-  const csv = [ASSET_HEADERS.join(','), ...rows.map((row) => row.join(','))].join('\n');
+    r.serialNumber ?? '',
+  ].map(escapeAssetsCsvCell));
+  const csv = [ASSET_HEADERS.map(escapeAssetsCsvCell).join(','), ...rows.map((row) => row.join(','))].join('\n');
   triggerAssetDownload(
     new Blob([csv], { type: 'text/csv;charset=utf-8' }),
     `admin-asset-register-audit-${new Date().toISOString().slice(0, 10)}.csv`,

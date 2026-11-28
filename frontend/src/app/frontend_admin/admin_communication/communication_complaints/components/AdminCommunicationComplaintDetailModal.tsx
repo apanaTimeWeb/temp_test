@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export interface AdminCommunicationComplaintDetailModalProps {
   viewItem: Complaint | null;
@@ -43,6 +43,13 @@ export function AdminCommunicationComplaintDetailModal({
 }: AdminCommunicationComplaintDetailModalProps) {
   const t = useTranslations('ADMIN_COMMUNICATION');
   const [copied, setCopied] = useState(false);
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    };
+  }, []);
 
   const category = viewItem ? resolveComplaintCategory(viewItem) : null;
   const priority = viewItem ? resolvePriority(viewItem) : null;
@@ -53,7 +60,11 @@ export function AdminCommunicationComplaintDetailModal({
     const text = `Library Grievance Ticket #${viewItem.id}\nBranch: ${viewItem.branchName ?? 'Downtown Central'}\nStudent: ${viewItem.student}\nSubject: ${viewItem.title}\nStatus: ${viewItem.status}\nDetails: ${viewItem.description}`;
     navigator.clipboard?.writeText(text);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = setTimeout(() => {
+      copyTimerRef.current = null;
+      setCopied(false);
+    }, 2000);
   };
 
   const handleShareWhatsApp = () => {

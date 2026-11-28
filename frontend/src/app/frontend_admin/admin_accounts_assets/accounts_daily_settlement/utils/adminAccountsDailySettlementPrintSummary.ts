@@ -7,11 +7,12 @@ export function printDailySettlementSummary(
   dateModeLabel: string,
 ): void {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=850,height=750');
+  const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=850,height=750');
   if (!printWindow) {
     window.print();
     return;
   }
+  printWindow.opener = null;
   const totalHandover = records.reduce((sum, r) => sum + r.actualHandoverCash, 0);
   const totalVariance = records.reduce((sum, r) => sum + r.difference, 0);
   const html = `

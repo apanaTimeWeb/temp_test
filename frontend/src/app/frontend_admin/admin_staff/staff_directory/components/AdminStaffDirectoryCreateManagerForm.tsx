@@ -24,7 +24,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Camera, Check, Copy, MessageSquare, Printer, ShieldCheck, UserPlus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -37,6 +37,11 @@ export default function AdminStaffDirectoryCreateManagerForm({ onCreate, canCrea
   const [pendingHref, setPendingHref] = useState<string | null>(null);
   const [createdManagerCreds, setCreatedManagerCreds] = useState<ManagerAppointmentCreds | null>(null);
   const [copiedKey, setCopiedKey] = useState(false);
+  const copyTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+  }, []);
 
   const schema = useMemo(
     () => createAdminStaffDirectoryCreateManagerSchema({
@@ -206,7 +211,8 @@ export default function AdminStaffDirectoryCreateManagerForm({ onCreate, canCrea
                         navigator.clipboard.writeText(createdManagerCreds.tempPassword);
                         setCopiedKey(true);
                         toast.success('Password copied to clipboard!', { id: 'admin-staff-directory-copy-pwd' });
-                        setTimeout(() => setCopiedKey(false), 2000);
+                        if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+                        copyTimerRef.current = window.setTimeout(() => { setCopiedKey(false); copyTimerRef.current = null; }, 2000);
                       }
                     }}
                     className="p-1 rounded text-text-secondary hover:text-text-primary"
@@ -230,7 +236,8 @@ export default function AdminStaffDirectoryCreateManagerForm({ onCreate, canCrea
                 const cleanPhone = createdManagerCreds.phone.replace(/\D/g, '');
                 const phone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
                 const msg = encodeURIComponent(`*Smart Library Management - Manager Credentials*\n\nHello ${createdManagerCreds.fullName},\nYou have been appointed as Operations Manager at *${createdManagerCreds.branchName}*.\n\n*Login URL:* https://smartlibrary.app/manager/login\n*Username:* @${createdManagerCreds.username}\n*Temp Password:* ${createdManagerCreds.tempPassword}\n\nPlease change your password upon your first login.\n- Head Office Administration`);
-                window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+                const popup = window.open(`https://wa.me/${phone}?text=${msg}`, '_blank', 'noopener,noreferrer');
+                if (popup) popup.opener = null;
               }}
               className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-success hover:opacity-90 text-on-primary font-semibold text-xs motion-safe:transition-colors"
             >

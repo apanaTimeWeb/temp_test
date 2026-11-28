@@ -1,5 +1,6 @@
-import type { AdminSeatsMatrixScenario } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/tests/harness/bootstrap';
 import type { ReactNode } from 'react';
+
+export type AdminSeatsMatrixScenario = 'ACTIVE' | 'EMPTY' | 'SERVER_500' | 'TIMEOUT' | 'UNAUTHORIZED';
 
 export type AdminSeatMatrixSeatMatrixStatus = 'free' | 'occupied' | 'expiring' | 'maintenance' | 'unknown';
 export interface AdminSeatMatrixSeatMatrixViewModel {

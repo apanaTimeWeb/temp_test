@@ -1,5 +1,6 @@
-import type { AdminShiftsManagementScenario } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/tests/harness/bootstrap';
 import type { ReactNode } from 'react';
+
+export type AdminShiftsManagementScenario = 'ACTIVE' | 'EMPTY' | 'SERVER_500' | 'TIMEOUT' | 'UNAUTHORIZED';
 
 export interface AdminShiftsShift {
   id: string;

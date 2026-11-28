@@ -1,13 +1,23 @@
 import type { AdminFinanceDemoReferrer, ReferralPayoutVoucher } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsTypes';
 
+function escapeReferralsHtml(value: unknown): string {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
 export function printReferralsLeaderboard(
   filteredReferrers: readonly AdminFinanceDemoReferrer[],
   branchLabel: string,
   timeRangeLabel: string,
 ) {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=850,height=750');
+  const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=850,height=750');
   if (!printWindow) { window.print(); return; }
+  printWindow.opener = null;
   const html = `
     <!DOCTYPE html><html><head><title>Smart Library - Referral Rewards Leaderboard</title>
       <style>
@@ -23,11 +33,11 @@ export function printReferralsLeaderboard(
     </head>
     <body>
       <div class="header">
-        <div><div class="title">SMART LIBRARY NETWORK</div><div style="font-size: 11px; color: #64748b;">Referral Rewards Program & Student Leaderboard · ${timeRangeLabel}</div></div>
-        <div style="text-align: right; font-size: 11px; color: #64748b;"><div>Scope: ${branchLabel}</div><div>Generated: ${new Date().toLocaleDateString('en-IN')}</div></div>
+        <div><div class="title">SMART LIBRARY NETWORK</div><div style="font-size: 11px; color: #64748b;">Referral Rewards Program & Student Leaderboard · ${escapeReferralsHtml(timeRangeLabel)}</div></div>
+        <div style="text-align: right; font-size: 11px; color: #64748b;"><div>Scope: ${escapeReferralsHtml(branchLabel)}</div><div>Generated: ${escapeReferralsHtml(new Date().toLocaleDateString('en-IN'))}</div></div>
       </div>
       <table><thead><tr><th>Rank</th><th>Referrer Name</th><th>Smart ID</th><th>Referred Count</th><th style="text-align: right;">Total Bonus</th><th style="text-align: right;">Redeemed</th><th style="text-align: right;">Balance</th></tr></thead>
-      <tbody>${filteredReferrers.map((r, i) => `<tr><td>#${i + 1}</td><td><strong>${r.name}</strong></td><td>${r.smartId}</td><td>${r.referredNames.length} students</td><td style="text-align: right; font-weight: bold; color: #15803d;">₹${(r.bonusEarned / 100).toLocaleString('en-IN')}</td><td style="text-align: right;">₹${(r.redeemed / 100).toLocaleString('en-IN')}</td><td style="text-align: right; font-weight: bold;">₹${(r.balance / 100).toLocaleString('en-IN')}</td></tr>`).join('')}</tbody></table>
+      <tbody>${filteredReferrers.map((r, i) => `<tr><td>#${i + 1}</td><td><strong>${escapeReferralsHtml(r.name)}</strong></td><td>${escapeReferralsHtml(r.smartId)}</td><td>${r.referredNames.length} students</td><td style="text-align: right; font-weight: bold; color: #15803d;">₹${(r.bonusEarned / 100).toLocaleString('en-IN')}</td><td style="text-align: right;">₹${(r.redeemed / 100).toLocaleString('en-IN')}</td><td style="text-align: right; font-weight: bold;">₹${(r.balance / 100).toLocaleString('en-IN')}</td></tr>`).join('')}</tbody></table>
       <div class="footer"><p>Smart Library Student Ambassador & Referral Program · Certified by Accounts</p></div>
       <script>window.onload = function() { window.print(); };</script>
     </body></html>
@@ -39,7 +49,7 @@ export function printReferralsLeaderboard(
 
 export function buildReferralVoucherPrintHtml(voucher: ReferralPayoutVoucher, amountRupees: number) {
   return `
-    <!DOCTYPE html><html><head><title>Referral Bonus Payout Voucher - ${voucher.voucherId}</title>
+    <!DOCTYPE html><html><head><title>Referral Bonus Payout Voucher - ${escapeReferralsHtml(voucher.voucherId)}</title>
       <style>
         @page { size: A5 landscape; margin: 10mm; }
         body { font-family: system-ui, -apple-system, sans-serif; color: #0f172a; margin: 0; padding: 15px; font-size: 12px; }
@@ -58,17 +68,17 @@ export function buildReferralVoucherPrintHtml(voucher: ReferralPayoutVoucher, am
     </head>
     <body>
       <div class="header">
-        <div><div class="logo">SMART LIBRARY NETWORK</div><div style="font-size: 11px; color: #64748b;">Referral Rewards & Student Payout Department · Branch: ${voucher.branch}</div></div>
-        <div style="text-align: right;"><span class="badge" style="background:#dcfce7; color:#15803d;">REFERRAL PAYOUT VOUCHER</span><div style="font-size: 12px; font-weight: bold; margin-top: 4px;">Voucher: ${voucher.voucherId}</div><div style="font-size: 10px; color: #64748b;">Date: ${voucher.disbursedAt}</div></div>
+        <div><div class="logo">SMART LIBRARY NETWORK</div><div style="font-size: 11px; color: #64748b;">Referral Rewards & Student Payout Department · Branch: ${escapeReferralsHtml(voucher.branch)}</div></div>
+        <div style="text-align: right;"><span class="badge" style="background:#dcfce7; color:#15803d;">REFERRAL PAYOUT VOUCHER</span><div style="font-size: 12px; font-weight: bold; margin-top: 4px;">Voucher: ${escapeReferralsHtml(voucher.voucherId)}</div><div style="font-size: 10px; color: #64748b;">Date: ${escapeReferralsHtml(voucher.disbursedAt)}</div></div>
       </div>
       <div class="grid">
-        <div class="box"><div class="box-title">Student Beneficiary</div><div style="font-size: 13px; font-weight: bold;">${voucher.studentName}</div><div>Smart ID: <strong>${voucher.smartId}</strong></div><div>Branch: ${voucher.branch}</div></div>
-        <div class="box"><div class="box-title">Settlement Channel</div><div>Mode: <strong>${voucher.mode === 'fee_adjustment' ? 'Adjusted in Next Month Desk Fee' : 'Direct Reward Payout (' + (voucher.subChannel || 'UPI') + ')'}</strong></div>${voucher.invoiceCreditNote ? `<div>Credit Note Ref: <strong>${voucher.invoiceCreditNote}</strong></div>` : ''}${voucher.utrReference ? `<div>Transaction UTR: <strong>${voucher.utrReference}</strong></div>` : ''}<div>Authorized By: <strong>${voucher.authorizedBy}</strong></div></div>
+        <div class="box"><div class="box-title">Student Beneficiary</div><div style="font-size: 13px; font-weight: bold;">${escapeReferralsHtml(voucher.studentName)}</div><div>Smart ID: <strong>${escapeReferralsHtml(voucher.smartId)}</strong></div><div>Branch: ${escapeReferralsHtml(voucher.branch)}</div></div>
+        <div class="box"><div class="box-title">Settlement Channel</div><div>Mode: <strong>${voucher.mode === 'fee_adjustment' ? 'Adjusted in Next Month Desk Fee' : 'Direct Reward Payout (' + escapeReferralsHtml(voucher.subChannel || 'UPI') + ')'}</strong></div>${voucher.invoiceCreditNote ? `<div>Credit Note Ref: <strong>${escapeReferralsHtml(voucher.invoiceCreditNote)}</strong></div>` : ''}${voucher.utrReference ? `<div>Transaction UTR: <strong>${escapeReferralsHtml(voucher.utrReference)}</strong></div>` : ''}<div>Authorized By: <strong>${escapeReferralsHtml(voucher.authorizedBy)}</strong></div></div>
       </div>
       <table><thead><tr><th>Disbursement Particulars</th><th style="text-align: right;">Amount (INR)</th></tr></thead>
-      <tbody><tr><td>Referral Bonus Earned Clearance (${voucher.studentName})</td><td style="text-align: right; font-family: monospace; font-size: 13px; font-weight: bold;">₹${amountRupees.toLocaleString('en-IN')}.00</td></tr>${voucher.notes ? `<tr><td colspan="2" style="color: #64748b; font-size: 10px;"><strong>Accounting Remarks:</strong> ${voucher.notes}</td></tr>` : ''}</tbody></table>
+      <tbody><tr><td>Referral Bonus Earned Clearance (${escapeReferralsHtml(voucher.studentName)})</td><td style="text-align: right; font-family: monospace; font-size: 13px; font-weight: bold;">₹${amountRupees.toLocaleString('en-IN')}.00</td></tr>${voucher.notes ? `<tr><td colspan="2" style="color: #64748b; font-size: 10px;"><strong>Accounting Remarks:</strong> ${escapeReferralsHtml(voucher.notes)}</td></tr>` : ''}</tbody></table>
       <div class="net-box"><span style="font-size: 12px; color: #065f46; font-weight: bold;">TOTAL DISBURSED BONUS: </span><span style="font-size: 18px; font-weight: 800; color: #047857;">₹${amountRupees.toLocaleString('en-IN')}.00</span></div>
-      <div class="footer"><div class="signature-box"><span>Student Signature / Acknowledgement</span><br/><small style="color: #64748b;">(${voucher.studentName})</small></div><div class="signature-box"><span>Admin / Cashier Signature</span><br/><small style="color: #64748b;">(Smart Library Accounts)</small></div></div>
+      <div class="footer"><div class="signature-box"><span>Student Signature / Acknowledgement</span><br/><small style="color: #64748b;">(${escapeReferralsHtml(voucher.studentName)})</small></div><div class="signature-box"><span>Admin / Cashier Signature</span><br/><small style="color: #64748b;">(Smart Library Accounts)</small></div></div>
       <script>window.onload = function() { window.print(); };</script>
     </body></html>
   `;

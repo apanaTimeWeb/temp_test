@@ -3,8 +3,9 @@ import { escapeBlacklistHtml } from '@/app/frontend_admin/admin_members/members_
 
 export function printBlacklistRosterHtml(records: readonly AdminBlacklistRecord[]): void {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=900,height=700');
+  const printWindow = window.open('', '_blank', 'width=900,height=700,noopener,noreferrer');
   if (!printWindow) { window.print(); return; }
+  printWindow.opener = null;
   const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   const html = `
     <!DOCTYPE html><html><head><title>Smart Library - Security Blacklist Roster</title>
@@ -39,8 +40,9 @@ export function printBlacklistRosterHtml(records: readonly AdminBlacklistRecord[
 
 export function printDisciplinaryMemoHtml(record: AdminBlacklistRecord): void {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=850,height=900');
+  const printWindow = window.open('', '_blank', 'width=850,height=900,noopener,noreferrer');
   if (!printWindow) { window.print(); return; }
+  printWindow.opener = null;
   const isNetwork = record.banScope === 'NETWORK_WIDE' || !record.banScope;
   const catLabels: Record<string, string> = {
     THEFT_STOLEN_PROPERTY: 'Theft / Stolen Property (चोरी)',

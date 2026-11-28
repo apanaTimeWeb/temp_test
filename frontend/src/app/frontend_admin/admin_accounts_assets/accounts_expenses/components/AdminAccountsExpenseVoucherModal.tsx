@@ -37,11 +37,12 @@ export function AdminAccountsExpenseVoucherModal({
 
   const handlePrint = () => {
     if (typeof window === 'undefined') return;
-    const printWindow = window.open('', '_blank', 'width=750,height=800');
+    const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=750,height=800');
     if (!printWindow) {
       window.print();
       return;
     }
+    printWindow.opener = null;
     printWindow.document.write(buildExpenseVoucherPrintHtml(expense, voucherNo, vendor, claimant, isApproved));
     printWindow.document.close();
     printWindow.focus();

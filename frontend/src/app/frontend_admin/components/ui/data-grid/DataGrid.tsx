@@ -36,6 +36,7 @@ export function DataGrid<TRow extends object>({
   const effectivePaginationLabels = {
     showing: paginationLabels?.showing ?? labels.showing, of: paginationLabels?.of ?? labels.of,
     previous: paginationLabels?.previous ?? labels.previous, next: paginationLabels?.next ?? labels.next,
+    rowsPerPage: paginationLabels?.rowsPerPage ?? labels.rowsPerPage, page: paginationLabels?.page ?? labels.page,
     sortBy: paginationLabels?.sortBy ?? labels.sortBy, currently: paginationLabels?.currently ?? labels.currently,
     ascending: paginationLabels?.ascending ?? labels.ascending, descending: paginationLabels?.descending ?? labels.descending,
   };
@@ -247,7 +248,7 @@ export function DataGrid<TRow extends object>({
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
               <label htmlFor="admin-data-grid-page-size" className="text-xs text-text-secondary whitespace-nowrap">
-                Rows per page:
+                {effectivePaginationLabels.rowsPerPage}
               </label>
               <select
                 id="admin-data-grid-page-size"
@@ -265,7 +266,7 @@ export function DataGrid<TRow extends object>({
             </div>
             <div className="flex items-center gap-2">
               <button type="button" className="min-h-9 rounded-md border border-border px-3 py-1.5 text-xs text-text-primary hover:bg-surface-hover disabled:cursor-not-allowed disabled:text-text-disabled" disabled={currentPage === 0} onClick={() => setPage((current) => Math.max(0, current - 1))}>{effectivePaginationLabels.previous}</button>
-              <span className="text-xs text-text-secondary">Page {currentPage + 1} of {totalPages}</span>
+              <span className="text-xs text-text-secondary">{effectivePaginationLabels.page} {currentPage + 1} {effectivePaginationLabels.of} {totalPages}</span>
               <button type="button" className="min-h-9 rounded-md border border-border px-3 py-1.5 text-xs text-text-primary hover:bg-surface-hover disabled:cursor-not-allowed disabled:text-text-disabled" disabled={currentPage >= totalPages - 1} onClick={() => setPage((current) => Math.min(totalPages - 1, current + 1))}>{effectivePaginationLabels.next}</button>
             </div>
           </div>

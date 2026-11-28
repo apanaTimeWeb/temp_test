@@ -6,9 +6,8 @@ import { toast } from 'sonner';
 
 function escapeCsvCell(value: unknown): string {
   const text = String(value ?? '');
-  return /^[\u0000-\u0020]*[=+\-@]/.test(text)
-    ? `'"${text.replace(/"/g, '""')}"`
-    : `"${text.replace(/"/g, '""')}"`;
+  const safeText = /^[\u0000-\u0020]*[=+\-@]/.test(text) ? `'${text}` : text;
+  return `"${safeText.replace(/"/g, '""')}"`;
 }
 
 export function filterAndSortSuspendedStudents(

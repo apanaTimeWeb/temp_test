@@ -161,13 +161,11 @@ export function AdminShiftsShiftGapPage() {
                 </div>
                 <div className="flex h-3.5 w-full rounded-xl overflow-hidden bg-surface-highlight border border-border">
                   <div
-                    className="h-full bg-success-text motion-safe:transition-all motion-safe:duration-500"
-                    style={{ width: `${utilPct}%` }}
+                    className={`h-full bg-success-text motion-safe:transition-all motion-safe:duration-500 admin-dynamic-width-${Math.min(100, Math.max(0, Math.round(utilPct)))}`}
                     title={`Occupied: ${shift.occupied} desks (${utilPct}%)`}
                   />
                   <div
-                    className="h-full bg-warning-text motion-safe:transition-all motion-safe:duration-500"
-                    style={{ width: `${gapPct}%` }}
+                    className={`h-full bg-warning-text motion-safe:transition-all motion-safe:duration-500 admin-dynamic-width-${Math.min(100, Math.max(0, Math.round(gapPct)))}`}
                     title={`Idle Gap: ${idleSeats} desks (${gapPct}%)`}
                   />
                 </div>

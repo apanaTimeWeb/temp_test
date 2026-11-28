@@ -14,31 +14,38 @@ function triggerSpreadsheetDownload(blob: Blob, filename: string): void {
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+function escapeFinancialCsvCell(value: unknown): string {
+  const text = String(value ?? '');
+  const isFiniteNumber = typeof value === 'number' && Number.isFinite(value);
+  const safeText = !isFiniteNumber && /^[\u0000-\u0020]*[=+\-@]/.test(text) ? `'${text}` : text;
+  return `"${safeText.replaceAll('"', '""')}"`;
+}
+
 export function exportFinancialReportCsv(spec: FinancialReportExportSpec): void {
   const pnlHeaders = ['Period / Month', 'Total Revenue (INR)', 'Operational Expenses (INR)', 'Net Profit (INR)', 'Profit Margin (%)'];
   const pnlRows = spec.rows.map((r) => {
     const profit = (r.incomeMinor - r.expenseMinor) / 100;
     const margin = r.incomeMinor > 0 ? (((r.incomeMinor - r.expenseMinor) / r.incomeMinor) * 100).toFixed(1) : '0.0';
-    return [`"${r.month}"`, (r.incomeMinor / 100).toFixed(2), (r.expenseMinor / 100).toFixed(2), profit.toFixed(2), `${margin}%`];
+    return [r.month, (r.incomeMinor / 100).toFixed(2), (r.expenseMinor / 100).toFixed(2), profit.toFixed(2), `${margin}%`].map(escapeFinancialCsvCell);
   });
   const categoryHeaders = ['Expense Category', 'Disbursed Amount (INR)', 'Portfolio Share (%)'];
-  const categoryRows = spec.categories.map((c) => [`"${c.category}"`, (c.amountMinor / 100).toFixed(2), `${c.pct}%`]);
+  const categoryRows = spec.categories.map((c) => [c.category, (c.amountMinor / 100).toFixed(2), `${c.pct}%`].map(escapeFinancialCsvCell));
   const totalProfitMinor = spec.totalIncomeMinor - spec.totalExpenseMinor;
   const totalMargin = spec.totalIncomeMinor > 0 ? ((totalProfitMinor / spec.totalIncomeMinor) * 100).toFixed(1) : '0.0';
 
   const csv = [
     'SMART LIBRARY FINANCIAL STATEMENT & PROFIT AND LOSS AUDIT REPORT',
-    `Reporting Period,${spec.period}`,
-    spec.customStartDate && spec.customEndDate ? `Custom Date Range,${spec.customStartDate} to ${spec.customEndDate}` : '',
+    `Reporting Period,${escapeFinancialCsvCell(spec.period)}`,
+    spec.customStartDate && spec.customEndDate ? `Custom Date Range,${escapeFinancialCsvCell(`${spec.customStartDate} to ${spec.customEndDate}`)}` : '',
     `Generated Date,${new Date().toISOString().slice(0, 10)}`,
     '',
     'SECTION 1: REVENUE AND EXPENSE SUMMARY',
-    pnlHeaders.join(','),
+    pnlHeaders.map(escapeFinancialCsvCell).join(','),
     ...pnlRows.map((r) => r.join(',')),
     `"TOTAL",${(spec.totalIncomeMinor / 100).toFixed(2)},${(spec.totalExpenseMinor / 100).toFixed(2)},${(totalProfitMinor / 100).toFixed(2)},${totalMargin}%`,
     '',
     'SECTION 2: OPERATIONAL EXPENSE CATEGORY BREAKDOWN',
-    categoryHeaders.join(','),
+    categoryHeaders.map(escapeFinancialCsvCell).join(','),
     ...categoryRows.map((r) => r.join(',')),
   ].filter(Boolean).join('\n');
 

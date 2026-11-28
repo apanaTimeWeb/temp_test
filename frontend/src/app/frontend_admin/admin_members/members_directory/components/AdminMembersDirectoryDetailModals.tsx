@@ -182,7 +182,7 @@ export function AdminMembersDirectoryDetailModals({
               </div>
               <div className="flex items-center justify-end gap-2 pt-2 border-t border-border">
                 <button type="button" onClick={() => printWaiverSlipHtml(member, previewWaiverSlip)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-text-primary hover:bg-surface-hover"><Printer size={13} aria-hidden="true" /> Print Order Letter</button>
-                <button type="button" onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Smart Library Official Concession Notice:\nOrder: ${previewWaiverSlip.id}\nBeneficiary: ${member.name} (${member.id})\nApproved Concession: ${previewWaiverSlip.amount}\nCategory: ${previewWaiverSlip.category}\nAuthorized by Master Admin.`)}`, '_blank')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-success text-on-success font-semibold text-xs hover:opacity-90"><MessageSquare size={13} aria-hidden="true" /> WhatsApp Student</button>
+                <button type="button" onClick={() => { const popup = window.open(`https://wa.me/?text=${encodeURIComponent(`Smart Library Official Concession Notice:\nOrder: ${previewWaiverSlip.id}\nBeneficiary: ${member.name} (${member.id})\nApproved Concession: ${previewWaiverSlip.amount}\nCategory: ${previewWaiverSlip.category}\nAuthorized by Master Admin.`)}`, '_blank', 'noopener,noreferrer'); if (popup) popup.opener = null; }} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-success text-on-success font-semibold text-xs hover:opacity-90"><MessageSquare size={13} aria-hidden="true" /> WhatsApp Student</button>
               </div>
             </>
           )}

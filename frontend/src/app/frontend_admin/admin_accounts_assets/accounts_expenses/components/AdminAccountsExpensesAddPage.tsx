@@ -114,7 +114,7 @@ export default function AdminAccountsExpensesAddPage({ onSaveExpense, onCancel }
         </div>
         <div>
           <label className="block text-sm font-medium text-text-secondary" htmlFor="expense-date">{t('DATE')}</label>
-          <input maxLength={30} id="expense-date" type="date" required aria-invalid={Boolean(form.formState.errors.date)} aria-describedby={form.formState.errors.date ? 'expense-date-error' : undefined} className="mt-1 min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('date')} />
+          <input id="expense-date" type="date" required aria-invalid={Boolean(form.formState.errors.date)} aria-describedby={form.formState.errors.date ? 'expense-date-error' : undefined} className="mt-1 min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('date')} />
           {form.formState.errors.date && <p id="expense-date-error" role="alert" className="mt-1 text-caption text-danger-text">{form.formState.errors.date.message}</p>}
         </div>
         <div>
@@ -135,7 +135,7 @@ export default function AdminAccountsExpensesAddPage({ onSaveExpense, onCancel }
         </div>
         <div>
           <label className="block text-sm font-medium text-text-secondary" htmlFor="expense-amount">{t('AMOUNT_INR')}</label>
-          <input maxLength={30} id="expense-amount" type="number" min="0.01" step="0.01" required aria-invalid={Boolean(form.formState.errors.amount)} aria-describedby={form.formState.errors.amount ? 'expense-amount-error' : undefined} className="mt-1 min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('amount', { valueAsNumber: true })} />
+          <input id="expense-amount" type="number" min="0.01" step="0.01" required aria-invalid={Boolean(form.formState.errors.amount)} aria-describedby={form.formState.errors.amount ? 'expense-amount-error' : undefined} className="mt-1 min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('amount', { valueAsNumber: true })} />
           {form.formState.errors.amount && <p id="expense-amount-error" role="alert" className="mt-1 text-caption text-danger-text">{form.formState.errors.amount.message}</p>}
           {(form.watch('amount') ?? 0) > 2000 && (
             <div className="mt-2.5 flex items-start gap-2.5 rounded-lg border border-warning bg-warning-bg p-3 text-xs text-warning-text">
