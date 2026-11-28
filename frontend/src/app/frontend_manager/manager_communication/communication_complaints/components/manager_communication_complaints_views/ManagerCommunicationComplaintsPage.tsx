@@ -198,9 +198,7 @@ export default function ManagerCommunicationComplaintsPage({
             <CheckCircle size={15} />
             <span className="font-medium">{toastMessage}</span>
           </div>
-          <button type="button" onClick={() => setToastMessage(null)} className="text-success hover:text-primary">
-            <X size={14} />
-          </button>
+          <button type="button" onClick={() => setToastMessage(null)} className="text-success hover:text-primary"><X size={14} /></button>
         </div>
       )}
 

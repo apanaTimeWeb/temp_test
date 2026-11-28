@@ -27,9 +27,7 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitTimerRef = useRef<number | null>(null);
 
-  useEffect(() => () => {
-    if (submitTimerRef.current !== null) window.clearTimeout(submitTimerRef.current);
-  }, []);
+  useEffect(() => () => { if (submitTimerRef.current !== null) window.clearTimeout(submitTimerRef.current); }, []);
   const [pricingConfig, setPricingConfig] = useState<LibraryPricingConfig>(() => getLibraryPricingConfig());
   const { register, watch, setValue, reset, formState: { errors, isDirty, isValid } } = form;
   const router = useRouter();
@@ -261,10 +259,7 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
                 watchedShift={watchedShift}
               />
               {/* BUG-14: Pass setValue and watch for RHF KYC document integration */}
-              <ManagerMembersNewAdmissionAdmissionDocumentSection
-                setValue={setValue}
-                watch={watch}
-              />
+              <ManagerMembersNewAdmissionAdmissionDocumentSection setValue={setValue} watch={watch} />
               <ManagerMembersNewAdmissionAdmissionPaymentSection
                 register={register}
                 errors={errors}

@@ -45,9 +45,7 @@ export default function ManagerFinanceSubscriptionsRenewModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitTimerRef = useRef<number | null>(null);
 
-  useEffect(() => () => {
-    if (submitTimerRef.current !== null) window.clearTimeout(submitTimerRef.current);
-  }, []);
+  useEffect(() => () => { if (submitTimerRef.current !== null) window.clearTimeout(submitTimerRef.current); }, []);
 
   useEffect(() => {
     if (!subscription) return;
@@ -230,33 +228,14 @@ export default function ManagerFinanceSubscriptionsRenewModal({
           {/* Payment Mode & Reference */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-semibold text-primary block mb-1">
-                Payment Mode <span className="text-rose-500">*</span>
-              </label>
-              <select
-                value={paymentMode}
-                onChange={(e) => setPaymentMode(e.target.value)}
-                className="mgr-input text-xs w-full cursor-pointer"
-                required
-              >
-                {PAYMENT_MODES.map((mode) => (
-                  <option key={mode} value={mode}>
-                    {mode}
-                  </option>
-                ))}
+              <label className="text-xs font-semibold text-primary block mb-1">Payment Mode <span className="text-rose-500">*</span></label>
+              <select value={paymentMode} onChange={(e) => setPaymentMode(e.target.value)} className="mgr-input text-xs w-full cursor-pointer" required>
+                {PAYMENT_MODES.map((mode) => <option key={mode} value={mode}>{mode}</option>)}
               </select>
             </div>
             <div>
-              <label className="text-xs font-semibold text-primary block mb-1">
-                Txn / Receipt Ref
-              </label>
-              <input maxLength={100}
-                type="text"
-                value={referenceNo}
-                onChange={(e) => setReferenceNo(e.target.value)}
-                placeholder="e.g. UPI-992123"
-                className="mgr-input text-xs w-full font-mono"
-              />
+              <label className="text-xs font-semibold text-primary block mb-1">Txn / Receipt Ref</label>
+              <input maxLength={100} type="text" value={referenceNo} onChange={(e) => setReferenceNo(e.target.value)} placeholder="e.g. UPI-992123" className="mgr-input text-xs w-full font-mono" />
             </div>
           </div>
 

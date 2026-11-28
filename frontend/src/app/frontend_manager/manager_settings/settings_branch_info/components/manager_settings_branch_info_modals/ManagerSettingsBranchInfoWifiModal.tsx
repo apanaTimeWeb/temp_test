@@ -54,10 +54,7 @@ export function ManagerSettingsBranchInfoWifiModal({
   const copyTimerRef = useRef<number | null>(null);
   const printTimerRef = useRef<number | null>(null);
 
-  useEffect(() => () => {
-    if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
-    if (printTimerRef.current !== null) window.clearTimeout(printTimerRef.current);
-  }, []);
+  useEffect(() => () => { if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current); if (printTimerRef.current !== null) window.clearTimeout(printTimerRef.current); }, []);
 
   const wifiPayload = useMemo(
     () => formatWifiQrPayload({ ssid, password, security }),
@@ -79,10 +76,7 @@ export function ManagerSettingsBranchInfoWifiModal({
     setCopiedKey(key);
     toast.success(`${label} copied!`, { id: `wifi-copy-${key}` });
     if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
-    copyTimerRef.current = window.setTimeout(() => {
-      copyTimerRef.current = null;
-      setCopiedKey((curr) => (curr === key ? null : curr));
-    }, 1800);
+    copyTimerRef.current = window.setTimeout(() => { copyTimerRef.current = null; setCopiedKey((curr) => (curr === key ? null : curr)); }, 1800);
   };
 
   const copyFullShareText = () => {
@@ -108,10 +102,7 @@ export function ManagerSettingsBranchInfoWifiModal({
   const handlePrintStandee = () => {
     toast.info('Preparing Desk Standee for printing...', { id: 'print-standee' });
     if (printTimerRef.current !== null) window.clearTimeout(printTimerRef.current);
-    printTimerRef.current = window.setTimeout(() => {
-      printTimerRef.current = null;
-      window.print();
-    }, 150);
+    printTimerRef.current = window.setTimeout(() => { printTimerRef.current = null; window.print(); }, 150);
   };
 
   const handleDownloadSvg = () => {
@@ -228,38 +219,22 @@ export function ManagerSettingsBranchInfoWifiModal({
                 <span>Print Standee</span>
               </button>
 
-              <button
-                type="button"
-                onClick={handleDownloadSvg}
-                className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs motion-safe:transition-all cursor-pointer"
-                title="Download vector SVG file"
-              >
+              <button type="button" onClick={handleDownloadSvg} className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs motion-safe:transition-all cursor-pointer" title="Download vector SVG file">
                 <Download size={14} className="text-cyan-400" />
                 <span>Download SVG</span>
               </button>
-
-              <button
-                type="button"
-                onClick={copyFullShareText}
-                className="col-span-2 sm:col-span-1 flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 font-semibold text-xs motion-safe:transition-all cursor-pointer"
-                title="Copy formatted Wi-Fi text for WhatsApp"
-              >
+              <button type="button" onClick={copyFullShareText} className="col-span-2 sm:col-span-1 flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 font-semibold text-xs motion-safe:transition-all cursor-pointer" title="Copy formatted Wi-Fi text for WhatsApp">
                 <Copy size={14} />
                 <span>Copy Text</span>
               </button>
             </div>
 
             <div className="rounded-xl border border-slate-700 bg-slate-900 p-3.5 space-y-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                <Smartphone size={12} className="text-cyan-400" />
-                <span>Student Connect Instructions</span>
-              </span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5"><Smartphone size={12} className="text-cyan-400" /><span>Student Connect Instructions</span></span>
               <div className="grid grid-cols-3 gap-2 text-center text-xs">
                 {CONNECT_STEPS.map((item) => (
                   <div key={item.step} className="p-2 rounded-lg bg-slate-800 border border-slate-700">
-                    <span className={`w-5 h-5 rounded-full font-bold text-[10px] inline-flex items-center justify-center mb-1 ${item.badgeCls}`}>
-                      {item.step}
-                    </span>
+                    <span className={`w-5 h-5 rounded-full font-bold text-[10px] inline-flex items-center justify-center mb-1 ${item.badgeCls}`}>{item.step}</span>
                     <p className="text-[10px] text-slate-300 font-medium">{item.text}</p>
                   </div>
                 ))}
