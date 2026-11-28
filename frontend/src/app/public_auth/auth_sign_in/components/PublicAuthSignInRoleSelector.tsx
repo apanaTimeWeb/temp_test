@@ -10,8 +10,6 @@ export interface RoleOptionConfig {
   email: string;
   password: string;
   icon: string;
-  redirectTo: string;
-  setupComplete: boolean;
 }
 
 const ROLE_DEST_LABEL: Record<PublicAuthRole, string> = {

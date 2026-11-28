@@ -15,10 +15,10 @@ const authApiEnvelopeSchema = z.object({
 }).passthrough();
 
 /** Safe internal classification; server text is not trusted as user-facing copy. */
-export type PublicAuthRegistrationApiErrorCode = 'CONFIGURATION' | 'CONNECTION' | 'UNEXPECTED_RESPONSE' | 'REQUEST_REJECTED';
+type PublicAuthRegistrationApiErrorCode = 'CONFIGURATION' | 'CONNECTION' | 'UNEXPECTED_RESPONSE' | 'REQUEST_REJECTED';
 
 /** Localized, user-safe copy supplied by the owning form. */
-export interface PublicAuthRegistrationApiErrorMessages {
+interface PublicAuthRegistrationApiErrorMessages {
   configuration: string;
   connection: string;
   requestFailed: string;

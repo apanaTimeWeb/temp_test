@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 /** Localized validation copy supplied to the module-owned Zod schema factory. */
-export interface PublicAuthRegistrationSchemaMessages {
+interface PublicAuthRegistrationSchemaMessages {
   ownerNameMin: string;
   libraryNameRequired: string;
   emailRequired: string;

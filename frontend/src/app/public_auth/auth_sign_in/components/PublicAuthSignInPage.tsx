@@ -36,8 +36,6 @@ const ROLES: RoleOptionConfig[] = [
     email: 'superadmin@library.com',
     password: 'Password@123',
     icon: '👑',
-    redirectTo: PUBLIC_AUTH_ROLE_REDIRECTS.superadmin,
-    setupComplete: true,
   },
   {
     id: 'admin',
@@ -45,8 +43,6 @@ const ROLES: RoleOptionConfig[] = [
     email: 'admin@library.com',
     password: 'Password@123',
     icon: '⚡',
-    redirectTo: PUBLIC_AUTH_ROLE_REDIRECTS.admin,
-    setupComplete: true,
   },
   {
     id: 'manager',
@@ -54,8 +50,6 @@ const ROLES: RoleOptionConfig[] = [
     email: 'manager@library.com',
     password: 'Password@123',
     icon: '👥',
-    redirectTo: PUBLIC_AUTH_ROLE_REDIRECTS.manager,
-    setupComplete: true,
   },
 ];
 

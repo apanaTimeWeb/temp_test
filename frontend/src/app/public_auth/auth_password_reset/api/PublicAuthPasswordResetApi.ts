@@ -15,10 +15,10 @@ const authApiEnvelopeSchema = z.object({
 }).passthrough();
 
 /** Safe internal classification; server text is not trusted as user-facing copy. */
-export type PublicAuthPasswordResetApiErrorCode = 'CONFIGURATION' | 'CONNECTION' | 'UNEXPECTED_RESPONSE' | 'REQUEST_REJECTED';
+type PublicAuthPasswordResetApiErrorCode = 'CONFIGURATION' | 'CONNECTION' | 'UNEXPECTED_RESPONSE' | 'REQUEST_REJECTED';
 
 /** Localized, user-safe copy supplied by the owning form. */
-export interface PublicAuthPasswordResetApiErrorMessages {
+interface PublicAuthPasswordResetApiErrorMessages {
   configuration: string;
   connection: string;
   requestFailed: string;
