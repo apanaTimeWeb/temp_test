@@ -1,0 +1,259 @@
+.login-bg {
+  background: #030712;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.12) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(34, 211, 238, 0.04) 0px, transparent 50%);
+}
+
+.dot-grid {
+  background-image: radial-gradient(rgba(99, 102, 241, 0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 80%);
+}
+
+.aurora-orb-1 {
+  position: absolute;
+  top: -20%;
+  left: -10%;
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(ellipse, rgba(99, 102, 241, 0.14) 0%, transparent 65%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.aurora-orb-2 {
+  position: absolute;
+  bottom: -15%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(ellipse, rgba(139, 92, 246, 0.12) 0%, transparent 65%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .aurora-orb-1 {
+    animation: orb-float 16s ease-in-out infinite alternate;
+  }
+  .aurora-orb-2 {
+    animation: orb-float 20s ease-in-out infinite alternate-reverse;
+  }
+}
+
+@keyframes orb-float {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(40px, 24px) scale(1.06);
+  }
+}
+
+.glass-login {
+  background: rgba(11, 13, 33, 0.84);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  box-shadow:
+    0 25px 60px -12px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 0 40px -10px rgba(99, 102, 241, 0.12);
+}
+
+.glass-left {
+  background: rgba(6, 7, 22, 0.65);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.brand-logo-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #06b6d4 100%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 4px 14px rgba(99, 102, 241, 0.4);
+  flex-shrink: 0;
+}
+
+.input-field {
+  background: rgba(14, 16, 40, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  outline: none;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.input-field::placeholder {
+  color: rgba(148, 163, 184, 0.45);
+}
+
+.input-field:focus {
+  background: rgba(18, 20, 48, 0.95);
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.input-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+.role-selector-track {
+  background: rgba(10, 10, 28, 0.7);
+}
+
+.role-tab {
+  color: rgba(148, 163, 184, 0.75);
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+.role-tab:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.role-tab-active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.24), rgba(139, 92, 246, 0.18));
+  border-color: rgba(99, 102, 241, 0.4) !important;
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 2px 10px rgba(99, 102, 241, 0.2);
+}
+
+.submit-btn {
+  position: relative;
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #4338ca 100%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 20px -3px rgba(99, 102, 241, 0.5);
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .input-field,
+  .role-tab,
+  .submit-btn {
+    transition: all 0.2s ease;
+  }
+  .submit-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+  .submit-btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.99);
+  }
+}
+
+.submit-btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 10px 25px -3px rgba(99, 102, 241, 0.65);
+}
+
+.auth-hero-orb-glow {
+  box-shadow: 0 0 8px #818cf8;
+}
+
+/* Sign-in transition & button loader styles */
+.auth-loader-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.auth-loader-overlay {
+  background: rgba(3, 7, 18, 0.7);
+  cursor: wait;
+}
+
+.auth-loader-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+}
+
+.auth-loader-box--sm {
+  width: 20px;
+  height: 20px;
+}
+
+.auth-loader-box .loader-aura {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  filter: blur(16px);
+  opacity: 0.6;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.35) 0%,
+    rgba(139, 92, 246, 0.2) 45%,
+    rgba(34, 211, 238, 0.1) 70%,
+    transparent 85%
+  );
+}
+
+.auth-loader-box--sm .loader-aura {
+  opacity: 0.2;
+}
+
+.auth-loader-box .loader-ring {
+  width: 100%;
+  height: 100%;
+  animation: spinCW 1.4s linear infinite;
+}
+
+.auth-loader-box .inner-svg {
+  position: absolute;
+  inset: 0;
+  animation: spinCCW 2.4s linear infinite;
+}
+
+.auth-loader-box .loader-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+  color: #ffffff;
+}
+
+.auth-loader-box .loader-icon svg {
+  width: 45%;
+  height: 45%;
+  filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.7)) drop-shadow(0 0 4px rgba(34, 211, 238, 0.5));
+}
+
+@keyframes spinCW {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinCCW {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-loader-box .loader-ring {
+    animation-duration: 4s;
+  }
+  .auth-loader-box .inner-svg {
+    animation-duration: 6s;
+  }
+}

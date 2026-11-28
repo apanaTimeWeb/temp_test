@@ -1,0 +1,93 @@
+.reg-bg {
+  background: #030712;
+}
+
+.reg-dot-grid {
+  background-image: radial-gradient(rgba(99, 102, 241, 0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.reg-aurora-orb-1 {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(ellipse, rgba(99, 102, 241, 0.16) 0%, transparent 65%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.reg-aurora-orb-2 {
+  position: absolute;
+  bottom: -10%;
+  right: -10%;
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(ellipse, rgba(34, 211, 238, 0.1) 0%, transparent 65%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.reg-glass-card {
+  background: rgba(8, 8, 24, 0.8);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(99, 102, 241, 0.22);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.7), 0 0 50px rgba(99, 102, 241, 0.08);
+}
+
+.reg-gradient-text {
+  background: linear-gradient(135deg, #a78bfa 0%, #6366f1 40%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.reg-input-field {
+  background: rgba(10, 10, 28, 0.85);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  color: #ffffff;
+  outline: none;
+}
+
+.reg-input-field::placeholder {
+  color: rgba(148, 163, 184, 0.45);
+}
+
+.reg-input-field:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.reg-input-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+.reg-shimmer-btn {
+  background: linear-gradient(90deg, #6366f1, #8b5cf6, #22d3ee, #6366f1);
+  background-size: 200% auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reg-input-field {
+    transition: all 0.2s;
+  }
+  .reg-shimmer-btn {
+    animation: reg-shimmer 3s linear infinite;
+  }
+}
+
+@keyframes reg-shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.reg-glow-indigo {
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.45);
+}
