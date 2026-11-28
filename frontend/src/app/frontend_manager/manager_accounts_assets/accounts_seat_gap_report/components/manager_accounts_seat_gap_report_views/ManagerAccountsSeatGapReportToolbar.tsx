@@ -1,5 +1,6 @@
 'use client';
 
+import '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/components/manager_accounts_seat_gap_report_styles/ManagerAccountsSeatGapReportStyles.css';
 import { Clock,Moon,RotateCcw,Search,Sun,Sunrise,X } from 'lucide-react';
 
 interface ManagerAccountsSeatGapReportToolbarProps {
@@ -41,54 +42,10 @@ export function ManagerAccountsSeatGapReportToolbar({
     searchQuery.trim() !== '';
 
   const shiftTabs = [
-    {
-      id: 'all',
-      label: 'All Shifts',
-      count: counts.all,
-      icon: Clock,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(99, 102, 241, 0.45)',
-        backgroundColor: '#6366f1',
-        borderColor: '#818cf8',
-        color: '#ffffff',
-      },
-    },
-    {
-      id: 'Morning',
-      label: 'Morning',
-      count: counts.morning,
-      icon: Sunrise,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(16, 185, 129, 0.45)',
-        backgroundColor: '#10b981',
-        borderColor: '#34d399',
-        color: '#ffffff',
-      },
-    },
-    {
-      id: 'Afternoon',
-      label: 'Afternoon',
-      count: counts.afternoon,
-      icon: Sun,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(245, 158, 11, 0.45)',
-        backgroundColor: '#f59e0b',
-        borderColor: '#fbbf24',
-        color: '#000000',
-      },
-    },
-    {
-      id: 'Night',
-      label: 'Night',
-      count: counts.night,
-      icon: Moon,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(168, 85, 247, 0.45)',
-        backgroundColor: '#a855f7',
-        borderColor: '#c084fc',
-        color: '#ffffff',
-      },
-    },
+    { id: 'all', label: 'All Shifts', count: counts.all, icon: Clock, activeClass: 'sgr-pill-indigo-active' },
+    { id: 'Morning', label: 'Morning', count: counts.morning, icon: Sunrise, activeClass: 'sgr-pill-emerald-active' },
+    { id: 'Afternoon', label: 'Afternoon', count: counts.afternoon, icon: Sun, activeClass: 'sgr-pill-amber-active' },
+    { id: 'Night', label: 'Night', count: counts.night, icon: Moon, activeClass: 'sgr-pill-purple-active' },
   ];
 
   return (
@@ -104,10 +61,9 @@ export function ManagerAccountsSeatGapReportToolbar({
                 key={tab.id}
                 type="button"
                 onClick={() => onShiftChange(tab.id)}
-                style={isActive ? tab.activeStyle : undefined}
                 className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   isActive
-                    ? 'border shadow-sm'
+                    ? `${tab.activeClass} border shadow-sm`
                     : 'bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover border border-border/80'
                 }`}
               >

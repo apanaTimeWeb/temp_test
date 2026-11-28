@@ -1,5 +1,6 @@
 'use client';
 
+import '@/app/frontend_manager/manager_communication/communication_notification_center/components/manager_communication_notification_center_styles/ManagerCommunicationNotificationCenterManager_notification_center.css';
 import { Check, Mail, MessageSquare, Smartphone } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -9,10 +10,7 @@ export const NOTIFICATION_CHANNELS = [
     label: 'WhatsApp',
     icon: Smartphone,
     subtitle: 'Instant delivery (High read rate)',
-    activeBg: 'rgba(16, 185, 129, 0.22)',
-    activeBorder: '#10b981',
-    activeGlow: '0 0 14px rgba(16, 185, 129, 0.45)',
-    activeColor: '#d1fae5',
+    activeGlowClass: 'mnc-channel--emerald',
     activeBox: 'border-emerald-500 font-bold',
     activeIcon: 'text-emerald-400',
     badge: 'Popular',
@@ -23,10 +21,7 @@ export const NOTIFICATION_CHANNELS = [
     label: 'SMS Text',
     icon: MessageSquare,
     subtitle: 'Carrier text message',
-    activeBg: 'rgba(245, 158, 11, 0.22)',
-    activeBorder: '#f59e0b',
-    activeGlow: '0 0 14px rgba(245, 158, 11, 0.45)',
-    activeColor: '#fef3c7',
+    activeGlowClass: 'mnc-channel--amber',
     activeBox: 'border-amber-500 font-bold',
     activeIcon: 'text-amber-400',
     badge: 'Direct',
@@ -37,10 +32,7 @@ export const NOTIFICATION_CHANNELS = [
     label: 'Email',
     icon: Mail,
     subtitle: 'Formal letter dispatch',
-    activeBg: 'rgba(14, 165, 233, 0.22)',
-    activeBorder: '#0ea5e9',
-    activeGlow: '0 0 14px rgba(14, 165, 233, 0.45)',
-    activeColor: '#e0f2fe',
+    activeGlowClass: 'mnc-channel--sky',
     activeBox: 'border-sky-500 font-bold',
     activeIcon: 'text-sky-400',
     badge: 'Official',
@@ -84,19 +76,9 @@ export function ManagerCommunicationNotificationCenterChannelPicker({
               key={ch.id}
               type="button"
               onClick={() => onSelectChannel(ch.id)}
-              style={
-                isSelected
-                  ? {
-                      backgroundColor: ch.activeBg,
-                      borderColor: ch.activeBorder,
-                      boxShadow: ch.activeGlow,
-                      color: ch.activeColor,
-                    }
-                  : undefined
-              }
               className={`relative flex flex-col p-3.5 rounded-2xl border text-left cursor-pointer motion-safe:transition-all ${
                 isSelected
-                  ? ch.activeBox
+                  ? `${ch.activeGlowClass} ${ch.activeBox}`
                   : 'bg-card border-border text-secondary hover:border-border-focus hover:bg-card hover:text-primary'
               }`}
               aria-pressed={isSelected}

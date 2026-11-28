@@ -24,39 +24,27 @@ export default function ManagerCommunicationNotificationCenterPage({
       labelKey: 'tab_my_notifications',
       icon: Bell,
       badge: '3',
-      activeBg: 'rgba(99, 102, 241, 0.25)',
-      activeBorder: '#6366f1',
-      activeText: '#e0e7ff',
-      activeGlow: '0 0 16px rgba(99, 102, 241, 0.5)',
+      activeClass: 'mnc-tab--indigo',
       activeIcon: 'text-indigo-400',
-      badgeBg: 'rgba(99, 102, 241, 0.5)',
-      badgeText: '#ffffff',
+      badgeActiveClass: 'mnc-tab-badge--indigo',
     },
     {
       name: 'Member Notifications',
       labelKey: 'tab_member_notifications',
       icon: Send,
       badge: 'Compose',
-      activeBg: 'rgba(16, 185, 129, 0.25)',
-      activeBorder: '#10b981',
-      activeText: '#d1fae5',
-      activeGlow: '0 0 16px rgba(16, 185, 129, 0.5)',
+      activeClass: 'mnc-tab--emerald',
       activeIcon: 'text-emerald-400',
-      badgeBg: 'rgba(16, 185, 129, 0.5)',
-      badgeText: '#ffffff',
+      badgeActiveClass: 'mnc-tab-badge--emerald',
     },
     {
       name: 'Notification History',
       labelKey: 'tab_notification_history',
       icon: History,
       badge: 'Logs',
-      activeBg: 'rgba(6, 182, 212, 0.25)',
-      activeBorder: '#06b6d4',
-      activeText: '#cffafe',
-      activeGlow: '0 0 16px rgba(6, 182, 212, 0.5)',
+      activeClass: 'mnc-tab--cyan',
       activeIcon: 'text-cyan-400',
-      badgeBg: 'rgba(6, 182, 212, 0.5)',
-      badgeText: '#ffffff',
+      badgeActiveClass: 'mnc-tab-badge--cyan',
     },
   ];
 
@@ -104,19 +92,9 @@ export default function ManagerCommunicationNotificationCenterPage({
               type="button"
               onClick={() => setActiveTab(tab.name)}
               aria-pressed={isActive}
-              style={
-                isActive
-                  ? {
-                      backgroundColor: tab.activeBg,
-                      borderColor: tab.activeBorder,
-                      color: tab.activeText,
-                      boxShadow: tab.activeGlow,
-                    }
-                  : undefined
-              }
               className={`group inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer border ${
                 isActive
-                  ? 'font-bold'
+                  ? `${tab.activeClass} font-bold`
                   : 'bg-card/60 border-border text-secondary hover:text-primary hover:bg-card hover:border-border-focus'
               }`}
             >
@@ -127,18 +105,9 @@ export default function ManagerCommunicationNotificationCenterPage({
               <span>{tManagerUi(tab.labelKey)}</span>
               {tab.badge && (
                 <span
-                  style={
-                    isActive
-                      ? {
-                          backgroundColor: tab.badgeBg,
-                          color: tab.badgeText,
-                          borderColor: tab.activeBorder,
-                        }
-                      : undefined
-                  }
                   className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full border transition-colors ${
                     isActive
-                      ? ''
+                      ? tab.badgeActiveClass
                       : 'bg-surface border-border text-secondary group-hover:text-primary'
                   }`}
                 >

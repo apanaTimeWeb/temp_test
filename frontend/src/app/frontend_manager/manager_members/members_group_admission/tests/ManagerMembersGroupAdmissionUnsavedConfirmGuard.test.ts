@@ -1,27 +1,29 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe,expect,it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-const formSource = readFileSync(join(__dirname, '../components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionAdmissionForm.tsx'), 'utf8');
-const summarySource = readFileSync(join(__dirname, '../components/manager_members_group_admission_sections/ManagerMembersGroupAdmissionAdmissionSummary.tsx'), 'utf8');
-const confirmSource = readFileSync(join(__dirname, '../hooks/useManagerMembersGroupAdmissionConfirm.tsx'), 'utf8');
+const moduleRoot = [
+  join(process.cwd(), 'src/app/frontend_manager/manager_members/members_group_admission'),
+  join(process.cwd(), 'app/frontend_manager/manager_members/members_group_admission'),
+  join(process.cwd(), 'frontend_manager/manager_members/members_group_admission'),
+].find(existsSync);
+if (!moduleRoot) throw new Error('Could not locate manager_members/members_group_admission from the test working directory.');
 
-describe('group admission unsaved-changes confirmation', () => {
-  it('uses the feature-local asynchronous dialog rather than the blocking browser confirm', () => {
-    expect(formSource).not.toContain('window.confirm(');
-    expect(confirmSource).toContain('<h2 id={titleId} className="text-lg font-semibold text-foreground">{pending.message}</h2>');
-    expect(summarySource).not.toContain('window.confirm(');
-    expect(formSource).toContain('useManagerMembersGroupAdmissionConfirm');
-    expect(formSource).toContain('event.stopImmediatePropagation()');
-    expect(formSource).toContain('pendingAnchor.click()');
-  });
-
-  it('exposes an accessible modal and fails closed when a confirmation is already pending', () => {
-    expect(confirmSource).toContain('role="alertdialog"');
-    expect(confirmSource).toContain('aria-modal="true"');
-    expect(confirmSource).toContain('if (pendingRef.current) return Promise.resolve(false)');
-    expect(confirmSource).toContain('settle(false)');
+describe('group admission lifecycle boundary', () => {
+  it('routes through GroupPage and avoids blocking browser confirm dialogs in group modals', () => {
+    const main = readFileSync(join(moduleRoot, 'components/ManagerMembersGroupAdmissionMain.tsx'), 'utf8');
+    const page = readFileSync(join(moduleRoot, 'page.tsx'), 'utf8');
+    const bulkModal = readFileSync(
+      join(moduleRoot, 'components/manager_members_group_admission_dialogs/ManagerMembersGroupAdmissionBulkModal.tsx'),
+      'utf8',
+    );
+    const manualModal = readFileSync(
+      join(moduleRoot, 'components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionManualModal.tsx'),
+      'utf8',
+    );
+    expect(main).not.toMatch(/AdmissionForm|useManagerMembersGroupAdmissionAdmission/);
+    expect(page).not.toMatch(/AdmissionForm|useManagerMembersGroupAdmissionAdmission/);
+    expect(bulkModal).not.toContain('window.confirm(');
+    expect(manualModal).not.toContain('window.confirm(');
   });
 });
-
-// Dialog accessibility regression: the accessible name must describe the unsaved-change decision, not the Cancel action.

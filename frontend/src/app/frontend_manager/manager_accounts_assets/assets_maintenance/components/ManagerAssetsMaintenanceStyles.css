@@ -67,3 +67,10 @@
   border-color: #2dd4bf;
   color: #ffffff;
 }
+
+.mm-pill-indigo-active {
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.45);
+  background-color: #6366f1;
+  border-color: #818cf8;
+  color: #ffffff;
+}

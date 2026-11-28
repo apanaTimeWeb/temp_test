@@ -1,8 +1,8 @@
 'use client';
 
+import '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_styles/ManagerAccountsExpensesStyles.css';
 import type { ManagerExpensesTimeHorizon } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_views/ManagerAccountsExpensesPage';
 import { Calendar,X } from 'lucide-react';
-import React from 'react';
 
 interface ManagerAccountsExpensesTimeHorizonBarProps {
   timeHorizon: ManagerExpensesTimeHorizon;
@@ -14,37 +14,12 @@ interface ManagerAccountsExpensesTimeHorizonBarProps {
   setCustomEndDate: (val: string) => void;
 }
 
-const HORIZON_STYLES: Record<ManagerExpensesTimeHorizon, React.CSSProperties> = {
-  all: {
-    boxShadow: '0 0 16px rgba(99, 102, 241, 0.45)',
-    backgroundColor: '#6366f1',
-    borderColor: '#818cf8',
-    color: '#ffffff',
-  },
-  today: {
-    boxShadow: '0 0 16px rgba(16, 185, 129, 0.45)',
-    backgroundColor: '#10b981',
-    borderColor: '#34d399',
-    color: '#ffffff',
-  },
-  this_week: {
-    boxShadow: '0 0 16px rgba(14, 165, 233, 0.45)',
-    backgroundColor: '#0ea5e9',
-    borderColor: '#38bdf8',
-    color: '#ffffff',
-  },
-  this_month: {
-    boxShadow: '0 0 16px rgba(245, 158, 11, 0.45)',
-    backgroundColor: '#f59e0b',
-    borderColor: '#fbbf24',
-    color: '#000000',
-  },
-  custom: {
-    boxShadow: '0 0 16px rgba(168, 85, 247, 0.45)',
-    backgroundColor: '#a855f7',
-    borderColor: '#c084fc',
-    color: '#ffffff',
-  },
+const HORIZON_ACTIVE_CLASSES: Record<ManagerExpensesTimeHorizon, string> = {
+  all: 'mex-pill-indigo-active',
+  today: 'mex-mode-cash-active',
+  this_week: 'mex-mode-upi-active',
+  this_month: 'mex-mode-bank-active',
+  custom: 'mex-mode-card-active',
 };
 
 export function ManagerAccountsExpensesTimeHorizonBar({
@@ -84,10 +59,9 @@ export function ManagerAccountsExpensesTimeHorizonBar({
                 key={opt.id}
                 type="button"
                 onClick={() => setTimeHorizon(opt.id)}
-                style={isActive ? HORIZON_STYLES[opt.id] : undefined}
                 className={`min-h-8 px-3 py-1 text-xs rounded-lg font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   isActive
-                    ? 'border shadow-sm font-bold'
+                    ? `${HORIZON_ACTIVE_CLASSES[opt.id]} border shadow-sm font-bold`
                     : 'text-secondary hover:text-primary hover:bg-surface-hover'
                 }`}
               >

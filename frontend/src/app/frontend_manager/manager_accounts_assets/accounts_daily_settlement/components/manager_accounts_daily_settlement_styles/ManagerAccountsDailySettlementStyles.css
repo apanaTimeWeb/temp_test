@@ -13,3 +13,43 @@
 .mds-kpi-amber {
   background: linear-gradient(135deg, rgba(69, 26, 3, 0.8), #261708, rgba(120, 53, 15, 0.6));
 }
+
+.mds-pill-indigo-active {
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.45);
+  background-color: #6366f1;
+  border-color: #818cf8;
+  color: #ffffff;
+}
+
+.mds-pill-emerald-active {
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.45);
+  background-color: #10b981;
+  border-color: #34d399;
+  color: #ffffff;
+}
+
+.mds-pill-sky-active {
+  box-shadow: 0 0 16px rgba(14, 165, 233, 0.45);
+  background-color: #0ea5e9;
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+.mds-pill-amber-active {
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.45);
+  background-color: #f59e0b;
+  border-color: #fbbf24;
+  color: #000000;
+}
+
+.mds-pill-purple-active {
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.45);
+  background-color: #a855f7;
+  border-color: #c084fc;
+  color: #ffffff;
+}
+
+.mds-date-custom-glow {
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.4);
+  border-color: #f59e0b;
+}

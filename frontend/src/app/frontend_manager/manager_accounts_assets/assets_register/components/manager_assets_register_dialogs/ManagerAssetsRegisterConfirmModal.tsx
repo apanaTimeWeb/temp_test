@@ -1,5 +1,6 @@
 'use client';
 
+import '@/app/frontend_manager/manager_accounts_assets/assets_register/components/manager_assets_register_styles/ManagerAssetsRegisterStyles.css';
 import type { ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
 import { CheckCircle2,ShieldCheck,X } from 'lucide-react';
 import { useEffect,useRef } from 'react';
@@ -103,12 +104,7 @@ export function ManagerAssetsRegisterConfirmModal({
             ref={confirmBtnRef}
             type="button"
             onClick={onConfirm}
-            style={{
-              boxShadow: '0 0 16px rgba(16, 185, 129, 0.45)',
-              backgroundColor: '#10b981',
-              borderColor: '#34d399',
-            }}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-xs font-semibold hover:opacity-95 transition-all cursor-pointer border"
+            className="mar-pill-active-state inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-xs font-semibold hover:opacity-95 transition-all cursor-pointer border"
           >
             <CheckCircle2 size={14} />
             Confirm & Register

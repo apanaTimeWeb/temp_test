@@ -26,3 +26,38 @@
 .sgr-wa-send-btn {
   box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
 }
+
+.sgr-pill-indigo-active {
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.45);
+  background-color: #6366f1;
+  border-color: #818cf8;
+  color: #ffffff;
+}
+
+.sgr-pill-emerald-active {
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.45);
+  background-color: #10b981;
+  border-color: #34d399;
+  color: #ffffff;
+}
+
+.sgr-pill-sky-active {
+  box-shadow: 0 0 16px rgba(14, 165, 233, 0.45);
+  background-color: #0ea5e9;
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+.sgr-pill-amber-active {
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.45);
+  background-color: #f59e0b;
+  border-color: #fbbf24;
+  color: #000000;
+}
+
+.sgr-pill-purple-active {
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.45);
+  background-color: #a855f7;
+  border-color: #c084fc;
+  color: #ffffff;
+}

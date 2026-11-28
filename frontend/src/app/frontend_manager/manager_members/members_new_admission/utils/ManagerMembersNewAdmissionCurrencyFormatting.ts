@@ -1,5 +1,5 @@
-const supportedCurrencies = typeof Intl !== 'undefined' && typeof (Intl as any).supportedValuesOf === 'function'
-  ? new Set<string>((Intl as any).supportedValuesOf('currency'))
+const supportedCurrencies = typeof Intl !== 'undefined' && typeof (Intl as unknown as { supportedValuesOf?: (key: string) => string[] }).supportedValuesOf === 'function'
+  ? new Set<string>((Intl as unknown as { supportedValuesOf: (key: string) => string[] }).supportedValuesOf('currency'))
   : null;
 
 /** Formats a minor-unit integer from an API/fixture using the active locale. */

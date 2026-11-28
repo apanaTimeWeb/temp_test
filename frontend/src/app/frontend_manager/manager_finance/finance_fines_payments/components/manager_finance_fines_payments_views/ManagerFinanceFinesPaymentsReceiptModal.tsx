@@ -1,6 +1,7 @@
 'use client';
 
 import type { ManagerReceiptRecord } from '@/app/frontend_manager/manager_finance/finance_fines_payments/components/manager_finance_fines_payments_views/ManagerFinanceFinesPaymentsFinesAndPaymentsPage';
+import { useManagerFinesPaymentsFormatting } from '@/app/frontend_manager/manager_finance/finance_fines_payments/hooks/ManagerFinanceFinesPaymentsFormattingHook';
 import { Mail, MessageSquare, Printer, Receipt, Smartphone, X } from 'lucide-react';
 
 export interface ManagerFinanceFinesPaymentsReceiptModalProps {
@@ -22,6 +23,7 @@ export default function ManagerFinanceFinesPaymentsReceiptModal({
   onShareEmail,
   onShareSms,
 }: ManagerFinanceFinesPaymentsReceiptModalProps) {
+  const { formatDateTime } = useManagerFinesPaymentsFormatting();
   if (!receipt) return null;
 
   return (
@@ -69,7 +71,7 @@ export default function ManagerFinanceFinesPaymentsReceiptModal({
             </div>
             <div>
               <span className="text-secondary block">Date & Time</span>
-              <span className="text-primary">{receipt.date}</span>
+              <span className="text-primary">{formatDateTime(receipt.date)}</span>
             </div>
             <div>
               <span className="text-secondary block">Collected By</span>

@@ -39,8 +39,9 @@ export async function fetchManagerMembersEnquiries(): Promise<ManagerMembersEnqu
       return managerCrmEnquiryResponseSchema.parse(response.data).map((item) => normalizeManagerEnquiriesEnquiry(item));
     }
     return getManagerEnquiriesDemoEnquiries();
-  } catch (err: any) {
-    if (err?.code === 'CRM_UNAVAILABLE' || err?.message?.includes('CRM service unavailable')) {
+  } catch (err: unknown) {
+    const apiErr = err as { code?: string; message?: string } | null;
+    if (apiErr?.code === 'CRM_UNAVAILABLE' || apiErr?.message?.includes('CRM service unavailable')) {
       throw err;
     }
     return getManagerEnquiriesDemoEnquiries();
@@ -60,8 +61,9 @@ export async function fetchManagerEnquiriesEnquiryById(id: string): Promise<Mana
       return normalizeManagerEnquiriesEnquiry((managerCrmEnquirySchema.or(managerCrmNormalizedEnquirySchema)).parse(response.data));
     }
     return getManagerEnquiriesDemoEnquiry(id) ?? getManagerEnquiriesDemoEnquiries()[0];
-  } catch (err: any) {
-    if (err?.code === 'CRM_UNAVAILABLE' || err?.message?.includes('CRM service unavailable')) {
+  } catch (err: unknown) {
+    const apiErr = err as { code?: string; message?: string } | null;
+    if (apiErr?.code === 'CRM_UNAVAILABLE' || apiErr?.message?.includes('CRM service unavailable')) {
       throw err;
     }
     return getManagerEnquiriesDemoEnquiry(id) ?? getManagerEnquiriesDemoEnquiries()[0];

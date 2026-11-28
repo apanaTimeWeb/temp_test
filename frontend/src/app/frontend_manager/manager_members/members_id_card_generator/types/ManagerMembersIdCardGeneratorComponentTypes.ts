@@ -26,6 +26,8 @@ export interface IdCardData {
   college?: string;
   wifiSsid?: string;
   wifiPassword?: string;
+  batch?: string;
+  serial?: string;
   emergencyPhone?: string;
   helpdeskPhone?: string;
   rules?: string[];

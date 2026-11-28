@@ -1,5 +1,6 @@
 'use client';
 
+import '@/app/frontend_manager/manager_accounts_assets/assets_register/components/manager_assets_register_styles/ManagerAssetsRegisterStyles.css';
 import { Archive,CheckCircle2,Package,RotateCcw,Search,Wrench,X } from 'lucide-react';
 
 interface ManagerAssetsRegisterToolbarProps {
@@ -38,54 +39,10 @@ export function ManagerAssetsRegisterToolbar({
     searchQuery.trim() !== '';
 
   const statusTabs = [
-    {
-      id: 'all',
-      label: 'All Assets',
-      count: counts.all,
-      icon: Package,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(99, 102, 241, 0.45)',
-        backgroundColor: '#6366f1',
-        borderColor: '#818cf8',
-        color: '#ffffff',
-      },
-    },
-    {
-      id: 'active',
-      label: 'Active & Operational',
-      count: counts.active,
-      icon: CheckCircle2,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(16, 185, 129, 0.45)',
-        backgroundColor: '#10b981',
-        borderColor: '#34d399',
-        color: '#ffffff',
-      },
-    },
-    {
-      id: 'maintenance',
-      label: 'Under Maintenance',
-      count: counts.maintenance,
-      icon: Wrench,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(245, 158, 11, 0.45)',
-        backgroundColor: '#f59e0b',
-        borderColor: '#fbbf24',
-        color: '#000000',
-      },
-    },
-    {
-      id: 'disposed',
-      label: 'Disposed',
-      count: counts.disposed,
-      icon: Archive,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(100, 116, 139, 0.45)',
-        backgroundColor: '#64748b',
-        borderColor: '#94a3b8',
-        color: '#ffffff',
-      },
-    },
+    { id: 'all', label: 'All Assets', count: counts.all, icon: Package, activeClass: 'mar-pill-indigo-active' },
+    { id: 'active', label: 'Active & Operational', count: counts.active, icon: CheckCircle2, activeClass: 'mar-pill-active-state' },
+    { id: 'maintenance', label: 'Under Maintenance', count: counts.maintenance, icon: Wrench, activeClass: 'mar-pill-maintenance-state' },
+    { id: 'disposed', label: 'Disposed', count: counts.disposed, icon: Archive, activeClass: 'mar-pill-disposed-state' },
   ];
 
   return (
@@ -101,10 +58,9 @@ export function ManagerAssetsRegisterToolbar({
                 key={tab.id}
                 type="button"
                 onClick={() => onStatusChange(tab.id)}
-                style={isActive ? tab.activeStyle : undefined}
                 className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   isActive
-                    ? 'border shadow-sm'
+                    ? `${tab.activeClass} border shadow-sm`
                     : 'bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover border border-border/80'
                 }`}
               >

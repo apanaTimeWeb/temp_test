@@ -1,5 +1,6 @@
 'use client';
 
+import '@/app/frontend_manager/components/ManagerLoader.css';
 import {
 Armchair,
 Ban,
@@ -101,50 +102,15 @@ const ICONS: Record<string, LucideIcon> = {
   'report': FileText,
 };
 
-/* ---------- SCOPED MANAGER LOADER STYLE (Aurora Cyber-Luxury) ---------- */
-const MGR_LOADER_CSS = `
-  .library-loader-box .loader-aura {
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    filter: blur(16px);
-    opacity: 0.6;
-    pointer-events: none;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.35) 0%, rgba(139, 92, 246, 0.2) 45%, rgba(34, 211, 238, 0.1) 70%, transparent 85%);
-  }
-  .library-loader-box .loader-ring {
-    width: 100%;
-    height: 100%;
-    animation: spinCW 1.4s linear infinite;
-  }
-  .library-loader-box .inner-svg {
-    position: absolute;
-    inset: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    pointer-events: none;
-    animation: spinCCW 2.4s linear infinite;
-  }
-  .library-loader-box .loader-icon {
-    color: #FFFFFF !important;
-  }
-  .library-loader-box .loader-icon svg {
-    filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.7)) drop-shadow(0 0 4px rgba(34, 211, 238, 0.5)) !important;
-  }
-  .library-loader-box.button-loader .loader-aura {
-    opacity: 0.25;
-  }
-`;
-
 /* ---------- GRADIENT DEFS (ek baar render) ---------- */
 const GradientDefs = React.memo(function GradientDefs() {
   return (
     <svg width="0" height="0" className="absolute pointer-events-none" aria-hidden="true">
       <defs>
         <linearGradient id="mgrLibGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#22D3EE" />
-          <stop offset="50%" stopColor="#6366F1" />
-          <stop offset="100%" stopColor="#A78BFA" />
+          <stop offset="0%" className="library-loader-stop-start" />
+          <stop offset="50%" className="library-loader-stop-mid" />
+          <stop offset="100%" className="library-loader-stop-end" />
         </linearGradient>
       </defs>
     </svg>
@@ -171,16 +137,15 @@ export function LibraryLoader({
   const variantClass = variant !== 'default' ? ` ${variant}` : '';
   const Icon = ICONS[icon] ?? Book;
 
-  const showInnerRing = true;
-
   return (
     <div
       className={`library-loader-box${variantClass}${className ? ' ' + className : ''}`}
       style={{ width: px, height: px }}
       role="status"
       aria-label={label}
+      aria-live="polite"
+      aria-busy="true"
     >
-      <style dangerouslySetInnerHTML={{ __html: MGR_LOADER_CSS }} />
       <span className="sr-only">{label}</span>
       <GradientDefs />
       <div className="loader-aura" aria-hidden="true" />
@@ -189,7 +154,7 @@ export function LibraryLoader({
       <svg className="loader-ring" viewBox="0 0 100 100" fill="none" aria-hidden="true">
         <circle
           cx="50" cy="50" r="44"
-          stroke="#6366F1" strokeWidth="2.5"
+          stroke="var(--primary)" strokeWidth="2.5"
           strokeDasharray="4 6" opacity="0.35"
           vectorEffect="non-scaling-stroke"
         />
@@ -202,16 +167,14 @@ export function LibraryLoader({
       </svg>
 
       {/* Inner CCW ring — luminous cyan dashed ring */}
-      {showInnerRing && (
-        <svg className="inner-svg" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-          <circle
-            cx="50" cy="50" r="35"
-            stroke="#22D3EE" strokeWidth="1.8"
-            strokeDasharray="6 10" opacity="0.75"
-            vectorEffect="non-scaling-stroke"
-          />
-        </svg>
-      )}
+      <svg className="inner-svg" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+        <circle
+          cx="50" cy="50" r="35"
+          stroke="var(--info)" strokeWidth="1.8"
+          strokeDasharray="6 10" opacity="0.75"
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
 
       {/* Center semantic icon */}
       <div className="loader-icon" aria-hidden="true">

@@ -84,8 +84,8 @@ export function normalizeManagerEnquiriesEnquiry(raw: ManagerMembersEnquiriesApi
     isOverdue: raw.isOverdue,
     isToday: raw.isToday,
     isUpcoming: raw.isUpcoming,
-    lostReason: (raw as any).lostReason,
-    lostDate: (raw as any).lostDate,
+    lostReason: (raw as { lostReason?: string }).lostReason,
+    lostDate: (raw as { lostDate?: string }).lostDate,
   };
 }
 

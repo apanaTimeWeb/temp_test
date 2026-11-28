@@ -166,7 +166,7 @@ export function ManagerCommunicationNotificationCenterNotificationHistorySection
           ),
       },
       {
-        field: 'actions' as any,
+        field: 'actions' as keyof ManagerCommunicationNotificationCenterNotificationHistoryRow,
         headerName: 'Actions',
         width: 130,
         cellRenderer: (p: NativeCellParams) => {

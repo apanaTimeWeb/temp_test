@@ -1,8 +1,8 @@
 'use client';
 
+import type { MANAGER_NAVIGATION_ITEMS } from '@/app/frontend_manager/manager_navigation/navigation/constants/ManagerNavigationNavigationConstants';
 import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
-import type { MANAGER_NAVIGATION_ITEMS } from '@/app/frontend_manager/manager_navigation/navigation/constants/ManagerNavigationNavigationConstants';
 
 type NavigationLinkItem = Extract<(typeof MANAGER_NAVIGATION_ITEMS)[number], { kind: 'link' }>;
 
@@ -21,62 +21,43 @@ interface ManagerNavigationSidebarNavSectionProps {
   onLinkClick: () => void;
 }
 
-const NAV_ICON_COLORS: Record<string, { iconColor: string; bg: string }> = {
-  // Main
-  nav_dashboard: { iconColor: '#38bdf8', bg: 'rgba(56, 189, 248, 0.14)' },       // Sky Blue
-  nav_reports: { iconColor: '#a78bfa', bg: 'rgba(167, 139, 250, 0.14)' },        // Soft Violet
-
-  // CRM
-  nav_enquiries: { iconColor: '#fb923c', bg: 'rgba(251, 146, 60, 0.14)' },       // Warm Orange
-
-  // Members
-  nav_member_directory: { iconColor: '#34d399', bg: 'rgba(52, 211, 153, 0.14)' },// Mint Emerald
-  nav_new_admission: { iconColor: '#4ade80', bg: 'rgba(74, 222, 128, 0.14)' },   // Bright Green
-  nav_group_admission: { iconColor: '#2dd4bf', bg: 'rgba(45, 212, 191, 0.14)' }, // Teal
-  nav_alumni: { iconColor: '#60a5fa', bg: 'rgba(96, 165, 250, 0.14)' },          // Blue
-  nav_referral_bonus: { iconColor: '#facc15', bg: 'rgba(250, 204, 21, 0.14)' },  // Gold
-  nav_id_card_generator: { iconColor: '#818cf8', bg: 'rgba(129, 140, 248, 0.14)' },// Indigo
-
-  // Seats & Shifts
-  nav_seat_matrix: { iconColor: '#22d3ee', bg: 'rgba(34, 211, 238, 0.14)' },     // Cyan
-  nav_seat_history: { iconColor: '#c084fc', bg: 'rgba(192, 132, 252, 0.14)' },   // Purple
-  nav_lockers: { iconColor: '#f472b6', bg: 'rgba(244, 114, 182, 0.14)' },         // Pink
-
-  // Finance
-  nav_collect_fee: { iconColor: '#10b981', bg: 'rgba(16, 185, 129, 0.14)' },     // Emerald Green
-  nav_subscriptions: { iconColor: '#818cf8', bg: 'rgba(129, 140, 248, 0.14)' }, // Indigo
-  nav_renewals: { iconColor: '#06b6d4', bg: 'rgba(6, 182, 212, 0.14)' },         // Cyan
-  nav_payment_promises: { iconColor: '#fbbf24', bg: 'rgba(251, 191, 36, 0.14)' },// Amber
-  nav_trust_scores: { iconColor: '#a855f7', bg: 'rgba(168, 85, 247, 0.14)' },    // Violet
-  nav_security_deposits: { iconColor: '#e879f9', bg: 'rgba(232, 121, 249, 0.14)' },// Fuchsia
-  nav_fines_payments: { iconColor: '#fb7185', bg: 'rgba(251, 113, 133, 0.14)' }, // Rose Coral
-  nav_auto_suspend: { iconColor: '#f87171', bg: 'rgba(248, 113, 113, 0.14)' },   // Red
-
-  // Operations
-  nav_attendance: { iconColor: '#4ade80', bg: 'rgba(74, 222, 128, 0.14)' },      // Green
-  nav_absentee_report: { iconColor: '#fbbf24', bg: 'rgba(251, 191, 36, 0.14)' }, // Amber
-  nav_qr_scanner: { iconColor: '#38bdf8', bg: 'rgba(56, 189, 248, 0.14)' },      // Sky Blue
-
-  // Accounts & Assets
-  nav_expenses: { iconColor: '#f87171', bg: 'rgba(248, 113, 113, 0.14)' },        // Red
-  nav_daily_settlement: { iconColor: '#34d399', bg: 'rgba(52, 211, 153, 0.14)' },// Emerald
-  nav_seat_gap_report: { iconColor: '#c084fc', bg: 'rgba(192, 132, 252, 0.14)' },// Purple
-  nav_assets: { iconColor: '#60a5fa', bg: 'rgba(96, 165, 250, 0.14)' },          // Blue
-  nav_asset_maintenance: { iconColor: '#fb923c', bg: 'rgba(251, 146, 60, 0.14)' },// Orange
-
-  // Communication
-  nav_complaints: { iconColor: '#f43f5e', bg: 'rgba(244, 63, 94, 0.14)' },       // Rose
-  nav_notification_center: { iconColor: '#facc15', bg: 'rgba(250, 204, 21, 0.14)' }, // Gold
-  nav_whatsapp_logs: { iconColor: '#25d366', bg: 'rgba(37, 211, 102, 0.14)' },   // WhatsApp Green
-  nav_whatsapp_templates: { iconColor: '#22c55e', bg: 'rgba(34, 197, 94, 0.14)' },// Green
-
-  // Support & Settings
-  nav_help_support: { iconColor: '#38bdf8', bg: 'rgba(56, 189, 248, 0.14)' },    // Sky
-  nav_branch_info: { iconColor: '#818cf8', bg: 'rgba(129, 140, 248, 0.14)' },     // Indigo
-  nav_security_settings: { iconColor: '#10b981', bg: 'rgba(16, 185, 129, 0.14)' },// Emerald Shield
+const NAV_ICON_BADGE_CLASS: Record<string, string> = {
+  nav_dashboard: 'mgr-nav-badge--sky',
+  nav_reports: 'mgr-nav-badge--violet',
+  nav_enquiries: 'mgr-nav-badge--orange',
+  nav_member_directory: 'mgr-nav-badge--emerald',
+  nav_new_admission: 'mgr-nav-badge--green',
+  nav_group_admission: 'mgr-nav-badge--teal',
+  nav_alumni: 'mgr-nav-badge--blue',
+  nav_referral_bonus: 'mgr-nav-badge--yellow',
+  nav_id_card_generator: 'mgr-nav-badge--indigo',
+  nav_seat_matrix: 'mgr-nav-badge--cyan',
+  nav_seat_history: 'mgr-nav-badge--purple',
+  nav_lockers: 'mgr-nav-badge--pink',
+  nav_collect_fee: 'mgr-nav-badge--emerald-deep',
+  nav_subscriptions: 'mgr-nav-badge--indigo',
+  nav_renewals: 'mgr-nav-badge--cyan-deep',
+  nav_payment_promises: 'mgr-nav-badge--amber',
+  nav_trust_scores: 'mgr-nav-badge--violet-deep',
+  nav_security_deposits: 'mgr-nav-badge--fuchsia',
+  nav_fines_payments: 'mgr-nav-badge--rose',
+  nav_auto_suspend: 'mgr-nav-badge--red',
+  nav_attendance: 'mgr-nav-badge--green',
+  nav_absentee_report: 'mgr-nav-badge--amber',
+  nav_qr_scanner: 'mgr-nav-badge--sky',
+  nav_expenses: 'mgr-nav-badge--red',
+  nav_daily_settlement: 'mgr-nav-badge--emerald',
+  nav_seat_gap_report: 'mgr-nav-badge--purple',
+  nav_assets: 'mgr-nav-badge--blue',
+  nav_asset_maintenance: 'mgr-nav-badge--orange',
+  nav_complaints: 'mgr-nav-badge--rose-deep',
+  nav_notification_center: 'mgr-nav-badge--yellow',
+  nav_whatsapp_logs: 'mgr-nav-badge--whatsapp',
+  nav_whatsapp_templates: 'mgr-nav-badge--green-deep',
+  nav_help_support: 'mgr-nav-badge--sky',
+  nav_branch_info: 'mgr-nav-badge--indigo',
+  nav_security_settings: 'mgr-nav-badge--emerald-deep',
 };
-
-const DEFAULT_ICON_COLOR = { iconColor: '#818cf8', bg: 'rgba(129, 140, 248, 0.14)' };
 
 export function ManagerNavigationSidebarNavSection({
   section,
@@ -88,41 +69,30 @@ export function ManagerNavigationSidebarNavSection({
   onToggleGroup,
   onLinkClick,
 }: ManagerNavigationSidebarNavSectionProps) {
-  if (section.key === 'primary') {
+  const renderLink = (item: NavigationLinkItem) => {
+    const active = isActive(item.href);
+    const Icon = item.icon;
+    const badgeClass = NAV_ICON_BADGE_CLASS[item.labelKey] ?? 'mgr-nav-badge--indigo';
     return (
-      <div className="mgr-nav-section">
-        {section.items.map((item) => {
-          const active = isActive(item.href);
-          const Icon = item.icon;
-          const colorMeta = NAV_ICON_COLORS[item.labelKey] ?? DEFAULT_ICON_COLOR;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`mgr-nav-item${active ? ' active' : ''}`}
-              data-testid={`manager-nav-link-${item.href.replace(/[^a-zA-Z0-9]+/g, '-')}`}
-              aria-current={active ? 'page' : undefined}
-              title={collapsed && !mobileOpen ? getNavLabel(item.labelKey) : undefined}
-              onClick={onLinkClick}
-            >
-              <span
-                className="mgr-nav-icon-badge"
-                style={{
-                  color: colorMeta.iconColor,
-                  backgroundColor: active ? `${colorMeta.iconColor}33` : colorMeta.bg,
-                  boxShadow: active ? `0 0 14px ${colorMeta.iconColor}50` : undefined,
-                }}
-              >
-                <Icon size={16} strokeWidth={2.2} className="mgr-nav-item-icon" aria-hidden="true" />
-              </span>
-              {(!collapsed || mobileOpen) && (
-                <span className="mgr-nav-label">{getNavLabel(item.labelKey)}</span>
-              )}
-            </Link>
-          );
-        })}
-      </div>
+      <Link
+        key={item.href}
+        href={item.href}
+        className={`mgr-nav-item${active ? ' active' : ''}`}
+        data-testid={`manager-nav-link-${item.href.replace(/[^a-zA-Z0-9]+/g, '-')}`}
+        aria-current={active ? 'page' : undefined}
+        title={collapsed && !mobileOpen ? getNavLabel(item.labelKey) : undefined}
+        onClick={onLinkClick}
+      >
+        <span className={`mgr-nav-icon-badge ${badgeClass}`}>
+          <Icon size={16} strokeWidth={2.2} className="mgr-nav-item-icon" aria-hidden="true" />
+        </span>
+        {(!collapsed || mobileOpen) && <span className="mgr-nav-label">{getNavLabel(item.labelKey)}</span>}
+      </Link>
     );
+  };
+
+  if (section.key === 'primary') {
+    return <div className="mgr-nav-section">{section.items.map(renderLink)}</div>;
   }
 
   return (
@@ -149,36 +119,7 @@ export function ManagerNavigationSidebarNavSection({
         hidden={!expanded}
         className={`mgr-nav-group-items${!expanded ? ' mgr-nav-group-items-collapsed' : ''}`}
       >
-        {section.items.map((item) => {
-          const active = isActive(item.href);
-          const Icon = item.icon;
-          const colorMeta = NAV_ICON_COLORS[item.labelKey] ?? DEFAULT_ICON_COLOR;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`mgr-nav-item${active ? ' active' : ''}`}
-              data-testid={`manager-nav-link-${item.href.replace(/[^a-zA-Z0-9]+/g, '-')}`}
-              aria-current={active ? 'page' : undefined}
-              title={collapsed && !mobileOpen ? getNavLabel(item.labelKey) : undefined}
-              onClick={onLinkClick}
-            >
-              <span
-                className="mgr-nav-icon-badge"
-                style={{
-                  color: colorMeta.iconColor,
-                  backgroundColor: active ? `${colorMeta.iconColor}33` : colorMeta.bg,
-                  boxShadow: active ? `0 0 14px ${colorMeta.iconColor}50` : undefined,
-                }}
-              >
-                <Icon size={16} strokeWidth={2.2} className="mgr-nav-item-icon" aria-hidden="true" />
-              </span>
-              {(!collapsed || mobileOpen) && (
-                <span className="mgr-nav-label">{getNavLabel(item.labelKey)}</span>
-              )}
-            </Link>
-          );
-        })}
+        {section.items.map(renderLink)}
       </div>
     </section>
   );

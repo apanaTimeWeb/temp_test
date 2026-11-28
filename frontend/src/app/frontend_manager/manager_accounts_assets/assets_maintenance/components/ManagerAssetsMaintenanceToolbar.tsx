@@ -1,5 +1,6 @@
 'use client';
 
+import '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/components/ManagerAssetsMaintenanceStyles.css';
 import { CheckCircle2,Clock,ListFilter,RotateCcw,Search,Wrench,X } from 'lucide-react';
 
 interface ManagerAssetsMaintenanceToolbarProps {
@@ -39,54 +40,10 @@ export function ManagerAssetsMaintenanceToolbar({
     typeFilter !== 'all';
 
   const statusTabs = [
-    {
-      id: 'all',
-      label: 'All Tickets',
-      count: counts.all,
-      icon: ListFilter,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(99, 102, 241, 0.45)',
-        backgroundColor: '#6366f1',
-        borderColor: '#818cf8',
-        color: '#ffffff',
-      },
-    },
-    {
-      id: 'pending',
-      label: 'Pending',
-      count: counts.pending,
-      icon: Clock,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(245, 158, 11, 0.45)',
-        backgroundColor: '#f59e0b',
-        borderColor: '#fbbf24',
-        color: '#000000',
-      },
-    },
-    {
-      id: 'in-progress',
-      label: 'In Progress',
-      count: counts.inProgress,
-      icon: Wrench,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(14, 165, 233, 0.45)',
-        backgroundColor: '#0ea5e9',
-        borderColor: '#38bdf8',
-        color: '#ffffff',
-      },
-    },
-    {
-      id: 'completed',
-      label: 'Completed',
-      count: counts.completed,
-      icon: CheckCircle2,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(16, 185, 129, 0.45)',
-        backgroundColor: '#10b981',
-        borderColor: '#34d399',
-        color: '#ffffff',
-      },
-    },
+    { id: 'all', label: 'All Tickets', count: counts.all, icon: ListFilter, activeClass: 'mm-pill-indigo-active' },
+    { id: 'pending', label: 'Pending', count: counts.pending, icon: Clock, activeClass: 'mm-pill-urgent-active' },
+    { id: 'in-progress', label: 'In Progress', count: counts.inProgress, icon: Wrench, activeClass: 'mm-pill-preventive-active' },
+    { id: 'completed', label: 'Completed', count: counts.completed, icon: CheckCircle2, activeClass: 'mm-pill-routine-active' },
   ];
 
   return (
@@ -102,10 +59,9 @@ export function ManagerAssetsMaintenanceToolbar({
                 key={tab.id}
                 type="button"
                 onClick={() => onStatusChange(tab.id)}
-                style={isActive ? tab.activeStyle : undefined}
                 className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   isActive
-                    ? 'border shadow-sm'
+                    ? `${tab.activeClass} border shadow-sm`
                     : 'bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover border border-border/80'
                 }`}
               >

@@ -77,9 +77,8 @@ export default function ManagerCommunicationWhatsappLogsNativeTable<T extends ob
     </div>
     <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-3 py-3 text-sm text-secondary">
       <span>
-        {(labels as any)?.range
-          ? (labels as any).range(rows.length === 0 ? 0 : effectivePage * pageSize + 1, Math.min((effectivePage + 1) * pageSize, rows.length), rows.length)
-          : `Showing ${rows.length === 0 ? 0 : effectivePage * pageSize + 1}–${Math.min((effectivePage + 1) * pageSize, rows.length)} of ${rows.length} results`}
+        {(labels as { previous?: string; next?: string; range?: (s: number, e: number, t: number) => string } | undefined)?.range?.(rows.length === 0 ? 0 : effectivePage * pageSize + 1, Math.min((effectivePage + 1) * pageSize, rows.length), rows.length)
+          ?? `Showing ${rows.length === 0 ? 0 : effectivePage * pageSize + 1}–${Math.min((effectivePage + 1) * pageSize, rows.length)} of ${rows.length} results`}
       </span>
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1.5">

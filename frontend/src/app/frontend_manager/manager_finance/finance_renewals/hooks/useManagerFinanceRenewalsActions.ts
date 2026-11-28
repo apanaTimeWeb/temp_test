@@ -1,23 +1,23 @@
 import { useState } from 'react';
 import type { RenewalRecord } from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_views/ManagerFinanceRenewalsBulkWhatsAppModal';
 
-interface UseRenewalsActionsParams {
-  renewalsList: any[];
-  setRenewalsList: React.Dispatch<React.SetStateAction<any[]>>;
-  pastGraceList: any[];
+interface UseRenewalsActionsParams<T extends RenewalRecord> {
+  renewalsList: T[];
+  setRenewalsList: React.Dispatch<React.SetStateAction<T[]>>;
+  pastGraceList: T[];
   confirm: (msg: string, cancelText: string, okText: string) => Promise<boolean>;
   setFeedbackMsg: (msg: string | null) => void;
   tManagerUi: (key: string) => string;
 }
 
-export function useManagerFinanceRenewalsActions({
+export function useManagerFinanceRenewalsActions<T extends RenewalRecord>({
   renewalsList,
   setRenewalsList,
   pastGraceList,
   confirm,
   setFeedbackMsg,
   tManagerUi,
-}: UseRenewalsActionsParams) {
+}: UseRenewalsActionsParams<T>) {
   const handleAutoReleaseSeats = async () => {
     const count = pastGraceList.length;
     if (count === 0) return;

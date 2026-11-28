@@ -26,8 +26,8 @@ export function ManagerAccountsSeatGapReportKpis({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div className="group relative overflow-hidden p-5 rounded-2xl border border-rose-500/40 sgr-kpi-rose shadow-lg shadow-rose-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-rose-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
-        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-          <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#f87171" strokeWidth="2.5" strokeLinecap="round" />
+        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 text-rose-400 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+          <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
         <div className="relative z-10">
           <p className="text-xs font-semibold text-rose-400 uppercase tracking-wider">{labels.totalGapSeats}</p>
@@ -40,8 +40,8 @@ export function ManagerAccountsSeatGapReportKpis({
       </div>
 
       <div className="group relative overflow-hidden p-5 rounded-2xl border border-amber-500/40 sgr-kpi-amber shadow-lg shadow-amber-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
-        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-          <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
+        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 text-amber-400 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+          <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
         <div className="relative z-10">
           <p className="text-xs font-semibold text-amber-400 uppercase tracking-wider">{labels.revenueLoss}</p>
@@ -54,8 +54,8 @@ export function ManagerAccountsSeatGapReportKpis({
       </div>
 
       <div className="group relative overflow-hidden p-5 rounded-2xl border border-cyan-500/40 sgr-kpi-cyan shadow-lg shadow-cyan-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-cyan-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
-        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-          <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" />
+        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 text-cyan-400 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+          <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
         <div className="relative z-10">
           <p className="text-xs font-semibold text-cyan-300 uppercase tracking-wider">{labels.avgGapDays}</p>
@@ -68,8 +68,8 @@ export function ManagerAccountsSeatGapReportKpis({
       </div>
 
       <div className="group relative overflow-hidden p-5 rounded-2xl border border-purple-500/40 sgr-kpi-purple shadow-lg shadow-purple-950/40 motion-safe:transition-all motion-safe:duration-300 hover:scale-[1.01] hover:border-purple-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
-        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-          <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#c084fc" strokeWidth="2.5" strokeLinecap="round" />
+        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 text-purple-400 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+          <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
         <div className="relative z-10">
           <p className="text-xs font-semibold text-purple-300 uppercase tracking-wider">{labels.underMaintenance}</p>

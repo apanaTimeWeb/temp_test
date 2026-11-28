@@ -953,3 +953,38 @@
   padding-right: 2.25rem;
 }
 
+.mgr-absentee-horizon--indigo {
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.45);
+  background-color: #6366f1;
+  border-color: #818cf8;
+  color: #ffffff;
+}
+
+.mgr-absentee-horizon--emerald {
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.45);
+  background-color: #10b981;
+  border-color: #34d399;
+  color: #ffffff;
+}
+
+.mgr-absentee-horizon--sky {
+  box-shadow: 0 0 16px rgba(14, 165, 233, 0.45);
+  background-color: #0ea5e9;
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+.mgr-absentee-horizon--amber {
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.45);
+  background-color: #f59e0b;
+  border-color: #fbbf24;
+  color: #000000;
+}
+
+.mgr-absentee-horizon--purple {
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.45);
+  background-color: #a855f7;
+  border-color: #c084fc;
+  color: #ffffff;
+}
+

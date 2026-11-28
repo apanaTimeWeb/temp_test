@@ -160,7 +160,7 @@ export function ManagerSeatsHistoryAuditModal({
               id="audit-horizon-select"
               data-testid="manager-audit-horizon-select"
               value={timeHorizon}
-              onChange={(e) => setTimeHorizon(e.target.value as any)}
+              onChange={(e) => setTimeHorizon(e.target.value as '30days' | '7days' | '90days' | 'all')}
               className="w-full h-9 px-2.5 rounded-lg border border-border bg-card text-primary text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
             >
               <option value="30days">🗓️ Past 1 Month (30 Days)</option>

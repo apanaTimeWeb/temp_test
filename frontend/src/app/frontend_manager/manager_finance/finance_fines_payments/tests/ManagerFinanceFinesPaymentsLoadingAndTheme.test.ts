@@ -28,7 +28,7 @@ describe('Finance loading, date, and theme source contracts', () => {
   it('formats Finance-facing dates through the module formatter', () => {
     const promises = readSource('manager_finance/finance_payment_promises/components/manager_finance_payment_promises_views/ManagerFinancePaymentPromisesPage.tsx');
     const dashboard = readSource('manager_finance/finance_subscriptions/components/manager_finance_subscriptions_views/ManagerFinanceSubscriptionsPage.tsx');
-    const receipt = readSource('manager_finance/finance_fines_payments/components/manager_finance_fines_payments_widgets/ManagerFinanceFinesPaymentsFineReceiptPanel.tsx');
+    const receipt = readSource('manager_finance/finance_fines_payments/components/manager_finance_fines_payments_views/ManagerFinanceFinesPaymentsReceiptModal.tsx');
     expect(promises).toContain('formatDate(p.expectedDate)');
     expect(promises).toContain(`p.fulfilledDate ? formatDate(p.fulfilledDate) : '—'`);
     expect(dashboard).toContain('formatDate(s.startDate)');

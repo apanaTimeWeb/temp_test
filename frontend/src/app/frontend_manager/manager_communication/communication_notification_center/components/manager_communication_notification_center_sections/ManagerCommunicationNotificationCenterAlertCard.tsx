@@ -14,9 +14,7 @@ export interface SystemNotificationItem {
   badgeClass: string;
   iconBox: string;
   activeFill: string;
-  activeBg?: string;
-  activeBorder?: string;
-  activeGlow?: string;
+  activeGlowClass?: string;
   tag: string;
   category: 'admissions' | 'maintenance' | 'security';
   isRead: boolean;
@@ -41,20 +39,11 @@ export function ManagerCommunicationNotificationCenterAlertCard({
   return (
     <article
       onClick={() => onCardClick(notification.id)}
-      style={
-        isSelected
-          ? {
-              backgroundColor: notification.activeBg,
-              borderColor: notification.activeBorder,
-              boxShadow: notification.activeGlow,
-            }
-          : undefined
-      }
       className={`relative flex flex-col p-4 sm:p-5 rounded-2xl border motion-safe:transition-all cursor-pointer ${
         notification.borderClass
       } ${
         isSelected
-          ? notification.activeFill
+          ? `${notification.activeFill} ${notification.activeGlowClass ?? ''}`
           : notification.isRead
             ? 'bg-card border-border opacity-75 hover:opacity-100 hover:border-border-focus'
             : 'bg-card border-border hover:border-border-focus hover:shadow-xs'

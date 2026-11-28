@@ -51,11 +51,12 @@ describe('Manager Members Group Admission Audit Regression Tests', () => {
     expect(content).not.toContain("'student@example.com'");
   });
 
-  it('C10: ensures confirmation dialog includes focus restoration ref and aria-describedby', () => {
-    const confirmHookPath = join(__dirname, '../hooks/useManagerMembersGroupAdmissionConfirm.tsx');
-    const content = readFileSync(confirmHookPath, 'utf8');
-    expect(content).toContain('previousFocusRef');
-    expect(content).toContain('aria-describedby={titleId}');
+  it('C10: ensures BulkModal exposes accessible dialog role and labelledby heading', () => {
+    const bulkModalPath = join(__dirname, '../components/manager_members_group_admission_dialogs/ManagerMembersGroupAdmissionBulkModal.tsx');
+    const content = readFileSync(bulkModalPath, 'utf8');
+    expect(content).toContain('role="dialog"');
+    expect(content).toContain('aria-modal="true"');
+    expect(content).toContain('aria-labelledby="bulk-upload-title"');
   });
 
   it('C18: ensures no sensitive PII is exposed in GroupPage DOM data attributes', () => {

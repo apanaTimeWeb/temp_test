@@ -1,5 +1,6 @@
 'use client';
 
+import '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_styles/ManagerAccountsExpensesStyles.css';
 import { Building,CreditCard,Download,RotateCcw,Search,Smartphone,Wallet,X } from 'lucide-react';
 
 interface ManagerAccountsExpensesToolbarProps {
@@ -28,61 +29,11 @@ export function ManagerAccountsExpensesToolbar({
   onExportCsv,
 }: ManagerAccountsExpensesToolbarProps) {
   const modeTabs = [
-    {
-      id: 'all',
-      label: 'All Modes',
-      icon: Wallet,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(99, 102, 241, 0.45)',
-        backgroundColor: '#6366f1',
-        borderColor: '#818cf8',
-        color: '#ffffff',
-      },
-    },
-    {
-      id: 'cash',
-      label: 'Cash (Counter)',
-      icon: Wallet,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(16, 185, 129, 0.45)',
-        backgroundColor: '#10b981',
-        borderColor: '#34d399',
-        color: '#ffffff',
-      },
-    },
-    {
-      id: 'upi',
-      label: 'UPI / QR',
-      icon: Smartphone,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(14, 165, 233, 0.45)',
-        backgroundColor: '#0ea5e9',
-        borderColor: '#38bdf8',
-        color: '#ffffff',
-      },
-    },
-    {
-      id: 'card',
-      label: 'Card (POS)',
-      icon: CreditCard,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(168, 85, 247, 0.45)',
-        backgroundColor: '#a855f7',
-        borderColor: '#c084fc',
-        color: '#ffffff',
-      },
-    },
-    {
-      id: 'bank',
-      label: 'Bank Transfer',
-      icon: Building,
-      activeStyle: {
-        boxShadow: '0 0 16px rgba(245, 158, 11, 0.45)',
-        backgroundColor: '#f59e0b',
-        borderColor: '#fbbf24',
-        color: '#000000',
-      },
-    },
+    { id: 'all', label: 'All Modes', icon: Wallet, activeClass: 'mex-pill-indigo-active' },
+    { id: 'cash', label: 'Cash (Counter)', icon: Wallet, activeClass: 'mex-mode-cash-active' },
+    { id: 'upi', label: 'UPI / QR', icon: Smartphone, activeClass: 'mex-mode-upi-active' },
+    { id: 'card', label: 'Card (POS)', icon: CreditCard, activeClass: 'mex-mode-card-active' },
+    { id: 'bank', label: 'Bank Transfer', icon: Building, activeClass: 'mex-mode-bank-active' },
   ];
 
   return (
@@ -98,10 +49,9 @@ export function ManagerAccountsExpensesToolbar({
                 key={tab.id}
                 type="button"
                 onClick={() => setModeFilter(tab.id)}
-                style={isActive ? tab.activeStyle : undefined}
                 className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   isActive
-                    ? 'border shadow-sm font-bold'
+                    ? `${tab.activeClass} border shadow-sm font-bold`
                     : 'bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover border border-border/80'
                 }`}
               >

@@ -1,5 +1,6 @@
 'use client';
 
+import '@/app/frontend_manager/manager_communication/communication_complaints/components/manager_communication_complaints_styles/ManagerCommunicationComplaintsManager_complaints.css';
 import { AlertCircle,CheckCircle2,Clock,Download,FileSpreadsheet,Layers,Printer,Search,X } from 'lucide-react';
 import { MANAGER_COMMUNICATION_COMPLAINT_TABS } from '@/app/frontend_manager/manager_communication/communication_complaints/constants/ManagerCommunicationComplaintsComplaintConstants';
 import type {
@@ -43,53 +44,33 @@ export function ManagerCommunicationComplaintsToolbar({
     {
       icon: typeof Layers;
       iconClass: string;
-      activeBg: string;
-      activeBorder: string;
-      activeText: string;
-      activeGlow: string;
-      badgeBg: string;
-      badgeText: string;
+      activeClass: string;
+      badgeActiveClass: string;
     }
   > = {
     All: {
       icon: Layers,
       iconClass: 'text-indigo-400',
-      activeBg: 'rgba(99, 102, 241, 0.24)',
-      activeBorder: '#6366f1',
-      activeText: '#e0e7ff',
-      activeGlow: '0 0 14px rgba(99, 102, 241, 0.45)',
-      badgeBg: 'rgba(99, 102, 241, 0.45)',
-      badgeText: '#ffffff',
+      activeClass: 'mc-tab--indigo-active',
+      badgeActiveClass: 'mc-tab-badge--indigo-active',
     },
     Open: {
       icon: AlertCircle,
       iconClass: 'text-rose-400',
-      activeBg: 'rgba(244, 63, 94, 0.25)',
-      activeBorder: '#f43f5e',
-      activeText: '#ffe4e6',
-      activeGlow: '0 0 16px rgba(244, 63, 94, 0.5)',
-      badgeBg: 'rgba(244, 63, 94, 0.5)',
-      badgeText: '#ffffff',
+      activeClass: 'mc-tab--rose-active',
+      badgeActiveClass: 'mc-tab-badge--rose-active',
     },
     'In-Progress': {
       icon: Clock,
       iconClass: 'text-amber-400',
-      activeBg: 'rgba(245, 158, 11, 0.25)',
-      activeBorder: '#f59e0b',
-      activeText: '#fef3c7',
-      activeGlow: '0 0 16px rgba(245, 158, 11, 0.5)',
-      badgeBg: 'rgba(245, 158, 11, 0.5)',
-      badgeText: '#ffffff',
+      activeClass: 'mc-tab--amber-active',
+      badgeActiveClass: 'mc-tab-badge--amber-active',
     },
     Resolved: {
       icon: CheckCircle2,
       iconClass: 'text-emerald-400',
-      activeBg: 'rgba(16, 185, 129, 0.25)',
-      activeBorder: '#10b981',
-      activeText: '#d1fae5',
-      activeGlow: '0 0 16px rgba(16, 185, 129, 0.5)',
-      badgeBg: 'rgba(16, 185, 129, 0.5)',
-      badgeText: '#ffffff',
+      activeClass: 'mc-tab--emerald-active',
+      badgeActiveClass: 'mc-tab-badge--emerald-active',
     },
   };
 
@@ -112,19 +93,9 @@ export function ManagerCommunicationComplaintsToolbar({
                   setTab(item);
                   onResetPage();
                 }}
-                style={
-                  isActive
-                    ? {
-                        backgroundColor: config.activeBg,
-                        borderColor: config.activeBorder,
-                        color: config.activeText,
-                        boxShadow: config.activeGlow,
-                      }
-                    : undefined
-                }
                 className={`group inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer border ${
                   isActive
-                    ? 'font-bold'
+                    ? `${config.activeClass} font-bold`
                     : 'bg-card/60 border-border text-secondary hover:text-primary hover:bg-surface-hover hover:border-border-focus'
                 }`}
                 aria-pressed={isActive}
@@ -135,18 +106,9 @@ export function ManagerCommunicationComplaintsToolbar({
                 />
                 <span>{item}</span>
                 <span
-                  style={
-                    isActive
-                      ? {
-                          backgroundColor: config.badgeBg,
-                          color: config.badgeText,
-                          borderColor: config.activeBorder,
-                        }
-                      : undefined
-                  }
                   className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold border transition-colors ${
                     isActive
-                      ? ''
+                      ? config.badgeActiveClass
                       : 'bg-surface border-border text-secondary group-hover:text-primary'
                   }`}
                 >

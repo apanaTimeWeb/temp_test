@@ -50,7 +50,7 @@ export function personalizeRenewalTemplate(template: string, item: RenewalMessag
     .replace(/{due}/gi, formatRenewalInr(Math.round(item.due / 100)));
 }
 
-export function handleRenewalsExport(visible: any[], filter: FilterType, setMsg: (m: string) => void) {
+export function handleRenewalsExport(visible: Parameters<typeof exportManagerRenewalsCsv>[0], filter: FilterType, setMsg: (m: string) => void) {
   exportManagerRenewalsCsv(visible, filter);
   setMsg(`Exported ${visible.length} renewal records to CSV successfully.`);
 }

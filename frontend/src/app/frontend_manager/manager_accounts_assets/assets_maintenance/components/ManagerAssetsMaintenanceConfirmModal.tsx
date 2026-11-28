@@ -1,5 +1,6 @@
 'use client';
 
+import '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/components/ManagerAssetsMaintenanceStyles.css';
 import { AlertCircle,CheckCircle2,Wrench,X } from 'lucide-react';
 import { useEffect,useRef } from 'react';
 import type { MaintenanceLogItem } from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/components/ManagerAssetsMaintenanceTable';
@@ -118,14 +119,9 @@ export function ManagerAssetsMaintenanceConfirmModal({
             ref={confirmBtnRef}
             type="button"
             onClick={onConfirm}
-            style={{
-              boxShadow: isCompleting
-                ? '0 0 16px rgba(16, 185, 129, 0.45)'
-                : '0 0 16px rgba(14, 165, 233, 0.45)',
-              backgroundColor: isCompleting ? '#10b981' : '#0ea5e9',
-              borderColor: isCompleting ? '#34d399' : '#38bdf8',
-            }}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-xs font-semibold hover:opacity-95 transition-all cursor-pointer border"
+            className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-xs font-semibold hover:opacity-95 transition-all cursor-pointer border ${
+              isCompleting ? 'mm-pill-routine-active' : 'mm-pill-preventive-active'
+            }`}
           >
             {isCompleting ? <CheckCircle2 size={14} /> : <Wrench size={14} />}
             Confirm & Advance

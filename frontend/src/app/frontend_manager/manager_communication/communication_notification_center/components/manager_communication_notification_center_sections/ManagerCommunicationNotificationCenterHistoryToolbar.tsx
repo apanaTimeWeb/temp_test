@@ -1,18 +1,19 @@
 'use client';
 
+import '@/app/frontend_manager/manager_communication/communication_notification_center/components/manager_communication_notification_center_styles/ManagerCommunicationNotificationCenterManager_notification_center.css';
 import { Filter, Search, X } from 'lucide-react';
 
 const CHANNEL_BUTTONS = [
-  { id: 'all', label: 'All Channels', activeBg: 'rgba(99, 102, 241, 0.22)', activeBorder: '#6366f1', activeText: '#e0e7ff', activeGlow: '0 0 14px rgba(99, 102, 241, 0.45)' },
-  { id: 'WhatsApp', label: '📱 WhatsApp', activeBg: 'rgba(16, 185, 129, 0.25)', activeBorder: '#10b981', activeText: '#d1fae5', activeGlow: '0 0 16px rgba(16, 185, 129, 0.5)' },
-  { id: 'SMS', label: '💬 SMS', activeBg: 'rgba(245, 158, 11, 0.25)', activeBorder: '#f59e0b', activeText: '#fef3c7', activeGlow: '0 0 16px rgba(245, 158, 11, 0.5)' },
-  { id: 'Email', label: '✉️ Email', activeBg: 'rgba(14, 165, 233, 0.25)', activeBorder: '#0ea5e9', activeText: '#e0f2fe', activeGlow: '0 0 16px rgba(14, 165, 233, 0.5)' },
+  { id: 'all', label: 'All Channels', activeClass: 'mnc-chip--indigo-sm' },
+  { id: 'WhatsApp', label: '📱 WhatsApp', activeClass: 'mnc-chip--emerald' },
+  { id: 'SMS', label: '💬 SMS', activeClass: 'mnc-chip--amber' },
+  { id: 'Email', label: '✉️ Email', activeClass: 'mnc-chip--sky' },
 ];
 
 const STATUS_BUTTONS = [
-  { id: 'all', label: 'All Status', activeBg: 'rgba(99, 102, 241, 0.22)', activeBorder: '#6366f1', activeText: '#e0e7ff', activeGlow: '0 0 14px rgba(99, 102, 241, 0.45)' },
-  { id: 'Delivered', label: '🟢 Delivered', activeBg: 'rgba(16, 185, 129, 0.25)', activeBorder: '#10b981', activeText: '#d1fae5', activeGlow: '0 0 16px rgba(16, 185, 129, 0.5)' },
-  { id: 'Failed', label: '🔴 Failed', activeBg: 'rgba(244, 63, 94, 0.25)', activeBorder: '#f43f5e', activeText: '#ffe4e6', activeGlow: '0 0 16px rgba(244, 63, 94, 0.5)' },
+  { id: 'all', label: 'All Status', activeClass: 'mnc-chip--indigo-sm' },
+  { id: 'Delivered', label: '🟢 Delivered', activeClass: 'mnc-chip--emerald' },
+  { id: 'Failed', label: '🔴 Failed', activeClass: 'mnc-chip--rose' },
 ];
 
 interface ManagerCommunicationNotificationCenterHistoryToolbarProps {
@@ -110,9 +111,8 @@ export function ManagerCommunicationNotificationCenterHistoryToolbar({
                 key={ch.id}
                 type="button"
                 onClick={() => setChannelFilter(ch.id)}
-                style={isSelected ? { backgroundColor: ch.activeBg, borderColor: ch.activeBorder, color: ch.activeText, boxShadow: ch.activeGlow } : undefined}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold motion-safe:transition-all cursor-pointer border ${
-                  isSelected ? 'font-bold' : 'bg-card border-border text-secondary hover:text-primary hover:bg-card hover:border-border-focus'
+                  isSelected ? `${ch.activeClass} font-bold` : 'bg-card border-border text-secondary hover:text-primary hover:bg-card hover:border-border-focus'
                 }`}
               >
                 <span>{ch.label}</span>
@@ -130,9 +130,8 @@ export function ManagerCommunicationNotificationCenterHistoryToolbar({
                 key={st.id}
                 type="button"
                 onClick={() => setStatusFilter(st.id)}
-                style={isSelected ? { backgroundColor: st.activeBg, borderColor: st.activeBorder, color: st.activeText, boxShadow: st.activeGlow } : undefined}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold motion-safe:transition-all cursor-pointer border ${
-                  isSelected ? 'font-bold' : 'bg-card border-border text-secondary hover:text-primary hover:bg-card hover:border-border-focus'
+                  isSelected ? `${st.activeClass} font-bold` : 'bg-card border-border text-secondary hover:text-primary hover:bg-card hover:border-border-focus'
                 }`}
               >
                 <span>{st.label}</span>

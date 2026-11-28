@@ -1,13 +1,24 @@
-import { fetchManagerGroupAdmission,fetchManagerStudentById } from '@/app/frontend_manager/manager_members/members_group_admission/api/manager_members_group_admission.api';
+import { fetchManagerGroupAdmission, fetchManagerStudentById } from '@/app/frontend_manager/manager_members/members_group_admission/api/manager_members_group_admission.api';
 import { apiFetch } from '@/lib/api';
-import { beforeEach,describe,expect,it,vi } from 'vitest';
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/lib/api', () => ({ apiFetch: vi.fn() }));
 const apiFetchMock: any = vi.mocked(apiFetch);
-const studentEnvelopeData = {"id": "student-1", "smartId": "SMART-001", "name": "Test Student", "phone": "9876543210", "shift": "Morning", "seat": "S-01", "status": "Active", "plan": "Monthly", "dueMinor": 0, "currency": "INR", "joined": "2026-10-01"} as const;
-
-import { existsSync,readFileSync } from 'node:fs';
-import { join } from 'node:path';
+const studentEnvelopeData = {
+  id: 'student-1',
+  smartId: 'SMART-001',
+  name: 'Test Student',
+  phone: '9876543210',
+  shift: 'Morning',
+  seat: 'S-01',
+  status: 'Active',
+  plan: 'Monthly',
+  dueMinor: 0,
+  currency: 'INR',
+  joined: '2026-10-01',
+} as const;
 
 const moduleRoot = [
   join(process.cwd(), 'src/app/frontend_manager/manager_members/members_group_admission'),
@@ -16,32 +27,25 @@ const moduleRoot = [
   join(process.cwd(), '..', '..'),
   join(process.cwd(), '..'),
   process.cwd(),
-].find((candidate) => existsSync(join(candidate, 'config/manager_members_group_admission.url_config.ts')) && existsSync(join(candidate, 'components/manager_members_group_admission_views/ManagerMembersGroupAdmissionGroupPage.tsx')));
+].find(
+  (candidate) =>
+    existsSync(join(candidate, 'config/manager_members_group_admission.url_config.ts')) &&
+    existsSync(join(candidate, 'components/manager_members_group_admission_views/ManagerMembersGroupAdmissionGroupPage.tsx')),
+);
 if (!moduleRoot) throw new Error('Could not locate the canonical members_group_admission module from the test working directory.');
 const readSource = (relativePath: string) => readFileSync(join(moduleRoot, relativePath), 'utf8');
 
-describe('student admission contract guard', () => {
-  it('does not seed invented plan prices or selected inventory defaults', () => {
-    const hook = readSource('hooks/useManagerMembersGroupAdmissionAdmission.ts');
-    expect(hook).toContain("plan: ''");
-    expect(hook).toContain("seat: ''");
-    expect(hook).toContain("shift: ''");
-    expect(hook).toContain("amountPaid: ''");
-    expect(hook).not.toContain('amountMinor');
+describe('group admission workflow ownership contract', () => {
+  it('keeps group admission routed to GroupPage without dead single-student AdmissionForm copies', () => {
+    expect(readSource('components/ManagerMembersGroupAdmissionMain.tsx')).toContain('ManagerMembersGroupAdmissionGroupPage');
+    expect(existsSync(join(moduleRoot, 'components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionAdmissionForm.tsx'))).toBe(false);
+    expect(existsSync(join(moduleRoot, 'hooks/useManagerMembersGroupAdmissionAdmission.ts'))).toBe(false);
   });
 
-  it('keeps pricing, payment, seat and locker controls unavailable without a host contract', () => {
-    const payment = readSource('components/manager_members_group_admission_sections/ManagerMembersGroupAdmissionAdmissionPaymentSection.tsx');
-    const enrollment = readSource('components/manager_members_group_admission_sections/ManagerMembersGroupAdmissionAdmissionEnrollmentSection.tsx');
-    const summary = readSource('components/manager_members_group_admission_sections/ManagerMembersGroupAdmissionAdmissionSummary.tsx');
-    expect(payment).toContain('disabled className="mgr-select mgr-input-with-icon"');
-    expect(payment).toContain('admission_unavailable_host_contract_not_supplied');
-    expect(enrollment).toContain('disabled className={`mgr-select');
-    expect(summary).toContain('pricingAvailable = false');
-    expect(summary).toContain('window.confirm');
-    expect(readSource('components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionAdmissionForm.tsx')).toContain('useManagerMembersGroupAdmissionUnsavedChangesGuard');
-    expect(readSource('hooks/useManagerMembersGroupAdmissionUnsavedChangesGuard.ts')).toContain('beforeunload');
-    expect(readSource('hooks/useManagerMembersGroupAdmissionUnsavedChangesGuard.ts')).toContain('pendingAnchor.click()');
+  it('persists group admission state through dedicated storage helpers', () => {
+    const groupPage = readSource('components/manager_members_group_admission_views/ManagerMembersGroupAdmissionGroupPage.tsx');
+    expect(groupPage).toContain('loadStoredGroupAdmissions');
+    expect(groupPage).toContain('persistGroupAdmissions');
   });
 });
 
@@ -59,7 +63,14 @@ describe('API response envelope contract', () => {
   });
 
   it('propagates a failed API envelope instead of parsing its null data', async () => {
-    apiFetchMock.mockResolvedValueOnce({ success: false, message: 'upstream unavailable', data: null, errorCode: 'UPSTREAM_UNAVAILABLE', statusCode: 503, requestId: 'test-failure' });
+    apiFetchMock.mockResolvedValueOnce({
+      success: false,
+      message: 'upstream unavailable',
+      data: null,
+      errorCode: 'UPSTREAM_UNAVAILABLE',
+      statusCode: 503,
+      requestId: 'test-failure',
+    });
     await expect(fetchManagerGroupAdmission()).rejects.toThrow('upstream unavailable');
   });
 });

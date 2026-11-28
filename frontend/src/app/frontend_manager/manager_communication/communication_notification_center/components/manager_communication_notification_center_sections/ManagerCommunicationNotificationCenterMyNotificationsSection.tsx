@@ -1,5 +1,6 @@
 'use client';
 
+import '@/app/frontend_manager/manager_communication/communication_notification_center/components/manager_communication_notification_center_styles/ManagerCommunicationNotificationCenterManager_notification_center.css';
 import {
   ManagerCommunicationNotificationCenterAlertCard,
   type SystemNotificationItem,
@@ -24,9 +25,7 @@ export function ManagerCommunicationNotificationCenterMyNotificationsSection() {
       badgeClass: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
       iconBox: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
       activeFill: 'border-emerald-500',
-      activeBg: 'rgba(16, 185, 129, 0.18)',
-      activeBorder: '#10b981',
-      activeGlow: '0 0 16px rgba(16, 185, 129, 0.35)',
+      activeGlowClass: 'mnc-alert--emerald',
       tag: 'Admissions',
       category: 'admissions',
       isRead: false,
@@ -41,9 +40,7 @@ export function ManagerCommunicationNotificationCenterMyNotificationsSection() {
       badgeClass: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
       iconBox: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
       activeFill: 'border-amber-500',
-      activeBg: 'rgba(245, 158, 11, 0.18)',
-      activeBorder: '#f59e0b',
-      activeGlow: '0 0 16px rgba(245, 158, 11, 0.35)',
+      activeGlowClass: 'mnc-alert--amber',
       tag: 'Maintenance',
       category: 'maintenance',
       isRead: false,
@@ -58,9 +55,7 @@ export function ManagerCommunicationNotificationCenterMyNotificationsSection() {
       badgeClass: 'bg-rose-500/15 text-rose-400 border-rose-500/30',
       iconBox: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
       activeFill: 'border-rose-500',
-      activeBg: 'rgba(244, 63, 94, 0.18)',
-      activeBorder: '#f43f5e',
-      activeGlow: '0 0 16px rgba(244, 63, 94, 0.35)',
+      activeGlowClass: 'mnc-alert--rose',
       tag: 'Security & Billing',
       category: 'security',
       isRead: false,
@@ -104,11 +99,11 @@ export function ManagerCommunicationNotificationCenterMyNotificationsSection() {
   });
 
   const CATEGORY_CHIPS = [
-    { id: 'all', label: 'All Alerts', count: notificationList.length, activeBg: 'rgba(99, 102, 241, 0.22)', activeBorder: '#6366f1', activeText: '#e0e7ff', activeGlow: '0 0 14px rgba(99, 102, 241, 0.45)' },
-    { id: 'unread', label: 'Unread', count: unreadCount, activeBg: 'rgba(99, 102, 241, 0.25)', activeBorder: '#6366f1', activeText: '#e0e7ff', activeGlow: '0 0 16px rgba(99, 102, 241, 0.5)' },
-    { id: 'admissions', label: 'Admissions', activeBg: 'rgba(16, 185, 129, 0.25)', activeBorder: '#10b981', activeText: '#d1fae5', activeGlow: '0 0 16px rgba(16, 185, 129, 0.5)' },
-    { id: 'maintenance', label: 'Maintenance', activeBg: 'rgba(245, 158, 11, 0.25)', activeBorder: '#f59e0b', activeText: '#fef3c7', activeGlow: '0 0 16px rgba(245, 158, 11, 0.5)' },
-    { id: 'security', label: 'Security', activeBg: 'rgba(244, 63, 94, 0.25)', activeBorder: '#f43f5e', activeText: '#ffe4e6', activeGlow: '0 0 16px rgba(244, 63, 94, 0.5)' },
+    { id: 'all', label: 'All Alerts', count: notificationList.length, activeClass: 'mnc-chip--indigo-sm', badgeBorderClass: 'border-indigo-500' },
+    { id: 'unread', label: 'Unread', count: unreadCount, activeClass: 'mnc-chip--indigo', badgeBorderClass: 'border-indigo-500' },
+    { id: 'admissions', label: 'Admissions', activeClass: 'mnc-chip--emerald', badgeBorderClass: 'border-emerald-500' },
+    { id: 'maintenance', label: 'Maintenance', activeClass: 'mnc-chip--amber', badgeBorderClass: 'border-amber-500' },
+    { id: 'security', label: 'Security', activeClass: 'mnc-chip--rose', badgeBorderClass: 'border-rose-500' },
   ];
 
   return (
@@ -154,21 +149,15 @@ export function ManagerCommunicationNotificationCenterMyNotificationsSection() {
               key={cat.id}
               type="button"
               onClick={() => setActiveCategory(cat.id)}
-              style={
-                isSelected
-                  ? { backgroundColor: cat.activeBg, borderColor: cat.activeBorder, color: cat.activeText, boxShadow: cat.activeGlow }
-                  : undefined
-              }
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold motion-safe:transition-all cursor-pointer border ${
-                isSelected ? 'font-bold' : 'bg-card border-border text-secondary hover:text-primary hover:bg-card hover:border-border-focus'
+                isSelected ? `${cat.activeClass} font-bold` : 'bg-card border-border text-secondary hover:text-primary hover:bg-card hover:border-border-focus'
               }`}
             >
               <span>{cat.label}</span>
               {typeof cat.count === 'number' && (
                 <span
-                  style={isSelected ? { borderColor: cat.activeBorder } : undefined}
                   className={`text-[10px] px-1.5 py-0.2 rounded-full border ${
-                    isSelected ? 'bg-slate-900/40 text-white' : 'bg-surface border-border text-secondary'
+                    isSelected ? `bg-slate-900/40 text-white ${cat.badgeBorderClass}` : 'bg-surface border-border text-secondary'
                   }`}
                 >
                   {cat.count}

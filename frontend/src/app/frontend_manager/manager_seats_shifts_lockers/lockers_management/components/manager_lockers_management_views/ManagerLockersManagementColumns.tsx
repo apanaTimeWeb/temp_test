@@ -16,7 +16,7 @@ const STATUS_CLASS: Record<LockerStatus, string> = {
   Expired: 'ss-badge bg-amber-500/15 text-amber-400 border border-amber-500/30',
 };
 
-export function LockerIdCell(props: { value?: any }) {
+export function LockerIdCell(props: { value?: unknown }) {
   return (
     <span className="font-mono font-bold text-xs text-primary bg-surface px-2 py-0.5 rounded-md border border-border">
       {String(props.value ?? '')}
@@ -24,7 +24,7 @@ export function LockerIdCell(props: { value?: any }) {
   );
 }
 
-export function LockerStatusCell(props: { value?: any; data?: any }) {
+export function LockerStatusCell(props: { value?: unknown; data?: Locker }) {
   const tManagerUi = useTranslations('manager.manager_lockers.ui');
   const status = props.value as LockerStatus;
   const locker = props.data as Locker;
@@ -57,7 +57,7 @@ export function LockerStatusCell(props: { value?: any; data?: any }) {
   );
 }
 
-export function KeyNumberCell(props: { data?: any }) {
+export function KeyNumberCell(props: { data?: Locker }) {
   const data = props.data as Locker;
   if (!data) return null;
   const keyTag = data.keyNumber || `KEY-${data.lockerId}`;
@@ -76,7 +76,7 @@ export function KeyNumberCell(props: { data?: any }) {
   );
 }
 
-export function ExpiryCell(props: { data?: any }) {
+export function ExpiryCell(props: { data?: Locker }) {
   const data = props.data as Locker;
   if (!data || !data.expiryDate || data.expiryDate === '—') {
     return <span className="text-secondary text-xs">—</span>;
@@ -94,7 +94,7 @@ export function ExpiryCell(props: { data?: any }) {
   );
 }
 
-export function AssignedToCell(props: { data?: any }) {
+export function AssignedToCell(props: { data?: Locker }) {
   const tManagerUi = useTranslations('manager.manager_lockers.ui');
   if (!props.data || props.data.assignedTo === '—') {
     return <span className="ss-table__cell-muted">{tManagerUi('unassigned')}</span>;
@@ -107,7 +107,7 @@ export function AssignedToCell(props: { data?: any }) {
   );
 }
 
-export function AssignedSinceCell(props: { value?: any }) {
+export function AssignedSinceCell(props: { value?: unknown }) {
   const locale = useLocale();
   const raw = String(props.value ?? '');
   if (raw === '—' || !/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
@@ -119,7 +119,7 @@ export function AssignedSinceCell(props: { value?: any }) {
 }
 
 interface GetLockerColumnsOptions {
-  tManagerUi: (key: string, values?: any) => string;
+  tManagerUi: (key: string, values?: Record<string, string | number | Date>) => string;
   onShowAssign: (locker: Locker) => void;
   onSetFreeTarget: (locker: Locker) => void;
   onSelectLocker?: (locker: Locker) => void;

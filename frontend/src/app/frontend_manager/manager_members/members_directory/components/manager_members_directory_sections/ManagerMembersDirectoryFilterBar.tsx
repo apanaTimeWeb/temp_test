@@ -83,7 +83,7 @@ export function ManagerMembersDirectoryFilterBar({
         <option value="all">All Plans</option>
         {MANAGER_MEMBERSHIP_TYPE_OPTIONS.map((opt) => (
           <option key={opt.value} value={opt.value}>
-            {tManagerUi(opt.labelKey as any) || opt.value}
+            {tManagerUi(opt.labelKey) || opt.value}
           </option>
         ))}
       </select>
@@ -113,7 +113,7 @@ export function ManagerMembersDirectoryFilterBar({
         <option value="all">All Genders</option>
         {MANAGER_MEMBERS_GENDER_OPTIONS.map((opt) => (
           <option key={opt.value} value={opt.value}>
-            {tManagerUi(opt.labelKey as any) || opt.value}
+            {tManagerUi(opt.labelKey) || opt.value}
           </option>
         ))}
       </select>

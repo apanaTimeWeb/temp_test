@@ -9,7 +9,7 @@ interface ManagerLockersManagementToolbarProps {
   setStatusFilter: (status: string) => void;
   mainTableSearch: string;
   setMainTableSearch: (val: string) => void;
-  tManagerUi: (key: string, values?: any) => string;
+  tManagerUi: (key: string, values?: Record<string, string | number | Date>) => string;
 }
 
 export function ManagerLockersManagementToolbar({

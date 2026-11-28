@@ -1,7 +1,7 @@
 'use client';
 
+import '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_styles/ManagerAttendanceAbsenteeReportManager_absentee_report.css';
 import { Calendar,X } from 'lucide-react';
-import React from 'react';
 
 export type ManagerAbsenteeTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
 
@@ -15,37 +15,12 @@ export interface ManagerAttendanceAbsenteeTimeHorizonBarProps {
   activeCount: number;
 }
 
-const HORIZON_STYLES: Record<ManagerAbsenteeTimeHorizon, React.CSSProperties> = {
-  all: {
-    boxShadow: '0 0 16px rgba(99, 102, 241, 0.45)',
-    backgroundColor: '#6366f1',
-    borderColor: '#818cf8',
-    color: '#ffffff',
-  },
-  today: {
-    boxShadow: '0 0 16px rgba(16, 185, 129, 0.45)',
-    backgroundColor: '#10b981',
-    borderColor: '#34d399',
-    color: '#ffffff',
-  },
-  this_week: {
-    boxShadow: '0 0 16px rgba(14, 165, 233, 0.45)',
-    backgroundColor: '#0ea5e9',
-    borderColor: '#38bdf8',
-    color: '#ffffff',
-  },
-  this_month: {
-    boxShadow: '0 0 16px rgba(245, 158, 11, 0.45)',
-    backgroundColor: '#f59e0b',
-    borderColor: '#fbbf24',
-    color: '#000000',
-  },
-  custom: {
-    boxShadow: '0 0 16px rgba(168, 85, 247, 0.45)',
-    backgroundColor: '#a855f7',
-    borderColor: '#c084fc',
-    color: '#ffffff',
-  },
+const HORIZON_ACTIVE_CLASSES: Record<ManagerAbsenteeTimeHorizon, string> = {
+  all: 'mgr-absentee-horizon--indigo',
+  today: 'mgr-absentee-horizon--emerald',
+  this_week: 'mgr-absentee-horizon--sky',
+  this_month: 'mgr-absentee-horizon--amber',
+  custom: 'mgr-absentee-horizon--purple',
 };
 
 const timeHorizonOptions: Array<{ id: ManagerAbsenteeTimeHorizon; label: string }> = [
@@ -91,10 +66,9 @@ export function ManagerAttendanceAbsenteeTimeHorizonBar({
                 key={opt.id}
                 type="button"
                 onClick={() => onChangeTimeHorizon(opt.id)}
-                style={isActive ? HORIZON_STYLES[opt.id] : undefined}
                 className={`min-h-8 px-3 py-1 text-xs rounded-lg font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   isActive
-                    ? 'border shadow-sm font-bold'
+                    ? `${HORIZON_ACTIVE_CLASSES[opt.id]} border shadow-sm font-bold`
                     : 'text-secondary hover:text-primary hover:bg-surface-hover'
                 }`}
               >

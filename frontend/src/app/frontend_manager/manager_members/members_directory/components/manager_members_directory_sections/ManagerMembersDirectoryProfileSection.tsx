@@ -180,10 +180,15 @@ export function ManagerMembersDirectoryProfileSection({
           <div className="p-5 sm:p-6 rounded-2xl bg-floating border border-border space-y-6 w-full max-w-full min-w-0 shadow-lg shadow-black/20">
             <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-5 min-w-0">
               <div className="flex items-start sm:items-center gap-4 min-w-0">
-                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-indigo-500/10 border-2 border-indigo-500/30 flex items-center justify-center shrink-0 cursor-pointer hover:border-indigo-400 hover:scale-105 motion-safe:transition-all shadow-md group relative" onClick={() => setIsZoomed(true)} title="Click to view enlarged photo">
+                <button
+                  type="button"
+                  onClick={() => setIsZoomed(true)}
+                  title="Click to view enlarged photo"
+                  aria-label="View enlarged member photo"
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-indigo-500/10 border-2 border-indigo-500/30 flex items-center justify-center shrink-0 cursor-pointer hover:border-indigo-400 hover:scale-105 motion-safe:transition-all shadow-md group relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
                   <Users size={38} className="text-indigo-400 group-hover:scale-110 motion-safe:transition-transform" />
-                  <span className="sr-only">Click to view enlarged photo</span>
-                </div>
+                </button>
                 <div className="min-w-0 flex-1">
                   <h3 className="text-xl sm:text-2xl font-black text-primary tracking-tight truncate" title={member.name}>{member.name}</h3>
                   <div className="flex items-center gap-2 flex-wrap mt-1.5">

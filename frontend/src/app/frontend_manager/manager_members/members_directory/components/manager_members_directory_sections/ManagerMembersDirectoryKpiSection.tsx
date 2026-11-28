@@ -29,7 +29,7 @@ export function ManagerMembersDirectoryKpiSection({
       badge: timeHorizonLabel,
       badgeStyle: 'bg-indigo-500/15 text-indigo-300 border border-indigo-500/30',
       subtext: 'All registered members',
-      stroke: '#818cf8',
+      strokeClass: 'text-indigo-400',
       unselectedBg: 'border-indigo-500/30 md-kpi-total-idle hover:border-indigo-400/60 shadow-lg shadow-indigo-950/30',
       activeBorder: 'border-2 border-indigo-400 shadow-xl shadow-indigo-500/40 md-kpi-total-active',
       activeTopBar: 'bg-indigo-400 md-kpi-total-bar',
@@ -47,7 +47,7 @@ export function ManagerMembersDirectoryKpiSection({
       badge: `${activeRate} Active`,
       badgeStyle: 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30',
       subtext: 'Valid subscriptions',
-      stroke: '#34d399',
+      strokeClass: 'text-emerald-400',
       unselectedBg: 'border-emerald-500/30 md-kpi-active-idle hover:border-emerald-400/60 shadow-lg shadow-emerald-950/30',
       activeBorder: 'border-2 border-emerald-400 shadow-xl shadow-emerald-500/40 md-kpi-active-sel',
       activeTopBar: 'bg-emerald-400 md-kpi-active-bar',
@@ -65,7 +65,7 @@ export function ManagerMembersDirectoryKpiSection({
       badge: expiredMembers > 0 ? `${expiredMembers} Expired` : '0 Expired',
       badgeStyle: 'bg-rose-500/15 text-rose-300 border border-rose-500/30',
       subtext: 'Needs renewal',
-      stroke: '#f87171',
+      strokeClass: 'text-rose-400',
       unselectedBg: 'border-rose-500/30 md-kpi-expired-idle hover:border-rose-400/60 shadow-lg shadow-rose-950/30',
       activeBorder: 'border-2 border-rose-400 shadow-xl shadow-rose-500/40 md-kpi-expired-sel',
       activeTopBar: 'bg-rose-400 md-kpi-expired-bar',
@@ -83,7 +83,7 @@ export function ManagerMembersDirectoryKpiSection({
       badge: suspendedMembers > 0 ? `${suspendedMembers} On Hold` : '0 On Hold',
       badgeStyle: 'bg-amber-500/15 text-amber-300 border border-amber-500/30',
       subtext: 'Account on hold',
-      stroke: '#fbbf24',
+      strokeClass: 'text-amber-400',
       unselectedBg: 'border-amber-500/30 md-kpi-suspended-idle hover:border-amber-400/60 shadow-lg shadow-amber-950/30',
       activeBorder: 'border-2 border-amber-400 shadow-xl shadow-amber-500/40 md-kpi-suspended-sel',
       activeTopBar: 'bg-amber-400 md-kpi-suspended-bar',
@@ -114,8 +114,8 @@ export function ManagerMembersDirectoryKpiSection({
             )}
 
             {/* Decorative Sparkline */}
-            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-              <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke={kpi.stroke} strokeWidth="2.5" strokeLinecap="round" />
+            <svg aria-hidden="true" className={`absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none ${kpi.strokeClass}`} viewBox="0 0 150 45">
+              <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
             </svg>
 
             <div className="flex items-center justify-between gap-2 min-w-0 relative z-10">

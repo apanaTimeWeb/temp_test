@@ -104,8 +104,8 @@ export function ManagerMembersIdCardGeneratorStudentIdCardHalfYearlyBack({
   const rules = data.rules && data.rules.length > 0 ? data.rules : DEFAULT_RULES;
   const helpdeskPhone = data.helpdeskPhone || '+91 98765 43210';
   const wifiSsid = data.wifiSsid || 'Central_Library_5G';
-  const batch = (data as any).batch || 'BATCH-24-Q4';
-  const serial = (data as any).serial || `SN-${data.smartId}`;
+  const batch = data.batch || 'BATCH-24-Q4';
+  const serial = data.serial || `SN-${data.smartId}`;
 
   return (
     <div
@@ -159,7 +159,7 @@ export function ManagerMembersIdCardGeneratorStudentIdCardHalfYearlyBack({
             <span>Study Wi-Fi Pass</span>
           </div>
           <div className="w-[44px] h-[44px] p-1 bg-white rounded-md shadow-md flex items-center justify-center my-0.5">
-            <HyWifiQrSvgBack ssid={wifiSsid} password={(data as any).wifiPassword} />
+            <HyWifiQrSvgBack ssid={wifiSsid} password={data.wifiPassword} />
           </div>
           <div className="flex flex-col items-center gap-0.5 leading-tight">
             <span className="text-[6.5px] font-bold text-sky-300">Scan to Auto-Connect</span>

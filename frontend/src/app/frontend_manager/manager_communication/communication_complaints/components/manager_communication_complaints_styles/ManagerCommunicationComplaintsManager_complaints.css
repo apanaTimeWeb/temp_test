@@ -541,3 +541,51 @@
   background-color: rgba(0, 92, 75, 0.8);
   border-color: #005c4b;
 }
+
+.mc-tab--indigo-active {
+  background-color: rgba(99, 102, 241, 0.24);
+  border-color: #6366f1;
+  color: #e0e7ff;
+  box-shadow: 0 0 14px rgba(99, 102, 241, 0.45);
+}
+.mc-tab-badge--indigo-active {
+  background-color: rgba(99, 102, 241, 0.45);
+  color: #ffffff;
+  border-color: #6366f1;
+}
+
+.mc-tab--rose-active {
+  background-color: rgba(244, 63, 94, 0.25);
+  border-color: #f43f5e;
+  color: #ffe4e6;
+  box-shadow: 0 0 16px rgba(244, 63, 94, 0.5);
+}
+.mc-tab-badge--rose-active {
+  background-color: rgba(244, 63, 94, 0.5);
+  color: #ffffff;
+  border-color: #f43f5e;
+}
+
+.mc-tab--amber-active {
+  background-color: rgba(245, 158, 11, 0.25);
+  border-color: #f59e0b;
+  color: #fef3c7;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.5);
+}
+.mc-tab-badge--amber-active {
+  background-color: rgba(245, 158, 11, 0.5);
+  color: #ffffff;
+  border-color: #f59e0b;
+}
+
+.mc-tab--emerald-active {
+  background-color: rgba(16, 185, 129, 0.25);
+  border-color: #10b981;
+  color: #d1fae5;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.5);
+}
+.mc-tab-badge--emerald-active {
+  background-color: rgba(16, 185, 129, 0.5);
+  color: #ffffff;
+  border-color: #10b981;
+}

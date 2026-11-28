@@ -37,13 +37,17 @@ async function fetchValidatedRecords(endpoint: string): Promise<Record<string, u
     if (Array.isArray(response)) {
       return recordArraySchema.parse(response);
     }
-    if (response && typeof response === 'object' && 'data' in response && Array.isArray((response as any).data)) {
-      return recordArraySchema.parse((response as any).data);
+    if (response && typeof response === 'object' && 'data' in response) {
+      const envelope = response as { data?: unknown; success?: boolean; message?: string };
+      if (Array.isArray(envelope.data)) {
+        return recordArraySchema.parse(envelope.data);
+      }
+      if (envelope.success === false) {
+        throw new Error(envelope.message || 'Unable to load seats/shifts/lockers data.');
+      }
+      return recordArraySchema.parse(envelope.data);
     }
-    if (!response.success) {
-      throw new Error(response.message || 'Unable to load seats/shifts/lockers data.');
-    }
-    return recordArraySchema.parse(response.data);
+    throw new Error('Unable to load seats/shifts/lockers data.');
   } catch (error) {
     if (endpoint === MANAGER_SEATS_MATRIX_API.SEAT_MATRIX) {
       return MANAGER_SEATS_MATRIX_DEMO_SEAT_MATRIX as unknown as Record<string, unknown>[];

@@ -31,8 +31,9 @@ export async function fetchManagerIdCardGenerator(): Promise<ManagerStudent[]> {
       return ManagerMembersIdCardGeneratorListResponseSchema.parse(response.data);
     }
     return MANAGER_ID_CARD_DEMO_STUDENTS;
-  } catch (err: any) {
-    if (err?.code === 'UPSTREAM_UNAVAILABLE' || err?.message === 'upstream unavailable') {
+  } catch (err: unknown) {
+    const apiErr = err as { code?: string; message?: string } | null;
+    if (apiErr?.code === 'UPSTREAM_UNAVAILABLE' || apiErr?.message === 'upstream unavailable') {
       throw err;
     }
     return MANAGER_ID_CARD_DEMO_STUDENTS;
@@ -54,8 +55,9 @@ export async function fetchManagerStudentById(id: string): Promise<ManagerStuden
     }
     const found = MANAGER_ID_CARD_DEMO_STUDENTS.find((s) => s.id === id || s.smartId === id);
     return found || MANAGER_ID_CARD_DEMO_STUDENTS[0];
-  } catch (err: any) {
-    if (err?.code === 'UPSTREAM_UNAVAILABLE' || err?.message === 'upstream unavailable') {
+  } catch (err: unknown) {
+    const apiErr = err as { code?: string; message?: string } | null;
+    if (apiErr?.code === 'UPSTREAM_UNAVAILABLE' || apiErr?.message === 'upstream unavailable') {
       throw err;
     }
     const found = MANAGER_ID_CARD_DEMO_STUDENTS.find((s) => s.id === id || s.smartId === id);
