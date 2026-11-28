@@ -23,7 +23,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertTriangle, IndianRupee, Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState, type KeyboardEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -38,6 +38,12 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
   const availableMonths = useMemo(() => getAvailableBillingMonths(6), []);
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
+  const submitTimerRef = useRef<number | null>(null);
+  const blurTimerRef = useRef<number | null>(null);
+  useEffect(() => () => {
+    if (submitTimerRef.current !== null) window.clearTimeout(submitTimerRef.current);
+    if (blurTimerRef.current !== null) window.clearTimeout(blurTimerRef.current);
+  }, []);
   useEffect(() => { const timeout = setTimeout(() => setDebouncedSearch(search), 300); return () => clearTimeout(timeout); }, [search]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [activeStudentIndex, setActiveStudentIndex] = useState(-1);
@@ -133,7 +139,9 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
     const confirmed = await confirm(`Confirm fee collection: Collect ${formatCollectFeeInr(total)} (${purposeName}) from ${studentName}? This will record the payment and verify receipt.`, tManagerUi('cancel') || 'Cancel', `${tManagerUi('collect_fee') || 'Collect Fee'} (${formatCollectFeeInr(total)})`);
     if (!confirmed) return;
     setIsSubmitting(true);
-    setTimeout(() => {
+    if (submitTimerRef.current !== null) window.clearTimeout(submitTimerRef.current);
+    submitTimerRef.current = window.setTimeout(() => {
+      submitTimerRef.current = null;
       setIsSubmitting(false);
       toast.success(`${tManagerUi('collect_fee')}: ${formatCollectFeeInr(total)} (${purposeName}) for ${studentName} recorded successfully!`, { id: 'manager-finance-collect-fee-success' });
       const activeLineItems = compositeEnabled ? compositeItems.filter((i) => i.enabled).map((i) => ({ id: i.id, label: i.label, amount: i.amount })) : [{ id: 'primary', label: activeCollectionOption.label, amount: total }];
@@ -159,7 +167,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                   placeholder={tManagerUi('search_by_name_or_smart_id')} value={search} role="combobox" aria-autocomplete="list" aria-haspopup="listbox"
                   aria-expanded={showDropdown && !selectedStudent} aria-controls={showDropdown && !selectedStudent && filteredStudents.length > 0 ? 'manager-collect-fee-student-options' : undefined}
                   aria-activedescendant={activeStudentIndex >= 0 && filteredStudents[activeStudentIndex] ? `manager-collect-fee-student-option-${filteredStudents[activeStudentIndex].id}` : undefined}
-                  onKeyDown={handleStudentSearchKeyDown} onFocus={() => setShowDropdown(true)} onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+                  onKeyDown={handleStudentSearchKeyDown} onFocus={() => setShowDropdown(true)} onBlur={() => { if (blurTimerRef.current !== null) window.clearTimeout(blurTimerRef.current); blurTimerRef.current = window.setTimeout(() => { setShowDropdown(false); blurTimerRef.current = null; }, 200); }}
                   onChange={(e) => { setSearch(e.target.value); setSelectedStudent(null); setActiveStudentIndex(-1); setValue('member', '', { shouldDirty: true, shouldValidate: true }); setShowDropdown(true); }}
                 />
                 <input type="hidden" {...register('member')} value={selectedStudent ? String(selectedStudent.id) : ''} readOnly />

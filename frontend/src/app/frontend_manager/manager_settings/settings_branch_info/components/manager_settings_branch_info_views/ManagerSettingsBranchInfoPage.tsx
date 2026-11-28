@@ -15,13 +15,18 @@ import {
 } from '@/app/frontend_manager/manager_settings/settings_branch_info/utils/ManagerSettingsBranchInfoWifiQr';
 import { Building2, Share2, Wifi } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 export default function ManagerSettingsBranchInfoPage() {
   const tManagerUi = useTranslations('manager.manager_branch_info.ui');
   const { branchData } = useManagerBranchInfoForm();
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const copyTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+  }, []);
   const [isWifiModalOpen, setIsWifiModalOpen] = useState(false);
   const [showPagePassword, setShowPagePassword] = useState(false);
   const [wifiConfig, setWifiConfig] = useState<{
@@ -60,7 +65,9 @@ export default function ManagerSettingsBranchInfoPage() {
     }
     setCopiedKey(key);
     toast.success(`${label} copied!`, { id: `copy-${key}` });
-    setTimeout(() => {
+    if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = window.setTimeout(() => {
+      copyTimerRef.current = null;
       setCopiedKey((curr) => (curr === key ? null : curr));
     }, 1800);
   };

@@ -97,7 +97,7 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
             </div>
             <div className="mgr-input-icon-wrap">
               <IndianRupee size={18} strokeWidth={2} className="mgr-input-icon text-secondary" />
-              <input maxLength={30} id="admission-reg-fee" {...register('registrationFee')} type="number" min="0" step="1" onKeyDown={(e) => { if (['-', '+', 'e', 'E'].includes(e.key)) e.preventDefault(); }} className="mgr-input mgr-input-with-icon" placeholder="200" />
+              <input id="admission-reg-fee" {...register('registrationFee')} type="number" min="0" step="1" onKeyDown={(e) => { if (['-', '+', 'e', 'E'].includes(e.key)) e.preventDefault(); }} className="mgr-input mgr-input-with-icon" placeholder="200" />
             </div>
           </div>
 
@@ -120,7 +120,7 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
             <label className="mgr-label" htmlFor="admission-discount">{tManagerUi('manual_discount')} <span className="text-secondary font-normal text-xs">(Optional)</span></label>
             <div className="mgr-input-icon-wrap">
               <IndianRupee size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input maxLength={30} id="admission-discount" {...register('manualDiscount')} type="number" min="0" step="1" onKeyDown={(e) => { if (['-', '+', 'e', 'E'].includes(e.key)) e.preventDefault(); }} className="mgr-input mgr-input-with-icon" placeholder="0" />
+              <input id="admission-discount" {...register('manualDiscount')} type="number" min="0" step="1" onKeyDown={(e) => { if (['-', '+', 'e', 'E'].includes(e.key)) e.preventDefault(); }} className="mgr-input mgr-input-with-icon" placeholder="0" />
             </div>
             {errors.manualDiscount && <p className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.manualDiscount.message}</p>}
           </div>
@@ -165,7 +165,7 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
             </div>
             <div className="mgr-input-icon-wrap">
               <IndianRupee size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input maxLength={30} id="admission-amount" {...register('amountPaid')} type="number" min="1" step="1" inputMode="numeric" onKeyDown={(e) => { if (['-', '+', 'e', 'E'].includes(e.key)) e.preventDefault(); }} className={`mgr-input mgr-input-with-icon${errors.amountPaid ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.amountPaid)} placeholder="1000" />
+              <input id="admission-amount" {...register('amountPaid')} type="number" min="1" step="1" inputMode="numeric" onKeyDown={(e) => { if (['-', '+', 'e', 'E'].includes(e.key)) e.preventDefault(); }} className={`mgr-input mgr-input-with-icon${errors.amountPaid ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.amountPaid)} placeholder="1000" />
             </div>
             {errors.amountPaid && <p className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.amountPaid.message}</p>}
           </div>

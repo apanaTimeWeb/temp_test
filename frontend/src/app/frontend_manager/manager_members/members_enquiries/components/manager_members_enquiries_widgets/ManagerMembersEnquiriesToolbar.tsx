@@ -42,7 +42,6 @@ export function ManagerMembersEnquiriesToolbar({
           <input maxLength={100}
             type="text"
             className="menq-dark-input w-full !pl-10 pr-8 py-2 border rounded-xl text-sm text-slate-100 placeholder:text-slate-400 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/30 motion-safe:transition-all"
-            style={{ paddingLeft: '2.5rem' }}
             placeholder={tManagerUi('search_by_name_or_phone')}
             aria-label={tManagerUi('search_by_name_or_phone')}
             value={search}

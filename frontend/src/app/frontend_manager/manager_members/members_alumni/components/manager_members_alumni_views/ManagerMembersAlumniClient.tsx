@@ -19,7 +19,7 @@ import {
 } from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniDepositSettlement';
 import { CheckCircle2, Download, Plus, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const ALUMNI_STORAGE_KEY = 'manager_alumni_records';
 
@@ -29,6 +29,7 @@ export function ManagerMembersAlumniClient() {
   const [deleteTarget, setDeleteTarget] = useState<MembersAlumniRow | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
+  const toastTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const initialStored = readStoredJsonList<MembersAlumniRow>(ALUMNI_STORAGE_KEY);
@@ -58,6 +59,7 @@ export function ManagerMembersAlumniClient() {
     window.addEventListener('manager_security_deposit_refunded', handleDepositRefunded);
     window.addEventListener('storage', handleAlumniSync);
     return () => {
+      if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current);
       window.removeEventListener('manager_alumni_created', handleAlumniSync);
       window.removeEventListener('manager_security_deposit_refunded', handleDepositRefunded);
       window.removeEventListener('storage', handleAlumniSync);
@@ -157,7 +159,8 @@ export function ManagerMembersAlumniClient() {
     writeStoredJsonList(ALUMNI_STORAGE_KEY, updated);
     try { window.dispatchEvent(new Event('manager_alumni_created')); } catch { /* fallback */ }
     setToastMsg(`Removed ${name} from alumni directory.`);
-    setTimeout(() => setToastMsg(null), 3500);
+    if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = window.setTimeout(() => { setToastMsg(null); toastTimerRef.current = null; }, 3500);
   };
 
   const kpis = useMemo(() => {

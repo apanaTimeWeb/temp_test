@@ -166,8 +166,7 @@ export function ManagerCommunicationComplaintsToolbar({
           <input maxLength={100}
             type="search"
             placeholder="Search complaint, student name, seat, or issue..."
-            className="mgr-input mgr-input-with-icon h-10 !pl-10 text-xs sm:text-sm w-full rounded-xl bg-surface/60 border border-border focus:border-primary"
-            style={{ paddingLeft: '2.6rem', paddingRight: searchQuery ? '2.25rem' : '1rem' }}
+            className={`mgr-input mgr-input-with-icon h-10 !pl-10 ${searchQuery ? '!pr-9' : '!pr-4'} text-xs sm:text-sm w-full rounded-xl bg-surface/60 border border-border focus:border-primary`}
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);

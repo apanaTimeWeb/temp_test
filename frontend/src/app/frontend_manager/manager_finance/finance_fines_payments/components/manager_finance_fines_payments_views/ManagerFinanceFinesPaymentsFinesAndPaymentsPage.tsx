@@ -23,7 +23,7 @@ import type { ManagerFinanceFinesPaymentsRouteQueryProps } from '@/app/frontend_
 import { AlertCircle, CheckCircle, DollarSign, Receipt, RotateCcw } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 export type { ManagerFinanceTimeHorizon };
@@ -64,6 +64,11 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
   const [historyModeFilter, setHistoryModeFilter] = useState('all');
   const [isSyncing, setIsSyncing] = useState(false);
   const [renewalAddedFines, setRenewalAddedFines] = useState<Set<string>>(new Set());
+  const syncTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (syncTimerRef.current !== null) window.clearTimeout(syncTimerRef.current);
+  }, []);
 
   const {
     timeHorizon, setTimeHorizon, customStartDate, setCustomStartDate, customEndDate, setCustomEndDate,
@@ -76,7 +81,9 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
 
   const handleSyncLedger = () => {
     setIsSyncing(true);
-    setTimeout(() => {
+    if (syncTimerRef.current !== null) window.clearTimeout(syncTimerRef.current);
+    syncTimerRef.current = window.setTimeout(() => {
+      syncTimerRef.current = null;
       setIsSyncing(false);
       toast.success('Financial ledger synchronized successfully', { id: 'fines-sync-ledger-success' });
     }, 600);

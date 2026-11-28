@@ -12,7 +12,7 @@ MapPin,
 Monitor,
 Smartphone,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import type { ManagerActiveSession } from '@/app/frontend_manager/manager_settings/settings_security/types/ManagerSettingsSecurityTypes';
 
@@ -29,6 +29,11 @@ export function ManagerSettingsSecurityActiveSessionsPanel({
 }: ManagerSettingsSecurityActiveSessionsPanelProps) {
   const [showLogoutAllModal, setShowLogoutAllModal] = useState(false);
   const [revokingId, setRevokingId] = useState<string | null>(null);
+  const revokeTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (revokeTimerRef.current !== null) window.clearTimeout(revokeTimerRef.current);
+  }, []);
 
   const getDeviceIcon = (session: ManagerActiveSession) => {
     if (session.deviceType === 'mobile') {
@@ -42,7 +47,9 @@ export function ManagerSettingsSecurityActiveSessionsPanel({
 
   const handleRevoke = (id: string, deviceName: string) => {
     setRevokingId(id);
-    setTimeout(() => {
+    if (revokeTimerRef.current !== null) window.clearTimeout(revokeTimerRef.current);
+    revokeTimerRef.current = window.setTimeout(() => {
+      revokeTimerRef.current = null;
       onRevokeSession(id);
       setRevokingId(null);
       toast.success(`Session ended for ${deviceName}`, { id: `revoke-session-${id}` });

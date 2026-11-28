@@ -20,7 +20,7 @@ import type { ManagerAccountsDailySettlementMainProps } from '@/app/frontend_man
 import { formatInrRupees } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/utils/ManagerAccountsDailySettlementDenominationHelpers';
 import { exportDailySettlementsCsv } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/utils/ManagerAccountsDailySettlementExport';
 import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 function toLocalDateInputValue(date: Date): string {
@@ -47,6 +47,11 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   const [selectedAuditEntry, setSelectedAuditEntry] = useState<Entry | null>(null);
   const [isDenominationModalOpen, setIsDenominationModalOpen] = useState(false);
   const [activeDenominationEntry, setActiveDenominationEntry] = useState<Entry | null>(null);
+  const syncTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (syncTimerRef.current !== null) window.clearTimeout(syncTimerRef.current);
+  }, []);
 
   const dateScopeLabel = useMemo(() => {
     switch (timeHorizon) {
@@ -62,7 +67,9 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
 
   const handleSyncBalances = () => {
     setIsSyncing(true);
-    setTimeout(() => {
+    if (syncTimerRef.current !== null) window.clearTimeout(syncTimerRef.current);
+    syncTimerRef.current = window.setTimeout(() => {
+      syncTimerRef.current = null;
       setIsSyncing(false);
       toast.success(`Shift balances and physical drawer cash synchronized (${formatInrRupees(0)} discrepancy)`, {
         id: 'manager-settlement-sync-balances',

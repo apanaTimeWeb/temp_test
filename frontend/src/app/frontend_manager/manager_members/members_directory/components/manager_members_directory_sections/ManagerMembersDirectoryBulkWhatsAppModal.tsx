@@ -143,8 +143,7 @@ export function ManagerMembersDirectoryBulkWhatsAppModal({
             </div>
             <div className="w-32 bg-surface-highlight rounded-full h-2.5 overflow-hidden border border-border">
               <div
-                className="bg-emerald-600 h-2.5 rounded-full motion-safe:transition-all motion-safe:duration-slow"
-                style={{ width: `${progressPct}%` }}
+                className={`bg-emerald-600 h-2.5 rounded-full motion-safe:transition-all motion-safe:duration-slow mgr-dynamic-width-${Math.min(100, Math.max(0, Math.round(progressPct)))}`}
               />
             </div>
           </div>

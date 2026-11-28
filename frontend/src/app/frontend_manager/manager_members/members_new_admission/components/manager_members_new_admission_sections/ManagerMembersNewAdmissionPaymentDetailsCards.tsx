@@ -217,7 +217,7 @@ export function ManagerMembersNewAdmissionPartialPromiseCard({
           </div>
           <div className="mgr-input-icon-wrap">
             <Calendar size={18} strokeWidth={2} className="mgr-input-icon text-secondary" />
-            <input maxLength={30} id="admission-promise-date" {...register('promiseDueDate')} type="date" className="mgr-input mgr-input-with-icon" />
+            <input id="admission-promise-date" {...register('promiseDueDate')} type="date" className="mgr-input mgr-input-with-icon" />
           </div>
         </div>
 

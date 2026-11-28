@@ -2,7 +2,7 @@
 
 import { CheckCircle2, Coins, Handshake, Megaphone, Receipt, RotateCcw, Save, Send, UserX, ShieldCheck } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/components/manager_communication_whatsapp_templates_styles/ManagerCommunicationWhatsappTemplatesManager_whatsapp_templates.css';
@@ -47,6 +47,13 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
   const [showTest, setShowTest] = useState(false);
   const [testPhone, setTestPhone] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const focusTimerRef = useRef<number | null>(null);
+  const toastTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (focusTimerRef.current !== null) window.clearTimeout(focusTimerRef.current);
+    if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current);
+  }, []);
 
   const active = templates.find((t) => t.id === activeId) || templates[0];
   const charCount = active.body.length;
@@ -66,7 +73,9 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
     const nextBody = active.body.slice(0, start) + v + active.body.slice(end);
     if (nextBody.length > MAX_CHARS) return;
     updateBody(nextBody);
-    setTimeout(() => {
+    if (focusTimerRef.current !== null) window.clearTimeout(focusTimerRef.current);
+    focusTimerRef.current = window.setTimeout(() => {
+      focusTimerRef.current = null;
       el.focus();
       el.setSelectionRange(start + v.length, start + v.length);
     }, 0);
@@ -77,7 +86,8 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
   const handleSave = () => {
     toast.success(`Template "${templateLabel(active)}" saved successfully!`, { id: 'manager-wa-tpl-save' });
     setToastFeedback(`Template "${templateLabel(active)}" saved successfully!`);
-    setTimeout(() => setToastFeedback(null), 4000);
+    if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = window.setTimeout(() => { setToastFeedback(null); toastTimerRef.current = null; }, 4000);
   };
 
   const handleTest = () => {

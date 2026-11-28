@@ -25,7 +25,7 @@ import {
 } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/utils/ManagerAccountsExpensesHelpers';
 import { Plus, Printer, RefreshCw } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 export type ManagerExpensesTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
@@ -54,10 +54,17 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
   const [timeHorizon, setTimeHorizon] = useState<ManagerExpensesTimeHorizon>('all');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
+  const syncTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (syncTimerRef.current !== null) window.clearTimeout(syncTimerRef.current);
+  }, []);
 
   const handleSyncExpenses = () => {
     setIsSyncing(true);
-    setTimeout(() => {
+    if (syncTimerRef.current !== null) window.clearTimeout(syncTimerRef.current);
+    syncTimerRef.current = window.setTimeout(() => {
+      syncTimerRef.current = null;
       setIsSyncing(false);
       toast.success('Expense ledger synced with general ledger', { id: 'manager-expenses-sync' });
     }, 600);

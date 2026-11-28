@@ -11,7 +11,7 @@ import {
   type DenominationCounts,
 } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/utils/ManagerAccountsDailySettlementDenominationHelpers';
 import { Check, CheckCircle2, Coins, Copy, Printer, Receipt, X } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 export { DENOMINATIONS };
@@ -54,6 +54,11 @@ export function ManagerAccountsDailySettlementDenominationAndHandoverModal({
   const [managerName, setManagerName] = useState<string>('Branch Manager Satyam');
   const [copied, setCopied] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'counter' | 'receipt'>('counter');
+  const copyTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -125,7 +130,8 @@ export function ManagerAccountsDailySettlementDenominationAndHandoverModal({
       );
       setCopied(true);
       toast.success('Cash handover receipt copied for WhatsApp!', { id: 'manager-settlement-copy-wa' });
-      setTimeout(() => setCopied(false), 2500);
+      if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = window.setTimeout(() => { setCopied(false); copyTimerRef.current = null; }, 2500);
     }
   };
 

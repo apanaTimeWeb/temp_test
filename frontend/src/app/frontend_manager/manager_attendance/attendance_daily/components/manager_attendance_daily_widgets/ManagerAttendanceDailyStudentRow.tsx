@@ -74,12 +74,12 @@ export function ManagerAttendanceDailyStudentRow({ student, onStatusChange, onFi
         <div className="eng-time-pair">
           <div className="eng-time-field">
             <label className="eng-label eng-label--no-margin" htmlFor={`eng-attendance-in-${student.id}`}>{tManagerUi('in')}</label>
-            <input maxLength={30} id={`eng-attendance-in-${student.id}`} type="time" className="eng-time-input" value={student.inTime} aria-label={`${tManagerUi('in')} — ${student.name}`} onChange={(event) => onFieldChange(student.id, 'inTime', event.target.value)} />
+            <input id={`eng-attendance-in-${student.id}`} type="time" className="eng-time-input" value={student.inTime} aria-label={`${tManagerUi('in')} — ${student.name}`} onChange={(event) => onFieldChange(student.id, 'inTime', event.target.value)} />
           </div>
           {student.status === 'present' && (
             <div className="eng-time-field">
               <label className="eng-label eng-label--no-margin" htmlFor={`eng-attendance-out-${student.id}`}>{tManagerUi('out')}</label>
-              <input maxLength={30} id={`eng-attendance-out-${student.id}`} type="time" className="eng-time-input" value={student.outTime} aria-label={`${tManagerUi('out')} — ${student.name}`} onChange={(event) => onFieldChange(student.id, 'outTime', event.target.value)} />
+              <input id={`eng-attendance-out-${student.id}`} type="time" className="eng-time-input" value={student.outTime} aria-label={`${tManagerUi('out')} — ${student.name}`} onChange={(event) => onFieldChange(student.id, 'outTime', event.target.value)} />
             </div>
           )}
         </div>

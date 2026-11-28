@@ -9,7 +9,7 @@ import {
   generateQrSvgPath,
 } from '@/app/frontend_manager/manager_settings/settings_branch_info/utils/ManagerSettingsBranchInfoWifiQr';
 import { Copy, Download, Info, Printer, ShieldCheck, Smartphone, Wifi, X } from 'lucide-react';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 export interface ManagerSettingsBranchInfoWifiModalProps {
@@ -51,6 +51,13 @@ export function ManagerSettingsBranchInfoWifiModal({
   const [isEditing, setIsEditing] = useState(false);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const copyTimerRef = useRef<number | null>(null);
+  const printTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+    if (printTimerRef.current !== null) window.clearTimeout(printTimerRef.current);
+  }, []);
 
   const wifiPayload = useMemo(
     () => formatWifiQrPayload({ ssid, password, security }),
@@ -71,7 +78,9 @@ export function ManagerSettingsBranchInfoWifiModal({
     }
     setCopiedKey(key);
     toast.success(`${label} copied!`, { id: `wifi-copy-${key}` });
-    setTimeout(() => {
+    if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = window.setTimeout(() => {
+      copyTimerRef.current = null;
       setCopiedKey((curr) => (curr === key ? null : curr));
     }, 1800);
   };
@@ -98,7 +107,9 @@ export function ManagerSettingsBranchInfoWifiModal({
 
   const handlePrintStandee = () => {
     toast.info('Preparing Desk Standee for printing...', { id: 'print-standee' });
-    setTimeout(() => {
+    if (printTimerRef.current !== null) window.clearTimeout(printTimerRef.current);
+    printTimerRef.current = window.setTimeout(() => {
+      printTimerRef.current = null;
       window.print();
     }, 150);
   };

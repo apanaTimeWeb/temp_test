@@ -50,15 +50,20 @@ export function ManagerCommunicationNotificationCenterNotificationHistorySection
   };
 
   const handleExportCsv = () => {
-    const headers = 'Recipient,Type,Channel,Date,Status\n';
-    const rows = filteredHistory.map((h) => `"${h.recipient}","${h.type}","${h.channel}","${h.date}","${h.status}"`).join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const escapeCsvCell = (value: unknown): string => {
+      const text = String(value ?? '');
+      const safeText = /^[\u0000-\u0020]*[=+\-@]/.test(text) ? `'${text}` : text;
+      return `"${safeText.replace(/"/g, '""')}"`;
+    };
+    const headers = ['Recipient', 'Type', 'Channel', 'Date', 'Status'].map(escapeCsvCell).join(',') + '\n';
+    const rows = filteredHistory.map((h) => [h.recipient, h.type, h.channel, h.date, h.status].map(escapeCsvCell).join(',')).join('\n');
+    const blob = new Blob([`\uFEFF${headers}${rows}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
     anchor.download = `notification_history_${new Date().toISOString().slice(0, 10)}.csv`;
     anchor.click();
-    URL.revokeObjectURL(url);
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     toast.success('Notification history exported to CSV successfully', { id: 'manager-notif-history-export' });
   };
 

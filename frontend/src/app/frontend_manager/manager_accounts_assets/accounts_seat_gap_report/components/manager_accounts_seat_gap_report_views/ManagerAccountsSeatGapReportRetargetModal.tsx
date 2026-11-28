@@ -12,7 +12,7 @@ import {
   formatSeatGapMinorInr,
 } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/utils/ManagerAccountsSeatGapReportHelpers';
 import { Check, Clock, Copy, Megaphone, Send, Target, X } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 export { DEMO_INQUIRY_LEADS };
@@ -34,6 +34,11 @@ export function ManagerAccountsSeatGapReportRetargetModal({
   const [selectedOfferType, setSelectedOfferType] = useState<string>('early_bird');
   const [selectedLeadId, setSelectedLeadId] = useState<string>('');
   const [copied, setCopied] = useState<boolean>(false);
+  const copyTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+  }, []);
 
   const matchingLeads = useMemo(() => {
     if (!seat) return DEMO_INQUIRY_LEADS;
@@ -76,7 +81,8 @@ export function ManagerAccountsSeatGapReportRetargetModal({
       navigator.clipboard.writeText(generatedMessage);
       setCopied(true);
       toast.success('Retargeting WhatsApp offer copied!', { id: 'manager-seat-gap-copy-wa' });
-      setTimeout(() => setCopied(false), 2500);
+      if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = window.setTimeout(() => { setCopied(false); copyTimerRef.current = null; }, 2500);
     }
   };
 

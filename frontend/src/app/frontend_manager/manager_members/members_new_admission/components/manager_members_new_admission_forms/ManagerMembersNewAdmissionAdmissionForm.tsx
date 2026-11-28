@@ -16,7 +16,7 @@ import { consumeEnquiryConversionPrefill, formatAdmissionInr, persistCompletedAd
 import type { DynamicPlanOption } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
 import { calculateAdmissionFee, getLibraryPricingConfig, type LibraryPricingConfig } from '@/lib/pricing/libraryPricingEngine';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 export default function ManagerMembersNewAdmissionAdmissionForm() {
   const tManagerUi = useTranslations('manager.manager_new_admission.ui');
@@ -25,6 +25,11 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
   const [draftFeedback, setDraftFeedback] = useState<string | null>(null);
   const [admittedStudent, setAdmittedStudent] = useState<AdmittedStudentInfo | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const submitTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (submitTimerRef.current !== null) window.clearTimeout(submitTimerRef.current);
+  }, []);
   const [pricingConfig, setPricingConfig] = useState<LibraryPricingConfig>(() => getLibraryPricingConfig());
   const { register, watch, setValue, reset, formState: { errors, isDirty, isValid } } = form;
   const router = useRouter();
@@ -174,7 +179,9 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
 
   const submit = form.handleSubmit((values) => {
     setIsSubmitting(true);
-    setTimeout(() => {
+    if (submitTimerRef.current !== null) window.clearTimeout(submitTimerRef.current);
+    submitTimerRef.current = window.setTimeout(() => {
+      submitTimerRef.current = null;
       setIsSubmitting(false);
       // BUG-02: Structured, collision-free Smart ID format
       const generatedSmartId = `LIB-${Date.now().toString().slice(-4)}`;

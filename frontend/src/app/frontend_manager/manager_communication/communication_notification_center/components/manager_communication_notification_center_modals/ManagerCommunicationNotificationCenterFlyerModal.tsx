@@ -6,7 +6,7 @@ import {
   type NoticeboardTemplate,
 } from '@/app/frontend_manager/manager_communication/communication_notification_center/components/manager_communication_notification_center_modals/ManagerCommunicationNotificationCenterFlyerTemplates';
 import { Check, Copy, FileText, Printer, Tag, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 export interface ManagerCommunicationNotificationCenterFlyerModalProps {
@@ -36,6 +36,13 @@ export function ManagerCommunicationNotificationCenterFlyerModal({
   const [instructions, setInstructions] = useState<string[]>(NOTICEBOARD_PRESET_TEMPLATES[0].instructions);
   const [isCustomizing, setIsCustomizing] = useState(false);
   const [copied, setCopied] = useState(false);
+  const printTimerRef = useRef<number | null>(null);
+  const copyTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (printTimerRef.current !== null) window.clearTimeout(printTimerRef.current);
+    if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+  }, []);
 
   if (!isOpen) return null;
 
@@ -53,7 +60,8 @@ export function ManagerCommunicationNotificationCenterFlyerModal({
 
   const handlePrintFlyer = () => {
     toast.info('Preparing official A4 noticeboard flyer for printing...', { id: 'manager-flyer-print' });
-    setTimeout(() => window.print(), 150);
+    if (printTimerRef.current !== null) window.clearTimeout(printTimerRef.current);
+    printTimerRef.current = window.setTimeout(() => { printTimerRef.current = null; window.print(); }, 150);
   };
 
   const handleCopyNotice = () => {
@@ -82,7 +90,8 @@ export function ManagerCommunicationNotificationCenterFlyerModal({
     }
     setCopied(true);
     toast.success('Notice text copied to clipboard!', { id: 'manager-flyer-copy' });
-    setTimeout(() => setCopied(false), 2000);
+    if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = window.setTimeout(() => { setCopied(false); copyTimerRef.current = null; }, 2000);
   };
 
   const currentDate = new Date().toLocaleDateString('hi-IN', { day: '2-digit', month: 'short', year: 'numeric' });

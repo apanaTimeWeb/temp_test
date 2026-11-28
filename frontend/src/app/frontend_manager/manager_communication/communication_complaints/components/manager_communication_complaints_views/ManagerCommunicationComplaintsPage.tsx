@@ -28,7 +28,7 @@ import {
 } from '@/app/frontend_manager/manager_communication/communication_complaints/utils/ManagerCommunicationComplaintsExport';
 import { CheckCircle, CheckCircle2, Clock, MessageSquare, MessageSquarePlus, Printer, X } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 // RESPONSIBILITY: Render the communication_complaints feature while preserving supported deep-link query state.
@@ -44,6 +44,8 @@ export default function ManagerCommunicationComplaintsPage({
   const [localComplaints, setLocalComplaints] = useState<ManagerCommunicationComplaintsComplaint[]>([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const toastTimerRef = useRef<number | null>(null);
+  useEffect(() => () => { if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current); }, []);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [page, setPage] = useState(0);
@@ -289,7 +291,8 @@ export default function ManagerCommunicationComplaintsPage({
         onSubmit={(newComp) => {
           setLocalComplaints((prev) => [newComp, ...prev]);
           setToastMessage(`Complaint #${newComp.id} lodged successfully.`);
-          setTimeout(() => setToastMessage(null), 4000);
+          if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current);
+          toastTimerRef.current = window.setTimeout(() => { setToastMessage(null); toastTimerRef.current = null; }, 4000);
         }}
       />
     </div>

@@ -96,9 +96,9 @@ export function ManagerAssetsMaintenanceKpis({
           <span className="text-xs text-secondary font-medium">{totalLogs} Total Service Tickets Recorded</span>
         </div>
         <div className="w-full h-2.5 rounded-full overflow-hidden flex bg-surface-highlight">
-          <div style={{ width: `${completedPct}%` }} className="bg-emerald-500 h-full motion-safe:transition-all motion-safe:duration-slow" title={`Completed (${completedPct}%)`} />
-          <div style={{ width: `${inProgressPct}%` }} className="bg-sky-500 h-full motion-safe:transition-all motion-safe:duration-slow" title={`In Progress (${inProgressPct}%)`} />
-          <div style={{ width: `${pendingPct}%` }} className="bg-amber-500 h-full motion-safe:transition-all motion-safe:duration-slow" title={`Pending (${pendingPct}%)`} />
+          <div className={`bg-emerald-500 h-full motion-safe:transition-all motion-safe:duration-slow mgr-dynamic-width-${Math.min(100, Math.max(0, Math.round(completedPct)))}`} title={`Completed (${completedPct}%)`} />
+          <div className={`bg-sky-500 h-full motion-safe:transition-all motion-safe:duration-slow mgr-dynamic-width-${Math.min(100, Math.max(0, Math.round(inProgressPct)))}`} title={`In Progress (${inProgressPct}%)`} />
+          <div className={`bg-amber-500 h-full motion-safe:transition-all motion-safe:duration-slow mgr-dynamic-width-${Math.min(100, Math.max(0, Math.round(pendingPct)))}`} title={`Pending (${pendingPct}%)`} />
         </div>
         <div className="flex flex-wrap gap-4 text-xs text-secondary pt-1">
           <span className="flex items-center gap-1.5 font-medium"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Completed ({completedPct}%)</span>

@@ -11,7 +11,7 @@ import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobo
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CalendarClock, CheckCircle2, CreditCard, Layers, Megaphone, MessageSquare, Printer, RotateCcw, Send, Smartphone, Tag, User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -94,13 +94,20 @@ export function ManagerCommunicationNotificationCenterNotificationDraftForm() {
     return [broadcast, ...students];
   }, []);
 
+  const draftTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (draftTimerRef.current !== null) window.clearTimeout(draftTimerRef.current);
+  }, []);
+
   const onValidateNotificationDraft = handleSubmit((data) => {
     toast.success(`Notification dispatched successfully to ${data.recipient} via ${data.channel}!`, {
       id: 'manager-notif-draft-submit',
     });
     setDraftFeedback(`Notification successfully queued for ${data.recipient} via ${data.channel}.`);
     reset({ recipient: '', type: 'Manual member notification', channel: 'Email', message: '' });
-    setTimeout(() => setDraftFeedback(null), 5000);
+    if (draftTimerRef.current !== null) window.clearTimeout(draftTimerRef.current);
+    draftTimerRef.current = window.setTimeout(() => { setDraftFeedback(null); draftTimerRef.current = null; }, 5000);
   });
 
   const notificationFieldError = (field: Extract<keyof ManagerCommunicationNotificationCenterNotificationDraft, string>) =>

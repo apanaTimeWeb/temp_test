@@ -76,7 +76,7 @@ export function ManagerMembersAlumniAddFormFields({
         <label className="font-semibold text-primary block mb-1">Achievement / Exit Date</label>
         <div className="mgr-input-icon-wrap relative">
           <Calendar size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
-          <input maxLength={100} type="date" className="mgr-input mgr-input-with-icon !pl-10 text-xs w-full h-9" value={leftDate} onChange={(e) => setLeftDate(e.target.value)} />
+          <input type="date" className="mgr-input mgr-input-with-icon !pl-10 text-xs w-full h-9" value={leftDate} onChange={(e) => setLeftDate(e.target.value)} />
         </div>
       </div>
 

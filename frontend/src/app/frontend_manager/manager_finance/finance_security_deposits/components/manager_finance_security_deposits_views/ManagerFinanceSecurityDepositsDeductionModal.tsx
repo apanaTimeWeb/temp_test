@@ -74,7 +74,7 @@ export default function ManagerFinanceSecurityDepositsDeductionModal({
             <label className="text-xs font-semibold text-primary block mb-1">Deduction Amount (INR) *</label>
             <div className="relative">
               <IndianRupee size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-              <input maxLength={100} type="number" min="0" required className="mgr-input pl-8 text-xs font-mono font-bold"
+              <input type="number" min="0" required className="mgr-input pl-8 text-xs font-mono font-bold"
                 value={deductionAmount}
                 onChange={(e) => onDeductionAmountChange(e.target.value)}
               />

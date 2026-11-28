@@ -14,7 +14,7 @@ import {
   type VariableDiagnostics,
 } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/utils/ManagerCommunicationWhatsappTemplatesPreviewHelpers';
 import { AlertCircle, AlertTriangle, Check, CheckCheck, CheckCircle2, Copy, Eye, SlidersHorizontal, User } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 export { DEFAULT_SAMPLE_PROFILES, KNOWN_VARIABLE_ALIASES, STANDARD_VARIABLES, analyzeVariables };
@@ -44,6 +44,11 @@ export const ManagerCommunicationWhatsappTemplatesVariablePreview: React.FC<
   const [copied, setCopied] = useState<boolean>(false);
   const [showCustomInputs, setShowCustomInputs] = useState<boolean>(false);
   const [customProfile, setCustomProfile] = useState<StudentSampleProfile>(() => createDefaultCustomProfile());
+  const copyTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+  }, []);
 
   const activeProfile = useMemo(() => {
     if (selectedProfileId === 'custom') return customProfile;
@@ -70,7 +75,8 @@ export const ManagerCommunicationWhatsappTemplatesVariablePreview: React.FC<
       navigator.clipboard.writeText(renderedText);
       setCopied(true);
       toast.success('Live preview message copied to clipboard!', { id: 'manager-wa-tpl-copy-preview' });
-      setTimeout(() => setCopied(false), 2500);
+      if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = window.setTimeout(() => { setCopied(false); copyTimerRef.current = null; }, 2500);
     }
   };
 

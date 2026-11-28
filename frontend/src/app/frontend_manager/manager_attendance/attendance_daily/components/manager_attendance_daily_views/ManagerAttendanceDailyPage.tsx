@@ -13,7 +13,7 @@ import { exportManagerAttendanceDailyCsv } from '@/app/frontend_manager/manager_
 import { Save } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 const INIT_STUDENTS: Student[] = MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE.map((student) => ({ ...student }));
@@ -40,6 +40,11 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [isSyncing, setIsSyncing] = useState(false);
+  const syncTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (syncTimerRef.current !== null) window.clearTimeout(syncTimerRef.current);
+  }, []);
 
   const shiftLabels: Record<string, string> = {
     Morning: tManagerUi('morning'),
@@ -50,7 +55,9 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
 
   const handleSyncAttendance = () => {
     setIsSyncing(true);
-    setTimeout(() => {
+    if (syncTimerRef.current !== null) window.clearTimeout(syncTimerRef.current);
+    syncTimerRef.current = window.setTimeout(() => {
+      syncTimerRef.current = null;
       setIsSyncing(false);
       toast.success('Biometric turnstile entry logs synchronized', {
         id: 'attendance-daily-sync',

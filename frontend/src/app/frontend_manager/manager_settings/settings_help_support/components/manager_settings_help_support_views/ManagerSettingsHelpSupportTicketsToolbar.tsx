@@ -100,8 +100,7 @@ export function ManagerSettingsHelpSupportTicketsToolbar({
           <input maxLength={30}
             type="text"
             placeholder="Search ticket ID, subject..."
-            className="mgr-input !pl-10 !py-2 text-xs w-full"
-            style={{ paddingLeft: '2.5rem', paddingRight: searchQuery ? '2.25rem' : '1rem' }}
+            className={`mgr-input !pl-10 ${searchQuery ? '!pr-9' : '!pr-4'} !py-2 text-xs w-full`}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />

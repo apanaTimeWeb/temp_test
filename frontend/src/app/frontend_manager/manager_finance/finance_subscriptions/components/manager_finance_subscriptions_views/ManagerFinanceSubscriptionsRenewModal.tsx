@@ -3,7 +3,7 @@
 import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import type { MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS } from '@/app/frontend_manager/manager_finance/finance_subscriptions/hooks/ManagerFinanceSubscriptionsDemoRepository';
 import { Calendar,RefreshCw,User,X } from 'lucide-react';
-import React,{ useEffect,useState } from 'react';
+import React,{ useEffect, useRef, useState } from 'react';
 
 export type SubscriptionRecord = (typeof MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS)[0];
 
@@ -43,6 +43,11 @@ export default function ManagerFinanceSubscriptionsRenewModal({
   const [paymentMode, setPaymentMode] = useState<string>('UPI');
   const [referenceNo, setReferenceNo] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const submitTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (submitTimerRef.current !== null) window.clearTimeout(submitTimerRef.current);
+  }, []);
 
   useEffect(() => {
     if (!subscription) return;
@@ -98,7 +103,9 @@ export default function ManagerFinanceSubscriptionsRenewModal({
       status: 'active',
     };
 
-    setTimeout(() => {
+    if (submitTimerRef.current !== null) window.clearTimeout(submitTimerRef.current);
+    submitTimerRef.current = window.setTimeout(() => {
+      submitTimerRef.current = null;
       onRenewSuccess(
         renewedRecord,
         `Subscription successfully renewed for ${subscription.studentName} for ${selectedDuration.label} until ${formatDate(newEndDate)}!`

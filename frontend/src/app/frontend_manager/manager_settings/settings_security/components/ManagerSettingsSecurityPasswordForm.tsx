@@ -12,7 +12,7 @@ import {
   ShieldCheck,
   XCircle,
 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 export function ManagerSettingsSecurityPasswordForm() {
@@ -29,6 +29,11 @@ export function ManagerSettingsSecurityPasswordForm() {
     type: 'success' | 'error';
     text: string;
   } | null>(null);
+  const submitTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (submitTimerRef.current !== null) window.clearTimeout(submitTimerRef.current);
+  }, []);
 
   const checks = useMemo(() => ({
     length: newPassword.length >= 8,
@@ -75,7 +80,9 @@ export function ManagerSettingsSecurityPasswordForm() {
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
+    if (submitTimerRef.current !== null) window.clearTimeout(submitTimerRef.current);
+    submitTimerRef.current = window.setTimeout(() => {
+      submitTimerRef.current = null;
       setIsSubmitting(false);
       setStatusMessage({
         type: 'success',

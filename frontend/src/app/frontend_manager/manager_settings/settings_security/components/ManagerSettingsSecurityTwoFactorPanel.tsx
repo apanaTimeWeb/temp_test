@@ -17,7 +17,7 @@ import {
   ShieldCheck,
   Smartphone,
 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 interface ManagerSettingsSecurityTwoFactorPanelProps {
@@ -36,6 +36,13 @@ export function ManagerSettingsSecurityTwoFactorPanel({
   const [copiedCodes, setCopiedCodes] = useState(false);
   const [backupCodes, setBackupCodes] = useState<string[]>(INITIAL_BACKUP_CODES);
   const [showDisableModal, setShowDisableModal] = useState(false);
+  const secretTimerRef = useRef<number | null>(null);
+  const codesTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (secretTimerRef.current !== null) window.clearTimeout(secretTimerRef.current);
+    if (codesTimerRef.current !== null) window.clearTimeout(codesTimerRef.current);
+  }, []);
 
   const qrSvg = useMemo(() => {
     try {
@@ -52,7 +59,8 @@ export function ManagerSettingsSecurityTwoFactorPanel({
     }
     setCopiedSecret(true);
     toast.success('2FA Secret Key copied!', { id: 'manager-security-copy-secret' });
-    setTimeout(() => setCopiedSecret(false), 2000);
+    if (secretTimerRef.current !== null) window.clearTimeout(secretTimerRef.current);
+    secretTimerRef.current = window.setTimeout(() => { setCopiedSecret(false); secretTimerRef.current = null; }, 2000);
   };
 
   const handleCopyBackupCodes = () => {
@@ -62,7 +70,8 @@ export function ManagerSettingsSecurityTwoFactorPanel({
     }
     setCopiedCodes(true);
     toast.success('Backup codes copied!', { id: 'manager-security-copy-backup-codes' });
-    setTimeout(() => setCopiedCodes(false), 2000);
+    if (codesTimerRef.current !== null) window.clearTimeout(codesTimerRef.current);
+    codesTimerRef.current = window.setTimeout(() => { setCopiedCodes(false); codesTimerRef.current = null; }, 2000);
   };
 
   const handleRegenerateCodes = () => {

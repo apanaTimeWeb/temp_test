@@ -3,7 +3,7 @@
 import { Armchair,CheckCircle,History,Layers,Settings,X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useRef,useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useManagerSeatMatrixDialogFocus } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/hooks/ManagerSeatsMatrixDialogFocus';
 import type { ManagerSeatsMatrixModalProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixComponentTypes';
@@ -28,6 +28,11 @@ export function ManagerSeatsMatrixModal({
   const [studentName, setStudentName] = useState('');
   const [studentShift, setStudentShift] = useState<ShiftType>('Morning');
   const [feedback, setFeedback] = useState<string | null>(null);
+  const feedbackTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (feedbackTimerRef.current !== null) window.clearTimeout(feedbackTimerRef.current);
+  }, []);
 
   useManagerSeatMatrixDialogFocus(dialogRef, onClose, Boolean(selectedSeat));
 
@@ -64,7 +69,9 @@ export function ManagerSeatsMatrixModal({
       });
     }
     setFeedback(`Seat ${selectedSeat.id} successfully allocated to ${studentName.trim()}`);
-    setTimeout(() => {
+    if (feedbackTimerRef.current !== null) window.clearTimeout(feedbackTimerRef.current);
+    feedbackTimerRef.current = window.setTimeout(() => {
+      feedbackTimerRef.current = null;
       setFeedback(null);
       setIsAssigning(false);
       onClose();
@@ -82,7 +89,9 @@ export function ManagerSeatsMatrixModal({
       });
     }
     setFeedback(`Seat ${selectedSeat.id} has been vacated`);
-    setTimeout(() => {
+    if (feedbackTimerRef.current !== null) window.clearTimeout(feedbackTimerRef.current);
+    feedbackTimerRef.current = window.setTimeout(() => {
+      feedbackTimerRef.current = null;
       setFeedback(null);
       onClose();
     }, 1000);
@@ -98,7 +107,9 @@ export function ManagerSeatsMatrixModal({
         ? `Seat ${selectedSeat.id} marked under maintenance`
         : `Seat ${selectedSeat.id} marked available`
     );
-    setTimeout(() => {
+    if (feedbackTimerRef.current !== null) window.clearTimeout(feedbackTimerRef.current);
+    feedbackTimerRef.current = window.setTimeout(() => {
+      feedbackTimerRef.current = null;
       setFeedback(null);
       onClose();
     }, 1000);
@@ -112,7 +123,9 @@ export function ManagerSeatsMatrixModal({
       });
     }
     setFeedback(`Seat ${selectedSeat.id} configuration updated`);
-    setTimeout(() => {
+    if (feedbackTimerRef.current !== null) window.clearTimeout(feedbackTimerRef.current);
+    feedbackTimerRef.current = window.setTimeout(() => {
+      feedbackTimerRef.current = null;
       setFeedback(null);
       setActiveModalTab('actions');
     }, 1000);

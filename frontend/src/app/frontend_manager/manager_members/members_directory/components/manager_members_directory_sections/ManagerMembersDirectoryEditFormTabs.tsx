@@ -66,7 +66,7 @@ export function ManagerMembersDirectoryEditFormTabs({ activeTab, formData, onCha
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div>
             <label htmlFor="edit-member-dob" className="block text-xs font-semibold text-secondary mb-1">Date of Birth</label>
-            <input maxLength={30} id="edit-member-dob" type="date" className={INPUT_CLS} value={formData.dob || ''} onChange={(e) => onChange('dob', e.target.value)} />
+            <input id="edit-member-dob" type="date" className={INPUT_CLS} value={formData.dob || ''} onChange={(e) => onChange('dob', e.target.value)} />
           </div>
           <div>
             <label htmlFor="edit-member-address" className="block text-xs font-semibold text-secondary mb-1">Residential Address</label>
@@ -220,7 +220,7 @@ export function ManagerMembersDirectoryEditFormTabs({ activeTab, formData, onCha
         </div>
         <div>
           <label htmlFor="edit-member-expiry" className="block text-xs font-semibold text-secondary mb-1">Plan Expiry Date *</label>
-          <input maxLength={30} id="edit-member-expiry" type="date" required aria-required="true" aria-describedby={errorId} className={INPUT_CLS} value={formData.expiryDate} onChange={(e) => onChange('expiryDate', e.target.value)} />
+          <input id="edit-member-expiry" type="date" required aria-required="true" aria-describedby={errorId} className={INPUT_CLS} value={formData.expiryDate} onChange={(e) => onChange('expiryDate', e.target.value)} />
         </div>
       </div>
     </div>

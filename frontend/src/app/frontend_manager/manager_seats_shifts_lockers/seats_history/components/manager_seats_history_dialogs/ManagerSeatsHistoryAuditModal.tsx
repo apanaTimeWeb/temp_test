@@ -1,7 +1,7 @@
 'use client';
 // RESPONSIBILITY: Modal dialog for auditing seat occupancy history, especially for damage or theft incident investigations (e.g. past 1 month occupants of a specific seat).
 import { Calendar,Check,Clock,Copy,Filter,Search,ShieldAlert,User,X } from 'lucide-react';
-import { useMemo,useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import type { ManagerSeatsHistoryRow } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryTypes';
 
@@ -26,6 +26,11 @@ export function ManagerSeatsHistoryAuditModal({
   const [timeHorizon, setTimeHorizon] = useState<'30days' | '7days' | '90days' | 'all'>('30days');
   const [studentSearch, setStudentSearch] = useState<string>('');
   const [copied, setCopied] = useState<boolean>(false);
+  const copyTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+  }, []);
 
   // Filter occupants by selected seat and time horizon
   const seatOccupants = useMemo(() => {
@@ -84,7 +89,8 @@ export function ManagerSeatsHistoryAuditModal({
     navigator.clipboard.writeText(lines.join('\n'));
     setCopied(true);
     toast.success('Audit report copied to clipboard', { id: 'manager-seat-audit-copy-success' });
-    setTimeout(() => setCopied(false), 2000);
+    if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = window.setTimeout(() => { setCopied(false); copyTimerRef.current = null; }, 2000);
   };
 
   const handleApplyFilter = () => {

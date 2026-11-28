@@ -11,13 +11,14 @@ import type { ReferralRow } from '@/app/frontend_manager/manager_members/members
 import { readBrowserStorageItem, writeBrowserStorageItem } from '@/lib/browserStorage';
 import { CheckCircle2, Download, Plus, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 export function ManagerMembersReferralBonusReferralsClient() {
   const tManagerUi = useTranslations('manager.manager_referral_bonus.ui');
   const [records, setRecords] = useState<ReferralRow[]>(getInitialDemoReferrals);
   const [deleteTarget, setDeleteTarget] = useState<ReferralRow | null>(null);
+  const toastTimerRef = useRef<number | null>(null);
 
   const updateRecords = (updater: (prev: ReferralRow[]) => ReferralRow[]) => {
     setRecords((prev) => {
@@ -47,6 +48,7 @@ export function ManagerMembersReferralBonusReferralsClient() {
     window.addEventListener('manager_referral_created', syncStoredReferrals);
     window.addEventListener('storage', syncStoredReferrals);
     return () => {
+      if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current);
       window.removeEventListener('manager_referral_created', syncStoredReferrals);
       window.removeEventListener('storage', syncStoredReferrals);
     };
@@ -133,7 +135,8 @@ export function ManagerMembersReferralBonusReferralsClient() {
 
   const showTempToastMsg = (msg: string) => {
     setToastMsg(msg);
-    setTimeout(() => setToastMsg(null), 3500);
+    if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = window.setTimeout(() => { setToastMsg(null); toastTimerRef.current = null; }, 3500);
   };
 
   const handleApprove = (id: string) => {

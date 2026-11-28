@@ -74,20 +74,26 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
   };
 
   const handleExportCsv = () => {
-    const headers = 'ID,Date Time,Phone,Student,Dispatch Mode,Type,Status,Error,Message\n';
+    const escapeCsvCell = (value: unknown): string => {
+      const text = String(value ?? '');
+      const safeText = /^[\u0000-\u0020]*[=+\-@]/.test(text) ? `'${text}` : text;
+      return `"${safeText.replace(/"/g, '""')}"`;
+    };
+    const headers = ['ID', 'Date Time', 'Phone', 'Student', 'Dispatch Mode', 'Type', 'Status', 'Error', 'Message'].map(escapeCsvCell).join(',') + '\n';
     const rows = filtered
-      .map(
-        (l) =>
-          `"${l.id}","${l.dateTime}","${l.phone}","${l.student}","${l.channelType || 'WhatsApp Web (Free)'}","${l.type}","${l.status}","${(l.error || '').replace(/"/g, '""')}","${l.message.replace(/"/g, '""')}"`
+      .map((l) =>
+        [l.id, l.dateTime, l.phone, l.student, l.channelType || 'WhatsApp Web (Free)', l.type, l.status, l.error || '', l.message]
+          .map(escapeCsvCell)
+          .join(',')
       )
       .join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const blob = new Blob([`\uFEFF${headers}${rows}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
     anchor.download = `whatsapp_logs_${new Date().toISOString().slice(0, 10)}.csv`;
     anchor.click();
-    URL.revokeObjectURL(url);
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     toast.success('WhatsApp delivery logs exported to CSV successfully', { id: 'manager-wa-logs-export-csv' });
   };
 

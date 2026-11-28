@@ -118,11 +118,11 @@ export function ManagerMembersDirectoryFreezeModal({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label htmlFor="leave-start-date" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Leave Start Date *</label>
-              <input maxLength={30} id="leave-start-date" type="date" required value={startDate} onChange={(e) => setStartDate(e.target.value)} className="w-full md-surface-sub border border-indigo-500/30 rounded-xl px-3 py-2 text-xs text-slate-200 outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 cursor-pointer" />
+              <input id="leave-start-date" type="date" required value={startDate} onChange={(e) => setStartDate(e.target.value)} className="w-full md-surface-sub border border-indigo-500/30 rounded-xl px-3 py-2 text-xs text-slate-200 outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 cursor-pointer" />
             </div>
             <div>
               <label htmlFor="leave-end-date" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Leave End Date *</label>
-              <input maxLength={30} id="leave-end-date" type="date" required min={startDate} value={endDate} onChange={(e) => setEndDate(e.target.value)} className="w-full md-surface-sub border border-indigo-500/30 rounded-xl px-3 py-2 text-xs text-slate-200 outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 cursor-pointer" />
+              <input id="leave-end-date" type="date" required min={startDate} value={endDate} onChange={(e) => setEndDate(e.target.value)} className="w-full md-surface-sub border border-indigo-500/30 rounded-xl px-3 py-2 text-xs text-slate-200 outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 cursor-pointer" />
             </div>
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Freeze Duration</label>

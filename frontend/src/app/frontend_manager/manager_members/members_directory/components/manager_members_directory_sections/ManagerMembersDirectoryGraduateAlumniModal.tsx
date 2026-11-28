@@ -154,7 +154,7 @@ export function ManagerMembersDirectoryGraduateAlumniModal({
               <label htmlFor="alumni-leftDate" className="block text-xs font-semibold text-secondary mb-1">Graduation Date</label>
               <div className="relative">
                 <Calendar size={14} className="absolute left-3 top-2.5 text-secondary" />
-                <input maxLength={30} id="alumni-leftDate" type="date" value={leftDate} onChange={(e) => setLeftDate(e.target.value)} className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-border bg-input-bg text-primary focus:outline-none focus:ring-2 focus:ring-primary" />
+                <input id="alumni-leftDate" type="date" value={leftDate} onChange={(e) => setLeftDate(e.target.value)} className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-border bg-input-bg text-primary focus:outline-none focus:ring-2 focus:ring-primary" />
               </div>
             </div>
           </div>

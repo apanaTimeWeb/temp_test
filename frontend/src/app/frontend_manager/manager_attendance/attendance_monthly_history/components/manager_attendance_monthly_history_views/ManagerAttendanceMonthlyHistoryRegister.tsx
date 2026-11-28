@@ -173,14 +173,13 @@ export function ManagerAttendanceMonthlyHistoryRegister({
                           </div>
                           <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden border border-border">
                             <div
-                              className={`h-full rounded-full ${
+                              className={`h-full rounded-full mgr-dynamic-width-${Math.min(100, Math.max(0, Math.round(item.attendanceRate)))} ${
                                 item.attendanceRate >= 85
                                   ? 'bg-emerald-500'
                                   : item.attendanceRate >= 70
                                   ? 'bg-amber-500'
                                   : 'bg-rose-500'
                               }`}
-                              style={{ width: `${Math.min(100, item.attendanceRate)}%` }}
                             />
                           </div>
                         </div>

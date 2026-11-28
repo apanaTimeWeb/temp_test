@@ -113,7 +113,7 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
             </div>
             <div className="flex items-center gap-3">
               <div className="w-28 sm:w-36 bg-surface-highlight rounded-full h-2.5 overflow-hidden border border-border">
-                <div className="bg-emerald-600 h-2.5 rounded-full motion-safe:transition-all motion-safe:duration-slow" style={{ width: `${progressPct}%` }} />
+                <div className={`bg-emerald-600 h-2.5 rounded-full motion-safe:transition-all motion-safe:duration-slow mgr-dynamic-width-${Math.min(100, Math.max(0, Math.round(progressPct)))}`} />
               </div>
               {!isComplete && (
                 <button

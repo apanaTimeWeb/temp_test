@@ -84,8 +84,7 @@ export function ManagerAccountsExpensesToolbar({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search description, payee, or category..."
-            style={{ paddingLeft: '2.5rem', paddingRight: '2.25rem' }}
-            className="w-full text-xs rounded-xl bg-card border border-border py-2 text-primary placeholder:text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary motion-safe:transition-all"
+            className="w-full text-xs rounded-xl bg-card border border-border py-2 !pl-10 !pr-9 text-primary placeholder:text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary motion-safe:transition-all"
           />
           <Search
             size={16}

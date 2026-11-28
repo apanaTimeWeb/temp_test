@@ -21,7 +21,7 @@ import {
 } from '@/app/frontend_manager/manager_finance/finance_security_deposits/utils/ManagerFinanceSecurityDepositsHelpers';
 import { ArrowDown, ArrowUp, ArrowUpDown, Search, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const URL_FILTERS = { status: { defaultValue: 'all', allowedValues: ['all', 'held', 'refunded', 'forfeited'] } as const };
 type DepositSortField = 'studentName' | 'depositAmount' | 'status' | 'collectedBy' | 'collectedDate' | 'deductionAmount' | 'refundedDate';
@@ -49,10 +49,16 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
   const [deductionTarget, setDeductionTarget] = useState<ManagerFinanceSecurityDepositsSampleDeposit | null>(null);
   const [deductionAmount, setDeductionAmount] = useState('150');
   const [deductionReason, setDeductionReason] = useState('Locker Key Lost');
+  const toastTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current);
+  }, []);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 4000);
+    if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = window.setTimeout(() => { setToastMessage(null); toastTimerRef.current = null; }, 4000);
   };
 
   const toggleSort = (field: DepositSortField) => {

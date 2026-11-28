@@ -1,7 +1,7 @@
 'use client';
 import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
 import { CheckCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface ManagerSeatsMatrixAddModalProps {
   isOpen: boolean;
@@ -17,6 +17,11 @@ export function ManagerSeatsMatrixAddModal({
   const [newSeatLabel, setNewSeatLabel] = useState('');
   const [newSeatWing, setNewSeatWing] = useState('Ground Floor — AC Silent Reading Hall');
   const [addFeedback, setAddFeedback] = useState<string | null>(null);
+  const addTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (addTimerRef.current !== null) window.clearTimeout(addTimerRef.current);
+  }, []);
 
   if (!isOpen) return null;
 
@@ -33,7 +38,9 @@ export function ManagerSeatsMatrixAddModal({
     };
     onAddSeat(newSeat);
     setAddFeedback(`Seat ${newSeat.id} created successfully!`);
-    setTimeout(() => {
+    if (addTimerRef.current !== null) window.clearTimeout(addTimerRef.current);
+    addTimerRef.current = window.setTimeout(() => {
+      addTimerRef.current = null;
       setAddFeedback(null);
       onClose();
       setNewSeatLabel('');

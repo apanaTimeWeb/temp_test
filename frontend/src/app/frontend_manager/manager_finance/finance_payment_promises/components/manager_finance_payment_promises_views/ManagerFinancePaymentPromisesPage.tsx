@@ -24,7 +24,7 @@ import {
 import { Download, Plus, Printer, Search, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFinancePaymentPromisesRouteQueryProps) {
   const router = useRouter();
@@ -52,10 +52,16 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
   const [editRemarks, setEditRemarks] = useState('');
   const [sortField, setSortField] = useState<PromiseSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const noticeTimerRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (noticeTimerRef.current !== null) window.clearTimeout(noticeTimerRef.current);
+  }, []);
 
   const showNotice = (msg: string) => {
     setFeedbackToast(msg);
-    setTimeout(() => setFeedbackToast(null), 4000);
+    if (noticeTimerRef.current !== null) window.clearTimeout(noticeTimerRef.current);
+    noticeTimerRef.current = window.setTimeout(() => { setFeedbackToast(null); noticeTimerRef.current = null; }, 4000);
   };
 
   const todayDateStr = useMemo(() => new Date().toISOString().slice(0, 10), []);

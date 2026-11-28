@@ -56,7 +56,6 @@ export function ManagerMembersDirectoryFilterBar({
           id="manager-members-search"
           type="search"
           className="mgr-input !pl-10 text-xs w-full"
-          style={{ paddingLeft: '2.5rem' }}
           placeholder="Search by name, ID, phone, email, seat..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}

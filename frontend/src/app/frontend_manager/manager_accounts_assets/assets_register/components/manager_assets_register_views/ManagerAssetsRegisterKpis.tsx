@@ -93,9 +93,9 @@ export function ManagerAssetsRegisterKpis({
           <span className="text-xs text-secondary font-medium">{totalAssets} Total Inventory Records</span>
         </div>
         <div className="w-full h-2.5 rounded-full overflow-hidden flex bg-surface-highlight">
-          <div style={{ width: `${activePct}%` }} className="bg-emerald-500 h-full motion-safe:transition-all motion-safe:duration-slow" title={`Active (${activePct}%)`} />
-          <div style={{ width: `${maintenancePct}%` }} className="bg-amber-500 h-full motion-safe:transition-all motion-safe:duration-slow" title={`Maintenance (${maintenancePct}%)`} />
-          <div style={{ width: `${disposedPct}%` }} className="bg-slate-500 h-full motion-safe:transition-all motion-safe:duration-slow" title={`Disposed (${disposedPct}%)`} />
+          <div className={`bg-emerald-500 h-full motion-safe:transition-all motion-safe:duration-slow mgr-dynamic-width-${Math.min(100, Math.max(0, Math.round(activePct)))}`} title={`Active (${activePct}%)`} />
+          <div className={`bg-amber-500 h-full motion-safe:transition-all motion-safe:duration-slow mgr-dynamic-width-${Math.min(100, Math.max(0, Math.round(maintenancePct)))}`} title={`Maintenance (${maintenancePct}%)`} />
+          <div className={`bg-slate-500 h-full motion-safe:transition-all motion-safe:duration-slow mgr-dynamic-width-${Math.min(100, Math.max(0, Math.round(disposedPct)))}`} title={`Disposed (${disposedPct}%)`} />
         </div>
         <div className="flex flex-wrap gap-4 text-xs text-secondary pt-1">
           <span className="flex items-center gap-1.5 font-medium"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Operational ({activePct}%)</span>

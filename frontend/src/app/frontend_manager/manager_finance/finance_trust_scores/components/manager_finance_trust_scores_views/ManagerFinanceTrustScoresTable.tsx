@@ -45,8 +45,7 @@ function TrustGauge({ score }: { score: number }) {
         aria-label={`Trust score: ${score} out of 100, ${label}`}
       >
         <div
-          className={`fin-trust-fill motion-safe:transition-all motion-safe:duration-normal ${colorBg}`}
-          style={{ width: `${clampedScore}%` }}
+          className={`fin-trust-fill motion-safe:transition-all motion-safe:duration-normal mgr-dynamic-width-${Math.min(100, Math.max(0, Math.round(clampedScore)))} ${colorBg}`}
         />
       </div>
       <span className={`text-xs font-bold ${colorText} shrink-0 w-7 text-right`}>{score}</span>
