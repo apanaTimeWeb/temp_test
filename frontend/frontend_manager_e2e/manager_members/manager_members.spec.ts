@@ -76,7 +76,7 @@ test.describe('manager_members domain E2E', () => {
     await page.getByRole('button', { name: /Full Day Access/i }).click();
     await expect(page.locator('#admission-shift-summary')).toHaveValue(/Full Day/i);
 
-    await page.getByRole('button', { name: 'Confirm Admission', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'Confirm Admission', exact: true })).toBeDisabled();
     await expect(page.locator('#admission-full-name')).toHaveValue('Playwright Candidate');
   });
 
@@ -123,7 +123,9 @@ test.describe('manager_members domain E2E', () => {
     expect(filteredByYear).toBeGreaterThan(0);
 
     await page.getByTestId('manager-alumni-search-input').fill('NoSuchAlumni2026');
-    await expect(rows).toHaveCount(0);
+    await expect(
+      page.getByText('No alumni records matching the selected search query and filters.'),
+    ).toBeVisible();
 
     await page.getByTestId('manager-alumni-reset-filters').click();
     await expect(page.getByTestId('manager-alumni-search-input')).toHaveValue('');

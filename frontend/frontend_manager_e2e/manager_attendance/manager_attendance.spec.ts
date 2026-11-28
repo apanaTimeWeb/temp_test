@@ -71,8 +71,9 @@ test.describe('manager_attendance domain E2E', () => {
     const threshold = page.locator('#absentee-threshold-select');
     await threshold.selectOption('7');
     await expect(threshold).toHaveValue('7');
+    await expect(main.getByText('No absentees above threshold!')).toBeVisible();
 
-    await main.getByRole('button', { name: /Reset Filters/i }).click();
+    await main.getByRole('button', { name: /Reset Filters/i }).first().click();
     await expect(threshold).toHaveValue('3');
     await expect(rows).toHaveCount(5);
     await expect(main.getByText('Priya Verma')).toBeVisible();

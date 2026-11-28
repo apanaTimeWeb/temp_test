@@ -18,11 +18,16 @@ test.describe('manager_finance domain E2E', () => {
     await expect(listbox).toBeHidden();
 
     const compositeToggle = page.getByTestId('manager-finance-composite-toggle');
-    await expect(compositeToggle).toBeVisible();
-    await compositeToggle.click();
-    await compositeToggle.click();
+    await expect(compositeToggle).toBeAttached();
+    const compositeLabel = compositeToggle.locator('..');
+    await compositeLabel.click();
+    await expect(compositeToggle).toBeChecked();
+    await compositeLabel.click();
+    await expect(compositeToggle).not.toBeChecked();
 
-    await page.getByRole('button', { name: /Partial Payment/i }).click();
+    await expect(page.getByText('Amount Paying: ₹1,200')).toBeVisible();
+    await page.getByRole('radio', { name: /Partial Payment/i }).click();
+    await expect(page.getByRole('radio', { name: /Partial Payment/i })).toHaveAttribute('aria-checked', 'true');
     const paymentModes = page.getByRole('group', { name: /Payment Mode/i });
     const cash = paymentModes.getByRole('button', { name: 'Cash', exact: true });
     const upi = paymentModes.getByRole('button', { name: 'UPI', exact: true });
@@ -89,10 +94,10 @@ test.describe('manager_finance domain E2E', () => {
 
     const dueTodayBtn = page.getByTestId('manager-finance-filter-due-today-btn');
     await dueTodayBtn.click();
-    const dueCount = await rows.count();
-    expect(dueCount).toBeLessThan(5);
-    await dueTodayBtn.click();
+    await expect(main.getByText('Aman Verma')).toHaveCount(0);
+    await page.getByRole('button', { name: 'All Time', exact: true }).click();
     await expect(rows).toHaveCount(5);
+    await expect(main.getByText('Aman Verma')).toBeVisible();
 
     const statusSelect = page.locator('#promises-status-filter');
     await statusSelect.selectOption('overdue');

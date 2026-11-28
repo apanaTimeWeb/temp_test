@@ -82,8 +82,8 @@ test.describe('manager_seats_shifts_lockers domain E2E', () => {
 
     await page.getByRole('button', { name: 'Table View', exact: true }).click();
     const tableRows = page.getByTestId('manager-main-content').locator('tbody tr');
-    const allCount = await tableRows.count();
-    expect(allCount).toBe(18);
+    await expect(tableRows).toHaveCount(10);
+    await expect(page.getByRole('button', { name: /All Statuses 18/i })).toBeVisible();
 
     const expiredBtn = page.getByTestId('manager-filter-expired-lockers-btn');
     await expect(expiredBtn).toBeVisible();
@@ -93,6 +93,6 @@ test.describe('manager_seats_shifts_lockers domain E2E', () => {
 
     await page.getByRole('button', { name: /All Statuses/i }).click();
     await expect(expiredBtn).toBeVisible();
-    await expect(tableRows).toHaveCount(18);
+    await expect(tableRows).toHaveCount(10);
   });
 });

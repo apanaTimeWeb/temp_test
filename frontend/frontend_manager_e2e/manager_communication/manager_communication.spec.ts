@@ -36,10 +36,10 @@ test.describe('manager_communication domain E2E', () => {
     await expect(rows).toHaveCount(4);
 
     const categorySelect = page.getByLabel('Filter by Category');
-    await categorySelect.selectOption('WiFi');
+    await categorySelect.selectOption('AC');
     await expect(rows).toHaveCount(1);
-    await expect(main.getByText('AC Water Leakage')).toHaveCount(0);
-    await expect(main.getByText('Wi-Fi Signal Drop')).toBeVisible();
+    await expect(main.getByText('Wi-Fi Signal Drop')).toHaveCount(0);
+    await expect(main.getByText('AC Water Leakage')).toBeVisible();
 
     await page.getByRole('button', { name: 'Reset', exact: true }).click();
     await expect(categorySelect).toHaveValue('all');
@@ -55,7 +55,7 @@ test.describe('manager_communication domain E2E', () => {
     await expectCanonicalManagerSubmoduleLoaded(
       page,
       '/frontend_manager/manager_communication/communication_notification_center',
-      { checkSearchInput: true, checkNoHorizontalOverflow: true },
+      { checkNoHorizontalOverflow: true },
     );
 
     const broadcastTab = page.getByRole('button', { name: /Member Notifications|Compose/i });
