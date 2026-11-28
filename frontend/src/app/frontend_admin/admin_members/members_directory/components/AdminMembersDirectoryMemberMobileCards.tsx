@@ -3,7 +3,7 @@
 
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import { displayValue } from '@/lib/display_value';
-import { Armchair, CalendarClock, CreditCard, Eye, Mail, MessageSquare } from 'lucide-react';
+import { Armchair, CalendarClock, CreditCard, Eye, Mail, MessageSquare, Pencil } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 export interface AdminMembersDirectoryMemberMobileCardsProps {
@@ -19,7 +19,11 @@ export interface AdminMembersDirectoryMemberMobileCardsProps {
 
 export default function AdminMembersDirectoryMemberMobileCards({
   visibleMembers,
+  selectedIds,
+  onToggleSelectOne,
   onSelectMember,
+  onAction,
+  canMutate = true,
   statusLabel,
   expiryLabel,
 }: AdminMembersDirectoryMemberMobileCardsProps) {
@@ -40,11 +44,22 @@ export default function AdminMembersDirectoryMemberMobileCards({
       {visibleMembers.map((member) => (
         <article key={`mobile-${member.id}`} role="listitem" className="rounded-2xl border border-border bg-card p-4 shadow-card space-y-3">
           <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <button type="button" className="text-left font-semibold text-text-primary underline-offset-2 hover:underline hover:text-primary motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectMember(member)}>
-                {displayValue(member.name)}
-              </button>
-              <div className="mt-0.5"><span className="font-mono text-xs text-text-secondary">{displayValue(member.id)}</span></div>
+            <div className="flex items-start gap-2.5 min-w-0">
+              {onToggleSelectOne && (
+                <input
+                  type="checkbox"
+                  className="mt-1 h-4 w-4 rounded border-border bg-input text-primary focus:ring-2 focus:ring-primary"
+                  checked={selectedIds.includes(member.id)}
+                  onChange={() => onToggleSelectOne(member.id)}
+                  aria-label={t('SELECT_MEMBER', { name: member.name })}
+                />
+              )}
+              <div className="min-w-0">
+                <button type="button" className="text-left font-semibold text-text-primary underline-offset-2 hover:underline hover:text-primary motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectMember(member)}>
+                  {displayValue(member.name)}
+                </button>
+                <div className="mt-0.5"><span className="font-mono text-xs text-text-secondary">{displayValue(member.id)}</span></div>
+              </div>
             </div>
             <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${getStatusBadge(member.status)}`}>{statusLabel(member.status)}</span>
           </div>
@@ -71,6 +86,9 @@ export default function AdminMembersDirectoryMemberMobileCards({
           <div className="relative flex flex-wrap items-center gap-2 border-t border-border pt-3">
             <button type="button" className="min-h-9 flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl border border-info bg-info-bg px-3 text-xs font-semibold text-info-text hover:opacity-90 motion-safe:transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectMember(member)}>
               <Eye size={14} aria-hidden="true" /> {t('ACTION_VIEW_DETAILS')}
+            </button>
+            <button type="button" className="min-h-9 rounded-xl border border-border bg-surface-highlight px-3 text-xs font-semibold text-text-primary hover:bg-surface-hover inline-flex items-center justify-center gap-1.5 motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-label={`${t('ACTION_EDIT_MEMBER')} ${member.name}`} title={canMutate ? t('ACTION_EDIT_MEMBER') : t('ACTION_EDIT_API_REQUIRED')} onClick={() => onAction('edit', member)}>
+              <Pencil size={14} aria-hidden="true" /> {t('ACTION_EDIT_MEMBER')}
             </button>
             {member.email && (
               <a href={`mailto:${member.email}?subject=${encodeURIComponent('Smart Library Notice')}&body=${encodeURIComponent(`Dear ${member.name},\n\n`)}`} className="min-h-9 rounded-xl border border-border bg-purple-bg px-3 text-xs font-semibold text-purple hover:opacity-90 inline-flex items-center justify-center gap-1.5 motion-safe:transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-label={`Email ${member.name}`} title={`Email ${member.name}`}>

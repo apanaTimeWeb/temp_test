@@ -18,11 +18,22 @@ export interface AdminShellHeaderNotificationItem {
   branch: string;
 }
 
+interface AdminShellNotificationsMenuLabels {
+  title: string;
+  dropdownLabel: string;
+  unreadAriaLabel: string;
+  newBadgeSuffix: string;
+  allCaughtUp: string;
+  markAllRead: string;
+  viewAll: string;
+}
+
 interface AdminShellNotificationsMenuProps {
   menuRef: RefObject<HTMLDivElement>;
   isOpen: boolean;
   notifications: AdminShellHeaderNotificationItem[];
   unreadCount: number;
+  labels?: Partial<AdminShellNotificationsMenuLabels>;
   onToggleOpen: () => void;
   onClose: () => void;
   onMarkAllRead: () => void;
@@ -34,11 +45,22 @@ export function AdminShellNotificationsMenu({
   isOpen,
   notifications,
   unreadCount,
+  labels,
   onToggleOpen,
   onClose,
   onMarkAllRead,
   onMarkAsRead,
 }: AdminShellNotificationsMenuProps) {
+  const titleLabel = labels?.title ?? 'Notifications';
+  const dropdownLabel = labels?.dropdownLabel ?? 'Notifications Dropdown';
+  const ariaLabel =
+    labels?.unreadAriaLabel ??
+    (unreadCount > 0 ? `${unreadCount} unread notifications` : titleLabel);
+  const newBadgeSuffix = labels?.newBadgeSuffix ?? 'New';
+  const allCaughtUpLabel = labels?.allCaughtUp ?? 'All caught up';
+  const markAllReadLabel = labels?.markAllRead ?? 'Mark all read';
+  const viewAllLabel = labels?.viewAll ?? 'View All in Notification Center';
+
   return (
     <div ref={menuRef} className="relative">
       <button
@@ -48,8 +70,8 @@ export function AdminShellNotificationsMenu({
         onClick={onToggleOpen}
         aria-expanded={isOpen}
         aria-haspopup="true"
-        aria-label={unreadCount > 0 ? `${unreadCount} unread notifications` : 'Notifications'}
-        title={unreadCount > 0 ? `${unreadCount} unread notifications` : 'Notifications'}
+        aria-label={ariaLabel}
+        title={ariaLabel}
       >
         <Bell size={18} strokeWidth={2} aria-hidden="true" />
         {unreadCount > 0 && <span className="admin-bell-dot" aria-hidden="true" />}
@@ -59,21 +81,21 @@ export function AdminShellNotificationsMenu({
         <div
           className="admin-notifications-dropdown"
           role="region"
-          aria-label="Notifications Dropdown"
+          aria-label={dropdownLabel}
           data-testid="admin-notifications-dropdown"
         >
           <div className="flex items-center justify-between border-b border-border bg-card px-4 py-3">
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold uppercase tracking-wider text-text-primary">
-                Notifications
+                {titleLabel}
               </span>
               {unreadCount > 0 ? (
                 <span className="rounded-full border border-border-focus bg-primary-subtle px-2 py-0.5 text-micro font-semibold text-primary">
-                  {unreadCount} New
+                  {unreadCount} {newBadgeSuffix}
                 </span>
               ) : (
                 <span className="rounded-full border border-border bg-surface-highlight px-2 py-0.5 text-micro font-medium text-text-secondary">
-                  All caught up
+                  {allCaughtUpLabel}
                 </span>
               )}
             </div>
@@ -83,7 +105,7 @@ export function AdminShellNotificationsMenu({
                 onClick={onMarkAllRead}
                 className="text-caption font-medium text-primary hover:underline cursor-pointer motion-safe:transition-colors"
               >
-                Mark all read
+                {markAllReadLabel}
               </button>
             )}
           </div>
@@ -142,7 +164,7 @@ export function AdminShellNotificationsMenu({
               data-testid="admin-notifications-view-all"
               className="flex w-full items-center justify-center gap-1.5 rounded-xl py-2 text-xs font-semibold text-primary hover:bg-surface-hover hover:text-text-primary motion-safe:transition-colors"
             >
-              <span>View All in Notification Center</span>
+              <span>{viewAllLabel}</span>
               <ChevronRight size={13} aria-hidden="true" />
             </Link>
           </div>

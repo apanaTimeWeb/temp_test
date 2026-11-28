@@ -191,6 +191,13 @@
     "WAIVER_CANCEL": "रद्द करें",
     "WAIVER_SUBMIT": "स्वीकृत करें और क्रेडिट मेमो जारी करें",
     "WAIVER_CATEGORY_LABEL": "छूट श्रेणी / योजना",
-    "WAIVER_REASON_LABEL": "प्रशासनिक औचित्य / स्वीकृति टिप्पणी"
+    "WAIVER_REASON_LABEL": "प्रशासनिक औचित्य / स्वीकृति टिप्पणी",
+    "MEMBER_ADD_TITLE": "नया सदस्य जोड़ें",
+    "MEMBER_ADD_SUBMIT": "सदस्य जोड़ें",
+    "BULK_IMPORT_CSV": "CSV थोक आयात",
+    "BULK_IMPORT_CSV_TITLE": "CSV/Excel से छात्रों का थोक आयात करें",
+    "BULK_WHATSAPP_COUNT": "बल्क WhatsApp ({count})",
+    "SELECT_ALL_MEMBERS": "सभी सदस्य चुनें",
+    "SELECT_MEMBER": "{name} चुनें"
   }
 }

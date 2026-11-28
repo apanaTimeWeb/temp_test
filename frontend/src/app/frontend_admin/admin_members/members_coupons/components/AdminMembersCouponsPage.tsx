@@ -73,6 +73,8 @@ export default function AdminCouponsPage() {
         code: values.code.trim().toUpperCase(),
         discount: values.discount,
         type: values.type,
+        currencyCode: 'INR',
+        amountUnit: 'major',
         usedCount: 0,
         maxUses: values.maxUses,
         expiry: values.expiry,

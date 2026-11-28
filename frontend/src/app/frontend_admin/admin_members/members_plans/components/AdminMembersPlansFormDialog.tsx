@@ -108,7 +108,13 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
     const initialBranch = editingPlan ? (editingPlan.branchApplicability || 'All Branches') : (!isAllBranches && selectedBranch ? selectedBranch.name : 'All Branches');
     reset(editingPlan ? {
       name: editingPlan.name, price: String(editingPlan.price), duration: editingPlan.duration, durationDays: String(editingPlan.durationDays),
-      features: editingPlan.features.join('\n'), branchApplicability: initialBranch, morningRate: '', afternoonRate: '', eveningRate: '', nightRate: '', fullDayRate: '', multiShiftDiscount: '10',
+      features: editingPlan.features.join('\n'), branchApplicability: initialBranch,
+      morningRate: editingPlan.morningRate ?? '',
+      afternoonRate: editingPlan.afternoonRate ?? '',
+      eveningRate: editingPlan.eveningRate ?? '',
+      nightRate: editingPlan.nightRate ?? '',
+      fullDayRate: editingPlan.fullDayRate ?? '',
+      multiShiftDiscount: editingPlan.multiShiftDiscount ?? '10',
     } : { ...EMPTY, branchApplicability: initialBranch });
   }, [editingPlan, open, reset, isAllBranches, selectedBranch]);
 
@@ -188,12 +194,12 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="admin-plan-price" className="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1.5">{t('PRICE')} (₹ Base/Month) <span className="text-danger-text">*</span></label>
-              <input maxLength={30} id="admin-plan-price" required min="0" className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-secondary focus:border-border-focus focus:outline-none focus:ring-1 focus:ring-primary font-mono" type="number" aria-invalid={Boolean(errors.price)} {...register('price')} placeholder={t('PRICE_PLACEHOLDER')} />
+              <input id="admin-plan-price" required min="0" className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-secondary focus:border-border-focus focus:outline-none focus:ring-1 focus:ring-primary font-mono" type="number" aria-invalid={Boolean(errors.price)} {...register('price')} placeholder={t('PRICE_PLACEHOLDER')} />
               {errors.price && <p className="mt-1 text-xs text-danger-text" role="alert">{getValidationMessage(errors.price.message)}</p>}
             </div>
             <div>
               <label htmlFor="admin-plan-duration-days" className="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1.5">{t('VALIDITY_DAYS')} <span className="text-danger-text">*</span></label>
-              <input maxLength={30} id="admin-plan-duration-days" min="1" required className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-secondary focus:border-border-focus focus:outline-none focus:ring-1 focus:ring-primary font-mono" type="number" aria-invalid={Boolean(errors.durationDays)} {...register('durationDays')} placeholder={t('DAYS_PLACEHOLDER')} />
+              <input id="admin-plan-duration-days" min="1" required className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-secondary focus:border-border-focus focus:outline-none focus:ring-1 focus:ring-primary font-mono" type="number" aria-invalid={Boolean(errors.durationDays)} {...register('durationDays')} placeholder={t('DAYS_PLACEHOLDER')} />
               {errors.durationDays && <p className="mt-1 text-xs text-danger-text" role="alert">{getValidationMessage(errors.durationDays.message)}</p>}
             </div>
           </div>

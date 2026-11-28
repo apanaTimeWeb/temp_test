@@ -1,6 +1,8 @@
+import type { AdminMembersEnquiriesScenario } from '@/app/frontend_admin/admin_members/members_enquiries/types/AdminMembersEnquiriesComponentTypes';
+
 /** Isolated test-scenario vocabulary owned by admin_members_enquiries. No sibling imports or live API assumptions. */
 export const AdminMembersEnquiriesScenarios = ['ACTIVE', 'EMPTY', 'SERVER_500', 'TIMEOUT', 'UNAUTHORIZED'] as const;
-export type AdminMembersEnquiriesScenario = (typeof AdminMembersEnquiriesScenarios)[number];
+export type { AdminMembersEnquiriesScenario };
 
 /** Describes a scenario for local tests without asserting an undocumented backend DTO. */
 export function AdminMembersEnquiriesScenarioLabel(scenario: AdminMembersEnquiriesScenario): string {

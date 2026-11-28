@@ -9,6 +9,7 @@ import {
   saveLibraryPricingConfig,
   type LibraryPricingConfig,
 } from '@/lib/pricing/libraryPricingEngine';
+import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import { Armchair, Layers, Lock, Percent } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
@@ -17,6 +18,7 @@ import { toast } from 'sonner';
 export function AdminMembersPlansPricingRuleSettings() {
   const t = useTranslations('ADMIN_PLANS');
   const locale = useLocale();
+  const isDemoMode = isFrontendDemoModeEnabled();
   const currencySymbol = getAdminMembersPlansCurrencySymbol(locale);
   const [config, setConfig] = useState<LibraryPricingConfig>(() => getLibraryPricingConfig());
   const [isEditing, setIsEditing] = useState(false);
@@ -33,6 +35,11 @@ export function AdminMembersPlansPricingRuleSettings() {
   }, []);
 
   const handleSave = () => {
+    if (!isDemoMode) {
+      toast.info(t('PERSISTENCE_BLOCKED'), { id: 'admin-plans-pricing-rules-blocked' });
+      setIsEditing(false);
+      return;
+    }
     saveLibraryPricingConfig(draftConfig);
     setConfig(draftConfig);
     setIsEditing(false);
@@ -84,8 +91,10 @@ export function AdminMembersPlansPricingRuleSettings() {
           ) : (
             <button
               type="button"
+              disabled={!isDemoMode}
+              title={!isDemoMode ? t('PERSISTENCE_BLOCKED') : undefined}
               onClick={() => setIsEditing(true)}
-              className="rounded-xl border border-border-focus bg-primary-subtle px-3.5 py-1.5 text-xs font-semibold text-primary hover:opacity-90 motion-safe:transition-opacity shadow-card"
+              className="rounded-xl border border-border-focus bg-primary-subtle px-3.5 py-1.5 text-xs font-semibold text-primary hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40 motion-safe:transition-opacity shadow-card"
             >
               Configure Rates & Discounts
             </button>

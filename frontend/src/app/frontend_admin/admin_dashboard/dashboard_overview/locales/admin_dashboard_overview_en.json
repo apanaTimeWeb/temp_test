@@ -164,6 +164,10 @@
     "LEADERBOARD_COL_EXPENSES_PERIOD": "Expenses ({period})",
     "LEADERBOARD_COL_PROFIT_PERIOD": "Net Profit ({period})",
     "LEADERBOARD_COL_RENEWAL_PCT": "Renewal %",
-    "LEADERBOARD_COL_BOTTLENECK_ALERT": "Key Bottleneck / Alert"
+    "LEADERBOARD_COL_BOTTLENECK_ALERT": "Key Bottleneck / Alert",
+    "REALIZED_CUSTOM_SUB": "Realized ({start} to {end})",
+    "REALIZED_CUSTOM_UNSET_SUB": "Select start & end dates (showing MTD)",
+    "LEADERBOARD_MGR_LABEL": "Mgr:",
+    "LEADERBOARD_SEATS_UNIT": "seats"
   }
 }

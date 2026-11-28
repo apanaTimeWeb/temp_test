@@ -13,6 +13,7 @@ import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Building2, CheckCircle } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -23,13 +24,6 @@ const COUPON_PRESETS = [
   { label: 'EXAMBOOST', code: 'EXAMBOOST', discount: 20, type: 'Percent' as const, maxUses: 200, desc: '20% Exam Prep Special' },
   { label: 'WESTSIDE30', code: 'WESTSIDE30', discount: 30, type: 'Percent' as const, maxUses: 80, desc: '30% Westside Launch' },
   { label: 'ANNUAL1000', code: 'ANNUAL1000', discount: 1000, type: 'Flat' as const, maxUses: 30, desc: '₹1000 Long-Term Discount' },
-];
-
-const BRANCH_OPTIONS = [
-  { value: 'All Branches', label: 'All Branches', code: 'GLOBAL', desc: 'Valid across entire network', badge: 'Global Network' },
-  { value: 'Downtown Central', label: 'Downtown Central', code: 'DT-CEN', desc: 'Main City Center Hub Exclusive', badge: 'High-Demand Hub' },
-  { value: 'Westside Branch', label: 'Westside Branch', code: 'WS-BR', desc: 'Suburban Hub Exclusive', badge: 'Growth Hub' },
-  { value: 'North Hub', label: 'North Hub', code: 'NH-01', desc: 'North Campus Hub Exclusive', badge: 'Campus Hub' },
 ];
 
 export function AdminCouponsDialog({
@@ -44,9 +38,21 @@ export function AdminCouponsDialog({
   onConfirmDelete = () => undefined,
 }: AdminCouponsCreateDialogProps) {
   const t = useTranslations('ADMIN_COUPONS');
+  const router = useRouter();
   const currencySymbol = getAdminMembersCouponsCurrencySymbol(useLocale());
-  const { selectedBranch, isAllBranches } = useAdminBranch();
+  const { branches, selectedBranch, isAllBranches } = useAdminBranch();
   const [confirmDiscard, setConfirmDiscard] = useState(false);
+  const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
+
+  const branchOptions = useMemo(() => [
+    { value: 'All Branches', label: 'All Branches', code: 'GLOBAL', desc: 'Valid across entire network' },
+    ...branches.map((b) => ({
+      value: b.name,
+      label: b.name,
+      code: b.code,
+      desc: `${b.city || 'Campus'} Hub Exclusive`,
+    })),
+  ], [branches]);
 
   const schema = useMemo(() => createAdminCouponsFormSchema({
     codeRequired: t('VALIDATION_CODE_REQUIRED'),
@@ -68,12 +74,36 @@ export function AdminCouponsDialog({
   useEffect(() => {
     if (!isDirty || !open || isSubmitting) return;
     const handleBeforeUnload = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = ''; };
+    const handleClick = (event: MouseEvent) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const anchor = target.closest('a[href]');
+      if (!(anchor instanceof HTMLAnchorElement) || anchor.target === '_blank' || anchor.hasAttribute('download')) return;
+      const destination = new URL(anchor.href, window.location.href);
+      if (destination.origin !== window.location.origin || destination.href === window.location.href) return;
+      event.preventDefault();
+      event.stopPropagation();
+      setPendingNavigation(`${destination.pathname}${destination.search}${destination.hash}`);
+      setConfirmDiscard(true);
+    };
     window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    document.addEventListener('click', handleClick, true);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      document.removeEventListener('click', handleClick, true);
+    };
   }, [isDirty, open, isSubmitting]);
 
   const requestClose = () => { if (isDirty) { setConfirmDiscard(true); return; } onOpenChange(false); };
-  const discardDraft = () => { setConfirmDiscard(false); reset(ADMIN_COUPONS_EMPTY_FORM); onOpenChange(false); };
+  const discardDraft = () => {
+    setConfirmDiscard(false);
+    reset(ADMIN_COUPONS_EMPTY_FORM);
+    const destination = pendingNavigation;
+    setPendingNavigation(null);
+    onOpenChange(false);
+    if (destination) router.push(destination);
+  };
   const codeRegistration = form.register('code');
 
   useEffect(() => {
@@ -175,7 +205,7 @@ export function AdminCouponsDialog({
                 <span className="text-[11px] text-primary font-medium">{t('ACTIVE_BRANCH_LABEL', { branch: watchedBranch })}</span>
               </div>
               <div className="grid grid-cols-2 gap-2">
-                {BRANCH_OPTIONS.map((b) => {
+                {branchOptions.map((b) => {
                   const isSelected = watchedBranch === b.value;
                   return (
                     <button key={b.value} type="button" onClick={() => form.setValue('branchApplicability', b.value, { shouldDirty: true })}
@@ -214,7 +244,7 @@ export function AdminCouponsDialog({
                 </div>
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-xs font-bold text-text-secondary">{watchedType === 'Percent' ? '%' : currencySymbol}</span>
-                  <input maxLength={30} id="admin-coupon-discount" type="number" min="0.01" step="any" {...form.register('discount')}
+                  <input id="admin-coupon-discount" type="number" min="0.01" step="any" {...form.register('discount')}
                     className="w-full rounded-xl border border-border bg-input pl-7 pr-3 py-2.5 text-xs text-text-primary focus:border-border-focus focus:outline-none font-mono"
                     placeholder={watchedType === 'Percent' ? '15' : '500'} aria-invalid={Boolean(errors.discount)} />
                 </div>
@@ -228,7 +258,7 @@ export function AdminCouponsDialog({
                   <label className="block text-xs font-semibold uppercase tracking-wider text-text-secondary" htmlFor="admin-coupon-max-uses">{t('FIELD_MAX_USES')}</label>
                   <span className="text-xs text-danger-text font-bold">*</span>
                 </div>
-                <input maxLength={30} id="admin-coupon-max-uses" type="number" min="1" step="1" {...form.register('maxUses')} className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-xs text-text-primary focus:border-border-focus focus:outline-none font-mono" placeholder="50" aria-invalid={Boolean(errors.maxUses)} />
+                <input id="admin-coupon-max-uses" type="number" min="1" step="1" {...form.register('maxUses')} className="w-full rounded-xl border border-border bg-input px-3.5 py-2.5 text-xs text-text-primary focus:border-border-focus focus:outline-none font-mono" placeholder="50" aria-invalid={Boolean(errors.maxUses)} />
                 {typeof errors.maxUses?.message === 'string' && <p id="admin-coupon-max-uses-error" role="alert" className="text-xs text-danger-text">{errors.maxUses.message}</p>}
               </div>
 
@@ -237,7 +267,7 @@ export function AdminCouponsDialog({
                   <label className="block text-xs font-semibold uppercase tracking-wider text-text-secondary" htmlFor="admin-coupon-expiry">{t('FIELD_EXPIRY')}</label>
                   <span className="text-xs text-danger-text font-bold">*</span>
                 </div>
-                <input maxLength={30} id="admin-coupon-expiry" type="date" {...form.register('expiry')} className="w-full rounded-xl border border-border bg-input px-3 py-2 text-xs text-text-primary focus:border-border-focus focus:outline-none" aria-invalid={Boolean(errors.expiry)} />
+                <input id="admin-coupon-expiry" type="date" {...form.register('expiry')} className="w-full rounded-xl border border-border bg-input px-3 py-2 text-xs text-text-primary focus:border-border-focus focus:outline-none" aria-invalid={Boolean(errors.expiry)} />
                 {typeof errors.expiry?.message === 'string' && <p id="admin-coupon-expiry-error" role="alert" className="text-xs text-danger-text">{errors.expiry.message}</p>}
               </div>
             </div>
@@ -256,7 +286,7 @@ export function AdminCouponsDialog({
               <h3 id="admin-coupon-discard-title" className="text-xs font-bold text-warning-text">{t('UNSAVED_CHANGES_TITLE')}</h3>
               <p className="mt-1 text-xs text-text-primary">{t('UNSAVED_CHANGES_DESCRIPTION')}</p>
               <div className="mt-3 flex justify-end gap-2">
-                <button type="button" className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-text-secondary hover:bg-surface-hover" onClick={() => setConfirmDiscard(false)}>{t('KEEP_EDITING')}</button>
+                <button type="button" className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-text-secondary hover:bg-surface-hover" onClick={() => { setConfirmDiscard(false); setPendingNavigation(null); }}>{t('KEEP_EDITING')}</button>
                 <button type="button" className="rounded-lg bg-danger px-3 py-1.5 text-xs font-semibold text-on-danger hover:opacity-90" onClick={discardDraft}>{t('DISCARD_CHANGES')}</button>
               </div>
             </div>

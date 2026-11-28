@@ -774,7 +774,11 @@
     "LEADERBOARD_COL_EXPENSES_PERIOD": "खर्च ({period})",
     "LEADERBOARD_COL_PROFIT_PERIOD": "शुद्ध लाभ ({period})",
     "LEADERBOARD_COL_RENEWAL_PCT": "नवीनीकरण %",
-    "LEADERBOARD_COL_BOTTLENECK_ALERT": "मुख्य बाधा / चेतावनी"
+    "LEADERBOARD_COL_BOTTLENECK_ALERT": "मुख्य बाधा / चेतावनी",
+    "REALIZED_CUSTOM_SUB": "प्राप्त ({start} से {end})",
+    "REALIZED_CUSTOM_UNSET_SUB": "प्रारंभ और समाप्ति तिथि चुनें (MTD दिखाया जा रहा है)",
+    "LEADERBOARD_MGR_LABEL": "प्रबंधक:",
+    "LEADERBOARD_SEATS_UNIT": "सीटें"
   },
   "ADMIN_SHELL": {
     "OPEN_MENU": "मेन्यू खोलें",
@@ -863,7 +867,17 @@
     "DESCRIPTION": "Report data and exports require verified source contracts.",
     "PENDING": "Data contract pending",
     "REPORTS_ANALYTICS_TITLE": "रिपोर्ट और विश्लेषण",
-    "REPORTS_ANALYTICS_DESCRIPTION": "डेमो मोड में नमूना विश्लेषण देखें; लाइव मापों के लिए सत्यापित रिपोर्ट DTO आवश्यक है।"
+    "REPORTS_ANALYTICS_DESCRIPTION": "डेमो मोड में नमूना विश्लेषण देखें; लाइव मापों के लिए सत्यापित रिपोर्ट DTO आवश्यक है।",
+    "NOTIFICATIONS_TITLE": "सूचनाएँ",
+    "NOTIFICATIONS_DROPDOWN": "सूचनाएँ ड्रॉपडाउन",
+    "NOTIFICATIONS_UNREAD_SINGLE": "1 अपठित सूचना",
+    "NOTIFICATIONS_UNREAD_MULTIPLE": "अपठित सूचनाएँ",
+    "NOTIFICATIONS_NEW": "नई",
+    "NOTIFICATIONS_ALL_CAUGHT_UP": "सभी पढ़ी जा चुकी हैं",
+    "NOTIFICATIONS_MARK_ALL_READ": "सभी को पढ़ा चिह्नित करें",
+    "NOTIFICATIONS_VIEW_ALL": "सूचना केंद्र में सभी देखें",
+    "NOTIFICATIONS_MARKED_READ": "सभी सूचनाएँ पढ़ी गईं के रूप में चिह्नित",
+    "SIGNED_OUT_SUCCESS": "सफलतापूर्वक साइन आउट किया गया"
   },
   "ADMIN_REPORTS": {
     "ALL_BRANCHES": "सभी शाखाएँ",
@@ -951,7 +965,12 @@
     "CURRENT_RANGE": "चुनी गई अवधि: {range}",
     "KPI_SECTION_LABEL": "मुख्य प्रदर्शन संकेतक",
     "CSV_EXPORT_FAILED": "CSV स्नैपशॉट तैयार नहीं हो सका। फिर से निर्यात करने का प्रयास करें।",
-    "SHIFT_AFTERNOON": "दोपहर"
+    "SHIFT_AFTERNOON": "दोपहर",
+    "LEADERBOARD_BADGE": "क्रॉस-शाखा कार्यकारी लीडरबोर्ड",
+    "WEEK_1": "सप्ताह 1",
+    "WEEK_2": "सप्ताह 2",
+    "WEEK_3": "सप्ताह 3",
+    "WEEK_4": "सप्ताह 4"
   },
   "ADMIN_FINANCE_COLLECT_FEE": {
     "BANNER_DEMO": "केवल डेमो पूर्वावलोकन। शुल्क की गणना नमूना छात्रों से होती है; सत्यापित भुगतान API उपलब्ध न होने के कारण भुगतान संग्रह बंद है। यहाँ भुगतान या रसीद नहीं बनाई जा सकती।",
@@ -1931,7 +1950,7 @@
     "SHIFT": "शिफ्ट"
   },
   "ADMIN_BLACKLIST": {
-    "BREADCRUMB": "स्मार्ट जिम 360 › एडमिन › ब्लैकलिस्ट",
+    "BREADCRUMB": "Smart Library › एडमिन › ब्लैकलिस्ट",
     "TITLE": "ब्लैकलिस्ट",
     "SUBTITLE": "वे छात्र जिन्हें लाइब्रेरी में दोबारा शामिल होने से प्रतिबंधित किया गया है।",
     "ADD_ACTION": "छात्र को ब्लैकलिस्ट करें",
@@ -1995,7 +2014,7 @@
     "DISCARD_CHANGES": "बदलाव छोड़ें"
   },
   "ADMIN_COUPONS": {
-    "BREADCRUMB": "स्मार्ट जिम 360 › एडमिन › कूपन",
+    "BREADCRUMB": "Smart Library › एडमिन › कूपन",
     "PAGE_TITLE": "कूपन",
     "PAGE_SUBTITLE": "डिस्काउंट कूपन देखें और ड्राफ़्ट की स्थानीय जाँच करें।",
     "CREATE_COUPON": "कूपन बनाएँ",
@@ -2270,7 +2289,14 @@
     "WAIVER_CANCEL": "रद्द करें",
     "WAIVER_SUBMIT": "स्वीकृत करें और क्रेडिट मेमो जारी करें",
     "WAIVER_CATEGORY_LABEL": "छूट श्रेणी / योजना",
-    "WAIVER_REASON_LABEL": "प्रशासनिक औचित्य / स्वीकृति टिप्पणी"
+    "WAIVER_REASON_LABEL": "प्रशासनिक औचित्य / स्वीकृति टिप्पणी",
+    "MEMBER_ADD_TITLE": "नया सदस्य जोड़ें",
+    "MEMBER_ADD_SUBMIT": "सदस्य जोड़ें",
+    "BULK_IMPORT_CSV": "CSV थोक आयात",
+    "BULK_IMPORT_CSV_TITLE": "CSV/Excel से छात्रों का थोक आयात करें",
+    "BULK_WHATSAPP_COUNT": "बल्क WhatsApp ({count})",
+    "SELECT_ALL_MEMBERS": "सभी सदस्य चुनें",
+    "SELECT_MEMBER": "{name} चुनें"
   },
   "ADMIN_ENQUIRIES": {
     "BREADCRUMB": "पूछताछ",
@@ -2453,10 +2479,11 @@
     "DISCARD_BUTTON": "छोड़ें",
     "SMS": "SMS",
     "SMS_TITLE": "SMS प्रदाता इंटीग्रेशन कॉन्फ़िगर नहीं है",
-    "SMS_UNAVAILABLE": "SMS संदेश भेजने के लिए प्रदाता इंटीग्रेशन आवश्यक है; कोई संदेश नहीं भेजा गया।"
+    "SMS_UNAVAILABLE": "SMS संदेश भेजने के लिए प्रदाता इंटीग्रेशन आवश्यक है; कोई संदेश नहीं भेजा गया।",
+    "ADD_ENQUIRY": "पूछताछ जोड़ें"
   },
   "ADMIN_PLANS": {
-    "BREADCRUMB": "स्मार्ट जिम 360 › एडमिन › योजनाएँ",
+    "BREADCRUMB": "Smart Library Management › एडमिन › योजनाएँ",
     "PAGE_TITLE": "सदस्यता योजनाएँ",
     "PAGE_SUBTITLE": "सभी शाखाओं के लिए उपलब्ध मूल्य योजनाएँ बनाएँ और प्रबंधित करें।",
     "CREATE_PLAN": "योजना बनाएँ",

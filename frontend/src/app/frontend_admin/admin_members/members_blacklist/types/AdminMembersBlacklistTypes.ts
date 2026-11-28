@@ -1,8 +1,9 @@
 import type { ADMIN_BLACKLIST_STATUS_VALUES } from '@/app/frontend_admin/admin_members/members_blacklist/config/admin_members_blacklist.url_config';
 import type { AdminBlacklistFormSchemaType } from '@/app/frontend_admin/admin_members/members_blacklist/schemas/AdminMembersBlacklistSchema';
-import type { AdminMembersBlacklistScenario } from '@/app/frontend_admin/admin_members/members_blacklist/tests/harness/bootstrap';
 import type { DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { ReactNode } from 'react';
+
+export type AdminMembersBlacklistScenario = 'ACTIVE' | 'EMPTY' | 'SERVER_500' | 'TIMEOUT' | 'UNAUTHORIZED';
 
 export type AdminBlacklistStatus = typeof ADMIN_BLACKLIST_STATUS_VALUES[number] | 'Pardoned';
 

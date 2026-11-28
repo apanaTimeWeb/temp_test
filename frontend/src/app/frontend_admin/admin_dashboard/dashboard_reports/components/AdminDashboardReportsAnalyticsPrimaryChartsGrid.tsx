@@ -3,10 +3,11 @@
 
 import { ADMIN_DASHBOARD_REPORTS_ANALYTICS_KPI_LABEL_KEYS,ADMIN_DASHBOARD_REPORTS_ANALYTICS_KPI_SUB_KEYS,ADMIN_DASHBOARD_REPORTS_ANALYTICS_KPI_TREND_KEYS,ADMIN_DASHBOARD_REPORTS_ANALYTICS_OCCUPANCY_LABEL_KEYS,ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/config/admin_dashboard_reports.url_config';
 import type { AdminDashboardReportsAnalyticsKpi,AdminDashboardReportsAnalyticsPrimaryChartsGridProps } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes';
-import { adminDashboardReportsAnalyticsFormatCurrency,adminDashboardReportsAnalyticsFormatNumber } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/utils/AdminDashboardReportsFormatters';
+import { adminDashboardReportsAnalyticsFormatCurrency,adminDashboardReportsAnalyticsFormatNumber,resolveAdminReportsChartPalette } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/utils/AdminDashboardReportsFormatters';
 import { displayValue } from '@/lib/display_value';
 import type { ApexOptions } from 'apexcharts';
 import { BarChart2,IndianRupee,PieChart,TrendingDown,TrendingUp,Users,Wallet,type LucideIcon } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 
@@ -54,18 +55,20 @@ const REPORT_KPI_THEMES = [
 
 export default function AdminDashboardReportsAnalyticsPrimaryChartsGrid({ data, range, locale }: AdminDashboardReportsAnalyticsPrimaryChartsGridProps) {
   const t = useTranslations('ADMIN_REPORTS');
+  const { resolvedTheme } = useTheme();
+  const palette = resolveAdminReportsChartPalette(resolvedTheme);
   const incomeExpense = data.incomeVsExpense[range];
   const incomeExpenseOptions: ApexOptions = {
     chart: { type: 'bar', toolbar: { show: false }, background: 'transparent', animations: { enabled: false } },
-    colors: ['#6366f1', '#f87171'],
+    colors: [palette.primary, palette.danger],
     plotOptions: { bar: { horizontal: false, columnWidth: '55%', borderRadius: 4 } },
     dataLabels: { enabled: false },
-    xaxis: { categories: incomeExpense.map((point) => { const key = ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS[point.month as keyof typeof ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS]; return key ? t(key) : point.month; }), labels: { style: { colors: '#94a3b8' } } },
-    yaxis: { labels: { formatter: (value) => adminDashboardReportsAnalyticsFormatCurrency(Math.round(value), data.currencyCode, locale), style: { colors: '#94a3b8' } } },
-    grid: { borderColor: 'rgba(99, 102, 241, 0.12)' },
-    legend: { labels: { colors: '#cbd5e1' } },
-    tooltip: { y: { formatter: (value) => adminDashboardReportsAnalyticsFormatCurrency(Math.round(value ?? 0), data.currencyCode, locale) }, theme: 'dark' },
-    noData: { text: t('CHART_NO_DATA'), style: { color: '#94a3b8' } },
+    xaxis: { categories: incomeExpense.map((point) => { const key = ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS[point.month as keyof typeof ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS]; return key ? t(key) : point.month; }), labels: { style: { colors: palette.textSecondary } } },
+    yaxis: { labels: { formatter: (value) => adminDashboardReportsAnalyticsFormatCurrency(Math.round(value), data.currencyCode, locale), style: { colors: palette.textSecondary } } },
+    grid: { borderColor: palette.gridBorder },
+    legend: { labels: { colors: palette.textSecondary } },
+    tooltip: { y: { formatter: (value) => adminDashboardReportsAnalyticsFormatCurrency(Math.round(value ?? 0), data.currencyCode, locale) }, theme: palette.isDark ? 'dark' : 'light' },
+    noData: { text: t('CHART_NO_DATA'), style: { color: palette.textSecondary } },
   };
   const incomeExpenseSeries = [
     { name: t('SERIES_INCOME'), data: incomeExpense.map((point) => point.incomeMinor) },
@@ -73,14 +76,14 @@ export default function AdminDashboardReportsAnalyticsPrimaryChartsGrid({ data, 
   ];
   const occupancyOptions: ApexOptions = {
     chart: { type: 'bar', toolbar: { show: false }, background: 'transparent', animations: { enabled: false } },
-    colors: ['#22d3ee', '#38bdf8', '#818cf8', '#a78bfa'],
+    colors: [palette.info, palette.primary, palette.secondary, palette.success, palette.warning],
     plotOptions: { bar: { horizontal: true, barHeight: '58%', borderRadius: 4 } },
-    dataLabels: { enabled: true, formatter: (value) => `${Math.round(Number(value))}%`, style: { colors: ['#ffffff'] } },
-    xaxis: { categories: data.shiftOccupancy.map((point) => { const key = ADMIN_DASHBOARD_REPORTS_ANALYTICS_OCCUPANCY_LABEL_KEYS[point.name as keyof typeof ADMIN_DASHBOARD_REPORTS_ANALYTICS_OCCUPANCY_LABEL_KEYS]; return key ? t(key) : point.name; }), min: 0, max: 100, labels: { formatter: (value) => `${value}%`, style: { colors: '#94a3b8' } } },
-    yaxis: { labels: { style: { colors: '#94a3b8' } } },
-    grid: { borderColor: 'rgba(99, 102, 241, 0.12)' },
-    tooltip: { y: { formatter: (value) => `${value}%` }, theme: 'dark' },
-    noData: { text: t('CHART_OCCUPANCY_NO_DATA'), style: { color: '#94a3b8' } },
+    dataLabels: { enabled: true, formatter: (value) => `${Math.round(Number(value))}%`, style: { colors: [palette.textOnPrimary] } },
+    xaxis: { categories: data.shiftOccupancy.map((point) => { const key = ADMIN_DASHBOARD_REPORTS_ANALYTICS_OCCUPANCY_LABEL_KEYS[point.name as keyof typeof ADMIN_DASHBOARD_REPORTS_ANALYTICS_OCCUPANCY_LABEL_KEYS]; return key ? t(key) : point.name; }), min: 0, max: 100, labels: { formatter: (value) => `${value}%`, style: { colors: palette.textSecondary } } },
+    yaxis: { labels: { style: { colors: palette.textSecondary } } },
+    grid: { borderColor: palette.gridBorder },
+    tooltip: { y: { formatter: (value) => `${value}%` }, theme: palette.isDark ? 'dark' : 'light' },
+    noData: { text: t('CHART_OCCUPANCY_NO_DATA'), style: { color: palette.textSecondary } },
   };
   const occupancySeries = [{ name: t('SERIES_OCCUPANCY'), data: data.shiftOccupancy.map((point) => Math.min(100, Math.max(0, point.value))) }];
 

@@ -125,7 +125,10 @@ export default function AdminMembersBlacklistMain() {
           className="admin-btn-icon min-h-11 min-w-11 disabled:cursor-not-allowed disabled:opacity-50 text-danger-text hover:bg-danger-bg"
           aria-label={t('REMOVE_ARIA', { name: data.name })}
           title={!isDemoMode ? t('LIVE_UNAVAILABLE') : undefined}
-          onClick={() => setRemoveId(data.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setRemoveId(data.id);
+          }}
         >
           <X size={18} strokeWidth={2} aria-hidden="true" />
         </button>

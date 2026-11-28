@@ -133,7 +133,9 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
 
   const handleMarkAllAsRead = () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-    toast.success('All notifications marked as read', { id: 'admin-shell-mark-all-read' });
+    toast.success(t('NOTIFICATIONS_MARKED_READ') || 'All notifications marked as read', {
+      id: 'admin-shell-mark-all-read',
+    });
   };
 
   const handleMarkAsRead = (id: string) => {
@@ -142,10 +144,12 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
 
   const handleSignOut = useCallback(() => {
     clearAdminClientSession();
-    toast.success('Signed out successfully', { id: 'admin-shell-sign-out' });
+    toast.success(t('SIGNED_OUT_SUCCESS') || 'Signed out successfully', {
+      id: 'admin-shell-sign-out',
+    });
     setShowLogoutModal(false);
     router.replace('/public_auth/auth_sign_in');
-  }, [router]);
+  }, [router, t]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -216,6 +220,20 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
           isOpen={isNotificationsOpen}
           notifications={notifications}
           unreadCount={unreadCount}
+          labels={{
+            title: t('NOTIFICATIONS_TITLE') || 'Notifications',
+            dropdownLabel: t('NOTIFICATIONS_DROPDOWN') || 'Notifications Dropdown',
+            unreadAriaLabel:
+              unreadCount === 1
+                ? t('NOTIFICATIONS_UNREAD_SINGLE') || '1 unread notification'
+                : unreadCount > 0
+                  ? `${unreadCount} ${t('NOTIFICATIONS_UNREAD_MULTIPLE') || 'unread notifications'}`
+                  : t('NOTIFICATIONS_TITLE') || 'Notifications',
+            newBadgeSuffix: t('NOTIFICATIONS_NEW') || 'New',
+            allCaughtUp: t('NOTIFICATIONS_ALL_CAUGHT_UP') || 'All caught up',
+            markAllRead: t('NOTIFICATIONS_MARK_ALL_READ') || 'Mark all read',
+            viewAll: t('NOTIFICATIONS_VIEW_ALL') || 'View All in Notification Center',
+          }}
           onToggleOpen={() => {
             setIsNotificationsOpen((prev) => !prev);
             setIsProfileOpen(false);

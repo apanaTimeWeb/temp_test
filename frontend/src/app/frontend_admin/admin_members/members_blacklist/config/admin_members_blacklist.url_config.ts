@@ -31,4 +31,18 @@ export const ADMIN_MEMBERS_BLACKLIST_CANONICAL_ROUTE = '/admin/admin_members/mem
 
 export const ADMIN_BLACKLIST_STATUS_VALUES = ['Blacklisted'] as const;
 
-export const ADMIN_BLACKLIST_EMPTY_FORM = { name: '', phone: '', reason: '', previousSeat: '' } as const;
+export const ADMIN_BLACKLIST_EMPTY_FORM = {
+  name: '',
+  phone: '',
+  reason: '',
+  previousSeat: '',
+  category: 'THEFT_STOLEN_PROPERTY' as const,
+  banScope: 'NETWORK_WIDE' as const,
+  banDuration: 'PERMANENT' as const,
+  revokeSeat: true,
+  revokeLocker: true,
+  blockBiometric: true,
+  confiscateDeposit: false,
+  incidentLocation: '',
+  firRefNo: '',
+} as const;

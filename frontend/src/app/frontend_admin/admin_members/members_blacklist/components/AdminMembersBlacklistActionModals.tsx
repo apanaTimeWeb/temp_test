@@ -97,12 +97,11 @@ export function AdminMembersBlacklistActionModals({
             <button
               type="button"
               className="rounded-xl bg-success px-4 py-2 text-xs font-semibold text-on-success hover:opacity-90 disabled:opacity-40"
-              disabled={!pardonReason.trim()}
+              disabled={!isDemoMode || !pardonReason.trim()}
               onClick={() => {
-                if (pardonTarget) {
-                  onConfirmPardon(pardonTarget.id, pardonReason);
-                  onClosePardon();
-                }
+                if (!isDemoMode || !pardonTarget) return;
+                onConfirmPardon(pardonTarget.id, pardonReason);
+                onClosePardon();
               }}
             >
               Confirm & Reinstate Access

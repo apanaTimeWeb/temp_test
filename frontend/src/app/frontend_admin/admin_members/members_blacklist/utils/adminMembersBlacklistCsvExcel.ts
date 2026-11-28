@@ -15,6 +15,13 @@ export function escapeBlacklistHtml(text: string): string {
   return text.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 }
 
+function escapeBlacklistCsvCell(value: unknown): string {
+  const text = String(value ?? '');
+  const isFiniteNumber = typeof value === 'number' && Number.isFinite(value);
+  const safeText = !isFiniteNumber && /^[\s]*[=+@-]/.test(text) ? `'${text}` : text;
+  return `"${safeText.replaceAll('"', '""')}"`;
+}
+
 export function exportBlacklistCsv(records: readonly AdminBlacklistRecord[], filename: string, includeBranch = false): void {
   const headers = includeBranch
     ? ['Record ID', 'Student Name', 'Phone', 'Reason', 'Blacklisted By', 'Incident Date', 'Previous Seat', 'Branch', 'Status']
@@ -22,20 +29,20 @@ export function exportBlacklistCsv(records: readonly AdminBlacklistRecord[], fil
 
   const rows = records.map((r) => {
     const base = [
-      `"${r.id}"`,
-      `"${(r.name || '').replaceAll('"', '""')}"`,
-      `"${r.phone || ''}"`,
-      `"${(r.reason || '').replaceAll('"', '""')}"`,
-      `"${(r.blacklistedBy || (includeBranch ? 'Admin Operations' : '')).replaceAll('"', '""')}"`,
-      `"${r.blacklistedOn || ''}"`,
-      `"${(r.previousSeat || '').replaceAll('"', '""')}"`,
+      r.id,
+      r.name || '',
+      r.phone || '',
+      r.reason || '',
+      r.blacklistedBy || (includeBranch ? 'Admin Operations' : ''),
+      r.blacklistedOn || '',
+      r.previousSeat || '',
     ];
-    if (includeBranch) base.push(`"${(r.branch || 'Main Branch').replaceAll('"', '""')}"`);
-    base.push(`"${r.status || 'Blacklisted'}"`);
-    return base;
+    if (includeBranch) base.push(r.branch || 'Main Branch');
+    base.push(r.status || 'Blacklisted');
+    return base.map(escapeBlacklistCsvCell);
   });
 
-  const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((row) => row.join(','))].join('\r\n');
+  const csvContent = '\uFEFF' + [headers.map(escapeBlacklistCsvCell).join(','), ...rows.map((row) => row.join(','))].join('\r\n');
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
@@ -100,5 +107,6 @@ export function openBlacklistWhatsAppNotice(record: AdminBlacklistRecord): void 
   const isNetwork = record.banScope === 'NETWORK_WIDE' || !record.banScope;
   const scopeText = isNetwork ? 'ऑल ब्रांचेज नेटवर्क-वाइड (All Branches)' : `${record.branch || 'ब्रांच'}`;
   const message = `*आधिकारिक निष्कासन एवं ब्लैकलिस्ट सूचना (SMART LIBRARY)*\n\nप्रिय ${record.name},\nआपको सूचित किया जाता है कि अनुशासनहीनता / पुस्तकालय नियमों के उल्लंघन के कारण आपको तत्काल प्रभाव से ब्लैकलिस्ट व निष्कासित कर दिया गया है।\n\n• *कारण:* ${record.reason}\n• *प्रतिबंध का दायरा:* ${scopeText}\n• *सीट आवंटन:* तत्काल निरस्त (Vacated)\n• *बायोमेट्रिक प्रवेश:* ब्लॉक कर दिया गया है\n\nकिसी भी अनधिकृत प्रवेश का प्रयास कानूनी उल्लंघन माना जाएगा। किसी भी औपचारिक अपील के लिए केंद्रीय प्रशासन कार्यालय से संपर्क करें।\n- मुख्य सुरक्षा प्रशासक`;
-  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
+  const popup = window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+  if (popup) popup.opener = null;
 }

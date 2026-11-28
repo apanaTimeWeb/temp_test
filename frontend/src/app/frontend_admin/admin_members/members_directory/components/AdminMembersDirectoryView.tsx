@@ -189,11 +189,11 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 id="admin-members-list-title" className="text-base sm:text-lg font-bold text-text-primary tracking-tight">{t(memberListConfig.titleKey)}</h2>
             <div className="flex flex-wrap items-center gap-2.5">
-              <button type="button" onClick={() => setIsBulkImportOpen(true)} className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-border-focus bg-primary-subtle px-3.5 py-1.5 text-xs font-semibold text-primary hover:opacity-90 motion-safe:transition-opacity shadow-card" title="Bulk Import Students from CSV/Excel">
-                <Upload size={14} aria-hidden="true" /> Bulk Import CSV
+              <button type="button" onClick={() => setIsBulkImportOpen(true)} className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-border-focus bg-primary-subtle px-3.5 py-1.5 text-xs font-semibold text-primary hover:opacity-90 motion-safe:transition-opacity shadow-card" title={t('BULK_IMPORT_CSV_TITLE')}>
+                <Upload size={14} aria-hidden="true" /> {t('BULK_IMPORT_CSV')}
               </button>
               <button type="button" onClick={() => setIsBulkWhatsAppOpen(true)} disabled={branchFilteredMembers.length === 0} className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-success bg-success-bg px-3.5 py-1.5 text-xs font-semibold text-success-text hover:opacity-90 motion-safe:transition-opacity disabled:opacity-40 shadow-card">
-                <MessageSquare size={14} aria-hidden="true" /> Bulk WhatsApp ({branchFilteredMembers.length})
+                <MessageSquare size={14} aria-hidden="true" /> {t('BULK_WHATSAPP_COUNT', { count: selectedMemberIds.length > 0 ? selectedMemberIds.length : branchFilteredMembers.length })}
               </button>
               <button type="button" className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-warning bg-warning-bg px-3.5 py-1.5 text-xs font-semibold text-warning-text hover:opacity-90 motion-safe:transition-opacity shadow-card" onClick={() => setActiveTab('renewal')}>
                 <RotateCcw size={15} aria-hidden="true" /> <span>{t('NAV_RENEWAL')}</span>
@@ -241,6 +241,7 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
 
       {model.viewingMember && (
         <AdminMembersDirectoryMemberDetailCard
+          key={model.viewingMember.id}
           member={model.viewingMember}
           detailTab={model.detailTab}
           isDemoMode={isDemoMode}

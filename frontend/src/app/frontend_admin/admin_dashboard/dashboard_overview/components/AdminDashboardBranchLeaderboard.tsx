@@ -1,6 +1,7 @@
 // components/AdminDashboardBranchLeaderboard.tsx
 'use client';
 import { AdminDashboardBranchLeaderboardRow } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/components/AdminDashboardBranchLeaderboardRow';
+import { getAdminDashboardTimeMultiplier } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/constants/AdminDashboardOverviewConstants';
 import { formatAdminDashboardCurrency } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/utils/formatAdminDashboardCurrency';
 import { ArrowDown, ArrowUp, ArrowUpDown, Trophy } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
@@ -89,8 +90,12 @@ type SortMetric = 'profit' | 'occupancy' | 'renewal' | 'revenue' | 'expenses' | 
 
 export function AdminDashboardBranchLeaderboard({
   timeRange = 'this_month',
+  customStartDate,
+  customEndDate,
 }: {
   timeRange?: AdminDashboardTimeRange;
+  customStartDate?: string;
+  customEndDate?: string;
 }) {
   const t = useTranslations('ADMIN_DASHBOARD');
   const locale = useLocale();
@@ -108,7 +113,7 @@ export function AdminDashboardBranchLeaderboard({
     }
   };
 
-  const multiplier = timeRange === 'today' ? 0.04 : timeRange === 'this_week' ? 0.25 : 1;
+  const multiplier = getAdminDashboardTimeMultiplier(timeRange, customStartDate, customEndDate);
 
   const adjustedBranches = useMemo(() => {
     return BRANCH_BENCHMARK_DATA.map((b) => ({
@@ -132,7 +137,16 @@ export function AdminDashboardBranchLeaderboard({
     });
   }, [adjustedBranches, sortBy, sortDirection]);
 
-  const periodLabel = timeRange === 'today' ? t('HORIZON_TODAY') : timeRange === 'this_week' ? t('HORIZON_THIS_WEEK') : t('HORIZON_MTD');
+  const periodLabel =
+    timeRange === 'today'
+      ? t('HORIZON_TODAY')
+      : timeRange === 'this_week'
+        ? t('HORIZON_THIS_WEEK')
+        : timeRange === 'custom'
+          ? customStartDate && customEndDate
+            ? `${customStartDate} → ${customEndDate}`
+            : t('HORIZON_CUSTOM_RANGE')
+          : t('HORIZON_MTD');
 
   const renderSortableHeader = (metric: SortMetric, label: string, align: 'left' | 'right' | 'center' = 'left') => {
     const isActive = sortBy === metric;

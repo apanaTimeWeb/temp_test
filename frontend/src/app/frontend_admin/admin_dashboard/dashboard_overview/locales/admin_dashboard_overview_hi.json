@@ -164,6 +164,10 @@
     "LEADERBOARD_COL_EXPENSES_PERIOD": "खर्च ({period})",
     "LEADERBOARD_COL_PROFIT_PERIOD": "शुद्ध लाभ ({period})",
     "LEADERBOARD_COL_RENEWAL_PCT": "नवीनीकरण %",
-    "LEADERBOARD_COL_BOTTLENECK_ALERT": "मुख्य बाधा / चेतावनी"
+    "LEADERBOARD_COL_BOTTLENECK_ALERT": "मुख्य बाधा / चेतावनी",
+    "REALIZED_CUSTOM_SUB": "प्राप्त ({start} से {end})",
+    "REALIZED_CUSTOM_UNSET_SUB": "प्रारंभ और समाप्ति तिथि चुनें (MTD दिखाया जा रहा है)",
+    "LEADERBOARD_MGR_LABEL": "प्रबंधक:",
+    "LEADERBOARD_SEATS_UNIT": "सीटें"
   }
 }

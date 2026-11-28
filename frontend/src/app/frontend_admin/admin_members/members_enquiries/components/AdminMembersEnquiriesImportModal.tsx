@@ -9,6 +9,7 @@ import type { Enquiry, EnquiryStatus } from '@/app/frontend_admin/admin_members/
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
+import { format } from 'date-fns';
 import { Download, Target, Upload, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
@@ -156,7 +157,7 @@ export default function AdminMembersEnquiriesImportModal({
       phone: r.phone,
       shift: r.shift,
       status: 'New' as EnquiryStatus,
-      addedDate: new Date().toISOString(),
+      addedDate: format(new Date(), 'yyyy-MM-dd'),
       source: r.source || 'Facebook Ads',
       notes: r.notes || 'Imported via CSV',
       handledBy: 'Admin Operations',

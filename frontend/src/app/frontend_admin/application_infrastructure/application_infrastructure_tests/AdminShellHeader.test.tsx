@@ -23,6 +23,16 @@ const translations: Record<string, string> = {
   CANCEL: 'Cancel',
   ADMINISTRATOR: 'Administrator',
   MY_PROFILE: 'My Profile',
+  NOTIFICATIONS_TITLE: 'Notifications',
+  NOTIFICATIONS_DROPDOWN: 'Notifications Dropdown',
+  NOTIFICATIONS_UNREAD_SINGLE: '1 unread notification',
+  NOTIFICATIONS_UNREAD_MULTIPLE: 'unread notifications',
+  NOTIFICATIONS_NEW: 'New',
+  NOTIFICATIONS_ALL_CAUGHT_UP: 'All caught up',
+  NOTIFICATIONS_MARK_ALL_READ: 'Mark all read',
+  NOTIFICATIONS_VIEW_ALL: 'View All in Notification Center',
+  NOTIFICATIONS_MARKED_READ: 'All notifications marked as read',
+  SIGNED_OUT_SUCCESS: 'Signed out successfully',
 };
 
 vi.mock('next-intl', () => ({

@@ -191,6 +191,13 @@
     "WAIVER_CANCEL": "Cancel",
     "WAIVER_SUBMIT": "Authorize & Credit Memo",
     "WAIVER_CATEGORY_LABEL": "Concession Category / Scheme",
-    "WAIVER_REASON_LABEL": "Administrative Justification / Approval Notes"
+    "WAIVER_REASON_LABEL": "Administrative Justification / Approval Notes",
+    "MEMBER_ADD_TITLE": "Add New Member",
+    "MEMBER_ADD_SUBMIT": "Create Member",
+    "BULK_IMPORT_CSV": "Bulk Import CSV",
+    "BULK_IMPORT_CSV_TITLE": "Bulk Import Students from CSV/Excel",
+    "BULK_WHATSAPP_COUNT": "Bulk WhatsApp ({count})",
+    "SELECT_ALL_MEMBERS": "Select all members",
+    "SELECT_MEMBER": "Select {name}"
   }
 }

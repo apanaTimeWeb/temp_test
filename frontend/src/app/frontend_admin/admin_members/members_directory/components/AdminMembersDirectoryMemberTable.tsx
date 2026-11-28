@@ -9,11 +9,11 @@ import {
   downloadAdminMembersDemoCsv,
   downloadAdminMembersDemoExcel,
   formatAdminMembersDate,
-  printAdminMembersRoster,
-} from '@/app/frontend_admin/admin_members/members_directory/utils/AdminMembersDirectoryExportUtils';
+} from '@/app/frontend_admin/admin_members/members_directory/utils/adminMembersDirectorySpreadsheet';
+import { printAdminMembersRoster } from '@/app/frontend_admin/admin_members/members_directory/utils/adminMembersDirectoryRosterPrint';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { displayValue } from '@/lib/display_value';
-import { ArrowDown, ArrowUp, ArrowUpDown, ChevronLeft, ChevronRight, Eye, Mail, MessageSquare, RotateCcw } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, ChevronLeft, ChevronRight, Eye, Mail, MessageSquare, Pencil, RotateCcw } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
@@ -33,6 +33,7 @@ export default function AdminMembersMemberTable({
   canMutate = true,
   selectedIds = [],
   onToggleSelectOne,
+  onToggleSelectAll,
   onQuickWhatsApp,
 }: AdminMembersMemberTableProps) {
   const t = useTranslations('ADMIN_MEMBERS');
@@ -182,6 +183,17 @@ export default function AdminMembersMemberTable({
             <table className="w-full text-left text-sm">
               <thead className="bg-surface-highlight uppercase text-[11px] font-semibold text-text-secondary border-b border-border tracking-wider">
                 <tr>
+                  {onToggleSelectAll && (
+                    <th scope="col" className="w-10 px-4 py-3">
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-border bg-input text-primary focus:ring-2 focus:ring-primary"
+                        checked={members.length > 0 && selectedIds.length === members.length}
+                        onChange={onToggleSelectAll}
+                        aria-label={t('SELECT_ALL_MEMBERS')}
+                      />
+                    </th>
+                  )}
                   {renderSortableHeader('name', t('TABLE_MEMBER'))}
                   {renderSortableHeader('phone', t('TABLE_CONTACT'))}
                   {renderSortableHeader('plan', t('TABLE_PLAN'))}
@@ -194,6 +206,17 @@ export default function AdminMembersMemberTable({
               <tbody className="divide-y divide-border">
                 {visibleMembers.map((member) => (
                   <tr key={member.id} className="hover:bg-surface-hover motion-safe:transition-colors h-14">
+                    {onToggleSelectAll && (
+                      <td className="w-10 px-4 py-3">
+                        <input
+                          type="checkbox"
+                          className="h-4 w-4 rounded border-border bg-input text-primary focus:ring-2 focus:ring-primary"
+                          checked={selectedIds.includes(member.id)}
+                          onChange={() => onToggleSelectOne?.(member.id)}
+                          aria-label={t('SELECT_MEMBER', { name: member.name })}
+                        />
+                      </td>
+                    )}
                     <th scope="row" className="px-4 py-3 font-medium text-text-primary">
                       <div className="flex items-center gap-2.5">
                         <div className="w-8 h-8 rounded-xl border border-border-focus bg-primary-subtle flex items-center justify-center shrink-0 font-bold text-xs text-primary">
@@ -221,6 +244,15 @@ export default function AdminMembersMemberTable({
                         )}
                         <button type="button" className="min-h-9 min-w-9 rounded-lg border border-info bg-info-bg text-info-text hover:opacity-90 inline-flex items-center justify-center motion-safe:transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-label={t('ACTION_VIEW_MEMBER', { name: member.name })} title="View member details" onClick={() => onSelectMember(member)}>
                           <Eye size={17} strokeWidth={2} aria-hidden="true" />
+                        </button>
+                        <button
+                          type="button"
+                          className="min-h-9 min-w-9 rounded-lg border border-border bg-surface-highlight text-text-primary hover:bg-surface-hover inline-flex items-center justify-center motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                          aria-label={`${t('ACTION_EDIT_MEMBER')} ${member.name}`}
+                          title={canMutate ? t('ACTION_EDIT_MEMBER') : t('ACTION_EDIT_API_REQUIRED')}
+                          onClick={() => onAction('edit', member)}
+                        >
+                          <Pencil size={15} strokeWidth={2} aria-hidden="true" />
                         </button>
                         <button
                           type="button"

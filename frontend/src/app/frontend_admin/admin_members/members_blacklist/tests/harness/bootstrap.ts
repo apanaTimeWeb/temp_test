@@ -1,6 +1,8 @@
+import type { AdminMembersBlacklistScenario } from '@/app/frontend_admin/admin_members/members_blacklist/types/AdminMembersBlacklistTypes';
+
 /** Isolated test-scenario vocabulary owned by admin_members_blacklist. No sibling imports or live API assumptions. */
 export const AdminMembersBlacklistScenarios = ['ACTIVE', 'EMPTY', 'SERVER_500', 'TIMEOUT', 'UNAUTHORIZED'] as const;
-export type AdminMembersBlacklistScenario = (typeof AdminMembersBlacklistScenarios)[number];
+export type { AdminMembersBlacklistScenario };
 
 /** Describes a scenario for local tests without asserting an undocumented backend DTO. */
 export function AdminMembersBlacklistScenarioLabel(scenario: AdminMembersBlacklistScenario): string {

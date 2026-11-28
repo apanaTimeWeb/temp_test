@@ -47,12 +47,9 @@ export function AdminNavigationSidebarCollapsedNav({
             }`}
           >
             <span
-              className="admin-nav-icon-badge"
-              style={{
-                color: colorMeta.iconColor,
-                backgroundColor: active ? `${colorMeta.iconColor}33` : colorMeta.bg,
-                boxShadow: active ? `0 0 12px ${colorMeta.iconColor}50` : undefined,
-              }}
+              className={`admin-nav-icon-badge ${colorMeta.badgeClass}${
+                active ? ' admin-nav-tint-active' : ''
+              }`}
             >
               <Icon
                 size={16}

@@ -142,6 +142,12 @@ export default function AdminPlansPage() {
       status: editingPlan?.status ?? ADMIN_PLANS_STATUS_VALUES[0],
       subscribers: editingPlan?.subscribers ?? 0,
       branchApplicability: values.branchApplicability || 'All Branches',
+      morningRate: values.morningRate?.trim() || undefined,
+      afternoonRate: values.afternoonRate?.trim() || undefined,
+      eveningRate: values.eveningRate?.trim() || undefined,
+      nightRate: values.nightRate?.trim() || undefined,
+      fullDayRate: values.fullDayRate?.trim() || undefined,
+      multiShiftDiscount: values.multiShiftDiscount?.trim() || undefined,
     };
     setDemoPlans((current) => upsertAdminPlansDemoPlan(current, nextPlan));
     toast.success(t(editing ? 'DEMO_PLAN_UPDATED' : 'DEMO_PLAN_CREATED', { name: nextPlan.name }), { id: 'admin_members-members_plans-components-AdminMembersPlansPage-toast-48-2' });

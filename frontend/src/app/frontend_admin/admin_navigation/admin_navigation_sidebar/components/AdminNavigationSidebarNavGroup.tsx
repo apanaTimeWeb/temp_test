@@ -83,12 +83,9 @@ export function AdminNavigationSidebarNavGroup({
               }`}
             >
               <span
-                className="admin-nav-icon-badge-sub"
-                style={{
-                  color: subColor.iconColor,
-                  backgroundColor: subActive ? `${subColor.iconColor}33` : subColor.bg,
-                  boxShadow: subActive ? `0 0 12px ${subColor.iconColor}50` : undefined,
-                }}
+                className={`admin-nav-icon-badge-sub ${subColor.badgeClass}${
+                  subActive ? ' admin-nav-tint-active' : ''
+                }`}
               >
                 <SubIcon
                   size={15}

@@ -9,6 +9,7 @@ import { AdminDashboardOverviewKpis } from '@/app/frontend_admin/admin_dashboard
 import {
 ADMIN_DASHBOARD_BRANCH_METRICS,
 ADMIN_DASHBOARD_DESTINATIONS,
+getAdminDashboardTimeMultiplier,
 } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/constants/AdminDashboardOverviewConstants';
 import { formatAdminDashboardCurrency } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/utils/formatAdminDashboardCurrency';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
@@ -27,7 +28,7 @@ X
 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useMemo,useState } from 'react';
+import { useEffect,useMemo,useRef,useState } from 'react';
 import { toast } from 'sonner';
 
 /**
@@ -45,10 +46,23 @@ export default function AdminDashboardOverviewMain() {
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
   const [isSyncing, setIsSyncing] = useState(false);
+  const syncTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (syncTimerRef.current) {
+        clearTimeout(syncTimerRef.current);
+      }
+    };
+  }, []);
 
   const handleSyncOverview = () => {
+    if (syncTimerRef.current) {
+      clearTimeout(syncTimerRef.current);
+    }
     setIsSyncing(true);
-    setTimeout(() => {
+    syncTimerRef.current = setTimeout(() => {
+      syncTimerRef.current = null;
       setIsSyncing(false);
       toast.success(t('SYNC_SUCCESS_TOAST'), { id: 'admin-dashboard-sync-overview' });
     }, 600);
@@ -56,16 +70,27 @@ export default function AdminDashboardOverviewMain() {
 
   const dynamicRevenue = useMemo(() => {
     const base = rawMetrics.revenueNum;
+    const multiplier = getAdminDashboardTimeMultiplier(timeRange, customStartDate, customEndDate);
     if (timeRange === 'today') {
-      const val = Math.round(base * 0.04);
+      const val = Math.round(base * multiplier);
       return { value: formatAdminDashboardCurrency(val, locale), subtext: t('REALIZED_TODAY_SUB') };
     }
     if (timeRange === 'this_week') {
-      const val = Math.round(base * 0.26);
+      const val = Math.round(base * multiplier);
       return { value: formatAdminDashboardCurrency(val, locale), subtext: t('REALIZED_WEEK_SUB') };
     }
+    if (timeRange === 'custom') {
+      if (customStartDate && customEndDate) {
+        const val = Math.round(base * multiplier);
+        return {
+          value: formatAdminDashboardCurrency(val, locale),
+          subtext: t('REALIZED_CUSTOM_SUB', { start: customStartDate, end: customEndDate }),
+        };
+      }
+      return { value: rawMetrics.revenue, subtext: t('REALIZED_CUSTOM_UNSET_SUB') };
+    }
     return { value: rawMetrics.revenue, subtext: rawMetrics.revenueSub };
-  }, [locale, rawMetrics, t, timeRange]);
+  }, [customEndDate, customStartDate, locale, rawMetrics, t, timeRange]);
 
   const periodLabel = timeRange === 'today' ? t('HORIZON_TODAY') : timeRange === 'this_week' ? t('HORIZON_THIS_WEEK') : timeRange === 'custom' ? t('HORIZON_CUSTOM_RANGE') : t('HORIZON_THIS_MONTH');
 
@@ -257,7 +282,11 @@ export default function AdminDashboardOverviewMain() {
       <AdminDashboardOperationsPulse />
 
       {/* ── Multi-Branch Comparative Analytics & Benchmarking Leaderboard ── */}
-      <AdminDashboardBranchLeaderboard timeRange={timeRange} />
+      <AdminDashboardBranchLeaderboard
+        timeRange={timeRange}
+        customStartDate={customStartDate}
+        customEndDate={customEndDate}
+      />
 
       {/* ── Core Operational Workspace Hubs ── */}
       <AdminDashboardOverviewDestinations

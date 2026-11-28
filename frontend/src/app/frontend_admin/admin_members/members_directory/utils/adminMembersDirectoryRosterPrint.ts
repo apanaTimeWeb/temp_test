@@ -1,5 +1,14 @@
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
 const ROSTER_PRINT_CSS = `
   @page { size: landscape; margin: 10mm; }
   body { font-family: system-ui, -apple-system, sans-serif; color: #0f172a; margin: 0; padding: 15px; }
@@ -18,23 +27,24 @@ const ROSTER_PRINT_CSS = `
 /** Prints a clean, high-resolution roster view with letterhead. */
 export function printAdminMembersRoster(members: readonly AdminMembersMember[], branchName = 'All Branches'): void {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=900,height=700');
+  const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=900,height=700');
   if (!printWindow) {
     window.print();
     return;
   }
-  const dateStr = new Date().toLocaleDateString('en-IN', {
+  printWindow.opener = null;
+  const dateStr = escapeHtml(new Date().toLocaleDateString('en-IN', {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-  });
+  }));
   const html = `
     <!DOCTYPE html><html><head><title>Smart Library - Member Directory Roster</title><style>${ROSTER_PRINT_CSS}</style></head>
       <body>
         <div class="header">
-          <div><div class="title">Smart Library Network · Member Roster</div><div class="subtitle">Scope: ${branchName} · Total Records: ${members.length}</div></div>
+          <div><div class="title">Smart Library Network · Member Roster</div><div class="subtitle">Scope: ${escapeHtml(branchName)} · Total Records: ${members.length}</div></div>
           <div class="meta"><div><strong>Generated:</strong> ${dateStr}</div><div><strong>Confidential:</strong> Admin Authorized View</div></div>
         </div>
         <table>
@@ -42,15 +52,15 @@ export function printAdminMembersRoster(members: readonly AdminMembersMember[], 
           <tbody>
             ${members.map((m) => `
               <tr>
-                <td style="font-family: monospace; font-weight: 600;">${m.id}</td>
-                <td><strong>${m.name}</strong></td>
-                <td>${m.phone || '—'}<br/><span style="color:#64748b; font-size:10px;">${m.email || '—'}</span></td>
-                <td>${m.branch || 'Downtown Central'}</td>
-                <td>${m.plan}</td>
-                <td>${m.seat ? `Seat ${m.seat}` : '—'} · ${m.shift || 'General'}</td>
-                <td>${m.feeStatus || 'Paid'}${m.dueFeeMinor ? ` (Due ₹${(m.dueFeeMinor / 100).toFixed(0)})` : ''}</td>
-                <td>${m.expiryDate || '—'}</td>
-                <td><span class="badge badge-${(m.status || 'Active').toLowerCase()}">${m.status}</span></td>
+                <td style="font-family: monospace; font-weight: 600;">${escapeHtml(m.id)}</td>
+                <td><strong>${escapeHtml(m.name)}</strong></td>
+                <td>${escapeHtml(m.phone || '—')}<br/><span style="color:#64748b; font-size:10px;">${escapeHtml(m.email || '—')}</span></td>
+                <td>${escapeHtml(m.branch || 'Downtown Central')}</td>
+                <td>${escapeHtml(m.plan)}</td>
+                <td>${m.seat ? `Seat ${escapeHtml(m.seat)}` : '—'} · ${escapeHtml(m.shift || 'General')}</td>
+                <td>${escapeHtml(m.feeStatus || 'Paid')}${m.dueFeeMinor ? ` (Due ₹${(m.dueFeeMinor / 100).toFixed(0)})` : ''}</td>
+                <td>${escapeHtml(m.expiryDate || '—')}</td>
+                <td><span class="badge badge-${escapeHtml((m.status || 'Active').toLowerCase())}">${escapeHtml(m.status)}</span></td>
               </tr>
             `).join('')}
           </tbody>

@@ -21,9 +21,7 @@ export default function useAdminDashboardReportsAnalyticsViewState(isDemoMode: b
       const matched = branchOptions.find(
         (b) => b.toLowerCase().includes(selectedBranch.name.toLowerCase()) || selectedBranch.name.toLowerCase().includes(b.toLowerCase())
       );
-      if (matched) {
-        setBranch(matched);
-      }
+      setBranch(matched ?? 'All Branches');
     }
   }, [selectedBranch, isAllBranches, branchOptions]);
 

@@ -518,6 +518,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  color: var(--nav-tint-color, #818cf8);
+  background-color: rgba(var(--nav-tint-rgb, 129, 140, 248), 0.14);
   transition: transform var(--animate-duration-fast) ease, filter var(--animate-duration-fast) ease;
 }
 .admin-sidebar-group-btn:hover .admin-nav-icon-badge {
@@ -532,8 +534,36 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  color: var(--nav-tint-color, #818cf8);
+  background-color: rgba(var(--nav-tint-rgb, 129, 140, 248), 0.14);
   transition: transform var(--animate-duration-fast) ease, filter var(--animate-duration-fast) ease;
 }
+.admin-nav-icon-badge.admin-nav-tint-active,
+.admin-nav-icon-badge-sub.admin-nav-tint-active {
+  background-color: rgba(var(--nav-tint-rgb, 129, 140, 248), 0.2);
+  box-shadow: 0 0 12px rgba(var(--nav-tint-rgb, 129, 140, 248), 0.31);
+}
+.admin-nav-tint-sky { --nav-tint-color: #38bdf8; --nav-tint-rgb: 56, 189, 248; }
+.admin-nav-tint-mint { --nav-tint-color: #34d399; --nav-tint-rgb: 52, 211, 153; }
+.admin-nav-tint-cyan { --nav-tint-color: #22d3ee; --nav-tint-rgb: 34, 211, 238; }
+.admin-nav-tint-emerald { --nav-tint-color: #10b981; --nav-tint-rgb: 16, 185, 129; }
+.admin-nav-tint-blue { --nav-tint-color: #60a5fa; --nav-tint-rgb: 96, 165, 250; }
+.admin-nav-tint-amber { --nav-tint-color: #f59e0b; --nav-tint-rgb: 245, 158, 11; }
+.admin-nav-tint-indigo { --nav-tint-color: #818cf8; --nav-tint-rgb: 129, 140, 248; }
+.admin-nav-tint-violet { --nav-tint-color: #a78bfa; --nav-tint-rgb: 167, 139, 250; }
+.admin-nav-tint-orange { --nav-tint-color: #fb923c; --nav-tint-rgb: 251, 146, 60; }
+.admin-nav-tint-yellow { --nav-tint-color: #facc15; --nav-tint-rgb: 250, 204, 21; }
+.admin-nav-tint-pink { --nav-tint-color: #ec4899; --nav-tint-rgb: 236, 72, 153; }
+.admin-nav-tint-rose { --nav-tint-color: #f43f5e; --nav-tint-rgb: 244, 63, 94; }
+.admin-nav-tint-purple { --nav-tint-color: #c084fc; --nav-tint-rgb: 192, 132, 252; }
+.admin-nav-tint-gold { --nav-tint-color: #fbbf24; --nav-tint-rgb: 251, 191, 36; }
+.admin-nav-tint-fuchsia { --nav-tint-color: #f472b6; --nav-tint-rgb: 244, 114, 182; }
+.admin-nav-tint-green { --nav-tint-color: #4ade80; --nav-tint-rgb: 74, 222, 128; }
+.admin-nav-tint-coral { --nav-tint-color: #fb7185; --nav-tint-rgb: 251, 113, 133; }
+.admin-nav-tint-red { --nav-tint-color: #f87171; --nav-tint-rgb: 248, 113, 113; }
+.admin-nav-tint-orchid { --nav-tint-color: #a855f7; --nav-tint-rgb: 168, 85, 247; }
+.admin-nav-tint-whatsapp { --nav-tint-color: #25d366; --nav-tint-rgb: 37, 211, 102; }
+.admin-nav-tint-leaf { --nav-tint-color: #22c55e; --nav-tint-rgb: 34, 197, 94; }
 .admin-sidebar-sublink:hover .admin-nav-icon-badge-sub {
   transform: scale(1.08);
   filter: brightness(1.2);

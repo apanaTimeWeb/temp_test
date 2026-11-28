@@ -774,7 +774,11 @@
     "LEADERBOARD_COL_EXPENSES_PERIOD": "Expenses ({period})",
     "LEADERBOARD_COL_PROFIT_PERIOD": "Net Profit ({period})",
     "LEADERBOARD_COL_RENEWAL_PCT": "Renewal %",
-    "LEADERBOARD_COL_BOTTLENECK_ALERT": "Key Bottleneck / Alert"
+    "LEADERBOARD_COL_BOTTLENECK_ALERT": "Key Bottleneck / Alert",
+    "REALIZED_CUSTOM_SUB": "Realized ({start} to {end})",
+    "REALIZED_CUSTOM_UNSET_SUB": "Select start & end dates (showing MTD)",
+    "LEADERBOARD_MGR_LABEL": "Mgr:",
+    "LEADERBOARD_SEATS_UNIT": "seats"
   },
   "ADMIN_SHELL": {
     "OPEN_MENU": "Open menu",
@@ -863,7 +867,17 @@
     "DESCRIPTION": "Report data and exports require verified source contracts.",
     "PENDING": "Data contract pending",
     "REPORTS_ANALYTICS_TITLE": "Reports and analytics",
-    "REPORTS_ANALYTICS_DESCRIPTION": "Review sample analytics in demo mode; live metrics require a verified report DTO."
+    "REPORTS_ANALYTICS_DESCRIPTION": "Review sample analytics in demo mode; live metrics require a verified report DTO.",
+    "NOTIFICATIONS_TITLE": "Notifications",
+    "NOTIFICATIONS_DROPDOWN": "Notifications Dropdown",
+    "NOTIFICATIONS_UNREAD_SINGLE": "1 unread notification",
+    "NOTIFICATIONS_UNREAD_MULTIPLE": "unread notifications",
+    "NOTIFICATIONS_NEW": "New",
+    "NOTIFICATIONS_ALL_CAUGHT_UP": "All caught up",
+    "NOTIFICATIONS_MARK_ALL_READ": "Mark all read",
+    "NOTIFICATIONS_VIEW_ALL": "View All in Notification Center",
+    "NOTIFICATIONS_MARKED_READ": "All notifications marked as read",
+    "SIGNED_OUT_SUCCESS": "Signed out successfully"
   },
   "ADMIN_REPORTS": {
     "ALL_BRANCHES": "All branches",
@@ -951,7 +965,12 @@
     "CURRENT_RANGE": "Selected range: {range}",
     "KPI_SECTION_LABEL": "Key performance indicators",
     "CSV_EXPORT_FAILED": "The CSV snapshot could not be prepared. Try exporting again.",
-    "SHIFT_AFTERNOON": "Afternoon"
+    "SHIFT_AFTERNOON": "Afternoon",
+    "LEADERBOARD_BADGE": "Cross-Branch Executive Leaderboard",
+    "WEEK_1": "W1",
+    "WEEK_2": "W2",
+    "WEEK_3": "W3",
+    "WEEK_4": "W4"
   },
   "ADMIN_FINANCE_COLLECT_FEE": {
     "BANNER_DEMO": "Demo preview only. Fee calculations use sample students; collection is disabled because no verified payment mutation API is supplied. No payment or receipt can be created here.",
@@ -2270,7 +2289,14 @@
     "WAIVER_CANCEL": "Cancel",
     "WAIVER_SUBMIT": "Authorize & Credit Memo",
     "WAIVER_CATEGORY_LABEL": "Concession Category / Scheme",
-    "WAIVER_REASON_LABEL": "Administrative Justification / Approval Notes"
+    "WAIVER_REASON_LABEL": "Administrative Justification / Approval Notes",
+    "MEMBER_ADD_TITLE": "Add New Member",
+    "MEMBER_ADD_SUBMIT": "Create Member",
+    "BULK_IMPORT_CSV": "Bulk Import CSV",
+    "BULK_IMPORT_CSV_TITLE": "Bulk Import Students from CSV/Excel",
+    "BULK_WHATSAPP_COUNT": "Bulk WhatsApp ({count})",
+    "SELECT_ALL_MEMBERS": "Select all members",
+    "SELECT_MEMBER": "Select {name}"
   },
   "ADMIN_ENQUIRIES": {
     "BREADCRUMB": "Enquiries",
@@ -2453,7 +2479,8 @@
     "DISCARD_BUTTON": "Discard",
     "SMS": "SMS",
     "SMS_TITLE": "SMS provider integration is not configured",
-    "SMS_UNAVAILABLE": "SMS delivery requires a provider integration; no messages were sent."
+    "SMS_UNAVAILABLE": "SMS delivery requires a provider integration; no messages were sent.",
+    "ADD_ENQUIRY": "Add Enquiry"
   },
   "ADMIN_PLANS": {
     "BREADCRUMB": "Smart Library Management › Admin › Plans",

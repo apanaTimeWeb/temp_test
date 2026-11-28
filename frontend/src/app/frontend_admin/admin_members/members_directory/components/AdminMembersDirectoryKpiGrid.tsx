@@ -33,7 +33,7 @@ export function AdminMembersDirectoryKpiGrid({ dummyMembers, demoRenewals }: Adm
     },
     {
       label: t('KPI_NEW_THIS_MONTH'),
-      value: String(Math.max(1, Math.ceil(dummyMembers.length * 0.25))),
+      value: dummyMembers.length === 0 ? '0' : String(Math.max(1, Math.ceil(dummyMembers.length * 0.25))),
       icon: UserPlus,
       iconBox: 'bg-purple-bg border-border text-purple',
       strokeColor: 'var(--chart-primary)',

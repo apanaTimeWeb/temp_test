@@ -83,3 +83,21 @@ export const ADMIN_DASHBOARD_BRANCH_METRICS: Record<
   },
 };
 
+export function getAdminDashboardTimeMultiplier(
+  timeRange: 'today' | 'this_week' | 'this_month' | 'custom',
+  customStartDate?: string,
+  customEndDate?: string,
+): number {
+  if (timeRange === 'today') return 0.04;
+  if (timeRange === 'this_week') return 0.26;
+  if (timeRange === 'custom' && customStartDate && customEndDate) {
+    const startMs = Date.parse(customStartDate);
+    const endMs = Date.parse(customEndDate);
+    if (Number.isFinite(startMs) && Number.isFinite(endMs) && endMs >= startMs) {
+      const diffDays = Math.floor((endMs - startMs) / 86_400_000) + 1;
+      return Math.min(12, Math.max(0.03, diffDays / 30));
+    }
+  }
+  return 1;
+}
+

@@ -3,10 +3,11 @@
 
 import { ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS,ADMIN_DASHBOARD_REPORTS_ANALYTICS_RANGE_LABEL_KEYS } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/config/admin_dashboard_reports.url_config';
 import type { AdminDashboardReportsAnalyticsBranchSummary as AdminDashboardReportsAnalyticsBranchSummaryRow,AdminDashboardReportsAnalyticsSecondaryInsightsSectionProps } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes';
-import { adminDashboardReportsAnalyticsFormatCurrency,adminDashboardReportsAnalyticsFormatNumber } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/utils/AdminDashboardReportsFormatters';
+import { adminDashboardReportsAnalyticsFormatCurrency,adminDashboardReportsAnalyticsFormatNumber,resolveAdminReportsChartPalette } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/utils/AdminDashboardReportsFormatters';
 import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
 import type { ApexOptions } from 'apexcharts';
 import { Activity,ArrowDown,ArrowUp,ArrowUpDown,Building2,Trophy,Users } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import { useMemo,useState } from 'react';
@@ -26,26 +27,28 @@ const AdminDashboardReportsSecondaryInsightsApexChart = dynamic(() => import('re
 
 export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({ data, range, locale, branches }: AdminDashboardReportsAnalyticsSecondaryInsightsSectionProps) {
   const t = useTranslations('ADMIN_REPORTS');
+  const { resolvedTheme } = useTheme();
+  const palette = resolveAdminReportsChartPalette(resolvedTheme);
   const selectedRangeLabel = t(ADMIN_DASHBOARD_REPORTS_ANALYTICS_RANGE_LABEL_KEYS[range]);
   const revenue = data.revenueTrend[range];
   const revenueOptions: ApexOptions = {
     chart: { type: 'line', toolbar: { show: false }, background: 'transparent', animations: { enabled: false } },
-    colors: ['#10b981'], stroke: { curve: 'smooth', width: 3 }, markers: { size: 5, strokeColors: '#030712', strokeWidth: 2 }, dataLabels: { enabled: false },
-    xaxis: { categories: revenue.map((point) => { const key = ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS[point.month as keyof typeof ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS]; return key ? t(key) : point.month; }), labels: { style: { colors: '#94a3b8' } } },
-    yaxis: { labels: { formatter: (value) => adminDashboardReportsAnalyticsFormatCurrency(Math.round(value), data.currencyCode, locale), style: { colors: '#94a3b8' } }, min: 0 },
-    grid: { borderColor: 'rgba(99, 102, 241, 0.12)' }, tooltip: { y: { formatter: (value) => adminDashboardReportsAnalyticsFormatCurrency(Math.round(value ?? 0), data.currencyCode, locale) }, theme: 'dark' },
-    noData: { text: t('CHART_REVENUE_NO_DATA'), style: { color: '#94a3b8' } },
+    colors: [palette.success], stroke: { curve: 'smooth', width: 3 }, markers: { size: 5, strokeColors: palette.surfaceBg, strokeWidth: 2 }, dataLabels: { enabled: false },
+    xaxis: { categories: revenue.map((point) => { const key = ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS[point.month as keyof typeof ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS]; return key ? t(key) : point.month; }), labels: { style: { colors: palette.textSecondary } } },
+    yaxis: { labels: { formatter: (value) => adminDashboardReportsAnalyticsFormatCurrency(Math.round(value), data.currencyCode, locale), style: { colors: palette.textSecondary } }, min: 0 },
+    grid: { borderColor: palette.gridBorder }, tooltip: { y: { formatter: (value) => adminDashboardReportsAnalyticsFormatCurrency(Math.round(value ?? 0), data.currencyCode, locale) }, theme: palette.isDark ? 'dark' : 'light' },
+    noData: { text: t('CHART_REVENUE_NO_DATA'), style: { color: palette.textSecondary } },
   };
   const revenueSeries = [{ name: t('SERIES_REVENUE'), data: revenue.map((point) => point.revenueMinor) }];
   const growth = data.studentGrowth[range];
   const growthOptions: ApexOptions = {
     chart: { type: 'bar', toolbar: { show: false }, background: 'transparent', animations: { enabled: false } },
-    colors: ['#22d3ee', '#f87171'], plotOptions: { bar: { horizontal: false, columnWidth: '55%', borderRadius: 4 } }, dataLabels: { enabled: false },
-    xaxis: { categories: growth.map((point) => { const key = ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS[point.month as keyof typeof ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS]; return key ? t(key) : point.month; }), labels: { style: { colors: '#94a3b8' } } },
-    yaxis: { min: 0, labels: { formatter: (value) => adminDashboardReportsAnalyticsFormatNumber(Math.round(value), locale), style: { colors: '#94a3b8' } } },
-    grid: { borderColor: 'rgba(99, 102, 241, 0.12)' }, legend: { labels: { colors: '#cbd5e1' } },
-    tooltip: { y: { formatter: (value) => adminDashboardReportsAnalyticsFormatNumber(Math.round(value ?? 0), locale) }, theme: 'dark' },
-    noData: { text: t('CHART_STUDENT_GROWTH_NO_DATA'), style: { color: '#94a3b8' } },
+    colors: [palette.info, palette.danger], plotOptions: { bar: { horizontal: false, columnWidth: '55%', borderRadius: 4 } }, dataLabels: { enabled: false },
+    xaxis: { categories: growth.map((point) => { const key = ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS[point.month as keyof typeof ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS]; return key ? t(key) : point.month; }), labels: { style: { colors: palette.textSecondary } } },
+    yaxis: { min: 0, labels: { formatter: (value) => adminDashboardReportsAnalyticsFormatNumber(Math.round(value), locale), style: { colors: palette.textSecondary } } },
+    grid: { borderColor: palette.gridBorder }, legend: { labels: { colors: palette.textSecondary } },
+    tooltip: { y: { formatter: (value) => adminDashboardReportsAnalyticsFormatNumber(Math.round(value ?? 0), locale) }, theme: palette.isDark ? 'dark' : 'light' },
+    noData: { text: t('CHART_STUDENT_GROWTH_NO_DATA'), style: { color: palette.textSecondary } },
   };
   const growthSeries = [
     { name: t('SERIES_JOINED'), data: growth.map((point) => point.joined) },
@@ -139,7 +142,7 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
             </div>
             <h2 id="admin-reports-branch-summary-title" className="text-base font-bold text-text-primary tracking-tight">{t('BRANCH_SUMMARY_TITLE')}</h2>
           </div>
-          <span className="text-xs font-semibold text-primary bg-primary-subtle border border-border-focus rounded-lg px-2.5 py-1 w-fit">Cross-Branch Executive Leaderboard</span>
+          <span className="text-xs font-semibold text-primary bg-primary-subtle border border-border-focus rounded-lg px-2.5 py-1 w-fit">{t('LEADERBOARD_BADGE')}</span>
         </div>
 
         {branches.length === 0 ? <AdminEmptyState title={t('BRANCH_SUMMARY_EMPTY_TITLE')} description={t('BRANCH_SUMMARY_EMPTY_DESCRIPTION')} /> : (
@@ -214,8 +217,7 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
                         <div className="flex items-center gap-2">
                           <div className="h-2 min-w-24 flex-1 overflow-hidden rounded-full bg-surface-highlight">
                             <div
-                              className="h-full rounded-full bg-primary"
-                              style={{ width: `${Math.min(100, Math.max(0, Math.round(row.occupancy)))}%` }}
+                              className={`h-full rounded-full bg-primary admin-dynamic-width-${Math.min(100, Math.max(0, Math.round(row.occupancy)))}`}
                             />
                           </div>
                           <span className="text-xs font-bold text-info-text tabular-nums">{adminDashboardReportsAnalyticsFormatNumber(row.occupancy, locale)}%</span>

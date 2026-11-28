@@ -1,6 +1,7 @@
 import type { Enquiry } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
-import type { AdminMembersEnquiriesScenario } from '@/app/frontend_admin/admin_members/members_enquiries/tests/harness/bootstrap';
 import type { ReactNode } from 'react';
+
+export type AdminMembersEnquiriesScenario = 'ACTIVE' | 'EMPTY' | 'SERVER_500' | 'TIMEOUT' | 'UNAUTHORIZED';
 
 export interface AdminEnquiriesEnquiryDetailPageViewProps { params: Promise<{ id: string }>; }
 

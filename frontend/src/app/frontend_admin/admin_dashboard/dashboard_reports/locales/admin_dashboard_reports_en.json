@@ -113,6 +113,11 @@
     "LOADING_DASHBOARD": "Loading reports",
     "CURRENT_RANGE": "Selected range: {range}",
     "KPI_SECTION_LABEL": "Key performance indicators",
-    "CSV_EXPORT_FAILED": "The CSV snapshot could not be prepared. Try exporting again."
+    "CSV_EXPORT_FAILED": "The CSV snapshot could not be prepared. Try exporting again.",
+    "LEADERBOARD_BADGE": "Cross-Branch Executive Leaderboard",
+    "WEEK_1": "W1",
+    "WEEK_2": "W2",
+    "WEEK_3": "W3",
+    "WEEK_4": "W4"
   }
 }

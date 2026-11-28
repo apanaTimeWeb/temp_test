@@ -2,7 +2,7 @@
 
 ## Source-derived tokens
 
-The current page uses the semantic classes `text-primary`, `text-secondary`, `border-border`, `bg-card`, and the approved focus-ring utility `focus-visible:ring-primary`. Remaining Tailwind utilities describe layout, spacing and typography (`mx-auto`, `w-full`, `max-w-7xl`, `space-y-*`, `p-*`, `sm:*`, `lg:*`, `grid`, `gap-*`, `rounded-xl`, `text-xs`, `text-sm`, `text-lg`, `text-2xl`, `font-semibold`, and `leading-6`). The page contains no raw hex color or inline style declaration.
+The current page uses the semantic classes `text-primary`, `text-secondary`, `border-border`, `bg-card`, `bg-surface-highlight`, `bg-primary-subtle`, `text-info-text`, `bg-info-bg`, `text-success-text`, `bg-success-bg`, `text-warning-text`, `bg-warning-bg`, `text-danger-text`, `bg-danger-bg`, `bg-purple-bg`, `text-purple`, and the approved focus-ring utility `focus-visible:ring-primary`. Remaining Tailwind utilities describe layout, spacing and typography (`mx-auto`, `w-full`, `max-w-7xl`, `space-y-*`, `p-*`, `sm:*`, `lg:*`, `grid`, `gap-*`, `rounded-xl`, `text-xs`, `text-sm`, `text-lg`, `text-2xl`, `font-semibold`, and `leading-6`). The page contains no raw hex color or inline style declaration.
 
 ## Responsive contract
 

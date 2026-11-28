@@ -63,12 +63,22 @@ export function downloadAdminEnquiriesExcel(records: readonly Enquiry[], filenam
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+function escapeEnquiriesHtml(value: unknown): string {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
 /** Prints a clean, high-resolution enquiry roster view with letterhead. */
 export function printAdminEnquiriesRoster(records: readonly Enquiry[]): void {
   if (typeof window === 'undefined') return;
-  const printWindow = window.open('', '_blank', 'width=900,height=700');
+  const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=900,height=700');
   if (!printWindow) { window.print(); return; }
-  const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  printWindow.opener = null;
+  const dateStr = escapeEnquiriesHtml(new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }));
   const html = `
     <!DOCTYPE html><html><head><title>Smart Library - Enquiries & CRM Pipeline</title>
       <style>
@@ -89,7 +99,7 @@ export function printAdminEnquiriesRoster(records: readonly Enquiry[]): void {
       <div class="header"><div><div class="title">Smart Library Network · CRM Leads & Enquiries</div><div class="subtitle">Total Records: ${records.length}</div></div>
       <div class="meta"><div><strong>Generated:</strong> ${dateStr}</div><div><strong>Confidential:</strong> Admin Authorized View</div></div></div>
       <table><thead><tr><th>ID</th><th>Lead Name</th><th>Phone</th><th>Shift</th><th>Status</th><th>Handled By</th><th>Source</th><th>Date Added</th></tr></thead>
-      <tbody>${records.map((e) => `<tr><td style="font-family: monospace; font-weight: 600;">${e.id}</td><td><strong>${e.name}</strong></td><td>${e.phone}</td><td>${e.shift || 'General'}</td><td><span class="badge badge-${(e.status || 'new').toLowerCase()}">${e.status}</span></td><td>${e.handledBy || 'Unassigned'}</td><td>${e.source || 'Walk-in'}</td><td>${e.addedDate || '—'}</td></tr>`).join('')}</tbody></table>
+      <tbody>${records.map((e) => `<tr><td style="font-family: monospace; font-weight: 600;">${escapeEnquiriesHtml(e.id)}</td><td><strong>${escapeEnquiriesHtml(e.name)}</strong></td><td>${escapeEnquiriesHtml(e.phone)}</td><td>${escapeEnquiriesHtml(e.shift || 'General')}</td><td><span class="badge badge-${escapeEnquiriesHtml((e.status || 'new').toLowerCase())}">${escapeEnquiriesHtml(e.status)}</span></td><td>${escapeEnquiriesHtml(e.handledBy || 'Unassigned')}</td><td>${escapeEnquiriesHtml(e.source || 'Walk-in')}</td><td>${escapeEnquiriesHtml(e.addedDate || '—')}</td></tr>`).join('')}</tbody></table>
       <div class="footer"><span>Smart Library CRM Management System</span><span>Page 1 of 1</span></div>
       <script>window.onload = function() { window.print(); };</script>
     </body></html>

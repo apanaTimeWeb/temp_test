@@ -32,15 +32,22 @@ export function escapePlanHtml(text: string): string {
   return text.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 }
 
+function escapePlansCsvCell(value: unknown): string {
+  const text = String(value ?? '');
+  const isFiniteNumber = typeof value === 'number' && Number.isFinite(value);
+  const safeText = !isFiniteNumber && /^[\s]*[=+@-]/.test(text) ? `'${text}` : text;
+  return `"${safeText.replaceAll('"', '""')}"`;
+}
+
 export function exportPlansCsv(visiblePlans: readonly AdminPlansPlan[]): void {
   const headers = ['Plan ID', 'Name', 'Price', 'Currency', 'Duration', 'Duration Days', 'Status', 'Subscribers', 'Branch', 'Features'];
   const rows = visiblePlans.map((p) => [
-    `"${p.id}"`, `"${p.name.replaceAll('"', '""')}"`, p.price, p.currencyCode || 'INR',
-    `"${p.duration}"`, p.durationDays, `"${p.status}"`, p.subscribers,
-    `"${(p.branchApplicability || 'All Branches').replaceAll('"', '""')}"`,
-    `"${p.features.join('; ').replaceAll('"', '""')}"`,
-  ]);
-  const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
+    p.id, p.name, p.price, p.currencyCode || 'INR',
+    p.duration, p.durationDays, p.status, p.subscribers,
+    p.branchApplicability || 'All Branches',
+    p.features.join('; '),
+  ].map(escapePlansCsvCell));
+  const csvContent = '\uFEFF' + [headers.map(escapePlansCsvCell).join(','), ...rows.map((r) => r.join(','))].join('\r\n');
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');

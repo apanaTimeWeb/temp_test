@@ -50,8 +50,10 @@ export default function AdminMembersDirectoryMemberForm({ model }: AdminMembersD
     setConfirmDiscard(true);
   }, []);
 
+  const isCreating = !isEditing && model.activeTab === 'add';
+
   useAdminMembersDirectoryUnsavedChangesGuard(
-    isDirty && isEditing,
+    isDirty && (isEditing || isCreating),
     isSubmitting,
     handleBlockedNavigation,
   );
@@ -95,6 +97,7 @@ export default function AdminMembersDirectoryMemberForm({ model }: AdminMembersD
       ...(values.locker?.trim() ? { locker: values.locker.trim() } : {}),
     };
     if (editingMember) model.handleSaveDemoMember(editingMember, cleanedValues);
+    else model.handleAddMember(cleanedValues);
   });
 
   const renderFormFields = (isEditMode: boolean) => {
@@ -187,6 +190,33 @@ export default function AdminMembersDirectoryMemberForm({ model }: AdminMembersD
           )}
         </section>
       </div>
+    );
+  }
+
+  if (isCreating) {
+    return (
+      <section className="rounded-2xl border border-border bg-card p-5 md:p-6 shadow-card" aria-labelledby="admin-members-create-title">
+        <h2 id="admin-members-create-title" className="text-lg font-semibold text-text-primary">{t('MEMBER_ADD_TITLE')}</h2>
+        <form className="mt-5 grid gap-4 sm:grid-cols-2" onSubmit={submit} noValidate>
+          {renderFormFields(false)}
+          <div className="sm:col-span-2 flex flex-wrap gap-2 pt-2">
+            <button type="submit" className="admin-btn-primary min-h-11" disabled={isSubmitting}>
+              {t('MEMBER_ADD_SUBMIT')}
+            </button>
+            <button type="button" className="admin-btn-ghost min-h-11" onClick={requestCancel}>{t('CANCEL')}</button>
+          </div>
+        </form>
+        {confirmDiscard && (
+          <div role="alertdialog" aria-modal="true" aria-labelledby="admin-members-create-discard-title" className="mt-4 rounded-lg border border-warning-bg bg-card p-4">
+            <h3 id="admin-members-create-discard-title" className="font-semibold text-text-primary">{t('UNSAVED_CHANGES_TITLE')}</h3>
+            <p className="mt-2 text-text-secondary">{t('UNSAVED_CHANGES_DESCRIPTION')}</p>
+            <div className="mt-4 flex justify-end gap-2">
+              <button type="button" className="admin-btn-ghost min-h-11" onClick={() => { setConfirmDiscard(false); setPendingNavigation(null); }}>{t('KEEP_EDITING')}</button>
+              <button type="button" className="admin-btn-danger min-h-11" onClick={discardDraft}>{t('DISCARD_CHANGES')}</button>
+            </div>
+          </div>
+        )}
+      </section>
     );
   }
 

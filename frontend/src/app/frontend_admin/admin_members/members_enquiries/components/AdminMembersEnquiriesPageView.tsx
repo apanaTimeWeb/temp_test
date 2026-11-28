@@ -15,7 +15,7 @@ import {
   ADMIN_ENQUIRIES_ENQUIRY_STATUS_FILTERS,
   ADMIN_ENQUIRIES_URLS,
 } from '@/app/frontend_admin/admin_members/members_enquiries/config/admin_members_enquiries.url_config';
-import useEnquiriesPage from '@/app/frontend_admin/admin_members/members_enquiries/hooks/useAdminMembersEnquiriesPage';
+import useEnquiriesPage, { saveEnquiries } from '@/app/frontend_admin/admin_members/members_enquiries/hooks/useAdminMembersEnquiriesPage';
 import type { Enquiry } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
 import type { AdminEnquiriesEnquiryKanbanCardProps } from '@/app/frontend_admin/admin_members/members_enquiries/types/AdminMembersEnquiriesComponentTypes';
 import {
@@ -25,7 +25,8 @@ import {
 } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
 import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
 import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
-import { Download, FileSpreadsheet, LayoutGrid, List, Mail, MessageSquare, MoreHorizontal, PhoneCall, Printer, Search, Smartphone, Upload } from 'lucide-react';
+import { Download, FileSpreadsheet, LayoutGrid, List, Mail, MessageSquare, MoreHorizontal, PhoneCall, Plus, Printer, Search, Smartphone, Upload } from 'lucide-react';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
@@ -45,7 +46,13 @@ export default function AdminEnquiriesPageView() {
   const [selectedEnquiryModal, setSelectedEnquiryModal] = useState<Enquiry | null>(null);
 
   const handleImportLeads = (newLeads: Enquiry[]) => {
-    setEnquiries((prev) => [...newLeads, ...prev]);
+    setEnquiries((prev) => {
+      const next = [...newLeads, ...prev];
+      if (isDemoMode) {
+        saveEnquiries(next);
+      }
+      return next;
+    });
     toast.success(`Successfully imported ${newLeads.length} enquiry leads.`, { id: 'admin-enquiries-import-success' });
   };
 
@@ -192,6 +199,12 @@ export default function AdminEnquiriesPageView() {
             </button>
           </div>
           <div className="flex flex-wrap items-center gap-2">
+            <Link
+              href={ADMIN_ENQUIRIES_URLS.ROUTE_ENQUIRIES_ADD}
+              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl bg-primary px-3 py-1.5 text-xs font-semibold text-on-primary shadow-card hover:bg-primary-hover motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              <Plus size={14} strokeWidth={2.2} aria-hidden="true" /> {t('ADD_ENQUIRY')}
+            </Link>
             <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-003" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-warning bg-warning-bg px-3 py-1.5 text-xs font-medium text-warning-text hover:opacity-90 motion-safe:transition-opacity" type="button" onClick={() => setIsImportModalOpen(true)} title={t('IMPORT_TITLE')}>
               <Upload size={14} strokeWidth={2} aria-hidden="true" /> {t('IMPORT')}
             </button>

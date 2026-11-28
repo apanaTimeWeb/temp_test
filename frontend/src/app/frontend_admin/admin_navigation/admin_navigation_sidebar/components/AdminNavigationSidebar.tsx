@@ -46,6 +46,15 @@ export function AdminNavigationSidebar({
   );
   const [searchQuery, setSearchQuery] = useState('');
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchFocusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (searchFocusTimerRef.current) {
+        clearTimeout(searchFocusTimerRef.current);
+      }
+    };
+  }, []);
 
   const collapsed = controlledCollapsed ?? internalCollapsed;
   const mobileOpen = controlledMobileOpen ?? internalMobileOpen;
@@ -207,7 +216,13 @@ export function AdminNavigationSidebar({
           setSearchQuery={setSearchQuery}
           onCollapsedToggle={() => {
             toggle();
-            setTimeout(() => searchInputRef.current?.focus(), 150);
+            if (searchFocusTimerRef.current) {
+              clearTimeout(searchFocusTimerRef.current);
+            }
+            searchFocusTimerRef.current = setTimeout(() => {
+              searchFocusTimerRef.current = null;
+              searchInputRef.current?.focus();
+            }, 150);
           }}
           searchInputRef={searchInputRef}
         />

@@ -27,20 +27,27 @@ export function escapeCouponHtml(text: string): string {
   return text.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 }
 
+function escapeCouponsCsvCell(value: unknown): string {
+  const text = String(value ?? '');
+  const isFiniteNumber = typeof value === 'number' && Number.isFinite(value);
+  const safeText = !isFiniteNumber && /^[\s]*[=+@-]/.test(text) ? `'${text}` : text;
+  return `"${safeText.replaceAll('"', '""')}"`;
+}
+
 export function exportCouponsCsv(filteredCoupons: readonly AdminCouponsCoupon[]): void {
   const headers = ['Coupon ID', 'Code', 'Discount', 'Type', 'Valid Until', 'Max Uses', 'Used Count', 'Branch', 'Status'];
   const rows = filteredCoupons.map((c) => [
-    `"${c.id}"`,
-    `"${c.code}"`,
+    c.id,
+    c.code,
     c.discount,
-    `"${c.type}"`,
-    `"${c.expiry || ''}"`,
+    c.type,
+    c.expiry || '',
     c.maxUses ?? '',
     c.usedCount ?? 0,
-    `"${(c.branchApplicability || 'All Branches').replaceAll('"', '""')}"`,
-    `"${c.status || 'Active'}"`,
-  ]);
-  const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((row) => row.join(','))].join('\r\n');
+    c.branchApplicability || 'All Branches',
+    c.status || 'Active',
+  ].map(escapeCouponsCsvCell));
+  const csvContent = '\uFEFF' + [headers.map(escapeCouponsCsvCell).join(','), ...rows.map((row) => row.join(','))].join('\r\n');
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');

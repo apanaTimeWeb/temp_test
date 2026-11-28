@@ -61,4 +61,10 @@ export interface AdminPlansPlan {
   status: AdminPlansStatus;
   subscribers: number;
   branchApplicability?: string;
+  morningRate?: string;
+  afternoonRate?: string;
+  eveningRate?: string;
+  nightRate?: string;
+  fullDayRate?: string;
+  multiShiftDiscount?: string;
 }

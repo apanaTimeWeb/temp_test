@@ -111,7 +111,7 @@ export function AdminBlacklistFormDialog({ open, onOpenChange, onSubmit, isDemoM
               <label htmlFor="admin-blacklist-category" className="admin-label">
                 Disciplinary Violation Category <span className="text-danger-text">*</span>
               </label>
-              <select id="admin-blacklist-category" {...register('category')} defaultValue="THEFT_STOLEN_PROPERTY" className="admin-input">
+              <select id="admin-blacklist-category" {...register('category')} className="admin-input">
                 <option value="THEFT_STOLEN_PROPERTY">🚨 Theft / Stolen Property (चोरी)</option>
                 <option value="INDISCIPLINE_MISCONDUCT">⚡ Gross Indiscipline & Misconduct (अनुशासनहीनता)</option>
                 <option value="PHYSICAL_ALTERCATION">⚠️ Physical Altercation / Threat (मारपीट/धमकी)</option>
@@ -126,7 +126,7 @@ export function AdminBlacklistFormDialog({ open, onOpenChange, onSubmit, isDemoM
               <label htmlFor="admin-blacklist-scope" className="admin-label">
                 Enforcement Scope (प्रतिबंध का दायरा) <span className="text-danger-text">*</span>
               </label>
-              <select id="admin-blacklist-scope" {...register('banScope')} defaultValue="NETWORK_WIDE" className="admin-input">
+              <select id="admin-blacklist-scope" {...register('banScope')} className="admin-input">
                 <option value="NETWORK_WIDE">🌐 Network-Wide Bar (All Library Branches)</option>
                 <option value="BRANCH_SPECIFIC">🏢 Branch Specific Only (Current Branch)</option>
               </select>
@@ -136,7 +136,7 @@ export function AdminBlacklistFormDialog({ open, onOpenChange, onSubmit, isDemoM
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="admin-blacklist-duration" className="admin-label">Ban Duration (प्रतिबंध अवधि)</label>
-              <select id="admin-blacklist-duration" {...register('banDuration')} defaultValue="PERMANENT" className="admin-input">
+              <select id="admin-blacklist-duration" {...register('banDuration')} className="admin-input">
                 <option value="PERMANENT">Permanent / Indefinite Bar (आजीवन निष्कासन)</option>
                 <option value="TEMPORARY_30_DAYS">Temporary (30 Days Suspension)</option>
                 <option value="TEMPORARY_90_DAYS">Temporary (90 Days / 3 Months)</option>
@@ -159,15 +159,15 @@ export function AdminBlacklistFormDialog({ open, onOpenChange, onSubmit, isDemoM
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
               <label className="flex items-center gap-2 text-text-primary cursor-pointer">
-                <input type="checkbox" defaultChecked {...register('revokeSeat')} className="rounded accent-danger" />
+                <input type="checkbox" {...register('revokeSeat')} className="rounded accent-danger" />
                 <span>Revoke & vacate assigned seat immediately</span>
               </label>
               <label className="flex items-center gap-2 text-text-primary cursor-pointer">
-                <input type="checkbox" defaultChecked {...register('revokeLocker')} className="rounded accent-danger" />
+                <input type="checkbox" {...register('revokeLocker')} className="rounded accent-danger" />
                 <span>Revoke & reclaim locker allocation</span>
               </label>
               <label className="flex items-center gap-2 text-text-primary cursor-pointer">
-                <input type="checkbox" defaultChecked {...register('blockBiometric')} className="rounded accent-danger" />
+                <input type="checkbox" {...register('blockBiometric')} className="rounded accent-danger" />
                 <span>Lock turnstiles & biometric access network-wide</span>
               </label>
               <label className="flex items-center gap-2 text-text-primary cursor-pointer">

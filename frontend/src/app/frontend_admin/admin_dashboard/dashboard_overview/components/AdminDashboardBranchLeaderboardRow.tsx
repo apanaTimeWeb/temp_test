@@ -2,6 +2,7 @@
 
 import type { BranchBenchmarkItem } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/components/AdminDashboardBranchLeaderboard';
 import { ShieldAlert } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface AdminDashboardBranchLeaderboardRowProps {
   item: BranchBenchmarkItem;
@@ -14,6 +15,7 @@ export function AdminDashboardBranchLeaderboardRow({
   rank,
   formatRupees,
 }: AdminDashboardBranchLeaderboardRowProps) {
+  const t = useTranslations('ADMIN_DASHBOARD');
   const currentProfit = item.profitDisplay ?? item.netProfitRupees;
   const isProfitPositive = currentProfit > 0;
   const clampedOccupancy = Math.min(100, Math.max(0, Math.round(item.occupancyRate)));
@@ -48,14 +50,14 @@ export function AdminDashboardBranchLeaderboardRow({
       <td className="px-3.5 py-3.5 whitespace-nowrap">
         <p className="font-bold text-text-primary text-xs sm:text-sm">{item.name}</p>
         <p className="text-xs text-text-secondary mt-0.5">
-          {item.city} · Mgr: <span className="font-medium text-text-primary">{item.managerName}</span>
+          {item.city} · {t('LEADERBOARD_MGR_LABEL')} <span className="font-medium text-text-primary">{item.managerName}</span>
         </p>
       </td>
 
       {/* Capacity & Occupancy Bar */}
       <td className="px-3.5 py-3.5 whitespace-nowrap min-w-[160px]">
         <div className="flex items-center justify-between text-xs mb-1">
-          <span className="font-medium text-text-secondary">{item.occupiedSeats}/{item.totalSeats} seats</span>
+          <span className="font-medium text-text-secondary">{item.occupiedSeats}/{item.totalSeats} {t('LEADERBOARD_SEATS_UNIT')}</span>
           <span className={`font-bold ${item.occupancyRate >= 80 ? 'text-success-text' : item.occupancyRate >= 60 ? 'text-warning-text' : 'text-danger-text'}`}>
             {item.occupancyRate}%
           </span>

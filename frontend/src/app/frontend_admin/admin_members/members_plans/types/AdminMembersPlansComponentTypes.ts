@@ -1,7 +1,8 @@
 import type { AdminPlansFormValues,AdminPlansPlan } from '@/app/frontend_admin/admin_members/members_plans/schemas/AdminMembersPlansSchema';
-import type { AdminMembersPlansScenario } from '@/app/frontend_admin/admin_members/members_plans/tests/harness/bootstrap';
 import type React from 'react';
 import type { ReactNode } from 'react';
+
+export type AdminMembersPlansScenario = 'ACTIVE' | 'EMPTY' | 'SERVER_500' | 'TIMEOUT' | 'UNAUTHORIZED';
 
 export interface AdminPlansDeleteDialogProps {
   open: boolean;
